@@ -1,27 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Static export for Cloudflare Pages
+  output: 'export',
+
+  // Required for static export
+  images: {
+    unoptimized: true,
+  },
+
+  // Disable trailing slashes for cleaner URLs
+  trailingSlash: false,
+
+  // React strict mode for better debugging
   reactStrictMode: true,
-  // PWA headers
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-        ],
-      },
-    ]
+
+  // Skip type checking during build (faster builds, run separately)
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+
+  // Skip ESLint during build (run separately)
+  eslint: {
+    ignoreDuringBuilds: false,
   },
 }
 

@@ -1,0 +1,19 @@
+# Cloudflare Pages configuration for TipTagPWA
+name = "tiptag-pwa"
+compatibility_date = "2024-01-01"
+
+[site]
+bucket = "./out"
+
+# Build configuration
+[build]
+command = "npm run build"
+
+# Environment variables (optional, set in Cloudflare dashboard)
+# [vars]
+# NEXT_PUBLIC_API_URL = "https://api.example.com"
+
+# Development settings
+[dev]
+port = 8788
+local_protocol = "http"
