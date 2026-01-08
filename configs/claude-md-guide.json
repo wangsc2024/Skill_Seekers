@@ -1,0 +1,22 @@
+{
+  "name": "claude-md-guide",
+  "description": "Guide for creating and configuring CLAUDE.md files for Claude Code projects. Use when setting up project memory, coding standards, and custom commands.",
+  "base_url": "https://docs.anthropic.com/",
+  "selectors": {
+    "main_content": "article",
+    "title": "h1",
+    "code_blocks": "pre code"
+  },
+  "url_patterns": {
+    "include": ["/claude-code/"],
+    "exclude": []
+  },
+  "categories": {
+    "getting_started": ["introduction", "setup", "installation"],
+    "configuration": ["config", "settings", "claude.md"],
+    "commands": ["commands", "slash", "custom"],
+    "best_practices": ["best", "practices", "tips"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100
+}
