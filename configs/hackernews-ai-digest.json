@@ -1,0 +1,24 @@
+{
+  "name": "hackernews-ai-digest",
+  "description": "Fetch latest AI news from Hacker News API, filter AI-related content, and generate Chinese translation digest. Use when tracking AI industry news and trends.",
+  "base_url": "https://hacker-news.firebaseio.com/v0/",
+  "type": "api",
+  "selectors": {
+    "stories": "/topstories.json",
+    "item": "/item/{id}.json"
+  },
+  "filters": {
+    "keywords": [
+      "ai", "artificial intelligence", "machine learning", "llm",
+      "gpt", "chatgpt", "openai", "claude", "anthropic", "gemini",
+      "deepseek", "mistral", "llama", "transformer", "neural network"
+    ]
+  },
+  "output": {
+    "format": "markdown",
+    "language": "zh-CN",
+    "count": 10
+  },
+  "rate_limit": 0.1,
+  "max_pages": 200
+}
