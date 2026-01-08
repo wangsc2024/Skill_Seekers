@@ -1,0 +1,30 @@
+{
+  "name": "vue-devtools",
+  "description": "Vue.js DevTools browser extension for debugging Vue applications. Use for component inspection, state debugging, Vuex/Pinia store inspection, performance profiling, and Vue app development workflow.",
+  "base_url": "https://devtools.vuejs.org/",
+  "start_urls": [
+    "https://devtools.vuejs.org/guide/installation.html",
+    "https://devtools.vuejs.org/guide/features.html",
+    "https://devtools.vuejs.org/guide/open-in-editor.html",
+    "https://devtools.vuejs.org/plugin/api-reference.html",
+    "https://devtools.vuejs.org/plugin/plugins-guide.html"
+  ],
+  "selectors": {
+    "main_content": "main",
+    "title": "h1",
+    "code_blocks": "pre code"
+  },
+  "url_patterns": {
+    "include": ["/guide/", "/plugin/"],
+    "exclude": []
+  },
+  "categories": {
+    "getting_started": ["installation", "getting-started", "intro"],
+    "features": ["features", "component", "inspector", "timeline"],
+    "debugging": ["debug", "state", "vuex", "pinia", "store"],
+    "plugin_api": ["plugin", "api", "hook", "custom"],
+    "configuration": ["config", "settings", "open-in-editor"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100
+}

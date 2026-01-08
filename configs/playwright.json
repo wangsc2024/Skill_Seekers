@@ -1,0 +1,36 @@
+{
+  "name": "playwright",
+  "description": "Playwright browser automation and testing framework. Use for end-to-end testing, browser automation, web scraping, cross-browser testing, and UI testing with Chromium, Firefox, and WebKit.",
+  "base_url": "https://playwright.dev/",
+  "start_urls": [
+    "https://playwright.dev/docs/intro",
+    "https://playwright.dev/docs/writing-tests",
+    "https://playwright.dev/docs/api/class-playwright",
+    "https://playwright.dev/docs/test-assertions",
+    "https://playwright.dev/docs/locators",
+    "https://playwright.dev/docs/pages",
+    "https://playwright.dev/docs/selectors",
+    "https://playwright.dev/docs/api/class-page",
+    "https://playwright.dev/docs/api/class-browser"
+  ],
+  "selectors": {
+    "main_content": "article",
+    "title": "h1",
+    "code_blocks": "pre code"
+  },
+  "url_patterns": {
+    "include": ["/docs/"],
+    "exclude": ["/community", "/blog", "/python/", "/java/", "/dotnet/"]
+  },
+  "categories": {
+    "getting_started": ["intro", "installation", "getting-started", "writing-tests"],
+    "locators": ["locator", "selector", "element", "find"],
+    "actions": ["click", "fill", "type", "keyboard", "mouse", "action"],
+    "assertions": ["assert", "expect", "assertion", "test-assertions"],
+    "api": ["api", "class-", "reference"],
+    "configuration": ["config", "playwright.config", "reporter", "fixture"],
+    "advanced": ["network", "intercept", "screenshot", "video", "trace", "debug"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 400
+}

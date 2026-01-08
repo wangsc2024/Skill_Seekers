@@ -1,0 +1,37 @@
+{
+  "name": "chrome-devtools",
+  "description": "Chrome DevTools for web development and debugging. Use for DOM inspection, JavaScript debugging, network analysis, performance profiling, CSS editing, memory profiling, and web app optimization.",
+  "base_url": "https://developer.chrome.com/docs/devtools/",
+  "start_urls": [
+    "https://developer.chrome.com/docs/devtools/overview",
+    "https://developer.chrome.com/docs/devtools/console",
+    "https://developer.chrome.com/docs/devtools/elements",
+    "https://developer.chrome.com/docs/devtools/network",
+    "https://developer.chrome.com/docs/devtools/sources",
+    "https://developer.chrome.com/docs/devtools/performance",
+    "https://developer.chrome.com/docs/devtools/memory",
+    "https://developer.chrome.com/docs/devtools/application",
+    "https://developer.chrome.com/docs/devtools/javascript"
+  ],
+  "selectors": {
+    "main_content": "article",
+    "title": "h1",
+    "code_blocks": "pre code"
+  },
+  "url_patterns": {
+    "include": ["/docs/devtools/"],
+    "exclude": ["/blog/", "/community/"]
+  },
+  "categories": {
+    "getting_started": ["overview", "open", "customize", "shortcuts"],
+    "elements": ["elements", "dom", "css", "styles", "computed"],
+    "console": ["console", "log", "error", "utilities"],
+    "sources": ["sources", "debug", "breakpoint", "javascript", "step"],
+    "network": ["network", "request", "response", "throttle", "cache"],
+    "performance": ["performance", "profile", "runtime", "fps", "lighthouse"],
+    "memory": ["memory", "heap", "allocation", "leak", "snapshot"],
+    "application": ["application", "storage", "cookies", "cache", "service-worker"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 300
+}
