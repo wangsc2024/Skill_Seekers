@@ -26,8 +26,8 @@ ENV/
 env/
 
 # Output directory
-output/
-*.zip
+# output/  # Commented out to allow skill uploads
+# *.zip
 
 # IDE
 .vscode/
