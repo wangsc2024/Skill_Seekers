@@ -1,287 +1,308 @@
 ---
 name: hackernews-ai-digest
-description: Fetch latest AI news from Hacker News API and translate to Chinese
-version: 1.0.0
+description: Fetch latest AI news from Hacker News API with full content and Chinese translation
+version: 2.0.0
 ---
 
-# Hacker News AI 新闻摘要 Skill
+# Hacker News AI 新闻摘要 Skill v2.0
 
 ## Overview
-此 Skill 使用 Hacker News 官方 API 获取最新新闻，自动筛选 AI 相关内容（包含 AI、LLM、GPT、Claude、机器学习等关键词），翻译成中文后以 Markdown 格式输出。
+此 Skill 使用 Hacker News 官方 API 获取最新新闻，自动筛选 AI 相关内容，**抓取完整文章内容**并提供**中文翻译**。支持获取热门评论，生成完整的中文新闻摘要。
 
 ## When to Use This Skill
 Use this skill when:
-- 需要获取最新的 AI/ML 技术新闻
-- 想要了解 Hacker News 上的 AI 热门讨论
-- 需要中文版的科技新闻摘要
-- 进行 AI 行业动态追踪
+- 需要获取最新的 AI/ML 技术新闻**完整内容**
+- 想要阅读 Hacker News 上 AI 文章的**中文翻译**
+- 需要了解 HN 社区对 AI 话题的讨论和评论
+- 进行 AI 行业动态追踪和研究
 
 ## Quick Reference
 
-### Hacker News API 端点
+### v2.0 新功能
 
-| 端点 | 说明 | URL |
-|------|------|-----|
-| 最新新闻 | 最近 500 条新闻 ID | `https://hacker-news.firebaseio.com/v0/newstories.json` |
-| 热门新闻 | 前 500 条热门新闻 | `https://hacker-news.firebaseio.com/v0/topstories.json` |
-| 最佳新闻 | 最佳新闻排名 | `https://hacker-news.firebaseio.com/v0/beststories.json` |
-| 新闻详情 | 单条新闻内容 | `https://hacker-news.firebaseio.com/v0/item/{id}.json` |
+| 功能 | 说明 |
+|------|------|
+| 📄 完整内容获取 | 抓取原文网页完整内容 |
+| 🌐 中文翻译 | 使用 Claude API 翻译标题、正文、评论 |
+| 💬 热门评论 | 获取 HN 讨论区热门评论 |
+| 🔧 灵活配置 | 支持摘要/完整模式切换 |
 
-### AI 关键词过滤
-
-```python
-AI_KEYWORDS = [
-    'ai', 'artificial intelligence', 'machine learning', 'ml',
-    'deep learning', 'neural network', 'llm', 'large language model',
-    'gpt', 'chatgpt', 'openai', 'claude', 'anthropic', 'gemini',
-    'deepseek', 'mistral', 'llama', 'transformer', 'diffusion',
-    'stable diffusion', 'midjourney', 'dall-e', 'sora',
-    'agi', 'artificial general intelligence',
-    'nlp', 'natural language processing',
-    'computer vision', 'reinforcement learning',
-    'ai agent', 'copilot', 'coding assistant'
-]
-```
-
-### Python 脚本使用
+### 使用方式
 
 ```bash
 # 安装依赖
-pip install requests
+pip install requests beautifulsoup4 anthropic
 
-# 运行脚本获取 AI 新闻
+# 设置 API Key（用于翻译）
+export ANTHROPIC_API_KEY=sk-ant-...
+
+# 基本使用（摘要模式）
 python scripts/fetch_ai_news.py
 
-# 指定获取数量
-python scripts/fetch_ai_news.py --count 20
+# 完整内容模式
+python scripts/fetch_ai_news.py --full
 
-# 输出到文件
-python scripts/fetch_ai_news.py --output ai_news.md
+# 完整内容 + 中文翻译（推荐）
+python scripts/fetch_ai_news.py --full --translate
 
-# 使用热门新闻源
-python scripts/fetch_ai_news.py --source top
+# 指定数量和输出文件
+python scripts/fetch_ai_news.py --full --translate --count 15 --output ai_news.md
+
+# 使用最新新闻源
+python scripts/fetch_ai_news.py --full --translate --source new
 ```
 
-### 输出格式
+### 命令行参数
 
-生成的 Markdown 文件格式：
+| 参数 | 简写 | 说明 | 默认值 |
+|------|------|------|--------|
+| `--count` | `-c` | 获取新闻数量 | 10 |
+| `--source` | `-s` | 新闻源 (new/top/best) | top |
+| `--output` | `-o` | 输出文件路径 | 终端 |
+| `--full` | `-f` | 获取完整内容 | 否 |
+| `--translate` | `-t` | 中文翻译 | 否 |
+| `--max-scan` | - | 最大扫描数量 | 200 |
+| `--max-comments` | - | 每条新闻最大评论数 | 5 |
+
+### 输出格式对比
+
+#### 摘要模式（默认）
 
 ```markdown
-# Hacker News AI 新闻精选
+## 1. 展示：AI 代码审查工具
 
-> 更新时间：2026-01-08
-> 来源：Hacker News
-
----
-
-## 1. 新闻标题（中文翻译）
-
-**原标题**: Original English Title
-
-**摘要**: 新闻内容摘要...
-
+**原标题**: Show HN: AI-powered code review tool
 **热度**: 🔥 256 points | 💬 128 comments
-
-**来源**: [Hacker News #12345678](https://news.ycombinator.com/item?id=12345678)
-
----
+**来源**: github.com
+**HN 讨论**: https://news.ycombinator.com/item?id=12345678
 ```
 
-### API 响应结构
+#### 完整内容 + 翻译模式（--full --translate）
 
-单条新闻的 JSON 结构：
+```markdown
+## 1. 展示：AI 驱动的代码审查工具
 
-```json
-{
-  "id": 12345678,
-  "type": "story",
-  "by": "username",
-  "time": 1704672000,
-  "title": "Show HN: AI-powered code review tool",
-  "url": "https://example.com/article",
-  "score": 256,
-  "descendants": 128,
-  "kids": [12345679, 12345680]
-}
+**原标题**: Show HN: AI-powered code review tool
+**热度**: 🔥 256 points | 💬 128 comments
+**来源**: github.com
+**HN 讨论**: https://news.ycombinator.com/item?id=12345678
+
+### 📄 文章内容（中文翻译）
+
+我们很高兴地宣布推出一款全新的 AI 驱动代码审查工具。
+这个工具使用 LLM 技术来分析你的代码，识别潜在问题，
+并提供改进建议。
+
+主要功能：
+- 自动检测代码异味和反模式
+- 安全漏洞扫描
+- 性能优化建议
+- 与 GitHub PR 工作流集成
+
+我们使用了 Claude API 作为核心引擎，它能够理解代码
+上下文并提供有意义的反馈...
+
+### 💬 热门评论
+
+**1. @developer123**:
+> 我已经在我的团队中使用了两周，效果非常好。它发现了
+> 几个我们人工审查漏掉的安全问题。唯一的缺点是对于
+> 大型 PR 有时会超时。
+
+**2. @airesearcher**:
+> 有趣的是你们选择了 Claude 而不是 GPT-4。能分享一下
+> 选择的原因吗？在我的测试中，Claude 在代码理解方面
+> 确实表现更好。
 ```
 
-### 完整代码示例
+## 完整代码示例
+
+### 获取完整内容并翻译
 
 ```python
-import requests
-import json
-from datetime import datetime
+from fetch_ai_news import HackerNewsAI
 
-class HackerNewsAI:
-    BASE_URL = "https://hacker-news.firebaseio.com/v0"
+# 创建抓取器
+hn = HackerNewsAI()
 
-    AI_KEYWORDS = [
-        'ai', 'artificial intelligence', 'machine learning',
-        'llm', 'gpt', 'chatgpt', 'openai', 'claude', 'anthropic',
-        'gemini', 'deepseek', 'neural', 'transformer'
-    ]
+# 获取 AI 新闻（完整模式）
+stories = hn.get_ai_news(
+    count=10,
+    source='top',
+    full_content=True,    # 获取完整文章
+    translate=True,       # 中文翻译
+    max_comments=5        # 每条新闻 5 条评论
+)
 
-    def fetch_story_ids(self, source='new'):
-        """获取新闻 ID 列表"""
-        endpoints = {
-            'new': f"{self.BASE_URL}/newstories.json",
-            'top': f"{self.BASE_URL}/topstories.json",
-            'best': f"{self.BASE_URL}/beststories.json"
-        }
-        response = requests.get(endpoints.get(source, endpoints['new']))
-        return response.json()
+# 生成 Markdown
+markdown = hn.generate_markdown(
+    stories,
+    full_content=True,
+    translate=True
+)
 
-    def fetch_story(self, story_id):
-        """获取单条新闻详情"""
-        url = f"{self.BASE_URL}/item/{story_id}.json"
-        response = requests.get(url)
-        return response.json()
-
-    def is_ai_related(self, story):
-        """检查是否为 AI 相关新闻"""
-        if not story or 'title' not in story:
-            return False
-        title = story.get('title', '').lower()
-        url = story.get('url', '').lower()
-        text = story.get('text', '').lower() if story.get('text') else ''
-
-        content = f"{title} {url} {text}"
-        return any(keyword in content for keyword in self.AI_KEYWORDS)
-
-    def get_ai_news(self, count=10, source='new'):
-        """获取 AI 相关新闻"""
-        story_ids = self.fetch_story_ids(source)
-        ai_stories = []
-
-        for story_id in story_ids:
-            if len(ai_stories) >= count:
-                break
-            story = self.fetch_story(story_id)
-            if self.is_ai_related(story):
-                ai_stories.append(story)
-
-        return ai_stories
-
-    def generate_markdown(self, stories):
-        """生成 Markdown 格式输出"""
-        now = datetime.now().strftime("%Y-%m-%d %H:%M")
-
-        md = f"""# Hacker News AI 新闻精选
-
-> 更新时间：{now}
-> 来源：[Hacker News](https://news.ycombinator.com/)
-
----
-
-"""
-        for i, story in enumerate(stories, 1):
-            title = story.get('title', 'No Title')
-            score = story.get('score', 0)
-            comments = story.get('descendants', 0)
-            story_id = story.get('id')
-            url = story.get('url', '')
-
-            md += f"""## {i}. {title}
-
-**热度**: 🔥 {score} points | 💬 {comments} comments
-
-**链接**: {url if url else 'N/A'}
-
-**来源**: [Hacker News #{story_id}](https://news.ycombinator.com/item?id={story_id})
-
----
-
-"""
-        return md
-
-# 使用示例
-if __name__ == "__main__":
-    hn = HackerNewsAI()
-    stories = hn.get_ai_news(count=10, source='top')
-    markdown = hn.generate_markdown(stories)
-    print(markdown)
+# 保存文件
+with open('ai_news_full.md', 'w', encoding='utf-8') as f:
+    f.write(markdown)
 ```
 
-### 中文翻译整合
-
-使用 Claude API 进行标题翻译：
+### 仅翻译标题
 
 ```python
-import anthropic
+hn = HackerNewsAI()
 
-def translate_title(title: str) -> str:
-    """使用 Claude API 翻译标题"""
-    client = anthropic.Anthropic()
+stories = hn.get_ai_news(count=20, source='top')
 
-    message = client.messages.create(
+for story in stories:
+    title = story.get('title', '')
+    title_zh = hn.translate_text(title, 'title')
+    print(f"原文: {title}")
+    print(f"翻译: {title_zh}")
+    print()
+```
+
+### 自定义翻译 Prompt
+
+```python
+def custom_translate(self, text: str) -> str:
+    """自定义翻译方法"""
+    prompt = f"""请将以下技术文章翻译成中文：
+
+要求：
+1. 保留所有技术术语原文（如 API、LLM、GPU 等）
+2. 使用专业的技术写作风格
+3. 保持原文的逻辑结构
+4. 翻译要准确流畅
+
+原文：
+{text}
+"""
+    message = self.translator.messages.create(
         model="claude-sonnet-4-20250514",
-        max_tokens=100,
-        messages=[{
-            "role": "user",
-            "content": f"将以下英文标题翻译成简洁的中文，只返回翻译结果：\n{title}"
-        }]
+        max_tokens=8192,
+        messages=[{"role": "user", "content": prompt}]
     )
-
     return message.content[0].text
 ```
 
-### 定时任务配置
+## 依赖说明
 
-使用 cron 每日自动更新：
+### 必需依赖
 
 ```bash
-# 每天早上 8 点更新 AI 新闻
-0 8 * * * cd /path/to/skill && python scripts/fetch_ai_news.py --output daily_ai_news.md
+pip install requests
+```
+
+### 可选依赖
+
+```bash
+# 获取完整文章内容（--full）
+pip install beautifulsoup4
+
+# 中文翻译（--translate）
+pip install anthropic
+export ANTHROPIC_API_KEY=sk-ant-...
+```
+
+### 功能可用性
+
+| 功能 | 必需依赖 | 可选依赖 |
+|------|----------|----------|
+| 基本摘要 | requests | - |
+| 完整内容 | requests | beautifulsoup4 |
+| 中文翻译 | requests | anthropic + API Key |
+| 完整+翻译 | requests | beautifulsoup4 + anthropic |
+
+## 翻译策略
+
+### Claude API 翻译（推荐）
+
+当设置了 `ANTHROPIC_API_KEY` 时使用：
+
+- **标题翻译**: 简洁准确，保留技术术语
+- **正文翻译**: 保持段落结构，流畅自然
+- **评论翻译**: 保留口语化风格
+
+### 规则翻译（回退）
+
+无 API Key 时使用基于规则的翻译：
+
+```python
+translations = {
+    'Show HN:': '展示：',
+    'Ask HN:': '提问：',
+    'artificial intelligence': '人工智能',
+    'machine learning': '机器学习',
+    'large language model': '大语言模型',
+    ...
+}
+```
+
+## 定时任务配置
+
+### 每日更新完整新闻
+
+```bash
+# crontab -e
+# 每天早上 8 点获取完整 AI 新闻并翻译
+0 8 * * * cd /path/to/skill && \
+  python scripts/fetch_ai_news.py \
+    --full --translate \
+    --count 15 \
+    --output /path/to/daily_ai_news.md
+```
+
+### 每小时快速更新
+
+```bash
+# 每小时获取摘要（不翻译，速度快）
+0 * * * * cd /path/to/skill && \
+  python scripts/fetch_ai_news.py \
+    --count 10 \
+    --output /path/to/hourly_ai_news.md
 ```
 
 ## Best Practices
 
-### 1. 请求限制
-- Hacker News API 无速率限制，但建议间隔 0.5 秒
-- 批量请求时使用异步提高效率
+### 1. 翻译质量优化
 
-### 2. 关键词优化
-- 定期更新 AI 关键词列表
-- 根据热度调整权重
-- 排除误匹配（如 "AI" 作为人名缩写）
+- 设置 `ANTHROPIC_API_KEY` 使用 Claude 翻译
+- 对于长文章，翻译前会自动截断到 5000 字符
+- 技术术语保持原文
 
-### 3. 缓存策略
-- 缓存已获取的新闻内容
-- 使用 story ID 作为缓存键
-- 设置合理的过期时间
+### 2. 性能优化
 
-### 4. 错误处理
-```python
-def fetch_with_retry(url, retries=3):
-    for i in range(retries):
-        try:
-            response = requests.get(url, timeout=10)
-            response.raise_for_status()
-            return response.json()
-        except Exception as e:
-            if i == retries - 1:
-                raise
-            time.sleep(1)
-```
+- 摘要模式比完整模式快 5-10 倍
+- 使用 `--max-scan 100` 减少扫描量
+- 使用 `--max-comments 3` 减少评论获取
+
+### 3. API 成本控制
+
+- 仅对重要新闻使用翻译
+- 使用 `claude-sonnet-4-20250514` 平衡质量和成本
+- 批量处理时设置合理间隔
 
 ## Common Issues
 
+### 无法获取文章内容
+
+1. 检查是否安装 beautifulsoup4
+2. 某些网站有反爬虫保护
+3. 付费内容无法获取
+
+### 翻译功能不工作
+
+1. 检查 `ANTHROPIC_API_KEY` 是否设置
+2. 检查 API Key 是否有效
+3. 检查网络连接
+
 ### API 请求失败
-1. 检查网络连接
-2. 验证 API 端点是否正确
-3. 添加重试机制
 
-### 关键词匹配不准确
-1. 使用小写比较
-2. 添加词边界检查
-3. 结合上下文判断
-
-### 翻译质量问题
-1. 保留技术术语原文
-2. 使用专业翻译 prompt
-3. 人工审核重要内容
+1. 增加请求间隔 `rate_limit`
+2. 检查网络代理设置
+3. HN API 无速率限制，但建议控制请求频率
 
 ## Reference Documentation
 - Hacker News API: https://github.com/HackerNews/API
-- Firebase REST API: https://firebase.google.com/docs/reference/rest/database
 - Anthropic API: https://docs.anthropic.com/
+- BeautifulSoup: https://www.crummy.com/software/BeautifulSoup/
