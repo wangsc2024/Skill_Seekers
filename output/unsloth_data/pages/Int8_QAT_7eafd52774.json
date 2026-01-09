@@ -1,0 +1,19 @@
+{
+  "title": "Int8 QAT",
+  "content": "from torchao.quantization import Int8DynamicActivationInt8WeightConfig\nmodel.save_pretrained_torchao(\n    model, \"tokenizer\",\n    torchao_config = Int8DynamicActivationInt8WeightConfig(),\n)\npython",
+  "code_samples": [
+    {
+      "code": "{% endcode %}\n\nYou can then run the merged QAT lower precision model in vLLM, Unsloth and other systems for inference! These are all in the [Qwen3-4B QAT Colab notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_\\(4B\\)_Instruct-QAT.ipynb) we have as well!\n\n### :teapot:Quantizing models without training\n\nYou can also call `model.save_pretrained_torchao` directly without doing any QAT as well! This is simply PTQ or native quantization. For example, saving to Dynamic float8 format is below:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": ":teapot:Quantizing models without training",
+      "id": ":teapot:quantizing-models-without-training"
+    }
+  ],
+  "url": "llms-txt#int8-qat",
+  "links": []
+}

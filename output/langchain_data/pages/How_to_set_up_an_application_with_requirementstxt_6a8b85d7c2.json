@@ -1,0 +1,49 @@
+{
+  "title": "How to set up an application with requirements.txt",
+  "content": "Source: https://docs.langchain.com/langsmith/setup-app-requirements-txt\n\nAn application must be configured with a [configuration file](/langsmith/cli#configuration-file) in order to be deployed to LangSmith (or to be self-hosted). This how-to guide discusses the basic steps to set up an application for deployment using `requirements.txt` to specify project dependencies.\n\nThis example is based on [this repository](https://github.com/langchain-ai/langgraph-example), which uses the LangGraph framework.\n\nThe final repository structure will look something like this:\n\n<Tip>\n  LangSmith Deployment supports deploying a [LangGraph](/oss/python/langgraph/overview) *graph*. However, the implementation of a *node* of a graph can contain arbitrary code. This means any framework can be implemented within a node and deployed on LangSmith Deployment. This lets you implement your core application logic without using additional LangGraph OSS APIs while still using LangSmith for [deployment](/langsmith/deployments), scaling, and [observability](/langsmith/observability). For more details, refer to [Use any framework with LangSmith Deployment](/langsmith/application-structure#use-any-framework-with-langsmith-deployment).\n</Tip>\n\nYou can also set up with:\n\n* `pyproject.toml`: If you prefer using poetry for dependency management, check out [this how-to guide](/langsmith/setup-app-requirements-txt) on using `pyproject.toml` for LangSmith.\n* a monorepo: If you are interested in deploying a graph located inside a monorepo, take a look at [this repository](https://github.com/langchain-ai/langgraph-example-monorepo) for an example of how to do so.\n\nAfter each step, an example file directory is provided to demonstrate how code can be organized.\n\n## Specify dependencies\n\nDependencies can optionally be specified in one of the following files: `pyproject.toml`, `setup.py`, or `requirements.txt`. If none of these files is created, then dependencies can be specified later in the [configuration file](#create-the-configuration-file).\n\nThe dependencies below will be included in the image, you can also use them in your code, as long as with a compatible version range:\n\nExample `requirements.txt` file:\n\nExample file directory:\n\n## Specify environment variables\n\nEnvironment variables can optionally be specified in a file (e.g. `.env`). See the [Environment Variables reference](/langsmith/env-var) to configure additional variables for a deployment.\n\nExample file directory:\n\n<Tip>\n  By default, LangSmith follows the `uv`/`pip` behavior of **not** installing prerelease versions unless explicitly allowed. If want to use prereleases, you have the following options:\n\n* With `pyproject.toml`: add `allow-prereleases = true` to your `[tool.uv]` section.\n  * With `requirements.txt` or `setup.py`: you must explicitly specify every prerelease dependency, including transitive ones. For example, if you declare `a==0.0.1a1` and `a` depends on `b==0.0.1a1`, then you must also explicitly include `b==0.0.1a1` in your dependencies.\n</Tip>\n\nImplement your graphs. Graphs can be defined in a single file or multiple files. Make note of the variable names of each [CompiledStateGraph](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.CompiledStateGraph) to be included in the application. The variable names will be used later when creating the [LangGraph configuration file](/langsmith/cli#configuration-file).\n\nExample `agent.py` file, which shows how to import from other modules you define (code for the modules is not shown here, please see [this repository](https://github.com/langchain-ai/langgraph-example) to see their implementation):\n\n```python  theme={null}",
+  "code_samples": [
+    {
+      "code": "<Tip>\n  LangSmith Deployment supports deploying a [LangGraph](/oss/python/langgraph/overview) *graph*. However, the implementation of a *node* of a graph can contain arbitrary code. This means any framework can be implemented within a node and deployed on LangSmith Deployment. This lets you implement your core application logic without using additional LangGraph OSS APIs while still using LangSmith for [deployment](/langsmith/deployments), scaling, and [observability](/langsmith/observability). For more details, refer to [Use any framework with LangSmith Deployment](/langsmith/application-structure#use-any-framework-with-langsmith-deployment).\n</Tip>\n\nYou can also set up with:\n\n* `pyproject.toml`: If you prefer using poetry for dependency management, check out [this how-to guide](/langsmith/setup-app-requirements-txt) on using `pyproject.toml` for LangSmith.\n* a monorepo: If you are interested in deploying a graph located inside a monorepo, take a look at [this repository](https://github.com/langchain-ai/langgraph-example-monorepo) for an example of how to do so.\n\nAfter each step, an example file directory is provided to demonstrate how code can be organized.\n\n## Specify dependencies\n\nDependencies can optionally be specified in one of the following files: `pyproject.toml`, `setup.py`, or `requirements.txt`. If none of these files is created, then dependencies can be specified later in the [configuration file](#create-the-configuration-file).\n\nThe dependencies below will be included in the image, you can also use them in your code, as long as with a compatible version range:",
+      "language": "unknown"
+    },
+    {
+      "code": "Example `requirements.txt` file:",
+      "language": "unknown"
+    },
+    {
+      "code": "Example file directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Specify environment variables\n\nEnvironment variables can optionally be specified in a file (e.g. `.env`). See the [Environment Variables reference](/langsmith/env-var) to configure additional variables for a deployment.\n\nExample `.env` file:",
+      "language": "unknown"
+    },
+    {
+      "code": "Example file directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n  By default, LangSmith follows the `uv`/`pip` behavior of **not** installing prerelease versions unless explicitly allowed. If want to use prereleases, you have the following options:\n\n  * With `pyproject.toml`: add `allow-prereleases = true` to your `[tool.uv]` section.\n  * With `requirements.txt` or `setup.py`: you must explicitly specify every prerelease dependency, including transitive ones. For example, if you declare `a==0.0.1a1` and `a` depends on `b==0.0.1a1`, then you must also explicitly include `b==0.0.1a1` in your dependencies.\n</Tip>\n\n## Define graphs\n\nImplement your graphs. Graphs can be defined in a single file or multiple files. Make note of the variable names of each [CompiledStateGraph](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.CompiledStateGraph) to be included in the application. The variable names will be used later when creating the [LangGraph configuration file](/langsmith/cli#configuration-file).\n\nExample `agent.py` file, which shows how to import from other modules you define (code for the modules is not shown here, please see [this repository](https://github.com/langchain-ai/langgraph-example) to see their implementation):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Specify dependencies",
+      "id": "specify-dependencies"
+    },
+    {
+      "level": "h2",
+      "text": "Specify environment variables",
+      "id": "specify-environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Define graphs",
+      "id": "define-graphs"
+    }
+  ],
+  "url": "llms-txt#how-to-set-up-an-application-with-requirements.txt",
+  "links": []
+}

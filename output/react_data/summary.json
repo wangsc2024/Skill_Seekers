@@ -1,0 +1,717 @@
+{
+  "name": "react",
+  "total_pages": 177,
+  "base_url": "https://react.dev/",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "Quick Start",
+      "url": "https://react.dev/learn"
+    },
+    {
+      "title": "Thinking in React",
+      "url": "https://react.dev/learn/thinking-in-react"
+    },
+    {
+      "title": "React Reference Overview",
+      "url": "https://react.dev/reference/react"
+    },
+    {
+      "title": "React DOM APIs",
+      "url": "https://react.dev/reference/react-dom"
+    },
+    {
+      "title": "Built-in React Hooks",
+      "url": "https://react.dev/reference/react/hooks"
+    },
+    {
+      "title": "Tutorial: Tic-Tac-Toe",
+      "url": "https://react.dev/learn/tutorial-tic-tac-toe"
+    },
+    {
+      "title": "Installation",
+      "url": "https://react.dev/learn/installation"
+    },
+    {
+      "title": "Creating a React App",
+      "url": "https://react.dev/learn/creating-a-react-app"
+    },
+    {
+      "title": "Build a React app from Scratch",
+      "url": "https://react.dev/learn/build-a-react-app-from-scratch"
+    },
+    {
+      "title": "Add React to an Existing Project",
+      "url": "https://react.dev/learn/add-react-to-an-existing-project"
+    },
+    {
+      "title": "Setup",
+      "url": "https://react.dev/learn/setup"
+    },
+    {
+      "title": "Editor Setup",
+      "url": "https://react.dev/learn/editor-setup"
+    },
+    {
+      "title": "Using TypeScript",
+      "url": "https://react.dev/learn/typescript"
+    },
+    {
+      "title": "React Developer Tools",
+      "url": "https://react.dev/learn/react-developer-tools"
+    },
+    {
+      "title": "React Compiler",
+      "url": "https://react.dev/learn/react-compiler"
+    },
+    {
+      "title": "Introduction",
+      "url": "https://react.dev/learn/react-compiler/introduction"
+    },
+    {
+      "title": "Installation",
+      "url": "https://react.dev/learn/react-compiler/installation"
+    },
+    {
+      "title": "Incremental Adoption",
+      "url": "https://react.dev/learn/react-compiler/incremental-adoption"
+    },
+    {
+      "title": "Debugging and Troubleshooting",
+      "url": "https://react.dev/learn/react-compiler/debugging"
+    },
+    {
+      "title": "Describing the UI",
+      "url": "https://react.dev/learn/describing-the-ui"
+    },
+    {
+      "title": "Your First Component",
+      "url": "https://react.dev/learn/your-first-component"
+    },
+    {
+      "title": "Importing and Exporting Components",
+      "url": "https://react.dev/learn/importing-and-exporting-components"
+    },
+    {
+      "title": "Writing Markup with JSX",
+      "url": "https://react.dev/learn/writing-markup-with-jsx"
+    },
+    {
+      "title": "JavaScript in JSX with Curly Braces",
+      "url": "https://react.dev/learn/javascript-in-jsx-with-curly-braces"
+    },
+    {
+      "title": "Passing Props to a Component",
+      "url": "https://react.dev/learn/passing-props-to-a-component"
+    },
+    {
+      "title": "Conditional Rendering",
+      "url": "https://react.dev/learn/conditional-rendering"
+    },
+    {
+      "title": "Rendering Lists",
+      "url": "https://react.dev/learn/rendering-lists"
+    },
+    {
+      "title": "Keeping Components Pure",
+      "url": "https://react.dev/learn/keeping-components-pure"
+    },
+    {
+      "title": "Understanding Your UI as a Tree",
+      "url": "https://react.dev/learn/understanding-your-ui-as-a-tree"
+    },
+    {
+      "title": "Adding Interactivity",
+      "url": "https://react.dev/learn/adding-interactivity"
+    },
+    {
+      "title": "Responding to Events",
+      "url": "https://react.dev/learn/responding-to-events"
+    },
+    {
+      "title": "State: A Component's Memory",
+      "url": "https://react.dev/learn/state-a-components-memory"
+    },
+    {
+      "title": "Render and Commit",
+      "url": "https://react.dev/learn/render-and-commit"
+    },
+    {
+      "title": "State as a Snapshot",
+      "url": "https://react.dev/learn/state-as-a-snapshot"
+    },
+    {
+      "title": "Queueing a Series of State Updates",
+      "url": "https://react.dev/learn/queueing-a-series-of-state-updates"
+    },
+    {
+      "title": "Updating Objects in State",
+      "url": "https://react.dev/learn/updating-objects-in-state"
+    },
+    {
+      "title": "Updating Arrays in State",
+      "url": "https://react.dev/learn/updating-arrays-in-state"
+    },
+    {
+      "title": "Managing State",
+      "url": "https://react.dev/learn/managing-state"
+    },
+    {
+      "title": "Reacting to Input with State",
+      "url": "https://react.dev/learn/reacting-to-input-with-state"
+    },
+    {
+      "title": "Choosing the State Structure",
+      "url": "https://react.dev/learn/choosing-the-state-structure"
+    },
+    {
+      "title": "Sharing State Between Components",
+      "url": "https://react.dev/learn/sharing-state-between-components"
+    },
+    {
+      "title": "Preserving and Resetting State",
+      "url": "https://react.dev/learn/preserving-and-resetting-state"
+    },
+    {
+      "title": "Extracting State Logic into a Reducer",
+      "url": "https://react.dev/learn/extracting-state-logic-into-a-reducer"
+    },
+    {
+      "title": "Passing Data Deeply with Context",
+      "url": "https://react.dev/learn/passing-data-deeply-with-context"
+    },
+    {
+      "title": "Scaling Up with Reducer and Context",
+      "url": "https://react.dev/learn/scaling-up-with-reducer-and-context"
+    },
+    {
+      "title": "Escape Hatches",
+      "url": "https://react.dev/learn/escape-hatches"
+    },
+    {
+      "title": "Referencing Values with Refs",
+      "url": "https://react.dev/learn/referencing-values-with-refs"
+    },
+    {
+      "title": "Manipulating the DOM with Refs",
+      "url": "https://react.dev/learn/manipulating-the-dom-with-refs"
+    },
+    {
+      "title": "Synchronizing with Effects",
+      "url": "https://react.dev/learn/synchronizing-with-effects"
+    },
+    {
+      "title": "You Might Not Need an Effect",
+      "url": "https://react.dev/learn/you-might-not-need-an-effect"
+    },
+    {
+      "title": "Lifecycle of Reactive Effects",
+      "url": "https://react.dev/learn/lifecycle-of-reactive-effects"
+    },
+    {
+      "title": "Separating Events from Effects",
+      "url": "https://react.dev/learn/separating-events-from-effects"
+    },
+    {
+      "title": "Removing Effect Dependencies",
+      "url": "https://react.dev/learn/removing-effect-dependencies"
+    },
+    {
+      "title": "Reusing Logic with Custom Hooks",
+      "url": "https://react.dev/learn/reusing-logic-with-custom-hooks"
+    },
+    {
+      "title": "useState",
+      "url": "https://react.dev/reference/react/useState"
+    },
+    {
+      "title": "useActionState",
+      "url": "https://react.dev/reference/react/useActionState"
+    },
+    {
+      "title": "useCallback",
+      "url": "https://react.dev/reference/react/useCallback"
+    },
+    {
+      "title": "useContext",
+      "url": "https://react.dev/reference/react/useContext"
+    },
+    {
+      "title": "useDebugValue",
+      "url": "https://react.dev/reference/react/useDebugValue"
+    },
+    {
+      "title": "useDeferredValue",
+      "url": "https://react.dev/reference/react/useDeferredValue"
+    },
+    {
+      "title": "useEffect",
+      "url": "https://react.dev/reference/react/useEffect"
+    },
+    {
+      "title": "useEffectEvent",
+      "url": "https://react.dev/reference/react/useEffectEvent"
+    },
+    {
+      "title": "useId",
+      "url": "https://react.dev/reference/react/useId"
+    },
+    {
+      "title": "useImperativeHandle",
+      "url": "https://react.dev/reference/react/useImperativeHandle"
+    },
+    {
+      "title": "useInsertionEffect",
+      "url": "https://react.dev/reference/react/useInsertionEffect"
+    },
+    {
+      "title": "useLayoutEffect",
+      "url": "https://react.dev/reference/react/useLayoutEffect"
+    },
+    {
+      "title": "useMemo",
+      "url": "https://react.dev/reference/react/useMemo"
+    },
+    {
+      "title": "useOptimistic",
+      "url": "https://react.dev/reference/react/useOptimistic"
+    },
+    {
+      "title": "useReducer",
+      "url": "https://react.dev/reference/react/useReducer"
+    },
+    {
+      "title": "useRef",
+      "url": "https://react.dev/reference/react/useRef"
+    },
+    {
+      "title": "useSyncExternalStore",
+      "url": "https://react.dev/reference/react/useSyncExternalStore"
+    },
+    {
+      "title": "useTransition",
+      "url": "https://react.dev/reference/react/useTransition"
+    },
+    {
+      "title": "Built-in React Components",
+      "url": "https://react.dev/reference/react/components"
+    },
+    {
+      "title": "<Fragment> (<>...</>)",
+      "url": "https://react.dev/reference/react/Fragment"
+    },
+    {
+      "title": "<Profiler>",
+      "url": "https://react.dev/reference/react/Profiler"
+    },
+    {
+      "title": "<StrictMode>",
+      "url": "https://react.dev/reference/react/StrictMode"
+    },
+    {
+      "title": "<Suspense>",
+      "url": "https://react.dev/reference/react/Suspense"
+    },
+    {
+      "title": "<Activity>",
+      "url": "https://react.dev/reference/react/Activity"
+    },
+    {
+      "title": "<ViewTransition> - This feature is available in the latest Canary version of React",
+      "url": "https://react.dev/reference/react/ViewTransition"
+    },
+    {
+      "title": "Built-in React APIs",
+      "url": "https://react.dev/reference/react/apis"
+    },
+    {
+      "title": "act",
+      "url": "https://react.dev/reference/react/act"
+    },
+    {
+      "title": "addTransitionType - This feature is available in the latest Canary version of React",
+      "url": "https://react.dev/reference/react/addTransitionType"
+    },
+    {
+      "title": "cache",
+      "url": "https://react.dev/reference/react/cache"
+    },
+    {
+      "title": "cacheSignal",
+      "url": "https://react.dev/reference/react/cacheSignal"
+    },
+    {
+      "title": "captureOwnerStack",
+      "url": "https://react.dev/reference/react/captureOwnerStack"
+    },
+    {
+      "title": "createContext",
+      "url": "https://react.dev/reference/react/createContext"
+    },
+    {
+      "title": "lazy",
+      "url": "https://react.dev/reference/react/lazy"
+    },
+    {
+      "title": "memo",
+      "url": "https://react.dev/reference/react/memo"
+    },
+    {
+      "title": "startTransition",
+      "url": "https://react.dev/reference/react/startTransition"
+    },
+    {
+      "title": "use",
+      "url": "https://react.dev/reference/react/use"
+    },
+    {
+      "title": "experimental_taintObjectReference - This feature is available in the latest Experimental version of React",
+      "url": "https://react.dev/reference/react/experimental_taintObjectReference"
+    },
+    {
+      "title": "experimental_taintUniqueValue - This feature is available in the latest Experimental version of React",
+      "url": "https://react.dev/reference/react/experimental_taintUniqueValue"
+    },
+    {
+      "title": "Built-in React DOM Hooks",
+      "url": "https://react.dev/reference/react-dom/hooks"
+    },
+    {
+      "title": "useFormStatus",
+      "url": "https://react.dev/reference/react-dom/hooks/useFormStatus"
+    },
+    {
+      "title": "React DOM Components",
+      "url": "https://react.dev/reference/react-dom/components"
+    },
+    {
+      "title": "Common components (e.g. <div>)",
+      "url": "https://react.dev/reference/react-dom/components/common"
+    },
+    {
+      "title": "<form>",
+      "url": "https://react.dev/reference/react-dom/components/form"
+    },
+    {
+      "title": "<input>",
+      "url": "https://react.dev/reference/react-dom/components/input"
+    },
+    {
+      "title": "<option>",
+      "url": "https://react.dev/reference/react-dom/components/option"
+    },
+    {
+      "title": "<progress>",
+      "url": "https://react.dev/reference/react-dom/components/progress"
+    },
+    {
+      "title": "<select>",
+      "url": "https://react.dev/reference/react-dom/components/select"
+    },
+    {
+      "title": "<textarea>",
+      "url": "https://react.dev/reference/react-dom/components/textarea"
+    },
+    {
+      "title": "<link>",
+      "url": "https://react.dev/reference/react-dom/components/link"
+    },
+    {
+      "title": "<meta>",
+      "url": "https://react.dev/reference/react-dom/components/meta"
+    },
+    {
+      "title": "<script>",
+      "url": "https://react.dev/reference/react-dom/components/script"
+    },
+    {
+      "title": "<style>",
+      "url": "https://react.dev/reference/react-dom/components/style"
+    },
+    {
+      "title": "<title>",
+      "url": "https://react.dev/reference/react-dom/components/title"
+    },
+    {
+      "title": "createPortal",
+      "url": "https://react.dev/reference/react-dom/createPortal"
+    },
+    {
+      "title": "flushSync",
+      "url": "https://react.dev/reference/react-dom/flushSync"
+    },
+    {
+      "title": "preconnect",
+      "url": "https://react.dev/reference/react-dom/preconnect"
+    },
+    {
+      "title": "prefetchDNS",
+      "url": "https://react.dev/reference/react-dom/prefetchDNS"
+    },
+    {
+      "title": "preinit",
+      "url": "https://react.dev/reference/react-dom/preinit"
+    },
+    {
+      "title": "preinitModule",
+      "url": "https://react.dev/reference/react-dom/preinitModule"
+    },
+    {
+      "title": "preload",
+      "url": "https://react.dev/reference/react-dom/preload"
+    },
+    {
+      "title": "preloadModule",
+      "url": "https://react.dev/reference/react-dom/preloadModule"
+    },
+    {
+      "title": "Client React DOM APIs",
+      "url": "https://react.dev/reference/react-dom/client"
+    },
+    {
+      "title": "createRoot",
+      "url": "https://react.dev/reference/react-dom/client/createRoot"
+    },
+    {
+      "title": "hydrateRoot",
+      "url": "https://react.dev/reference/react-dom/client/hydrateRoot"
+    },
+    {
+      "title": "Server React DOM APIs",
+      "url": "https://react.dev/reference/react-dom/server"
+    },
+    {
+      "title": "renderToPipeableStream",
+      "url": "https://react.dev/reference/react-dom/server/renderToPipeableStream"
+    },
+    {
+      "title": "renderToReadableStream",
+      "url": "https://react.dev/reference/react-dom/server/renderToReadableStream"
+    },
+    {
+      "title": "renderToStaticMarkup",
+      "url": "https://react.dev/reference/react-dom/server/renderToStaticMarkup"
+    },
+    {
+      "title": "renderToString",
+      "url": "https://react.dev/reference/react-dom/server/renderToString"
+    },
+    {
+      "title": "resume",
+      "url": "https://react.dev/reference/react-dom/server/resume"
+    },
+    {
+      "title": "resumeToPipeableStream",
+      "url": "https://react.dev/reference/react-dom/server/resumeToPipeableStream"
+    },
+    {
+      "title": "Static React DOM APIs",
+      "url": "https://react.dev/reference/react-dom/static"
+    },
+    {
+      "title": "prerender",
+      "url": "https://react.dev/reference/react-dom/static/prerender"
+    },
+    {
+      "title": "prerenderToNodeStream",
+      "url": "https://react.dev/reference/react-dom/static/prerenderToNodeStream"
+    },
+    {
+      "title": "resumeAndPrerender",
+      "url": "https://react.dev/reference/react-dom/static/resumeAndPrerender"
+    },
+    {
+      "title": "resumeAndPrerenderToNodeStream",
+      "url": "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream"
+    },
+    {
+      "title": "Configuration",
+      "url": "https://react.dev/reference/react-compiler/configuration"
+    },
+    {
+      "title": "compilationMode",
+      "url": "https://react.dev/reference/react-compiler/compilationMode"
+    },
+    {
+      "title": "gating",
+      "url": "https://react.dev/reference/react-compiler/gating"
+    },
+    {
+      "title": "logger",
+      "url": "https://react.dev/reference/react-compiler/logger"
+    },
+    {
+      "title": "panicThreshold",
+      "url": "https://react.dev/reference/react-compiler/panicThreshold"
+    },
+    {
+      "title": "target",
+      "url": "https://react.dev/reference/react-compiler/target"
+    },
+    {
+      "title": "Directives",
+      "url": "https://react.dev/reference/react-compiler/directives"
+    },
+    {
+      "title": "use memo",
+      "url": "https://react.dev/reference/react-compiler/directives/use-memo"
+    },
+    {
+      "title": "use no memo",
+      "url": "https://react.dev/reference/react-compiler/directives/use-no-memo"
+    },
+    {
+      "title": "Compiling Libraries",
+      "url": "https://react.dev/reference/react-compiler/compiling-libraries"
+    },
+    {
+      "title": "React Performance tracks",
+      "url": "https://react.dev/reference/dev-tools/react-performance-tracks"
+    },
+    {
+      "title": "eslint-plugin-react-hooks - This feature is available in the latest RC version",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks"
+    },
+    {
+      "title": "exhaustive-deps",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps"
+    },
+    {
+      "title": "rules-of-hooks",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks"
+    },
+    {
+      "title": "component-hook-factories",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories"
+    },
+    {
+      "title": "config",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/config"
+    },
+    {
+      "title": "error-boundaries",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries"
+    },
+    {
+      "title": "gating",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating"
+    },
+    {
+      "title": "globals",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals"
+    },
+    {
+      "title": "immutability",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability"
+    },
+    {
+      "title": "incompatible-library",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library"
+    },
+    {
+      "title": "preserve-manual-memoization",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization"
+    },
+    {
+      "title": "purity",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity"
+    },
+    {
+      "title": "refs",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs"
+    },
+    {
+      "title": "set-state-in-effect",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect"
+    },
+    {
+      "title": "set-state-in-render",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render"
+    },
+    {
+      "title": "static-components",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components"
+    },
+    {
+      "title": "unsupported-syntax",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax"
+    },
+    {
+      "title": "use-memo",
+      "url": "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo"
+    },
+    {
+      "title": "Rules of React",
+      "url": "https://react.dev/reference/rules"
+    },
+    {
+      "title": "Components and Hooks must be pure",
+      "url": "https://react.dev/reference/rules/components-and-hooks-must-be-pure"
+    },
+    {
+      "title": "React calls Components and Hooks",
+      "url": "https://react.dev/reference/rules/react-calls-components-and-hooks"
+    },
+    {
+      "title": "Rules of Hooks",
+      "url": "https://react.dev/reference/rules/rules-of-hooks"
+    },
+    {
+      "title": "Server Components",
+      "url": "https://react.dev/reference/rsc/server-components"
+    },
+    {
+      "title": "Server Functions",
+      "url": "https://react.dev/reference/rsc/server-functions"
+    },
+    {
+      "title": "Directives",
+      "url": "https://react.dev/reference/rsc/directives"
+    },
+    {
+      "title": "'use client'",
+      "url": "https://react.dev/reference/rsc/use-client"
+    },
+    {
+      "title": "'use server'",
+      "url": "https://react.dev/reference/rsc/use-server"
+    },
+    {
+      "title": "Legacy React APIs",
+      "url": "https://react.dev/reference/react/legacy"
+    },
+    {
+      "title": "Children",
+      "url": "https://react.dev/reference/react/Children"
+    },
+    {
+      "title": "cloneElement",
+      "url": "https://react.dev/reference/react/cloneElement"
+    },
+    {
+      "title": "Component",
+      "url": "https://react.dev/reference/react/Component"
+    },
+    {
+      "title": "createElement",
+      "url": "https://react.dev/reference/react/createElement"
+    },
+    {
+      "title": "createRef",
+      "url": "https://react.dev/reference/react/createRef"
+    },
+    {
+      "title": "forwardRef",
+      "url": "https://react.dev/reference/react/forwardRef"
+    },
+    {
+      "title": "isValidElement",
+      "url": "https://react.dev/reference/react/isValidElement"
+    },
+    {
+      "title": "PureComponent",
+      "url": "https://react.dev/reference/react/PureComponent"
+    }
+  ]
+}

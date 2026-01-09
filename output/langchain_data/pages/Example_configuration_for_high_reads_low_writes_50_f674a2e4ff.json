@@ -1,0 +1,19 @@
+{
+  "title": "Example configuration for high reads, low writes (500 read/5 write requests per second)",
+  "content": "api:\n  replicas: 10\n  resources:\n    requests:\n      cpu: \"1\"\n      memory: \"2Gi\"\n    limits:\n      cpu: \"2\"\n      memory: \"4Gi\"\n\nqueue:\n  replicas: 1  # Default, minimal write load\n  resources:\n    requests:\n      cpu: \"1\"\n      memory: \"2Gi\"\n    limits:\n      cpu: \"2\"\n      memory: \"4Gi\"\n\nredis:\n  resources:\n    requests:\n      memory: \"2Gi\"\n    limits:\n      memory: \"2Gi\"\n\npostgres:\n  resources:\n    requests:\n      cpu: \"4\"\n      memory: \"16Gi\"\n    limits:\n      cpu: \"8\"\n      memory: \"32Gi\"\n  # Consider read replicas for high read scenarios\n  readReplicas: 2\nyaml  theme={null}",
+  "code_samples": [
+    {
+      "code": "### Medium reads, medium writes <a name=\"medium-reads-medium-writes\" />\n\nThis is a balanced configuration that should handle moderate read and write loads (50 read/50 write requests per second).\n\nFor this, we recommend a configuration like this:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Medium reads, medium writes <a name=\"medium-reads-medium-writes\" />",
+      "id": "medium-reads,-medium-writes-<a-name=\"medium-reads-medium-writes\"-/>"
+    }
+  ],
+  "url": "llms-txt#example-configuration-for-high-reads,-low-writes-(500-read/5-write-requests-per-second)",
+  "links": []
+}

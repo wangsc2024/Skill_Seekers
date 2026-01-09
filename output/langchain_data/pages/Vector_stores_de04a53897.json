@@ -1,0 +1,364 @@
+{
+  "title": "Vector stores",
+  "content": "Source: https://docs.langchain.com/oss/python/integrations/vectorstores/index\n\nA vector store stores [embedded](/oss/python/integrations/text_embedding) data and performs similarity search.\n\nLangChain provides a unified interface for vector stores, allowing you to:\n\n* `add_documents` - Add documents to the store.\n* `delete` - Remove stored documents by ID.\n* `similarity_search` - Query for semantically similar documents.\n\nThis abstraction lets you switch between different implementations without altering your application logic.\n\nTo initialize a vector store, provide it with an embedding model:\n\nAdd [`Document`](https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document) objects (holding `page_content` and optional metadata) like so:\n\n### Deleting documents\n\nDelete by specifying IDs:\n\n### Similarity search\n\nIssue a semantic query using `similarity_search`, which returns the closest embedded documents:\n\nMany vector stores support parameters like:\n\n* `k` — number of results to return\n* `filter` — conditional filtering based on metadata\n\n### Similarity metrics & indexing\n\nEmbedding similarity may be computed using:\n\n* **Cosine similarity**\n* **Euclidean distance**\n* **Dot product**\n\nEfficient search often employs indexing methods such as HNSW (Hierarchical Navigable Small World), though specifics depend on the vector store.\n\n### Metadata filtering\n\nFiltering by metadata (e.g., source, date) can refine search results:\n\n<important>\n  Support for metadata-based filtering varies between implementations.\n  Check the documentation of your chosen vector store for details.\n</important>\n\n**Select embedding model:**\n\n<AccordionGroup>\n  <Accordion title=\"OpenAI\">\n    <CodeGroup>\n\n<Accordion title=\"Azure\">\n\n<Accordion title=\"Google Gemini\">\n\n<Accordion title=\"Google Vertex\">\n\n<Accordion title=\"AWS\">\n\n<Accordion title=\"HuggingFace\">\n\n<Accordion title=\"Ollama\">\n\n<Accordion title=\"Cohere\">\n\n<Accordion title=\"Mistral AI\">\n\n<Accordion title=\"Nomic\">\n\n<Accordion title=\"NVIDIA\">\n\n<Accordion title=\"Voyage AI\">\n\n<Accordion title=\"IBM watsonx\">\n\n<Accordion title=\"Fake\">\n\n<Accordion title=\"xAI\">\n\n<Accordion title=\"Perplexity\">\n\n<Accordion title=\"DeepSeek\">\n\n</Accordion>\n</AccordionGroup>\n\n**Select vector store:**\n\n<AccordionGroup>\n  <Accordion title=\"In-memory\">\n    <CodeGroup>\n\n<Accordion title=\"Amazon OpenSearch\">\n\n<Accordion title=\"Astra DB\">\n    <CodeGroup>\n\n<Accordion title=\"Azure Cosmos DB NoSQL\">\n    <CodeGroup>\n\n<Accordion title=\"Azure Cosmos DB Mongo vCore\">\n    <CodeGroup>\n\n<Accordion title=\"Chroma\">\n    <CodeGroup>\n\n<Accordion title=\"FAISS\">\n\n<Accordion title=\"Milvus\">\n    <CodeGroup>\n\n<Accordion title=\"MongoDB\">\n\n<Accordion title=\"PGVector\">\n    <CodeGroup>\n\n<Accordion title=\"PGVectorStore\">\n    <CodeGroup>\n\n<Accordion title=\"Pinecone\">\n    <CodeGroup>\n\n<Accordion title=\"Qdrant\">\n    <CodeGroup>\n\n</Accordion>\n</AccordionGroup>\n\n| Vectorstore                                                                                                                                          | Delete by ID | Filtering | Search by Vector | Search with score | Async | Passes Standard Tests | Multi Tenancy | IDs in add Documents |\n| ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- | ---------------- | ----------------- | ----- | --------------------- | ------------- | -------------------- |\n| [`AstraDBVectorStore`](/oss/python/integrations/vectorstores/astradb)                                                                                | ✅            | ✅         | ✅                | ✅                 | ✅     | ✅                     | ✅             | ✅                    |\n| [`AzureCosmosDBNoSqlVectorStore`](/oss/python/integrations/vectorstores/azure_cosmos_db_no_sql)                                                      | ✅            | ✅         | ✅                | ✅                 | ❌     | ✅                     | ✅             | ✅                    |\n| [`AzureCosmosDBMongoVCoreVectorStore`](/oss/python/integrations/vectorstores/azure_cosmos_db_mongo_vcore)                                            | ✅            | ✅         | ✅                | ✅                 | ❌     | ✅                     | ✅             | ✅                    |\n| [`Chroma`](/oss/python/integrations/vectorstores/chroma)                                                                                             | ✅            | ✅         | ✅                | ✅                 | ✅     | ✅                     | ✅             | ✅                    |\n| [`Clickhouse`](/oss/python/integrations/vectorstores/clickhouse)                                                                                     | ✅            | ✅         | ❌                | ✅                 | ❌     | ❌                     | ❌             | ✅                    |\n| [`CouchbaseSearchVectorStore`](/oss/python/integrations/vectorstores/couchbase)                                                                      | ✅            | ✅         | ✅                | ✅                 | ✅     | ❌                     | ✅             | ✅                    |\n| [`DatabricksVectorSearch`](/oss/python/integrations/vectorstores/databricks_vector_search)                                                           | ✅            | ✅         | ✅                | ✅                 | ✅     | ❌                     | ❌             | ✅                    |\n| [`ElasticsearchStore`](/oss/python/integrations/vectorstores/elasticsearch)                                                                          | ✅            | ✅         | ✅                | ✅                 | ✅     | ❌                     | ❌             | ✅                    |\n| [`FAISS`](/oss/python/integrations/vectorstores/faiss)                                                                                               | ✅            | ✅         | ✅                | ✅                 | ✅     | ❌                     | ❌             | ✅                    |\n| [`InMemoryVectorStore`](https://python.langchain.com/api_reference/core/vectorstores/langchain_core.vectorstores.in_memory.InMemoryVectorStore.html) | ✅            | ✅         | ❌                | ✅                 | ✅     | ❌                     | ❌             | ✅                    |\n| [`Milvus`](/oss/python/integrations/vectorstores/milvus)                                                                                             | ✅            | ✅         | ✅                | ✅                 | ✅     | ✅                     | ✅             | ✅                    |\n| [`Moorcheh`](/oss/python/integrations/vectorstores/moorcheh)                                                                                         | ✅            | ✅         | ✅                | ✅                 | ✅     | ✅                     | ✅             | ✅                    |\n| [`MongoDBAtlasVectorSearch`](/oss/python/integrations/vectorstores/mongodb_atlas)                                                                    | ✅            | ✅         | ✅                | ✅                 | ✅     | ✅                     | ✅             | ✅                    |\n| [`openGauss`](/oss/python/integrations/vectorstores/opengauss)                                                                                       | ✅            | ✅         | ✅                | ✅                 | ❌     | ✅                     | ❌             | ✅                    |\n| [`PGVector`](/oss/python/integrations/vectorstores/pgvector)                                                                                         | ✅            | ✅         | ✅                | ✅                 | ✅     | ❌                     | ❌             | ✅                    |\n| [`PGVectorStore`](/oss/python/integrations/vectorstores/pgvectorstore)                                                                               | ✅            | ✅         | ✅                | ✅                 | ✅     | ✅                     | ❌             | ✅                    |\n| [`PineconeVectorStore`](/oss/python/integrations/vectorstores/pinecone)                                                                              | ✅            | ✅         | ✅                | ❌                 | ✅     | ❌                     | ❌             | ✅                    |\n| [`QdrantVectorStore`](/oss/python/integrations/vectorstores/qdrant)                                                                                  | ✅            | ✅         | ✅                | ✅                 | ✅     | ❌                     | ✅             | ✅                    |\n| [`Weaviate`](/oss/python/integrations/vectorstores/weaviate)                                                                                         | ✅            | ✅         | ✅                | ✅                 | ✅     | ❌                     | ✅             | ✅                    |\n| [`SQLServer`](/oss/python/integrations/vectorstores/sqlserver)                                                                                       | ✅            | ✅         | ✅                | ✅                 | ❌     | ❌                     | ❌             | ✅                    |\n| [`ZeusDB`](/oss/python/integrations/vectorstores/zeusdb)                                                                                             | ✅            | ✅         | ✅                | ✅                 | ✅     | ✅                     | ❌             | ✅                    |\n| [`Oracle AI Vector Search`](/oss/python/integrations/vectorstores/oracle)                                                                            | ✅            | ✅         | ✅                | ✅                 | ✅     | ✅                     | ❌             | ✅                    |\n\n<Columns cols={3}>\n  <Card title=\"Activeloop Deep Lake\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/activeloop_deeplake\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Alibaba Cloud OpenSearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/alibabacloud_opensearch\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"AnalyticDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/analyticdb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Annoy\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/annoy\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Apache Doris\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/apache_doris\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"ApertureDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/aperturedb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Astra DB Vector Store\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/astradb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Atlas\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/atlas\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"AwaDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/awadb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Azure Cosmos DB Mongo vCore\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/azure_cosmos_db_mongo_vcore\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Azure Cosmos DB No SQL\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/azure_cosmos_db_no_sql\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Azure Database for PostgreSQL - Flexible Server\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/azure_db_for_postgresql\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Azure AI Search\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/azuresearch\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Bagel\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/bagel\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"BagelDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/bageldb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Baidu Cloud ElasticSearch VectorSearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/baiducloud_vector_search\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Baidu VectorDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/baiduvectordb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Apache Cassandra\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/cassandra\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Chroma\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/chroma\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Clarifai\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/clarifai\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"ClickHouse\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/clickhouse\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Couchbase\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/couchbase\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"DashVector\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/dashvector\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Databricks\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/databricks_vector_search\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"IBM Db2\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/db2\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"DingoDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/dingo\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"DocArray HnswSearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/docarray_hnsw\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"DocArray InMemorySearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/docarray_in_memory\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Amazon Document DB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/documentdb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"DuckDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/duckdb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"China Mobile ECloud ElasticSearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/ecloud_vector_search\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Elasticsearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/elasticsearch\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Epsilla\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/epsilla\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Faiss\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/faiss\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Faiss (Async)\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/faiss_async\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"FalkorDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/falkordbvector\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Gel\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/gel\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Google AlloyDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_alloydb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Google BigQuery Vector Search\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_bigquery_vector_search\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Google Cloud SQL for MySQL\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_cloud_sql_mysql\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Google Cloud SQL for PostgreSQL\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_cloud_sql_pg\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Firestore\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_firestore\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Google Memorystore for Redis\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_memorystore_redis\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Google Spanner\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_spanner\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Google Vertex AI Feature Store\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_vertex_ai_feature_store\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Google Vertex AI Vector Search\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_vertex_ai_vector_search\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Hippo\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/hippo\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Hologres\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/hologres\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Jaguar Vector Database\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/jaguar\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Kinetica\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/kinetica\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"LanceDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/lancedb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Lantern\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/lantern\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Lindorm\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/lindorm\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"LLMRails\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/llm_rails\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"ManticoreSearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/manticore_search\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"MariaDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/mariadb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Marqo\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/marqo\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Meilisearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/meilisearch\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Amazon MemoryDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/memorydb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Milvus\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/milvus\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Momento Vector Index\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/momento_vector_index\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Moorcheh\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/moorcheh\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"MongoDB Atlas\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/mongodb_atlas\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"MyScale\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/myscale\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Neo4j Vector Index\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/neo4jvector\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"NucliaDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/nucliadb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Oceanbase\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/oceanbase\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"openGauss\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/opengauss\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"OpenSearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/opensearch\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Oracle AI Vector Search\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/oracle\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Pathway\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/pathway\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Postgres Embedding\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/pgembedding\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"PGVecto.rs\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/pgvecto_rs\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"PGVector\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/pgvector\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"PGVectorStore\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/pgvectorstore\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Pinecone\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/pinecone\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Pinecone (sparse)\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/pinecone_sparse\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Qdrant\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/qdrant\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Relyt\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/relyt\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Rockset\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/rockset\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"SAP HANA Cloud Vector Engine\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/sap_hanavector\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"ScaNN\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/google_scann\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"SemaDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/semadb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"SingleStore\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/singlestore\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"scikit-learn\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/sklearn\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"SQLiteVec\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/sqlitevec\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"SQLite-VSS\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/sqlitevss\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"SQLServer\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/sqlserver\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"StarRocks\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/starrocks\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Supabase\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/supabase\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"SurrealDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/surrealdb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Tablestore\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/tablestore\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Tair\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/tair\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Tencent Cloud VectorDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/tencentvectordb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Teradata VectorStore\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/teradata\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"ThirdAI NeuralDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/thirdai_neuraldb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"TiDB Vector\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/tidb_vector\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Tigris\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/tigris\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"TileDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/tiledb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Timescale Vector\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/timescalevector\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Typesense\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/typesense\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Upstash Vector\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/upstash\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"USearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/usearch\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Vald\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/vald\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"VDMS\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/vdms\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Vearch\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/vearch\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Vectara\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/vectara\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Vespa\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/vespa\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"viking DB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/vikingdb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"vlite\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/vlite\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Weaviate\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/weaviate\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Xata\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/xata\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"YDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/ydb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Yellowbrick\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/yellowbrick\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Zep\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/zep\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Zep Cloud\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/zep_cloud\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"ZeusDB\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/zeusdb\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Zilliz\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/zilliz\" arrow=\"true\" cta=\"View guide\" />\n\n<Card title=\"Oracle AI Vector Search\" icon=\"link\" href=\"/oss/python/integrations/vectorstores/oracle\" arrow=\"true\" cta=\"View guide\" />\n</Columns>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/python/integrations/vectorstores/index.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "### Interface\n\nLangChain provides a unified interface for vector stores, allowing you to:\n\n* `add_documents` - Add documents to the store.\n* `delete` - Remove stored documents by ID.\n* `similarity_search` - Query for semantically similar documents.\n\nThis abstraction lets you switch between different implementations without altering your application logic.\n\n### Initialization\n\nTo initialize a vector store, provide it with an embedding model:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Adding documents\n\nAdd [`Document`](https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document) objects (holding `page_content` and optional metadata) like so:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Deleting documents\n\nDelete by specifying IDs:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Similarity search\n\nIssue a semantic query using `similarity_search`, which returns the closest embedded documents:",
+      "language": "unknown"
+    },
+    {
+      "code": "Many vector stores support parameters like:\n\n* `k` — number of results to return\n* `filter` — conditional filtering based on metadata\n\n### Similarity metrics & indexing\n\nEmbedding similarity may be computed using:\n\n* **Cosine similarity**\n* **Euclidean distance**\n* **Dot product**\n\nEfficient search often employs indexing methods such as HNSW (Hierarchical Navigable Small World), though specifics depend on the vector store.\n\n### Metadata filtering\n\nFiltering by metadata (e.g., source, date) can refine search results:",
+      "language": "unknown"
+    },
+    {
+      "code": "<important>\n  Support for metadata-based filtering varies between implementations.\n  Check the documentation of your chosen vector store for details.\n</important>\n\n## Top integrations\n\n**Select embedding model:**\n\n<AccordionGroup>\n  <Accordion title=\"OpenAI\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Azure\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Google Gemini\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Google Vertex\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"AWS\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"HuggingFace\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Ollama\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Cohere\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Mistral AI\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Nomic\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"NVIDIA\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Voyage AI\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"IBM watsonx\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Fake\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"xAI\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Perplexity\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"DeepSeek\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n</AccordionGroup>\n\n**Select vector store:**\n\n<AccordionGroup>\n  <Accordion title=\"In-memory\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Amazon OpenSearch\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Astra DB\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Azure Cosmos DB NoSQL\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Azure Cosmos DB Mongo vCore\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Chroma\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"FAISS\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Milvus\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"MongoDB\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"PGVector\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"PGVectorStore\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Pinecone\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Qdrant\">\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "Interface",
+      "id": "interface"
+    },
+    {
+      "level": "h3",
+      "text": "Initialization",
+      "id": "initialization"
+    },
+    {
+      "level": "h3",
+      "text": "Adding documents",
+      "id": "adding-documents"
+    },
+    {
+      "level": "h3",
+      "text": "Deleting documents",
+      "id": "deleting-documents"
+    },
+    {
+      "level": "h3",
+      "text": "Similarity search",
+      "id": "similarity-search"
+    },
+    {
+      "level": "h3",
+      "text": "Similarity metrics & indexing",
+      "id": "similarity-metrics-&-indexing"
+    },
+    {
+      "level": "h3",
+      "text": "Metadata filtering",
+      "id": "metadata-filtering"
+    },
+    {
+      "level": "h2",
+      "text": "Top integrations",
+      "id": "top-integrations"
+    },
+    {
+      "level": "h2",
+      "text": "All vector stores",
+      "id": "all-vector-stores"
+    }
+  ],
+  "url": "llms-txt#vector-stores",
+  "links": []
+}

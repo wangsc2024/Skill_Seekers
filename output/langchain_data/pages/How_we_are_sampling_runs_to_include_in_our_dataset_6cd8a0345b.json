@@ -1,0 +1,19 @@
+{
+  "title": "How we are sampling runs to include in our dataset",
+  "content": "end_time = datetime.now(tz=timezone.utc)\nstart_time = end_time - timedelta(days=1)\nrun_filter = f'and(gt(start_time, \"{start_time.isoformat()}\"), lt(end_time, \"{end_time.isoformat()}\"))'\nprod_runs = list(\n    client.list_runs(\n        project_name=project_name,\n        is_root=True,\n        filter=run_filter,\n    )\n)\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "### Convert runs to experiment\n\n`convert_runs_to_test` is a function which takes some runs and does the following:\n\n1. The inputs, and optionally the outputs, are saved to a dataset as Examples.\n2. The inputs and outputs are stored as an experiment, as if you had run the `evaluate` function and received those outputs.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Convert runs to experiment",
+      "id": "convert-runs-to-experiment"
+    }
+  ],
+  "url": "llms-txt#how-we-are-sampling-runs-to-include-in-our-dataset",
+  "links": []
+}

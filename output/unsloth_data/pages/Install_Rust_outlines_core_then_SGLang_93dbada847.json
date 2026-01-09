@@ -1,0 +1,40 @@
+{
+  "title": "Install Rust, outlines-core then SGLang",
+  "content": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\nsource $HOME/.cargo/env && sudo apt-get install -y pkg-config libssl-dev\npip install --upgrade pip && pip install uv\nuv pip install \"sglang\" && uv pip install unsloth\nshellscript\ndocker run --gpus all \\\n    --shm-size 32g \\\n    -p 30000:30000 \\\n    -v ~/.cache/huggingface:/root/.cache/huggingface \\\n    --env \"HF_TOKEN=<secret>\" \\\n    --ipc=host \\\n    lmsysorg/sglang:latest \\\n    python3 -m sglang.launch_server --model-path unsloth/Llama-3.1-8B-Instruct --host 0.0.0.0 --port 30000\n\nhint: This usually indicates a problem with the package or the build environment.\n  help: `outlines-core` (v0.1.26) was included because `sglang` (v0.5.5.post2) depends on `outlines` (v0.1.11) which depends on `outlines-core`\n\n/home/daniel/.cache/flashinfer/0.5.2/100a/generated/batch_prefill_with_kv_cache_dtype_q_bf16_dtype_kv_bf16_dtype_o_bf16_dtype_idx_i32_head_dim_qk_64_head_dim_vo_64_posenc_0_use_swa_False_use_logits_cap_False_f16qk_False/batch_prefill_ragged_kernel_mask_1.cu:1:10: fatal error: flashinfer/attention/prefill.cuh: No such file or directory\n    1 | #include <flashinfer/attention/prefill.cuh>\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\ncompilation terminated.\nninja: build stopped: subcommand failed.\n\nPossible solutions:\n1. set --mem-fraction-static to a smaller value (e.g., 0.8 or 0.7)\n2. set --cuda-graph-max-bs to a smaller value (e.g., 16)\n3. disable torch compile by not using --enable-torch-compile\n4. disable CUDA graph by --disable-cuda-graph. (Not recommended. Huge performance loss)\nOpen an issue on GitHub https://github.com/sgl-project/sglang/issues/new/choose\nshellscript\npython3 -m sglang.launch_server \\\n    --model-path unsloth/Llama-3.2-1B-Instruct \\\n    --host 0.0.0.0 --port 30000\npython",
+  "code_samples": [
+    {
+      "code": "For **Docker** setups run:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\n### :bug:Debugging SGLang Installation issues\n\nNote if you see the below, update Rust and outlines-core as specified in [#setting-up-sglang](#setting-up-sglang \"mention\")\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\nIf you see a Flashinfer issue like below:",
+      "language": "unknown"
+    },
+    {
+      "code": "Remove the flashinfer cache via `rm -rf .cache/flashinfer` and also the directory listed in the error message ie `rm -rf ~/.cache/flashinfer`\n\n### :truck:Deploying SGLang models\n\nTo deploy any model like for example [unsloth/Llama-3.2-1B-Instruct](https://huggingface.co/unsloth/Llama-3.2-1B-Instruct), do the below in a separate terminal (otherwise it'll block your current terminal - you can also use tmux):\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fq3rBt5dn2PhrpvvfhSzo%2Fimage.png?alt=media&#x26;token=e7a5170b-eabb-4a11-ae4b-f27a11213ae3\" alt=\"\"><figcaption></figcaption></figure>\n\nYou can then use the OpenAI Chat completions library to call the model (in another terminal or using tmux):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": ":bug:Debugging SGLang Installation issues",
+      "id": ":bug:debugging-sglang-installation-issues"
+    },
+    {
+      "level": "h3",
+      "text": ":truck:Deploying SGLang models",
+      "id": ":truck:deploying-sglang-models"
+    }
+  ],
+  "url": "llms-txt#install-rust,-outlines-core-then-sglang",
+  "links": []
+}

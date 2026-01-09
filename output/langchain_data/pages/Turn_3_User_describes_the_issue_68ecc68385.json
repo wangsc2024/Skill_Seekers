@@ -1,0 +1,8 @@
+{
+  "title": "Turn 3: User describes the issue",
+  "content": "print(\"\\n=== Turn 3: Issue Description ===\")\nresult = agent.invoke(\n    {\"messages\": [HumanMessage(\"The screen is physically cracked from dropping it\")]},\n    config\n)\nfor msg in result['messages']:\n    msg.pretty_print()\nprint(f\"Current step: {result.get('current_step')}\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#turn-3:-user-describes-the-issue",
+  "links": []
+}

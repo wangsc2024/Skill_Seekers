@@ -1,0 +1,8 @@
+{
+  "title": "This is loaded from the `.env` file you created above",
+  "content": "SUPABASE_URL = os.environ[\"SUPABASE_URL\"]\nSUPABASE_SERVICE_KEY = os.environ[\"SUPABASE_SERVICE_KEY\"]\n\n@auth.authenticate\nasync def get_current_user(authorization: str | None):\n    \"\"\"Validate JWT tokens and extract user information.\"\"\"\n    assert authorization\n    scheme, token = authorization.split()\n    assert scheme.lower() == \"bearer\"\n\ntry:\n        # Verify token with auth provider\n        async with httpx.AsyncClient() as client:\n            response = await client.get(\n                f\"{SUPABASE_URL}/auth/v1/user\",\n                headers={\n                    \"Authorization\": authorization,\n                    \"apiKey\": SUPABASE_SERVICE_KEY,\n                },\n            )\n            assert response.status_code == 200\n            user = response.json()\n            return {\n                \"identity\": user[\"id\"],  # Unique user identifier\n                \"email\": user[\"email\"],\n                \"is_authenticated\": True,\n            }\n    except Exception as e:\n        raise Auth.exceptions.HTTPException(status_code=401, detail=str(e))",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#this-is-loaded-from-the-`.env`-file-you-created-above",
+  "links": []
+}

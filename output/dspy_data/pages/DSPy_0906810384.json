@@ -1,0 +1,44 @@
+{
+  "title": "DSPy",
+  "content": "> The framework for programming—rather than prompting—language models.\n\nDSPy is the framework for programming—rather than prompting—language models. DSPy unifies techniques for prompting, fine-tuning, reasoning, tool use, and evaluation of LMs. It provides a systematic approach to building AI applications through composable modules,  optimization techniques, and evaluation frameworks.\n\n- [Get Started](https://dspy.ai/index.md): DSPy overview and quick start guide\n- [Cheatsheet](https://dspy.ai/cheatsheet/index.md): DSPy cheatsheet for quick reference\n\n- [Programming Overview](https://dspy.ai/learn/programming/overview/index.md): Programming paradigm and philosophy\n- [Signatures](https://dspy.ai/learn/programming/signatures/index.md): Signatures - declarative input/output specifications\n- [Modules](https://dspy.ai/learn/programming/modules/index.md): Modules - composable AI components\n- [Language Models](https://dspy.ai/learn/programming/language_models/index.md): Language model interfaces and configuration\n\n## Essential Tutorials\n\n- [Retrieval-Augmented Generation (RAG)](https://dspy.ai/tutorials/rag/index.md): Retrieval-Augmented Generation (RAG) tutorial\n- [Classification](https://dspy.ai/tutorials/classification/index.md): Classification with DSPy\n- [Building RAG as Agent](https://dspy.ai/tutorials/agents/index.md): Building AI agents with DSPy\n\n- [Optimization Overview](https://dspy.ai/learn/optimization/overview/index.md): Optimization techniques overview\n- [Overview](https://dspy.ai/tutorials/optimize_ai_program/index.md): Guide to optimizing AI programs\n- [BootstrapFewShot](https://dspy.ai/api/optimizers/BootstrapFewShot/index.md): Bootstrap few-shot optimizer\n\n- [Predict](https://dspy.ai/api/modules/Predict/index.md): Basic prediction module\n- [ChainOfThought](https://dspy.ai/api/modules/ChainOfThought/index.md): Chain of thought reasoning\n- [ReAct](https://dspy.ai/api/modules/ReAct/index.md): ReAct agent module\n\n## Core API Reference\n\n- [Signature](https://dspy.ai/api/signatures/Signature/index.md): Signature system documentation\n- [Example](https://dspy.ai/api/primitives/Example/index.md): Example primitive for training data\n\n- [Deployment](https://dspy.ai/tutorials/deployment/index.md): Production deployment guide\n- [Debugging & Observability](https://dspy.ai/tutorials/observability/index.md): Debugging and observability",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "Core Concepts",
+      "id": "core-concepts"
+    },
+    {
+      "level": "h2",
+      "text": "Essential Tutorials",
+      "id": "essential-tutorials"
+    },
+    {
+      "level": "h2",
+      "text": "Optimization",
+      "id": "optimization"
+    },
+    {
+      "level": "h2",
+      "text": "Key Modules API",
+      "id": "key-modules-api"
+    },
+    {
+      "level": "h2",
+      "text": "Core API Reference",
+      "id": "core-api-reference"
+    },
+    {
+      "level": "h2",
+      "text": "Production",
+      "id": "production"
+    }
+  ],
+  "url": "llms-txt#dspy",
+  "links": []
+}

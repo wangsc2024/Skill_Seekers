@@ -1,0 +1,47 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+  "title": "Examples — AutoGen",
+  "content": "A list of examples to help you get started with AgentChat.\n\nGenerating a travel plan using multiple agents.\n\nGenerating a company research report using multiple agents with tools.\n\nGenerating a literature review using agents with tools.\n\nTracing and Observability",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Examples#",
+      "id": ""
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html"
+  ]
+}

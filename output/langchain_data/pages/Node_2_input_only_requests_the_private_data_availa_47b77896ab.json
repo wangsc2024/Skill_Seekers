@@ -1,0 +1,8 @@
+{
+  "title": "Node 2 input only requests the private data available after node_1",
+  "content": "class Node2Input(TypedDict):\n    private_data: str\n\ndef node_2(state: Node2Input) -> OverallState:\n    output = {\"a\": \"set by node_2\"}\n    print(f\"Entered node `node_2`:\\n\\tInput: {state}.\\n\\tReturned: {output}\")\n    return output",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#node-2-input-only-requests-the-private-data-available-after-node_1",
+  "links": []
+}

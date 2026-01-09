@@ -1,0 +1,8 @@
+{
+  "title": "Build the graph with explicit schemas",
+  "content": "builder = StateGraph(OverallState, input_schema=InputState, output_schema=OutputState)\nbuilder.add_node(answer_node)\nbuilder.add_edge(START, \"answer_node\")\nbuilder.add_edge(\"answer_node\", END)\ngraph = builder.compile()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#build-the-graph-with-explicit-schemas",
+  "links": []
+}

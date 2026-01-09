@@ -1,0 +1,44 @@
+{
+  "title": "Set up custom authentication",
+  "content": "Source: https://docs.langchain.com/langsmith/set-up-custom-auth\n\nIn this tutorial, we will build a chatbot that only lets specific users access it. We'll start with the LangGraph template and add token-based security step by step. By the end, you'll have a working chatbot that checks for valid tokens before allowing access.\n\nThis is part 1 of our authentication series:\n\n1. Set up custom authentication (you are here) - Control who can access your bot\n2. [Make conversations private](/langsmith/resource-auth) - Let users have private conversations\n3. [Connect an authentication provider](/langsmith/add-auth-server) - Add real user accounts and validate using OAuth2 for production\n\nThis guide assumes basic familiarity with the following concepts:\n\n* [**Authentication & Access Control**](/langsmith/auth)\n* [**LangSmith**](/langsmith/home)\n\n<Note>\n  Custom auth is only available for LangSmith SaaS deployments or Enterprise Self-Hosted deployments.\n</Note>\n\n## 1. Create your app\n\nCreate a new chatbot using the LangGraph starter template:\n\nThe template gives us a placeholder LangGraph app. Try it out by installing the local dependencies and running the development server:\n\nThe server will start and open [Studio](/langsmith/studio) in your browser:\n\nIf you were to self-host this on the public internet, anyone could access it.\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=3ca2c9a8d65891ef71abfb7ad0aae7d3\" alt=\"No authentication: the dev server is publicly reachable, anyone can access the bot if exposed to the internet.\" data-og-width=\"1974\" width=\"1974\" data-og-height=\"1412\" height=\"1412\" data-path=\"langsmith/images/no-auth.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=280&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=67bfe450ee04d2432e5e1b86cfa0af1c 280w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=560&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=087f8083981ae85eeca794bdca3e0e05 560w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=840&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=7967264c0243918be1a8561d4db89586 840w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=1100&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=fd9d62383850b137834bfc7e35bc4533 1100w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=1650&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=66100323459f51596c53b3d941e3f85d 1650w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=2500&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=a7b9157f67b3094370cc5399d917a164 2500w\" />\n\n## 2. Add authentication\n\nNow that you have a base LangGraph app, add authentication to it.\n\n<Note>\n  In this tutorial, you will start with a hard-coded token for example purposes. You will get to a \"production-ready\" authentication scheme in the third tutorial.\n</Note>\n\nThe [Auth](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth) object lets you register an authentication function that the LangSmith deployment will run on every request. This function receives each request and decides whether to accept or reject.\n\nCreate a new file `src/security/auth.py`. This is where your code will live to check if users are allowed to access your bot:\n\n```python {highlight={10,15-16}} title=\"src/security/auth.py\" theme={null}\nfrom langgraph_sdk import Auth",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nThe template gives us a placeholder LangGraph app. Try it out by installing the local dependencies and running the development server:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nThe server will start and open [Studio](/langsmith/studio) in your browser:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you were to self-host this on the public internet, anyone could access it.\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=3ca2c9a8d65891ef71abfb7ad0aae7d3\" alt=\"No authentication: the dev server is publicly reachable, anyone can access the bot if exposed to the internet.\" data-og-width=\"1974\" width=\"1974\" data-og-height=\"1412\" height=\"1412\" data-path=\"langsmith/images/no-auth.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=280&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=67bfe450ee04d2432e5e1b86cfa0af1c 280w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=560&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=087f8083981ae85eeca794bdca3e0e05 560w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=840&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=7967264c0243918be1a8561d4db89586 840w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=1100&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=fd9d62383850b137834bfc7e35bc4533 1100w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=1650&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=66100323459f51596c53b3d941e3f85d 1650w, https://mintcdn.com/langchain-5e9cc07a/N1xJUsnxxRqnrjxV/langsmith/images/no-auth.png?w=2500&fit=max&auto=format&n=N1xJUsnxxRqnrjxV&q=85&s=a7b9157f67b3094370cc5399d917a164 2500w\" />\n\n## 2. Add authentication\n\nNow that you have a base LangGraph app, add authentication to it.\n\n<Note>\n  In this tutorial, you will start with a hard-coded token for example purposes. You will get to a \"production-ready\" authentication scheme in the third tutorial.\n</Note>\n\nThe [Auth](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth) object lets you register an authentication function that the LangSmith deployment will run on every request. This function receives each request and decides whether to accept or reject.\n\nCreate a new file `src/security/auth.py`. This is where your code will live to check if users are allowed to access your bot:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "1. Create your app",
+      "id": "1.-create-your-app"
+    },
+    {
+      "level": "h2",
+      "text": "2. Add authentication",
+      "id": "2.-add-authentication"
+    }
+  ],
+  "url": "llms-txt#set-up-custom-authentication",
+  "links": []
+}

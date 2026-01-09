@@ -1,0 +1,39 @@
+{
+  "title": "Test the graph with a valid input",
+  "content": "graph.invoke({\"a\": \"hello\"})\npython  theme={null}\ntry:\n    graph.invoke({\"a\": 123})  # Should be a string\nexcept Exception as e:\n    print(\"An exception was raised because `a` is an integer rather than a string.\")\n    print(e)\n\nAn exception was raised because `a` is an integer rather than a string.\n1 validation error for OverallState\na\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.9/v/string_type\npython  theme={null}\n  from langgraph.graph import StateGraph, START, END\n  from pydantic import BaseModel\n\nclass NestedModel(BaseModel):\n      value: str\n\nclass ComplexState(BaseModel):\n      text: str\n      count: int\n      nested: NestedModel\n\ndef process_node(state: ComplexState):\n      # Node receives a validated Pydantic object\n      print(f\"Input state type: {type(state)}\")\n      print(f\"Nested type: {type(state.nested)}\")\n      # Return a dictionary update\n      return {\"text\": state.text + \" processed\", \"count\": state.count + 1}\n\n# Build the graph\n  builder = StateGraph(ComplexState)\n  builder.add_node(\"process\", process_node)\n  builder.add_edge(START, \"process\")\n  builder.add_edge(\"process\", END)\n  graph = builder.compile()\n\n# Create a Pydantic instance for input\n  input_state = ComplexState(text=\"hello\", count=0, nested=NestedModel(value=\"test\"))\n  print(f\"Input object type: {type(input_state)}\")\n\n# Invoke graph with a Pydantic instance\n  result = graph.invoke(input_state)\n  print(f\"Output type: {type(result)}\")\n  print(f\"Output content: {result}\")\n\n# Convert back to Pydantic model if needed\n  output_model = ComplexState(**result)\n  print(f\"Converted back to Pydantic: {type(output_model)}\")\n  python  theme={null}\n  from langgraph.graph import StateGraph, START, END\n  from pydantic import BaseModel\n\nclass CoercionExample(BaseModel):\n      # Pydantic will coerce string numbers to integers\n      number: int\n      # Pydantic will parse string booleans to bool\n      flag: bool\n\ndef inspect_node(state: CoercionExample):\n      print(f\"number: {state.number} (type: {type(state.number)})\")\n      print(f\"flag: {state.flag} (type: {type(state.flag)})\")\n      return {}\n\nbuilder = StateGraph(CoercionExample)\n  builder.add_node(\"inspect\", inspect_node)\n  builder.add_edge(START, \"inspect\")\n  builder.add_edge(\"inspect\", END)\n  graph = builder.compile()\n\n# Demonstrate coercion with string inputs that will be converted\n  result = graph.invoke({\"number\": \"42\", \"flag\": \"true\"})\n\n# This would fail with a validation error\n  try:\n      graph.invoke({\"number\": \"not-a-number\", \"flag\": \"true\"})\n  except Exception as e:\n      print(f\"\\nExpected validation error: {e}\")\n  python  theme={null}\n  from langgraph.graph import StateGraph, START, END\n  from pydantic import BaseModel\n  from langchain.messages import HumanMessage, AIMessage, AnyMessage\n  from typing import List\n\nclass ChatState(BaseModel):\n      messages: List[AnyMessage]\n      context: str\n\ndef add_message(state: ChatState):\n      return {\"messages\": state.messages + [AIMessage(content=\"Hello there!\")]}\n\nbuilder = StateGraph(ChatState)\n  builder.add_node(\"add_message\", add_message)\n  builder.add_edge(START, \"add_message\")\n  builder.add_edge(\"add_message\", END)\n  graph = builder.compile()\n\n# Create input with a message\n  initial_state = ChatState(\n      messages=[HumanMessage(content=\"Hi\")], context=\"Customer support chat\"\n  )\n\nresult = graph.invoke(initial_state)\n  print(f\"Output: {result}\")\n\n# Convert back to Pydantic model to see message types\n  output_model = ChatState(**result)\n  for i, msg in enumerate(output_model.messages):\n      print(f\"Message {i}: {type(msg).__name__} - {msg.content}\")\n  python  theme={null}\nfrom langgraph.graph import END, StateGraph, START\nfrom langgraph.runtime import Runtime\nfrom typing_extensions import TypedDict",
+  "code_samples": [
+    {
+      "code": "Invoke the graph with an **invalid** input",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "See below for additional features of Pydantic model state:\n\n<Accordion title=\"Serialization Behavior\">\n  When using Pydantic models as state schemas, it's important to understand how serialization works, especially when:\n\n  * Passing Pydantic objects as inputs\n  * Receiving outputs from the graph\n  * Working with nested Pydantic models\n\n  Let's see these behaviors in action.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n<Accordion title=\"Runtime Type Coercion\">\n  Pydantic performs runtime type coercion for certain data types. This can be helpful but also lead to unexpected behavior if you're not aware of it.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n<Accordion title=\"Working with Message Models\">\n  When working with LangChain message types in your state schema, there are important considerations for serialization. You should use `AnyMessage` (rather than `BaseMessage`) for proper serialization/deserialization when using message objects over the wire.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Add runtime configuration\n\nSometimes you want to be able to configure your graph when calling it. For example, you might want to be able to specify what LLM or system prompt to use at runtime, *without polluting the graph state with these parameters*.\n\nTo add runtime configuration:\n\n1. Specify a schema for your configuration\n2. Add the configuration to the function signature for nodes or conditional edges\n3. Pass the configuration into the graph.\n\nSee below for a simple example:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Add runtime configuration",
+      "id": "add-runtime-configuration"
+    }
+  ],
+  "url": "llms-txt#test-the-graph-with-a-valid-input",
+  "links": []
+}

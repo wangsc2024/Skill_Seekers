@@ -1,0 +1,8 @@
+{
+  "title": "Generate a completion",
+  "content": "client = openai.Client()\nchat_completion = client.chat.completions.create(\n    model=\"gpt-4o-mini\",\n    messages=messages\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#generate-a-completion",
+  "links": []
+}

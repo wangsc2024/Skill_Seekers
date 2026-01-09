@@ -1,0 +1,13 @@
+{
+  "title": "Define the system prompt that instructs the model to use a specific format",
+  "content": "SYSTEM_PROMPT = \"\"\"\nRespond in the following format:\n<reasoning>\n...\n</reasoning>\n<answer>\n...\n</answer>\n\"\"\"\n\nXML_COT_FORMAT = \"\"\"\\\n<reasoning>\n{reasoning}\n</reasoning>\n<answer>\n{answer}\n</answer>\n\"\"\"\n\nimport re\nfrom datasets import load_dataset, Dataset",
+  "code_samples": [
+    {
+      "code": "Now, to prepare the dataset:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#define-the-system-prompt-that-instructs-the-model-to-use-a-specific-format",
+  "links": []
+}

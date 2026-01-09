@@ -1,0 +1,142 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+  "title": "Installation — AutoGen",
+  "content": "When installing AgentChat locally, we recommend using a virtual environment for the installation. This will ensure that the dependencies for AgentChat are isolated from the rest of your system.\n\nWindows command-line:\n\nTo deactivate later, run:\n\nInstall Conda if you have not already.\n\nTo deactivate later, run:\n\nInstall the autogen-core package using pip:\n\nPython 3.10 or later is required.\n\nTo use the OpenAI and Azure OpenAI models, you need to install the following extensions:\n\nIf you are using Azure OpenAI with AAD authentication, you need to install the following:\n\nWe recommend using Docker to use DockerCommandLineCodeExecutor for execution of model-generated code. To install Docker, follow the instructions for your operating system on the Docker website.\n\nTo learn more code execution, see Command Line Code Executors and Code Execution.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Installation#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Create a Virtual Environment (optional)#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Install using pip#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Install OpenAI for Model Client#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Install Docker for Code Execution (Optional)#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "python3 -m venv .venv\nsource .venv/bin/activate",
+      "language": "unknown"
+    },
+    {
+      "code": "python3 -m venv .venv\nsource .venv/bin/activate",
+      "language": "unknown"
+    },
+    {
+      "code": "python3 -m venv .venv\n.venv\\Scripts\\activate.bat",
+      "language": "unknown"
+    },
+    {
+      "code": "python3 -m venv .venv\n.venv\\Scripts\\activate.bat",
+      "language": "unknown"
+    },
+    {
+      "code": "conda create -n autogen python=3.12\nconda activate autogen",
+      "language": "unknown"
+    },
+    {
+      "code": "conda create -n autogen python=3.12\nconda activate autogen",
+      "language": "unknown"
+    },
+    {
+      "code": "conda deactivate",
+      "language": "unknown"
+    },
+    {
+      "code": "conda deactivate",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-core\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-core\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[azure]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[azure]\"",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Decide whether to retrieve",
+  "content": "workflow.add_conditional_edges(\n    \"generate_query_or_respond\",\n    # Assess LLM decision (call `retriever_tool` tool or respond to the user)\n    tools_condition,\n    {\n        # Translate the condition outputs to nodes in our graph\n        \"tools\": \"retrieve\",\n        END: END,\n    },\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#decide-whether-to-retrieve",
+  "links": []
+}

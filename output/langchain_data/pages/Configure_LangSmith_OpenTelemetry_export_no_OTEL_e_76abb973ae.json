@@ -1,0 +1,19 @@
+{
+  "title": "Configure LangSmith OpenTelemetry export (no OTEL env vars or headers needed)",
+  "content": "configure(project_name=\"adk-otel-demo\")\n\nasync def main():\n    agent = LlmAgent(\n        name=\"travel_assistant\",\n        model=\"gemini-2.5-flash-lite\",\n        instruction=\"You are a helpful travel assistant.\",\n    )\n\nsession_service = InMemorySessionService()\n    runner = Runner(app_name=\"travel_app\", agent=agent, session_service=session_service)\n\nuser_id = \"user_123\"\n    session_id = \"session_abc\"\n    await session_service.create_session(app_name=\"travel_app\", user_id=user_id, session_id=session_id)\n\nnew_message = types.Content(parts=[types.Part(text=\"Hi! Recommend a weekend trip to Paris.\")], role=\"user\")\n\nfor event in runner.run(user_id=user_id, session_id=session_id, new_message=new_message):\n        print(event)\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\npython  theme={null}\nimport asyncio\nimport base64\nimport json\nfrom pathlib import Path\nfrom dotenv import load_dotenv\nfrom google.adk import Runner\nfrom google.adk.agents import LlmAgent\nfrom google.adk.sessions import InMemorySessionService\nfrom google.genai import types\nfrom opentelemetry import trace\nfrom opentelemetry.sdk.trace import TracerProvider, SpanProcessor\nfrom langsmith.integrations.otel import OtelSpanProcessor\n\nclass AttachmentSpanProcessor(SpanProcessor):\n    \"\"\"Custom SpanProcessor to add attachments to invocation spans.\"\"\"\n\ndef __init__(self):\n        self.attachment_data = None\n\ndef set_attachment(self, attachment_data):\n        self.attachment_data = attachment_data\n\ndef on_end(self, span):\n        if span.name == \"invocation\" and self.attachment_data:\n            attachments_json = json.dumps([self.attachment_data])\n            span._attributes[\"langsmith.attachments\"] = attachments_json",
+  "code_samples": [
+    {
+      "code": "<Note>\n  You do not need to set OTEL environment variables or exporters. `configure()` wires them for LangSmith automatically; instrumentors (like `GoogleADKInstrumentor`) create the spans.\n</Note>\n\nHere is an [example](https://smith.langchain.com/public/d6d47eeb-511e-4fda-ad17-2caa7bd7150b/r) of what the resulting trace looks like in LangSmith.\n\n### Add an attachment to a trace\n\nLangSmith supports [attaching files to traces](/langsmith/upload-files-with-traces). This is useful when building an agent with multimodal inputs or outputs. Attachments are also supported when tracing with OpenTelemetry.\n\nThe example below [traces a Google ADK agent](/langsmith/trace-with-google-adk) and adds an attachment to the trace. It uses a combination of LangSmith's `OtelSpanProcessor` and a custom `AttachmentSpanProcessor` that uses [`on_end()`](https://opentelemetry-python.readthedocs.io/en/latest/sdk/trace.export.html#opentelemetry.sdk.trace.export.SimpleSpanProcessor.on_end) to add an image attachment to the parent span.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Add an attachment to a trace",
+      "id": "add-an-attachment-to-a-trace"
+    }
+  ],
+  "url": "llms-txt#configure-langsmith-opentelemetry-export-(no-otel-env-vars-or-headers-needed)",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "(Here, we demonstrate manually creating the messages for brevity)",
+  "content": "ai_message = AIMessage(\n    content=[],\n    tool_calls=[{\n        \"name\": \"get_weather\",\n        \"args\": {\"location\": \"San Francisco\"},\n        \"id\": \"call_123\"\n    }]\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#(here,-we-demonstrate-manually-creating-the-messages-for-brevity)",
+  "links": []
+}

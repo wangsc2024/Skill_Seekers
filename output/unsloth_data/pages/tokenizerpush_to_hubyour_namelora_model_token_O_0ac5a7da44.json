@@ -1,0 +1,14 @@
+{
+  "title": "tokenizer.push_to_hub(\"your_name/lora_model\", token = \"...\") # Online saving",
+  "content": "This saves the model weights (for LoRA, it might save only adapter weights if the base is not fully fine-tuned). If you used `--push_model` in CLI or `trainer.push_to_hub()`, you could upload it to Hugging Face Hub directly.\n\nNow you should have a fine-tuned TTS model in the directory. The next step is to test it out and if supported, you can use llama.cpp to convert it into a GGUF file.\n\n### Fine-tuning Voice models vs. Zero-shot voice cloning\n\nPeople say you can clone a voice with just 30 seconds of audio using models like XTTS - no training required. That’s technically true, but it misses the point.\n\nZero-shot voice cloning, which is also available in models like Orpheus and CSM, is an approximation. It captures the general **tone and timbre** of a speaker’s voice, but it doesn’t reproduce the full expressive range. You lose details like speaking speed, phrasing, vocal quirks, and the subtleties of prosody - things that give a voice its **personality and uniqueness**.\n\nIf you just want a different voice and are fine with the same delivery patterns, zero-shot is usually good enough. But the speech will still follow the **model’s style**, not the speaker’s.\n\nFor anything more personalized or expressive, you need training with methods like LoRA to truly capture how someone speaks.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Fine-tuning Voice models vs. Zero-shot voice cloning",
+      "id": "fine-tuning-voice-models-vs.-zero-shot-voice-cloning"
+    }
+  ],
+  "url": "llms-txt#tokenizer.push_to_hub(\"your_name/lora_model\",-token-=-\"...\")-#-online-saving",
+  "links": []
+}

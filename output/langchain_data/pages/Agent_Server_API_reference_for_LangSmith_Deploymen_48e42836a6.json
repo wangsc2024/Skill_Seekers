@@ -1,0 +1,14 @@
+{
+  "title": "Agent Server API reference for LangSmith Deployment",
+  "content": "Source: https://docs.langchain.com/langsmith/server-api-ref\n\nThe Agent Server API reference is available within each [deployment](/langsmith/deployments) at the `/docs` endpoint (e.g. `http://localhost:8124/docs`).\n\nBrowse the full API reference in the **Agent Server API** section in the sidebar, or see the endpoint groups below:\n\n* [Assistants](/langsmith/agent-server-api/assistants) - Configured instances of a graph\n* [Threads](/langsmith/agent-server-api/threads) - Accumulated outputs of a group of runs\n* [Thread Runs](/langsmith/agent-server-api/thread-runs) - Invocations of a graph/assistant on a thread\n* [Stateless Runs](/langsmith/agent-server-api/stateless-runs) - Invocations with no state persistence\n* [Crons](/langsmith/agent-server-api/crons-plus-tier) - Periodic runs on a schedule\n* [Store](/langsmith/agent-server-api/store) - Persistent key-value store for long-term memory\n* [A2A](/langsmith/agent-server-api/a2a) - Agent-to-Agent Protocol endpoints\n* [MCP](/langsmith/agent-server-api/mcp) - Model Context Protocol endpoints\n* [System](/langsmith/agent-server-api/system) - Health checks and server info\n\nFor deployments to LangSmith, authentication is required. Pass the `X-Api-Key` header with each request to the Agent Server. The value of the header should be set to a valid LangSmith API key for the organization where the Agent Server is deployed.\n\nExample `curl` command:\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/server-api-ref.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Authentication",
+      "id": "authentication"
+    }
+  ],
+  "url": "llms-txt#agent-server-api-reference-for-langsmith-deployment",
+  "links": []
+}

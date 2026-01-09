@@ -1,0 +1,174 @@
+{
+  "title": "Manage prompts programmatically",
+  "content": "Source: https://docs.langchain.com/langsmith/manage-prompts-programmatically\n\nYou can use the LangSmith Python and TypeScript SDK to manage prompts programmatically.\n\n<Note>\n  Previously this functionality lived in the `langchainhub` package which is now deprecated. All functionality going forward will live in the `langsmith` package.\n</Note>\n\nIn Python, you can directly use the LangSmith SDK (*recommended, full functionality*) or you can use through the LangChain package (limited to pushing and pulling prompts).\n\nIn TypeScript, you must use the LangChain npm package for pulling prompts (it also allows pushing). For all other functionality, use the LangSmith package.\n\n## Configure environment variables\n\nIf you already have `LANGSMITH_API_KEY` set to your current workspace's api key from LangSmith, you can skip this step.\n\nOtherwise, get an API key for your workspace by navigating to `Settings > API Keys > Create API Key` in LangSmith.\n\nSet your environment variable.\n\n<Note>\n  What we refer to as \"prompts\" used to be called \"repos\", so any references to \"repo\" in the code are referring to a prompt.\n</Note>\n\nTo create a new prompt or update an existing prompt, you can use the `push prompt` method.\n\nYou can also push a prompt as a RunnableSequence of a prompt and a model. This is useful for storing the model configuration you want to use with this prompt. The provider must be supported by the LangSmith playground. (see settings here: [Supported Providers](https://langsmith.com/playground))\n\nTo pull a prompt, you can use the `pull prompt` method, which returns a the prompt as a langchain `PromptTemplate`.\n\nTo pull a **private prompt** you do not need to specify the owner handle (though you can, if you have one set).\n\nTo pull a **public prompt** from the LangChain Hub, you need to specify the handle of the prompt's author.\n\nSimilar to pushing a prompt, you can also pull a prompt as a RunnableSequence of a prompt and a model. Just specify include\\_model when pulling the prompt. If the stored prompt includes a model, it will be returned as a RunnableSequence. Make sure you have the proper environment variables set for the model you are using.\n\nWhen pulling a prompt, you can also specify a specific commit hash or [commit tag](/langsmith/manage-prompts#commit-tags) to pull a specific version of the prompt.\n\nTo pull a public prompt from the LangChain Hub, you need to specify the handle of the prompt's author.\n\n<Note>\n  For pulling prompts, if you are using Node.js or an environment that supports dynamic imports, we recommend using the `langchain/hub/node` entrypoint, as it handles deserialization of models associated with your prompt configuration automatically.\n\nIf you are in a non-Node environment, \"includeModel\" is not supported for non-OpenAI models and you should use the base `langchain/hub` entrypoint.\n</Note>\n\n## Use a prompt without LangChain\n\nIf you want to store your prompts in LangSmith but use them directly with a model provider's API, you can use our conversion methods. These convert your prompt into the payload required for the OpenAI or Anthropic API.\n\nThese conversion methods rely on logic from within LangChain integration packages, and you will need to install the appropriate package as a dependency in addition to your official SDK of choice. Here are some examples:\n\n## List, delete, and like prompts\n\nYou can also list, delete, and like/unlike prompts using the `list prompts`, `delete prompt`, `like prompt` and `unlike prompt` methods. See the [LangSmith SDK client](https://github.com/langchain-ai/langsmith-sdk) for extensive documentation on these methods.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/manage-prompts-programmatically.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Configure environment variables\n\nIf you already have `LANGSMITH_API_KEY` set to your current workspace's api key from LangSmith, you can skip this step.\n\nOtherwise, get an API key for your workspace by navigating to `Settings > API Keys > Create API Key` in LangSmith.\n\nSet your environment variable.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n  What we refer to as \"prompts\" used to be called \"repos\", so any references to \"repo\" in the code are referring to a prompt.\n</Note>\n\n## Push a prompt\n\nTo create a new prompt or update an existing prompt, you can use the `push prompt` method.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nYou can also push a prompt as a RunnableSequence of a prompt and a model. This is useful for storing the model configuration you want to use with this prompt. The provider must be supported by the LangSmith playground. (see settings here: [Supported Providers](https://langsmith.com/playground))\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Pull a prompt\n\nTo pull a prompt, you can use the `pull prompt` method, which returns a the prompt as a langchain `PromptTemplate`.\n\nTo pull a **private prompt** you do not need to specify the owner handle (though you can, if you have one set).\n\nTo pull a **public prompt** from the LangChain Hub, you need to specify the handle of the prompt's author.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSimilar to pushing a prompt, you can also pull a prompt as a RunnableSequence of a prompt and a model. Just specify include\\_model when pulling the prompt. If the stored prompt includes a model, it will be returned as a RunnableSequence. Make sure you have the proper environment variables set for the model you are using.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nWhen pulling a prompt, you can also specify a specific commit hash or [commit tag](/langsmith/manage-prompts#commit-tags) to pull a specific version of the prompt.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nTo pull a public prompt from the LangChain Hub, you need to specify the handle of the prompt's author.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n<Note>\n  For pulling prompts, if you are using Node.js or an environment that supports dynamic imports, we recommend using the `langchain/hub/node` entrypoint, as it handles deserialization of models associated with your prompt configuration automatically.\n\n  If you are in a non-Node environment, \"includeModel\" is not supported for non-OpenAI models and you should use the base `langchain/hub` entrypoint.\n</Note>\n\n## Use a prompt without LangChain\n\nIf you want to store your prompts in LangSmith but use them directly with a model provider's API, you can use our conversion methods. These convert your prompt into the payload required for the OpenAI or Anthropic API.\n\nThese conversion methods rely on logic from within LangChain integration packages, and you will need to install the appropriate package as a dependency in addition to your official SDK of choice. Here are some examples:\n\n### OpenAI\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Anthropic\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## List, delete, and like prompts\n\nYou can also list, delete, and like/unlike prompts using the `list prompts`, `delete prompt`, `like prompt` and `unlike prompt` methods. See the [LangSmith SDK client](https://github.com/langchain-ai/langsmith-sdk) for extensive documentation on these methods.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Install packages",
+      "id": "install-packages"
+    },
+    {
+      "level": "h2",
+      "text": "Configure environment variables",
+      "id": "configure-environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Push a prompt",
+      "id": "push-a-prompt"
+    },
+    {
+      "level": "h2",
+      "text": "Pull a prompt",
+      "id": "pull-a-prompt"
+    },
+    {
+      "level": "h2",
+      "text": "Use a prompt without LangChain",
+      "id": "use-a-prompt-without-langchain"
+    },
+    {
+      "level": "h3",
+      "text": "OpenAI",
+      "id": "openai"
+    },
+    {
+      "level": "h3",
+      "text": "Anthropic",
+      "id": "anthropic"
+    },
+    {
+      "level": "h2",
+      "text": "List, delete, and like prompts",
+      "id": "list,-delete,-and-like-prompts"
+    }
+  ],
+  "url": "llms-txt#manage-prompts-programmatically",
+  "links": []
+}

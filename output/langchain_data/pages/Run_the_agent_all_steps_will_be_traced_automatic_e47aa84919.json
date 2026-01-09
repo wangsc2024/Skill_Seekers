@@ -1,0 +1,19 @@
+{
+  "title": "Run the agent - all steps will be traced automatically",
+  "content": "response = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Search for the latest AI news and email a summary to john@example.com\"}]\n})\npython  theme={null}\nimport langsmith as ls",
+  "code_samples": [
+    {
+      "code": "By default, the trace will be logged to the project with the name `default`. To configure a custom project name, see [Log to a project](#log-to-a-project).\n\n## Trace selectively\n\nYou may opt to trace specific invocations or parts of your application using LangSmith's `tracing_context` context manager:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Trace selectively",
+      "id": "trace-selectively"
+    }
+  ],
+  "url": "llms-txt#run-the-agent---all-steps-will-be-traced-automatically",
+  "links": []
+}

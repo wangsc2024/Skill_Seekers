@@ -1,0 +1,8 @@
+{
+  "title": "Use the public key in docker run",
+  "content": "-e \"SSH_KEY=$(cat ~/.ssh/container_key.pub)\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-the-public-key-in-docker-run",
+  "links": []
+}

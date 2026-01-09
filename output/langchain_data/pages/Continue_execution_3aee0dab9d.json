@@ -1,0 +1,82 @@
+{
+  "title": "Continue execution",
+  "content": "for event in graph.stream(Command(resume=\"baz\"), config):\n    print(event)\n    print(\"\\n\")\npython  theme={null}\nfrom typing import Union\n\ndef review_tool_call(tool_call: ToolCall) -> Union[ToolCall, ToolMessage]:\n    \"\"\"Review a tool call, returning a validated version.\"\"\"\n    human_review = interrupt(\n        {\n            \"question\": \"Is this correct?\",\n            \"tool_call\": tool_call,\n        }\n    )\n    review_action = human_review[\"action\"]\n    review_data = human_review.get(\"data\")\n    if review_action == \"continue\":\n        return tool_call\n    elif review_action == \"update\":\n        updated_tool_call = {**tool_call, **{\"args\": review_data}}\n        return updated_tool_call\n    elif review_action == \"feedback\":\n        return ToolMessage(\n            content=review_data, name=tool_call[\"name\"], tool_call_id=tool_call[\"id\"]\n        )\npython  theme={null}\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langgraph.graph.message import add_messages\nfrom langgraph.types import Command, interrupt\n\ncheckpointer = InMemorySaver()\n\n@entrypoint(checkpointer=checkpointer)\ndef agent(messages, previous):\n    if previous is not None:\n        messages = add_messages(previous, messages)\n\nmodel_response = call_model(messages).result()\n    while True:\n        if not model_response.tool_calls:\n            break\n\n# Review tool calls\n        tool_results = []\n        tool_calls = []\n        for i, tool_call in enumerate(model_response.tool_calls):\n            review = review_tool_call(tool_call)\n            if isinstance(review, ToolMessage):\n                tool_results.append(review)\n            else:  # is a validated tool call\n                tool_calls.append(review)\n                if review != tool_call:\n                    model_response.tool_calls[i] = review  # update message\n\n# Execute remaining tool calls\n        tool_result_futures = [call_tool(tool_call) for tool_call in tool_calls]\n        remaining_tool_results = [fut.result() for fut in tool_result_futures]\n\n# Append to message list\n        messages = add_messages(\n            messages,\n            [model_response, *tool_results, *remaining_tool_results],\n        )\n\n# Call model again\n        model_response = call_model(messages).result()\n\n# Generate final response\n    messages = add_messages(messages, model_response)\n    return entrypoint.final(value=model_response, save=messages)\npython  theme={null}\nconfig = {\n    \"configurable\": {\n        \"thread_id\": \"1\",  # [!code highlight]\n        # optionally provide an ID for a specific checkpoint,\n        # otherwise the latest checkpoint is shown\n        # \"checkpoint_id\": \"1f029ca3-1f5b-6704-8004-820c16b69a5a\"  # [!code highlight]\n\n}\n}\ngraph.get_state(config)  # [!code highlight]\n\nStateSnapshot(\n    values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today?), HumanMessage(content=\"what's my name?\"), AIMessage(content='Your name is Bob.')]}, next=(),\n    config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1f5b-6704-8004-820c16b69a5a'}},\n    metadata={\n        'source': 'loop',\n        'writes': {'call_model': {'messages': AIMessage(content='Your name is Bob.')}},\n        'step': 4,\n        'parents': {},\n        'thread_id': '1'\n    },\n    created_at='2025-05-05T16:01:24.680462+00:00',\n    parent_config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1790-6b0a-8003-baf965b6a38f'}},\n    tasks=(),\n    interrupts=()\n)\npython  theme={null}\nconfig = {\n    \"configurable\": {\n        \"thread_id\": \"1\"  # [!code highlight]\n    }\n}\nlist(graph.get_state_history(config))  # [!code highlight]\n\n[\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?'), HumanMessage(content=\"what's my name?\"), AIMessage(content='Your name is Bob.')]},\n        next=(),\n        config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1f5b-6704-8004-820c16b69a5a'}},\n        metadata={'source': 'loop', 'writes': {'call_model': {'messages': AIMessage(content='Your name is Bob.')}}, 'step': 4, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:24.680462+00:00',\n        parent_config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1790-6b0a-8003-baf965b6a38f'}},\n        tasks=(),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?'), HumanMessage(content=\"what's my name?\")]},\n        next=('call_model',),\n        config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1790-6b0a-8003-baf965b6a38f'}},\n        metadata={'source': 'loop', 'writes': None, 'step': 3, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:23.863421+00:00',\n        parent_config={...}\n        tasks=(PregelTask(id='8ab4155e-6b15-b885-9ce5-bed69a2c305c', name='call_model', path=('__pregel_pull', 'call_model'), error=None, interrupts=(), state=None, result={'messages': AIMessage(content='Your name is Bob.')}),),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')]},\n        next=('__start__',),\n        config={...},\n        metadata={'source': 'input', 'writes': {'__start__': {'messages': [{'role': 'user', 'content': \"what's my name?\"}]}}, 'step': 2, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:23.863173+00:00',\n        parent_config={...}\n        tasks=(PregelTask(id='24ba39d6-6db1-4c9b-f4c5-682aeaf38dcd', name='__start__', path=('__pregel_pull', '__start__'), error=None, interrupts=(), state=None, result={'messages': [{'role': 'user', 'content': \"what's my name?\"}]}),),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')]},\n        next=(),\n        config={...},\n        metadata={'source': 'loop', 'writes': {'call_model': {'messages': AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')}}, 'step': 1, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:23.862295+00:00',\n        parent_config={...}\n        tasks=(),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\")]},\n        next=('call_model',),\n        config={...},\n        metadata={'source': 'loop', 'writes': None, 'step': 0, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:22.278960+00:00',\n        parent_config={...}\n        tasks=(PregelTask(id='8cbd75e0-3720-b056-04f7-71ac805140a0', name='call_model', path=('__pregel_pull', 'call_model'), error=None, interrupts=(), state=None, result={'messages': AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')}),),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': []},\n        next=('__start__',),\n        config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-0870-6ce2-bfff-1f3f14c3e565'}},\n        metadata={'source': 'input', 'writes': {'__start__': {'messages': [{'role': 'user', 'content': \"hi! I'm bob\"}]}}, 'step': -1, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:22.277497+00:00',\n        parent_config=None,\n        tasks=(PregelTask(id='d458367b-8265-812c-18e2-33001d199ce6', name='__start__', path=('__pregel_pull', '__start__'), error=None, interrupts=(), state=None, result={'messages': [{'role': 'user', 'content': \"hi! I'm bob\"}]}),),\n        interrupts=()\n    )\n]\npython  theme={null}\nfrom langgraph.func import entrypoint\nfrom langgraph.checkpoint.memory import InMemorySaver\n\ncheckpointer = InMemorySaver()\n\n@entrypoint(checkpointer=checkpointer)\ndef accumulate(n: int, *, previous: int | None) -> entrypoint.final[int, int]:\n    previous = previous or 0\n    total = previous + n\n    # Return the *previous* value to the caller but save the *new* total to the checkpoint.\n    return entrypoint.final(value=previous, save=total)\n\nconfig = {\"configurable\": {\"thread_id\": \"my-thread\"}}\n\nprint(accumulate.invoke(1, config=config))  # 0\nprint(accumulate.invoke(2, config=config))  # 1\nprint(accumulate.invoke(3, config=config))  # 3\npython  theme={null}\nfrom langchain.messages import BaseMessage\nfrom langgraph.graph import add_messages\nfrom langgraph.func import entrypoint, task\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langchain_anthropic import ChatAnthropic\n\nmodel = ChatAnthropic(model=\"claude-sonnet-4-5-20250929\")\n\n@task\ndef call_model(messages: list[BaseMessage]):\n    response = model.invoke(messages)\n    return response\n\ncheckpointer = InMemorySaver()\n\n@entrypoint(checkpointer=checkpointer)\ndef workflow(inputs: list[BaseMessage], *, previous: list[BaseMessage]):\n    if previous:\n        inputs = add_messages(previous, inputs)\n\nresponse = call_model(inputs).result()\n    return entrypoint.final(value=response, save=add_messages(inputs, response))\n\nconfig = {\"configurable\": {\"thread_id\": \"1\"}}\ninput_message = {\"role\": \"user\", \"content\": \"hi! I'm bob\"}\nfor chunk in workflow.stream([input_message], config, stream_mode=\"values\"):\n    chunk.pretty_print()\n\ninput_message = {\"role\": \"user\", \"content\": \"what's my name?\"}\nfor chunk in workflow.stream([input_message], config, stream_mode=\"values\"):\n    chunk.pretty_print()\n```\n\n[long-term memory](/oss/python/concepts/memory#long-term-memory) allows storing information across different **thread ids**. This could be useful for learning information about a given user in one conversation and using it in another.\n\n* [Workflows and agent](/oss/python/langgraph/workflows-agents) guide for more examples of how to build workflows using the Functional API.\n\n## Integrate with other libraries\n\n* [Add LangGraph's features to other frameworks using the functional API](/langsmith/deploy-other-frameworks): Add LangGraph features like persistence, memory and streaming to other agent frameworks that do not provide them out of the box.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/use-functional-api.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "After resuming, the run proceeds through the remaining step and terminates as expected.\n\n### Review tool calls\n\nTo review tool calls before execution, we add a `review_tool_call` function that calls [`interrupt`](/oss/python/langgraph/interrupts#pause-using-interrupt). When this function is called, execution will be paused until we issue a command to resume it.\n\nGiven a tool call, our function will [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt) for human review. At that point we can either:\n\n* Accept the tool call\n* Revise the tool call and continue\n* Generate a custom tool message (e.g., instructing the model to re-format its tool call)",
+      "language": "unknown"
+    },
+    {
+      "code": "We can now update our [entrypoint](/oss/python/langgraph/functional-api#entrypoint) to review the generated tool calls. If a tool call is accepted or revised, we execute in the same way as before. Otherwise, we just append the [`ToolMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.ToolMessage) supplied by the human. The results of prior tasks — in this case the initial model call — are persisted, so that they are not run again following the [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Short-term memory\n\nShort-term memory allows storing information across different **invocations** of the same **thread id**. See [short-term memory](/oss/python/langgraph/functional-api#short-term-memory) for more details.\n\n### Manage checkpoints\n\nYou can view and delete the information stored by the checkpointer.\n\n<a id=\"checkpoint\" />\n\n#### View thread state",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<a id=\"checkpoints\" />\n\n#### View the history of the thread",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Decouple return value from saved value\n\nUse `entrypoint.final` to decouple what is returned to the caller from what is persisted in the checkpoint. This is useful when:\n\n* You want to return a computed result (e.g., a summary or status), but save a different internal value for use on the next invocation.\n* You need to control what gets passed to the previous parameter on the next run.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Chatbot example\n\nAn example of a simple chatbot using the functional API and the [`InMemorySaver`](https://reference.langchain.com/python/langgraph/checkpoints/#langgraph.checkpoint.memory.InMemorySaver) checkpointer.\n\nThe bot is able to remember the previous conversation and continue from where it left off.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Review tool calls",
+      "id": "review-tool-calls"
+    },
+    {
+      "level": "h2",
+      "text": "Short-term memory",
+      "id": "short-term-memory"
+    },
+    {
+      "level": "h3",
+      "text": "Manage checkpoints",
+      "id": "manage-checkpoints"
+    },
+    {
+      "level": "h3",
+      "text": "Decouple return value from saved value",
+      "id": "decouple-return-value-from-saved-value"
+    },
+    {
+      "level": "h3",
+      "text": "Chatbot example",
+      "id": "chatbot-example"
+    },
+    {
+      "level": "h2",
+      "text": "Long-term memory",
+      "id": "long-term-memory"
+    },
+    {
+      "level": "h2",
+      "text": "Workflows",
+      "id": "workflows"
+    },
+    {
+      "level": "h2",
+      "text": "Integrate with other libraries",
+      "id": "integrate-with-other-libraries"
+    }
+  ],
+  "url": "llms-txt#continue-execution",
+  "links": []
+}

@@ -1,0 +1,137 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html",
+  "title": "autogen_ext.agents.video_surfer — AutoGen",
+  "content": "Bases: AssistantAgent\n\nVideoSurfer is a specialized agent designed to answer questions about a local video file.\n\nThis agent utilizes various tools to extract information from the video, such as its length, screenshots at specific timestamps, and audio transcriptions. It processes these elements to provide detailed answers to user queries.\n\ntranscribe_audio_with_timestamps()\n\ntranscribe_video_screenshot()\n\nname (str) – The name of the agent.\n\nmodel_client (ChatCompletionClient) – The model client used for generating responses.\n\ntools (List[BaseTool[BaseModel, BaseModel] | Callable[..., Any] | Callable[..., Awaitable[Any]]] | None, optional) – A list of tools or functions the agent can use. If not provided, defaults to all video tools from the action space.\n\ndescription (str, optional) – A brief description of the agent. Defaults to “An agent that can answer questions about a local video.”.\n\nsystem_message (str | None, optional) – The system message guiding the agent’s behavior. Defaults to a predefined message.\n\nThe following example demonstrates how to create an video surfing agent with a model client and generate a response to a simple query about a local video called video.mp4.\n\nThe following example demonstrates how to create and use a VideoSurfer and UserProxyAgent with MagenticOneGroupChat.\n\nTranscribes the video screenshot at a specific timestamp.\n\nvideo_path (str) – Path to the video file.\n\ntimestamp (float) – Timestamp to take the screenshot.\n\nstr – Transcription of the video screenshot.\n\nautogen_ext.agents.openai\n\nautogen_ext.agents.web_surfer",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "autogen_ext.agents.video_surfer#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "pip install \"autogen-ext[video-surfer]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[video-surfer]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "import asyncio\nfrom autogen_agentchat.ui import Console\nfrom autogen_agentchat.conditions import TextMentionTermination\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_ext.agents.video_surfer import VideoSurfer\n\nasync def main() -> None:\n    \"\"\"\n    Main function to run the video agent.\n    \"\"\"\n    # Define an agent\n    video_agent = VideoSurfer(\n        name=\"VideoSurfer\",\n        model_client=OpenAIChatCompletionClient(model=\"gpt-4o-2024-08-06\")\n        )\n\n    # Define termination condition\n    termination = TextMentionTermination(\"TERMINATE\")\n\n    # Define a team\n    agent_team = RoundRobinGroupChat([video_agent], termination_condition=termination)\n\n    # Run the team and stream messages to the console\n    stream = agent_team.run_stream(task=\"How does Adam define complex tasks in video.mp4? What concrete example of complex does his use? Can you save this example to disk as well?\")\n    await Console(stream)\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nfrom autogen_agentchat.ui import Console\nfrom autogen_agentchat.conditions import TextMentionTermination\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_ext.agents.video_surfer import VideoSurfer\n\nasync def main() -> None:\n    \"\"\"\n    Main function to run the video agent.\n    \"\"\"\n    # Define an agent\n    video_agent = VideoSurfer(\n        name=\"VideoSurfer\",\n        model_client=OpenAIChatCompletionClient(model=\"gpt-4o-2024-08-06\")\n        )\n\n    # Define termination condition\n    termination = TextMentionTermination(\"TERMINATE\")\n\n    # Define a team\n    agent_team = RoundRobinGroupChat([video_agent], termination_condition=termination)\n\n    # Run the team and stream messages to the console\n    stream = agent_team.run_stream(task=\"How does Adam define complex tasks in video.mp4? What concrete example of complex does his use? Can you save this example to disk as well?\")\n    await Console(stream)\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_agentchat.ui import Console\nfrom autogen_agentchat.teams import MagenticOneGroupChat\nfrom autogen_agentchat.agents import UserProxyAgent\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_ext.agents.video_surfer import VideoSurfer\n\nasync def main() -> None:\n    \"\"\"\n    Main function to run the video agent.\n    \"\"\"\n\n    model_client = OpenAIChatCompletionClient(model=\"gpt-4o-2024-08-06\")\n\n    # Define an agent\n    video_agent = VideoSurfer(\n        name=\"VideoSurfer\",\n        model_client=model_client\n        )\n\n    web_surfer_agent = UserProxyAgent(\n        name=\"User\"\n    )\n\n    # Define a team\n    agent_team = MagenticOneGroupChat([web_surfer_agent, video_agent], model_client=model_client,)\n\n    # Run the team and stream messages to the console\n    stream = agent_team.run_stream(task=\"Find a latest video about magentic one on youtube and extract quotes from it that make sense.\")\n    await Console(stream)\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_agentchat.ui import Console\nfrom autogen_agentchat.teams import MagenticOneGroupChat\nfrom autogen_agentchat.agents import UserProxyAgent\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_ext.agents.video_surfer import VideoSurfer\n\nasync def main() -> None:\n    \"\"\"\n    Main function to run the video agent.\n    \"\"\"\n\n    model_client = OpenAIChatCompletionClient(model=\"gpt-4o-2024-08-06\")\n\n    # Define an agent\n    video_agent = VideoSurfer(\n        name=\"VideoSurfer\",\n        model_client=model_client\n        )\n\n    web_surfer_agent = UserProxyAgent(\n        name=\"User\"\n    )\n\n    # Define a team\n    agent_team = MagenticOneGroupChat([web_surfer_agent, video_agent], model_client=model_client,)\n\n    # Run the team and stream messages to the console\n    stream = agent_team.run_stream(task=\"Find a latest video about magentic one on youtube and extract quotes from it that make sense.\")\n    await Console(stream)\n\nasyncio.run(main())",
+      "language": "python"
+    }
+  ],
+  "patterns": [
+    {
+      "description": "API Reference autogen_ext.agents.video_surfer autogen_ext.agents.video_surfer# class VideoSurfer(name: str, model_client: ChatCompletionClient, *, tools: List[BaseTool[BaseModel, BaseModel] | Callable[[...], Any] | Callable[[...], Awaitable[Any]]] | None = None, description: str | None = None, system_message: str | None = None)[source]# Bases: AssistantAgent VideoSurfer is a specialized agent designed to answer questions about a local video file. Installation: pip install \"autogen-ext[video-surfer]\" This agent utilizes various tools to extract information from the video, such as its length, screenshots at specific timestamps, and audio transcriptions. It processes these elements to provide detailed answers to user queries. Available tools: extract_audio() get_video_length() transcribe_audio_with_timestamps() get_screenshot_at() save_screenshot() transcribe_video_screenshot() Parameters: name (str) – The name of the agent. model_client (ChatCompletionClient) – The model client used for generating responses. tools (List[BaseTool[BaseModel, BaseModel] | Callable[..., Any] | Callable[..., Awaitable[Any]]] | None, optional) – A list of tools or functions the agent can use. If not provided, defaults to all video tools from the action space. description (str, optional) – A brief description of the agent. Defaults to “An agent that can answer questions about a local video.”. system_message (str | None, optional) – The system message guiding the agent’s behavior. Defaults to a predefined message. Example usage: The following example demonstrates how to create an video surfing agent with a model client and generate a response to a simple query about a local video called video.mp4. import asyncio from autogen_agentchat.ui import Console from autogen_agentchat.conditions import TextMentionTermination from autogen_agentchat.teams import RoundRobinGroupChat from autogen_ext.models.openai import OpenAIChatCompletionClient from autogen_ext.agents.video_surfer import VideoSurfer async def main() -> None: \"\"\" Main function to run the video agent. \"\"\" # Define an agent video_agent = VideoSurfer( name=\"VideoSurfer\", model_client=OpenAIChatCompletionClient(model=\"gpt-4o-2024-08-06\") ) # Define termination condition termination = TextMentionTermination(\"TERMINATE\") # Define a team agent_team = RoundRobinGroupChat([video_agent], termination_condition=termination) # Run the team and stream messages to the console stream = agent_team.run_stream(task=\"How does Adam define complex tasks in video.mp4? What concrete example of complex does his use? Can you save this example to disk as well?\") await Console(stream) asyncio.run(main()) The following example demonstrates how to create and use a VideoSurfer and UserProxyAgent with MagenticOneGroupChat. import asyncio from autogen_agentchat.ui import Console from autogen_agentchat.teams import MagenticOneGroupChat from autogen_agentchat.agents import UserProxyAgent from autogen_ext.models.openai import OpenAIChatCompletionClient from autogen_ext.agents.video_surfer import VideoSurfer async def main() -> None: \"\"\" Main function to run the video agent. \"\"\" model_client = OpenAIChatCompletionClient(model=\"gpt-4o-2024-08-06\") # Define an agent video_agent = VideoSurfer( name=\"VideoSurfer\", model_client=model_client ) web_surfer_agent = UserProxyAgent( name=\"User\" ) # Define a team agent_team = MagenticOneGroupChat([web_surfer_agent, video_agent], model_client=model_client,) # Run the team and stream messages to the console stream = agent_team.run_stream(task=\"Find a latest video about magentic one on youtube and extract quotes from it that make sense.\") await Console(stream) asyncio.run(main()) DEFAULT_DESCRIPTION = 'An agent that can answer questions about a local video.'# DEFAULT_SYSTEM_MESSAGE = '\\n You are a helpful agent that is an expert at answering questions from a video.\\n When asked to answer a question about a video, you should:\\n 1. Check if that video is available locally.\\n 2. Use the transcription to find which part of the video the question is referring to.\\n 3. Optionally use screenshots from those timestamps\\n 4. Provide a detailed answer to the question.\\n Reply with TERMINATE when the task has been completed.\\n '# async vs_transribe_video_screenshot(video_path: str, timestamp: float) → str[source]# Transcribes the video screenshot at a specific timestamp. Parameters: video_path (str) – Path to the video file. timestamp (float) – Timestamp to take the screenshot. Returns: str – Transcription of the video screenshot. previous autogen_ext.agents.openai next autogen_ext.agents.web_surfer On this page VideoSurfer VideoSurfer.DEFAULT_DESCRIPTION VideoSurfer.DEFAULT_SYSTEM_MESSAGE VideoSurfer.vs_transribe_video_screenshot() Edit on GitHub Show Source",
+      "code": "AssistantAgent"
+    },
+    {
+      "description": "API Reference autogen_ext.agents.video_surfer autogen_ext.agents.video_surfer# class VideoSurfer(name: str, model_client: ChatCompletionClient, *, tools: List[BaseTool[BaseModel, BaseModel] | Callable[[...], Any] | Callable[[...], Awaitable[Any]]] | None = None, description: str | None = None, system_message: str | None = None)[source]# Bases: AssistantAgent VideoSurfer is a specialized agent designed to answer questions about a local video file. Installation: pip install \"autogen-ext[video-surfer]\" This agent utilizes various tools to extract information from the video, such as its length, screenshots at specific timestamps, and audio transcriptions. It processes these elements to provide detailed answers to user queries. Available tools: extract_audio() get_video_length() transcribe_audio_with_timestamps() get_screenshot_at() save_screenshot() transcribe_video_screenshot() Parameters: name (str) – The name of the agent. model_client (ChatCompletionClient) – The model client used for generating responses. tools (List[BaseTool[BaseModel, BaseModel] | Callable[..., Any] | Callable[..., Awaitable[Any]]] | None, optional) – A list of tools or functions the agent can use. If not provided, defaults to all video tools from the action space. description (str, optional) – A brief description of the agent. Defaults to “An agent that can answer questions about a local video.”. system_message (str | None, optional) – The system message guiding the agent’s behavior. Defaults to a predefined message. Example usage: The following example demonstrates how to create an video surfing agent with a model client and generate a response to a simple query about a local video called video.mp4. import asyncio from autogen_agentchat.ui import Console from autogen_agentchat.conditions import TextMentionTermination from autogen_agentchat.teams import RoundRobinGroupChat from autogen_ext.models.openai import OpenAIChatCompletionClient from autogen_ext.agents.video_surfer import VideoSurfer async def main() -> None: \"\"\" Main function to run the video agent. \"\"\" # Define an agent video_agent = VideoSurfer( name=\"VideoSurfer\", model_client=OpenAIChatCompletionClient(model=\"gpt-4o-2024-08-06\") ) # Define termination condition termination = TextMentionTermination(\"TERMINATE\") # Define a team agent_team = RoundRobinGroupChat([video_agent], termination_condition=termination) # Run the team and stream messages to the console stream = agent_team.run_stream(task=\"How does Adam define complex tasks in video.mp4? What concrete example of complex does his use? Can you save this example to disk as well?\") await Console(stream) asyncio.run(main()) The following example demonstrates how to create and use a VideoSurfer and UserProxyAgent with MagenticOneGroupChat. import asyncio from autogen_agentchat.ui import Console from autogen_agentchat.teams import MagenticOneGroupChat from autogen_agentchat.agents import UserProxyAgent from autogen_ext.models.openai import OpenAIChatCompletionClient from autogen_ext.agents.video_surfer import VideoSurfer async def main() -> None: \"\"\" Main function to run the video agent. \"\"\" model_client = OpenAIChatCompletionClient(model=\"gpt-4o-2024-08-06\") # Define an agent video_agent = VideoSurfer( name=\"VideoSurfer\", model_client=model_client ) web_surfer_agent = UserProxyAgent( name=\"User\" ) # Define a team agent_team = MagenticOneGroupChat([web_surfer_agent, video_agent], model_client=model_client,) # Run the team and stream messages to the console stream = agent_team.run_stream(task=\"Find a latest video about magentic one on youtube and extract quotes from it that make sense.\") await Console(stream) asyncio.run(main()) DEFAULT_DESCRIPTION = 'An agent that can answer questions about a local video.'# DEFAULT_SYSTEM_MESSAGE = '\\n You are a helpful agent that is an expert at answering questions from a video.\\n When asked to answer a question about a video, you should:\\n 1. Check if that video is available locally.\\n 2. Use the transcription to find which part of the video the question is referring to.\\n 3. Optionally use screenshots from those timestamps\\n 4. Provide a detailed answer to the question.\\n Reply with TERMINATE when the task has been completed.\\n '# async vs_transribe_video_screenshot(video_path: str, timestamp: float) → str[source]# Transcribes the video screenshot at a specific timestamp. Parameters: video_path (str) – Path to the video file. timestamp (float) – Timestamp to take the screenshot. Returns: str – Transcription of the video screenshot. previous autogen_ext.agents.openai next autogen_ext.agents.web_surfer",
+      "code": "AssistantAgent"
+    },
+    {
+      "description": "Example usage:",
+      "code": "import asyncio\nfrom autogen_agentchat.ui import Console\nfrom autogen_agentchat.conditions import TextMentionTermination\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_ext.agents.video_surfer import VideoSurfer\n\nasync def main() -> None:\n    \"\"\"\n    Main function to run the video agent.\n    \"\"\"\n    # Define an agent\n    video_agent = VideoSurfer(\n        name=\"VideoSurfer\",\n        model_client=OpenAIChatCompletionClient(model=\"gpt-4o-2024-08-06\")\n        )\n\n    # Define termination condition\n    termination = TextMentionTermination(\"TERMINATE\")\n\n    # Define a team\n    agent_team = RoundRobinGroupChat([video_agent], termination_condition=termination)\n\n    # Run the team and stream messages to the console\n    stream = agent_team.run_stream(task=\"How does Adam define complex tasks in video.mp4? What concrete example of complex does his use? Can you save this example to disk as well?\")\n    await Console(stream)\n\nasyncio.run(main())"
+    }
+  ],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.state.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.code_executor.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.exceptions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.logging.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tool_agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.file_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.auth.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.diskcache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker_jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.local.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.canvas.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.chromadb.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.mem0.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.llama_cpp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.replay.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.code_execution.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.http.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.playwright_controller.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2_grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2_grpc.html"
+  ]
+}

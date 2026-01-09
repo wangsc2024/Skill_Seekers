@@ -1,0 +1,8 @@
+{
+  "title": "Invoke the agent",
+  "content": "result = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Delete the file temp.txt\"}]\n}, config=config)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#invoke-the-agent",
+  "links": []
+}

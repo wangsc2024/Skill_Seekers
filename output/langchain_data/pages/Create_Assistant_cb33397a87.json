@@ -1,0 +1,8 @@
+{
+  "title": "Create Assistant",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/assistants/create-assistant\n\nlangsmith/agent-server-openapi.json post /assistants\nCreate an assistant.\n\nAn initial version of the assistant will be created and the assistant is set to that version. To change versions, use the `POST /assistants/{assistant_id}/latest` endpoint.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-assistant",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "results in `Weather(temperature=70.0, condition='sunny')`",
+  "content": "python  theme={null}\nfrom langchain_anthropic import ChatAnthropic\n\nmodel = ChatAnthropic(model=\"claude-sonnet-4-5-20250929\")\nresponse = model.invoke(\"What's the capital of France?\")",
+  "code_samples": [
+    {
+      "code": "**Error handling**: Control error handling via the `handle_errors` parameter to `ToolStrategy`:\n\n* **Parsing errors**: Model generates data that doesn't match desired structure\n* **Multiple tool calls**: Model generates 2+ tool calls for structured output schemas\n\n***\n\n## Standard content blocks\n\n<Note>\n  Content block support is currently only available for the following integrations:\n\n  * [`langchain-anthropic`](https://pypi.org/project/langchain-anthropic/)\n  * [`langchain-aws`](https://pypi.org/project/langchain-aws/)\n  * [`langchain-openai`](https://pypi.org/project/langchain-openai/)\n  * [`langchain-google-genai`](https://pypi.org/project/langchain-google-genai/)\n  * [`langchain-ollama`](https://pypi.org/project/langchain-ollama/)\n\n  Broader support for content blocks will be rolled out gradually across more providers.\n</Note>\n\nThe new [`content_blocks`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.messages.BaseMessage.content_blocks) property introduces a standard representation for message content that works across providers:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Standard content blocks",
+      "id": "standard-content-blocks"
+    }
+  ],
+  "url": "llms-txt#results-in-`weather(temperature=70.0,-condition='sunny')`",
+  "links": []
+}

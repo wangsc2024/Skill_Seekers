@@ -1,0 +1,8 @@
+{
+  "title": "2. Define an evaluator",
+  "content": "def is_concise(outputs: dict, reference_outputs: dict) -> bool:\n    return len(outputs[\"answer\"]) < (3 * len(reference_outputs[\"answer\"]))",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#2.-define-an-evaluator",
+  "links": []
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Unsloth Benchmarks",
+  "content": "Unsloth recorded benchmarks on NVIDIA GPUs.\n\n* For more detailed benchmarks, read our [Llama 3.3 Blog](https://unsloth.ai/blog/llama3-3).\n* Benchmarking of Unsloth was also conducted by [🤗Hugging Face](https://huggingface.co/blog/unsloth-trl).\n\nTested on H100 and [Blackwell](https://docs.unsloth.ai/basics/fine-tuning-llms-with-blackwell-rtx-50-series-and-unsloth) GPUs. We tested using the Alpaca Dataset, a batch size of 2, gradient accumulation steps of 4, rank = 32, and applied QLoRA on all linear layers (q, k, v, o, gate, up, down):\n\n<table data-full-width=\"false\"><thead><tr><th>Model</th><th>VRAM</th><th>🦥Unsloth speed</th><th>🦥VRAM reduction</th><th>🦥Longer context</th><th>😊Hugging Face + FA2</th></tr></thead><tbody><tr><td>Llama 3.3 (70B)</td><td>80GB</td><td>2x</td><td>>75%</td><td>13x longer</td><td>1x</td></tr><tr><td>Llama 3.1 (8B)</td><td>80GB</td><td>2x</td><td>>70%</td><td>12x longer</td><td>1x</td></tr></tbody></table>\n\n## Context length benchmarks\n\n{% hint style=\"info\" %}\nThe more data you have, the less VRAM Unsloth uses due to our [gradient checkpointing](https://unsloth.ai/blog/long-context) algorithm + Apple's CCE algorithm!\n{% endhint %}\n\n### **Llama 3.1 (8B) max. context length**\n\nWe tested Llama 3.1 (8B) Instruct and did 4bit QLoRA on all linear layers (Q, K, V, O, gate, up and down) with rank = 32 with a batch size of 1. We padded all sequences to a certain maximum sequence length to mimic long context finetuning workloads.\n\n| GPU VRAM | 🦥Unsloth context length | Hugging Face + FA2 |\n| -------- | ------------------------ | ------------------ |\n| 8 GB     | 2,972                    | OOM                |\n| 12 GB    | 21,848                   | 932                |\n| 16 GB    | 40,724                   | 2,551              |\n| 24 GB    | 78,475                   | 5,789              |\n| 40 GB    | 153,977                  | 12,264             |\n| 48 GB    | 191,728                  | 15,502             |\n| 80 GB    | 342,733                  | 28,454             |\n\n### **Llama 3.3 (70B) max. context length**\n\nWe tested Llama 3.3 (70B) Instruct on a 80GB A100 and did 4bit QLoRA on all linear layers (Q, K, V, O, gate, up and down) with rank = 32 with a batch size of 1. We padded all sequences to a certain maximum sequence length to mimic long context finetuning workloads.\n\n| GPU VRAM | 🦥Unsloth context length | Hugging Face + FA2 |\n| -------- | ------------------------ | ------------------ |\n| 48 GB    | 12,106                   | OOM                |\n| 80 GB    | 89,389                   | 6,916              |",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Context length benchmarks",
+      "id": "context-length-benchmarks"
+    },
+    {
+      "level": "h3",
+      "text": "**Llama 3.1 (8B) max. context length**",
+      "id": "**llama-3.1-(8b)-max.-context-length**"
+    },
+    {
+      "level": "h3",
+      "text": "**Llama 3.3 (70B) max. context length**",
+      "id": "**llama-3.3-(70b)-max.-context-length**"
+    }
+  ],
+  "url": "llms-txt#unsloth-benchmarks",
+  "links": []
+}

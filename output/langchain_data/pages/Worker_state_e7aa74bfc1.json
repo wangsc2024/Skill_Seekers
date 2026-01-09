@@ -1,0 +1,8 @@
+{
+  "title": "Worker state",
+  "content": "class WorkerState(TypedDict):\n    section: Section\n    completed_sections: Annotated[list, operator.add]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#worker-state",
+  "links": []
+}

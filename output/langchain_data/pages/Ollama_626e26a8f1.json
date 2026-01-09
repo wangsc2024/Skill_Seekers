@@ -1,0 +1,19 @@
+{
+  "title": "Ollama",
+  "content": "Source: https://docs.langchain.com/oss/python/integrations/providers/ollama\n\nThis page covers all LangChain integrations with [Ollama](https://ollama.com/).\n\nOllama allows you to run open-source models (like [`gpt-oss`](https://ollama.com/library/gpt-oss)) locally.\n\nFor a complete list of supported models and variants, see the [Ollama model library](https://ollama.ai/library).\n\n<Columns cols={2}>\n  <Card title=\"ChatOllama\" href=\"/oss/python/integrations/chat/ollama\" cta=\"Get started\" icon=\"message\" arrow>\n    Ollama chat models.\n  </Card>\n\n<Card title=\"OllamaEmbeddings\" href=\"/oss/python/integrations/text_embedding/ollama\" cta=\"Get started\" icon=\"microsoft\" arrow>\n    Ollama embedding models.\n  </Card>\n</Columns>\n\n<Columns cols={2}>\n  <Card title=\"OllamaLLM\" href=\"/oss/python/integrations/llms/ollama\" cta=\"Get started\" icon=\"i-cursor\" arrow>\n    (Legacy) Ollama text completion models.\n  </Card>\n</Columns>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/python/integrations/providers/ollama.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Model interfaces",
+      "id": "model-interfaces"
+    },
+    {
+      "level": "h2",
+      "text": "Other",
+      "id": "other"
+    }
+  ],
+  "url": "llms-txt#ollama",
+  "links": []
+}

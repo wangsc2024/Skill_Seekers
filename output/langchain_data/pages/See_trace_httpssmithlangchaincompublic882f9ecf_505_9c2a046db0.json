@@ -1,0 +1,33 @@
+{
+  "title": "See trace: https://smith.langchain.com/public/882f9ecf-5057-426a-ae98-0edf84fdcaf9/r",
+  "content": "MyClass(13).combine(29)\npython Python theme={null}\n  from langsmith import Client\n\n@traceable(client=client)\n  async def my_traced_func():\n    # Your code here...\n    pass\n\ntry:\n    await my_traced_func()\n  finally:\n    await client.flush()\n  typescript TypeScript theme={null}\n  import { Client } from \"langsmith\";\n\nconst langsmithClient = new Client({});\n\nconst myTracedFunc = traceable(async () => {\n    // Your code here...\n  },{ client: langsmithClient });\n\ntry {\n    await myTracedFunc();\n  } finally {\n    await langsmithClient.flush();\n  }\n  ```\n</CodeGroup>\n\nIf you are using LangChain, please refer to our [LangChain tracing guide](/langsmith/trace-with-langchain#ensure-all-traces-are-submitted-before-exiting).\n\nIf you prefer a video tutorial, check out the [Tracing Basics video](https://academy.langchain.com/pages/intro-to-langsmith-preview) from the Introduction to LangSmith Course.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/annotate-code.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## Ensure all traces are submitted before exiting\n\nLangSmith's tracing is done in a background thread to avoid obstructing your production application. This means that your process may end before all traces are successfully posted to LangSmith. Here are some options for ensuring all traces are submitted before exiting your application.\n\n### Using the LangSmith SDK\n\nIf you are using the LangSmith SDK standalone, you can use the `flush` method before exit:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Ensure all traces are submitted before exiting",
+      "id": "ensure-all-traces-are-submitted-before-exiting"
+    },
+    {
+      "level": "h3",
+      "text": "Using the LangSmith SDK",
+      "id": "using-the-langsmith-sdk"
+    },
+    {
+      "level": "h3",
+      "text": "Using LangChain",
+      "id": "using-langchain"
+    }
+  ],
+  "url": "llms-txt#see-trace:-https://smith.langchain.com/public/882f9ecf-5057-426a-ae98-0edf84fdcaf9/r",
+  "links": []
+}

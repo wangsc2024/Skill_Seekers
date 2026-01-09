@@ -1,0 +1,106 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+  "title": "Model Context — AutoGen",
+  "content": "A model context supports storage and retrieval of Chat Completion messages. It is always used together with a model client to generate LLM-based responses.\n\nFor example, BufferedChatCompletionContext is a most-recent-used (MRU) context that stores the most recent buffer_size number of messages. This is useful to avoid context overflow in many LLMs.\n\nLet’s see an example that uses BufferedChatCompletionContext.\n\nNow let’s try to ask follow up questions after the first one.\n\nFrom the second response, you can see the agent now can recall its own previous responses.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Model Context#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import AgentId, MessageContext, RoutedAgent, SingleThreadedAgentRuntime, message_handler\nfrom autogen_core.model_context import BufferedChatCompletionContext\nfrom autogen_core.models import AssistantMessage, ChatCompletionClient, SystemMessage, UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import AgentId, MessageContext, RoutedAgent, SingleThreadedAgentRuntime, message_handler\nfrom autogen_core.model_context import BufferedChatCompletionContext\nfrom autogen_core.models import AssistantMessage, ChatCompletionClient, SystemMessage, UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: str",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: str",
+      "language": "python"
+    },
+    {
+      "code": "class SimpleAgentWithContext(RoutedAgent):\n    def __init__(self, model_client: ChatCompletionClient) -> None:\n        super().__init__(\"A simple agent\")\n        self._system_messages = [SystemMessage(content=\"You are a helpful AI assistant.\")]\n        self._model_client = model_client\n        self._model_context = BufferedChatCompletionContext(buffer_size=5)\n\n    @message_handler\n    async def handle_user_message(self, message: Message, ctx: MessageContext) -> Message:\n        # Prepare input to the chat completion model.\n        user_message = UserMessage(content=message.content, source=\"user\")\n        # Add message to model context.\n        await self._model_context.add_message(user_message)\n        # Generate a response.\n        response = await self._model_client.create(\n            self._system_messages + (await self._model_context.get_messages()),\n            cancellation_token=ctx.cancellation_token,\n        )\n        # Return with the model's response.\n        assert isinstance(response.content, str)\n        # Add message to model context.\n        await self._model_context.add_message(AssistantMessage(content=response.content, source=self.metadata[\"type\"]))\n        return Message(content=response.content)",
+      "language": "python"
+    },
+    {
+      "code": "class SimpleAgentWithContext(RoutedAgent):\n    def __init__(self, model_client: ChatCompletionClient) -> None:\n        super().__init__(\"A simple agent\")\n        self._system_messages = [SystemMessage(content=\"You are a helpful AI assistant.\")]\n        self._model_client = model_client\n        self._model_context = BufferedChatCompletionContext(buffer_size=5)\n\n    @message_handler\n    async def handle_user_message(self, message: Message, ctx: MessageContext) -> Message:\n        # Prepare input to the chat completion model.\n        user_message = UserMessage(content=message.content, source=\"user\")\n        # Add message to model context.\n        await self._model_context.add_message(user_message)\n        # Generate a response.\n        response = await self._model_client.create(\n            self._system_messages + (await self._model_context.get_messages()),\n            cancellation_token=ctx.cancellation_token,\n        )\n        # Return with the model's response.\n        assert isinstance(response.content, str)\n        # Add message to model context.\n        await self._model_context.add_message(AssistantMessage(content=response.content, source=self.metadata[\"type\"]))\n        return Message(content=response.content)",
+      "language": "python"
+    },
+    {
+      "code": "model_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o-mini\",\n    # api_key=\"sk-...\", # Optional if you have an OPENAI_API_KEY set in the environment.\n)\n\nruntime = SingleThreadedAgentRuntime()\nawait SimpleAgentWithContext.register(\n    runtime,\n    \"simple_agent_context\",\n    lambda: SimpleAgentWithContext(model_client=model_client),\n)\n# Start the runtime processing messages.\nruntime.start()\nagent_id = AgentId(\"simple_agent_context\", \"default\")\n\n# First question.\nmessage = Message(\"Hello, what are some fun things to do in Seattle?\")\nprint(f\"Question: {message.content}\")\nresponse = await runtime.send_message(message, agent_id)\nprint(f\"Response: {response.content}\")\nprint(\"-----\")\n\n# Second question.\nmessage = Message(\"What was the first thing you mentioned?\")\nprint(f\"Question: {message.content}\")\nresponse = await runtime.send_message(message, agent_id)\nprint(f\"Response: {response.content}\")\n\n# Stop the runtime processing messages.\nawait runtime.stop()\nawait model_client.close()",
+      "language": "yaml"
+    },
+    {
+      "code": "model_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o-mini\",\n    # api_key=\"sk-...\", # Optional if you have an OPENAI_API_KEY set in the environment.\n)\n\nruntime = SingleThreadedAgentRuntime()\nawait SimpleAgentWithContext.register(\n    runtime,\n    \"simple_agent_context\",\n    lambda: SimpleAgentWithContext(model_client=model_client),\n)\n# Start the runtime processing messages.\nruntime.start()\nagent_id = AgentId(\"simple_agent_context\", \"default\")\n\n# First question.\nmessage = Message(\"Hello, what are some fun things to do in Seattle?\")\nprint(f\"Question: {message.content}\")\nresponse = await runtime.send_message(message, agent_id)\nprint(f\"Response: {response.content}\")\nprint(\"-----\")\n\n# Second question.\nmessage = Message(\"What was the first thing you mentioned?\")\nprint(f\"Question: {message.content}\")\nresponse = await runtime.send_message(message, agent_id)\nprint(f\"Response: {response.content}\")\n\n# Stop the runtime processing messages.\nawait runtime.stop()\nawait model_client.close()",
+      "language": "yaml"
+    },
+    {
+      "code": "Question: Hello, what are some fun things to do in Seattle?\nResponse: Seattle offers a variety of fun activities and attractions. Here are some highlights:\n\n1. **Pike Place Market**: Visit this iconic market to explore local vendors, fresh produce, artisanal products, and watch the famous fish throwing.\n\n2. **Space Needle**: Take a trip to the observation deck for stunning panoramic views of the city, Puget Sound, and the surrounding mountains.\n\n3. **Chihuly Garden and Glass**: Marvel at the stunning glass art installations created by artist Dale Chihuly, located right next to the Space Needle.\n\n4. **Seattle Waterfront**: Enjoy a stroll along the waterfront, visit the Seattle Aquarium, and take a ferry ride to nearby islands like Bainbridge Island.\n\n5. **Museum of Pop Culture (MoPOP)**: Explore exhibits on music, science fiction, and pop culture in this architecturally striking building.\n\n6. **Seattle Art Museum (SAM)**: Discover an extensive collection of art from around the world, including contemporary and Native American art.\n\n7. **Gas Works Park**: Relax in this unique park that features remnants of an old gasification plant, offering great views of the Seattle skyline and Lake Union.\n\n8. **Discovery Park**: Enjoy nature trails, beaches, and beautiful views of the Puget Sound and the Olympic Mountains in this large urban park.\n\n9. **Ballard Locks**: Watch boats navigate the locks and see fish swimming upstream during the salmon migration season.\n\n10. **Fremont Troll**: Check out this quirky public art installation under a bridge in the Fremont neighborhood.\n\n11. **Underground Tour**: Take an entertaining guided tour through the underground passages of Pioneer Square to learn about Seattle's history.\n\n12. **Brewery Tours**: Seattle is known for its craft beer scene. Visit local breweries for tastings and tours.\n\n13. **Seattle Center**: Explore the cultural complex that includes the Space Needle, MoPOP, and various festivals and events throughout the year.\n\nThese are just a few options, and Seattle has something for everyone, whether you're into outdoor activities, culture, history, or food!\n-----\nQuestion: What was the first thing you mentioned?\nResponse: The first thing I mentioned was **Pike Place Market**. It's an iconic market in Seattle known for its local vendors, fresh produce, artisanal products, and the famous fish throwing by the fishmongers. It's a vibrant place full of sights, sounds, and delicious food.",
+      "language": "yaml"
+    },
+    {
+      "code": "Question: Hello, what are some fun things to do in Seattle?\nResponse: Seattle offers a variety of fun activities and attractions. Here are some highlights:\n\n1. **Pike Place Market**: Visit this iconic market to explore local vendors, fresh produce, artisanal products, and watch the famous fish throwing.\n\n2. **Space Needle**: Take a trip to the observation deck for stunning panoramic views of the city, Puget Sound, and the surrounding mountains.\n\n3. **Chihuly Garden and Glass**: Marvel at the stunning glass art installations created by artist Dale Chihuly, located right next to the Space Needle.\n\n4. **Seattle Waterfront**: Enjoy a stroll along the waterfront, visit the Seattle Aquarium, and take a ferry ride to nearby islands like Bainbridge Island.\n\n5. **Museum of Pop Culture (MoPOP)**: Explore exhibits on music, science fiction, and pop culture in this architecturally striking building.\n\n6. **Seattle Art Museum (SAM)**: Discover an extensive collection of art from around the world, including contemporary and Native American art.\n\n7. **Gas Works Park**: Relax in this unique park that features remnants of an old gasification plant, offering great views of the Seattle skyline and Lake Union.\n\n8. **Discovery Park**: Enjoy nature trails, beaches, and beautiful views of the Puget Sound and the Olympic Mountains in this large urban park.\n\n9. **Ballard Locks**: Watch boats navigate the locks and see fish swimming upstream during the salmon migration season.\n\n10. **Fremont Troll**: Check out this quirky public art installation under a bridge in the Fremont neighborhood.\n\n11. **Underground Tour**: Take an entertaining guided tour through the underground passages of Pioneer Square to learn about Seattle's history.\n\n12. **Brewery Tours**: Seattle is known for its craft beer scene. Visit local breweries for tastings and tours.\n\n13. **Seattle Center**: Explore the cultural complex that includes the Space Needle, MoPOP, and various festivals and events throughout the year.\n\nThese are just a few options, and Seattle has something for everyone, whether you're into outdoor activities, culture, history, or food!\n-----\nQuestion: What was the first thing you mentioned?\nResponse: The first thing I mentioned was **Pike Place Market**. It's an iconic market in Seattle known for its local vendors, fresh produce, artisanal products, and the famous fish throwing by the fishmongers. It's a vibrant place full of sights, sounds, and delicious food.",
+      "language": "yaml"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html"
+  ]
+}

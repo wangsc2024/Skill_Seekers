@@ -1,0 +1,101 @@
+{
+  "title": "Human-in-the-loop using server API",
+  "content": "Source: https://docs.langchain.com/langsmith/add-human-in-the-loop\n\nTo review, edit, and approve tool calls in an agent or workflow, use LangGraph's [human-in-the-loop](/oss/python/langgraph/interrupts) features.\n\n## Dynamic interrupts\n\n<Tabs>\n  <Tab title=\"Python\">\n\n1. The graph is invoked with some initial state.\n    2. When the graph hits the interrupt, it returns an interrupt object with the payload and metadata.\n       3\\. The graph is resumed with a `Command(resume=...)`, injecting the human's input and continuing execution.\n  </Tab>\n\n<Tab title=\"JavaScript\">\n\n1. The graph is invoked with some initial state.\n    2. When the graph hits the interrupt, it returns an interrupt object with the payload and metadata.\n    3. The graph is resumed with a `{ resume: ... }` command object, injecting the human's input and continuing execution.\n  </Tab>\n\n<Tab title=\"cURL\">\n    Create a thread:\n\nRun the graph until the interrupt is hit.:\n\n<Accordion title=\"Extended example: using `interrupt`\">\n  This is an example graph you can run in the Agent Server.\n  See [LangSmith quickstart](/langsmith/deployment-quickstart) for more details.\n\n1. `interrupt(...)` pauses execution at `human_node`, surfacing the given payload to a human.\n  2. Any JSON serializable value can be passed to the [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt) function. Here, a dict containing the text to revise.\n  3. Once resumed, the return value of `interrupt(...)` is the human-provided input, which is used to update the state.\n\nOnce you have a running Agent Server, you can interact with it using\n  [LangGraph SDK](/langsmith/langgraph-python-sdk)\n\n<Tabs>\n    <Tab title=\"Python\">\n\n1. The graph is invoked with some initial state.\n      2. When the graph hits the interrupt, it returns an interrupt object with the payload and metadata.\n         3\\. The graph is resumed with a `Command(resume=...)`, injecting the human's input and continuing execution.\n    </Tab>\n\n<Tab title=\"JavaScript\">\n\n1. The graph is invoked with some initial state.\n      2. When the graph hits the interrupt, it returns an interrupt object with the payload and metadata.\n      3. The graph is resumed with a `{ resume: ... }` command object, injecting the human's input and continuing execution.\n    </Tab>\n\n<Tab title=\"cURL\">\n      Create a thread:\n\nRun the graph until the interrupt is hit:\n\n</Tab>\n  </Tabs>\n</Accordion>\n\nStatic interrupts (also known as static breakpoints) are triggered either before or after a node executes.\n\n<Warning>\n  Static interrupts are **not** recommended for human-in-the-loop workflows. They are best used for debugging and testing.\n</Warning>\n\nYou can set static interrupts by specifying `interrupt_before` and `interrupt_after` at compile time:\n\n1. The breakpoints are set during `compile` time.\n2. `interrupt_before` specifies the nodes where execution should pause before the node is executed.\n3. `interrupt_after` specifies the nodes where execution should pause after the node is executed.\n\nAlternatively, you can set static interrupts at run time:\n\n<Tabs>\n  <Tab title=\"Python\">\n\n1. `client.runs.wait` is called with the `interrupt_before` and `interrupt_after` parameters. This is a run-time configuration and can be changed for every invocation.\n    2. `interrupt_before` specifies the nodes where execution should pause before the node is executed.\n    3. `interrupt_after` specifies the nodes where execution should pause after the node is executed.\n  </Tab>\n\n<Tab title=\"JavaScript\">\n\n1. `client.runs.wait` is called with the `interruptBefore` and `interruptAfter` parameters. This is a run-time configuration and can be changed for every invocation.\n    2. `interruptBefore` specifies the nodes where execution should pause before the node is executed.\n    3. `interruptAfter` specifies the nodes where execution should pause after the node is executed.\n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\nThe following example shows how to add static interrupts:\n\n<Tabs>\n  <Tab title=\"Python\">\n\n1. The graph is run until the first breakpoint is hit.\n    2. The graph is resumed by passing in `None` for the input. This will run the graph until the next breakpoint is hit.\n  </Tab>\n\n<Tab title=\"JavaScript\">\n\n1. The graph is run until the first breakpoint is hit.\n    2. The graph is resumed by passing in `null` for the input. This will run the graph until the next breakpoint is hit.\n  </Tab>\n\n<Tab title=\"cURL\">\n    Create a thread:\n\nRun the graph until the breakpoint:\n\n* [Human-in-the-loop conceptual guide](/oss/python/langgraph/interrupts): learn more about LangGraph human-in-the-loop features.\n* [Common patterns](/oss/python/langgraph/interrupts#common-patterns): learn how to implement patterns like approving/rejecting actions, requesting user input, tool call review, and validating human input.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/add-human-in-the-loop.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "1. The graph is invoked with some initial state.\n    2. When the graph hits the interrupt, it returns an interrupt object with the payload and metadata.\n       3\\. The graph is resumed with a `Command(resume=...)`, injecting the human's input and continuing execution.\n  </Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The graph is invoked with some initial state.\n    2. When the graph hits the interrupt, it returns an interrupt object with the payload and metadata.\n    3. The graph is resumed with a `{ resume: ... }` command object, injecting the human's input and continuing execution.\n  </Tab>\n\n  <Tab title=\"cURL\">\n    Create a thread:",
+      "language": "unknown"
+    },
+    {
+      "code": "Run the graph until the interrupt is hit.:",
+      "language": "unknown"
+    },
+    {
+      "code": "Resume the graph:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n<Accordion title=\"Extended example: using `interrupt`\">\n  This is an example graph you can run in the Agent Server.\n  See [LangSmith quickstart](/langsmith/deployment-quickstart) for more details.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. `interrupt(...)` pauses execution at `human_node`, surfacing the given payload to a human.\n  2. Any JSON serializable value can be passed to the [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt) function. Here, a dict containing the text to revise.\n  3. Once resumed, the return value of `interrupt(...)` is the human-provided input, which is used to update the state.\n\n  Once you have a running Agent Server, you can interact with it using\n  [LangGraph SDK](/langsmith/langgraph-python-sdk)\n\n  <Tabs>\n    <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The graph is invoked with some initial state.\n      2. When the graph hits the interrupt, it returns an interrupt object with the payload and metadata.\n         3\\. The graph is resumed with a `Command(resume=...)`, injecting the human's input and continuing execution.\n    </Tab>\n\n    <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The graph is invoked with some initial state.\n      2. When the graph hits the interrupt, it returns an interrupt object with the payload and metadata.\n      3. The graph is resumed with a `{ resume: ... }` command object, injecting the human's input and continuing execution.\n    </Tab>\n\n    <Tab title=\"cURL\">\n      Create a thread:",
+      "language": "unknown"
+    },
+    {
+      "code": "Run the graph until the interrupt is hit:",
+      "language": "unknown"
+    },
+    {
+      "code": "Resume the graph:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n  </Tabs>\n</Accordion>\n\n## Static interrupts\n\nStatic interrupts (also known as static breakpoints) are triggered either before or after a node executes.\n\n<Warning>\n  Static interrupts are **not** recommended for human-in-the-loop workflows. They are best used for debugging and testing.\n</Warning>\n\nYou can set static interrupts by specifying `interrupt_before` and `interrupt_after` at compile time:",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The breakpoints are set during `compile` time.\n2. `interrupt_before` specifies the nodes where execution should pause before the node is executed.\n3. `interrupt_after` specifies the nodes where execution should pause after the node is executed.\n\nAlternatively, you can set static interrupts at run time:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. `client.runs.wait` is called with the `interrupt_before` and `interrupt_after` parameters. This is a run-time configuration and can be changed for every invocation.\n    2. `interrupt_before` specifies the nodes where execution should pause before the node is executed.\n    3. `interrupt_after` specifies the nodes where execution should pause after the node is executed.\n  </Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. `client.runs.wait` is called with the `interruptBefore` and `interruptAfter` parameters. This is a run-time configuration and can be changed for every invocation.\n    2. `interruptBefore` specifies the nodes where execution should pause before the node is executed.\n    3. `interruptAfter` specifies the nodes where execution should pause after the node is executed.\n  </Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nThe following example shows how to add static interrupts:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The graph is run until the first breakpoint is hit.\n    2. The graph is resumed by passing in `None` for the input. This will run the graph until the next breakpoint is hit.\n  </Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The graph is run until the first breakpoint is hit.\n    2. The graph is resumed by passing in `null` for the input. This will run the graph until the next breakpoint is hit.\n  </Tab>\n\n  <Tab title=\"cURL\">\n    Create a thread:",
+      "language": "unknown"
+    },
+    {
+      "code": "Run the graph until the breakpoint:",
+      "language": "unknown"
+    },
+    {
+      "code": "Resume the graph:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Dynamic interrupts",
+      "id": "dynamic-interrupts"
+    },
+    {
+      "level": "h2",
+      "text": "Static interrupts",
+      "id": "static-interrupts"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    }
+  ],
+  "url": "llms-txt#human-in-the-loop-using-server-api",
+  "links": []
+}

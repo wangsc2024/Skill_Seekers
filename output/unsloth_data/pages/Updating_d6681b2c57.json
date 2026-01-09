@@ -1,0 +1,33 @@
+{
+  "title": "Updating",
+  "content": "To update or use an old version of Unsloth, follow the steps below:\n\n## Standard Updating (recommended):\n\n### Updating without dependency updates:\n\n<pre class=\"language-bash\" data-overflow=\"wrap\"><code class=\"lang-bash\">pip install --upgrade --force-reinstall --no-cache-dir --no-deps unsloth\n<strong>pip install --upgrade --force-reinstall --no-cache-dir --no-deps unsloth_zoo\n</strong></code></pre>\n\n## To use an old version of Unsloth:\n\n{% code overflow=\"wrap\" %}\n\n'2025.1.5' is one of the previous old versions of Unsloth. Change it to a specific release listed on our [Github here](https://github.com/unslothai/unsloth/releases).",
+  "code_samples": [
+    {
+      "code": "pip install --upgrade unsloth unsloth_zoo",
+      "language": "bash"
+    },
+    {
+      "code": "pip install --force-reinstall --no-cache-dir --no-deps unsloth==2025.1.5",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Standard Updating (recommended):",
+      "id": "standard-updating-(recommended):"
+    },
+    {
+      "level": "h3",
+      "text": "Updating without dependency updates:",
+      "id": "updating-without-dependency-updates:"
+    },
+    {
+      "level": "h2",
+      "text": "To use an old version of Unsloth:",
+      "id": "to-use-an-old-version-of-unsloth:"
+    }
+  ],
+  "url": "llms-txt#updating",
+  "links": []
+}

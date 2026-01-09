@@ -1,0 +1,8 @@
+{
+  "title": "List buckets",
+  "content": "aws s3 --endpoint-url=<endpoint_url> ls /",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#list-buckets",
+  "links": []
+}

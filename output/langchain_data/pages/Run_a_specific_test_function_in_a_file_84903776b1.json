@@ -1,0 +1,8 @@
+{
+  "title": "Run a specific test function in a file",
+  "content": "uv run --group test pytest tests/integration_tests/test_chat_models.py::test_chat_completions",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#run-a-specific-test-function-in-a-file",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Patch Deployment",
+  "content": "Source: https://docs.langchain.com/api-reference/deployments-v2/patch-deployment\n\nhttps://api.host.langchain.com/openapi.json patch /v2/deployments/{deployment_id}\nPatch a deployment by ID.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#patch-deployment",
+  "links": []
+}

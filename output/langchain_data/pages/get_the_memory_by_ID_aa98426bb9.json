@@ -1,0 +1,8 @@
+{
+  "title": "get the \"memory\" by ID",
+  "content": "item = store.get(namespace, \"a-memory\") # [!code highlight]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-the-\"memory\"-by-id",
+  "links": []
+}

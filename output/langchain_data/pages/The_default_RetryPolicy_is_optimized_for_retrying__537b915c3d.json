@@ -1,0 +1,32 @@
+{
+  "title": "The default RetryPolicy is optimized for retrying specific network errors.",
+  "content": "retry_policy = RetryPolicy(retry_on=ValueError)\n\n@task(retry_policy=retry_policy)\ndef get_info():\n    global attempts\n    attempts += 1\n\nif attempts < 2:\n        raise ValueError('Failure')\n    return \"OK\"\n\ncheckpointer = InMemorySaver()\n\n@entrypoint(checkpointer=checkpointer)\ndef main(inputs, writer):\n    return get_info().result()\n\nconfig = {\n    \"configurable\": {\n        \"thread_id\": \"1\"\n    }\n}\n\nmain.invoke({'any_input': 'foobar'}, config=config)\npycon  theme={null}\n'OK'\npython  theme={null}\nimport time\nfrom langgraph.cache.memory import InMemoryCache\nfrom langgraph.func import entrypoint, task\nfrom langgraph.types import CachePolicy\n\n@task(cache_policy=CachePolicy(ttl=120))    # [!code highlight]\ndef slow_add(x: int) -> int:\n    time.sleep(1)\n    return x * 2\n\n@entrypoint(cache=InMemoryCache())\ndef main(inputs: dict) -> dict[str, int]:\n    result1 = slow_add(inputs[\"x\"]).result()\n    result2 = slow_add(inputs[\"x\"]).result()\n    return {\"result1\": result1, \"result2\": result2}\n\nfor chunk in main.stream({\"x\": 5}, stream_mode=\"updates\"):\n    print(chunk)\n\n#> {'slow_add': 10}\n#> {'slow_add': 10, '__metadata__': {'cached': True}}\n#> {'main': {'result1': 10, 'result2': 10}}\npython  theme={null}\nimport time\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langgraph.func import entrypoint, task\nfrom langgraph.types import StreamWriter",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Caching Tasks",
+      "language": "unknown"
+    },
+    {
+      "code": "1. `ttl` is specified in seconds. The cache will be invalidated after this time.\n\n## Resuming after an error",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Caching Tasks",
+      "id": "caching-tasks"
+    },
+    {
+      "level": "h2",
+      "text": "Resuming after an error",
+      "id": "resuming-after-an-error"
+    }
+  ],
+  "url": "llms-txt#the-default-retrypolicy-is-optimized-for-retrying-specific-network-errors.",
+  "links": []
+}

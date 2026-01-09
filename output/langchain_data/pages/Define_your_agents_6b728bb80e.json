@@ -1,0 +1,8 @@
+{
+  "title": "Define your agents",
+  "content": "market_researcher = Agent(\n    role=\"Senior Market Researcher\",\n    goal=\"Analyze market trends and consumer behavior in the tech industry\",\n    backstory=\"\"\"You are an experienced market researcher with 10+ years of experience\n    analyzing technology markets. You excel at identifying emerging trends and\n    understanding consumer needs.\"\"\",\n    verbose=True,\n    allow_delegation=False,\n)\n\ncontent_strategist = Agent(\n    role=\"Content Marketing Strategist\",\n    goal=\"Create compelling marketing content based on research insights\",\n    backstory=\"\"\"You are a creative content strategist who transforms complex market\n    research into engaging marketing materials. You understand how to communicate\n    technical concepts to different audiences.\"\"\",\n    verbose=True,\n    allow_delegation=False,\n)\n\ndata_analyst = Agent(\n    role=\"Data Analyst\",\n    goal=\"Provide statistical analysis and data-driven insights\",\n    backstory=\"\"\"You are a skilled data analyst who can interpret complex datasets\n    and provide actionable insights. You excel at finding patterns and trends\n    in data that others might miss.\"\"\",\n    verbose=True,\n    allow_delegation=False,\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-your-agents",
+  "links": []
+}

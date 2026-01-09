@@ -1,0 +1,8 @@
+{
+  "title": "Store with specific fields to embed",
+  "content": "store.put(\n    namespace_for_memory,\n    str(uuid.uuid4()),\n    {\n        \"food_preference\": \"I love Italian cuisine\",\n        \"context\": \"Discussing dinner plans\"\n    },\n    index=[\"food_preference\"]  # Only embed \"food_preferences\" field\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#store-with-specific-fields-to-embed",
+  "links": []
+}

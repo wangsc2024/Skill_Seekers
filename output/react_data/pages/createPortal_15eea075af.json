@@ -1,0 +1,233 @@
+{
+  "url": "https://react.dev/reference/react-dom/createPortal",
+  "title": "createPortal",
+  "content": "createPortal lets you render some children into a different part of the DOM.\n\nTo create a portal, call createPortal, passing some JSX, and the DOM node where it should be rendered:\n\nSee more examples below.\n\nA portal only changes the physical placement of the DOM node. In every other way, the JSX you render into a portal acts as a child node of the React component that renders it. For example, the child can access the context provided by the parent tree, and events bubble up from children to parents according to the React tree.\n\nchildren: Anything that can be rendered with React, such as a piece of JSX (e.g. <div /> or <SomeComponent />), a Fragment (<>...</>), a string or a number, or an array of these.\n\ndomNode: Some DOM node, such as those returned by document.getElementById(). The node must already exist. Passing a different DOM node during an update will cause the portal content to be recreated.\n\noptional key: A unique string or number to be used as the portal’s key.\n\ncreatePortal returns a React node that can be included into JSX or returned from a React component. If React encounters it in the render output, it will place the provided children inside the provided domNode.\n\nPortals let your components render some of their children into a different place in the DOM. This lets a part of your component “escape” from whatever containers it may be in. For example, a component can display a modal dialog or a tooltip that appears above and outside of the rest of the page.\n\nTo create a portal, render the result of createPortal with some JSX and the DOM node where it should go:\n\nReact will put the DOM nodes for the JSX you passed inside of the DOM node you provided.\n\nWithout a portal, the second <p> would be placed inside the parent <div>, but the portal “teleported” it into the document.body:\n\nNotice how the second paragraph visually appears outside the parent <div> with the border. If you inspect the DOM structure with developer tools, you’ll see that the second <p> got placed directly into the <body>:\n\nA portal only changes the physical placement of the DOM node. In every other way, the JSX you render into a portal acts as a child node of the React component that renders it. For example, the child can access the context provided by the parent tree, and events still bubble up from children to parents according to the React tree.\n\nYou can use a portal to create a modal dialog that floats above the rest of the page, even if the component that summons the dialog is inside a container with overflow: hidden or other styles that interfere with the dialog.\n\nIn this example, the two containers have styles that disrupt the modal dialog, but the one rendered into a portal is unaffected because, in the DOM, the modal is not contained within the parent JSX elements.\n\nIt’s important to make sure that your app is accessible when using portals. For instance, you may need to manage keyboard focus so that the user can move the focus in and out of the portal in a natural way.\n\nFollow the WAI-ARIA Modal Authoring Practices when creating modals. If you use a community package, ensure that it is accessible and follows these guidelines.\n\nPortals can be useful if your React root is only part of a static or server-rendered page that isn’t built with React. For example, if your page is built with a server framework like Rails, you can create areas of interactivity within static areas such as sidebars. Compared with having multiple separate React roots, portals let you treat the app as a single React tree with shared state even though its parts render to different parts of the DOM.\n\nYou can also use a portal to manage the content of a DOM node that’s managed outside of React. For example, suppose you’re integrating with a non-React map widget and you want to render React content inside a popup. To do this, declare a popupContainer state variable to store the DOM node you’re going to render into:\n\nWhen you create the third-party widget, store the DOM node returned by the widget so you can render into it:\n\nThis lets you use createPortal to render React content into popupContainer once it becomes available:\n\nHere is a complete example you can play with:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "createPortal",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "createPortal(children, domNode, key?)",
+      "id": "createportal"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Rendering to a different part of the DOM",
+      "id": "rendering-to-a-different-part-of-the-dom"
+    },
+    {
+      "level": "h3",
+      "text": "Rendering a modal dialog with a portal",
+      "id": "rendering-a-modal-dialog-with-a-portal"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Rendering React components into non-React server markup",
+      "id": "rendering-react-components-into-non-react-server-markup"
+    },
+    {
+      "level": "h3",
+      "text": "Rendering React components into non-React DOM nodes",
+      "id": "rendering-react-components-into-non-react-dom-nodes"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<div>  <SomeComponent />  {createPortal(children, domNode, key?)}</div>",
+      "language": "jsx"
+    },
+    {
+      "code": "import { createPortal } from 'react-dom';// ...<div>  <p>This child is placed in the parent div.</p>  {createPortal(    <p>This child is placed in the document body.</p>,    document.body  )}</div>",
+      "language": "sql"
+    },
+    {
+      "code": "import { createPortal } from 'react-dom';function MyComponent() {  return (    <div style={{ border: '2px solid black' }}>      <p>This child is placed in the parent div.</p>      {createPortal(        <p>This child is placed in the document body.</p>,        document.body      )}    </div>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "<body>  <div id=\"root\">    ...      <div style=\"border: 2px solid black\">        <p>This child is placed inside the parent div.</p>      </div>    ...  </div>  <p>This child is placed in the document body.</p></body>",
+      "language": "html"
+    },
+    {
+      "code": "const [popupContainer, setPopupContainer] = useState(null);",
+      "language": "jsx"
+    },
+    {
+      "code": "useEffect(() => {  if (mapRef.current === null) {    const map = createMapWidget(containerRef.current);    mapRef.current = map;    const popupDiv = addPopupToMapWidget(map);    setPopupContainer(popupDiv);  }}, []);",
+      "language": "jsx"
+    },
+    {
+      "code": "return (  <div style={{ width: 250, height: 250 }} ref={containerRef}>    {popupContainer !== null && createPortal(      <p>Hello from React!</p>,      popupContainer    )}  </div>);",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

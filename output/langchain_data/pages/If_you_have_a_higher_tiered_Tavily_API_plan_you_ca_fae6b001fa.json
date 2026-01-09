@@ -1,0 +1,8 @@
+{
+  "title": "If you have a higher tiered Tavily API plan you can increase this",
+  "content": "rate_limiter = InMemoryRateLimiter(requests_per_second=0.08)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#if-you-have-a-higher-tiered-tavily-api-plan-you-can-increase-this",
+  "links": []
+}

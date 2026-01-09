@@ -1,0 +1,84 @@
+{
+  "title": "Model Context Protocol (MCP)",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/mcp\n\n[Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) is an open protocol that standardizes how applications provide tools and context to LLMs. LangChain agents can use tools defined on MCP servers using the [`langchain-mcp-adapters`](https://github.com/langchain-ai/langchain-mcp-adapters) library.\n\nInstall the `langchain-mcp-adapters` library:\n\n`langchain-mcp-adapters` enables agents to use tools defined across one or more MCP servers.\n\n<Note>\n  `MultiServerMCPClient` is **stateless by default**. Each tool invocation creates a fresh MCP `ClientSession`, executes the tool, and then cleans up. See the [stateful sessions](#stateful-sessions) section for more details.\n</Note>\n\nTo create a custom MCP server, use the [FastMCP](https://gofastmcp.com/getting-started/welcome) library:\n\nTo test your agent with MCP tool servers, use the following examples:\n\nMCP supports different transport mechanisms for client-server communication.\n\nThe `http` transport (also referred to as `streamable-http`) uses HTTP requests for client-server communication. See the [MCP HTTP transport specification](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) for more details.\n\nWhen connecting to MCP servers over HTTP, you can include custom headers (e.g., for authentication or tracing) using the `headers` field in the connection configuration. This is supported for `sse` (deprecated by MCP spec) and `streamable_http` transports.\n\nThe `langchain-mcp-adapters` library uses the official [MCP SDK](https://github.com/modelcontextprotocol/python-sdk) under the hood, which allows you to provide a custom authentication mechanism by implementing the `httpx.Auth` interface.\n\n* [Example custom auth implementation](https://github.com/modelcontextprotocol/python-sdk/blob/main/examples/clients/simple-auth-client/mcp_simple_auth_client/main.py)\n* [Built-in OAuth flow](https://github.com/modelcontextprotocol/python-sdk/blob/main/src/mcp/client/auth.py#L179)\n\nClient launches server as a subprocess and communicates via standard input/output. Best for local tools and simple setups.\n\n<Note>\n  Unlike HTTP transports, `stdio` connections are inherently **stateful**—the subprocess persists for the lifetime of the client connection. However, when using `MultiServerMCPClient` without explicit session management, each tool call still creates a new session. See [stateful sessions](#stateful-sessions) for managing persistent connections.\n</Note>\n\nBy default, `MultiServerMCPClient` is **stateless**—each tool invocation creates a fresh MCP session, executes the tool, and then cleans up.\n\nIf you need to control the [lifecycle](https://modelcontextprotocol.io/specification/2025-03-26/basic/lifecycle) of an MCP session (for example, when working with a stateful server that maintains context across tool calls), you can create a persistent `ClientSession` using `client.session()`.\n\n```python Using MCP ClientSession for stateful tool usage theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\nfrom langchain_mcp_adapters.tools import load_mcp_tools\nfrom langchain.agents import create_agent\n\nclient = MultiServerMCPClient({...})",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n`langchain-mcp-adapters` enables agents to use tools defined across one or more MCP servers.\n\n<Note>\n  `MultiServerMCPClient` is **stateless by default**. Each tool invocation creates a fresh MCP `ClientSession`, executes the tool, and then cleans up. See the [stateful sessions](#stateful-sessions) section for more details.\n</Note>",
+      "language": "unknown"
+    },
+    {
+      "code": "## Custom servers\n\nTo create a custom MCP server, use the [FastMCP](https://gofastmcp.com/getting-started/welcome) library:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nTo test your agent with MCP tool servers, use the following examples:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Transports\n\nMCP supports different transport mechanisms for client-server communication.\n\n### HTTP\n\nThe `http` transport (also referred to as `streamable-http`) uses HTTP requests for client-server communication. See the [MCP HTTP transport specification](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) for more details.",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Passing headers\n\nWhen connecting to MCP servers over HTTP, you can include custom headers (e.g., for authentication or tracing) using the `headers` field in the connection configuration. This is supported for `sse` (deprecated by MCP spec) and `streamable_http` transports.",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Authentication\n\nThe `langchain-mcp-adapters` library uses the official [MCP SDK](https://github.com/modelcontextprotocol/python-sdk) under the hood, which allows you to provide a custom authentication mechanism by implementing the `httpx.Auth` interface.",
+      "language": "unknown"
+    },
+    {
+      "code": "* [Example custom auth implementation](https://github.com/modelcontextprotocol/python-sdk/blob/main/examples/clients/simple-auth-client/mcp_simple_auth_client/main.py)\n* [Built-in OAuth flow](https://github.com/modelcontextprotocol/python-sdk/blob/main/src/mcp/client/auth.py#L179)\n\n### stdio\n\nClient launches server as a subprocess and communicates via standard input/output. Best for local tools and simple setups.\n\n<Note>\n  Unlike HTTP transports, `stdio` connections are inherently **stateful**—the subprocess persists for the lifetime of the client connection. However, when using `MultiServerMCPClient` without explicit session management, each tool call still creates a new session. See [stateful sessions](#stateful-sessions) for managing persistent connections.\n</Note>",
+      "language": "unknown"
+    },
+    {
+      "code": "## Stateful sessions\n\nBy default, `MultiServerMCPClient` is **stateless**—each tool invocation creates a fresh MCP session, executes the tool, and then cleans up.\n\nIf you need to control the [lifecycle](https://modelcontextprotocol.io/specification/2025-03-26/basic/lifecycle) of an MCP session (for example, when working with a stateful server that maintains context across tool calls), you can create a persistent `ClientSession` using `client.session()`.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Quickstart",
+      "id": "quickstart"
+    },
+    {
+      "level": "h2",
+      "text": "Custom servers",
+      "id": "custom-servers"
+    },
+    {
+      "level": "h2",
+      "text": "Transports",
+      "id": "transports"
+    },
+    {
+      "level": "h3",
+      "text": "HTTP",
+      "id": "http"
+    },
+    {
+      "level": "h3",
+      "text": "stdio",
+      "id": "stdio"
+    },
+    {
+      "level": "h2",
+      "text": "Stateful sessions",
+      "id": "stateful-sessions"
+    }
+  ],
+  "url": "llms-txt#model-context-protocol-(mcp)",
+  "links": []
+}

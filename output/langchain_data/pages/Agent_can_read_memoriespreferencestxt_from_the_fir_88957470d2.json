@@ -1,0 +1,42 @@
+{
+  "title": "Agent can read /memories/preferences.txt from the first thread",
+  "content": "python  theme={null}\nagent = create_deep_agent(\n    store=InMemoryStore(),\n    backend=lambda rt: CompositeBackend(\n        default=StateBackend(rt),\n        routes={\"/memories/\": StoreBackend(rt)}\n    ),\n    system_prompt=\"\"\"When users tell you their preferences, save them to\n    /memories/user_preferences.txt so you remember them in future conversations.\"\"\"\n)\npython  theme={null}\nagent = create_deep_agent(\n    store=InMemoryStore(),\n    backend=lambda rt: CompositeBackend(\n        default=StateBackend(rt),\n        routes={\"/memories/\": StoreBackend(rt)}\n    ),\n    system_prompt=\"\"\"You have a file at /memories/instructions.txt with additional\n    instructions and preferences.\n\nRead this file at the start of conversations to understand user preferences.\n\nWhen users provide feedback like \"please always do X\" or \"I prefer Y\",\n    update /memories/instructions.txt using the edit_file tool.\"\"\"\n)\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "## Use cases\n\n### User preferences\n\nStore user preferences that persist across sessions:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Self-improving instructions\n\nAn agent can update its own instructions based on feedback:",
+      "language": "unknown"
+    },
+    {
+      "code": "Over time, the instructions file accumulates user preferences, helping the agent improve.\n\n### Knowledge base\n\nBuild up knowledge over multiple conversations:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Use cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h3",
+      "text": "User preferences",
+      "id": "user-preferences"
+    },
+    {
+      "level": "h3",
+      "text": "Self-improving instructions",
+      "id": "self-improving-instructions"
+    },
+    {
+      "level": "h3",
+      "text": "Knowledge base",
+      "id": "knowledge-base"
+    }
+  ],
+  "url": "llms-txt#agent-can-read-/memories/preferences.txt-from-the-first-thread",
+  "links": []
+}

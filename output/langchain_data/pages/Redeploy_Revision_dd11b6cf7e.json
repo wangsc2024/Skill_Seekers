@@ -1,0 +1,8 @@
+{
+  "title": "Redeploy Revision",
+  "content": "Source: https://docs.langchain.com/api-reference/deployments-v2/redeploy-revision\n\nhttps://api.host.langchain.com/openapi.json post /v2/deployments/{deployment_id}/revisions/{revision_id}/redeploy\nRedeploy a specific revision ID.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#redeploy-revision",
+  "links": []
+}

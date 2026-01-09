@@ -1,0 +1,8 @@
+{
+  "title": "LLM-as-judge instructions",
+  "content": "grader_instructions = \"\"\"You are a teacher grading a quiz.\n\nYou will be given a QUESTION, the GROUND TRUTH (correct) RESPONSE, and the STUDENT RESPONSE.\n\nHere is the grade criteria to follow:\n(1) Grade the student responses based ONLY on their factual accuracy relative to the ground truth answer.\n(2) Ensure that the student response does not contain any conflicting statements.\n(3) It is OK if the student response contains more information than the ground truth response, as long as it is factually accurate relative to the  ground truth response.\n\nCorrectness:\nTrue means that the student's response meets all of the criteria.\nFalse means that the student's response does not meet all of the criteria.\n\nExplain your reasoning in a step-by-step manner to ensure your reasoning and conclusion are correct.\"\"\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#llm-as-judge-instructions",
+  "links": []
+}

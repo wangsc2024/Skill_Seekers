@@ -1,0 +1,8 @@
+{
+  "title": "Bob creates his own thread",
+  "content": "bob_thread = await bob.threads.create()\nawait bob.runs.create(\n    thread_id=bob_thread[\"thread_id\"],\n    assistant_id=\"agent\",\n    input={\"messages\": [{\"role\": \"user\", \"content\": \"Hi, this is Bob's private chat\"}]}\n)\nprint(f\"✅ Bob created his own thread: {bob_thread['thread_id']}\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#bob-creates-his-own-thread",
+  "links": []
+}

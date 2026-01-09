@@ -1,0 +1,86 @@
+{
+  "title": "Build a voice agent with LangChain",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/voice-agent\n\nChat interfaces have dominated how we interact with AI, but recent breakthroughs in multimodal AI are opening up exciting new possibilities. High-quality generative models and expressive text-to-speech (TTS) systems now make it possible to build agents that feel less like tools and more like conversational partners.\n\nVoice agents are one example of this. Instead of relying on a keyboard and mouse to type inputs into an agent, you can use spoken words to interact with it. This can be a more natural and engaging way to interact with AI, and can be especially useful for certain contexts.\n\n### What are voice agents?\n\nVoice agents are [agents](/oss/python/langchain/agents) that can engage in natural spoken conversations with users. These agents combine speech recognition, natural language processing, generative AI, and text-to-speech technologies to create seamless, natural conversations.\n\nThey're suited for a variety of use cases, including:\n\n* Customer support\n* Personal assistants\n* Hands-free interfaces\n* Coaching and training\n\n### How do voice agents work?\n\nAt a high level, every voice agent needs to handle three tasks:\n\n1. **Listen** - capture audio and transcribe it\n2. **Think** - interpret intent, reason, plan\n3. **Speak** - generate audio and stream it back to the user\n\nThe difference lies in how these steps are sequenced and coupled. In practice, production agents follow one of two main architectures:\n\n#### 1. STT > Agent > TTS Architecture (The \"Sandwich\")\n\nThe Sandwich architecture composes three distinct components: speech-to-text (STT), a text-based LangChain agent, and text-to-speech (TTS).\n\n* Full control over each component (swap STT/TTS providers as needed)\n* Access to latest capabilities from modern text-modality models\n* Transparent behavior with clear boundaries between components\n\n* Requires orchestrating multiple services\n* Additional complexity in managing the pipeline\n* Conversion from speech to text loses information (e.g., tone, emotion)\n\n#### 2. Speech-to-Speech Architecture (S2S)\n\nSpeech-to-speech uses a multimodal model that processes audio input and generates audio output natively.\n\n* Simpler architecture with fewer moving parts\n* Typically lower latency for simple interactions\n* Direct audio processing captures tone and other nuances of speech\n\n* Limited model options, greater risk of provider lock-in\n* Features may lag behind text-modality models\n* Less transparency in how audio is processed\n* Reduced controllability and customization options\n\nThis guide demonstrates the **sandwich architecture** to balance performance, controllability, and access to modern model capabilities. The sandwich can achieve sub-700ms latency with some STT and TTS providers while maintaining control over modular components.\n\n### Demo Application Overview\n\nWe'll walk through building a voice-based agent using the sandwich architecture. The agent will manage orders for a sandwich shop. The application will demonstrate all three components of the sandwich architecture, using [AssemblyAI](https://www.assemblyai.com/) for STT and [Cartesia](https://cartesia.ai/) for TTS (although adapters can be built for most providers).\n\nAn end-to-end reference application is available in the [voice-sandwich-demo](https://github.com/langchain-ai/voice-sandwich-demo) repository. We will walk through that application here.\n\nThe demo uses WebSockets for real-time bidirectional communication between the browser and server. The same architecture can be adapted for other transports like telephony systems (Twilio, Vonage) or WebRTC connections.\n\nThe demo implements a streaming pipeline where each stage processes data asynchronously:\n\n* Captures microphone audio and encodes it as PCM\n* Establishes WebSocket connection to the backend server\n* Streams audio chunks to the server in real-time\n* Receives and plays back synthesized speech audio\n\n* Accepts WebSocket connections from clients\n\n* Orchestrates the three-step pipeline:\n  * [Speech-to-text (STT)](#1-speech-to-text): Forwards audio to the STT provider (e.g., AssemblyAI), receives transcript events\n  * [Agent](#2-langchain-agent): Processes transcripts with LangChain agent, streams response tokens\n  * [Text-to-speech (TTS)](#3-text-to-speech): Sends agent responses to the TTS provider (e.g., Cartesia), receives audio chunks\n\n* Returns synthesized audio to the client for playback\n\nThe pipeline uses async generators to enable streaming at each stage. This allows downstream components to begin processing before upstream stages complete, minimizing end-to-end latency.\n\nFor detailed installation instructions and setup, see the [repository README](https://github.com/langchain-ai/voice-sandwich-demo#readme).\n\nThe STT stage transforms an incoming audio stream into text transcripts. The implementation uses a producer-consumer pattern to handle audio streaming and transcript reception concurrently.\n\n**Producer-Consumer Pattern**: Audio chunks are sent to the STT service concurrently with receiving transcript events. This allows transcription to begin before all audio has arrived.\n\n* `stt_chunk`: Partial transcripts provided as the STT service processes audio\n* `stt_output`: Final, formatted transcripts that trigger agent processing\n\n**WebSocket Connection**: Maintains a persistent connection to AssemblyAI's real-time STT API, configured for 16kHz PCM audio with automatic turn formatting.\n\nThe application implements an AssemblyAI client to manage the WebSocket connection and message parsing. See below for implementations; similar adapters can be constructed for other STT providers.\n\n<Accordion title=\"AssemblyAI Client\">\n  \n</Accordion>\n\n## 2. LangChain agent\n\nThe agent stage processes text transcripts through a LangChain [agent](/oss/python/langchain/agents) and streams the response tokens. In this case, we stream all [text content blocks](/oss/python/langchain/messages#textcontentblock) generated by the agent.\n\n**Streaming Responses**: The agent uses [`stream_mode=\"messages\"`](/oss/python/langchain/streaming#llm-tokens) to emit response tokens as they're generated, rather than waiting for the complete response. This enables the TTS stage to begin synthesis immediately.\n\n**Conversation Memory**: A [checkpointer](/oss/python/langchain/short-term-memory) maintains conversation state across turns using a unique thread ID. This allows the agent to reference previous exchanges in the conversation.\n\n```python  theme={null}\nfrom uuid import uuid4\nfrom langchain.agents import create_agent\nfrom langchain.messages import HumanMessage\nfrom langgraph.checkpoint.memory import InMemorySaver",
+  "code_samples": [
+    {
+      "code": "**Pros:**\n\n* Full control over each component (swap STT/TTS providers as needed)\n* Access to latest capabilities from modern text-modality models\n* Transparent behavior with clear boundaries between components\n\n**Cons:**\n\n* Requires orchestrating multiple services\n* Additional complexity in managing the pipeline\n* Conversion from speech to text loses information (e.g., tone, emotion)\n\n#### 2. Speech-to-Speech Architecture (S2S)\n\nSpeech-to-speech uses a multimodal model that processes audio input and generates audio output natively.",
+      "language": "unknown"
+    },
+    {
+      "code": "**Pros:**\n\n* Simpler architecture with fewer moving parts\n* Typically lower latency for simple interactions\n* Direct audio processing captures tone and other nuances of speech\n\n**Cons:**\n\n* Limited model options, greater risk of provider lock-in\n* Features may lag behind text-modality models\n* Less transparency in how audio is processed\n* Reduced controllability and customization options\n\nThis guide demonstrates the **sandwich architecture** to balance performance, controllability, and access to modern model capabilities. The sandwich can achieve sub-700ms latency with some STT and TTS providers while maintaining control over modular components.\n\n### Demo Application Overview\n\nWe'll walk through building a voice-based agent using the sandwich architecture. The agent will manage orders for a sandwich shop. The application will demonstrate all three components of the sandwich architecture, using [AssemblyAI](https://www.assemblyai.com/) for STT and [Cartesia](https://cartesia.ai/) for TTS (although adapters can be built for most providers).\n\nAn end-to-end reference application is available in the [voice-sandwich-demo](https://github.com/langchain-ai/voice-sandwich-demo) repository. We will walk through that application here.\n\nThe demo uses WebSockets for real-time bidirectional communication between the browser and server. The same architecture can be adapted for other transports like telephony systems (Twilio, Vonage) or WebRTC connections.\n\n### Architecture\n\nThe demo implements a streaming pipeline where each stage processes data asynchronously:\n\n**Client (Browser)**\n\n* Captures microphone audio and encodes it as PCM\n* Establishes WebSocket connection to the backend server\n* Streams audio chunks to the server in real-time\n* Receives and plays back synthesized speech audio\n\n**Server (Python)**\n\n* Accepts WebSocket connections from clients\n\n* Orchestrates the three-step pipeline:\n  * [Speech-to-text (STT)](#1-speech-to-text): Forwards audio to the STT provider (e.g., AssemblyAI), receives transcript events\n  * [Agent](#2-langchain-agent): Processes transcripts with LangChain agent, streams response tokens\n  * [Text-to-speech (TTS)](#3-text-to-speech): Sends agent responses to the TTS provider (e.g., Cartesia), receives audio chunks\n\n* Returns synthesized audio to the client for playback\n\nThe pipeline uses async generators to enable streaming at each stage. This allows downstream components to begin processing before upstream stages complete, minimizing end-to-end latency.\n\n## Setup\n\nFor detailed installation instructions and setup, see the [repository README](https://github.com/langchain-ai/voice-sandwich-demo#readme).\n\n## 1. Speech-to-text\n\nThe STT stage transforms an incoming audio stream into text transcripts. The implementation uses a producer-consumer pattern to handle audio streaming and transcript reception concurrently.\n\n### Key Concepts\n\n**Producer-Consumer Pattern**: Audio chunks are sent to the STT service concurrently with receiving transcript events. This allows transcription to begin before all audio has arrived.\n\n**Event Types**:\n\n* `stt_chunk`: Partial transcripts provided as the STT service processes audio\n* `stt_output`: Final, formatted transcripts that trigger agent processing\n\n**WebSocket Connection**: Maintains a persistent connection to AssemblyAI's real-time STT API, configured for 16kHz PCM audio with automatic turn formatting.\n\n### Implementation",
+      "language": "unknown"
+    },
+    {
+      "code": "The application implements an AssemblyAI client to manage the WebSocket connection and message parsing. See below for implementations; similar adapters can be constructed for other STT providers.\n\n<Accordion title=\"AssemblyAI Client\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## 2. LangChain agent\n\nThe agent stage processes text transcripts through a LangChain [agent](/oss/python/langchain/agents) and streams the response tokens. In this case, we stream all [text content blocks](/oss/python/langchain/messages#textcontentblock) generated by the agent.\n\n### Key Concepts\n\n**Streaming Responses**: The agent uses [`stream_mode=\"messages\"`](/oss/python/langchain/streaming#llm-tokens) to emit response tokens as they're generated, rather than waiting for the complete response. This enables the TTS stage to begin synthesis immediately.\n\n**Conversation Memory**: A [checkpointer](/oss/python/langchain/short-term-memory) maintains conversation state across turns using a unique thread ID. This allows the agent to reference previous exchanges in the conversation.\n\n### Implementation",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "What are voice agents?",
+      "id": "what-are-voice-agents?"
+    },
+    {
+      "level": "h3",
+      "text": "How do voice agents work?",
+      "id": "how-do-voice-agents-work?"
+    },
+    {
+      "level": "h3",
+      "text": "Demo Application Overview",
+      "id": "demo-application-overview"
+    },
+    {
+      "level": "h3",
+      "text": "Architecture",
+      "id": "architecture"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "1. Speech-to-text",
+      "id": "1.-speech-to-text"
+    },
+    {
+      "level": "h3",
+      "text": "Key Concepts",
+      "id": "key-concepts"
+    },
+    {
+      "level": "h3",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h2",
+      "text": "2. LangChain agent",
+      "id": "2.-langchain-agent"
+    },
+    {
+      "level": "h3",
+      "text": "Key Concepts",
+      "id": "key-concepts"
+    },
+    {
+      "level": "h3",
+      "text": "Implementation",
+      "id": "implementation"
+    }
+  ],
+  "url": "llms-txt#build-a-voice-agent-with-langchain",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "List GitHub Repositories",
+  "content": "Source: https://docs.langchain.com/api-reference/integrations-v1/list-github-repositories\n\nhttps://api.host.langchain.com/openapi.json get /v1/integrations/github/{integration_id}/repos\nList available GitHub repositories for an integration that are available to deploy to LangSmith Deployment.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#list-github-repositories",
+  "links": []
+}

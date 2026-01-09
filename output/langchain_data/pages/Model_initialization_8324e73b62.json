@@ -1,0 +1,47 @@
+{
+  "title": "Model initialization",
+  "content": "from langchain.chat_models import init_chat_model\nfrom langchain.embeddings import init_embeddings\nbash pip theme={null}\n  pip install langchain-classic\n  bash uv theme={null}\n  uv add langchain-classic\n  python  theme={null}\nfrom langchain import ...  # [!code --]\nfrom langchain_classic import ...  # [!code ++]\n\nfrom langchain.chains import ...  # [!code --]\nfrom langchain_classic.chains import ...  # [!code ++]\n\nfrom langchain.retrievers import ...  # [!code --]\nfrom langchain_classic.retrievers import ...  # [!code ++]\n\nfrom langchain import hub  # [!code --]\nfrom langchain_classic import hub  # [!code ++]\n```\n\nSee our [migration guide](/oss/python/migrate/langchain-v1) for help updating your code to LangChain v1.\n\nPlease report any issues discovered with 1.0 on [GitHub](https://github.com/langchain-ai/langchain/issues) using the `'v1'` [label](https://github.com/langchain-ai/langchain/issues?q=state%3Aopen%20label%3Av1).\n\n## Additional resources\n\n<CardGroup cols={3}>\n  <Card title=\"LangChain 1.0\" icon=\"rocket\" href=\"https://blog.langchain.com/langchain-langchain-1-0-alpha-releases/\">\n    Read the announcement\n  </Card>\n\n<Card title=\"Middleware guide\" icon=\"puzzle-piece\" href=\"https://blog.langchain.com/agent-middleware/\">\n    Deep dive into middleware\n  </Card>\n\n<Card title=\"Agents Documentation\" icon=\"book\" href=\"/oss/python/langchain/agents\" arrow>\n    Full agent documentation\n  </Card>\n\n<Card title=\"Message Content\" icon=\"message\" href=\"/oss/python/langchain/messages#message-content\" arrow>\n    New content blocks API\n  </Card>\n\n<Card title=\"Migration guide\" icon=\"arrow-right-arrow-left\" href=\"/oss/python/migrate/langchain-v1\" arrow>\n    How to migrate to LangChain v1\n  </Card>\n\n<Card title=\"GitHub\" icon=\"github\" href=\"https://github.com/langchain-ai/langchain\">\n    Report issues or contribute\n  </Card>\n</CardGroup>\n\n* [Versioning](/oss/python/versioning) – Understanding version numbers\n* [Release policy](/oss/python/release-policy) – Detailed release policies\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/python/releases/langchain-v1.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "### `langchain-classic`\n\nLegacy functionality has moved to [`langchain-classic`](https://pypi.org/project/langchain-classic) to keep the core packages lean and focused.\n\n**What's in `langchain-classic`:**\n\n* Legacy chains and chain implementations\n* Retrievers (e.g. `MultiQueryRetriever` or anything from the previous `langchain.retrievers` module)\n* The indexing API\n* The hub module (for managing prompts programmatically)\n* [`langchain-community`](https://pypi.org/project/langchain-community) exports\n* Other deprecated functionality\n\nIf you use any of this functionality, install [`langchain-classic`](https://pypi.org/project/langchain-classic):\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nThen update your imports:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "`langchain-classic`",
+      "id": "`langchain-classic`"
+    },
+    {
+      "level": "h2",
+      "text": "Migration guide",
+      "id": "migration-guide"
+    },
+    {
+      "level": "h2",
+      "text": "Reporting issues",
+      "id": "reporting-issues"
+    },
+    {
+      "level": "h2",
+      "text": "Additional resources",
+      "id": "additional-resources"
+    },
+    {
+      "level": "h2",
+      "text": "See also",
+      "id": "see-also"
+    }
+  ],
+  "url": "llms-txt#model-initialization",
+  "links": []
+}

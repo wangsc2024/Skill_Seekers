@@ -1,0 +1,8 @@
+{
+  "title": "Fetch the files as bytes",
+  "content": "pdf_bytes = requests.get(pdf_url).content\nwav_bytes = requests.get(wav_url).content\nimg_bytes = requests.get(img_url).content",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#fetch-the-files-as-bytes",
+  "links": []
+}

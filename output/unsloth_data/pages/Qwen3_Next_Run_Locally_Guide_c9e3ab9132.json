@@ -1,0 +1,37 @@
+{
+  "title": "Qwen3-Next: Run Locally Guide",
+  "content": "Run Qwen3-Next-80B-A3B-Instruct and Thinking versions locally on your device!\n\nQwen released Qwen3-Next in Sept 2025, which are 80B MoEs with Thinking and Instruct model variants of [Qwen3](https://docs.unsloth.ai/models/qwen3-how-to-run-and-fine-tune). With 256K context, Qwen3-Next was designed with a brand new architecture (Hybrid of MoEs & Gated DeltaNet + Gated Attention) that specifically optimizes for fast inference on longer context lengths. Qwen3-Next has 10x faster inference than Qwen3-32B.\n\n<a href=\"#run-qwen3-next-tutorials\" class=\"button secondary\">Run Qwen3-Next Instruct</a><a href=\"#thinking-qwen3-next-80b-a3b-thinking\" class=\"button secondary\">Run Qwen3-Next Thinking</a>\n\nQwen3-Next-80B-A3B Dynamic GGUFs: [**Instruct**](https://huggingface.co/unsloth/Qwen3-Next-80B-A3B-Instruct-GGUF) **•** [**Thinking**](https://huggingface.co/unsloth/Qwen3-Next-80B-A3B-Thinking-GGUF)\n\n{% hint style=\"success\" %}\nNEW as of Dec 6, 2025: Unsloth Qwen3-Next now updated with iMatrix for improved performance.\n\nThe thinking model uses `temperature = 0.6`, but the instruct model uses `temperature = 0.7`\\\nThe thinking model uses `top_p = 0.95`, but the instruct model uses `top_p = 0.8`\n{% endhint %}\n\nTo achieve optimal performance, Qwen recommends these settings:\n\n| Instruct:                                                                                                     | Thinking:                                                                                                     |\n| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |\n| <mark style=\"background-color:blue;\">`Temperature = 0.7`</mark>                                               | <mark style=\"background-color:blue;\">`Temperature = 0.6`</mark>                                               |\n| `Min_P = 0.00` (llama.cpp's default is 0.1)                                                                   | `Min_P = 0.00` (llama.cpp's default is 0.1)                                                                   |\n| `Top_P = 0.80`                                                                                                | `Top_P = 0.95`                                                                                                |\n| `TopK = 20`                                                                                                   | `TopK = 20`                                                                                                   |\n| `presence_penalty = 0.0 to 2.0` (llama.cpp default turns it off, but to reduce repetitions, you can use this) | `presence_penalty = 0.0 to 2.0` (llama.cpp default turns it off, but to reduce repetitions, you can use this) |\n\n**Adequate Output Length**: Use an output length of `32,768` tokens for most queries for the thinking variant, and `16,384` for the instruct variant. You can increase the max output size for the thinking model if necessary.\n\nChat template for both Thinking (thinking has `<think></think>`) and Instruct is below:\n\n## 📖 Run Qwen3-Next Tutorials\n\nBelow are guides for the [Thinking](#thinking-qwen3-next-80b-a3b-thinking) and [Instruct](#instruct-qwen3-next-80b-a3b-instruct) versions of the model.\n\n### Instruct: Qwen3-Next-80B-A3B-Instruct\n\nGiven that this is a non thinking model, the model does not generate `<think> </think>` blocks.\n\n#### ⚙️Best Practices\n\nTo achieve optimal performance, Qwen recommends the following settings:\n\n* We suggest using `temperature=0.7, top_p=0.8, top_k=20, and min_p=0.0` `presence_penalty` between 0 and 2 if the framework supports to reduce endless repetitions.\n* **`temperature = 0.7`**\n* `top_k = 20`\n* `min_p = 0.00` (llama.cpp's default is 0.1)\n* **`top_p = 0.80`**\n* `presence_penalty = 0.0 to 2.0` (llama.cpp default turns it off, but to reduce repetitions, you can use this) Try 1.0 for example.\n* Supports up to `262,144` context natively but you can set it to `32,768` tokens for less RAM use\n\n#### :sparkles: Llama.cpp: Run Qwen3-Next-80B-A3B-Instruct Tutorial\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. You can directly pull from HuggingFace via:\n\n3. Download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose `UD_Q4_K_XL` or other quantized versions.",
+  "code_samples": [
+    {
+      "code": "<|im_start|>user\nHey there!<|im_end|>\n<|im_start|>assistant\nWhat is 1+1?<|im_end|>\n<|im_start|>user\n2<|im_end|>\n<|im_start|>assistant",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli \\\n       -hf unsloth/Qwen3-Next-80B-A3B-Instruct-GGUF:Q4_K_XL \\\n       --jinja -ngl 99 --threads -1 --ctx-size 32768 \\\n       --temp 0.7 --min-p 0.0 --top-p 0.80 --top-k 20 --presence-penalty 1.0",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "⚙️ Usage Guide",
+      "id": "⚙️-usage-guide"
+    },
+    {
+      "level": "h2",
+      "text": "📖 Run Qwen3-Next Tutorials",
+      "id": "📖-run-qwen3-next-tutorials"
+    },
+    {
+      "level": "h3",
+      "text": "Instruct: Qwen3-Next-80B-A3B-Instruct",
+      "id": "instruct:-qwen3-next-80b-a3b-instruct"
+    }
+  ],
+  "url": "llms-txt#qwen3-next:-run-locally-guide",
+  "links": []
+}

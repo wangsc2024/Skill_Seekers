@@ -1,0 +1,8 @@
+{
+  "title": "Run the graph until the interrupt is hit.",
+  "content": "result = agent.invoke(\n    {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": \"Delete old records from the database\",\n            }\n        ]\n    },\n    config=config # [!code highlight]\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#run-the-graph-until-the-interrupt-is-hit.",
+  "links": []
+}

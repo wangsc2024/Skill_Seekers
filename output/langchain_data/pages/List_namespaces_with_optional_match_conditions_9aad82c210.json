@@ -1,0 +1,8 @@
+{
+  "title": "List namespaces with optional match conditions.",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/store/list-namespaces-with-optional-match-conditions\n\nlangsmith/agent-server-openapi.json post /store/namespaces",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#list-namespaces-with-optional-match-conditions.",
+  "links": []
+}

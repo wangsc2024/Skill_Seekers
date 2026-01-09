@@ -1,0 +1,13 @@
+{
+  "title": "Define the nodes",
+  "content": "def node_a(state: State) -> Command[Literal[\"node_b\", \"node_c\"]]:\n    print(\"Called A\")\n    value = random.choice([\"b\", \"c\"])\n    # this is a replacement for a conditional edge function\n    if value == \"b\":\n        goto = \"node_b\"\n    else:\n        goto = \"node_c\"\n\n# note how Command allows you to BOTH update the graph state AND route to the next node\n    return Command(\n        # this is the state update\n        update={\"foo\": value},\n        # this is a replacement for an edge\n        goto=goto,\n    )\n\ndef node_b(state: State):\n    print(\"Called B\")\n    return {\"foo\": state[\"foo\"] + \"b\"}\n\ndef node_c(state: State):\n    print(\"Called C\")\n    return {\"foo\": state[\"foo\"] + \"c\"}\npython  theme={null}\nbuilder = StateGraph(State)\nbuilder.add_edge(START, \"node_a\")\nbuilder.add_node(node_a)\nbuilder.add_node(node_b)\nbuilder.add_node(node_c)",
+  "code_samples": [
+    {
+      "code": "We can now create the [`StateGraph`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph) with the above nodes. Notice that the graph doesn't have [conditional edges](/oss/python/langgraph/graph-api#conditional-edges) for routing! This is because control flow is defined with [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) inside `node_a`.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#define-the-nodes",
+  "links": []
+}

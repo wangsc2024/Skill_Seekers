@@ -1,0 +1,8 @@
+{
+  "title": "To approve",
+  "content": "graph.invoke(Command(resume=True), config=config)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#to-approve",
+  "links": []
+}

@@ -1,0 +1,33 @@
+{
+  "title": "Find the simulator's hidden folder",
+  "content": "find ~/Library/Developer/CoreSimulator/Devices/ -type d -iname \"*Qwen3test*\"\nbash\ncp tokenizer.json /path/to/Qwen3test/tokenizer.json\ncp qwen3_0.6B_model.pte /path/to/Qwen3test/qwen3_model.pte\nbash",
+  "code_samples": [
+    {
+      "code": "When you see the folder run the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Load & Chat**\n\n{% columns %}\n{% column %}\n\n1. Return to the etLLM app in the simulator. Tap it to launch.\n\n<div align=\"left\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2F55YWFJN49DCiHsy9EKOA%2Funknown.png?alt=media&#x26;token=4f8c8e90-df0b-4121-99eb-24437580724b\" alt=\"\" width=\"375\"><figcaption></figcaption></figure></div>\n{% endcolumn %}\n\n{% column %}\n2\\. Load the model and tokenizer from the Qwen3test folder\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FpwUCX0nfarr6HSUd0pd3%2Funknown.png?alt=media&#x26;token=923b6ad3-d6e6-4e64-8223-947410c2218e\" alt=\"\" width=\"188\"><figcaption></figcaption></figure>\n{% endcolumn %}\n\n{% column %}\n3\\. Start chatting with your fine-tuned model! 🎉\n\n<div align=\"left\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FJrEzy1bvVeb4qLFxPFit%2Funknown.png?alt=media&#x26;token=36b7c70b-f014-4323-bdc5-cc5bf0fd12af\" alt=\"\" width=\"188\"><figcaption></figcaption></figure></div>\n{% endcolumn %}\n{% endcolumns %}\n\n### Deploying to Your Physical iPhone\n\n**Initial Device Setup**\n\n1. Connect your iPhone to your Mac via USB\n2. Unlock your iPhone and tap \"Trust This Device\"\n3. In Xcode, go to Window → Devices and Simulators\n4. Wait until your device appears on the left (it may show \"Preparing\" for a bit)\n\n**Configure Xcode Signing**\n\n{% columns %}\n{% column %}\n\n1. Add your Apple Account: Xcode → Settings → Accounts → `+`\n2. In the project navigator, click the etLLM project (blue icon)\n3. Select etLLM under TARGETS\n4. Go to the Signing & Capabilities tab\n5. Check \"Automatically manage signing\"\n6. Select your Team from the dropdown\n   {% endcolumn %}\n\n{% column %}\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FFm4a47e9Wuo7JiNbEeYl%2Funknown.png?alt=media&#x26;token=3f958363-6c0d-4608-8895-8376b0e1b1b1\" alt=\"\" width=\"375\"><figcaption></figcaption></figure>\n{% endcolumn %}\n{% endcolumns %}\n\n{% hint style=\"warning\" %}\nChange the Bundle Identifier to something unique (e.g., com.yourname.etLLM). This fixes 99% of provisioning profile errors\n{% endhint %}\n\n**Add the Required Capability**\n\n1. Still in Signing & Capabilities, click + Capability\n2. Search for \"Increased Memory Limit\" and add it\n\n**Build & Run**\n\n1. In the top toolbar, select your physical iPhone from the device selector\n2. Hit Play (▶️) or press Cmd + R\n\n**Trust the Developer Certificate**\n\nYour first build will fail—this is normal!\n\n1. On your iPhone, go to Settings → Privacy & Security → Developer Mode\n2. Toggle On\n3. Agree and accept notices\n4. Restart device, return to Xcode and hit Play again\n\n{% hint style=\"warning\" %}\nDeveloper Mode allows XCode to run and install apps on your iPhone\n{% endhint %}\n\n**Transfer Model Files to Your iPhone**\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FqAGQov6BgjlDSqA5GENN%2Funknown.png?alt=media&#x26;token=386b17df-703c-4e2c-9969-895577a98f0a\" alt=\"\" width=\"375\"><figcaption></figcaption></figure>\n\n1. Once the app is running, open Finder on your Mac\n2. Select your iPhone in the sidebar\n3. Click the Files tab\n4. Expand etLLM\n5. Drag and drop your .pte and tokenizer.json files directly into this folder\n6. Be patient! These files are large and may take a few minutes\n\n**Load & Chat**\n\n{% columns %}\n{% column %}\n\n1. On your iPhone, switch back to the etLLM app\n\n<div align=\"center\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FXY4EPFNcxaaBpjVroja3%2Funknown.jpeg?alt=media&#x26;token=7e8eca62-a5de-4705-9f0c-832b40579e78\" alt=\"\" width=\"188\"><figcaption></figcaption></figure></div>\n\n2. Load the model and tokenizer from the app interface\n\n<div align=\"center\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FUzKWYRNR02vkVn5S3SQ5%2Funknown.jpeg?alt=media&#x26;token=84a85440-bf98-438d-a035-d8a11912a7a8\" alt=\"\" width=\"188\"><figcaption></figcaption></figure></div>\n{% endcolumn %}\n\n{% column %}\n3\\. Your fine-tuned Qwen3 is now running natively on your iPhone!\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FBX1nCLPbsnuRQchJXyAS%2Funknown.png?alt=media&#x26;token=d276d4d6-2fc7-4cba-87f1-634aaea29884\" alt=\"\" width=\"184\"><figcaption></figcaption></figure>\n{% endcolumn %}\n{% endcolumns %}\n\n## <i class=\"fa-android\">:android:</i> Android Deployment\n\nThis guide covers how to build and install the ExecuTorch Llama demo app on an Android device (tested using Pixel 8 but will also work on other Android phones too) using a Linux/Mac command line environment. This approach minimizes dependencies (no Android Studio required) and offloads the heavy build process to your computer.\n\n### 🚀 Requirements\n\nEnsure your development machine has the following installed:\n\n* Java 17 (Java 21 is often the default but may cause build issues)\n* Git\n* Wget / Curl\n* Android Command Line Tools\n* [Guide to install](https://www.xda-developers.com/install-adb-windows-macos-linux/) and setup `adb` on your android and your computer\n\n#### Verification\n\nCheck that your Java version matches 17.x:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Deploying to Your Physical iPhone",
+      "id": "deploying-to-your-physical-iphone"
+    },
+    {
+      "level": "h2",
+      "text": "<i class=\"fa-android\">:android:</i> Android Deployment",
+      "id": "<i-class=\"fa-android\">:android:</i>-android-deployment"
+    },
+    {
+      "level": "h3",
+      "text": "🚀 Requirements",
+      "id": "🚀-requirements"
+    }
+  ],
+  "url": "llms-txt#find-the-simulator's-hidden-folder",
+  "links": []
+}

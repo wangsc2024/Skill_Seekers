@@ -1,0 +1,72 @@
+{
+  "title": "MCP endpoint in Agent Server",
+  "content": "Source: https://docs.langchain.com/langsmith/server-mcp\n\nThe Model Context Protocol (MCP) is an open protocol for describing tools and data sources in a model-agnostic format, enabling LLMs to discover and use them via a structured API.\n\n[Agent Server](/langsmith/agent-server) implements MCP using the [Streamable HTTP transport](https://spec.modelcontextprotocol.io/specification/2025-03-26/basic/transports/#streamable-http). This allows LangGraph **agents** to be exposed as **MCP tools**, making them usable with any MCP-compliant client supporting Streamable HTTP.\n\nThe MCP endpoint is available at `/mcp` on [Agent Server](/langsmith/agent-server).\n\nYou can set up [custom authentication middleware](/langsmith/custom-auth) to authenticate a user with an MCP server to get access to user-scoped tools within your LangSmith deployment.\n\nAn example architecture for this flow:\n\nTo use MCP, ensure you have the following dependencies installed:\n\n* `langgraph-api >= 0.2.3`\n* `langgraph-sdk >= 0.1.61`\n\n* Upgrade to use langgraph-api>=0.2.3. If you are deploying LangSmith, this will be done for you automatically if you create a new revision.\n* MCP tools (agents) will be automatically exposed.\n* Connect with any MCP-compliant client that supports Streamable HTTP.\n\nUse an MCP-compliant client to connect to the Agent Server. The following examples show how to connect using different programming languages.\n\n<Tabs>\n  <Tab title=\"JavaScript/TypeScript\">\n\n> **Note**\n    > Replace `serverUrl` with your Agent Server URL and configure authentication headers as needed.\n\n<Tab title=\"Python\">\n    Install the adapter with:\n\nHere is an example of how to connect to a remote MCP endpoint and use an agent as a tool:\n\n## Expose an agent as MCP tool\n\nWhen deployed, your agent will appear as a tool in the MCP endpoint\nwith this configuration:\n\n* **Tool name**: The agent's name.\n* **Tool description**: The agent's description.\n* **Tool input schema**: The agent's input schema.\n\n### Setting name and description\n\nYou can set the name and description of your agent in `langgraph.json`:\n\nAfter deployment, you can update the name and description using the LangGraph SDK.\n\nDefine clear, minimal input and output schemas to avoid exposing unnecessary internal complexity to the LLM.\n\nThe default [MessagesState](/oss/python/langgraph/graph-api#messagesstate) uses `AnyMessage`, which supports many message types but is too general for direct LLM exposure.\n\nInstead, define **custom agents or workflows** that use explicitly typed input and output structures.\n\nFor example, a workflow answering documentation questions might look like this:\n\n```python  theme={null}\nfrom langgraph.graph import StateGraph, START, END\nfrom typing_extensions import TypedDict",
+  "code_samples": [
+    {
+      "code": "## Requirements\n\nTo use MCP, ensure you have the following dependencies installed:\n\n* `langgraph-api >= 0.2.3`\n* `langgraph-sdk >= 0.1.61`\n\nInstall them with:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Usage overview\n\nTo enable MCP:\n\n* Upgrade to use langgraph-api>=0.2.3. If you are deploying LangSmith, this will be done for you automatically if you create a new revision.\n* MCP tools (agents) will be automatically exposed.\n* Connect with any MCP-compliant client that supports Streamable HTTP.\n\n### Client\n\nUse an MCP-compliant client to connect to the Agent Server. The following examples show how to connect using different programming languages.\n\n<Tabs>\n  <Tab title=\"JavaScript/TypeScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "> **Note**\n    > Replace `serverUrl` with your Agent Server URL and configure authentication headers as needed.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Python\">\n    Install the adapter with:",
+      "language": "unknown"
+    },
+    {
+      "code": "Here is an example of how to connect to a remote MCP endpoint and use an agent as a tool:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Expose an agent as MCP tool\n\nWhen deployed, your agent will appear as a tool in the MCP endpoint\nwith this configuration:\n\n* **Tool name**: The agent's name.\n* **Tool description**: The agent's description.\n* **Tool input schema**: The agent's input schema.\n\n### Setting name and description\n\nYou can set the name and description of your agent in `langgraph.json`:",
+      "language": "unknown"
+    },
+    {
+      "code": "After deployment, you can update the name and description using the LangGraph SDK.\n\n### Schema\n\nDefine clear, minimal input and output schemas to avoid exposing unnecessary internal complexity to the LLM.\n\nThe default [MessagesState](/oss/python/langgraph/graph-api#messagesstate) uses `AnyMessage`, which supports many message types but is too general for direct LLM exposure.\n\nInstead, define **custom agents or workflows** that use explicitly typed input and output structures.\n\nFor example, a workflow answering documentation questions might look like this:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Requirements",
+      "id": "requirements"
+    },
+    {
+      "level": "h2",
+      "text": "Usage overview",
+      "id": "usage-overview"
+    },
+    {
+      "level": "h3",
+      "text": "Client",
+      "id": "client"
+    },
+    {
+      "level": "h2",
+      "text": "Expose an agent as MCP tool",
+      "id": "expose-an-agent-as-mcp-tool"
+    },
+    {
+      "level": "h3",
+      "text": "Setting name and description",
+      "id": "setting-name-and-description"
+    },
+    {
+      "level": "h3",
+      "text": "Schema",
+      "id": "schema"
+    }
+  ],
+  "url": "llms-txt#mcp-endpoint-in-agent-server",
+  "links": []
+}

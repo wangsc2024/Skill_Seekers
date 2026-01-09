@@ -1,0 +1,131 @@
+{
+  "title": "Build customer support with handoffs",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs-customer-support\n\nThe [state machine pattern](/oss/python/langchain/multi-agent/handoffs) describes workflows where an agent's behavior changes as it moves through different states of a task. This tutorial shows how to implement a state machine by using tool calls to dynamically change a single agent's configuration—updating its available tools and instructions based on the current state. The state can be determined from multiple sources: the agent's past actions (tool calls), external state (such as API call results), or even initial user input (for example, by running a classifier to determine user intent).\n\nIn this tutorial, you'll build a customer support agent that does the following:\n\n* Collects warranty information before proceeding.\n* Classifies issues as hardware or software.\n* Provides solutions or escalates to human support.\n* Maintains conversation state across multiple turns.\n\nUnlike the [subagents pattern](/oss/python/langchain/multi-agent/subagents-personal-assistant) where sub-agents are called as tools, the **state machine pattern** uses a single agent whose configuration changes based on workflow progress. Each \"step\" is just a different configuration (system prompt + tools) of the same underlying agent, selected dynamically based on state.\n\nHere's the workflow we'll build:\n\nThis tutorial requires the `langchain` package:\n\nFor more details, see our [Installation guide](/oss/python/langchain/install).\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your agent. Then set the following environment variables:\n\nSelect a chat model from LangChain's suite of integrations:\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)\n\n</CodeGroup>\n  </Tab>\n</Tabs>\n\n## 1. Define custom state\n\nFirst, define a custom state schema that tracks which step is currently active:\n\n```python  theme={null}\nfrom langchain.agents import AgentState\nfrom typing_extensions import NotRequired\nfrom typing import Literal",
+  "code_samples": [
+    {
+      "code": "## Setup\n\n### Installation\n\nThis tutorial requires the `langchain` package:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nFor more details, see our [Installation guide](/oss/python/langchain/install).\n\n### LangSmith\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your agent. Then set the following environment variables:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Select an LLM\n\nSelect a chat model from LangChain's suite of integrations:\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n</Tabs>\n\n## 1. Define custom state\n\nFirst, define a custom state schema that tracks which step is currently active:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h3",
+      "text": "LangSmith",
+      "id": "langsmith"
+    },
+    {
+      "level": "h3",
+      "text": "Select an LLM",
+      "id": "select-an-llm"
+    },
+    {
+      "level": "h2",
+      "text": "1. Define custom state",
+      "id": "1.-define-custom-state"
+    }
+  ],
+  "url": "llms-txt#build-customer-support-with-handoffs",
+  "links": []
+}

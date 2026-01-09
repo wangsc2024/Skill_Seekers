@@ -1,0 +1,8 @@
+{
+  "title": "Create a code reviewer agent",
+  "content": "code_reviewer = autogen.AssistantAgent(\n    name=\"code_reviewer\",\n    llm_config={\"config_list\": config_list},\n    system_message=\"\"\"You are an expert code reviewer. Your role is to:\n    1. Review code for bugs, security issues, and best practices\n    2. Suggest improvements and optimizations\n    3. Provide constructive feedback\n    Always be thorough but constructive in your reviews.\"\"\",\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-code-reviewer-agent",
+  "links": []
+}

@@ -1,0 +1,23 @@
+{
+  "title": "if configured with a subdomain / path prefix:",
+  "content": "curl http://<langsmith_url/prefix/api/v1/info\njson  theme={null}\n{\n  \"version\": \"0.11.4\",\n  \"license_expiration_time\": \"2026-08-18T19:14:34Z\",\n  \"customer_info\": {\n    \"customer_id\": \"<id>\",\n    \"customer_name\": \"<name>\"\n  }\n}\nbash  theme={null}",
+  "code_samples": [
+    {
+      "code": "This will return a JSON response containing your customer information:",
+      "language": "unknown"
+    },
+    {
+      "code": "Extract the `customer_id` and `customer_name` from this response to use as input for the export scripts.\n\n### Process the API response with jq\n\nYou can use [jq](https://jqlang.org/download) to parse the JSON response and set bash variables for use in your scripts:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Process the API response with jq",
+      "id": "process-the-api-response-with-jq"
+    }
+  ],
+  "url": "llms-txt#if-configured-with-a-subdomain-/-path-prefix:",
+  "links": []
+}

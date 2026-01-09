@@ -1,0 +1,8 @@
+{
+  "title": "Explore the failed inputs and outputs.",
+  "content": "for r in failed:\n    print(r[\"example\"].inputs)\n    print(r[\"run\"].outputs)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#explore-the-failed-inputs-and-outputs.",
+  "links": []
+}

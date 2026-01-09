@@ -1,0 +1,19 @@
+{
+  "title": "Instrument AutoGen and OpenAI calls",
+  "content": "AutogenInstrumentor().instrument()\nOpenAIInstrumentor().instrument()\npython  theme={null}\nimport autogen\nfrom openinference.instrumentation.autogen import AutogenInstrumentor\nfrom openinference.instrumentation.openai import OpenAIInstrumentor\nfrom langsmith.integrations.otel import configure\nimport os\nimport dotenv",
+  "code_samples": [
+    {
+      "code": "<Note>\n  You do not need to set any OpenTelemetry environment variables or configure exporters manually—`configure()` handles everything automatically.\n</Note>\n\n### 3. Create and run your AutoGen application\n\nOnce configured, your AutoGen application will automatically send traces to LangSmith:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "3. Create and run your AutoGen application",
+      "id": "3.-create-and-run-your-autogen-application"
+    }
+  ],
+  "url": "llms-txt#instrument-autogen-and-openai-calls",
+  "links": []
+}

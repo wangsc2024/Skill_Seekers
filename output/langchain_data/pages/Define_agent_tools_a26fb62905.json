@@ -1,0 +1,8 @@
+{
+  "title": "Define agent tools",
+  "content": "def add_to_order(item: str, quantity: int) -> str:\n    \"\"\"Add an item to the customer's sandwich order.\"\"\"\n    return f\"Added {quantity} x {item} to the order.\"\n\ndef confirm_order(order_summary: str) -> str:\n    \"\"\"Confirm the final order with the customer.\"\"\"\n    return f\"Order confirmed: {order_summary}. Sending to kitchen.\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-agent-tools",
+  "links": []
+}

@@ -1,0 +1,31 @@
+{
+  "title": "Output should look like: openjdk version \"17.0.x\"",
+  "content": "java -version\nbash\nsudo apt install openjdk-17-jdk\nbash\nexport JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64\nexport PATH=$JAVA_HOME/bin:$PATH\nbash\nmkdir -p ~/android-sdk/cmdline-tools\ncd ~/android-sdk\nbash\nwget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip\nunzip commandlinetools-linux-*.zip -d cmdline-tools",
+  "code_samples": [
+    {
+      "code": "If it does not match, install it via Ubuntu/Debian:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then set it as default or export `JAVA_HOME`:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you are on a different OS or distribution, you might want to follow [this guide](https://docs.oracle.com/en/java/javase/25/install/overview-jdk-installation.html) or just ask your favorite LLM to guide you through.\n\n### Step 1: Install Android SDK & NDK\n\nSet up a minimal Android SDK environment without the full Android Studio.\n\n1\\. Create the SDK directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Install Android Command Line Tools",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Step 1: Install Android SDK & NDK",
+      "id": "step-1:-install-android-sdk-&-ndk"
+    }
+  ],
+  "url": "llms-txt#output-should-look-like:-openjdk-version-\"17.0.x\"",
+  "links": []
+}

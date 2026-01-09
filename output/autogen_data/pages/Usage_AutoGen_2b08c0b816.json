@@ -1,0 +1,109 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/usage.html",
+  "title": "Usage — AutoGen",
+  "content": "AutoGen Studio (AGS) provides a Team Builder interface where developers can define multiple components and behaviors. Users can create teams, add agents to teams, attach tools and models to agents, and define team termination conditions. After defining a team, users can test directly in the team builder view or attach it to a session for use in the Playground view.\n\nSee a video tutorial on AutoGen Studio v0.4 (02/25) - https://youtu.be/oum6EI7wohM\n\nMost of your agents will require an API key. You can set up an environment variable OPENAI_API_KEY (assuming you are using OpenAI models) and AutoGen will automatically use this for any OpenAI model clients you specify for your agents or teams. Alternatively you can specify the api key as part of the team or agent configuration.\n\nSee the section below on how to build an agent team either using the visual builder or by directly editing the JSON configuration.\n\nAutoGen Studio integrates closely with all component abstractions provided by AutoGen AgentChat, including teams, agents, models, tools, and termination conditions.\n\nThe Team Builder view in AGS provides a visual team builder that allows users to define components through either drag-and-drop functionality or by editing a JSON configuration of the team directly.\n\nThe visual builder is enabled by default and allows users to drag-and-drop components from the provided Component library to the Team Builder canvas. The team builder canvas represents a team and consists of a main team node and a set of a connected agent nodes. It includes a Component Library that has a selection of components that can be added to the team or agent nodes in the canvas.\n\nThe core supported behaviours include:\n\nCreate a new team. This can be done by clicking on the “New Team” button in the Team Builder view or by selecting any of the existing default teams that ship with the default AGS Gallery. Once you do this, a new team node and agent node(s) will be created in the canvas.\n\nDrag and drop components from the library to the team or agent nodes in the canvas.\n\nTeams: drag in agents and termination conditions to the team node (there are specific drop zones for these components)\n\nAgents: drag in models and tools to the agent node (there are specific drop zones for these components)\n\nEditing Team/Agent Nodes: Click on the edit icon (top right) of the node to view and edit its properties. This pops up a panel that allows you to edit the fields of the node. In some cases you will need to scroll down and click into specific sections e.g., for an agent with a model client, you will need to click into the model client section to edit the model client properties. Once done with editing, click on the save button to save the changes.\n\nAGS also lets you directly modify the JSON configuration of the team. This can be done by toggling the visual builder mode off. Once you do this, you will see the JSON configuration of the team. You can then edit the JSON configuration directly.\n\nDid you know that you define your agents in Python, export them to JSON and then paste them in the JSON editor? The section below shows how to accomplish this.\n\nAutoGen Studio is built on the declarative specification behaviors of AutoGen AgentChat. This allows users to define teams, agents, models, tools, and termination conditions in Python and then dump them into a JSON file for use in AutoGen Studio.\n\nHere’s an example of an agent team and how it is converted to a JSON file:\n\nThis example shows a team with a single agent, using the RoundRobinGroupChat type and a TextMentionTermination condition. You will also notice that the model client is an OpenAIChatCompletionClient model client where only the model name is specified. In this case, the API key is assumed to be set as an environment variable OPENAI_API_KEY. You can also specify the API key as part of the model client configuration.\n\nTo understand the full configuration of an model clients, you can refer to the AutoGen Model Clients documentation.\n\nNote that you can similarly define your model client in Python and call dump_component() on it to get the JSON configuration and use it to update the model client section of your team or agent configuration.\n\nFinally, you can use the load_component() method to load a team configuration from a JSON file:\n\nAGS provides a Gallery view, where a gallery is a collection of components - teams, agents, models, tools, and terminations - that can be shared and reused across projects.\n\nUsers can create a local gallery or import a gallery (from a URL, a JSON file import or simply by copying and pasting the JSON). At any given time, users can select any of the current Gallery items as a default gallery. This default gallery will be used to populate the Team Builder sidebar with components.\n\nCreate new galleries via Gallery -> New Gallery\n\nEdit gallery JSON as needed\n\nSet a default gallery (click pin icon in sidebar) to make components available in Team Builder.\n\nThe AutoGen Studio Playground enables users to:\n\nTest teams on specific tasks\n\nReview generated artifacts (images, code, text)\n\nMonitor team “inner monologue” during task execution\n\nView performance metrics (turn count, token usage)\n\nTrack agent actions (tool usage, code execution results)\n\nAutoGen Studio’s Gallery view offers a default component collection and supports importing external configurations:\n\nCreate/Import galleries through Gallery -> New Gallery -> Import\n\nSet default galleries via sidebar pin icon\n\nAccess components in Team Builder through Sidebar -> From Gallery\n\nTeam configurations can be integrated into Python applications using the TeamManager class:\n\nTo export team configurations, use the export button in Team Builder to generate a JSON file for Python application use.\n\nExperimental Features",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Usage#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Setting Up an API Key#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Building an Agent Team#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Using the Visual Builder#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Using the JSON Editor#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Declarative Specification of Components#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Gallery - Sharing and Reusing Components#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Interactively Running Teams#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Importing and Reusing Team Configurations#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Python Integration#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_agentchat.conditions import  TextMentionTermination\n\nagent = AssistantAgent(\n        name=\"weather_agent\",\n        model_client=OpenAIChatCompletionClient(\n            model=\"gpt-4o-mini\",\n        ),\n    )\n\nagent_team = RoundRobinGroupChat([agent], termination_condition=TextMentionTermination(\"TERMINATE\"))\nconfig = agent_team.dump_component()\nprint(config.model_dump_json())",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_agentchat.conditions import  TextMentionTermination\n\nagent = AssistantAgent(\n        name=\"weather_agent\",\n        model_client=OpenAIChatCompletionClient(\n            model=\"gpt-4o-mini\",\n        ),\n    )\n\nagent_team = RoundRobinGroupChat([agent], termination_condition=TextMentionTermination(\"TERMINATE\"))\nconfig = agent_team.dump_component()\nprint(config.model_dump_json())",
+      "language": "python"
+    },
+    {
+      "code": "{\n  \"provider\": \"autogen_agentchat.teams.RoundRobinGroupChat\",\n  \"component_type\": \"team\",\n  \"version\": 1,\n  \"component_version\": 1,\n  \"description\": \"A team that runs a group chat with participants taking turns in a round-robin fashion\\n    to publish a message to all.\",\n  \"label\": \"RoundRobinGroupChat\",\n  \"config\": {\n    \"participants\": [\n      {\n        \"provider\": \"autogen_agentchat.agents.AssistantAgent\",\n        \"component_type\": \"agent\",\n        \"version\": 1,\n        \"component_version\": 1,\n        \"description\": \"An agent that provides assistance with tool use.\",\n        \"label\": \"AssistantAgent\",\n        \"config\": {\n          \"name\": \"weather_agent\",\n          \"model_client\": {\n            \"provider\": \"autogen_ext.models.openai.OpenAIChatCompletionClient\",\n            \"component_type\": \"model\",\n            \"version\": 1,\n            \"component_version\": 1,\n            \"description\": \"Chat completion client for OpenAI hosted models.\",\n            \"label\": \"OpenAIChatCompletionClient\",\n            \"config\": { \"model\": \"gpt-4o-mini\" }\n          },\n          \"tools\": [],\n          \"handoffs\": [],\n          \"model_context\": {\n            \"provider\": \"autogen_core.model_context.UnboundedChatCompletionContext\",\n            \"component_type\": \"chat_completion_context\",\n            \"version\": 1,\n            \"component_version\": 1,\n            \"description\": \"An unbounded chat completion context that keeps a view of the all the messages.\",\n            \"label\": \"UnboundedChatCompletionContext\",\n            \"config\": {}\n          },\n          \"description\": \"An agent that provides assistance with ability to use tools.\",\n          \"system_message\": \"You are a helpful AI assistant. Solve tasks using your tools. Reply with TERMINATE when the task has been completed.\",\n          \"model_client_stream\": false,\n          \"reflect_on_tool_use\": false,\n          \"tool_call_summary_format\": \"{result}\"\n        }\n      }\n    ],\n    \"termination_condition\": {\n      \"provider\": \"autogen_agentchat.conditions.TextMentionTermination\",\n      \"component_type\": \"termination\",\n      \"version\": 1,\n      \"component_version\": 1,\n      \"description\": \"Terminate the conversation if a specific text is mentioned.\",\n      \"label\": \"TextMentionTermination\",\n      \"config\": { \"text\": \"TERMINATE\" }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n  \"provider\": \"autogen_agentchat.teams.RoundRobinGroupChat\",\n  \"component_type\": \"team\",\n  \"version\": 1,\n  \"component_version\": 1,\n  \"description\": \"A team that runs a group chat with participants taking turns in a round-robin fashion\\n    to publish a message to all.\",\n  \"label\": \"RoundRobinGroupChat\",\n  \"config\": {\n    \"participants\": [\n      {\n        \"provider\": \"autogen_agentchat.agents.AssistantAgent\",\n        \"component_type\": \"agent\",\n        \"version\": 1,\n        \"component_version\": 1,\n        \"description\": \"An agent that provides assistance with tool use.\",\n        \"label\": \"AssistantAgent\",\n        \"config\": {\n          \"name\": \"weather_agent\",\n          \"model_client\": {\n            \"provider\": \"autogen_ext.models.openai.OpenAIChatCompletionClient\",\n            \"component_type\": \"model\",\n            \"version\": 1,\n            \"component_version\": 1,\n            \"description\": \"Chat completion client for OpenAI hosted models.\",\n            \"label\": \"OpenAIChatCompletionClient\",\n            \"config\": { \"model\": \"gpt-4o-mini\" }\n          },\n          \"tools\": [],\n          \"handoffs\": [],\n          \"model_context\": {\n            \"provider\": \"autogen_core.model_context.UnboundedChatCompletionContext\",\n            \"component_type\": \"chat_completion_context\",\n            \"version\": 1,\n            \"component_version\": 1,\n            \"description\": \"An unbounded chat completion context that keeps a view of the all the messages.\",\n            \"label\": \"UnboundedChatCompletionContext\",\n            \"config\": {}\n          },\n          \"description\": \"An agent that provides assistance with ability to use tools.\",\n          \"system_message\": \"You are a helpful AI assistant. Solve tasks using your tools. Reply with TERMINATE when the task has been completed.\",\n          \"model_client_stream\": false,\n          \"reflect_on_tool_use\": false,\n          \"tool_call_summary_format\": \"{result}\"\n        }\n      }\n    ],\n    \"termination_condition\": {\n      \"provider\": \"autogen_agentchat.conditions.TextMentionTermination\",\n      \"component_type\": \"termination\",\n      \"version\": 1,\n      \"component_version\": 1,\n      \"description\": \"Terminate the conversation if a specific text is mentioned.\",\n      \"label\": \"TextMentionTermination\",\n      \"config\": { \"text\": \"TERMINATE\" }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "import json\nfrom autogen_agentchat.teams import BaseGroupChat\nteam_config = json.load(open(\"team.json\"))\nteam = BaseGroupChat.load_component(team_config)",
+      "language": "sql"
+    },
+    {
+      "code": "import json\nfrom autogen_agentchat.teams import BaseGroupChat\nteam_config = json.load(open(\"team.json\"))\nteam = BaseGroupChat.load_component(team_config)",
+      "language": "sql"
+    },
+    {
+      "code": "from autogenstudio.teammanager import TeamManager\n\ntm = TeamManager()\nresult_stream = tm.run(task=\"What is the weather in New York?\", team_config=\"team.json\") # or tm.run_stream(..)",
+      "language": "sql"
+    },
+    {
+      "code": "from autogenstudio.teammanager import TeamManager\n\ntm = TeamManager()\nresult_stream = tm.run(task=\"What is the weather in New York?\", team_config=\"team.json\") # or tm.run_stream(..)",
+      "language": "sql"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/usage.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/experimental.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/faq.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html"
+  ]
+}

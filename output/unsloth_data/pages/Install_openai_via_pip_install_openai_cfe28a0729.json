@@ -1,0 +1,68 @@
+{
+  "title": "Install openai via pip install openai",
+  "content": "from openai import OpenAI\nimport json\nopenai_client = OpenAI(\n    base_url = \"http://0.0.0.0:30000/v1\",\n    api_key = \"sk-no-key-required\",\n)\ncompletion = openai_client.chat.completions.create(\n    model = \"unsloth/Llama-3.2-1B-Instruct\",\n    messages = [{\"role\": \"user\", \"content\": \"What is 2+2?\"},],\n)\nprint(completion.choices[0].message.content)\npython\nfrom unsloth import FastLanguageModel\nimport torch\nmodel, tokenizer = FastLanguageModel.from_pretrained(\n    model_name = \"unsloth/gpt-oss-20b\",\n    max_seq_length = 2048,\n    load_in_4bit = True,\n)\nmodel = FastLanguageModel.get_peft_model(model)\npython\nmodel.save_pretrained_merged(\"finetuned_model\", tokenizer, save_method = \"merged_16bit\")\n## OR to upload to HuggingFace:\nmodel.push_to_hub_merged(\"hf/model\", tokenizer, save_method = \"merged_16bit\", token = \"\")\npython\nmodel.save_pretrained(\"finetuned_model\")\ntokenizer.save_pretrained(\"finetuned_model\")\npython\nmodel.save_pretrained_merged(\"model\", tokenizer, save_method = \"lora\")\n## OR to upload to HuggingFace\nmodel.push_to_hub_merged(\"hf/model\", tokenizer, save_method = \"lora\", token = \"\")\npython\nmodel.save_pretrained_merged(\n    \"finetuned_model\", \n    tokenizer, \n    save_method = \"merged_16bit\",\n)\n## For gpt-oss specific mxfp4 conversions:\nmodel.save_pretrained_merged(\n    \"finetuned_model\", \n    tokenizer, \n    save_method = \"mxfp4\", # (ONLY FOR gpt-oss otherwise choose \"merged_16bit\")\n)\nshellscript\npython -m sglang.launch_server \\\n    --model-path finetuned_model \\\n    --host 0.0.0.0 --port 30002\npython\nfrom openai import OpenAI\nimport json\nopenai_client = OpenAI(\n    base_url = \"http://0.0.0.0:30002/v1\",\n    api_key = \"sk-no-key-required\",\n)\ncompletion = openai_client.chat.completions.create(\n    model = \"finetuned_model\",\n    messages = [{\"role\": \"user\", \"content\": \"What is 2+2?\"},],\n)\nprint(completion.choices[0].message.content)",
+  "code_samples": [
+    {
+      "code": "And you will get `2 + 2 = 4.`\n\n### 🦥Deploying Unsloth finetunes in SGLang\n\nAfter fine-tuning [fine-tuning-llms-guide](https://docs.unsloth.ai/get-started/fine-tuning-llms-guide \"mention\") or using our notebooks at [unsloth-notebooks](https://docs.unsloth.ai/get-started/unsloth-notebooks \"mention\"), you can save or deploy your models directly through SGLang within a single workflow. An example Unsloth finetuning script for eg:",
+      "language": "unknown"
+    },
+    {
+      "code": "**To save to 16-bit for SGLang, use:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**To save just the LoRA adapters**, either use:",
+      "language": "unknown"
+    },
+    {
+      "code": "Or just use our builtin function to do that:",
+      "language": "unknown"
+    },
+    {
+      "code": "### :railway\\_car:gpt-oss-20b: Unsloth & SGLang Deployment Guide\n\nBelow is a step-by-step tutorial with instructions for training the [gpt-oss](https://docs.unsloth.ai/models/gpt-oss-how-to-run-and-fine-tune)-20b using Unsloth and deploying it with SGLang. It includes performance benchmarks across multiple quantization formats.\n\n{% stepper %}\n{% step %}\n\n#### Unsloth Fine-tuning and Exporting Formats\n\nIf you're new to fine-tuning, you can read our [guide](https://docs.unsloth.ai/get-started/fine-tuning-llms-guide), or try the gpt-oss 20B finetuning notebook at [gpt-oss-how-to-run-and-fine-tune](https://docs.unsloth.ai/models/gpt-oss-how-to-run-and-fine-tune \"mention\") After training, you can export the model in multiple formats:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n{% endstep %}\n\n{% step %}\n\n#### Deployment with SGLang\n\nWe saved our gpt-oss finetune to the folder \"finetuned\\_model\", and so in a new terminal, we can launch the finetuned model as an inference endpoint with SGLang:",
+      "language": "unknown"
+    },
+    {
+      "code": "You might have to wait a bit on `Capturing batches (bs=1 avail_mem=20.84 GB):` !\n{% endstep %}\n\n{% step %}\n\n#### Calling the inference endpoint:\n\nTo call the inference endpoint, first launch a new terminal. We then can call the model like below:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "🦥Deploying Unsloth finetunes in SGLang",
+      "id": "🦥deploying-unsloth-finetunes-in-sglang"
+    },
+    {
+      "level": "h2",
+      "text": "OR to upload to HuggingFace:",
+      "id": "or-to-upload-to-huggingface:"
+    },
+    {
+      "level": "h2",
+      "text": "OR to upload to HuggingFace",
+      "id": "or-to-upload-to-huggingface"
+    },
+    {
+      "level": "h3",
+      "text": ":railway\\_car:gpt-oss-20b: Unsloth & SGLang Deployment Guide",
+      "id": ":railway\\_car:gpt-oss-20b:-unsloth-&-sglang-deployment-guide"
+    },
+    {
+      "level": "h2",
+      "text": "For gpt-oss specific mxfp4 conversions:",
+      "id": "for-gpt-oss-specific-mxfp4-conversions:"
+    },
+    {
+      "level": "h2",
+      "text": "OUTPUT ##",
+      "id": "output-##"
+    }
+  ],
+  "url": "llms-txt#install-openai-via-pip-install-openai",
+  "links": []
+}

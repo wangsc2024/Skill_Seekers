@@ -1,0 +1,32 @@
+{
+  "title": "Important: Reorganize to satisfy SDK structure",
+  "content": "mv cmdline-tools/cmdline-tools cmdline-tools/latest\nbash\nexport ANDROID_HOME=$HOME/android-sdk\nexport PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH\nexport PATH=$ANDROID_HOME/platform-tools:$PATH\nbash\nsource ~/.zshrc  # or ~/.bashrc depending on your shell\nbash",
+  "code_samples": [
+    {
+      "code": "### Step 2: Configure Environment Variables\n\nAdd these to your `~/.bashrc` or `~/.zshrc`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Reload them:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Step 3: Install SDK Components\n\nExecuTorch requires specific NDK versions.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Step 2: Configure Environment Variables",
+      "id": "step-2:-configure-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Step 3: Install SDK Components",
+      "id": "step-3:-install-sdk-components"
+    }
+  ],
+  "url": "llms-txt#important:-reorganize-to-satisfy-sdk-structure",
+  "links": []
+}

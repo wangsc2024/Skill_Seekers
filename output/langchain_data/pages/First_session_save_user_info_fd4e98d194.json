@@ -1,0 +1,8 @@
+{
+  "title": "First session: save user info",
+  "content": "agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Save the following user: userid: abc123, name: Foo, age: 25, email: foo@langchain.dev\"}]\n})",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#first-session:-save-user-info",
+  "links": []
+}

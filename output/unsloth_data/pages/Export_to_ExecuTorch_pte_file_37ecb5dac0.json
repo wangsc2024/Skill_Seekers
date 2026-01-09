@@ -1,0 +1,39 @@
+{
+  "title": "Export to ExecuTorch pte file",
+  "content": "python -m executorch.examples.models.llama.export_llama \\\n    --model \"qwen3_0_6b\" \\\n    --checkpoint pytorch_model_converted.bin \\\n    --params 0.6B_config.json \\\n    --output_name qwen3_0.6B_model.pte \\\n    -kv --use_sdpa_with_kv_cache -X --xnnpack-extended-ops \\\n    --max_context_length 1024 --max_seq_length 128 --dtype fp32 \\\n    --metadata '{\"get_bos_id\":199999, \"get_eos_ids\":[200020,199999]}'\nbash",
+  "code_samples": [
+    {
+      "code": "{% endcode %}\n\n### 🏁 Deployment After Training\n\nAnd now with your `qwen3_0.6B_model.pte` file which is around 472MB in size, we can deploy it! Pick your device and jump straight in:\n\n* [#ios-deployment](#ios-deployment \"mention\") – Xcode route, simulator or device\n* [#android-deployment](#android-deployment \"mention\") – command-line route, no Studio required\n\n## <i class=\"fa-apple\">:apple:</i> iOS Deployment\n\nTutorial to get your model running on iOS (tested on an iPhone 16 Pro but will work for other iPhones too). You will need a physical macOS based device which must be capable of running XCode 15.\n\n### macOS Development Environment Setup\n\n**Install Xcode & Command Line Tools**\n\n1. Install Xcode from the Mac App Store (must be version 15 or later)\n2. Open Terminal and verify your installation: `xcode-select -p`\n3. Install command line tools and accept the license:&#x20;\n   1. `xcode-select --install`\n   2. `sudo xcodebuild -license accept`\n4. Launch Xcode for the first time and install any additional components when prompted\n5. If asked to select platforms, choose iOS 18 and download it for simulator access\n\n{% hint style=\"warning\" %}\nImportant: The first Xcode launch is crucial! Don't skip those extra component installations! Check [here](https://developer.apple.com/documentation/xcode/downloading-and-installing-additional-xcode-components) and [here](https://developer.apple.com/documentation/safari-developer-tools/adding-additional-simulators) for additional help.\n{% endhint %}\n\n**Verify Everything Works:**  `xcode-select -p`\n\nYou should see a path printed. If not, repeat step 3.\n\n![](https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FJii1jArd6GQrdaCMHvyR%2Funknown.png?alt=media\\&token=bd8b7a75-23e3-4474-b84b-ab9ad34cc401)\n\n### Apple Developer Account Setup\n\n**For Physical devices only!**\n\n{% hint style=\"info\" %}\nSkip this entire section if you're only using the iOS Simulator. You only need a paid developer account for deployment to a physical iPhone.\n{% endhint %}\n\n{% columns %}\n{% column %}\n**Create Your Apple ID**\n\nDon't have an Apple ID?[ Sign up here](https://support.apple.com/en-us/108647?device-type=iphone).\n\n#### **Add Your Account to Xcode**\n\n1. Open Xcode\n2. Navigate to Xcode → Settings → Accounts\n3. Click the + button and select Apple ID\n4. Sign in with your regular Apple ID\n   {% endcolumn %}\n\n{% column %}\n\n<div align=\"left\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FxG5ifHNeI6xKWqHw1pxL%2Funknown.png?alt=media&#x26;token=875fb5e4-e5f3-4c88-9af6-cb4e587975ca\" alt=\"\" width=\"563\"><figcaption></figcaption></figure></div>\n{% endcolumn %}\n{% endcolumns %}\n\n#### **Enroll in the Apple Developer Program**\n\nExecuTorch requires the `increased-memory-limit capability`, which needs a paid developer account:\n\n1. Visit[ developer.apple.com](https://developer.apple.com)\n2. Sign in with your Apple ID\n3. Enroll in the Apple Developer Program\n\n### Setup the ExecuTorch Demo App\n\n**Grab the Example Code:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "🏁 Deployment After Training",
+      "id": "🏁-deployment-after-training"
+    },
+    {
+      "level": "h2",
+      "text": "<i class=\"fa-apple\">:apple:</i> iOS Deployment",
+      "id": "<i-class=\"fa-apple\">:apple:</i>-ios-deployment"
+    },
+    {
+      "level": "h3",
+      "text": "macOS Development Environment Setup",
+      "id": "macos-development-environment-setup"
+    },
+    {
+      "level": "h3",
+      "text": "Apple Developer Account Setup",
+      "id": "apple-developer-account-setup"
+    },
+    {
+      "level": "h3",
+      "text": "Setup the ExecuTorch Demo App",
+      "id": "setup-the-executorch-demo-app"
+    }
+  ],
+  "url": "llms-txt#export-to-executorch-pte-file",
+  "links": []
+}

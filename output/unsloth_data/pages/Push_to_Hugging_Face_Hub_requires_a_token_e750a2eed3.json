@@ -1,0 +1,19 @@
+{
+  "title": "Push to Hugging Face Hub (requires a token)",
+  "content": "model.push_to_hub_merged(\n    \"your-username/model-name\", tokenizer, save_method=\"merged_16bit\", token=\"your-token\"\n)\npython\nmodel.push_to_hub_gguf(\n    \"your-username/model-name\",\n    tokenizer,\n    quantization_method=[\"q4_k_m\", \"q8_0\", \"q5_k_m\"],\n    token=\"your-token\",\n)\n```\n\nOnce saved in GGUF format, the model can be easily deployed in lightweight environments using **llama.cpp** or used in other inference engines.\n{% endstep %}\n{% endstepper %}\n\nHere are some video tutorials created by amazing YouTubers who we think are fantastic!\n\n{% embed url=\"<https://www.youtube.com/watch?v=9t-BAjzBWj8>\" %}\n\n{% columns %}\n{% column width=\"50%\" %}\n{% embed url=\"<https://www.youtube.com/watch?t=3289s&v=bbFEYPx9Hpo>\" %}\nGreat to learn about how to prep your dataset and explanations behind Reinforcement Learning + GRPO basics\n{% endembed %}\n\n{% embed url=\"<https://www.youtube.com/watch?v=oF0_eMhzRaQ>\" %}\n{% endcolumn %}\n\n{% column width=\"50%\" %}\n{% embed url=\"<https://www.youtube.com/watch?v=juOh1afy-IE>\" %}\n\n{% embed url=\"<https://www.youtube.com/watch?v=SoPE1cUz3Hs>\" %}\nLocal GRPO on your own device\n{% endembed %}\n{% endcolumn %}\n{% endcolumns %}",
+  "code_samples": [
+    {
+      "code": "**Saving in GGUF Format for llama.cpp**\n\nUnsloth also supports saving in **GGUF format**, making it compatible with **llama.cpp** and **Ollama**.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Video Tutorials",
+      "id": "video-tutorials"
+    }
+  ],
+  "url": "llms-txt#push-to-hugging-face-hub-(requires-a-token)",
+  "links": []
+}

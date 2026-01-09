@@ -1,0 +1,8 @@
+{
+  "title": "Calculate aggregate metrics",
+  "content": "total_score = 0\ncount = 0\n\nfor result in results:\n    eval_result = result[\"evaluation_results\"][\"results\"][0]\n    total_score += eval_result.score\n    count += 1\n\naverage_accuracy = total_score / count\n\nprint(f\"Average accuracy: {average_accuracy:.2%}\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#calculate-aggregate-metrics",
+  "links": []
+}

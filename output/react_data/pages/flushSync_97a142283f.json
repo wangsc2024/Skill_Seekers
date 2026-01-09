@@ -1,0 +1,233 @@
+{
+  "url": "https://react.dev/reference/react-dom/flushSync",
+  "title": "flushSync",
+  "content": "Using flushSync is uncommon and can hurt the performance of your app.\n\nflushSync lets you force React to flush any updates inside the provided callback synchronously. This ensures that the DOM is updated immediately.\n\nCall flushSync to force React to flush any pending work and update the DOM synchronously.\n\nMost of the time, flushSync can be avoided. Use flushSync as last resort.\n\nSee more examples below.\n\nflushSync returns undefined.\n\nWhen integrating with third-party code such as browser APIs or UI libraries, it may be necessary to force React to flush updates. Use flushSync to force React to flush any state updates inside the callback synchronously:\n\nThis ensures that, by the time the next line of code runs, React has already updated the DOM.\n\nUsing flushSync is uncommon, and using it often can significantly hurt the performance of your app. If your app only uses React APIs, and does not integrate with third-party libraries, flushSync should be unnecessary.\n\nHowever, it can be helpful for integrating with third-party code like browser APIs.\n\nSome browser APIs expect results inside of callbacks to be written to the DOM synchronously, by the end of the callback, so the browser can do something with the rendered DOM. In most cases, React handles this for you automatically. But in some cases it may be necessary to force a synchronous update.\n\nFor example, the browser onbeforeprint API allows you to change the page immediately before the print dialog opens. This is useful for applying custom print styles that allow the document to display better for printing. In the example below, you use flushSync inside of the onbeforeprint callback to immediately “flush” the React state to the DOM. Then, by the time the print dialog opens, isPrinting displays “yes”:\n\nWithout flushSync, the print dialog will display isPrinting as “no”. This is because React batches the updates asynchronously and the print dialog is displayed before the state is updated.\n\nflushSync can significantly hurt performance, and may unexpectedly force pending Suspense boundaries to show their fallback state.\n\nMost of the time, flushSync can be avoided, so use flushSync as a last resort.\n\nReact cannot flushSync in the middle of a render. If you do, it will noop and warn:\n\nThis includes calling flushSync inside:\n\nFor example, calling flushSync in an Effect will noop and warn:\n\nTo fix this, you usually want to move the flushSync call to an event:\n\nIf it’s difficult to move to an event, you can defer flushSync in a microtask:\n\nThis will allow the current render to finish and schedule another syncronous render to flush the updates.\n\nflushSync can significantly hurt performance, but this particular pattern is even worse for performance. Exhaust all other options before calling flushSync in a microtask as an escape hatch.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "flushSync",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "flushSync(callback)",
+      "id": "flushsync"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Flushing updates for third-party integrations",
+      "id": "flushing-updates-for-third-party-integrations"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "I’m getting an error: “flushSync was called from inside a lifecycle method”",
+      "id": "im-getting-an-error-flushsync-was-called-from-inside-a-lifecycle-method"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "flushSync(callback)",
+      "language": "unknown"
+    },
+    {
+      "code": "import { flushSync } from 'react-dom';flushSync(() => {  setSomething(123);});",
+      "language": "sql"
+    },
+    {
+      "code": "flushSync(() => {  setSomething(123);});// By this line, the DOM is updated.",
+      "language": "javascript"
+    },
+    {
+      "code": "import { useEffect } from 'react';import { flushSync } from 'react-dom';function MyComponent() {  useEffect(() => {    // 🚩 Wrong: calling flushSync inside an effect    flushSync(() => {      setSomething(newValue);    });  }, []);  return <div>{/* ... */}</div>;}",
+      "language": "javascript"
+    },
+    {
+      "code": "function handleClick() {  // ✅ Correct: flushSync in event handlers is safe  flushSync(() => {    setSomething(newValue);  });}",
+      "language": "javascript"
+    },
+    {
+      "code": "useEffect(() => {  // ✅ Correct: defer flushSync to a microtask  queueMicrotask(() => {    flushSync(() => {      setSomething(newValue);    });  });}, []);",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

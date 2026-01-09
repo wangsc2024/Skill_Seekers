@@ -1,0 +1,34 @@
+{
+  "title": "Enforce previous behavior with output_version flag",
+  "content": "model = ChatOpenAI(model=\"gpt-4o-mini\", output_version=\"v0\")\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "### Default `max_tokens` in `langchain-anthropic`\n\nThe `max_tokens` parameter in `langchain-anthropic` now defaults to higher values based on the model chosen, rather than the previous default of `1024`. If you relied on the old default, explicitly set `max_tokens=1024`.\n\n### Legacy code moved to `langchain-classic`\n\nExisting functionality outside the focus of standard interfaces and agents has been moved to the [`langchain-classic`](https://pypi.org/project/langchain-classic) package. See the [Simplified namespace](#simplified-package) section for details on what's available in the core `langchain` package and what moved to `langchain-classic`.\n\n### Removal of deprecated APIs\n\nMethods, functions, and other objects that were already deprecated and slated for removal in 1.0 have been deleted. Check the [deprecation notices](https://python.langchain.com/docs/versions/migrating_chains) from previous versions for replacement APIs.\n\n### Text property\n\nUse of the `.text()` method on message objects should drop the parentheses, as it is now a property:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Default `max_tokens` in `langchain-anthropic`",
+      "id": "default-`max_tokens`-in-`langchain-anthropic`"
+    },
+    {
+      "level": "h3",
+      "text": "Legacy code moved to `langchain-classic`",
+      "id": "legacy-code-moved-to-`langchain-classic`"
+    },
+    {
+      "level": "h3",
+      "text": "Removal of deprecated APIs",
+      "id": "removal-of-deprecated-apis"
+    },
+    {
+      "level": "h3",
+      "text": "Text property",
+      "id": "text-property"
+    }
+  ],
+  "url": "llms-txt#enforce-previous-behavior-with-output_version-flag",
+  "links": []
+}

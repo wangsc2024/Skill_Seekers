@@ -1,0 +1,17 @@
+{
+  "title": "Update the user_name in the agent state",
+  "content": "@tool\ndef update_user_name(\n    new_name: str,\n    runtime: ToolRuntime\n) -> Command:\n    \"\"\"Update the user's name.\"\"\"\n    return Command(update={\"user_name\": new_name})\npython  theme={null}\nfrom dataclasses import dataclass\nfrom langchain_openai import ChatOpenAI\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\n\nUSER_DATABASE = {\n    \"user123\": {\n        \"name\": \"Alice Johnson\",\n        \"account_type\": \"Premium\",\n        \"balance\": 5000,\n        \"email\": \"alice@example.com\"\n    },\n    \"user456\": {\n        \"name\": \"Bob Smith\",\n        \"account_type\": \"Standard\",\n        \"balance\": 1200,\n        \"email\": \"bob@example.com\"\n    }\n}\n\n@dataclass\nclass UserContext:\n    user_id: str\n\n@tool\ndef get_account_info(runtime: ToolRuntime[UserContext]) -> str:\n    \"\"\"Get the current user's account information.\"\"\"\n    user_id = runtime.context.user_id\n\nif user_id in USER_DATABASE:\n        user = USER_DATABASE[user_id]\n        return f\"Account holder: {user['name']}\\nType: {user['account_type']}\\nBalance: ${user['balance']}\"\n    return \"User not found\"\n\nmodel = ChatOpenAI(model=\"gpt-4o\")\nagent = create_agent(\n    model,\n    tools=[get_account_info],\n    context_schema=UserContext,\n    system_prompt=\"You are a financial assistant.\"\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my current balance?\"}]},\n    context=UserContext(user_id=\"user123\")\n)\npython expandable theme={null}\nfrom typing import Any\nfrom langgraph.store.memory import InMemoryStore\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime",
+  "code_samples": [
+    {
+      "code": "#### Context\n\nAccess immutable configuration and contextual data like user IDs, session details, or application-specific configuration through `runtime.context`.\n\nTools can access runtime context through `ToolRuntime`:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Memory (Store)\n\nAccess persistent data across conversations using the store. The store is accessed via `runtime.store` and allows you to save and retrieve user-specific or application-specific data.\n\nTools can access and update the store through `ToolRuntime`:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#update-the-user_name-in-the-agent-state",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Create Listener",
+  "content": "Source: https://docs.langchain.com/api-reference/listeners-v2/create-listener\n\nhttps://api.host.langchain.com/openapi.json post /v2/listeners\nCreate a listener.<br>\n<br>\nCreating a listener is only allowed for LangSmith organizations with self-hosted enterprise plans.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-listener",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Wrap it in a CompiledSubAgent",
+  "content": "weather_subagent = CompiledSubAgent(\n    name=\"weather\",\n    description=\"This subagent can get weather in cities.\",\n    runnable=weather_graph\n)\n\nagent = create_agent(\n    model=\"claude-sonnet-4-5-20250929\",\n    middleware=[\n        SubAgentMiddleware(\n            default_model=\"claude-sonnet-4-5-20250929\",\n            default_tools=[],\n            subagents=[weather_subagent],\n        )\n    ],\n)\n```\n\nIn addition to any user-defined subagents, the main agent has access to a `general-purpose` subagent at all times. This subagent has the same instructions as the main agent and all the tools it has access to. The primary purpose of the `general-purpose` subagent is context isolation—the main agent can delegate a complex task to this subagent and get a concise answer back without bloat from intermediate tool calls.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/deepagents/middleware.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#wrap-it-in-a-compiledsubagent",
+  "links": []
+}

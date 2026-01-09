@@ -1,0 +1,8 @@
+{
+  "title": "Add edges to connect nodes",
+  "content": "orchestrator_worker_builder.add_edge(START, \"orchestrator\")\norchestrator_worker_builder.add_conditional_edges(\n    \"orchestrator\", assign_workers, [\"llm_call\"]\n)\norchestrator_worker_builder.add_edge(\"llm_call\", \"synthesizer\")\norchestrator_worker_builder.add_edge(\"synthesizer\", END)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-edges-to-connect-nodes",
+  "links": []
+}

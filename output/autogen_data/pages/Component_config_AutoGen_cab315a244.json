@@ -1,0 +1,131 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+  "title": "Component config — AutoGen",
+  "content": "AutoGen components are able to be declaratively configured in a generic fashion. This is to support configuration based experiences, such as AutoGen studio, but it is also useful for many other scenarios.\n\nThe system that provides this is called “component configuration”. In AutoGen, a component is simply something that can be created from a config object and itself can be dumped to a config object. In this way, you can define a component in code and then get the config object from it.\n\nThis system is generic and allows for components defined outside of AutoGen itself (such as extensions) to be configured in the same way.\n\nThis is a very important point to clarify. When we talk about serializing an object, we must include all data that makes that object itself. Including things like message history etc. When deserializing from serialized state, you must get back the exact same object. This is not the case with component configuration.\n\nComponent configuration should be thought of as the blueprint for an object, and can be stamped out many times to create many instances of the same configured object.\n\nIf you have a component in Python and want to get the config for it, simply call dump_component() on it. The resulting object can be passed back into load_component() to get the component back.\n\nTo load a component from a config object, you can use the load_component() method. This method will take a config object and return a component object. It is best to call this method on the interface you want. For example to load a model client:\n\nTo add component functionality to a given class:\n\nAdd a call to Component() in the class inheritance list.\n\nImplment the _to_config() and _from_config() methods\n\nIf a field of a config object is a secret value, it should be marked using SecretStr, this will ensure that the value will not be dumped to the config object.\n\nDistributed Agent Runtime",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Component config#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "How does this differ from state?#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Usage#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Loading a component from a config#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Creating a component class#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Secrets#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from autogen_core.models import ChatCompletionClient\n\nconfig = {\n    \"provider\": \"openai_chat_completion_client\",\n    \"config\": {\"model\": \"gpt-4o\"},\n}\n\nclient = ChatCompletionClient.load_component(config)",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_core.models import ChatCompletionClient\n\nconfig = {\n    \"provider\": \"openai_chat_completion_client\",\n    \"config\": {\"model\": \"gpt-4o\"},\n}\n\nclient = ChatCompletionClient.load_component(config)",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_core import Component, ComponentBase\nfrom pydantic import BaseModel\n\n\nclass Config(BaseModel):\n    value: str\n\n\nclass MyComponent(ComponentBase[Config], Component[Config]):\n    component_type = \"custom\"\n    component_config_schema = Config\n\n    def __init__(self, value: str):\n        self.value = value\n\n    def _to_config(self) -> Config:\n        return Config(value=self.value)\n\n    @classmethod\n    def _from_config(cls, config: Config) -> \"MyComponent\":\n        return cls(value=config.value)",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core import Component, ComponentBase\nfrom pydantic import BaseModel\n\n\nclass Config(BaseModel):\n    value: str\n\n\nclass MyComponent(ComponentBase[Config], Component[Config]):\n    component_type = \"custom\"\n    component_config_schema = Config\n\n    def __init__(self, value: str):\n        self.value = value\n\n    def _to_config(self) -> Config:\n        return Config(value=self.value)\n\n    @classmethod\n    def _from_config(cls, config: Config) -> \"MyComponent\":\n        return cls(value=config.value)",
+      "language": "python"
+    },
+    {
+      "code": "from pydantic import BaseModel, SecretStr\n\n\nclass ClientConfig(BaseModel):\n    endpoint: str\n    api_key: SecretStr",
+      "language": "python"
+    },
+    {
+      "code": "from pydantic import BaseModel, SecretStr\n\n\nclass ClientConfig(BaseModel):\n    endpoint: str\n    api_key: SecretStr",
+      "language": "python"
+    }
+  ],
+  "patterns": [
+    {
+      "description": "Core Component config Component config# AutoGen components are able to be declaratively configured in a generic fashion. This is to support configuration based experiences, such as AutoGen studio, but it is also useful for many other scenarios. The system that provides this is called “component configuration”. In AutoGen, a component is simply something that can be created from a config object and itself can be dumped to a config object. In this way, you can define a component in code and then get the config object from it. This system is generic and allows for components defined outside of AutoGen itself (such as extensions) to be configured in the same way. How does this differ from state?# This is a very important point to clarify. When we talk about serializing an object, we must include all data that makes that object itself. Including things like message history etc. When deserializing from serialized state, you must get back the exact same object. This is not the case with component configuration. Component configuration should be thought of as the blueprint for an object, and can be stamped out many times to create many instances of the same configured object. Usage# If you have a component in Python and want to get the config for it, simply call dump_component() on it. The resulting object can be passed back into load_component() to get the component back. Loading a component from a config# To load a component from a config object, you can use the load_component() method. This method will take a config object and return a component object. It is best to call this method on the interface you want. For example to load a model client: from autogen_core.models import ChatCompletionClient config = { \"provider\": \"openai_chat_completion_client\", \"config\": {\"model\": \"gpt-4o\"}, } client = ChatCompletionClient.load_component(config) Creating a component class# To add component functionality to a given class: Add a call to Component() in the class inheritance list. Implment the _to_config() and _from_config() methods For example: from autogen_core import Component, ComponentBase from pydantic import BaseModel class Config(BaseModel): value: str class MyComponent(ComponentBase[Config], Component[Config]): component_type = \"custom\" component_config_schema = Config def __init__(self, value: str): self.value = value def _to_config(self) -> Config: return Config(value=self.value) @classmethod def _from_config(cls, config: Config) -> \"MyComponent\": return cls(value=config.value) Secrets# If a field of a config object is a secret value, it should be marked using SecretStr, this will ensure that the value will not be dumped to the config object. For example: from pydantic import BaseModel, SecretStr class ClientConfig(BaseModel): endpoint: str api_key: SecretStr previous Distributed Agent Runtime next Model Clients On this page How does this differ from state? Usage Loading a component from a config Creating a component class Secrets Edit on GitHub Show Source",
+      "code": "dump_component()"
+    },
+    {
+      "description": "Core Component config Component config# AutoGen components are able to be declaratively configured in a generic fashion. This is to support configuration based experiences, such as AutoGen studio, but it is also useful for many other scenarios. The system that provides this is called “component configuration”. In AutoGen, a component is simply something that can be created from a config object and itself can be dumped to a config object. In this way, you can define a component in code and then get the config object from it. This system is generic and allows for components defined outside of AutoGen itself (such as extensions) to be configured in the same way. How does this differ from state?# This is a very important point to clarify. When we talk about serializing an object, we must include all data that makes that object itself. Including things like message history etc. When deserializing from serialized state, you must get back the exact same object. This is not the case with component configuration. Component configuration should be thought of as the blueprint for an object, and can be stamped out many times to create many instances of the same configured object. Usage# If you have a component in Python and want to get the config for it, simply call dump_component() on it. The resulting object can be passed back into load_component() to get the component back. Loading a component from a config# To load a component from a config object, you can use the load_component() method. This method will take a config object and return a component object. It is best to call this method on the interface you want. For example to load a model client: from autogen_core.models import ChatCompletionClient config = { \"provider\": \"openai_chat_completion_client\", \"config\": {\"model\": \"gpt-4o\"}, } client = ChatCompletionClient.load_component(config) Creating a component class# To add component functionality to a given class: Add a call to Component() in the class inheritance list. Implment the _to_config() and _from_config() methods For example: from autogen_core import Component, ComponentBase from pydantic import BaseModel class Config(BaseModel): value: str class MyComponent(ComponentBase[Config], Component[Config]): component_type = \"custom\" component_config_schema = Config def __init__(self, value: str): self.value = value def _to_config(self) -> Config: return Config(value=self.value) @classmethod def _from_config(cls, config: Config) -> \"MyComponent\": return cls(value=config.value) Secrets# If a field of a config object is a secret value, it should be marked using SecretStr, this will ensure that the value will not be dumped to the config object. For example: from pydantic import BaseModel, SecretStr class ClientConfig(BaseModel): endpoint: str api_key: SecretStr previous Distributed Agent Runtime next Model Clients",
+      "code": "dump_component()"
+    },
+    {
+      "description": "For example:",
+      "code": "from autogen_core import Component, ComponentBase\nfrom pydantic import BaseModel\n\n\nclass Config(BaseModel):\n    value: str\n\n\nclass MyComponent(ComponentBase[Config], Component[Config]):\n    component_type = \"custom\"\n    component_config_schema = Config\n\n    def __init__(self, value: str):\n        self.value = value\n\n    def _to_config(self) -> Config:\n        return Config(value=self.value)\n\n    @classmethod\n    def _from_config(cls, config: Config) -> \"MyComponent\":\n        return cls(value=config.value)"
+    },
+    {
+      "description": "For example:",
+      "code": "from pydantic import BaseModel, SecretStr\n\n\nclass ClientConfig(BaseModel):\n    endpoint: str\n    api_key: SecretStr"
+    }
+  ],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

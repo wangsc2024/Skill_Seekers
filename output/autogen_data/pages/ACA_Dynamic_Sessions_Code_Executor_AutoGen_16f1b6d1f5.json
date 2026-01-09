@@ -1,0 +1,119 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-container-code-executor.html",
+  "title": "ACA Dynamic Sessions Code Executor — AutoGen",
+  "content": "This guide will explain the Azure Container Apps dynamic sessions in Azure Container Apps and show you how to use the Azure Container Code Executor class.\n\nThe Azure Container Apps dynamic sessions is a component in the Azure Container Apps service. The environment is hosted on remote Azure instances and will not execute any code locally. The interpreter is capable of executing python code in a jupyter environment with a pre-installed base of commonly used packages. Custom environments can be created by users for their applications. Files can additionally be uploaded to, or downloaded from each session.\n\nThe code interpreter can run multiple sessions of code, each of which are delineated by a session identifier string.\n\nIn your Azure portal, create a new Container App Session Pool resource with the pool type set to Python code interpreter and note the Pool management endpoint. The format for the endpoint should be something like https://{region}.dynamicsessions.io/subscriptions/{subscription_id}/resourceGroups/{resource_group_name}/sessionPools/{session_pool_name}.\n\nAlternatively, you can use the Azure CLI to create a session pool.\n\nThe ACADynamicSessionsCodeExecutor class is a python code executor that creates and executes arbitrary python code on a default Serverless code interpreter session. Its interface is as follows\n\nFirst, you will need to find or create a credentialing object that implements the TokenProvider interface. This is any object that implements the following function\n\nAn example of such an object is the azure.identity.DefaultAzureCredential class.\n\nLets start by installing that\n\nNext, lets import all the necessary modules and classes for our code\n\nNow, we create our Azure code executor and run some test code along with verification that it ran correctly. We’ll create the executor with a temporary working directory to ensure a clean environment as we show how to use each feature\n\nNext, lets try uploading some files and verifying their integrity. All files uploaded to the Serverless code interpreter is uploaded into the /mnt/data directory. All downloadable files must also be placed in the directory. By default, the current working directory for the code executor is set to /mnt/data.\n\nDownloading files works in a similar way.\n\nEvery instance of the ACADynamicSessionsCodeExecutor class will have a unique session ID. Every call to a particular code executor will be executed on the same session until the restart() function is called on it. Previous sessions cannot be reused.\n\nHere we’ll run some code on the code session, restart it, then verify that a new session has been opened.\n\nEach code execution instance is pre-installed with most of the commonly used packages. However, the list of available packages and versions are not available outside of the execution environment. The packages list on the environment can be retrieved by calling the get_available_packages() function on the code executor.\n\nCreating your own extension\n\nAzure AI Foundry Agent",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "ACA Dynamic Sessions Code Executor#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Create a Container Apps Session Pool#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "ACADynamicSessionsCodeExecutor#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Initialization#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "New Sessions#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Available Packages#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "def get_token(\n    self, *scopes: str, claims: Optional[str] = None, tenant_id: Optional[str] = None, **kwargs: Any\n) -> azure.core.credentials.AccessToken",
+      "language": "python"
+    },
+    {
+      "code": "def get_token(\n    self, *scopes: str, claims: Optional[str] = None, tenant_id: Optional[str] = None, **kwargs: Any\n) -> azure.core.credentials.AccessToken",
+      "language": "python"
+    },
+    {
+      "code": "# pip install azure.identity",
+      "language": "markdown"
+    },
+    {
+      "code": "# pip install azure.identity",
+      "language": "markdown"
+    },
+    {
+      "code": "import os\nimport tempfile\n\nfrom anyio import open_file\nfrom autogen_core import CancellationToken\nfrom autogen_core.code_executor import CodeBlock\nfrom autogen_ext.code_executors.azure import ACADynamicSessionsCodeExecutor\nfrom azure.identity import DefaultAzureCredential",
+      "language": "python"
+    },
+    {
+      "code": "import os\nimport tempfile\n\nfrom anyio import open_file\nfrom autogen_core import CancellationToken\nfrom autogen_core.code_executor import CodeBlock\nfrom autogen_ext.code_executors.azure import ACADynamicSessionsCodeExecutor\nfrom azure.identity import DefaultAzureCredential",
+      "language": "python"
+    },
+    {
+      "code": "cancellation_token = CancellationToken()\nPOOL_MANAGEMENT_ENDPOINT = \"...\"\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    executor = ACADynamicSessionsCodeExecutor(\n        pool_management_endpoint=POOL_MANAGEMENT_ENDPOINT, credential=DefaultAzureCredential(), work_dir=temp_dir\n    )\n\n    code_blocks = [CodeBlock(code=\"import sys; print('hello world!')\", language=\"python\")]\n    code_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\n    assert code_result.exit_code == 0 and \"hello world!\" in code_result.output",
+      "language": "python"
+    },
+    {
+      "code": "cancellation_token = CancellationToken()\nPOOL_MANAGEMENT_ENDPOINT = \"...\"\n\nwith tempfile.TemporaryDirectory() as temp_dir:\n    executor = ACADynamicSessionsCodeExecutor(\n        pool_management_endpoint=POOL_MANAGEMENT_ENDPOINT, credential=DefaultAzureCredential(), work_dir=temp_dir\n    )\n\n    code_blocks = [CodeBlock(code=\"import sys; print('hello world!')\", language=\"python\")]\n    code_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\n    assert code_result.exit_code == 0 and \"hello world!\" in code_result.output",
+      "language": "python"
+    },
+    {
+      "code": "with tempfile.TemporaryDirectory() as temp_dir:\n    test_file_1 = \"test_upload_1.txt\"\n    test_file_1_contents = \"test1 contents\"\n    test_file_2 = \"test_upload_2.txt\"\n    test_file_2_contents = \"test2 contents\"\n\n    async with await open_file(os.path.join(temp_dir, test_file_1), \"w\") as f:  # type: ignore[syntax]\n        await f.write(test_file_1_contents)\n    async with await open_file(os.path.join(temp_dir, test_file_2), \"w\") as f:  # type: ignore[syntax]\n        await f.write(test_file_2_contents)\n\n    assert os.path.isfile(os.path.join(temp_dir, test_file_1))\n    assert os.path.isfile(os.path.join(temp_dir, test_file_2))\n\n    executor = ACADynamicSessionsCodeExecutor(\n        pool_management_endpoint=POOL_MANAGEMENT_ENDPOINT, credential=DefaultAzureCredential(), work_dir=temp_dir\n    )\n    await executor.upload_files([test_file_1, test_file_2], cancellation_token)\n\n    file_list = await executor.get_file_list(cancellation_token)\n    assert test_file_1 in file_list\n    assert test_file_2 in file_list\n\n    code_blocks = [\n        CodeBlock(\n            code=f\"\"\"\nwith open(\"{test_file_1}\") as f:\n  print(f.read())\nwith open(\"{test_file_2}\") as f:\n  print(f.read())\n\"\"\",\n            language=\"python\",\n        )\n    ]\n    code_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\n    assert code_result.exit_code == 0\n    assert test_file_1_contents in code_result.output\n    assert test_file_2_contents in code_result.output",
+      "language": "typescript"
+    },
+    {
+      "code": "with tempfile.TemporaryDirectory() as temp_dir:\n    test_file_1 = \"test_upload_1.txt\"\n    test_file_1_contents = \"test1 contents\"\n    test_file_2 = \"test_upload_2.txt\"\n    test_file_2_contents = \"test2 contents\"\n\n    async with await open_file(os.path.join(temp_dir, test_file_1), \"w\") as f:  # type: ignore[syntax]\n        await f.write(test_file_1_contents)\n    async with await open_file(os.path.join(temp_dir, test_file_2), \"w\") as f:  # type: ignore[syntax]\n        await f.write(test_file_2_contents)\n\n    assert os.path.isfile(os.path.join(temp_dir, test_file_1))\n    assert os.path.isfile(os.path.join(temp_dir, test_file_2))\n\n    executor = ACADynamicSessionsCodeExecutor(\n        pool_management_endpoint=POOL_MANAGEMENT_ENDPOINT, credential=DefaultAzureCredential(), work_dir=temp_dir\n    )\n    await executor.upload_files([test_file_1, test_file_2], cancellation_token)\n\n    file_list = await executor.get_file_list(cancellation_token)\n    assert test_file_1 in file_list\n    assert test_file_2 in file_list\n\n    code_blocks = [\n        CodeBlock(\n            code=f\"\"\"\nwith open(\"{test_file_1}\") as f:\n  print(f.read())\nwith open(\"{test_file_2}\") as f:\n  print(f.read())\n\"\"\",\n            language=\"python\",\n        )\n    ]\n    code_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\n    assert code_result.exit_code == 0\n    assert test_file_1_contents in code_result.output\n    assert test_file_2_contents in code_result.output",
+      "language": "typescript"
+    },
+    {
+      "code": "with tempfile.TemporaryDirectory() as temp_dir:\n    test_file_1 = \"test_upload_1.txt\"\n    test_file_1_contents = \"test1 contents\"\n    test_file_2 = \"test_upload_2.txt\"\n    test_file_2_contents = \"test2 contents\"\n\n    assert not os.path.isfile(os.path.join(temp_dir, test_file_1))\n    assert not os.path.isfile(os.path.join(temp_dir, test_file_2))\n\n    executor = ACADynamicSessionsCodeExecutor(\n        pool_management_endpoint=POOL_MANAGEMENT_ENDPOINT, credential=DefaultAzureCredential(), work_dir=temp_dir\n    )\n\n    code_blocks = [\n        CodeBlock(\n            code=f\"\"\"\nwith open(\"{test_file_1}\", \"w\") as f:\n  f.write(\"{test_file_1_contents}\")\nwith open(\"{test_file_2}\", \"w\") as f:\n  f.write(\"{test_file_2_contents}\")\n\"\"\",\n            language=\"python\",\n        ),\n    ]\n    code_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\n    assert code_result.exit_code == 0\n\n    file_list = await executor.get_file_list(cancellation_token)\n    assert test_file_1 in file_list\n    assert test_file_2 in file_list\n\n    await executor.download_files([test_file_1, test_file_2], cancellation_token)\n\n    assert os.path.isfile(os.path.join(temp_dir, test_file_1))\n    async with await open_file(os.path.join(temp_dir, test_file_1), \"r\") as f:  # type: ignore[syntax]\n        content = await f.read()\n        assert test_file_1_contents in content\n    assert os.path.isfile(os.path.join(temp_dir, test_file_2))\n    async with await open_file(os.path.join(temp_dir, test_file_2), \"r\") as f:  # type: ignore[syntax]\n        content = await f.read()\n        assert test_file_2_contents in content",
+      "language": "typescript"
+    },
+    {
+      "code": "with tempfile.TemporaryDirectory() as temp_dir:\n    test_file_1 = \"test_upload_1.txt\"\n    test_file_1_contents = \"test1 contents\"\n    test_file_2 = \"test_upload_2.txt\"\n    test_file_2_contents = \"test2 contents\"\n\n    assert not os.path.isfile(os.path.join(temp_dir, test_file_1))\n    assert not os.path.isfile(os.path.join(temp_dir, test_file_2))\n\n    executor = ACADynamicSessionsCodeExecutor(\n        pool_management_endpoint=POOL_MANAGEMENT_ENDPOINT, credential=DefaultAzureCredential(), work_dir=temp_dir\n    )\n\n    code_blocks = [\n        CodeBlock(\n            code=f\"\"\"\nwith open(\"{test_file_1}\", \"w\") as f:\n  f.write(\"{test_file_1_contents}\")\nwith open(\"{test_file_2}\", \"w\") as f:\n  f.write(\"{test_file_2_contents}\")\n\"\"\",\n            language=\"python\",\n        ),\n    ]\n    code_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\n    assert code_result.exit_code == 0\n\n    file_list = await executor.get_file_list(cancellation_token)\n    assert test_file_1 in file_list\n    assert test_file_2 in file_list\n\n    await executor.download_files([test_file_1, test_file_2], cancellation_token)\n\n    assert os.path.isfile(os.path.join(temp_dir, test_file_1))\n    async with await open_file(os.path.join(temp_dir, test_file_1), \"r\") as f:  # type: ignore[syntax]\n        content = await f.read()\n        assert test_file_1_contents in content\n    assert os.path.isfile(os.path.join(temp_dir, test_file_2))\n    async with await open_file(os.path.join(temp_dir, test_file_2), \"r\") as f:  # type: ignore[syntax]\n        content = await f.read()\n        assert test_file_2_contents in content",
+      "language": "typescript"
+    },
+    {
+      "code": "executor = ACADynamicSessionsCodeExecutor(\n    pool_management_endpoint=POOL_MANAGEMENT_ENDPOINT, credential=DefaultAzureCredential()\n)\n\ncode_blocks = [CodeBlock(code=\"x = 'abcdefg'\", language=\"python\")]\ncode_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\nassert code_result.exit_code == 0\n\ncode_blocks = [CodeBlock(code=\"print(x)\", language=\"python\")]\ncode_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\nassert code_result.exit_code == 0 and \"abcdefg\" in code_result.output\n\nawait executor.restart()\ncode_blocks = [CodeBlock(code=\"print(x)\", language=\"python\")]\ncode_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\nassert code_result.exit_code != 0 and \"NameError\" in code_result.output",
+      "language": "python"
+    },
+    {
+      "code": "executor = ACADynamicSessionsCodeExecutor(\n    pool_management_endpoint=POOL_MANAGEMENT_ENDPOINT, credential=DefaultAzureCredential()\n)\n\ncode_blocks = [CodeBlock(code=\"x = 'abcdefg'\", language=\"python\")]\ncode_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\nassert code_result.exit_code == 0\n\ncode_blocks = [CodeBlock(code=\"print(x)\", language=\"python\")]\ncode_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\nassert code_result.exit_code == 0 and \"abcdefg\" in code_result.output\n\nawait executor.restart()\ncode_blocks = [CodeBlock(code=\"print(x)\", language=\"python\")]\ncode_result = await executor.execute_code_blocks(code_blocks, cancellation_token)\nassert code_result.exit_code != 0 and \"NameError\" in code_result.output",
+      "language": "python"
+    },
+    {
+      "code": "print(executor.get_available_packages(cancellation_token))",
+      "language": "unknown"
+    },
+    {
+      "code": "print(executor.get_available_packages(cancellation_token))",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-container-code-executor.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/discover.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/create-your-own.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-foundry-agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html"
+  ]
+}

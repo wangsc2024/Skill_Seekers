@@ -1,0 +1,144 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+  "title": "Serializing Components — AutoGen",
+  "content": "AutoGen provides a Component configuration class that defines behaviours to serialize/deserialize component into declarative specifications. We can accomplish this by calling .dump_component() and .load_component() respectively. This is useful for debugging, visualizing, and even for sharing your work with others. In this notebook, we will demonstrate how to serialize multiple components to a declarative specification like a JSON file.\n\nONLY LOAD COMPONENTS FROM TRUSTED SOURCES.\n\nWith serilized components, each component implements the logic for how it is serialized and deserialized - i.e., how the declarative specification is generated and how it is converted back to an object.\n\nIn some cases, creating an object may include executing code (e.g., a serialized function). ONLY LOAD COMPONENTS FROM TRUSTED SOURCES.\n\nselector_func is not serializable and will be ignored during serialization and deserialization process.\n\nIn the example below, we will define termination conditions (a part of an agent team) in python, export this to a dictionary/json and also demonstrate how the termination condition object can be loaded from the dictionary/json.\n\nIn the example below, we will define an agent in python, export this to a dictionary/json and also demonstrate how the agent object can be loaded from the dictionary/json.\n\nA similar approach can be used to serialize the MultiModalWebSurfer agent.\n\nIn the example below, we will define a team in python, export this to a dictionary/json and also demonstrate how the team object can be loaded from the dictionary/json.\n\nTracing and Observability",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Serializing Components#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Termination Condition Example#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Agent Example#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Team Example#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from autogen_agentchat.conditions import MaxMessageTermination, StopMessageTermination\n\nmax_termination = MaxMessageTermination(5)\nstop_termination = StopMessageTermination()\n\nor_termination = max_termination | stop_termination\n\nor_term_config = or_termination.dump_component()\nprint(\"Config: \", or_term_config.model_dump_json())\n\nnew_or_termination = or_termination.load_component(or_term_config)",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.conditions import MaxMessageTermination, StopMessageTermination\n\nmax_termination = MaxMessageTermination(5)\nstop_termination = StopMessageTermination()\n\nor_termination = max_termination | stop_termination\n\nor_term_config = or_termination.dump_component()\nprint(\"Config: \", or_term_config.model_dump_json())\n\nnew_or_termination = or_termination.load_component(or_term_config)",
+      "language": "python"
+    },
+    {
+      "code": "Config:  {\"provider\":\"autogen_agentchat.base.OrTerminationCondition\",\"component_type\":\"termination\",\"version\":1,\"component_version\":1,\"description\":null,\"config\":{\"conditions\":[{\"provider\":\"autogen_agentchat.conditions.MaxMessageTermination\",\"component_type\":\"termination\",\"version\":1,\"component_version\":1,\"config\":{\"max_messages\":5}},{\"provider\":\"autogen_agentchat.conditions.StopMessageTermination\",\"component_type\":\"termination\",\"version\":1,\"component_version\":1,\"config\":{}}]}}",
+      "language": "json"
+    },
+    {
+      "code": "Config:  {\"provider\":\"autogen_agentchat.base.OrTerminationCondition\",\"component_type\":\"termination\",\"version\":1,\"component_version\":1,\"description\":null,\"config\":{\"conditions\":[{\"provider\":\"autogen_agentchat.conditions.MaxMessageTermination\",\"component_type\":\"termination\",\"version\":1,\"component_version\":1,\"config\":{\"max_messages\":5}},{\"provider\":\"autogen_agentchat.conditions.StopMessageTermination\",\"component_type\":\"termination\",\"version\":1,\"component_version\":1,\"config\":{}}]}}",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent, UserProxyAgent\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create an agent that uses the OpenAI GPT-4o model.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    # api_key=\"YOUR_API_KEY\",\n)\nagent = AssistantAgent(\n    name=\"assistant\",\n    model_client=model_client,\n    handoffs=[\"flights_refunder\", \"user\"],\n    # tools=[], # serializing tools is not yet supported\n    system_message=\"Use tools to solve tasks.\",\n)\nuser_proxy = UserProxyAgent(name=\"user\")",
+      "language": "sql"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent, UserProxyAgent\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create an agent that uses the OpenAI GPT-4o model.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    # api_key=\"YOUR_API_KEY\",\n)\nagent = AssistantAgent(\n    name=\"assistant\",\n    model_client=model_client,\n    handoffs=[\"flights_refunder\", \"user\"],\n    # tools=[], # serializing tools is not yet supported\n    system_message=\"Use tools to solve tasks.\",\n)\nuser_proxy = UserProxyAgent(name=\"user\")",
+      "language": "sql"
+    },
+    {
+      "code": "user_proxy_config = user_proxy.dump_component()  # dump component\nprint(user_proxy_config.model_dump_json())\nup_new = user_proxy.load_component(user_proxy_config)  # load component",
+      "language": "unknown"
+    },
+    {
+      "code": "user_proxy_config = user_proxy.dump_component()  # dump component\nprint(user_proxy_config.model_dump_json())\nup_new = user_proxy.load_component(user_proxy_config)  # load component",
+      "language": "unknown"
+    },
+    {
+      "code": "{\"provider\":\"autogen_agentchat.agents.UserProxyAgent\",\"component_type\":\"agent\",\"version\":1,\"component_version\":1,\"description\":null,\"config\":{\"name\":\"user\",\"description\":\"A human user\"}}",
+      "language": "json"
+    },
+    {
+      "code": "{\"provider\":\"autogen_agentchat.agents.UserProxyAgent\",\"component_type\":\"agent\",\"version\":1,\"component_version\":1,\"description\":null,\"config\":{\"name\":\"user\",\"description\":\"A human user\"}}",
+      "language": "json"
+    },
+    {
+      "code": "agent_config = agent.dump_component()  # dump component\nprint(agent_config.model_dump_json())\nagent_new = agent.load_component(agent_config)  # load component",
+      "language": "unknown"
+    },
+    {
+      "code": "agent_config = agent.dump_component()  # dump component\nprint(agent_config.model_dump_json())\nagent_new = agent.load_component(agent_config)  # load component",
+      "language": "unknown"
+    },
+    {
+      "code": "{\"provider\":\"autogen_agentchat.agents.AssistantAgent\",\"component_type\":\"agent\",\"version\":1,\"component_version\":1,\"description\":null,\"config\":{\"name\":\"assistant\",\"model_client\":{\"provider\":\"autogen_ext.models.openai.OpenAIChatCompletionClient\",\"component_type\":\"model\",\"version\":1,\"component_version\":1,\"config\":{\"model\":\"gpt-4o\"}},\"handoffs\":[{\"target\":\"flights_refunder\",\"description\":\"Handoff to flights_refunder.\",\"name\":\"transfer_to_flights_refunder\",\"message\":\"Transferred to flights_refunder, adopting the role of flights_refunder immediately.\"},{\"target\":\"user\",\"description\":\"Handoff to user.\",\"name\":\"transfer_to_user\",\"message\":\"Transferred to user, adopting the role of user immediately.\"}],\"model_context\":{\"provider\":\"autogen_core.model_context.UnboundedChatCompletionContext\",\"component_type\":\"chat_completion_context\",\"version\":1,\"component_version\":1,\"config\":{}},\"description\":\"An agent that provides assistance with ability to use tools.\",\"system_message\":\"Use tools to solve tasks.\",\"reflect_on_tool_use\":false,\"tool_call_summary_format\":\"{result}\"}}",
+      "language": "json"
+    },
+    {
+      "code": "{\"provider\":\"autogen_agentchat.agents.AssistantAgent\",\"component_type\":\"agent\",\"version\":1,\"component_version\":1,\"description\":null,\"config\":{\"name\":\"assistant\",\"model_client\":{\"provider\":\"autogen_ext.models.openai.OpenAIChatCompletionClient\",\"component_type\":\"model\",\"version\":1,\"component_version\":1,\"config\":{\"model\":\"gpt-4o\"}},\"handoffs\":[{\"target\":\"flights_refunder\",\"description\":\"Handoff to flights_refunder.\",\"name\":\"transfer_to_flights_refunder\",\"message\":\"Transferred to flights_refunder, adopting the role of flights_refunder immediately.\"},{\"target\":\"user\",\"description\":\"Handoff to user.\",\"name\":\"transfer_to_user\",\"message\":\"Transferred to user, adopting the role of user immediately.\"}],\"model_context\":{\"provider\":\"autogen_core.model_context.UnboundedChatCompletionContext\",\"component_type\":\"chat_completion_context\",\"version\":1,\"component_version\":1,\"config\":{}},\"description\":\"An agent that provides assistance with ability to use tools.\",\"system_message\":\"Use tools to solve tasks.\",\"reflect_on_tool_use\":false,\"tool_call_summary_format\":\"{result}\"}}",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_ext.agents.web_surfer import MultimodalWebSurfer\n\nagent = MultimodalWebSurfer(\n    name=\"web_surfer\",\n    model_client=model_client,\n    headless=False,\n)\n\nweb_surfer_config = agent.dump_component()  # dump component\nprint(web_surfer_config.model_dump_json())",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_ext.agents.web_surfer import MultimodalWebSurfer\n\nagent = MultimodalWebSurfer(\n    name=\"web_surfer\",\n    model_client=model_client,\n    headless=False,\n)\n\nweb_surfer_config = agent.dump_component()  # dump component\nprint(web_surfer_config.model_dump_json())",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent, UserProxyAgent\nfrom autogen_agentchat.conditions import MaxMessageTermination\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create an agent that uses the OpenAI GPT-4o model.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    # api_key=\"YOUR_API_KEY\",\n)\nagent = AssistantAgent(\n    name=\"assistant\",\n    model_client=model_client,\n    handoffs=[\"flights_refunder\", \"user\"],\n    # tools=[], # serializing tools is not yet supported\n    system_message=\"Use tools to solve tasks.\",\n)\n\nteam = RoundRobinGroupChat(participants=[agent], termination_condition=MaxMessageTermination(2))\n\nteam_config = team.dump_component()  # dump component\nprint(team_config.model_dump_json())\n\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent, UserProxyAgent\nfrom autogen_agentchat.conditions import MaxMessageTermination\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create an agent that uses the OpenAI GPT-4o model.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    # api_key=\"YOUR_API_KEY\",\n)\nagent = AssistantAgent(\n    name=\"assistant\",\n    model_client=model_client,\n    handoffs=[\"flights_refunder\", \"user\"],\n    # tools=[], # serializing tools is not yet supported\n    system_message=\"Use tools to solve tasks.\",\n)\n\nteam = RoundRobinGroupChat(participants=[agent], termination_condition=MaxMessageTermination(2))\n\nteam_config = team.dump_component()  # dump component\nprint(team_config.model_dump_json())\n\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "{\"provider\":\"autogen_agentchat.teams.RoundRobinGroupChat\",\"component_type\":\"team\",\"version\":1,\"component_version\":1,\"description\":null,\"config\":{\"participants\":[{\"provider\":\"autogen_agentchat.agents.AssistantAgent\",\"component_type\":\"agent\",\"version\":1,\"component_version\":1,\"config\":{\"name\":\"assistant\",\"model_client\":{\"provider\":\"autogen_ext.models.openai.OpenAIChatCompletionClient\",\"component_type\":\"model\",\"version\":1,\"component_version\":1,\"config\":{\"model\":\"gpt-4o\"}},\"handoffs\":[{\"target\":\"flights_refunder\",\"description\":\"Handoff to flights_refunder.\",\"name\":\"transfer_to_flights_refunder\",\"message\":\"Transferred to flights_refunder, adopting the role of flights_refunder immediately.\"},{\"target\":\"user\",\"description\":\"Handoff to user.\",\"name\":\"transfer_to_user\",\"message\":\"Transferred to user, adopting the role of user immediately.\"}],\"model_context\":{\"provider\":\"autogen_core.model_context.UnboundedChatCompletionContext\",\"component_type\":\"chat_completion_context\",\"version\":1,\"component_version\":1,\"config\":{}},\"description\":\"An agent that provides assistance with ability to use tools.\",\"system_message\":\"Use tools to solve tasks.\",\"reflect_on_tool_use\":false,\"tool_call_summary_format\":\"{result}\"}}],\"termination_condition\":{\"provider\":\"autogen_agentchat.conditions.MaxMessageTermination\",\"component_type\":\"termination\",\"version\":1,\"component_version\":1,\"config\":{\"max_messages\":2}}}}",
+      "language": "json"
+    },
+    {
+      "code": "{\"provider\":\"autogen_agentchat.teams.RoundRobinGroupChat\",\"component_type\":\"team\",\"version\":1,\"component_version\":1,\"description\":null,\"config\":{\"participants\":[{\"provider\":\"autogen_agentchat.agents.AssistantAgent\",\"component_type\":\"agent\",\"version\":1,\"component_version\":1,\"config\":{\"name\":\"assistant\",\"model_client\":{\"provider\":\"autogen_ext.models.openai.OpenAIChatCompletionClient\",\"component_type\":\"model\",\"version\":1,\"component_version\":1,\"config\":{\"model\":\"gpt-4o\"}},\"handoffs\":[{\"target\":\"flights_refunder\",\"description\":\"Handoff to flights_refunder.\",\"name\":\"transfer_to_flights_refunder\",\"message\":\"Transferred to flights_refunder, adopting the role of flights_refunder immediately.\"},{\"target\":\"user\",\"description\":\"Handoff to user.\",\"name\":\"transfer_to_user\",\"message\":\"Transferred to user, adopting the role of user immediately.\"}],\"model_context\":{\"provider\":\"autogen_core.model_context.UnboundedChatCompletionContext\",\"component_type\":\"chat_completion_context\",\"version\":1,\"component_version\":1,\"config\":{}},\"description\":\"An agent that provides assistance with ability to use tools.\",\"system_message\":\"Use tools to solve tasks.\",\"reflect_on_tool_use\":false,\"tool_call_summary_format\":\"{result}\"}}],\"termination_condition\":{\"provider\":\"autogen_agentchat.conditions.MaxMessageTermination\",\"component_type\":\"termination\",\"version\":1,\"component_version\":1,\"config\":{\"max_messages\":2}}}}",
+      "language": "json"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

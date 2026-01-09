@@ -1,0 +1,8 @@
+{
+  "title": "Instrument AutoGen and OpenAI",
+  "content": "AutogenInstrumentor().instrument()\nOpenAIInstrumentor().instrument()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#instrument-autogen-and-openai",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Load all documents",
+  "content": "documents = loader.load()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#load-all-documents",
+  "links": []
+}

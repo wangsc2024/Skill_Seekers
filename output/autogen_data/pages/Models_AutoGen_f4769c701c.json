@@ -1,0 +1,286 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+  "title": "Models — AutoGen",
+  "content": "In many cases, agents need access to LLM model services such as OpenAI, Azure OpenAI, or local models. Since there are many different providers with different APIs, autogen-core implements a protocol for model clients and autogen-ext implements a set of model clients for popular model services. AgentChat can use these model clients to interact with model services.\n\nThis section provides a quick overview of available model clients. For more details on how to use them directly, please refer to Model Clients in the Core API documentation.\n\nSee ChatCompletionCache for a caching wrapper to use with the following clients.\n\nAutoGen uses standard Python logging module to log events like model calls and responses. The logger name is autogen_core.EVENT_LOGGER_NAME, and the event type is LLMCall.\n\nTo access OpenAI models, install the openai extension, which allows you to use the OpenAIChatCompletionClient.\n\nYou will also need to obtain an API key from OpenAI.\n\nTo test the model client, you can use the following code:\n\nYou can use this client with models hosted on OpenAI-compatible endpoints, however, we have not tested this functionality. See OpenAIChatCompletionClient for more information.\n\nSimilarly, install the azure and openai extensions to use the AzureOpenAIChatCompletionClient.\n\nTo use the client, you need to provide your deployment id, Azure Cognitive Services endpoint, api version, and model capabilities. For authentication, you can either provide an API key or an Azure Active Directory (AAD) token credential.\n\nThe following code snippet shows how to use AAD authentication. The identity used must be assigned the Cognitive Services OpenAI User role.\n\nSee here for how to use the Azure client directly or for more information.\n\nAzure AI Foundry (previously known as Azure AI Studio) offers models hosted on Azure. To use those models, you use the AzureAIChatCompletionClient.\n\nYou need to install the azure extra to use this client.\n\nBelow is an example of using this client with the Phi-4 model from GitHub Marketplace.\n\nTo use the AnthropicChatCompletionClient, you need to install the anthropic extra. Underneath, it uses the anthropic python sdk to access the models. You will also need to obtain an API key from Anthropic.\n\nOllama is a local model server that can run models locally on your machine.\n\nSmall local models are typically not as capable as larger models on the cloud. For some tasks they may not perform as well and the output may be suprising.\n\nTo use Ollama, install the ollama extension and use the OllamaChatCompletionClient.\n\nGemini currently offers an OpenAI-compatible API (beta). So you can use the OpenAIChatCompletionClient with the Gemini API.\n\nWhile some model providers may offer OpenAI-compatible APIs, they may still have minor differences. For example, the finish_reason field may be different in the response.\n\nAlso, as Gemini adds new models, you may need to define the models capabilities via the model_info field. For example, to use gemini-2.0-flash-lite or a similar new model, you can use the following code:\n\nLlama API is the Meta’s first party API offering. It currently offers an OpenAI compatible endpoint. So you can use the OpenAIChatCompletionClient with the Llama API.\n\nThis endpoint fully supports the following OpenAI client library features:\n\nStructured output (JSON mode)\n\nFunction calling (tools)\n\nThe SKChatCompletionAdapter allows you to use Semantic kernel model clients as a ChatCompletionClient by adapting them to the required interface.\n\nYou need to install the relevant provider extras to use this adapter.\n\nThe list of extras that can be installed:\n\nsemantic-kernel-anthropic: Install this extra to use Anthropic models.\n\nsemantic-kernel-google: Install this extra to use Google Gemini models.\n\nsemantic-kernel-ollama: Install this extra to use Ollama models.\n\nsemantic-kernel-mistralai: Install this extra to use MistralAI models.\n\nsemantic-kernel-aws: Install this extra to use AWS models.\n\nsemantic-kernel-hugging-face: Install this extra to use Hugging Face models.\n\nFor example, to use Anthropic models, you need to install semantic-kernel-anthropic.\n\nTo use this adapter, you need create a Semantic Kernel model client and pass it to the adapter.\n\nFor example, to use the Anthropic model:\n\nRead more about the Semantic Kernel Adapter.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Models#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Log Model Calls#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "OpenAI#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Azure OpenAI#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Azure AI Foundry#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Anthropic (experimental)#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Ollama (experimental)#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Gemini (experimental)#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Llama API (experimental)#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Semantic Kernel Adapter#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "import logging\n\nfrom autogen_core import EVENT_LOGGER_NAME\n\nlogging.basicConfig(level=logging.WARNING)\nlogger = logging.getLogger(EVENT_LOGGER_NAME)\nlogger.addHandler(logging.StreamHandler())\nlogger.setLevel(logging.INFO)",
+      "language": "python"
+    },
+    {
+      "code": "import logging\n\nfrom autogen_core import EVENT_LOGGER_NAME\n\nlogging.basicConfig(level=logging.WARNING)\nlogger = logging.getLogger(EVENT_LOGGER_NAME)\nlogger.addHandler(logging.StreamHandler())\nlogger.setLevel(logging.INFO)",
+      "language": "python"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "from autogen_ext.models.openai import OpenAIChatCompletionClient\n\nopenai_model_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o-2024-08-06\",\n    # api_key=\"sk-...\", # Optional if you have an OPENAI_API_KEY environment variable set.\n)",
+      "language": "sql"
+    },
+    {
+      "code": "from autogen_ext.models.openai import OpenAIChatCompletionClient\n\nopenai_model_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o-2024-08-06\",\n    # api_key=\"sk-...\", # Optional if you have an OPENAI_API_KEY environment variable set.\n)",
+      "language": "sql"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\n\nresult = await openai_model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)\nawait openai_model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\n\nresult = await openai_model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)\nawait openai_model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "CreateResult(finish_reason='stop', content='The capital of France is Paris.', usage=RequestUsage(prompt_tokens=15, completion_tokens=7), cached=False, logprobs=None)",
+      "language": "rust"
+    },
+    {
+      "code": "CreateResult(finish_reason='stop', content='The capital of France is Paris.', usage=RequestUsage(prompt_tokens=15, completion_tokens=7), cached=False, logprobs=None)",
+      "language": "rust"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai,azure]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai,azure]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.auth.azure import AzureTokenProvider\nfrom autogen_ext.models.openai import AzureOpenAIChatCompletionClient\nfrom azure.identity import DefaultAzureCredential\n\n# Create the token provider\ntoken_provider = AzureTokenProvider(\n    DefaultAzureCredential(),\n    \"https://cognitiveservices.azure.com/.default\",\n)\n\naz_model_client = AzureOpenAIChatCompletionClient(\n    azure_deployment=\"{your-azure-deployment}\",\n    model=\"{model-name, such as gpt-4o}\",\n    api_version=\"2024-06-01\",\n    azure_endpoint=\"https://{your-custom-endpoint}.openai.azure.com/\",\n    azure_ad_token_provider=token_provider,  # Optional if you choose key-based authentication.\n    # api_key=\"sk-...\", # For key-based authentication.\n)\n\nresult = await az_model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)\nawait az_model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.auth.azure import AzureTokenProvider\nfrom autogen_ext.models.openai import AzureOpenAIChatCompletionClient\nfrom azure.identity import DefaultAzureCredential\n\n# Create the token provider\ntoken_provider = AzureTokenProvider(\n    DefaultAzureCredential(),\n    \"https://cognitiveservices.azure.com/.default\",\n)\n\naz_model_client = AzureOpenAIChatCompletionClient(\n    azure_deployment=\"{your-azure-deployment}\",\n    model=\"{model-name, such as gpt-4o}\",\n    api_version=\"2024-06-01\",\n    azure_endpoint=\"https://{your-custom-endpoint}.openai.azure.com/\",\n    azure_ad_token_provider=token_provider,  # Optional if you choose key-based authentication.\n    # api_key=\"sk-...\", # For key-based authentication.\n)\n\nresult = await az_model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)\nawait az_model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "pip install \"autogen-ext[azure]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[azure]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "import os\n\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.azure import AzureAIChatCompletionClient\nfrom azure.core.credentials import AzureKeyCredential\n\nclient = AzureAIChatCompletionClient(\n    model=\"Phi-4\",\n    endpoint=\"https://models.github.ai/inference\",\n    # To authenticate with the model you will need to generate a personal access token (PAT) in your GitHub settings.\n    # Create your PAT token by following instructions here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens\n    credential=AzureKeyCredential(os.environ[\"GITHUB_TOKEN\"]),\n    model_info={\n        \"json_output\": False,\n        \"function_calling\": False,\n        \"vision\": False,\n        \"family\": \"unknown\",\n        \"structured_output\": False,\n    },\n)\n\nresult = await client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)\nawait client.close()",
+      "language": "python"
+    },
+    {
+      "code": "import os\n\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.azure import AzureAIChatCompletionClient\nfrom azure.core.credentials import AzureKeyCredential\n\nclient = AzureAIChatCompletionClient(\n    model=\"Phi-4\",\n    endpoint=\"https://models.github.ai/inference\",\n    # To authenticate with the model you will need to generate a personal access token (PAT) in your GitHub settings.\n    # Create your PAT token by following instructions here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens\n    credential=AzureKeyCredential(os.environ[\"GITHUB_TOKEN\"]),\n    model_info={\n        \"json_output\": False,\n        \"function_calling\": False,\n        \"vision\": False,\n        \"family\": \"unknown\",\n        \"structured_output\": False,\n    },\n)\n\nresult = await client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)\nawait client.close()",
+      "language": "python"
+    },
+    {
+      "code": "finish_reason='stop' content='The capital of France is Paris.' usage=RequestUsage(prompt_tokens=14, completion_tokens=8) cached=False logprobs=None",
+      "language": "rust"
+    },
+    {
+      "code": "finish_reason='stop' content='The capital of France is Paris.' usage=RequestUsage(prompt_tokens=14, completion_tokens=8) cached=False logprobs=None",
+      "language": "rust"
+    },
+    {
+      "code": "# !pip install -U \"autogen-ext[anthropic]\"",
+      "language": "markdown"
+    },
+    {
+      "code": "# !pip install -U \"autogen-ext[anthropic]\"",
+      "language": "markdown"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.anthropic import AnthropicChatCompletionClient\n\nanthropic_client = AnthropicChatCompletionClient(model=\"claude-3-7-sonnet-20250219\")\nresult = await anthropic_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)\nawait anthropic_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.anthropic import AnthropicChatCompletionClient\n\nanthropic_client = AnthropicChatCompletionClient(model=\"claude-3-7-sonnet-20250219\")\nresult = await anthropic_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)\nawait anthropic_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "finish_reason='stop' content=\"The capital of France is Paris. It's not only the political and administrative capital but also a major global center for art, fashion, gastronomy, and culture. Paris is known for landmarks such as the Eiffel Tower, the Louvre Museum, Notre-Dame Cathedral, and the Champs-Élysées.\" usage=RequestUsage(prompt_tokens=14, completion_tokens=73) cached=False logprobs=None thought=None",
+      "language": "typescript"
+    },
+    {
+      "code": "finish_reason='stop' content=\"The capital of France is Paris. It's not only the political and administrative capital but also a major global center for art, fashion, gastronomy, and culture. Paris is known for landmarks such as the Eiffel Tower, the Louvre Museum, Notre-Dame Cathedral, and the Champs-Élysées.\" usage=RequestUsage(prompt_tokens=14, completion_tokens=73) cached=False logprobs=None thought=None",
+      "language": "typescript"
+    },
+    {
+      "code": "pip install -U \"autogen-ext[ollama]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install -U \"autogen-ext[ollama]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.ollama import OllamaChatCompletionClient\n\n# Assuming your Ollama server is running locally on port 11434.\nollama_model_client = OllamaChatCompletionClient(model=\"llama3.2\")\n\nresponse = await ollama_model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(response)\nawait ollama_model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.ollama import OllamaChatCompletionClient\n\n# Assuming your Ollama server is running locally on port 11434.\nollama_model_client = OllamaChatCompletionClient(model=\"llama3.2\")\n\nresponse = await ollama_model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(response)\nawait ollama_model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "finish_reason='unknown' content='The capital of France is Paris.' usage=RequestUsage(prompt_tokens=32, completion_tokens=8) cached=False logprobs=None thought=None",
+      "language": "rust"
+    },
+    {
+      "code": "finish_reason='unknown' content='The capital of France is Paris.' usage=RequestUsage(prompt_tokens=32, completion_tokens=8) cached=False logprobs=None thought=None",
+      "language": "rust"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gemini-1.5-flash-8b\",\n    # api_key=\"GEMINI_API_KEY\",\n)\n\nresponse = await model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(response)\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gemini-1.5-flash-8b\",\n    # api_key=\"GEMINI_API_KEY\",\n)\n\nresponse = await model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(response)\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "finish_reason='stop' content='Paris\\n' usage=RequestUsage(prompt_tokens=7, completion_tokens=2) cached=False logprobs=None thought=None",
+      "language": "rust"
+    },
+    {
+      "code": "finish_reason='stop' content='Paris\\n' usage=RequestUsage(prompt_tokens=7, completion_tokens=2) cached=False logprobs=None thought=None",
+      "language": "rust"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_core.models import ModelInfo\n\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gemini-2.0-flash-lite\",\n    model_info=ModelInfo(vision=True, function_calling=True, json_output=True, family=\"unknown\", structured_output=True)\n    # api_key=\"GEMINI_API_KEY\",\n)\n\nresponse = await model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(response)\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_core.models import ModelInfo\n\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gemini-2.0-flash-lite\",\n    model_info=ModelInfo(vision=True, function_calling=True, json_output=True, family=\"unknown\", structured_output=True)\n    # api_key=\"GEMINI_API_KEY\",\n)\n\nresponse = await model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(response)\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from pathlib import Path\n\nfrom autogen_core import Image\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Text\nmodel_client = OpenAIChatCompletionClient(\n    model=\"Llama-4-Scout-17B-16E-Instruct-FP8\",\n    # api_key=\"LLAMA_API_KEY\"\n)\n\nresponse = await model_client.create([UserMessage(content=\"Write me a poem\", source=\"user\")])\nprint(response)\nawait model_client.close()\n\n# Image\nmodel_client = OpenAIChatCompletionClient(\n    model=\"Llama-4-Maverick-17B-128E-Instruct-FP8\",\n    # api_key=\"LLAMA_API_KEY\"\n)\nimage = Image.from_file(Path(\"test.png\"))\n\nresponse = await model_client.create([UserMessage(content=[\"What is in this image\", image], source=\"user\")])\nprint(response)\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from pathlib import Path\n\nfrom autogen_core import Image\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Text\nmodel_client = OpenAIChatCompletionClient(\n    model=\"Llama-4-Scout-17B-16E-Instruct-FP8\",\n    # api_key=\"LLAMA_API_KEY\"\n)\n\nresponse = await model_client.create([UserMessage(content=\"Write me a poem\", source=\"user\")])\nprint(response)\nawait model_client.close()\n\n# Image\nmodel_client = OpenAIChatCompletionClient(\n    model=\"Llama-4-Maverick-17B-128E-Instruct-FP8\",\n    # api_key=\"LLAMA_API_KEY\"\n)\nimage = Image.from_file(Path(\"test.png\"))\n\nresponse = await model_client.create([UserMessage(content=[\"What is in this image\", image], source=\"user\")])\nprint(response)\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "# pip install \"autogen-ext[semantic-kernel-anthropic]\"",
+      "language": "markdown"
+    },
+    {
+      "code": "# pip install \"autogen-ext[semantic-kernel-anthropic]\"",
+      "language": "markdown"
+    },
+    {
+      "code": "import os\n\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.semantic_kernel import SKChatCompletionAdapter\nfrom semantic_kernel import Kernel\nfrom semantic_kernel.connectors.ai.anthropic import AnthropicChatCompletion, AnthropicChatPromptExecutionSettings\nfrom semantic_kernel.memory.null_memory import NullMemory\n\nsk_client = AnthropicChatCompletion(\n    ai_model_id=\"claude-3-5-sonnet-20241022\",\n    api_key=os.environ[\"ANTHROPIC_API_KEY\"],\n    service_id=\"my-service-id\",  # Optional; for targeting specific services within Semantic Kernel\n)\nsettings = AnthropicChatPromptExecutionSettings(\n    temperature=0.2,\n)\n\nanthropic_model_client = SKChatCompletionAdapter(\n    sk_client, kernel=Kernel(memory=NullMemory()), prompt_settings=settings\n)\n\n# Call the model directly.\nmodel_result = await anthropic_model_client.create(\n    messages=[UserMessage(content=\"What is the capital of France?\", source=\"User\")]\n)\nprint(model_result)\nawait anthropic_model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "import os\n\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.semantic_kernel import SKChatCompletionAdapter\nfrom semantic_kernel import Kernel\nfrom semantic_kernel.connectors.ai.anthropic import AnthropicChatCompletion, AnthropicChatPromptExecutionSettings\nfrom semantic_kernel.memory.null_memory import NullMemory\n\nsk_client = AnthropicChatCompletion(\n    ai_model_id=\"claude-3-5-sonnet-20241022\",\n    api_key=os.environ[\"ANTHROPIC_API_KEY\"],\n    service_id=\"my-service-id\",  # Optional; for targeting specific services within Semantic Kernel\n)\nsettings = AnthropicChatPromptExecutionSettings(\n    temperature=0.2,\n)\n\nanthropic_model_client = SKChatCompletionAdapter(\n    sk_client, kernel=Kernel(memory=NullMemory()), prompt_settings=settings\n)\n\n# Call the model directly.\nmodel_result = await anthropic_model_client.create(\n    messages=[UserMessage(content=\"What is the capital of France?\", source=\"User\")]\n)\nprint(model_result)\nawait anthropic_model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "finish_reason='stop' content='The capital of France is Paris. It is also the largest city in France and one of the most populous metropolitan areas in Europe.' usage=RequestUsage(prompt_tokens=0, completion_tokens=0) cached=False logprobs=None",
+      "language": "rust"
+    },
+    {
+      "code": "finish_reason='stop' content='The capital of France is Paris. It is also the largest city in France and one of the most populous metropolitan areas in Europe.' usage=RequestUsage(prompt_tokens=0, completion_tokens=0) cached=False logprobs=None",
+      "language": "rust"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html"
+  ]
+}

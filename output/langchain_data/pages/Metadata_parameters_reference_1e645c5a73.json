@@ -1,0 +1,191 @@
+{
+  "title": "Metadata parameters reference",
+  "content": "Source: https://docs.langchain.com/langsmith/ls-metadata-parameters\n\nWhen you trace LLM calls with LangSmith, you often want to [track costs](/langsmith/cost-tracking), compare model configurations, and analyze performance across different providers. LangSmith's native integrations (like [LangChain](/langsmith/trace-with-langchain) or the [OpenAI](/langsmith/trace-openai)/[Anthropic](/langsmith/trace-anthropic) wrappers) handle this automatically, but custom model wrappers and self-hosted models require a standardized way to provide this information. LangSmith uses `ls_` metadata parameters for this purpose.\n\nThese metadata parameters (all prefixed with `ls_`) let you pass model configuration and identification information through the standard `metadata` field. Once set, LangSmith can automatically calculate costs, display model information in the UI, and enable filtering and analytics across your traces.\n\nUse `ls_` metadata parameters to:\n\n* **Enable automatic cost tracking** for custom or self-hosted models by identifying the provider and model name.\n* **Track model configuration** like temperature, max tokens, and other parameters for experiment comparison.\n* **Filter and analyze traces** by provider or configuration settings\n* **Improve debugging** by recording exactly which model settings were used for each run.\n\n## Basic usage example\n\nThe most common use case is enabling cost tracking for custom model wrappers. To do this, you need to provide two key pieces of information: the provider name (`ls_provider`) and the model name (`ls_model_name`). These work together to match against LangSmith's pricing database.\n\nThis minimal setup tells LangSmith what model you're using, enabling automatic cost calculation if the model exists in the pricing database or if you've [configured custom pricing](/langsmith/cost-tracking#set-up-model-pricing).\n\nFor more comprehensive tracking, you can include additional configuration parameters. This is especially useful when [running experiments](/langsmith/evaluation-quickstart) or comparing different model settings:\n\nWith this setup, you can later filter traces by temperature, compare runs with different max token settings, or analyze which configuration parameters produce the best results. All these parameters are optional except for the `ls_provider` and `ls_model_name` pair needed for cost tracking.\n\n### User-configurable parameters\n\n| Parameter                                       | Type       | Required | Description                         |\n| ----------------------------------------------- | ---------- | -------- | ----------------------------------- |\n| [`ls_provider`](#ls-provider)                   | `string`   | Yes\\*    | LLM provider name for cost tracking |\n| [`ls_model_name`](#ls-model-name)               | `string`   | Yes\\*    | Model identifier for cost tracking  |\n| [`ls_temperature`](#ls-temperature)             | `number`   | No       | Temperature parameter used          |\n| [`ls_max_tokens`](#ls-max-tokens)               | `number`   | No       | Maximum tokens parameter used       |\n| [`ls_stop`](#ls-stop)                           | `string[]` | No       | Stop sequences used                 |\n| [`ls_invocation_params`](#ls-invocation-params) | `object`   | No       | Additional invocation parameters    |\n\n\\* `ls_provider` and `ls_model_name` must be provided together for cost tracking\n\n### System-generated parameters\n\n| Parameter                       | Type      | Description                                                            |\n| ------------------------------- | --------- | ---------------------------------------------------------------------- |\n| [`ls_run_depth`](#ls-run-depth) | `integer` | Depth in trace tree (0=root, 1=child, etc.) - automatically calculated |\n| [`ls_method`](#ls-method)       | `string`  | Tracing method used (e.g., \"traceable\") - set by SDK                   |\n\n### Experiment parameters\n\n| Parameter                               | Type            | Description                                                             |\n| --------------------------------------- | --------------- | ----------------------------------------------------------------------- |\n| [`ls_example_*`](#ls-example-)          | `any`           | Example metadata prefixed with `ls_example_` - added during experiments |\n| [`ls_experiment_id`](#ls-experiment-id) | `string` (UUID) | Unique experiment identifier - added during experiments                 |\n\n* **Type:** `string`\n* **Required:** Yes (with [`ls_model_name`](#ls-model-name))\n\n**What it does:**\nIdentifies the LLM provider. Combined with `ls_model_name`, enables automatic cost calculation by matching against [LangSmith's model pricing database](https://smith.langchain.com/settings/workspaces/models).\n\n* `\"openai\"`\n* `\"anthropic\"`\n* `\"azure\"`\n* `\"bedrock\"`\n* `\"google_vertexai\"`\n* `\"google_genai\"`\n* `\"fireworks\"`\n* `\"mistral\"`\n* `\"groq\"`\n* Or, any custom string\n\n**When to use:**\nWhen you want [automatic cost tracking](/langsmith/cost-tracking) for custom model wrappers or self-hosted models.\n\n* **Requires** [`ls_model_name`](#ls-model-name) for cost tracking to work.\n* Works with token usage data to calculate costs.\n\n* **Type:** `string`\n* **Required:** Yes (with `ls_provider`)\n\n**What it does:**\nIdentifies the specific model. Combined with `ls_provider`, matches against pricing database for automatic cost calculation.\n\n* OpenAI: `\"gpt-4o\"`, `\"gpt-4o-mini\"`, `\"gpt-3.5-turbo\"`\n* Anthropic: `\"claude-3-5-sonnet-20241022\"`, `\"claude-3-opus-20240229\"`\n* Custom: Any model identifier\n\n**When to use:**\nWhen you want automatic [cost tracking](/langsmith/cost-tracking) and model identification in the [UI](https://smith.langchain.com).\n\n* **Requires** [`ls_provider`](#ls-provider) for cost tracking to work.\n* Works with token usage data to calculate costs.\n\n* **Type:** `number` (nullable)\n* **Required:** No\n\n**What it does:**\nRecords the temperature setting used. This is for tracking only—does not affect LangSmith behavior.\n\n**When to use:**\nWhen you want to track model configuration for experiments or debugging.\n\n* Independent; just for tracking.\n* Useful alongside other config parameters for experiment comparison.\n\n* **Type:** `number` (nullable)\n* **Required:** No\n\n**What it does:**\nRecords the maximum tokens setting used. This is for tracking only—does not affect LangSmith behavior.\n\n**When to use:**\nWhen you want to track model configuration for experiments or debugging.\n\n* Independent; just for tracking.\n* Useful for cost analysis when combined with actual token usage.\n\n* **Type:** `string[]` (nullable)\n* **Required:** No\n\n**What it does:**\nRecords stop sequences used. This is for tracking only—does not affect LangSmith behavior.\n\n**When to use:**\nWhen you want to track model configuration for experiments or debugging.\n\n* Independent; just for tracking.\n\n### `ls_invocation_params`\n\n* **Type:** `object` (any key-value pairs)\n* **Required:** No\n\n**What it does:**\nStores additional model parameters that don't fit the specific `ls_` parameters. Can include provider-specific settings.\n\n**Common parameters:**\n`top_p`, `frequency_penalty`, `presence_penalty`, `top_k`, `seed`, or any custom parameters\n\n**When to use:**\nWhen you need to track additional configuration beyond the standard parameters.\n\n* Independent; stores arbitrary configuration.\n\n* **Type:** `integer`\n* **Set by:** LangSmith backend (automatic)\n* **Cannot be overridden**\n\n**What it does:**\nIndicates depth in the trace tree:\n\n* `0` = Root run (top-level)\n* `1` = Direct child\n* `2` = Grandchild\n* etc.\n\n**When it's used:**\nAutomatically calculated during trace ingestion. Used for filtering (e.g., \"show only root runs\") and UI visualization.\n\n* Determined by trace parent-child structure.\n* Cannot be set manually.\n\n* **Type:** `string`\n* **Set by:** SDK (automatic)\n\n**What it does:**\nIndicates which SDK method created the trace (commonly `\"traceable\"` for `@traceable` decorator).\n\n**When it's used:**\nAutomatically set by the tracing SDK. Used for debugging and analytics.\n\n* Set by SDK based on how trace was created.\n* Cannot be set manually.\n\n* **Type:** Any (depends on example metadata)\n* **Pattern:** `ls_example_{original_key}`\n* **Set by:** LangSmith experiments system (automatic)\n\n**What it does:**\nWhen running [experiments on datasets](/langsmith/evaluation-quickstart), metadata from the example is automatically prefixed with `ls_example_` and added to the trace.\n\n**Special parameter:**\n\n* `ls_example_dataset_split`: Dataset split (e.g., \"train\", \"test\", \"validation\")\n\n**When it's used:**\nDuring dataset experiments. Allows filtering/grouping by example characteristics.\n\n**Example:**\nIf example has metadata `{\"category\": \"technical\", \"difficulty\": \"hard\"}`, trace gets:\n\n* Automatically derived from example metadata.\n* Cannot be set manually on traces.\n\n### `ls_experiment_id`\n\n* **Type:** `string` (UUID)\n* **Set by:** LangSmith experiments system (automatic)\n\n**What it does:**\nUnique identifier for an experiment run.\n\n**When it's used:**\nAutomatically added when running [experiments/evaluations on datasets](/langsmith/evaluation-quickstart). Used to group all runs from the same experiment.\n\n* Links runs to specific experiments.\n* Cannot be set manually.\n\n## Parameter relationships\n\n### Cost tracking dependencies\n\nFor LangSmith to automatically calculate costs, several parameters must work together. Here's what's required:\n\n**Primary requirement:** [`ls_provider`](#ls-provider) + [`ls_model_name`](#ls-model-name)\n\n* Both should be present for automatic cost calculation.\n* If [`ls_model_name`](#ls-model-name) is missing, system will fall back to checking [`ls_invocation_params`](#ls-invocation-params) for model name.\n* [`ls_provider`](#ls-provider) must match a provider in the [pricing database](https://smith.langchain.com/settings/workspaces/models) (or use custom pricing).\n\n**Additional requirements:**\n\n* Run must have `run_type=\"llm\"` (or [arbitrary cost tracking](/langsmith/cost-tracking#tracking-costs-for-arbitrary-runs) must be enabled).\n* [Token usage data](/langsmith/log-llm-trace#provide-token-and-cost-information) must be present in the trace (prompt\\_tokens, completion\\_tokens).\n* Model must exist in pricing database or have [custom pricing configured](/langsmith/cost-tracking#set-up-model-pricing).\n\n**Fallback behavior:**\nIf [`ls_model_name`](#ls-model-name) is not in metadata, the system checks [`ls_invocation_params`](#ls-invocation-params) for model identifiers like `\"model\"` before giving up on cost tracking.\n\n### Configuration tracking group\n\nThese parameters help you track model settings but don't affect LangSmith's core functionality:\n\n**Optional, work independently:** [`ls_temperature`](#ls-temperature), [`ls_max_tokens`](#ls-max-tokens), [`ls_stop`](#ls-stop)\n\n* These are for tracking/display.\n* Do not affect LangSmith behavior or cost calculation.\n* Useful for experiment comparison and debugging.\n\n### Invocation params special case\n\nThe `ls_invocation_params` parameter has a dual role as both a tracking field and a fallback mechanism:\n\n**[`ls_invocation_params`](#ls-invocation-params)**; partially independent with fallback role:\n\n* Primarily stores arbitrary configuration for tracking.\n* **Can serve as fallback** for cost tracking if [`ls_model_name`](#ls-model-name) is missing.\n* Does not directly affect cost calculation when [`ls_model_name`](#ls-model-name) is present.\n\n### System parameters\n\nThese parameters are automatically generated by LangSmith and cannot be manually set:\n\n**Cannot be user-set:** [`ls_run_depth`](#ls-run-depth), [`ls_method`](#ls-method), [`ls_example_*`](#ls-example-), [`ls_experiment_id`](#ls-experiment-id)\n\n* Automatically set by system.\n* Used for filtering, analytics, and system tracking.\n\n## Filter traces by metadata parameters\n\nOnce you've added `ls_` metadata parameters to your traces, you can use them to filter and search traces programmatically via the [API](https://api.smith.langchain.com/redoc#tag/run/operation/query_runs_api_v1_runs_query_post) or interactively in the [LangSmith UI](https://smith.langchain.com). This lets you narrow down traces by model, provider, configuration settings, or trace depth.\n\nUse the [`Client`](https://docs.smith.langchain.com/reference/python/client/langsmith.client.Client) class with the [`list_runs()`](https://docs.smith.langchain.com/reference/python/client/langsmith.client.Client#langsmith.client.Client.list_runs) method (Python) or [`listRuns()`](https://docs.smith.langchain.com/reference/js/classes/client.Client#listruns) method (TypeScript) to query traces based on metadata values. The [filter syntax](/langsmith/trace-query-syntax) supports equality checks, comparisons, and logical operators.\n\nThese examples show common filtering patterns:\n\n* **Filter by provider or model** to analyze usage patterns or costs for specific models\n* **Filter by run depth** to get only root traces (depth 0) or child runs at specific nesting levels\n* **Filter by configuration** to compare experiments with different temperature, max tokens, or other settings\n\nIn the [LangSmith UI](https://smith.langchain.com), use the filter/search bar with the [filter syntax](/langsmith/trace-query-syntax):\n\n* [Cost tracking guide](/langsmith/cost-tracking): Learn how to track and analyze LLM costs in LangSmith.\n* [Log LLM traces](/langsmith/log-llm-trace): Format requirements for logging LLM calls with proper token tracking.\n* [Trace query syntax](/langsmith/trace-query-syntax): Complete reference for filtering and searching traces.\n* [Evaluation quickstart](/langsmith/evaluation-quickstart): Run experiments on datasets to compare model configurations.\n* [Add metadata and tags](/langsmith/add-metadata-tags): General guide to adding metadata to traces.\n* [Filter traces in application](/langsmith/filter-traces-in-application): Programmatically filter traces in your code.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/ls-metadata-parameters.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nThis minimal setup tells LangSmith what model you're using, enabling automatic cost calculation if the model exists in the pricing database or if you've [configured custom pricing](/langsmith/cost-tracking#set-up-model-pricing).\n\nFor more comprehensive tracking, you can include additional configuration parameters. This is especially useful when [running experiments](/langsmith/evaluation-quickstart) or comparing different model settings:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nWith this setup, you can later filter traces by temperature, compare runs with different max token settings, or analyze which configuration parameters produce the best results. All these parameters are optional except for the `ls_provider` and `ls_model_name` pair needed for cost tracking.\n\n## All parameters\n\n### User-configurable parameters\n\n| Parameter                                       | Type       | Required | Description                         |\n| ----------------------------------------------- | ---------- | -------- | ----------------------------------- |\n| [`ls_provider`](#ls-provider)                   | `string`   | Yes\\*    | LLM provider name for cost tracking |\n| [`ls_model_name`](#ls-model-name)               | `string`   | Yes\\*    | Model identifier for cost tracking  |\n| [`ls_temperature`](#ls-temperature)             | `number`   | No       | Temperature parameter used          |\n| [`ls_max_tokens`](#ls-max-tokens)               | `number`   | No       | Maximum tokens parameter used       |\n| [`ls_stop`](#ls-stop)                           | `string[]` | No       | Stop sequences used                 |\n| [`ls_invocation_params`](#ls-invocation-params) | `object`   | No       | Additional invocation parameters    |\n\n\\* `ls_provider` and `ls_model_name` must be provided together for cost tracking\n\n### System-generated parameters\n\n| Parameter                       | Type      | Description                                                            |\n| ------------------------------- | --------- | ---------------------------------------------------------------------- |\n| [`ls_run_depth`](#ls-run-depth) | `integer` | Depth in trace tree (0=root, 1=child, etc.) - automatically calculated |\n| [`ls_method`](#ls-method)       | `string`  | Tracing method used (e.g., \"traceable\") - set by SDK                   |\n\n### Experiment parameters\n\n| Parameter                               | Type            | Description                                                             |\n| --------------------------------------- | --------------- | ----------------------------------------------------------------------- |\n| [`ls_example_*`](#ls-example-)          | `any`           | Example metadata prefixed with `ls_example_` - added during experiments |\n| [`ls_experiment_id`](#ls-experiment-id) | `string` (UUID) | Unique experiment identifier - added during experiments                 |\n\n## Parameter details\n\n### `ls_provider`\n\n* **Type:** `string`\n* **Required:** Yes (with [`ls_model_name`](#ls-model-name))\n\n**What it does:**\nIdentifies the LLM provider. Combined with `ls_model_name`, enables automatic cost calculation by matching against [LangSmith's model pricing database](https://smith.langchain.com/settings/workspaces/models).\n\n**Common values:**\n\n* `\"openai\"`\n* `\"anthropic\"`\n* `\"azure\"`\n* `\"bedrock\"`\n* `\"google_vertexai\"`\n* `\"google_genai\"`\n* `\"fireworks\"`\n* `\"mistral\"`\n* `\"groq\"`\n* Or, any custom string\n\n**When to use:**\nWhen you want [automatic cost tracking](/langsmith/cost-tracking) for custom model wrappers or self-hosted models.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Relationships:**\n\n* **Requires** [`ls_model_name`](#ls-model-name) for cost tracking to work.\n* Works with token usage data to calculate costs.\n\n### `ls_model_name`\n\n* **Type:** `string`\n* **Required:** Yes (with `ls_provider`)\n\n**What it does:**\nIdentifies the specific model. Combined with `ls_provider`, matches against pricing database for automatic cost calculation.\n\n**Common values:**\n\n* OpenAI: `\"gpt-4o\"`, `\"gpt-4o-mini\"`, `\"gpt-3.5-turbo\"`\n* Anthropic: `\"claude-3-5-sonnet-20241022\"`, `\"claude-3-opus-20240229\"`\n* Custom: Any model identifier\n\n**When to use:**\nWhen you want automatic [cost tracking](/langsmith/cost-tracking) and model identification in the [UI](https://smith.langchain.com).\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Relationships:**\n\n* **Requires** [`ls_provider`](#ls-provider) for cost tracking to work.\n* Works with token usage data to calculate costs.\n\n### `ls_temperature`\n\n* **Type:** `number` (nullable)\n* **Required:** No\n\n**What it does:**\nRecords the temperature setting used. This is for tracking only—does not affect LangSmith behavior.\n\n**When to use:**\nWhen you want to track model configuration for experiments or debugging.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Relationships:**\n\n* Independent; just for tracking.\n* Useful alongside other config parameters for experiment comparison.\n\n### `ls_max_tokens`\n\n* **Type:** `number` (nullable)\n* **Required:** No\n\n**What it does:**\nRecords the maximum tokens setting used. This is for tracking only—does not affect LangSmith behavior.\n\n**When to use:**\nWhen you want to track model configuration for experiments or debugging.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Relationships:**\n\n* Independent; just for tracking.\n* Useful for cost analysis when combined with actual token usage.\n\n### `ls_stop`\n\n* **Type:** `string[]` (nullable)\n* **Required:** No\n\n**What it does:**\nRecords stop sequences used. This is for tracking only—does not affect LangSmith behavior.\n\n**When to use:**\nWhen you want to track model configuration for experiments or debugging.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Relationships:**\n\n* Independent; just for tracking.\n\n### `ls_invocation_params`\n\n* **Type:** `object` (any key-value pairs)\n* **Required:** No\n\n**What it does:**\nStores additional model parameters that don't fit the specific `ls_` parameters. Can include provider-specific settings.\n\n**Common parameters:**\n`top_p`, `frequency_penalty`, `presence_penalty`, `top_k`, `seed`, or any custom parameters\n\n**When to use:**\nWhen you need to track additional configuration beyond the standard parameters.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Relationships:**\n\n* Independent; stores arbitrary configuration.\n\n### `ls_run_depth`\n\n* **Type:** `integer`\n* **Set by:** LangSmith backend (automatic)\n* **Cannot be overridden**\n\n**What it does:**\nIndicates depth in the trace tree:\n\n* `0` = Root run (top-level)\n* `1` = Direct child\n* `2` = Grandchild\n* etc.\n\n**When it's used:**\nAutomatically calculated during trace ingestion. Used for filtering (e.g., \"show only root runs\") and UI visualization.\n\n**Example query:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Relationships:**\n\n* Determined by trace parent-child structure.\n* Cannot be set manually.\n\n### `ls_method`\n\n* **Type:** `string`\n* **Set by:** SDK (automatic)\n\n**What it does:**\nIndicates which SDK method created the trace (commonly `\"traceable\"` for `@traceable` decorator).\n\n**When it's used:**\nAutomatically set by the tracing SDK. Used for debugging and analytics.\n\n**Relationships:**\n\n* Set by SDK based on how trace was created.\n* Cannot be set manually.\n\n### `ls_example_*`\n\n* **Type:** Any (depends on example metadata)\n* **Pattern:** `ls_example_{original_key}`\n* **Set by:** LangSmith experiments system (automatic)\n\n**What it does:**\nWhen running [experiments on datasets](/langsmith/evaluation-quickstart), metadata from the example is automatically prefixed with `ls_example_` and added to the trace.\n\n**Special parameter:**\n\n* `ls_example_dataset_split`: Dataset split (e.g., \"train\", \"test\", \"validation\")\n\n**When it's used:**\nDuring dataset experiments. Allows filtering/grouping by example characteristics.\n\n**Example:**\nIf example has metadata `{\"category\": \"technical\", \"difficulty\": \"hard\"}`, trace gets:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Relationships:**\n\n* Automatically derived from example metadata.\n* Cannot be set manually on traces.\n\n### `ls_experiment_id`\n\n* **Type:** `string` (UUID)\n* **Set by:** LangSmith experiments system (automatic)\n\n**What it does:**\nUnique identifier for an experiment run.\n\n**When it's used:**\nAutomatically added when running [experiments/evaluations on datasets](/langsmith/evaluation-quickstart). Used to group all runs from the same experiment.\n\n**Relationships:**\n\n* Links runs to specific experiments.\n* Cannot be set manually.\n\n## Parameter relationships\n\n### Cost tracking dependencies\n\nFor LangSmith to automatically calculate costs, several parameters must work together. Here's what's required:\n\n**Primary requirement:** [`ls_provider`](#ls-provider) + [`ls_model_name`](#ls-model-name)\n\n* Both should be present for automatic cost calculation.\n* If [`ls_model_name`](#ls-model-name) is missing, system will fall back to checking [`ls_invocation_params`](#ls-invocation-params) for model name.\n* [`ls_provider`](#ls-provider) must match a provider in the [pricing database](https://smith.langchain.com/settings/workspaces/models) (or use custom pricing).\n\n**Additional requirements:**\n\n* Run must have `run_type=\"llm\"` (or [arbitrary cost tracking](/langsmith/cost-tracking#tracking-costs-for-arbitrary-runs) must be enabled).\n* [Token usage data](/langsmith/log-llm-trace#provide-token-and-cost-information) must be present in the trace (prompt\\_tokens, completion\\_tokens).\n* Model must exist in pricing database or have [custom pricing configured](/langsmith/cost-tracking#set-up-model-pricing).\n\n**Fallback behavior:**\nIf [`ls_model_name`](#ls-model-name) is not in metadata, the system checks [`ls_invocation_params`](#ls-invocation-params) for model identifiers like `\"model\"` before giving up on cost tracking.\n\n### Configuration tracking group\n\nThese parameters help you track model settings but don't affect LangSmith's core functionality:\n\n**Optional, work independently:** [`ls_temperature`](#ls-temperature), [`ls_max_tokens`](#ls-max-tokens), [`ls_stop`](#ls-stop)\n\n* These are for tracking/display.\n* Do not affect LangSmith behavior or cost calculation.\n* Useful for experiment comparison and debugging.\n\n### Invocation params special case\n\nThe `ls_invocation_params` parameter has a dual role as both a tracking field and a fallback mechanism:\n\n**[`ls_invocation_params`](#ls-invocation-params)**; partially independent with fallback role:\n\n* Primarily stores arbitrary configuration for tracking.\n* **Can serve as fallback** for cost tracking if [`ls_model_name`](#ls-model-name) is missing.\n* Does not directly affect cost calculation when [`ls_model_name`](#ls-model-name) is present.\n\n### System parameters\n\nThese parameters are automatically generated by LangSmith and cannot be manually set:\n\n**Cannot be user-set:** [`ls_run_depth`](#ls-run-depth), [`ls_method`](#ls-method), [`ls_example_*`](#ls-example-), [`ls_experiment_id`](#ls-experiment-id)\n\n* Automatically set by system.\n* Used for filtering, analytics, and system tracking.\n\n## Filter traces by metadata parameters\n\nOnce you've added `ls_` metadata parameters to your traces, you can use them to filter and search traces programmatically via the [API](https://api.smith.langchain.com/redoc#tag/run/operation/query_runs_api_v1_runs_query_post) or interactively in the [LangSmith UI](https://smith.langchain.com). This lets you narrow down traces by model, provider, configuration settings, or trace depth.\n\n### Use the API\n\nUse the [`Client`](https://docs.smith.langchain.com/reference/python/client/langsmith.client.Client) class with the [`list_runs()`](https://docs.smith.langchain.com/reference/python/client/langsmith.client.Client#langsmith.client.Client.list_runs) method (Python) or [`listRuns()`](https://docs.smith.langchain.com/reference/js/classes/client.Client#listruns) method (TypeScript) to query traces based on metadata values. The [filter syntax](/langsmith/trace-query-syntax) supports equality checks, comparisons, and logical operators.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nThese examples show common filtering patterns:\n\n* **Filter by provider or model** to analyze usage patterns or costs for specific models\n* **Filter by run depth** to get only root traces (depth 0) or child runs at specific nesting levels\n* **Filter by configuration** to compare experiments with different temperature, max tokens, or other settings\n\n### Use the UI\n\nIn the [LangSmith UI](https://smith.langchain.com), use the filter/search bar with the [filter syntax](/langsmith/trace-query-syntax):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Basic usage example",
+      "id": "basic-usage-example"
+    },
+    {
+      "level": "h2",
+      "text": "All parameters",
+      "id": "all-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "User-configurable parameters",
+      "id": "user-configurable-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "System-generated parameters",
+      "id": "system-generated-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Experiment parameters",
+      "id": "experiment-parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Parameter details",
+      "id": "parameter-details"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_provider`",
+      "id": "`ls_provider`"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_model_name`",
+      "id": "`ls_model_name`"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_temperature`",
+      "id": "`ls_temperature`"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_max_tokens`",
+      "id": "`ls_max_tokens`"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_stop`",
+      "id": "`ls_stop`"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_invocation_params`",
+      "id": "`ls_invocation_params`"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_run_depth`",
+      "id": "`ls_run_depth`"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_method`",
+      "id": "`ls_method`"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_example_*`",
+      "id": "`ls_example_*`"
+    },
+    {
+      "level": "h3",
+      "text": "`ls_experiment_id`",
+      "id": "`ls_experiment_id`"
+    },
+    {
+      "level": "h2",
+      "text": "Parameter relationships",
+      "id": "parameter-relationships"
+    },
+    {
+      "level": "h3",
+      "text": "Cost tracking dependencies",
+      "id": "cost-tracking-dependencies"
+    },
+    {
+      "level": "h3",
+      "text": "Configuration tracking group",
+      "id": "configuration-tracking-group"
+    },
+    {
+      "level": "h3",
+      "text": "Invocation params special case",
+      "id": "invocation-params-special-case"
+    },
+    {
+      "level": "h3",
+      "text": "System parameters",
+      "id": "system-parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Filter traces by metadata parameters",
+      "id": "filter-traces-by-metadata-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Use the API",
+      "id": "use-the-api"
+    },
+    {
+      "level": "h3",
+      "text": "Use the UI",
+      "id": "use-the-ui"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    }
+  ],
+  "url": "llms-txt#metadata-parameters-reference",
+  "links": []
+}

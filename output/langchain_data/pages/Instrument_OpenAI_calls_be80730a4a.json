@@ -1,0 +1,8 @@
+{
+  "title": "Instrument OpenAI calls",
+  "content": "OpenAIInstrumentor().instrument()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#instrument-openai-calls",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Example configuration for low reads, high writes (5 read/500 write requests per second)",
+  "content": "api:\n  replicas: 6\n  resources:\n    requests:\n      cpu: \"1\"\n      memory: \"2Gi\"\n    limits:\n      cpu: \"2\"\n      memory: \"4Gi\"\n\nqueue:\n  replicas: 10\n  resources:\n    requests:\n      cpu: \"1\"\n      memory: \"2Gi\"\n    limits:\n      cpu: \"2\"\n      memory: \"4Gi\"\n\nconfig:\n  numberOfJobsPerWorker: 50\n\nredis:\n  resources:\n    requests:\n      memory: \"2Gi\"\n    limits:\n      memory: \"2Gi\"\n\npostgres:\n  resources:\n    requests:\n      cpu: \"4\"\n      memory: \"16Gi\"\n    limits:\n      cpu: \"8\"\n      memory: \"32Gi\"\nyaml  theme={null}",
+  "code_samples": [
+    {
+      "code": "### High reads, low writes <a name=\"high-reads-low-writes\" />\n\nYou have a high volume of read requests (500 per second) but relatively few write requests (5 per second).\n\nFor this, we recommend a configuration like this:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "High reads, low writes <a name=\"high-reads-low-writes\" />",
+      "id": "high-reads,-low-writes-<a-name=\"high-reads-low-writes\"-/>"
+    }
+  ],
+  "url": "llms-txt#example-configuration-for-low-reads,-high-writes-(5-read/500-write-requests-per-second)",
+  "links": []
+}

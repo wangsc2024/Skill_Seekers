@@ -1,0 +1,8 @@
+{
+  "title": "get the latest state snapshot",
+  "content": "config = {\"configurable\": {\"thread_id\": \"1\"}}\ngraph.get_state(config)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-the-latest-state-snapshot",
+  "links": []
+}

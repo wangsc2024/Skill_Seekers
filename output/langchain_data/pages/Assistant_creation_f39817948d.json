@@ -1,0 +1,38 @@
+{
+  "title": "Assistant creation",
+  "content": "@auth.on.assistants.create\nasync def on_assistant_create(\n    ctx: Auth.types.AuthContext,\n    value: Auth.types.assistants.create.value\n):\n    if \"assistants:create\" not in ctx.permissions:\n        raise Auth.exceptions.HTTPException(\n            status_code=403,\n            detail=\"User lacks the required permissions.\"\n        )\npython  theme={null}\n@auth.on\nasync def owner_only(ctx: Auth.types.AuthContext, value: dict):\n    metadata = value.setdefault(\"metadata\", {})\n    metadata[\"owner\"] = ctx.user.identity\n    return {\"owner\": ctx.user.identity}\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "Notice that we are mixing global and resource-specific handlers in the above example. Since each request is handled by the most specific handler, a request to create a `thread` would match the `on_thread_create` handler but NOT the `reject_unhandled_requests` handler. A request to `update` a thread, however would be handled by the global handler, since we don't have a more specific handler for that resource and action.\n\n<a id=\"filter-operations\" />\n\n### Filter operations\n\nAuthorization handlers can return `None`, a boolean, or a filter dictionary.\n\n* `None` and `True` mean \"authorize access to all underling resources\"\n* `False` means \"deny access to all underling resources (raises a 403 exception)\"\n* A metadata filter dictionary will restrict access to resources\n\nA filter dictionary is a dictionary with keys that match the resource metadata. It supports three operators:\n\n* The default value is a shorthand for exact match, or \"\\$eq\", below. For example, `{\"owner\": user_id}` will include only resources with metadata containing `{\"owner\": user_id}`\n* `$eq`: Exact match (e.g., `{\"owner\": {\"$eq\": user_id}}`) - this is equivalent to the shorthand above, `{\"owner\": user_id}`\n* `$contains`: List membership (e.g., `{\"allowed_users\": {\"$contains\": user_id}}`) or list containment (e.g., `{\"allowed_users\": {\"$contains\": [user_id_1, user_id_2]}}`). The value here must be an element of the list or a subset of the elements of the list, respectively. The metadata in the stored resource must be a list/container type.\n\nA dictionary with multiple keys is treated using a logical `AND` filter. For example, `{\"owner\": org_id, \"allowed_users\": {\"$contains\": user_id}}` will only match resources with metadata whose \"owner\" is `org_id` and whose \"allowed\\_users\" list contains `user_id`.\nSee the reference [`Auth`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth)(Auth) for more information.\n\n## Common access patterns\n\nHere are some typical authorization patterns:\n\n### Single-owner resources\n\nThis common pattern lets you scope all threads, assistants, crons, and runs to a single user. It's useful for common single-user use cases like regular chatbot-style apps.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Permission-based access\n\nThis pattern lets you control access based on **permissions**. It's useful if you want certain roles to have broader or more restricted access to resources.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Filter operations",
+      "id": "filter-operations"
+    },
+    {
+      "level": "h2",
+      "text": "Common access patterns",
+      "id": "common-access-patterns"
+    },
+    {
+      "level": "h3",
+      "text": "Single-owner resources",
+      "id": "single-owner-resources"
+    },
+    {
+      "level": "h3",
+      "text": "Permission-based access",
+      "id": "permission-based-access"
+    }
+  ],
+  "url": "llms-txt#assistant-creation",
+  "links": []
+}

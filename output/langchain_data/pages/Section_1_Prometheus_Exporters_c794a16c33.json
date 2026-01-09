@@ -1,0 +1,13 @@
+{
+  "title": "Section 1: Prometheus Exporters",
+  "content": "Use this section if you would like to only deploy metrics exporters for the components in your self hosted deployment, which you can then scrape using your telemetry. If you would like a full observability stack deployed for you, go to the [End-to-End Deployment Section](/langsmith/observability-stack#prerequisites).\n\nThe helm chart provides a set of Prometheus exporters to expose metrics from [Redis](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-redis-exporter), [Postgres](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-postgres-exporter), [Nginx](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-nginx-exporter), and [Kube state metrics](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics).\n\n1. Create a local file called `langsmith_obs_config.yaml`\n2. Copy over the values from this [file](https://github.com/langchain-ai/helm/blob/main/charts/langsmith-observability/examples/metric-exporters-only.yaml) into `langsmith_obs_config.yaml`, making sure to modify the values to match your LangSmith deployment.\n3. Find the latest version of the chart by running `helm search repo langchain/langsmith-observability --versions`.\n4. Grab the latest version number, and run `helm install langsmith-observability langchain/langsmith-observability --values langsmith_obs_config.yaml --version <version> -n <namespace> --wait --debug`\n\nThis will allow you to scrape metrics at the following service endpoints:\n\n* Postgres: `langsmith-observability-postgres-exporter:9187/metrics`\n* Redis: `langsmith-observability-redis-exporter:9121/metrics`\n* Nginx: `langsmith-observability-nginx-exporter:9113/metrics`\n* KubeStateMetrics: `langsmith-observability-kube-state-metrics:8080/metrics`\n\nYou should see the following if the installation went through:\n\nAnd if you run `kubectl get pods -n langsmith-observability`, you should see:",
+  "code_samples": [
+    {
+      "code": "And if you run `kubectl get pods -n langsmith-observability`, you should see:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#section-1:-prometheus-exporters",
+  "links": []
+}

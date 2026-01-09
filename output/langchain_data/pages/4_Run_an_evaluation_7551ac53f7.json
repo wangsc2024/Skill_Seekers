@@ -1,0 +1,8 @@
+{
+  "title": "4. Run an evaluation",
+  "content": "experiment = ls_client.evaluate(\n    chatbot,\n    data=dataset,\n    evaluators=[is_concise],\n    experiment_prefix=\"my-first-experiment\",\n    # 'upload_results' is the relevant arg.\n    upload_results=False\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#4.-run-an-evaluation",
+  "links": []
+}

@@ -1,0 +1,14 @@
+{
+  "title": "minReplicas: 20",
+  "content": "## Ensure your Redis cache is at least 200 GB\nredis:\n  external:\n    enabled: true\n    existingSecretName: langsmith-redis-secret # Set the connection url for your external Redis instance (200+ GB)",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Ensure your Redis cache is at least 200 GB",
+      "id": "ensure-your-redis-cache-is-at-least-200-gb"
+    }
+  ],
+  "url": "llms-txt#minreplicas:-20",
+  "links": []
+}

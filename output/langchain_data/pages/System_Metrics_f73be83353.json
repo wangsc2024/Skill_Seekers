@@ -1,0 +1,8 @@
+{
+  "title": "System Metrics",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/system/system-metrics\n\nlangsmith/agent-server-openapi.json get /metrics\nGet system metrics in Prometheus or JSON format for monitoring and observability.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#system-metrics",
+  "links": []
+}

@@ -1,0 +1,183 @@
+{
+  "url": "https://react.dev/learn/your-first-component",
+  "title": "Your First Component",
+  "content": "Components are one of the core concepts of React. They are the foundation upon which you build user interfaces (UI), which makes them the perfect place to start your React journey!\n\nOn the Web, HTML lets us create rich structured documents with its built-in set of tags like <h1> and <li>:\n\nThis markup represents this article <article>, its heading <h1>, and an (abbreviated) table of contents as an ordered list <ol>. Markup like this, combined with CSS for style, and JavaScript for interactivity, lies behind every sidebar, avatar, modal, dropdown—every piece of UI you see on the Web.\n\nReact lets you combine your markup, CSS, and JavaScript into custom “components”, reusable UI elements for your app. The table of contents code you saw above could be turned into a <TableOfContents /> component you could render on every page. Under the hood, it still uses the same HTML tags like <article>, <h1>, etc.\n\nJust like with HTML tags, you can compose, order and nest components to design whole pages. For example, the documentation page you’re reading is made out of React components:\n\nAs your project grows, you will notice that many of your designs can be composed by reusing components you already wrote, speeding up your development. Our table of contents above could be added to any screen with <TableOfContents />! You can even jumpstart your project with the thousands of components shared by the React open source community like Chakra UI and Material UI.\n\nTraditionally when creating web pages, web developers marked up their content and then added interaction by sprinkling on some JavaScript. This worked great when interaction was a nice-to-have on the web. Now it is expected for many sites and all apps. React puts interactivity first while still using the same technology: a React component is a JavaScript function that you can sprinkle with markup. Here’s what that looks like (you can edit the example below):\n\nAnd here’s how to build a component:\n\nThe export default prefix is a standard JavaScript syntax (not specific to React). It lets you mark the main function in a file so that you can later import it from other files. (More on importing in Importing and Exporting Components!)\n\nWith function Profile() { } you define a JavaScript function with the name Profile.\n\nReact components are regular JavaScript functions, but their names must start with a capital letter or they won’t work!\n\nThe component returns an <img /> tag with src and alt attributes. <img /> is written like HTML, but it is actually JavaScript under the hood! This syntax is called JSX, and it lets you embed markup inside JavaScript.\n\nReturn statements can be written all on one line, as in this component:\n\nBut if your markup isn’t all on the same line as the return keyword, you must wrap it in a pair of parentheses:\n\nWithout parentheses, any code on the lines after return will be ignored!\n\nNow that you’ve defined your Profile component, you can nest it inside other components. For example, you can export a Gallery component that uses multiple Profile components:\n\nNotice the difference in casing:\n\nAnd Profile contains even more HTML: <img />. In the end, this is what the browser sees:\n\nComponents are regular JavaScript functions, so you can keep multiple components in the same file. This is convenient when components are relatively small or tightly related to each other. If this file gets crowded, you can always move Profile to a separate file. You will learn how to do this shortly on the page about imports.\n\nBecause the Profile components are rendered inside Gallery—even several times!—we can say that Gallery is a parent component, rendering each Profile as a “child”. This is part of the magic of React: you can define a component once, and then use it in as many places and as many times as you like.\n\nComponents can render other components, but you must never nest their definitions:\n\nThe snippet above is very slow and causes bugs. Instead, define every component at the top level:\n\nWhen a child component needs some data from a parent, pass it by props instead of nesting definitions.\n\nYour React application begins at a “root” component. Usually, it is created automatically when you start a new project. For example, if you use CodeSandbox or if you use the framework Next.js, the root component is defined in pages/index.js. In these examples, you’ve been exporting root components.\n\nMost React apps use components all the way down. This means that you won’t only use components for reusable pieces like buttons, but also for larger pieces like sidebars, lists, and ultimately, complete pages! Components are a handy way to organize UI code and markup, even if some of them are only used once.\n\nReact-based frameworks take this a step further. Instead of using an empty HTML file and letting React “take over” managing the page with JavaScript, they also generate the HTML automatically from your React components. This allows your app to show some content before the JavaScript code loads.\n\nStill, many websites only use React to add interactivity to existing HTML pages. They have many root components instead of a single one for the entire page. You can use as much—or as little—React as you need.\n\nYou’ve just gotten your first taste of React! Let’s recap some key points.\n\nReact lets you create components, reusable UI elements for your app.\n\nIn a React app, every piece of UI is a component.\n\nReact components are regular JavaScript functions except:\n\nThis sandbox doesn’t work because the root component is not exported:\n\nTry to fix it yourself before looking at the solution!",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Your First Component",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Components: UI building blocks",
+      "id": "components-ui-building-blocks"
+    },
+    {
+      "level": "h2",
+      "text": "Defining a component",
+      "id": "defining-a-component"
+    },
+    {
+      "level": "h3",
+      "text": "Step 1: Export the component",
+      "id": "step-1-export-the-component"
+    },
+    {
+      "level": "h3",
+      "text": "Step 2: Define the function",
+      "id": "step-2-define-the-function"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Step 3: Add markup",
+      "id": "step-3-add-markup"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Using a component",
+      "id": "using-a-component"
+    },
+    {
+      "level": "h3",
+      "text": "What the browser sees",
+      "id": "what-the-browser-sees"
+    },
+    {
+      "level": "h3",
+      "text": "Nesting and organizing components",
+      "id": "nesting-and-organizing-components"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Components all the way down",
+      "id": "components-all-the-way-down"
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    },
+    {
+      "level": "h2",
+      "text": "Try out some challenges",
+      "id": "challenges"
+    },
+    {
+      "level": "h4",
+      "text": "Challenge 1 of 4: Export the component",
+      "id": "export-the-component"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<article>  <h1>My First Component</h1>  <ol>    <li>Components: UI Building Blocks</li>    <li>Defining a Component</li>    <li>Using a Component</li>  </ol></article>",
+      "language": "julia"
+    },
+    {
+      "code": "<PageLayout>  <NavigationHeader>    <SearchBar />    <Link to=\"/docs\">Docs</Link>  </NavigationHeader>  <Sidebar />  <PageContent>    <TableOfContents />    <DocumentationText />  </PageContent></PageLayout>",
+      "language": "jsx"
+    },
+    {
+      "code": "return <img src=\"https://i.imgur.com/MK3eW3As.jpg\" alt=\"Katherine Johnson\" />;",
+      "language": "jsx"
+    },
+    {
+      "code": "return (  <div>    <img src=\"https://i.imgur.com/MK3eW3As.jpg\" alt=\"Katherine Johnson\" />  </div>);",
+      "language": "jsx"
+    },
+    {
+      "code": "<section>  <h1>Amazing scientists</h1>  <img src=\"https://i.imgur.com/MK3eW3As.jpg\" alt=\"Katherine Johnson\" />  <img src=\"https://i.imgur.com/MK3eW3As.jpg\" alt=\"Katherine Johnson\" />  <img src=\"https://i.imgur.com/MK3eW3As.jpg\" alt=\"Katherine Johnson\" /></section>",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function Gallery() {  // 🔴 Never define a component inside another component!  function Profile() {    // ...  }  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function Gallery() {  // ...}// ✅ Declare components at the top levelfunction Profile() {  // ...}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react-dom"
+  ]
+}

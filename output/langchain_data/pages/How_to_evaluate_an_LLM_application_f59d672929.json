@@ -1,0 +1,81 @@
+{
+  "title": "How to evaluate an LLM application",
+  "content": "Source: https://docs.langchain.com/langsmith/evaluate-llm-application\n\nThis guide shows you how to run an evaluation on an LLM application using the LangSmith SDK.\n\n<Info>\n  [Evaluations](/langsmith/evaluation-concepts#applying-evaluations) | [Evaluators](/langsmith/evaluation-concepts#evaluators) | [Datasets](/langsmith/evaluation-concepts#datasets)\n</Info>\n\nIn this guide we'll go over how to evaluate an application using the [evaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._runner.evaluate) method in the LangSmith SDK.\n\n<Check>\n  For larger evaluation jobs in Python we recommend using [aevaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._arunner.aevaluate), the asynchronous version of [evaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._runner.evaluate). It is still worthwhile to read this guide first, as the two have identical interfaces, before reading the how-to guide on [running an evaluation asynchronously](/langsmith/evaluation-async).\n\nIn JS/TS evaluate() is already asynchronous so no separate method is needed.\n\nIt is also important to configure the `max_concurrency`/`maxConcurrency` arg when running large jobs. This parallelizes evaluation by effectively splitting the dataset across threads.\n</Check>\n\n## Define an application\n\nFirst we need an application to evaluate. Let's create a simple toxicity classifier for this example.\n\nWe've optionally enabled tracing to capture the inputs and outputs of each step in the pipeline. To understand how to annotate your code for tracing, please refer to [this guide](/langsmith/annotate-code).\n\n## Create or select a dataset\n\nWe need a [Dataset](/langsmith/evaluation-concepts#datasets) to evaluate our application on. Our dataset will contain labeled [examples](/langsmith/evaluation-concepts#examples) of toxic and non-toxic text.\n\nRequires `langsmith>=0.3.13`\n\nFor more details on datasets, refer to the [Manage datasets](/langsmith/manage-datasets) page.\n\n## Define an evaluator\n\n<Check>\n  You can also check out LangChain's open source evaluation package [openevals](https://github.com/langchain-ai/openevals) for common pre-built evaluators.\n</Check>\n\n[Evaluators](/langsmith/evaluation-concepts#evaluators) are functions for scoring your application's outputs. They take in the example inputs, actual outputs, and, when present, the reference outputs. Since we have labels for this task, our evaluator can directly check if the actual outputs match the reference outputs.\n\n* Python: Requires `langsmith>=0.3.13`\n* TypeScript: Requires `langsmith>=0.2.9`\n\n## Run the evaluation\n\nWe'll use the [evaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._runner.evaluate) / [aevaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._arunner.aevaluate) methods to run the evaluation.\n\nThe key arguments are:\n\n* a target function that takes an input dictionary and returns an output dictionary. The `example.inputs` field of each [Example](/langsmith/example-data-format) is what gets passed to the target function. In this case our `toxicity_classifier` is already set up to take in example inputs so we can use it directly.\n* `data` - the name OR UUID of the LangSmith dataset to evaluate on, or an iterator of examples\n* `evaluators` - a list of evaluators to score the outputs of the function\n\nPython: Requires `langsmith>=0.3.13`\n\n## Explore the results[​](#explore-the-results \"Direct link to Explore the results\")\n\nEach invocation of `evaluate()` creates an [Experiment](/langsmith/evaluation-concepts#experiments) which can be viewed in the LangSmith UI or queried via the SDK. Evaluation scores are stored against each actual output as feedback.\n\n*If you've annotated your code for tracing, you can open the trace of each row in a side panel view.*\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/1RIJxfRpkszanJLL/langsmith/images/view-experiment.gif?s=252d96dbd2100a691f1d3b61716fde38\" alt=\"View experiment\" data-og-width=\"1132\" width=\"1132\" data-og-height=\"720\" height=\"720\" data-path=\"langsmith/images/view-experiment.gif\" data-optimize=\"true\" data-opv=\"3\" />\n\n## Reference code[​](#reference-code \"Direct link to Reference code\")\n\n<Accordion title=\"Click to see a consolidated code snippet\">\n  <CodeGroup>\n\n</CodeGroup>\n</Accordion>\n\n## Related[​](#related \"Direct link to Related\")\n\n* [Run an evaluation asynchronously](/langsmith/evaluation-async)\n* [Run an evaluation via the REST API](/langsmith/run-evals-api-only)\n* [Run an evaluation from the prompt playground](/langsmith/run-evaluation-from-prompt-playground)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/evaluate-llm-application.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nWe've optionally enabled tracing to capture the inputs and outputs of each step in the pipeline. To understand how to annotate your code for tracing, please refer to [this guide](/langsmith/annotate-code).\n\n## Create or select a dataset\n\nWe need a [Dataset](/langsmith/evaluation-concepts#datasets) to evaluate our application on. Our dataset will contain labeled [examples](/langsmith/evaluation-concepts#examples) of toxic and non-toxic text.\n\nRequires `langsmith>=0.3.13`\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nFor more details on datasets, refer to the [Manage datasets](/langsmith/manage-datasets) page.\n\n## Define an evaluator\n\n<Check>\n  You can also check out LangChain's open source evaluation package [openevals](https://github.com/langchain-ai/openevals) for common pre-built evaluators.\n</Check>\n\n[Evaluators](/langsmith/evaluation-concepts#evaluators) are functions for scoring your application's outputs. They take in the example inputs, actual outputs, and, when present, the reference outputs. Since we have labels for this task, our evaluator can directly check if the actual outputs match the reference outputs.\n\n* Python: Requires `langsmith>=0.3.13`\n* TypeScript: Requires `langsmith>=0.2.9`\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Run the evaluation\n\nWe'll use the [evaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._runner.evaluate) / [aevaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._arunner.aevaluate) methods to run the evaluation.\n\nThe key arguments are:\n\n* a target function that takes an input dictionary and returns an output dictionary. The `example.inputs` field of each [Example](/langsmith/example-data-format) is what gets passed to the target function. In this case our `toxicity_classifier` is already set up to take in example inputs so we can use it directly.\n* `data` - the name OR UUID of the LangSmith dataset to evaluate on, or an iterator of examples\n* `evaluators` - a list of evaluators to score the outputs of the function\n\nPython: Requires `langsmith>=0.3.13`\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Explore the results[​](#explore-the-results \"Direct link to Explore the results\")\n\nEach invocation of `evaluate()` creates an [Experiment](/langsmith/evaluation-concepts#experiments) which can be viewed in the LangSmith UI or queried via the SDK. Evaluation scores are stored against each actual output as feedback.\n\n*If you've annotated your code for tracing, you can open the trace of each row in a side panel view.*\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/1RIJxfRpkszanJLL/langsmith/images/view-experiment.gif?s=252d96dbd2100a691f1d3b61716fde38\" alt=\"View experiment\" data-og-width=\"1132\" width=\"1132\" data-og-height=\"720\" height=\"720\" data-path=\"langsmith/images/view-experiment.gif\" data-optimize=\"true\" data-opv=\"3\" />\n\n## Reference code[​](#reference-code \"Direct link to Reference code\")\n\n<Accordion title=\"Click to see a consolidated code snippet\">\n  <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Define an application",
+      "id": "define-an-application"
+    },
+    {
+      "level": "h2",
+      "text": "Create or select a dataset",
+      "id": "create-or-select-a-dataset"
+    },
+    {
+      "level": "h2",
+      "text": "Define an evaluator",
+      "id": "define-an-evaluator"
+    },
+    {
+      "level": "h2",
+      "text": "Run the evaluation",
+      "id": "run-the-evaluation"
+    },
+    {
+      "level": "h2",
+      "text": "Explore the results[​](#explore-the-results \"Direct link to Explore the results\")",
+      "id": "explore-the-results[​](#explore-the-results-\"direct-link-to-explore-the-results\")"
+    },
+    {
+      "level": "h2",
+      "text": "Reference code[​](#reference-code \"Direct link to Reference code\")",
+      "id": "reference-code[​](#reference-code-\"direct-link-to-reference-code\")"
+    },
+    {
+      "level": "h2",
+      "text": "Related[​](#related \"Direct link to Related\")",
+      "id": "related[​](#related-\"direct-link-to-related\")"
+    }
+  ],
+  "url": "llms-txt#how-to-evaluate-an-llm-application",
+  "links": []
+}

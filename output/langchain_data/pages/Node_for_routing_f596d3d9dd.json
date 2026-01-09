@@ -1,0 +1,8 @@
+{
+  "title": "Node for routing.",
+  "content": "async def intent_classifier(\n    state: State,\n) -> Command[Literal[\"refund_agent\", \"question_answering_agent\"]]:\n    response = router_llm.invoke(\n        [{\"role\": \"system\", \"content\": route_instructions}, *state[\"messages\"]]\n    )\n    return Command(goto=response[\"intent\"] + \"_agent\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#node-for-routing.",
+  "links": []
+}

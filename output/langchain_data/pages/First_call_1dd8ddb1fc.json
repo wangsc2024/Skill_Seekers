@@ -1,0 +1,8 @@
+{
+  "title": "First call",
+  "content": "config = {\"configurable\": {\"thread_id\": \"my-thread\"}}\nresult = agent.invoke(input, config=config)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#first-call",
+  "links": []
+}

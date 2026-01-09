@@ -1,0 +1,8 @@
+{
+  "title": "Do model patching and add fast LoRA weights",
+  "content": "model = FastLanguageModel.get_peft_model(\n    model,\n    r = 64,\n    target_modules = [\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\",\n                      \"gate_proj\", \"up_proj\", \"down_proj\",],\n    lora_alpha = 64,\n    lora_dropout = 0, # Supports any, but = 0 is optimized\n    bias = \"none\",    # Supports any, but = \"none\" is optimized\n    # [NEW] \"unsloth\" uses 30% less VRAM, fits 2x larger batch sizes!\n    use_gradient_checkpointing = \"unsloth\", # True or \"unsloth\" for very long context\n    random_state = 3407,\n    max_seq_length = max_seq_length,\n)\n\ndpo_trainer = DPOTrainer(\n    model = model,\n    ref_model = None,\n    args = TrainingArguments(\n        per_device_train_batch_size = 4,\n        gradient_accumulation_steps = 8,\n        warmup_ratio = 0.1,\n        num_train_epochs = 3,\n        fp16 = not is_bfloat16_supported(),\n        bf16 = is_bfloat16_supported(),\n        logging_steps = 1,\n        optim = \"adamw_8bit\",\n        seed = 42,\n        output_dir = \"outputs\",\n    ),\n    beta = 0.1,\n    train_dataset = YOUR_DATASET_HERE,\n    # eval_dataset = YOUR_DATASET_HERE,\n    tokenizer = tokenizer,\n    max_length = 1024,\n    max_prompt_length = 512,\n)\ndpo_trainer.train()\n```",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#do-model-patching-and-add-fast-lora-weights",
+  "links": []
+}

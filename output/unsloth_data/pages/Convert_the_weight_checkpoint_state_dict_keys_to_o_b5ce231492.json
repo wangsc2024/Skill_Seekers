@@ -1,0 +1,8 @@
+{
+  "title": "Convert the weight checkpoint state dict keys to one that ExecuTorch expects",
+  "content": "python -m executorch.examples.models.qwen3.convert_weights \"phone_model\" pytorch_model_converted.bin",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#convert-the-weight-checkpoint-state-dict-keys-to-one-that-executorch-expects",
+  "links": []
+}

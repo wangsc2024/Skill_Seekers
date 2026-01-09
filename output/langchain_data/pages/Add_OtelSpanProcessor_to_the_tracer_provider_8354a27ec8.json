@@ -1,0 +1,8 @@
+{
+  "title": "Add OtelSpanProcessor to the tracer provider",
+  "content": "tracer_provider.add_span_processor(OtelSpanProcessor())",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-otelspanprocessor-to-the-tracer-provider",
+  "links": []
+}

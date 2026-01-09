@@ -1,0 +1,130 @@
+{
+  "url": "https://react.dev/learn/react-compiler/debugging",
+  "title": "Debugging and Troubleshooting",
+  "content": "This guide helps you identify and fix issues when using React Compiler. Learn how to debug compilation problems and resolve common issues.\n\nReact Compiler is designed to handle code that follows the Rules of React. When it encounters code that might break these rules, it safely skips optimization rather than risk changing your app’s behavior.\n\nCompiler errors occur at build time and prevent your code from compiling. These are rare because the compiler is designed to skip problematic code rather than fail.\n\nRuntime issues occur when compiled code behaves differently than expected. Most of the time, if you encounter an issue with React Compiler, it’s a runtime issue. This typically happens when your code violates the Rules of React in subtle ways that the compiler couldn’t detect, and the compiler mistakenly compiled a component it should have skipped.\n\nWhen debugging runtime issues, focus your efforts on finding Rules of React violations in the affected components that were not detected by the ESLint rule. The compiler relies on your code following these rules, and when they’re broken in ways it can’t detect, that’s when runtime problems occur.\n\nOne of the main ways React Compiler can break your app is if your code was written to rely on memoization for correctness. This means your app depends on specific values being memoized to work properly. Since the compiler may memoize differently than your manual approach, this can lead to unexpected behavior like effects over-firing, infinite loops, or missing updates.\n\nCommon scenarios where this occurs:\n\nFollow these steps when you encounter issues:\n\nIf you encounter a compiler error that unexpectedly breaks your build, this is likely a bug in the compiler. Report it to the facebook/react repository with:\n\nFor runtime behavior issues:\n\nUse \"use no memo\" to isolate whether an issue is compiler-related:\n\nIf the issue disappears, it’s likely related to a Rules of React violation.\n\nYou can also try removing manual memoization (useMemo, useCallback, memo) from the problematic component to verify that your app works correctly without any memoization. If the bug still occurs when all memoization is removed, you have a Rules of React violation that needs to be fixed.\n\nIf you believe you’ve found a compiler bug:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Debugging and Troubleshooting",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Understanding Compiler Behavior",
+      "id": "understanding-compiler-behavior"
+    },
+    {
+      "level": "h3",
+      "text": "Compiler Errors vs Runtime Issues",
+      "id": "compiler-errors-vs-runtime-issues"
+    },
+    {
+      "level": "h2",
+      "text": "Common Breaking Patterns",
+      "id": "common-breaking-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "Debugging Workflow",
+      "id": "debugging-workflow"
+    },
+    {
+      "level": "h3",
+      "text": "Compiler Build Errors",
+      "id": "compiler-build-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Runtime Issues",
+      "id": "runtime-issues"
+    },
+    {
+      "level": "h3",
+      "text": "1. Temporarily Disable Compilation",
+      "id": "temporarily-disable-compilation"
+    },
+    {
+      "level": "h3",
+      "text": "2. Fix Issues Step by Step",
+      "id": "fix-issues-step-by-step"
+    },
+    {
+      "level": "h2",
+      "text": "Reporting Compiler Bugs",
+      "id": "reporting-compiler-bugs"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "function ProblematicComponent() {  \"use no memo\"; // Skip compilation for this component  // ... rest of component}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/react-dom"
+  ]
+}

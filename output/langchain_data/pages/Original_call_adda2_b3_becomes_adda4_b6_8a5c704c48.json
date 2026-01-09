@@ -1,0 +1,17 @@
+{
+  "title": "Original call: add(a=2, b=3) becomes add(a=4, b=6)",
+  "content": "python Dynamic header modification theme={null}\nasync def auth_header_interceptor(\n    request: MCPToolCallRequest,\n    handler,\n):\n    \"\"\"Add authentication headers based on the tool being called.\"\"\"\n    token = get_token_for_tool(request.name)\n    modified_request = request.override(\n        headers={\"Authorization\": f\"Bearer {token}\"}  # [!code highlight]\n    )\n    return await handler(modified_request)\npython Composing multiple interceptors theme={null}\nasync def outer_interceptor(request, handler):\n    print(\"outer: before\")\n    result = await handler(request)\n    print(\"outer: after\")\n    return result\n\nasync def inner_interceptor(request, handler):\n    print(\"inner: before\")\n    result = await handler(request)\n    print(\"inner: after\")\n    return result\n\nclient = MultiServerMCPClient(\n    {...},\n    tool_interceptors=[outer_interceptor, inner_interceptor],  # [!code highlight]\n)",
+  "code_samples": [
+    {
+      "code": "**Modifying headers at runtime**\n\nInterceptors can modify HTTP headers dynamically based on the request context:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Composing interceptors**\n\nMultiple interceptors compose in \"onion\" order — the first interceptor in the list is the outermost layer:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#original-call:-add(a=2,-b=3)-becomes-add(a=4,-b=6)",
+  "links": []
+}

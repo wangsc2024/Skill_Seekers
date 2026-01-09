@@ -1,0 +1,8 @@
+{
+  "title": "Add attachment processor FIRST (runs before LangSmith processor)",
+  "content": "attachment_processor = AttachmentSpanProcessor()\nprovider.add_span_processor(attachment_processor)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-attachment-processor-first-(runs-before-langsmith-processor)",
+  "links": []
+}

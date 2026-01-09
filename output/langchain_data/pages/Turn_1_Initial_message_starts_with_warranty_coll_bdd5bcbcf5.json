@@ -1,0 +1,8 @@
+{
+  "title": "Turn 1: Initial message - starts with warranty_collector step",
+  "content": "print(\"=== Turn 1: Warranty Collection ===\")\nresult = agent.invoke(\n    {\"messages\": [HumanMessage(\"Hi, my phone screen is cracked\")]},\n    config\n)\nfor msg in result['messages']:\n    msg.pretty_print()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#turn-1:-initial-message---starts-with-warranty_collector-step",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Example configuration for high reads, high writes (500 read/500 write requests per second)",
+  "content": "api:\n  replicas: 15\n  resources:\n    requests:\n      cpu: \"1\"\n      memory: \"2Gi\"\n    limits:\n      cpu: \"2\"\n      memory: \"4Gi\"\n\nqueue:\n  replicas: 10\n  resources:\n    requests:\n      cpu: \"1\"\n      memory: \"2Gi\"\n    limits:\n      cpu: \"2\"\n      memory: \"4Gi\"\n\nconfig:\n  numberOfJobsPerWorker: 50\n\nredis:\n  resources:\n    requests:\n      memory: \"2Gi\"\n    limits:\n      memory: \"2Gi\"\n\npostgres:\n  resources:\n    requests:\n      cpu: \"8\"\n      memory: \"32Gi\"\n    limits:\n      cpu: \"16\"\n      memory: \"64Gi\"\nyaml  theme={null}\napi:\n  autoscaling:\n    enabled: true\n    minReplicas: 15\n    maxReplicas: 25\n\nqueue:\n  autoscaling:\n    enabled: true\n    minReplicas: 10\n    maxReplicas: 20\n```\n\n<Note>\n  Ensure that your deployment environment has sufficient resources to scale to the recommended size. Monitor your applications and infrastructure to ensure optimal performance. Consider implementing monitoring and alerting to track resource usage and application performance.\n</Note>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/agent-server-scale.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "### Autoscaling\n\nIf your deployment experiences bursty traffic, you can enable autoscaling to scale the number of API servers and queue workers to handle the load.\n\nHere is a sample configuration for autoscaling for high reads and high writes:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Autoscaling",
+      "id": "autoscaling"
+    }
+  ],
+  "url": "llms-txt#example-configuration-for-high-reads,-high-writes-(500-read/500-write-requests-per-second)",
+  "links": []
+}

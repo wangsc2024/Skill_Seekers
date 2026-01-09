@@ -1,0 +1,19 @@
+{
+  "title": "Reactive Approach (fallback) - catching error externally",
+  "content": "try:\n    result = graph.invoke({\"messages\": []}, {\"recursion_limit\": 10})\nexcept GraphRecursionError as e:\n    # Handle externally after graph execution fails\n    result = {\"messages\": [\"Fallback: recursion limit exceeded\"]}\npython  theme={null}\ndef inspect_metadata(state: dict, config: RunnableConfig) -> dict:\n    metadata = config[\"metadata\"]\n\nprint(f\"Step: {metadata['langgraph_step']}\")\n    print(f\"Node: {metadata['langgraph_node']}\")\n    print(f\"Triggers: {metadata['langgraph_triggers']}\")\n    print(f\"Path: {metadata['langgraph_path']}\")\n    print(f\"Checkpoint NS: {metadata['langgraph_checkpoint_ns']}\")\n\nIt's often nice to be able to visualize graphs, especially as they get more complex. LangGraph comes with several built-in ways to visualize graphs. See [this how-to guide](/oss/python/langgraph/use-graph-api#visualize-your-graph) for more info.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/graph-api.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "The key differences between these approaches are:\n\n| Approach                                  | Detection            | Handling                             | Control Flow                       |\n| ----------------------------------------- | -------------------- | ------------------------------------ | ---------------------------------- |\n| Proactive (using `RemainingSteps`)        | Before limit reached | Inside graph via conditional routing | Graph continues to completion node |\n| Reactive (catching `GraphRecursionError`) | After limit exceeded | Outside graph in try/catch           | Graph execution terminated         |\n\n**Proactive advantages:**\n\n* Graceful degradation within the graph\n* Can save intermediate state in checkpoints\n* Better user experience with partial results\n* Graph completes normally (no exception)\n\n**Reactive advantages:**\n\n* Simpler implementation\n* No need to modify graph logic\n* Centralized error handling\n\n#### Other available metadata\n\nAlong with `langgraph_step`, the following metadata is also available in `config[\"metadata\"]`:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Visualization",
+      "id": "visualization"
+    }
+  ],
+  "url": "llms-txt#reactive-approach-(fallback)---catching-error-externally",
+  "links": []
+}

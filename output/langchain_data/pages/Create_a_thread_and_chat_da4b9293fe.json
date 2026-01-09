@@ -1,0 +1,14 @@
+{
+  "title": "Create a thread and chat",
+  "content": "thread = await client.threads.create()\nprint(f\"✅ Created thread as Alice: {thread['thread_id']}\")\n\nresponse = await client.runs.create(\n    thread_id=thread[\"thread_id\"],\n    assistant_id=\"agent\",\n    input={\"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]},\n)\nprint(\"✅ Bot responded:\")\nprint(response)\n```\n\n1. Without a valid token, we can't access the bot\n2. With a valid token, we can create threads and chat\n\nCongratulations! You've built a chatbot that only lets \"authenticated\" users access it. While this system doesn't (yet) implement a production-ready security scheme, we've learned the basic mechanics of how to control access to our bot. In the next tutorial, we'll learn how to give each user their own private conversations.\n\nNow that you can control who accesses your bot, you might want to:\n\n1. Continue the tutorial by going to [Make conversations private](/langsmith/resource-auth) to learn about resource authorization.\n2. Read more about [authentication concepts](/langsmith/auth).\n3. Check out the API reference for [Auth](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth), [Auth.authenticate](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate), and [MinimalUserDict](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.types.MinimalUserDict) for more authentication details.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/set-up-custom-auth.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#create-a-thread-and-chat",
+  "links": []
+}

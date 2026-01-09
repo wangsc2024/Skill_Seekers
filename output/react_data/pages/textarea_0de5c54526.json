@@ -1,0 +1,281 @@
+{
+  "url": "https://react.dev/reference/react-dom/components/textarea",
+  "title": "<textarea>",
+  "content": "The built-in browser <textarea> component lets you render a multiline text input.\n\nTo display a text area, render the built-in browser <textarea> component.\n\nSee more examples below.\n\n<textarea> supports all common element props.\n\nYou can make a text area controlled by passing a value prop:\n\nWhen you pass value, you must also pass an onChange handler that updates the passed value.\n\nIf your <textarea> is uncontrolled, you may pass the defaultValue prop instead:\n\nThese <textarea> props are relevant both for uncontrolled and controlled text areas:\n\nRender <textarea> to display a text area. You can specify its default size with the rows and cols attributes, but by default the user will be able to resize it. To disable resizing, you can specify resize: none in the CSS.\n\nTypically, you will place every <textarea> inside a <label> tag. This tells the browser that this label is associated with that text area. When the user clicks the label, the browser will focus the text area. It’s also essential for accessibility: a screen reader will announce the label caption when the user focuses the text area.\n\nIf you can’t nest <textarea> into a <label>, associate them by passing the same ID to <textarea id> and <label htmlFor>. To avoid conflicts between instances of one component, generate such an ID with useId.\n\nYou can optionally specify the initial value for the text area. Pass it as the defaultValue string.\n\nUnlike in HTML, passing initial text like <textarea>Some content</textarea> is not supported.\n\nAdd a <form> around your textarea with a <button type=\"submit\"> inside. It will call your <form onSubmit> event handler. By default, the browser will send the form data to the current URL and refresh the page. You can override that behavior by calling e.preventDefault(). Read the form data with new FormData(e.target).\n\nGive a name to your <textarea>, for example <textarea name=\"postContent\" />. The name you specified will be used as a key in the form data, for example { postContent: \"Your post\" }.\n\nBy default, any <button> inside a <form> will submit it. This can be surprising! If you have your own custom Button React component, consider returning <button type=\"button\"> instead of <button>. Then, to be explicit, use <button type=\"submit\"> for buttons that are supposed to submit the form.\n\nA text area like <textarea /> is uncontrolled. Even if you pass an initial value like <textarea defaultValue=\"Initial text\" />, your JSX only specifies the initial value, not the value right now.\n\nTo render a controlled text area, pass the value prop to it. React will force the text area to always have the value you passed. Typically, you will control a text area by declaring a state variable:\n\nThis is useful if you want to re-render some part of the UI in response to every keystroke.\n\nIf you pass value without onChange, it will be impossible to type into the text area. When you control a text area by passing some value to it, you force it to always have the value you passed. So if you pass a state variable as a value but forget to update that state variable synchronously during the onChange event handler, React will revert the text area after every keystroke back to the value that you specified.\n\nIf you render a text area with value but no onChange, you will see an error in the console:\n\nAs the error message suggests, if you only wanted to specify the initial value, pass defaultValue instead:\n\nIf you want to control this text area with a state variable, specify an onChange handler:\n\nIf the value is intentionally read-only, add a readOnly prop to suppress the error:\n\nIf you control a text area, you must update its state variable to the text area’s value from the DOM during onChange.\n\nYou can’t update it to something other than e.target.value:\n\nYou also can’t update it asynchronously:\n\nTo fix your code, update it synchronously to e.target.value:\n\nIf this doesn’t fix the problem, it’s possible that the text area gets removed and re-added from the DOM on every keystroke. This can happen if you’re accidentally resetting state on every re-render. For example, this can happen if the text area or one of its parents always receives a different key attribute, or if you nest component definitions (which is not allowed in React and causes the “inner” component to remount on every render).\n\nIf you provide a value to the component, it must remain a string throughout its lifetime.\n\nYou cannot pass value={undefined} first and later pass value=\"some string\" because React won’t know whether you want the component to be uncontrolled or controlled. A controlled component should always receive a string value, not null or undefined.\n\nIf your value is coming from an API or a state variable, it might be initialized to null or undefined. In that case, either set it to an empty string ('') initially, or pass value={someValue ?? ''} to ensure value is a string.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "<textarea>",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "<textarea>",
+      "id": "textarea"
+    },
+    {
+      "level": "h4",
+      "text": "Props",
+      "id": "props"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Displaying a text area",
+      "id": "displaying-a-text-area"
+    },
+    {
+      "level": "h3",
+      "text": "Providing a label for a text area",
+      "id": "providing-a-label-for-a-text-area"
+    },
+    {
+      "level": "h3",
+      "text": "Providing an initial value for a text area",
+      "id": "providing-an-initial-value-for-a-text-area"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Reading the text area value when submitting a form",
+      "id": "reading-the-text-area-value-when-submitting-a-form"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Controlling a text area with a state variable",
+      "id": "controlling-a-text-area-with-a-state-variable"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "My text area doesn’t update when I type into it",
+      "id": "my-text-area-doesnt-update-when-i-type-into-it"
+    },
+    {
+      "level": "h3",
+      "text": "My text area caret jumps to the beginning on every keystroke",
+      "id": "my-text-area-caret-jumps-to-the-beginning-on-every-keystroke"
+    },
+    {
+      "level": "h3",
+      "text": "I’m getting an error: “A component is changing an uncontrolled input to be controlled”",
+      "id": "im-getting-an-error-a-component-is-changing-an-uncontrolled-input-to-be-controlled"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<textarea />",
+      "language": "jsx"
+    },
+    {
+      "code": "<textarea name=\"postContent\" />",
+      "language": "jsx"
+    },
+    {
+      "code": "function NewPost() {  const [postContent, setPostContent] = useState(''); // Declare a state variable...  // ...  return (    <textarea      value={postContent} // ...force the input's value to match the state variable...      onChange={e => setPostContent(e.target.value)} // ... and update the state variable on any edits!    />  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "// 🔴 Bug: controlled text area with no onChange handler<textarea value={something} />",
+      "language": "jsx"
+    },
+    {
+      "code": "// ✅ Good: uncontrolled text area with an initial value<textarea defaultValue={something} />",
+      "language": "jsx"
+    },
+    {
+      "code": "// ✅ Good: controlled text area with onChange<textarea value={something} onChange={e => setSomething(e.target.value)} />",
+      "language": "jsx"
+    },
+    {
+      "code": "// ✅ Good: readonly controlled text area without on change<textarea value={something} readOnly={true} />",
+      "language": "jsx"
+    },
+    {
+      "code": "function handleChange(e) {  // 🔴 Bug: updating an input to something other than e.target.value  setFirstName(e.target.value.toUpperCase());}",
+      "language": "javascript"
+    },
+    {
+      "code": "function handleChange(e) {  // 🔴 Bug: updating an input asynchronously  setTimeout(() => {    setFirstName(e.target.value);  }, 100);}",
+      "language": "javascript"
+    },
+    {
+      "code": "function handleChange(e) {  // ✅ Updating a controlled input to e.target.value synchronously  setFirstName(e.target.value);}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

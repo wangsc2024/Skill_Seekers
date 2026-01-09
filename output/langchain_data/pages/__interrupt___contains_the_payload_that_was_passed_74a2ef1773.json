@@ -1,0 +1,8 @@
+{
+  "title": "__interrupt__ contains the payload that was passed to interrupt()",
+  "content": "print(result[\"__interrupt__\"])",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#__interrupt__-contains-the-payload-that-was-passed-to-interrupt()",
+  "links": []
+}

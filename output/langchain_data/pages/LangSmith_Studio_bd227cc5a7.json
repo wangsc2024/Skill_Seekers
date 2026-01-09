@@ -1,0 +1,24 @@
+{
+  "title": "LangSmith Studio",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/studio\n\nWhen building agents with LangChain locally, it's helpful to visualize what's happening inside your agent, interact with it in real-time, and debug issues as they occur. **LangSmith Studio** is a free visual interface for developing and testing your LangChain agents from your local machine.\n\nStudio connects to your locally running agent to show you each step your agent takes: the prompts sent to the model, tool calls and their results, and the final output. You can test different inputs, inspect intermediate states, and iterate on your agent's behavior without additional code or deployment.\n\nThis pages describes how to set up Studio with your local LangChain agent.\n\nBefore you begin, ensure you have the following:\n\n* **A LangSmith account**: Sign up (for free) or log in at [smith.langchain.com](https://smith.langchain.com).\n* **A LangSmith API key**: Follow the [Create an API key](/langsmith/create-account-api-key#create-an-api-key) guide.\n* If you don't want data [traced](/langsmith/observability-concepts#traces) to LangSmith, set `LANGSMITH_TRACING=false` in your application's `.env` file. With tracing disabled, no data leaves your local server.\n\n## Set up local Agent server\n\n### 1. Install the LangGraph CLI\n\nThe [LangGraph CLI](/langsmith/cli) provides a local development server (also called [Agent Server](/langsmith/agent-server)) that connects your agent to Studio.\n\n```shell  theme={null}",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Set up local Agent server",
+      "id": "set-up-local-agent-server"
+    },
+    {
+      "level": "h3",
+      "text": "1. Install the LangGraph CLI",
+      "id": "1.-install-the-langgraph-cli"
+    }
+  ],
+  "url": "llms-txt#langsmith-studio",
+  "links": []
+}

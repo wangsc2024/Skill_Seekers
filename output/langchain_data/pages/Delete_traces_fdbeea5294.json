@@ -1,0 +1,51 @@
+{
+  "title": "Delete traces",
+  "content": "Source: https://docs.langchain.com/langsmith/script-delete-traces\n\nThe LangSmith UI does not currently support the deletion of an individual trace. This, however, can be accomplished by directly removing the trace from all materialized views in ClickHouse (except the runs\\_history views) and the runs and feedback table themselves.\n\nThis command can either be run using a trace ID as an argument or using a file that is a list of trace IDs.\n\nEnsure you have the following tools/items ready.\n\n* [https://kubernetes.io/docs/tasks/tools/](https://kubernetes.io/docs/tasks/tools/)\n\n2. Clickhouse database credentials\n\n* Host\n   * Port\n   * Username\n     * If using the bundled version, this is `default`\n   * Password\n     * If using the bundled version, this is `password`\n   * Database name\n     * If using the bundled version, this is `default`\n\n3. Connectivity to the Clickhouse database from the machine you will be running the `delete_trace_by_id` script on.\n\n* If you are using the bundled version, you may need to port forward the clickhouse service to your local machine.\n   * Run `kubectl port-forward svc/langsmith-clickhouse 8123:8123` to port forward the clickhouse service to your local machine.\n\n4. The script to delete a trace\n\n* You can download the script from [here](https://github.com/langchain-ai/helm/blob/main/charts/langsmith/scripts/delete_trace_by_id.sh)\n\n### Running the deletion script for a single trace\n\nRun the following command to run the trace deletion script using a single trace ID:\n\nFor example, if you are using the bundled version with port-forwarding, the command would look like:\n\nIf you visit the LangSmith UI, you should now see specified trace ID is no longer present nor reflected in stats.\n\n### Running the deletion script for a multiple traces from a file with one trace ID per line\n\nRun the following command to run the trace deletion script using a list of trace IDs:\n\nFor example, if you are using the bundled version with port-forwarding, the command would look like:\n\nIf you visit the LangSmith UI, you should now see all the specified traces have been removed.\n\n### \"Could not find trace IDs\" error\n\nIf you receive an error message stating that trace IDs could not be found, add the `--ssl` flag to your command. Without this flag, the script may not be able to properly connect to ClickHouse, resulting in false \"trace ID not found\" errors.\n\nExample with SSL flag:\n\nYou can also verify that traces exist by connecting to ClickHouse directly using `clickhouse-cli` and querying for the trace IDs before running the deletion script.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/script-delete-traces.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "For example, if you are using the bundled version with port-forwarding, the command would look like:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you visit the LangSmith UI, you should now see specified trace ID is no longer present nor reflected in stats.\n\n### Running the deletion script for a multiple traces from a file with one trace ID per line\n\nRun the following command to run the trace deletion script using a list of trace IDs:",
+      "language": "unknown"
+    },
+    {
+      "code": "For example, if you are using the bundled version with port-forwarding, the command would look like:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you visit the LangSmith UI, you should now see all the specified traces have been removed.\n\n## Troubleshooting\n\n### \"Could not find trace IDs\" error\n\nIf you receive an error message stating that trace IDs could not be found, add the `--ssl` flag to your command. Without this flag, the script may not be able to properly connect to ClickHouse, resulting in false \"trace ID not found\" errors.\n\nExample with SSL flag:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h3",
+      "text": "Running the deletion script for a single trace",
+      "id": "running-the-deletion-script-for-a-single-trace"
+    },
+    {
+      "level": "h3",
+      "text": "Running the deletion script for a multiple traces from a file with one trace ID per line",
+      "id": "running-the-deletion-script-for-a-multiple-traces-from-a-file-with-one-trace-id-per-line"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "\"Could not find trace IDs\" error",
+      "id": "\"could-not-find-trace-ids\"-error"
+    }
+  ],
+  "url": "llms-txt#delete-traces",
+  "links": []
+}

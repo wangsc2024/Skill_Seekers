@@ -1,0 +1,8 @@
+{
+  "title": "Extract customer_id and customer_name using jq",
+  "content": "export CUSTOMER_ID=$(echo \"$response\" | jq -r '.customer_info.customer_id')\nexport CUSTOMER_NAME=$(echo \"$response\" | jq -r '.customer_info.customer_name')",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#extract-customer_id-and-customer_name-using-jq",
+  "links": []
+}

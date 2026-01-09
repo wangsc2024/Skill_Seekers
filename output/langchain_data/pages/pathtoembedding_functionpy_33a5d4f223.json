@@ -1,0 +1,19 @@
+{
+  "title": "path/to/embedding_function.py",
+  "content": "from openai import AsyncOpenAI\n\nclient = AsyncOpenAI()\n\nasync def aembed_texts(texts: list[str]) -> list[list[float]]:\n    \"\"\"Custom embedding function that must:\n    1. Be async\n    2. Accept a list of strings\n    3. Return a list of float arrays (embeddings)\n    \"\"\"\n    response = await client.embeddings.create(\n        model=\"text-embedding-3-small\",\n        input=texts\n    )\n    return [e.embedding for e in response.data]\npython  theme={null}\nfrom langgraph_sdk import get_client\n\nasync def search_store():\n    client = get_client()\n    results = await client.store.search_items(\n        (\"memory\", \"facts\"),\n        query=\"your search query\",\n        limit=3  # number of results to return\n    )\n    return results",
+  "code_samples": [
+    {
+      "code": "## Querying via the API\n\nYou can also query the store using the LangGraph SDK. Since the SDK uses async operations:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Querying via the API",
+      "id": "querying-via-the-api"
+    }
+  ],
+  "url": "llms-txt#path/to/embedding_function.py",
+  "links": []
+}

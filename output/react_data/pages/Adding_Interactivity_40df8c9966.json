@@ -1,0 +1,163 @@
+{
+  "url": "https://react.dev/learn/adding-interactivity",
+  "title": "Adding Interactivity",
+  "content": "Some things on the screen update in response to user input. For example, clicking an image gallery switches the active image. In React, data that changes over time is called state. You can add state to any component, and update it as needed. In this chapter, you’ll learn how to write components that handle interactions, update their state, and display different output over time.\n\nReact lets you add event handlers to your JSX. Event handlers are your own functions that will be triggered in response to user interactions like clicking, hovering, focusing on form inputs, and so on.\n\nBuilt-in components like <button> only support built-in browser events like onClick. However, you can also create your own components, and give their event handler props any application-specific names that you like.\n\nRead Responding to Events to learn how to add event handlers.\n\nComponents often need to change what’s on the screen as a result of an interaction. Typing into the form should update the input field, clicking “next” on an image carousel should change which image is displayed, clicking “buy” puts a product in the shopping cart. Components need to “remember” things: the current input value, the current image, the shopping cart. In React, this kind of component-specific memory is called state.\n\nYou can add state to a component with a useState Hook. Hooks are special functions that let your components use React features (state is one of those features). The useState Hook lets you declare a state variable. It takes the initial state and returns a pair of values: the current state, and a state setter function that lets you update it.\n\nHere is how an image gallery uses and updates state on click:\n\nRead State: A Component’s Memory to learn how to remember a value and update it on interaction.\n\nBefore your components are displayed on the screen, they must be rendered by React. Understanding the steps in this process will help you think about how your code executes and explain its behavior.\n\nImagine that your components are cooks in the kitchen, assembling tasty dishes from ingredients. In this scenario, React is the waiter who puts in requests from customers and brings them their orders. This process of requesting and serving UI has three steps:\n\nIllustrated by Rachel Lee Nabors\n\nRead Render and Commit to learn the lifecycle of a UI update.\n\nUnlike regular JavaScript variables, React state behaves more like a snapshot. Setting it does not change the state variable you already have, but instead triggers a re-render. This can be surprising at first!\n\nThis behavior helps you avoid subtle bugs. Here is a little chat app. Try to guess what happens if you press “Send” first and then change the recipient to Bob. Whose name will appear in the alert five seconds later?\n\nRead State as a Snapshot to learn why state appears “fixed” and unchanging inside the event handlers.\n\nThis component is buggy: clicking “+3” increments the score only once.\n\nState as a Snapshot explains why this is happening. Setting state requests a new re-render, but does not change it in the already running code. So score continues to be 0 right after you call setScore(score + 1).\n\nYou can fix this by passing an updater function when setting state. Notice how replacing setScore(score + 1) with setScore(s => s + 1) fixes the “+3” button. This lets you queue multiple state updates.\n\nRead Queueing a Series of State Updates to learn how to queue a sequence of state updates.\n\nState can hold any kind of JavaScript value, including objects. But you shouldn’t change objects and arrays that you hold in the React state directly. Instead, when you want to update an object and array, you need to create a new one (or make a copy of an existing one), and then update the state to use that copy.\n\nUsually, you will use the ... spread syntax to copy objects and arrays that you want to change. For example, updating a nested object could look like this:\n\nIf copying objects in code gets tedious, you can use a library like Immer to reduce repetitive code:\n\nRead Updating Objects in State to learn how to update objects correctly.\n\nArrays are another type of mutable JavaScript objects you can store in state and should treat as read-only. Just like with objects, when you want to update an array stored in state, you need to create a new one (or make a copy of an existing one), and then set state to use the new array:\n\nIf copying arrays in code gets tedious, you can use a library like Immer to reduce repetitive code:\n\nRead Updating Arrays in State to learn how to update arrays correctly.\n\nHead over to Responding to Events to start reading this chapter page by page!\n\nOr, if you’re already familiar with these topics, why not read about Managing State?",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Adding Interactivity",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "In this chapter",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Responding to events",
+      "id": "responding-to-events"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "State: a component’s memory",
+      "id": "state-a-components-memory"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Render and commit",
+      "id": "render-and-commit"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "State as a snapshot",
+      "id": "state-as-a-snapshot"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Queueing a series of state updates",
+      "id": "queueing-a-series-of-state-updates"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Updating objects in state",
+      "id": "updating-objects-in-state"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Updating arrays in state",
+      "id": "updating-arrays-in-state"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "What’s next?",
+      "id": "whats-next"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "const [index, setIndex] = useState(0);const [showMore, setShowMore] = useState(false);",
+      "language": "jsx"
+    },
+    {
+      "code": "console.log(count);  // 0setCount(count + 1); // Request a re-render with 1console.log(count);  // Still 0!",
+      "language": "javascript"
+    },
+    {
+      "code": "console.log(score);  // 0setScore(score + 1); // setScore(0 + 1);console.log(score);  // 0setScore(score + 1); // setScore(0 + 1);console.log(score);  // 0setScore(score + 1); // setScore(0 + 1);console.log(score);  // 0",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react-dom"
+  ]
+}

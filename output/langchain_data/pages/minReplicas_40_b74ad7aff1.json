@@ -1,0 +1,8 @@
+{
+  "title": "minReplicas: 40",
+  "content": "backend:\n  deployment:\n    replicas: 50 # OR enable autoscaling to this level (example below)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#minreplicas:-40",
+  "links": []
+}

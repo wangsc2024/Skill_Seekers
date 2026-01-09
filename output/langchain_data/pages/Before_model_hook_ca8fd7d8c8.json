@@ -1,0 +1,8 @@
+{
+  "title": "Before model hook",
+  "content": "@before_model\ndef log_before_model(state: AgentState, runtime: Runtime[Context]) -> dict | None:  # [!code highlight]\n    print(f\"Processing request for user: {runtime.context.user_name}\")  # [!code highlight]\n    return None",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#before-model-hook",
+  "links": []
+}

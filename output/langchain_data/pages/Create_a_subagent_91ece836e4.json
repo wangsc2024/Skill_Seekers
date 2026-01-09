@@ -1,0 +1,8 @@
+{
+  "title": "Create a subagent",
+  "content": "subagent = create_agent(model=\"anthropic:claude-sonnet-4-20250514\", tools=[...])",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-subagent",
+  "links": []
+}

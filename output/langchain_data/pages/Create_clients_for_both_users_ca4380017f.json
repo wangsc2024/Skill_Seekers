@@ -1,0 +1,8 @@
+{
+  "title": "Create clients for both users",
+  "content": "alice = get_client(\n    url=\"http://localhost:2024\",\n    headers={\"Authorization\": \"Bearer user1-token\"}\n)\n\nbob = get_client(\n    url=\"http://localhost:2024\",\n    headers={\"Authorization\": \"Bearer user2-token\"}\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-clients-for-both-users",
+  "links": []
+}

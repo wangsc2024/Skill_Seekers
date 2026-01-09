@@ -1,0 +1,8 @@
+{
+  "title": "Check if execution was interrupted",
+  "content": "if result.get(\"__interrupt__\"):\n    # Extract interrupt information\n    interrupts = result[\"__interrupt__\"][0].value\n    action_requests = interrupts[\"action_requests\"]\n    review_configs = interrupts[\"review_configs\"]\n\n# Create a lookup map from tool name to review config\n    config_map = {cfg[\"action_name\"]: cfg for cfg in review_configs}\n\n# Display the pending actions to the user\n    for action in action_requests:\n        review_config = config_map[action[\"name\"]]\n        print(f\"Tool: {action['name']}\")\n        print(f\"Arguments: {action['args']}\")\n        print(f\"Allowed decisions: {review_config['allowed_decisions']}\")\n\n# Get user decisions (one per action_request, in order)\n    decisions = [\n        {\"type\": \"approve\"}  # User approved the deletion\n    ]\n\n# Resume execution with decisions\n    result = agent.invoke(\n        Command(resume={\"decisions\": decisions}),\n        config=config  # Must use the same config!\n    )",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#check-if-execution-was-interrupted",
+  "links": []
+}

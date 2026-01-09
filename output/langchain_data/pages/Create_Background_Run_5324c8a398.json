@@ -1,0 +1,8 @@
+{
+  "title": "Create Background Run",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/thread-runs/create-background-run\n\nlangsmith/agent-server-openapi.json post /threads/{thread_id}/runs\nCreate a run in existing thread, return the run ID immediately. Don't wait for the final run output.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-background-run",
+  "links": []
+}

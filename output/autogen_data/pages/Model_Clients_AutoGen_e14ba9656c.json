@@ -1,0 +1,206 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+  "title": "Model Clients — AutoGen",
+  "content": "AutoGen provides a suite of built-in model clients for using ChatCompletion API. All model clients implement the ChatCompletionClient protocol class.\n\nCurrently we support the following built-in model clients:\n\nOpenAIChatCompletionClient: for OpenAI models and models with OpenAI API compatibility (e.g., Gemini).\n\nAzureOpenAIChatCompletionClient: for Azure OpenAI models.\n\nAzureAIChatCompletionClient: for GitHub models and models hosted on Azure.\n\nOllamaChatCompletionClient (Experimental): for local models hosted on Ollama.\n\nAnthropicChatCompletionClient (Experimental): for models hosted on Anthropic.\n\nSKChatCompletionAdapter: adapter for Semantic Kernel AI connectors.\n\nFor more information on how to use these model clients, please refer to the documentation of each client.\n\nAutoGen uses standard Python logging module to log events like model calls and responses. The logger name is autogen_core.EVENT_LOGGER_NAME, and the event type is LLMCall.\n\nTo call a model client, you can use the create() method. This example uses the OpenAIChatCompletionClient to call an OpenAI model.\n\nYou can use the create_stream() method to create a chat completion request with streaming token chunks.\n\nThe last response in the streaming response is always the final response of the type CreateResult.\n\nThe default usage response is to return zero values. To enable usage, see create_stream() for more details.\n\nStructured output can be enabled by setting the response_format field in OpenAIChatCompletionClient and AzureOpenAIChatCompletionClient to as a Pydantic BaseModel class.\n\nStructured output is only available for models that support it. It also requires the model client to support structured output as well. Currently, the OpenAIChatCompletionClient and AzureOpenAIChatCompletionClient support structured output.\n\nYou also use the extra_create_args parameter in the create() method to set the response_format field so that the structured output can be configured for each request.\n\nautogen_ext implements ChatCompletionCache that can wrap any ChatCompletionClient. Using this wrapper avoids incurring token usage when querying the underlying client with the same prompt multiple times.\n\nChatCompletionCache uses a CacheStore protocol. We have implemented some useful variants of CacheStore including DiskCacheStore and RedisStore.\n\nHere’s an example of using diskcache for local caching:\n\nInspecting cached_client.total_usage() (or model_client.total_usage()) before and after a cached response should yield idential counts.\n\nNote that the caching is sensitive to the exact arguments provided to cached_client.create or cached_client.create_stream, so changing tools or json_output arguments might lead to a cache miss.\n\nLet’s create a simple AI agent that can respond to messages using the ChatCompletion API.\n\nThe SimpleAgent class is a subclass of the autogen_core.RoutedAgent class for the convenience of automatically routing messages to the appropriate handlers. It has a single handler, handle_user_message, which handles message from the user. It uses the ChatCompletionClient to generate a response to the message. It then returns the response to the user, following the direct communication model.\n\nThe cancellation_token of the type autogen_core.CancellationToken is used to cancel asynchronous operations. It is linked to async calls inside the message handlers and can be used by the caller to cancel the handlers.\n\nThe above SimpleAgent always responds with a fresh context that contains only the system message and the latest user’s message. We can use model context classes from autogen_core.model_context to make the agent “remember” previous conversations. See the Model Context page for more details.\n\nIn the examples above, we show that you can provide the API key through the api_key argument. Importantly, the OpenAI and Azure OpenAI clients use the openai package, which will automatically read an api key from the environment variable if one is not provided.\n\nFor OpenAI, you can set the OPENAI_API_KEY environment variable.\n\nFor Azure OpenAI, you can set the AZURE_OPENAI_API_KEY environment variable.\n\nIn addition, for Gemini (Beta), you can set the GEMINI_API_KEY environment variable.\n\nThis is a good practice to explore, as it avoids including sensitive api keys in your code.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Model Clients#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Log Model Calls#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Call Model Client#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Streaming Tokens#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Structured Output#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Caching Model Responses#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Build an Agent with a Model Client#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "API Keys From Environment Variables#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "import logging\n\nfrom autogen_core import EVENT_LOGGER_NAME\n\nlogging.basicConfig(level=logging.WARNING)\nlogger = logging.getLogger(EVENT_LOGGER_NAME)\nlogger.addHandler(logging.StreamHandler())\nlogger.setLevel(logging.INFO)",
+      "language": "python"
+    },
+    {
+      "code": "import logging\n\nfrom autogen_core import EVENT_LOGGER_NAME\n\nlogging.basicConfig(level=logging.WARNING)\nlogger = logging.getLogger(EVENT_LOGGER_NAME)\nlogger.addHandler(logging.StreamHandler())\nlogger.setLevel(logging.INFO)",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4\", temperature=0.3\n)  # assuming OPENAI_API_KEY is set in the environment.\n\nresult = await model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4\", temperature=0.3\n)  # assuming OPENAI_API_KEY is set in the environment.\n\nresult = await model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"user\")])\nprint(result)",
+      "language": "python"
+    },
+    {
+      "code": "finish_reason='stop' content='The capital of France is Paris.' usage=RequestUsage(prompt_tokens=15, completion_tokens=8) cached=False logprobs=None thought=None",
+      "language": "rust"
+    },
+    {
+      "code": "finish_reason='stop' content='The capital of France is Paris.' usage=RequestUsage(prompt_tokens=15, completion_tokens=8) cached=False logprobs=None thought=None",
+      "language": "rust"
+    },
+    {
+      "code": "from autogen_core.models import CreateResult, UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\nmodel_client = OpenAIChatCompletionClient(model=\"gpt-4o\")  # assuming OPENAI_API_KEY is set in the environment.\n\nmessages = [\n    UserMessage(content=\"Write a very short story about a dragon.\", source=\"user\"),\n]\n\n# Create a stream.\nstream = model_client.create_stream(messages=messages)\n\n# Iterate over the stream and print the responses.\nprint(\"Streamed responses:\")\nasync for chunk in stream:  # type: ignore\n    if isinstance(chunk, str):\n        # The chunk is a string.\n        print(chunk, flush=True, end=\"\")\n    else:\n        # The final chunk is a CreateResult object.\n        assert isinstance(chunk, CreateResult) and isinstance(chunk.content, str)\n        # The last response is a CreateResult object with the complete message.\n        print(\"\\n\\n------------\\n\")\n        print(\"The complete response:\", flush=True)\n        print(chunk.content, flush=True)",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core.models import CreateResult, UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\nmodel_client = OpenAIChatCompletionClient(model=\"gpt-4o\")  # assuming OPENAI_API_KEY is set in the environment.\n\nmessages = [\n    UserMessage(content=\"Write a very short story about a dragon.\", source=\"user\"),\n]\n\n# Create a stream.\nstream = model_client.create_stream(messages=messages)\n\n# Iterate over the stream and print the responses.\nprint(\"Streamed responses:\")\nasync for chunk in stream:  # type: ignore\n    if isinstance(chunk, str):\n        # The chunk is a string.\n        print(chunk, flush=True, end=\"\")\n    else:\n        # The final chunk is a CreateResult object.\n        assert isinstance(chunk, CreateResult) and isinstance(chunk.content, str)\n        # The last response is a CreateResult object with the complete message.\n        print(\"\\n\\n------------\\n\")\n        print(\"The complete response:\", flush=True)\n        print(chunk.content, flush=True)",
+      "language": "python"
+    },
+    {
+      "code": "Streamed responses:\nIn the heart of an ancient forest, beneath the shadow of snow-capped peaks, a dragon named Elara lived secretly for centuries. Elara was unlike any dragon from the old tales; her scales shimmered with a deep emerald hue, each scale engraved with symbols of lost wisdom. The villagers in the nearby valley spoke of mysterious lights dancing across the night sky, but none dared venture close enough to solve the enigma.\n\nOne cold winter's eve, a young girl named Lira, brimming with curiosity and armed with the innocence of youth, wandered into Elara’s domain. Instead of fire and fury, she found warmth and a gentle gaze. The dragon shared stories of a world long forgotten and in return, Lira gifted her simple stories of human life, rich in laughter and scent of earth.\n\nFrom that night on, the villagers noticed subtle changes—the crops grew taller, and the air seemed sweeter. Elara had infused the valley with ancient magic, a guardian of balance, watching quietly as her new friend thrived under the stars. And so, Lira and Elara’s bond marked the beginning of a timeless friendship that spun tales of hope whispered through the leaves of the ever-verdant forest.\n\n------------\n\nThe complete response:\nIn the heart of an ancient forest, beneath the shadow of snow-capped peaks, a dragon named Elara lived secretly for centuries. Elara was unlike any dragon from the old tales; her scales shimmered with a deep emerald hue, each scale engraved with symbols of lost wisdom. The villagers in the nearby valley spoke of mysterious lights dancing across the night sky, but none dared venture close enough to solve the enigma.\n\nOne cold winter's eve, a young girl named Lira, brimming with curiosity and armed with the innocence of youth, wandered into Elara’s domain. Instead of fire and fury, she found warmth and a gentle gaze. The dragon shared stories of a world long forgotten and in return, Lira gifted her simple stories of human life, rich in laughter and scent of earth.\n\nFrom that night on, the villagers noticed subtle changes—the crops grew taller, and the air seemed sweeter. Elara had infused the valley with ancient magic, a guardian of balance, watching quietly as her new friend thrived under the stars. And so, Lira and Elara’s bond marked the beginning of a timeless friendship that spun tales of hope whispered through the leaves of the ever-verdant forest.\n\n\n------------\n\nThe token usage was:\nRequestUsage(prompt_tokens=0, completion_tokens=0)",
+      "language": "sql"
+    },
+    {
+      "code": "Streamed responses:\nIn the heart of an ancient forest, beneath the shadow of snow-capped peaks, a dragon named Elara lived secretly for centuries. Elara was unlike any dragon from the old tales; her scales shimmered with a deep emerald hue, each scale engraved with symbols of lost wisdom. The villagers in the nearby valley spoke of mysterious lights dancing across the night sky, but none dared venture close enough to solve the enigma.\n\nOne cold winter's eve, a young girl named Lira, brimming with curiosity and armed with the innocence of youth, wandered into Elara’s domain. Instead of fire and fury, she found warmth and a gentle gaze. The dragon shared stories of a world long forgotten and in return, Lira gifted her simple stories of human life, rich in laughter and scent of earth.\n\nFrom that night on, the villagers noticed subtle changes—the crops grew taller, and the air seemed sweeter. Elara had infused the valley with ancient magic, a guardian of balance, watching quietly as her new friend thrived under the stars. And so, Lira and Elara’s bond marked the beginning of a timeless friendship that spun tales of hope whispered through the leaves of the ever-verdant forest.\n\n------------\n\nThe complete response:\nIn the heart of an ancient forest, beneath the shadow of snow-capped peaks, a dragon named Elara lived secretly for centuries. Elara was unlike any dragon from the old tales; her scales shimmered with a deep emerald hue, each scale engraved with symbols of lost wisdom. The villagers in the nearby valley spoke of mysterious lights dancing across the night sky, but none dared venture close enough to solve the enigma.\n\nOne cold winter's eve, a young girl named Lira, brimming with curiosity and armed with the innocence of youth, wandered into Elara’s domain. Instead of fire and fury, she found warmth and a gentle gaze. The dragon shared stories of a world long forgotten and in return, Lira gifted her simple stories of human life, rich in laughter and scent of earth.\n\nFrom that night on, the villagers noticed subtle changes—the crops grew taller, and the air seemed sweeter. Elara had infused the valley with ancient magic, a guardian of balance, watching quietly as her new friend thrived under the stars. And so, Lira and Elara’s bond marked the beginning of a timeless friendship that spun tales of hope whispered through the leaves of the ever-verdant forest.\n\n\n------------\n\nThe token usage was:\nRequestUsage(prompt_tokens=0, completion_tokens=0)",
+      "language": "sql"
+    },
+    {
+      "code": "from typing import Literal\n\nfrom pydantic import BaseModel\n\n\n# The response format for the agent as a Pydantic base model.\nclass AgentResponse(BaseModel):\n    thoughts: str\n    response: Literal[\"happy\", \"sad\", \"neutral\"]\n\n\n# Create an agent that uses the OpenAI GPT-4o model with the custom response format.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    response_format=AgentResponse,  # type: ignore\n)\n\n# Send a message list to the model and await the response.\nmessages = [\n    UserMessage(content=\"I am happy.\", source=\"user\"),\n]\nresponse = await model_client.create(messages=messages)\nassert isinstance(response.content, str)\nparsed_response = AgentResponse.model_validate_json(response.content)\nprint(parsed_response.thoughts)\nprint(parsed_response.response)\n\n# Close the connection to the model client.\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Literal\n\nfrom pydantic import BaseModel\n\n\n# The response format for the agent as a Pydantic base model.\nclass AgentResponse(BaseModel):\n    thoughts: str\n    response: Literal[\"happy\", \"sad\", \"neutral\"]\n\n\n# Create an agent that uses the OpenAI GPT-4o model with the custom response format.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    response_format=AgentResponse,  # type: ignore\n)\n\n# Send a message list to the model and await the response.\nmessages = [\n    UserMessage(content=\"I am happy.\", source=\"user\"),\n]\nresponse = await model_client.create(messages=messages)\nassert isinstance(response.content, str)\nparsed_response = AgentResponse.model_validate_json(response.content)\nprint(parsed_response.thoughts)\nprint(parsed_response.response)\n\n# Close the connection to the model client.\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "I'm glad to hear that you're feeling happy! It's such a great emotion that can brighten your whole day. Is there anything in particular that's bringing you joy today? 😊\nhappy",
+      "language": "unknown"
+    },
+    {
+      "code": "I'm glad to hear that you're feeling happy! It's such a great emotion that can brighten your whole day. Is there anything in particular that's bringing you joy today? 😊\nhappy",
+      "language": "unknown"
+    },
+    {
+      "code": "# pip install -U \"autogen-ext[openai, diskcache]\"",
+      "language": "markdown"
+    },
+    {
+      "code": "# pip install -U \"autogen-ext[openai, diskcache]\"",
+      "language": "markdown"
+    },
+    {
+      "code": "import asyncio\nimport tempfile\n\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.cache_store.diskcache import DiskCacheStore\nfrom autogen_ext.models.cache import CHAT_CACHE_VALUE_TYPE, ChatCompletionCache\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom diskcache import Cache\n\n\nasync def main() -> None:\n    with tempfile.TemporaryDirectory() as tmpdirname:\n        # Initialize the original client\n        openai_model_client = OpenAIChatCompletionClient(model=\"gpt-4o\")\n\n        # Then initialize the CacheStore, in this case with diskcache.Cache.\n        # You can also use redis like:\n        # from autogen_ext.cache_store.redis import RedisStore\n        # import redis\n        # redis_instance = redis.Redis()\n        # cache_store = RedisCacheStore[CHAT_CACHE_VALUE_TYPE](redis_instance)\n        cache_store = DiskCacheStore[CHAT_CACHE_VALUE_TYPE](Cache(tmpdirname))\n        cache_client = ChatCompletionCache(openai_model_client, cache_store)\n\n        response = await cache_client.create([UserMessage(content=\"Hello, how are you?\", source=\"user\")])\n        print(response)  # Should print response from OpenAI\n        response = await cache_client.create([UserMessage(content=\"Hello, how are you?\", source=\"user\")])\n        print(response)  # Should print cached response\n\n        await openai_model_client.close()\n        await cache_client.close()\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nimport tempfile\n\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.cache_store.diskcache import DiskCacheStore\nfrom autogen_ext.models.cache import CHAT_CACHE_VALUE_TYPE, ChatCompletionCache\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom diskcache import Cache\n\n\nasync def main() -> None:\n    with tempfile.TemporaryDirectory() as tmpdirname:\n        # Initialize the original client\n        openai_model_client = OpenAIChatCompletionClient(model=\"gpt-4o\")\n\n        # Then initialize the CacheStore, in this case with diskcache.Cache.\n        # You can also use redis like:\n        # from autogen_ext.cache_store.redis import RedisStore\n        # import redis\n        # redis_instance = redis.Redis()\n        # cache_store = RedisCacheStore[CHAT_CACHE_VALUE_TYPE](redis_instance)\n        cache_store = DiskCacheStore[CHAT_CACHE_VALUE_TYPE](Cache(tmpdirname))\n        cache_client = ChatCompletionCache(openai_model_client, cache_store)\n\n        response = await cache_client.create([UserMessage(content=\"Hello, how are you?\", source=\"user\")])\n        print(response)  # Should print response from OpenAI\n        response = await cache_client.create([UserMessage(content=\"Hello, how are you?\", source=\"user\")])\n        print(response)  # Should print cached response\n\n        await openai_model_client.close()\n        await cache_client.close()\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import MessageContext, RoutedAgent, SingleThreadedAgentRuntime, message_handler\nfrom autogen_core.models import ChatCompletionClient, SystemMessage, UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n\n@dataclass\nclass Message:\n    content: str\n\n\nclass SimpleAgent(RoutedAgent):\n    def __init__(self, model_client: ChatCompletionClient) -> None:\n        super().__init__(\"A simple agent\")\n        self._system_messages = [SystemMessage(content=\"You are a helpful AI assistant.\")]\n        self._model_client = model_client\n\n    @message_handler\n    async def handle_user_message(self, message: Message, ctx: MessageContext) -> Message:\n        # Prepare input to the chat completion model.\n        user_message = UserMessage(content=message.content, source=\"user\")\n        response = await self._model_client.create(\n            self._system_messages + [user_message], cancellation_token=ctx.cancellation_token\n        )\n        # Return with the model's response.\n        assert isinstance(response.content, str)\n        return Message(content=response.content)",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import MessageContext, RoutedAgent, SingleThreadedAgentRuntime, message_handler\nfrom autogen_core.models import ChatCompletionClient, SystemMessage, UserMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n\n@dataclass\nclass Message:\n    content: str\n\n\nclass SimpleAgent(RoutedAgent):\n    def __init__(self, model_client: ChatCompletionClient) -> None:\n        super().__init__(\"A simple agent\")\n        self._system_messages = [SystemMessage(content=\"You are a helpful AI assistant.\")]\n        self._model_client = model_client\n\n    @message_handler\n    async def handle_user_message(self, message: Message, ctx: MessageContext) -> Message:\n        # Prepare input to the chat completion model.\n        user_message = UserMessage(content=message.content, source=\"user\")\n        response = await self._model_client.create(\n            self._system_messages + [user_message], cancellation_token=ctx.cancellation_token\n        )\n        # Return with the model's response.\n        assert isinstance(response.content, str)\n        return Message(content=response.content)",
+      "language": "python"
+    },
+    {
+      "code": "# Create the runtime and register the agent.\nfrom autogen_core import AgentId\n\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o-mini\",\n    # api_key=\"sk-...\", # Optional if you have an OPENAI_API_KEY set in the environment.\n)\n\nruntime = SingleThreadedAgentRuntime()\nawait SimpleAgent.register(\n    runtime,\n    \"simple_agent\",\n    lambda: SimpleAgent(model_client=model_client),\n)\n# Start the runtime processing messages.\nruntime.start()\n# Send a message to the agent and get the response.\nmessage = Message(\"Hello, what are some fun things to do in Seattle?\")\nresponse = await runtime.send_message(message, AgentId(\"simple_agent\", \"default\"))\nprint(response.content)\n# Stop the runtime processing messages.\nawait runtime.stop()\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "# Create the runtime and register the agent.\nfrom autogen_core import AgentId\n\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o-mini\",\n    # api_key=\"sk-...\", # Optional if you have an OPENAI_API_KEY set in the environment.\n)\n\nruntime = SingleThreadedAgentRuntime()\nawait SimpleAgent.register(\n    runtime,\n    \"simple_agent\",\n    lambda: SimpleAgent(model_client=model_client),\n)\n# Start the runtime processing messages.\nruntime.start()\n# Send a message to the agent and get the response.\nmessage = Message(\"Hello, what are some fun things to do in Seattle?\")\nresponse = await runtime.send_message(message, AgentId(\"simple_agent\", \"default\"))\nprint(response.content)\n# Stop the runtime processing messages.\nawait runtime.stop()\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "Seattle is a vibrant city with a wide range of activities and attractions. Here are some fun things to do in Seattle:\n\n1. **Space Needle**: Visit this iconic observation tower for stunning views of the city and surrounding mountains.\n\n2. **Pike Place Market**: Explore this historic market where you can see the famous fish toss, buy local produce, and find unique crafts and eateries.\n\n3. **Museum of Pop Culture (MoPOP)**: Dive into the world of contemporary culture, music, and science fiction at this interactive museum.\n\n4. **Chihuly Garden and Glass**: Marvel at the beautiful glass art installations by artist Dale Chihuly, located right next to the Space Needle.\n\n5. **Seattle Aquarium**: Discover the diverse marine life of the Pacific Northwest at this engaging aquarium.\n\n6. **Seattle Art Museum**: Explore a vast collection of art from around the world, including contemporary and indigenous art.\n\n7. **Kerry Park**: For one of the best views of the Seattle skyline, head to this small park on Queen Anne Hill.\n\n8. **Ballard Locks**: Watch boats pass through the locks and observe the salmon ladder to see salmon migrating.\n\n9. **Ferry to Bainbridge Island**: Take a scenic ferry ride across Puget Sound to enjoy charming shops, restaurants, and beautiful natural scenery.\n\n10. **Olympic Sculpture Park**: Stroll through this outdoor park with large-scale sculptures and stunning views of the waterfront and mountains.\n\n11. **Underground Tour**: Discover Seattle's history on this quirky tour of the city's underground passageways in Pioneer Square.\n\n12. **Seattle Waterfront**: Enjoy the shops, restaurants, and attractions along the waterfront, including the Seattle Great Wheel and the aquarium.\n\n13. **Discovery Park**: Explore the largest green space in Seattle, featuring trails, beaches, and views of Puget Sound.\n\n14. **Food Tours**: Try out Seattle’s diverse culinary scene, including fresh seafood, international cuisines, and coffee culture (don’t miss the original Starbucks!).\n\n15. **Attend a Sports Game**: Catch a Seahawks (NFL), Mariners (MLB), or Sounders (MLS) game for a lively local experience.\n\nWhether you're interested in culture, nature, food, or history, Seattle has something for everyone to enjoy!",
+      "language": "sql"
+    },
+    {
+      "code": "Seattle is a vibrant city with a wide range of activities and attractions. Here are some fun things to do in Seattle:\n\n1. **Space Needle**: Visit this iconic observation tower for stunning views of the city and surrounding mountains.\n\n2. **Pike Place Market**: Explore this historic market where you can see the famous fish toss, buy local produce, and find unique crafts and eateries.\n\n3. **Museum of Pop Culture (MoPOP)**: Dive into the world of contemporary culture, music, and science fiction at this interactive museum.\n\n4. **Chihuly Garden and Glass**: Marvel at the beautiful glass art installations by artist Dale Chihuly, located right next to the Space Needle.\n\n5. **Seattle Aquarium**: Discover the diverse marine life of the Pacific Northwest at this engaging aquarium.\n\n6. **Seattle Art Museum**: Explore a vast collection of art from around the world, including contemporary and indigenous art.\n\n7. **Kerry Park**: For one of the best views of the Seattle skyline, head to this small park on Queen Anne Hill.\n\n8. **Ballard Locks**: Watch boats pass through the locks and observe the salmon ladder to see salmon migrating.\n\n9. **Ferry to Bainbridge Island**: Take a scenic ferry ride across Puget Sound to enjoy charming shops, restaurants, and beautiful natural scenery.\n\n10. **Olympic Sculpture Park**: Stroll through this outdoor park with large-scale sculptures and stunning views of the waterfront and mountains.\n\n11. **Underground Tour**: Discover Seattle's history on this quirky tour of the city's underground passageways in Pioneer Square.\n\n12. **Seattle Waterfront**: Enjoy the shops, restaurants, and attractions along the waterfront, including the Seattle Great Wheel and the aquarium.\n\n13. **Discovery Park**: Explore the largest green space in Seattle, featuring trails, beaches, and views of Puget Sound.\n\n14. **Food Tours**: Try out Seattle’s diverse culinary scene, including fresh seafood, international cuisines, and coffee culture (don’t miss the original Starbucks!).\n\n15. **Attend a Sports Game**: Catch a Seahawks (NFL), Mariners (MLB), or Sounders (MLS) game for a lively local experience.\n\nWhether you're interested in culture, nature, food, or history, Seattle has something for everyone to enjoy!",
+      "language": "sql"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.diskcache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html"
+  ]
+}

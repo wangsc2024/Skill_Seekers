@@ -1,0 +1,8 @@
+{
+  "title": "OPTIONAL use a virtual environment",
+  "content": "python -m venv unsloth_env\nsource unsloth_env/bin/activate",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#optional-use-a-virtual-environment",
+  "links": []
+}

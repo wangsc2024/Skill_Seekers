@@ -1,0 +1,32 @@
+{
+  "title": "<|channel|>analysis<|message|>The user asks a simple math question. We should answer 4. Also we should comply with policy. No issues.<|end|><|start|>assistant<|channel|>final<|message|>2 + 2 equals 4.",
+  "content": "shellscript\npython -m sglang.launch_server \\\n    --model-path unsloth/Llama-3.2-1B-Instruct \\\n    --host 0.0.0.0 --port 30002 \\\n    --quantization fp8 \\\n    --kv-cache-dtype fp8_e4m3\nshellscript\npython -m sglang.launch_server \\\n    --model-path finetuned_model \\\n    --host 0.0.0.0 --port 30002\nshellscript",
+  "code_samples": [
+    {
+      "code": "{% endcode %}\n{% endstep %}\n{% endstepper %}\n\n### :gem:FP8 Online Quantization\n\nTo deploy models with FP8 online quantization which allows 30 to 50% more throughput and 50% less memory usage with 2x longer context length supports with SGLang, you can do the below:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\nYou can also use `--kv-cache-dtype fp8_e5m2` which has a larger dynamic range which might solve FP8 inference issues if you see them. Or use our pre-quantized float8 quants listed in <https://huggingface.co/unsloth/models?search=-fp8> or some are listed below:\n\n{% embed url=\"<https://huggingface.co/unsloth/Llama-3.2-3B-FP8-Dynamic>\" %}\n\n{% embed url=\"<https://huggingface.co/unsloth/Llama-3.3-70B-Instruct-FP8-Dynamic>\" %}\n\n### ⚡Benchmarking SGLang\n\nBelow is some code you can run to test the performance speed of your finetuned model:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then in another terminal or via tmux:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": ":gem:FP8 Online Quantization",
+      "id": ":gem:fp8-online-quantization"
+    },
+    {
+      "level": "h3",
+      "text": "⚡Benchmarking SGLang",
+      "id": "⚡benchmarking-sglang"
+    }
+  ],
+  "url": "llms-txt#<|channel|>analysis<|message|>the-user-asks-a-simple-math-question.-we-should-answer-4.-also-we-should-comply-with-policy.-no-issues.<|end|><|start|>assistant<|channel|>final<|message|>2-+-2-equals-4.",
+  "links": []
+}

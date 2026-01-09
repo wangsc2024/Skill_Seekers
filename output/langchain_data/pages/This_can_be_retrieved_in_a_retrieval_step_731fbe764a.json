@@ -1,0 +1,8 @@
+{
+  "title": "This can be retrieved in a retrieval step",
+  "content": "context = \"During this morning's meeting, we solved all world conflict.\"\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant. Please respond to the user's request only based on the given context.\"},\n    {\"role\": \"user\", \"content\": f\"Question: {question}\\nContext: {context}\"}\n]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#this-can-be-retrieved-in-a-retrieval-step",
+  "links": []
+}

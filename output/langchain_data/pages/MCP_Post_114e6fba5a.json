@@ -1,0 +1,8 @@
+{
+  "title": "MCP Post",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/mcp/mcp-post\n\nlangsmith/agent-server-openapi.json post /mcp/\nImplemented according to the Streamable HTTP Transport specification.\nSends a JSON-RPC 2.0 message to the server.\n\n- **Request**: Provide an object with `jsonrpc`, `id`, `method`, and optional `params`.\n- **Response**: Returns a JSON-RPC response or acknowledgment.\n\n**Notes:**\n- Stateless: Sessions are not persisted across requests.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#mcp-post",
+  "links": []
+}

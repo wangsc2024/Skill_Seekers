@@ -1,0 +1,28 @@
+{
+  "title": "Launch the shell",
+  "content": "CMD [\"/bin/bash\"]\nbash\ndocker run -it \\\n    --gpus=all \\\n    --net=host \\\n    --ipc=host \\\n    --ulimit memlock=-1 \\\n    --ulimit stack=67108864 \\\n    -v $(pwd):$(pwd) \\\n    -v $HOME/.cache/huggingface:/root/.cache/huggingface \\\n    -w $(pwd) \\\n    unsloth-dgx-spark\nbash\nNOTEBOOK_URL=\"https://raw.githubusercontent.com/unslothai/notebooks/refs/heads/main/nb/gpt_oss_(20B)_Reinforcement_Learning_2048_Game_DGX_Spark.ipynb\"\nwget -O \"gpt_oss_20B_RL_2048_Game.ipynb\" \"$NOTEBOOK_URL\"\n\njupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root\n```\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-0862eed0acf0656ff0cb802b6aebc30892997e3b%2Fdgx6.png?alt=media\" alt=\"\" width=\"563\"><figcaption></figcaption></figure>\n\nDon't forget Unsloth also allows you to [save and run](https://docs.unsloth.ai/basics/inference-and-deployment) your models after fine-tuning so you can locally deploy them directly on your DGX Spark after.\n{% endstep %}\n{% endstepper %}\n\nMany thanks to [Lakshmi Ramesh](https://www.linkedin.com/in/rlakshmi24/) and [Barath Anandan](https://www.linkedin.com/in/barathsa/) from NVIDIA for helping Unsloth’s DGX Spark launch and building the Docker image.\n\n### Unified Memory Usage\n\ngpt-oss-120b QLoRA 4-bit fine-tuning will use around **68GB** of unified memory. How your unified memory usage should look **before** (left) and **after** (right) training:\n\n<div><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-e079a9aa8d853b319520fe0f0fbcca2e85b31ea6%2Fdgx7.png?alt=media\" alt=\"\"><figcaption></figcaption></figure> <figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-c389a73a48ad059bbb92121b328fa7ccc61bee95%2Fdgx8.png?alt=media\" alt=\"\"><figcaption></figcaption></figure></div>\n\nAnd that's it! Have fun training and running LLMs completely locally on your NVIDIA DGX Spark!\n\nThanks to Tim from [AnythingLLM](https://github.com/Mintplex-Labs/anything-llm) for providing a great fine-tuning tutorial with Unsloth on DGX Spark:\n\n{% embed url=\"<https://www.youtube.com/watch?t=962s&v=zs-J9sKxvoM>\" %}",
+  "code_samples": [
+    {
+      "code": "</details>\n{% endstep %}\n\n{% step %}\n**Launch container**\n\nLaunch the training container with GPU access and volume mounts:",
+      "language": "unknown"
+    },
+    {
+      "code": "<div><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-a67c36494f5c4ab4017748d490fb258655cd2378%2Fdgx2.png?alt=media\" alt=\"\"><figcaption></figcaption></figure> <figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-b7758db087ab8b724049361781952b5ed154dfe8%2Fdgx5.png?alt=media\" alt=\"\"><figcaption></figcaption></figure></div>\n{% endstep %}\n\n{% step %}\n**Start Jupyter and Run Notebooks**\n\nInside the container, start Jupyter and run the required notebook. You can use the Reinforcement Learning gpt-oss 20b to win 2048 [notebook here](https://github.com/unslothai/notebooks/blob/main/nb/gpt_oss_\\(20B\\)_Reinforcement_Learning_2048_Game_DGX_Spark.ipynb). In fact all [Unsloth notebooks](https://docs.unsloth.ai/get-started/unsloth-notebooks) work in DGX Spark including the **120b** notebook! Just remove the installation cells.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-a8472482c49e1763378b609f8f537ca89df60260%2FNotebooks%20on%20dgx.png?alt=media\" alt=\"\" width=\"563\"><figcaption></figcaption></figure>\n\nThe below commands can be used to run the RL notebook as well. After Jupyter Notebook is launched, open up the “`gpt_oss_20B_RL_2048_Game.ipynb`”",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Unified Memory Usage",
+      "id": "unified-memory-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Video Tutorials",
+      "id": "video-tutorials"
+    }
+  ],
+  "url": "llms-txt#launch-the-shell",
+  "links": []
+}

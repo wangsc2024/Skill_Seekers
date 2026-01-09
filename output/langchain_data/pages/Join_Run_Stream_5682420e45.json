@@ -1,0 +1,8 @@
+{
+  "title": "Join Run Stream",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/thread-runs/join-run-stream\n\nlangsmith/agent-server-openapi.json get /threads/{thread_id}/runs/{run_id}/stream\nJoin a run stream. This endpoint streams output in real-time from a run similar to the /threads/__THREAD_ID__/runs/stream endpoint. If the run has been created with `stream_resumable=true`, the stream can be resumed from the last seen event ID.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#join-run-stream",
+  "links": []
+}

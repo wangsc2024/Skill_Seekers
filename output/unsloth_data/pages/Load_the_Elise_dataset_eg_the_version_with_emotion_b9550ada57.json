@@ -1,0 +1,8 @@
+{
+  "title": "Load the Elise dataset (e.g., the version with emotion tags)",
+  "content": "dataset = load_dataset(\"MrDragonFox/Elise\", split=\"train\")\nprint(len(dataset), \"samples\")  # ~1200 samples in Elise",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#load-the-elise-dataset-(e.g.,-the-version-with-emotion-tags)",
+  "links": []
+}

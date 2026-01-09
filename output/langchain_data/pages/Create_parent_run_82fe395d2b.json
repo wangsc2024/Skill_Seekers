@@ -1,0 +1,8 @@
+{
+  "title": "Create parent run",
+  "content": "parent_run_id = uuid7()\npost_run(parent_run_id, \"Chat Pipeline\", \"chain\", {\"question\": question})",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-parent-run",
+  "links": []
+}

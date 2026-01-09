@@ -1,0 +1,43 @@
+{
+  "title": "... Define the graph ...",
+  "content": "graph.compile(\n    checkpointer=InMemorySaver(serde=JsonPlusSerializer(pickle_fallback=True))\n)\npython  theme={null}\nimport sqlite3\n\nfrom langgraph.checkpoint.serde.encrypted import EncryptedSerializer\nfrom langgraph.checkpoint.sqlite import SqliteSaver\n\nserde = EncryptedSerializer.from_pycryptodome_aes()  # reads LANGGRAPH_AES_KEY\ncheckpointer = SqliteSaver(sqlite3.connect(\"checkpoint.db\"), serde=serde)\npython  theme={null}\nfrom langgraph.checkpoint.serde.encrypted import EncryptedSerializer\nfrom langgraph.checkpoint.postgres import PostgresSaver\n\nserde = EncryptedSerializer.from_pycryptodome_aes()\ncheckpointer = PostgresSaver.from_conn_string(\"postgresql://...\", serde=serde)\ncheckpointer.setup()\n```\n\nWhen running on LangSmith, encryption is automatically enabled whenever `LANGGRAPH_AES_KEY` is present, so you only need to provide the environment variable. Other encryption schemes can be used by implementing [`CipherProtocol`](https://reference.langchain.com/python/langgraph/checkpoints/#langgraph.checkpoint.serde.base.CipherProtocol) and supplying it to [`EncryptedSerializer`](https://reference.langchain.com/python/langgraph/checkpoints/#langgraph.checkpoint.serde.encrypted.EncryptedSerializer).\n\n### Human-in-the-loop\n\nFirst, checkpointers facilitate [human-in-the-loop workflows](/oss/python/langgraph/interrupts) by allowing humans to inspect, interrupt, and approve graph steps. Checkpointers are needed for these workflows as the human has to be able to view the state of a graph at any point in time, and the graph has to be to resume execution after the human has made any updates to the state. See [the how-to guides](/oss/python/langgraph/interrupts) for examples.\n\nSecond, checkpointers allow for [\"memory\"](/oss/python/concepts/memory) between interactions. In the case of repeated human interactions (like conversations) any follow up messages can be sent to that thread, which will retain its memory of previous ones. See [Add memory](/oss/python/langgraph/add-memory) for information on how to add and manage conversation memory using checkpointers.\n\nThird, checkpointers allow for [\"time travel\"](/oss/python/langgraph/use-time-travel), allowing users to replay prior graph executions to review and / or debug specific graph steps. In addition, checkpointers make it possible to fork the graph state at arbitrary checkpoints to explore alternative trajectories.\n\nLastly, checkpointing also provides fault-tolerance and error recovery: if one or more nodes fail at a given superstep, you can restart your graph from the last successful step. Additionally, when a graph node fails mid-execution at a given superstep, LangGraph stores pending checkpoint writes from any other nodes that completed successfully at that superstep, so that whenever we resume graph execution from that superstep we don't re-run the successful nodes.\n\nAdditionally, when a graph node fails mid-execution at a given superstep, LangGraph stores pending checkpoint writes from any other nodes that completed successfully at that superstep, so that whenever we resume graph execution from that superstep we don't re-run the successful nodes.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/persistence.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "#### Encryption\n\nCheckpointers can optionally encrypt all persisted state. To enable this, pass an instance of [`EncryptedSerializer`](https://reference.langchain.com/python/langgraph/checkpoints/#langgraph.checkpoint.serde.encrypted.EncryptedSerializer) to the `serde` argument of any [`BaseCheckpointSaver`](https://reference.langchain.com/python/langgraph/checkpoints/#langgraph.checkpoint.base.BaseCheckpointSaver) implementation. The easiest way to create an encrypted serializer is via [`from_pycryptodome_aes`](https://reference.langchain.com/python/langgraph/checkpoints/#langgraph.checkpoint.serde.encrypted.EncryptedSerializer.from_pycryptodome_aes), which reads the AES key from the `LANGGRAPH_AES_KEY` environment variable (or accepts a `key` argument):",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Capabilities",
+      "id": "capabilities"
+    },
+    {
+      "level": "h3",
+      "text": "Human-in-the-loop",
+      "id": "human-in-the-loop"
+    },
+    {
+      "level": "h3",
+      "text": "Memory",
+      "id": "memory"
+    },
+    {
+      "level": "h3",
+      "text": "Time Travel",
+      "id": "time-travel"
+    },
+    {
+      "level": "h3",
+      "text": "Fault-tolerance",
+      "id": "fault-tolerance"
+    }
+  ],
+  "url": "llms-txt#...-define-the-graph-...",
+  "links": []
+}

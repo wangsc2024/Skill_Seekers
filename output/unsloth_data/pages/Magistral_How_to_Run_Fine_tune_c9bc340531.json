@@ -1,0 +1,71 @@
+{
+  "title": "Magistral: How to Run & Fine-tune",
+  "content": "Meet Magistral - Mistral's new reasoning models.\n\n**Magistral-Small-2509** is a reasoning LLM developed by Mistral AI. It excels at coding and mathematics and supports multiple languages. Magistral supports a 128k token context window and was finetuned from [**Mistral-Small-3.2**](https://huggingface.co/unsloth/Mistral-Small-3.2-24B-Instruct-2506). Magistral runs perfectly well locally on a single RTX 4090 or a Mac with 16 to 24GB RAM.\n\n<a href=\"#running-magistral\" class=\"button primary\">Running Magistral Tutorial</a> <a href=\"#fine-tuning-magistral-with-unsloth\" class=\"button secondary\">Fine-tuning Magistral</a>\n\n{% hint style=\"success\" %}\nUpdate: **Magistral-2509** new update is out as of September, 2025!\\\n\\\nNow with Vision support! We worked with Mistral again with the release of Magistral. Make sure to download Mistral's official uploads or Unsloth's uploads to get the correct implementation (ie correct system prompt, correct chat template etc.)\n\n**If you're using llama.cpp, please use `--jinja` to enable the system prompt!**\n{% endhint %}\n\nAll uploads use Unsloth [Dynamic 2.0](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs) for SOTA 5-shot MMLU and KL Divergence performance, meaning you can run & fine-tune quantized Mistral LLMs with minimal accuracy loss.\n\n#### Magistral-Small **- Unsloth Dynamic** uploads:\n\n<table><thead><tr><th width=\"255.64999389648438\">Dynamic 2.0 GGUF (to run)</th><th width=\"305.25\">Dynamic 4-bit (to finetune/deploy)</th><th>Dynamic Float8</th></tr></thead><tbody><tr><td><ul><li><a href=\"https://huggingface.co/unsloth/Magistral-Small-2509-GGUF\">Magistral-Small-2509-GGUF</a> - new</li><li><a href=\"https://huggingface.co/unsloth/Magistral-Small-2507-GGUF\">Magistral-Small-2507-GGUF</a></li><li><a href=\"https://huggingface.co/unsloth/Magistral-Small-2506-GGUF\">Magistral-Small-2506-GGUF</a></li></ul></td><td><ul><li><a href=\"https://huggingface.co/unsloth/Magistral-Small-2509-unsloth-bnb-4bit\">Magistral-Small-2509-unsloth-bnb-4bit</a> - new</li><li><a href=\"https://huggingface.co/unsloth/Magistral-Small-2507-unsloth-bnb-4bit\">Magistral-Small-2507-unsloth-bnb-4bit</a></li><li><a href=\"https://huggingface.co/unsloth/Magistral-Small-2506-unsloth-bnb-4bit\">Magistral-Small-2506-unsloth-bnb-4bit</a></li></ul></td><td><ul><li><a href=\"https://huggingface.co/unsloth/Magistral-Small-2509-FP8-Dynamic\">Magistral-Small-2509-FP8-Dynamic</a></li><li><a href=\"https://huggingface.co/unsloth/Magistral-Small-2509-FP8-torchao\">Magistral-Small-2509-FP8-torchao</a></li></ul></td></tr></tbody></table>\n\n## 🖥️ **Running Magistral**\n\n### :gear: Official Recommended Settings\n\nAccording to Mistral AI, these are the recommended settings for inference:\n\n* <mark style=\"background-color:blue;\">**Temperature of: 0.7**</mark>\n* Min\\_P of: 0.01 (optional, but 0.01 works well, llama.cpp default is 0.1)\n* Set <mark style=\"background-color:green;\">**top\\_p to: 0.95**</mark>\n* A 128k context window is supported, **but** performance might degrade past **40k**. So we recommend setting the maximum length to 40k if you see bad performance.\n\n**This is the recommended system prompt for Magistral 2509, 2507:**\n\n{% code overflow=\"wrap\" %}\n\n**This is the recommended system prompt for Magistral 2506:**\n\n{% hint style=\"success\" %}\nOur dynamic uploads have the '`UD`' prefix in them. Those without are not dynamic however still utilize our calibration dataset.\n{% endhint %}\n\n* **Multilingual:** Magistral supports many languages including: English, French, German, Greek, Hindi, Indonesian, Italian, Japanese, Korean, Malay, Nepali, Polish, Portuguese, Romanian, Russian, Serbian, Spanish, Swedish, Turkish, Ukrainian, Vietnamese, Arabic, Bengali, Chinese, and Farsi.\n\n### :question:Testing the model\n\nMistral has their own vibe checking prompts which can be used to evaluate Magistral. Keep in mind these tests are based on running the full unquantized version of the model, however you could also test them on quantized versions:\n\n**Easy -** *Make sure they always work*\n\n**Medium** - *Should most of the time be correct*\n\n**Hard** - *Should sometimes get them right*\n\n<mark style=\"color:green;\">**We provide some**</mark> [<mark style=\"color:green;\">**example outputs**</mark>](#sample-outputs) <mark style=\"color:green;\">**at the end of the blog.**</mark>\n\n## :llama: Tutorial: How to Run Magistral in Ollama\n\n1. Install `ollama` if you haven't already!\n\n2. Run the model with our dynamic quant. We did not set the context length automatically, so it will just use Ollama's default set context length.\\\n   Note you can call `ollama serve &`in another terminal if it fails! We include all suggested parameters (temperature etc) in `params` in our Hugging Face upload!\n3. Also Magistral supports 40K context lengths, so best to enable [**KV cache quantization**](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-can-i-set-the-quantization-type-for-the-kv-cache). We use 8bit quantization which saves 50% memory usage. You can also try `\"q4_0\"` or `\"q8_0\"`\n4. **Ollama also sets the default context length to 4096**, as [mentioned here](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-can-i-specify-the-context-window-size). Use `OLLAMA_CONTEXT_LENGTH=8192` to change it to 8192. Magistral supports up to 128K, but 40K (40960) is tested most.\n\n## 📖 Tutorial: How to Run Magistral in llama.cpp <a href=\"#tutorial-how-to-run-llama-4-scout-in-llama.cpp\" id=\"tutorial-how-to-run-llama-4-scout-in-llama.cpp\"></a>\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. If you want to use `llama.cpp` directly to load models, you can do the below: (:Q4\\_K\\_XL) is the quantization type. You can also download via Hugging Face (point 3). This is similar to `ollama run`\n\n{% code overflow=\"wrap\" %}\n\n{% hint style=\"warning\" %}\nIn llama.cpp, please use `--jinja` to enable the system prompt!\n{% endhint %}\n\n3. **OR** download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose UD-Q4\\_K\\_XL, (Unsloth Dynamic), Q4\\_K\\_M, or other quantized versions (like BF16 full precision).",
+  "code_samples": [
+    {
+      "code": "First draft your thinking process (inner monologue) until you arrive at a response. Format your response using Markdown, and use LaTeX for any mathematical equations. Write both your thoughts and the response in the same language as the input.\n\nYour thinking process must follow the template below:[THINK]Your thoughts or/and draft, like working through an exercise on scratch paper. Be as casual and as long as you want until you are confident to generate the response. Use the same language as the input.[/THINK]Here, provide a self-contained response.",
+      "language": "unknown"
+    },
+    {
+      "code": "A user will ask you to solve a task. You should first draft your thinking process (inner monologue) until you have derived the final answer. Afterwards, write a self-contained summary of your thoughts (i.e. your summary should be succinct but contain all the critical steps you needed to reach the conclusion). You should use Markdown to format your response. Write both your thoughts and summary in the same language as the task posed by the user. NEVER use \\boxed{} in your response.\n\nYour thinking process must follow the template below:\n<think>\nYour thoughts or/and draft, like working through an exercise on scratch paper. Be as casual and as long as you want until you are confident to generate a correct answer.\n</think>\n\nHere, provide a concise summary that reflects your reasoning and presents a clear final answer to the user. Don't mention that this is a summary.\n\nProblem:",
+      "language": "unknown"
+    },
+    {
+      "code": "prompt_1 = 'How many \"r\" are in strawberry?'\n\nprompt_2 = 'John is one of 4 children. The first sister is 4 years old. Next year, the second sister will be twice as old as the first sister. The third sister is two years older than the second sister. The third sister is half the ago of her older brother. How old is John?'\n\nprompt_3 = '9.11 and 9.8, which is greater?'",
+      "language": "py"
+    },
+    {
+      "code": "prompt_4 = \"Think about 5 random numbers. Verify if you can combine them with addition, multiplication, subtraction or division to 133\"\n\nprompt_5 = \"Write 4 sentences, each with at least 8 words. Now make absolutely sure that every sentence has exactly one word less than the previous sentence.\"\n\nprompt_6 = \"If it takes 30 minutes to dry 12 T-shirts in the sun, how long does it take to dry 33 T-shirts?\"",
+      "language": "py"
+    },
+    {
+      "code": "prompt_7 = \"Pick 5 random words each with at least 10 letters. Print them out. Reverse each word and print it out. Then extract letters that are alphabetically sorted smaller than \"g\" and print them. Do not use code.\"\n\nprompt_8 = \"Exactly how many days ago did the French Revolution start? Today is June 4th, 2025.\"",
+      "language": "py"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils -y\ncurl -fsSL https://ollama.com/install.sh | sh",
+      "language": "bash"
+    },
+    {
+      "code": "export OLLAMA_KV_CACHE_TYPE=\"f16\"\nOLLAMA_CONTEXT_LENGTH=8192 ollama serve &\nollama run hf.co/unsloth/Magistral-Small-2509-GGUF:UD-Q4_K_XL",
+      "language": "bash"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-quantize llama-cli llama-gguf-split llama-mtmd-cli\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli -hf unsloth/Magistral-Small-2509-GGUF:UD-Q4_K_XL --jinja --temp 0.7 --top-k -1 --top-p 0.95 -ngl 99",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "🖥️ **Running Magistral**",
+      "id": "🖥️-**running-magistral**"
+    },
+    {
+      "level": "h3",
+      "text": ":gear: Official Recommended Settings",
+      "id": ":gear:-official-recommended-settings"
+    },
+    {
+      "level": "h3",
+      "text": ":question:Testing the model",
+      "id": ":question:testing-the-model"
+    },
+    {
+      "level": "h2",
+      "text": ":llama: Tutorial: How to Run Magistral in Ollama",
+      "id": ":llama:-tutorial:-how-to-run-magistral-in-ollama"
+    },
+    {
+      "level": "h2",
+      "text": "📖 Tutorial: How to Run Magistral in llama.cpp <a href=\"#tutorial-how-to-run-llama-4-scout-in-llama.cpp\" id=\"tutorial-how-to-run-llama-4-scout-in-llama.cpp\"></a>",
+      "id": "📖-tutorial:-how-to-run-magistral-in-llama.cpp-<a-href=\"#tutorial-how-to-run-llama-4-scout-in-llama.cpp\"-id=\"tutorial-how-to-run-llama-4-scout-in-llama.cpp\"></a>"
+    }
+  ],
+  "url": "llms-txt#magistral:-how-to-run-&-fine-tune",
+  "links": []
+}

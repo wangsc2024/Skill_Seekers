@@ -1,0 +1,8 @@
+{
+  "title": "Run evaluation with blocking=False to get an iterator",
+  "content": "streamed_results = client.evaluate(\n    target,\n    data=\"MY_DATASET_NAME\",\n    evaluators=[evaluator],\n    blocking=False\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#run-evaluation-with-blocking=false-to-get-an-iterator",
+  "links": []
+}

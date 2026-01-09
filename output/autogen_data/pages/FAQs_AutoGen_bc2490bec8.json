@@ -1,0 +1,106 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+  "title": "FAQs — AutoGen",
+  "content": "Agents might be distributed across multiple machines, so the underlying agent instance is intentionally discouraged from being accessed. If the agent is definitely running on the same machine, you can access the agent instance by calling autogen_core.AgentRuntime.try_get_underlying_agent_instance() on the AgentRuntime. If the agent is not available this will throw an exception.\n\nSince the instance itself is not accessible, you can’t call a function on an agent directly. Instead, you should create a type to represent the function call and its arguments, and then send that message to the agent. Then in the agent, create a handler for that message type and implement the required logic. This also supports returning a response to the caller.\n\nThis allows your agent to work in a distributed environment a well as a local one.\n\nAn autogen_core.AgentId is composed of a type and a key. The type corresponds to the factory that created the agent, and the key is a runtime, data dependent key for this instance.\n\nThe key can correspond to a user id, a session id, or could just be “default” if you don’t need to differentiate between instances. Each unique key will create a new instance of the agent, based on the factory provided. This allows the system to automatically scale to different instances of the same agent, and to manage the lifecycle of each instance independently based on how you choose to handle keys in your application.\n\nIf you need to provide custom gRPC options, such as overriding the max_send_message_length and max_receive_message_length, you can define an extra_grpc_config variable and pass it to both the GrpcWorkerAgentRuntimeHost and GrpcWorkerAgentRuntime instances.\n\nNote: When GrpcWorkerAgentRuntime creates a host connection for the clients, it uses DEFAULT_GRPC_CONFIG from HostConnection class as default set of values which will can be overriden if you pass parameters with the same name using extra_grpc_config.\n\nModel capabilites are additional capabilities an LLM may have beyond the standard natural language features. There are currently 3 additional capabilities that can be specified within Autogen\n\nvision: The model is capable of processing and interpreting image data.\n\nfunction_calling: The model has the capacity to accept function descriptions; such as the function name, purpose, input parameters, etc; and can respond with an appropriate function to call including any necessary parameters.\n\njson_output: The model is capable of outputting responses to conform with a specified json format.\n\nModel capabilities can be passed into a model, which will override the default definitions. These capabilities will not affect what the underlying model is actually capable of, but will allow or disallow behaviors associated with them. This is particularly useful when using local LLMs.\n\nTracking LLM usage with a logger",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "FAQs#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "How do I get the underlying agent instance?#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "How do I call call a function on an agent?#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Why do I need to use a factory to register an agent?#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "How do I increase the GRPC message size?#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "What are model capabilities and how do I specify them?#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# Define custom gRPC options\nextra_grpc_config = [\n    (\"grpc.max_send_message_length\", new_max_size),\n    (\"grpc.max_receive_message_length\", new_max_size),\n]\n\n# Create instances of GrpcWorkerAgentRuntimeHost and GrpcWorkerAgentRuntime with the custom gRPC options\n\nhost = GrpcWorkerAgentRuntimeHost(address=host_address, extra_grpc_config=extra_grpc_config)\nworker1 = GrpcWorkerAgentRuntime(host_address=host_address, extra_grpc_config=extra_grpc_config)",
+      "language": "markdown"
+    },
+    {
+      "code": "# Define custom gRPC options\nextra_grpc_config = [\n    (\"grpc.max_send_message_length\", new_max_size),\n    (\"grpc.max_receive_message_length\", new_max_size),\n]\n\n# Create instances of GrpcWorkerAgentRuntimeHost and GrpcWorkerAgentRuntime with the custom gRPC options\n\nhost = GrpcWorkerAgentRuntimeHost(address=host_address, extra_grpc_config=extra_grpc_config)\nworker1 = GrpcWorkerAgentRuntime(host_address=host_address, extra_grpc_config=extra_grpc_config)",
+      "language": "markdown"
+    },
+    {
+      "code": "from autogen_ext.models.openai import OpenAIChatCompletionClient\n\nclient = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    api_key=\"YourApiKey\",\n    model_capabilities={\n        \"vision\": True,\n        \"function_calling\": False,\n        \"json_output\": False,\n    }\n)",
+      "language": "sql"
+    },
+    {
+      "code": "from autogen_ext.models.openai import OpenAIChatCompletionClient\n\nclient = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    api_key=\"YourApiKey\",\n    model_capabilities={\n        \"vision\": True,\n        \"function_calling\": False,\n        \"json_output\": False,\n    }\n)",
+      "language": "sql"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

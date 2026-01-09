@@ -1,0 +1,8 @@
+{
+  "title": "Show the workflow",
+  "content": "display(Image(orchestrator_worker.get_graph().draw_mermaid_png()))",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#show-the-workflow",
+  "links": []
+}

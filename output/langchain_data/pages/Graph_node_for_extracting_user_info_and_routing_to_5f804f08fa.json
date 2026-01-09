@@ -1,0 +1,8 @@
+{
+  "title": "Graph node for extracting user info and routing to lookup/refund/END.",
+  "content": "async def gather_info(state: State) -> Command[Literal[\"lookup\", \"refund\", END]]:\n    info = await info_llm.ainvoke(\n        [\n            {\"role\": \"system\", \"content\": gather_info_instructions},\n            *state[\"messages\"],\n        ]\n    )\n    parsed = info[\"parsed\"]\n    if any(parsed[k] for k in (\"invoice_id\", \"invoice_line_ids\")):\n        goto = \"refund\"\n    elif all(\n        parsed[k]\n        for k in (\"customer_first_name\", \"customer_last_name\", \"customer_phone\")\n    ):\n        goto = \"lookup\"\n    else:\n        goto = END\n    update = {\"messages\": [info[\"raw\"]], **parsed}\n    return Command(update=update, goto=goto)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#graph-node-for-extracting-user-info-and-routing-to-lookup/refund/end.",
+  "links": []
+}

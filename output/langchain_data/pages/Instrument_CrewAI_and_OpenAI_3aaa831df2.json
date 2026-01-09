@@ -1,0 +1,8 @@
+{
+  "title": "Instrument CrewAI and OpenAI",
+  "content": "CrewAIInstrumentor().instrument()\nOpenAIInstrumentor().instrument()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#instrument-crewai-and-openai",
+  "links": []
+}

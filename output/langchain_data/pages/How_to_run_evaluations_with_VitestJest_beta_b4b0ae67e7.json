@@ -1,0 +1,169 @@
+{
+  "title": "How to run evaluations with Vitest/Jest (beta)",
+  "content": "Source: https://docs.langchain.com/langsmith/vitest-jest\n\nLangSmith provides integrations with Vitest and Jest that allow JavaScript and TypeScript developers define their datasets and evaluate using familiar syntax.\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/jest-vitest-reporter-output.png?fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=94fd2a6f61c9dc386002fadbab7024a8\" alt=\"Jest/Vitest reporter output\" data-og-width=\"2200\" width=\"2200\" data-og-height=\"564\" height=\"564\" data-path=\"langsmith/images/jest-vitest-reporter-output.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/jest-vitest-reporter-output.png?w=280&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=cf56669ba6d6ab79ed6237424f163fa7 280w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/jest-vitest-reporter-output.png?w=560&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=af88b4a6c4d31520b783336f311f56fc 560w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/jest-vitest-reporter-output.png?w=840&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=32ee63fc2b8923236850f9b2a1fb1775 840w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/jest-vitest-reporter-output.png?w=1100&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=e1f396ae3e1b68e358efc599f700e0c3 1100w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/jest-vitest-reporter-output.png?w=1650&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=77b9a394525825d5f9395cdb22a5c8b4 1650w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/jest-vitest-reporter-output.png?w=2500&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=2d22bf302eedc50c70280ce2d8bc7d79 2500w\" />\n\nCompared to the `evaluate()` evaluation flow, this is useful when:\n\n* **Each example requires different evaluation logic**: Standard evaluation flows assume consistent application and evaluator execution across all dataset examples. For more complex systems or comprehensive evaluations, specific system subsets may require evaluation with particular input types and metrics. These heterogeneous evaluations are simpler to write as distinct test case suites that track together.\n* **You want to assert binary expectations**: Track assertions in LangSmith and raise assertion errors locally (e.g. in CI pipelines). Testing tools help when both evaluating system outputs and asserting basic properties about them.\n* **You want to take advantage of mocks, watch mode, local results, or other features of the Vitest/Jest ecosystems**\n\n<Info>\n  Requires JS/TS SDK version `langsmith>=0.3.1`.\n</Info>\n\n<Warning>\n  The Vitest/Jest integrations are in beta and are subject to change in upcoming releases.\n</Warning>\n\n<Info>\n  The Python SDK has an analogous [pytest integration](/langsmith/pytest).\n</Info>\n\nSet up the integrations as follows. Note that while you can add LangSmith evals alongside your other unit tests (as standard `*.test.ts` files) using your existing test config files, the below examples will also set up a separate test config file and command to run your evals. It will assume you end your test files with `.eval.ts`.\n\nThis ensures that the custom test reporter and other LangSmith touchpoints do not modify your existing test outputs.\n\nInstall the required development dependencies if you have not already:\n\nThe examples below also require `openai` (and of course `langsmith`!) as a dependency:\n\nThen create a separate `ls.vitest.config.ts` file with the following base config:\n\n* `include` ensures that only files ending with some variation of `eval.ts` in your project are run\n* `reporters` is responsible for nicely formatting your output as shown above\n* `setupFiles` runs `dotenv` to load environment variables before running your evals\n\n<Warning>\n  JSDom environments are not supported at this time. You should either omit the `\"environment\"` field from your config or set it to `\"node\"`.\n</Warning>\n\nFinally, add the following to the `scripts` field in your `package.json` to run Vitest with the config you just created:\n\nNote that the above script disables Vitest's default watch mode for running evals since many evaluators may include longer running LLM calls.\n\nInstall the required development dependencies if you have not already:\n\nThe examples below also require `openai` (and of course `langsmith`!) as a dependency:\n\n<Info>\n  The setup instructions below are for basic JS files and CJS. To add support for TypeScript and ESM, see Jest's official docs or use [Vitest](#vitest).\n</Info>\n\nThen create a separate config file named `ls.jest.config.cjs`:\n\n* `testMatch` ensures that only files ending with some variation of `eval.js` in your project are run\n* `reporters` is responsible for nicely formatting your output as shown above\n* `setupFiles` runs `dotenv` to load environment variables before running your evals\n\n<Warning>\n  JSDom environments are not supported at this time. You should either omit the `\"testEnvironment\"` field from your config or set it to `\"node\"`.\n</Warning>\n\nFinally, add the following to the `scripts` field in your `package.json` to run Jest with the config you just created:\n\n## Define and run evals\n\nYou can now define evals as tests using familiar Vitest/Jest syntax, with a few caveats:\n\n* You should import `describe` and `test` from the `langsmith/jest` or `langsmith/vitest` entrypoint\n* You must wrap your test cases in a `describe` block\n* When declaring tests, the signature is slightly different - there is an extra argument containing example inputs and expected outputs\n\nTry it out by creating a file named `sql.eval.ts` (or `sql.eval.js` if you are using Jest without TypeScript) and pasting the below contents into it:\n\nYou can think of each `ls.test()` case as corresponding to a dataset example, and `ls.describe()` as defining a LangSmith dataset. If you have LangSmith [tracing environment variables](/#3-set-up-your-environment) set when you run the test suite, the SDK does the following:\n\n* creates a [dataset](/langsmith/evaluation-concepts#datasets) with the same name as the name passed to `ls.describe()` in LangSmith if it does not exist\n* creates an example in the dataset for each input and expected output passed into a test case if a matching one does not already exist\n* creates a new [experiment](/langsmith/evaluation-concepts#experiment) with one result for each test case\n* collects the pass/fail rate under the `pass` feedback key for each test case\n\nWhen you run this test it will have a default `pass` boolean feedback key based on the test case passing / failing. It will also track any outputs that you log with the `ls.logOutputs()` or return from the test function as \"actual\" result values from your app for the experiment.\n\nCreate a `.env` file with your `OPENAI_API_KEY` and LangSmith credentials if you don't already have one:\n\nNow use the `eval` script we set up in the previous step to run the test:\n\nAnd your declared test should run!\n\nOnce it finishes, if you've set your LangSmith environment variables, you should see a link directing you to an experiment created in LangSmith alongside the test results.\n\nHere's what an experiment against that test suite looks like:\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=9cde688950dd2fc454a8514b02ed7268\" alt=\"Experiment\" data-og-width=\"2752\" width=\"2752\" data-og-height=\"902\" height=\"902\" data-path=\"langsmith/images/simple-vitest.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=280&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=e583f4ee7179018b026ce9c037a05702 280w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=560&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=3d87bf9ced639e2deb375f0638b1912e 560w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=840&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=e1f92efbbffa880300575043180eb107 840w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=1100&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=90a9e603ea1b613b6a95f4a686cb954b 1100w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=1650&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=335d4ba669f1a75d6c8171ce2d7cbb99 1650w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=2500&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=9330a3bc998e80851ce3a162272b037d 2500w\" />\n\nBy default LangSmith collects the pass/fail rate under the `pass` feedback key for each test case. You can add additional feedback with either `ls.logFeedback()` or `wrapEvaluator()`. To do so, try the following as your `sql.eval.ts` file (or `sql.eval.js` if you are using Jest without TypeScript):\n\nNote the use of `ls.wrapEvaluator()` around the `myEvaluator` function. This makes it so that the LLM-as-judge call is traced separately from the rest of the test case to avoid clutter, and conveniently creates feedback if the return value from the wrapped function matches `{ key: string; score: number | boolean }`. In this case, instead of showing up in the main test case run, the evaluator trace will instead show up in a trace associated with the `correctness` feedback key.\n\nYou can see the evaluator runs in LangSmith by clicking their corresponding feedback chips in the UI.\n\n## Running multiple examples against a test case\n\nYou can run the same test case over multiple examples and parameterize your tests using `ls.test.each()`. This is useful when you want to evaluate your app the same way against different inputs:\n\nIf you have tracking enabled, each example in the local dataset will be synced to the one created in LangSmith.\n\nEvery time we run a test we're syncing it to a dataset example and tracing it as a run. To trace final outputs for the run, you can use `ls.logOutputs()` like this:\n\nThe logged outputs will appear in your reporter summary and in LangSmith.\n\nYou can also directly return a value from your test function:\n\nHowever keep in mind if you do this that if your test fails to complete due to a failed assertion or other error, your output will not appear.\n\n## Trace intermediate calls\n\nLangSmith will automatically trace any traceable intermediate calls that happen in the course of test case execution.\n\n## Focusing or skipping tests\n\nYou can chain the Vitest/Jest `.skip` and `.only` methods on `ls.test()` and `ls.describe()`:\n\n## Configuring test suites\n\nYou can configure test suites with values like metadata or a custom client by passing an extra argument to `ls.describe()` for the full suite or by passing a `config` field into `ls.test()` for individual tests:\n\nThe test suite will also automatically extract environment variables from `process.env.ENVIRONMENT`, `process.env.NODE_ENV` and `process.env.LANGSMITH_ENVIRONMENT` and set them as metadata on created experiments. You can then filter experiments by metadata in LangSmith's UI.\n\nSee [the API refs](https://docs.smith.langchain.com/reference/js/functions/vitest.describe) for a full list of configuration options.\n\nIf you want to run the tests without syncing the results to LangSmith, you can set omit your LangSmith tracing environment variables or set `LANGSMITH_TEST_TRACKING=false` in your environment.\n\nThe tests will run as normal, but the experiment logs will not be sent to LangSmith.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/vitest-jest.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nThe examples below also require `openai` (and of course `langsmith`!) as a dependency:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nThen create a separate `ls.vitest.config.ts` file with the following base config:",
+      "language": "unknown"
+    },
+    {
+      "code": "* `include` ensures that only files ending with some variation of `eval.ts` in your project are run\n* `reporters` is responsible for nicely formatting your output as shown above\n* `setupFiles` runs `dotenv` to load environment variables before running your evals\n\n<Warning>\n  JSDom environments are not supported at this time. You should either omit the `\"environment\"` field from your config or set it to `\"node\"`.\n</Warning>\n\nFinally, add the following to the `scripts` field in your `package.json` to run Vitest with the config you just created:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that the above script disables Vitest's default watch mode for running evals since many evaluators may include longer running LLM calls.\n\n### Jest\n\nInstall the required development dependencies if you have not already:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nThe examples below also require `openai` (and of course `langsmith`!) as a dependency:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n<Info>\n  The setup instructions below are for basic JS files and CJS. To add support for TypeScript and ESM, see Jest's official docs or use [Vitest](#vitest).\n</Info>\n\nThen create a separate config file named `ls.jest.config.cjs`:",
+      "language": "unknown"
+    },
+    {
+      "code": "* `testMatch` ensures that only files ending with some variation of `eval.js` in your project are run\n* `reporters` is responsible for nicely formatting your output as shown above\n* `setupFiles` runs `dotenv` to load environment variables before running your evals\n\n<Warning>\n  JSDom environments are not supported at this time. You should either omit the `\"testEnvironment\"` field from your config or set it to `\"node\"`.\n</Warning>\n\nFinally, add the following to the `scripts` field in your `package.json` to run Jest with the config you just created:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Define and run evals\n\nYou can now define evals as tests using familiar Vitest/Jest syntax, with a few caveats:\n\n* You should import `describe` and `test` from the `langsmith/jest` or `langsmith/vitest` entrypoint\n* You must wrap your test cases in a `describe` block\n* When declaring tests, the signature is slightly different - there is an extra argument containing example inputs and expected outputs\n\nTry it out by creating a file named `sql.eval.ts` (or `sql.eval.js` if you are using Jest without TypeScript) and pasting the below contents into it:",
+      "language": "unknown"
+    },
+    {
+      "code": "You can think of each `ls.test()` case as corresponding to a dataset example, and `ls.describe()` as defining a LangSmith dataset. If you have LangSmith [tracing environment variables](/#3-set-up-your-environment) set when you run the test suite, the SDK does the following:\n\n* creates a [dataset](/langsmith/evaluation-concepts#datasets) with the same name as the name passed to `ls.describe()` in LangSmith if it does not exist\n* creates an example in the dataset for each input and expected output passed into a test case if a matching one does not already exist\n* creates a new [experiment](/langsmith/evaluation-concepts#experiment) with one result for each test case\n* collects the pass/fail rate under the `pass` feedback key for each test case\n\nWhen you run this test it will have a default `pass` boolean feedback key based on the test case passing / failing. It will also track any outputs that you log with the `ls.logOutputs()` or return from the test function as \"actual\" result values from your app for the experiment.\n\nCreate a `.env` file with your `OPENAI_API_KEY` and LangSmith credentials if you don't already have one:",
+      "language": "unknown"
+    },
+    {
+      "code": "Now use the `eval` script we set up in the previous step to run the test:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nAnd your declared test should run!\n\nOnce it finishes, if you've set your LangSmith environment variables, you should see a link directing you to an experiment created in LangSmith alongside the test results.\n\nHere's what an experiment against that test suite looks like:\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=9cde688950dd2fc454a8514b02ed7268\" alt=\"Experiment\" data-og-width=\"2752\" width=\"2752\" data-og-height=\"902\" height=\"902\" data-path=\"langsmith/images/simple-vitest.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=280&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=e583f4ee7179018b026ce9c037a05702 280w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=560&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=3d87bf9ced639e2deb375f0638b1912e 560w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=840&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=e1f92efbbffa880300575043180eb107 840w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=1100&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=90a9e603ea1b613b6a95f4a686cb954b 1100w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=1650&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=335d4ba669f1a75d6c8171ce2d7cbb99 1650w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-vitest.png?w=2500&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=9330a3bc998e80851ce3a162272b037d 2500w\" />\n\n## Trace feedback\n\nBy default LangSmith collects the pass/fail rate under the `pass` feedback key for each test case. You can add additional feedback with either `ls.logFeedback()` or `wrapEvaluator()`. To do so, try the following as your `sql.eval.ts` file (or `sql.eval.js` if you are using Jest without TypeScript):",
+      "language": "unknown"
+    },
+    {
+      "code": "Note the use of `ls.wrapEvaluator()` around the `myEvaluator` function. This makes it so that the LLM-as-judge call is traced separately from the rest of the test case to avoid clutter, and conveniently creates feedback if the return value from the wrapped function matches `{ key: string; score: number | boolean }`. In this case, instead of showing up in the main test case run, the evaluator trace will instead show up in a trace associated with the `correctness` feedback key.\n\nYou can see the evaluator runs in LangSmith by clicking their corresponding feedback chips in the UI.\n\n## Running multiple examples against a test case\n\nYou can run the same test case over multiple examples and parameterize your tests using `ls.test.each()`. This is useful when you want to evaluate your app the same way against different inputs:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you have tracking enabled, each example in the local dataset will be synced to the one created in LangSmith.\n\n## Log outputs\n\nEvery time we run a test we're syncing it to a dataset example and tracing it as a run. To trace final outputs for the run, you can use `ls.logOutputs()` like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "The logged outputs will appear in your reporter summary and in LangSmith.\n\nYou can also directly return a value from your test function:",
+      "language": "unknown"
+    },
+    {
+      "code": "However keep in mind if you do this that if your test fails to complete due to a failed assertion or other error, your output will not appear.\n\n## Trace intermediate calls\n\nLangSmith will automatically trace any traceable intermediate calls that happen in the course of test case execution.\n\n## Focusing or skipping tests\n\nYou can chain the Vitest/Jest `.skip` and `.only` methods on `ls.test()` and `ls.describe()`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Configuring test suites\n\nYou can configure test suites with values like metadata or a custom client by passing an extra argument to `ls.describe()` for the full suite or by passing a `config` field into `ls.test()` for individual tests:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Vitest",
+      "id": "vitest"
+    },
+    {
+      "level": "h3",
+      "text": "Jest",
+      "id": "jest"
+    },
+    {
+      "level": "h2",
+      "text": "Define and run evals",
+      "id": "define-and-run-evals"
+    },
+    {
+      "level": "h2",
+      "text": "Trace feedback",
+      "id": "trace-feedback"
+    },
+    {
+      "level": "h2",
+      "text": "Running multiple examples against a test case",
+      "id": "running-multiple-examples-against-a-test-case"
+    },
+    {
+      "level": "h2",
+      "text": "Log outputs",
+      "id": "log-outputs"
+    },
+    {
+      "level": "h2",
+      "text": "Trace intermediate calls",
+      "id": "trace-intermediate-calls"
+    },
+    {
+      "level": "h2",
+      "text": "Focusing or skipping tests",
+      "id": "focusing-or-skipping-tests"
+    },
+    {
+      "level": "h2",
+      "text": "Configuring test suites",
+      "id": "configuring-test-suites"
+    },
+    {
+      "level": "h2",
+      "text": "Dry-run mode",
+      "id": "dry-run-mode"
+    }
+  ],
+  "url": "llms-txt#how-to-run-evaluations-with-vitest/jest-(beta)",
+  "links": []
+}

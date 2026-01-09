@@ -1,0 +1,129 @@
+{
+  "title": "How to kick off background runs",
+  "content": "Source: https://docs.langchain.com/langsmith/background-run\n\nThis guide covers how to kick off background runs for your agent.\nThis can be useful for long running jobs.\n\nFirst let's set up our client and thread:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\n## Check runs on thread\n\nIf we list the current runs on this thread, we will see that it's empty:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\n## Start runs on thread\n\nNow let's kick off a run:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nThe first time we poll it, we can see `status=pending`:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nNow we can join the run, wait for it to finish and check that status again:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nPerfect! The run succeeded as we would expect. We can double check that the run worked as expected by printing out the final state:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nWe can also just print the content of the last AIMessage:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/background-run.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Check runs on thread\n\nIf we list the current runs on this thread, we will see that it's empty:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Start runs on thread\n\nNow let's kick off a run:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nThe first time we poll it, we can see `status=pending`:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    },
+    {
+      "code": "Now we can join the run, wait for it to finish and check that status again:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    },
+    {
+      "code": "Perfect! The run succeeded as we would expect. We can double check that the run worked as expected by printing out the final state:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    },
+    {
+      "code": "We can also just print the content of the last AIMessage:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "Check runs on thread",
+      "id": "check-runs-on-thread"
+    },
+    {
+      "level": "h2",
+      "text": "Start runs on thread",
+      "id": "start-runs-on-thread"
+    }
+  ],
+  "url": "llms-txt#how-to-kick-off-background-runs",
+  "links": []
+}

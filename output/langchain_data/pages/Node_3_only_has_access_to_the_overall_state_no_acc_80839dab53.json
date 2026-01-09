@@ -1,0 +1,8 @@
+{
+  "title": "Node 3 only has access to the overall state (no access to private data from node_1)",
+  "content": "def node_3(state: OverallState) -> OverallState:\n    output = {\"a\": \"set by node_3\"}\n    print(f\"Entered node `node_3`:\\n\\tInput: {state}.\\n\\tReturned: {output}\")\n    return output",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#node-3-only-has-access-to-the-overall-state-(no-access-to-private-data-from-node_1)",
+  "links": []
+}

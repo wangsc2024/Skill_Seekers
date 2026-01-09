@@ -1,0 +1,14 @@
+{
+  "title": "The rest of your code",
+  "content": "import langsmith\nlangsmith_client = langsmith.Client(\n    api_key='<api_key>',\n    api_url='http(s)://<host>/api/v1',\n)\n```\n\nTo access the API reference, navigate to `http://<host>/api/docs` in your browser.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/self-host-usage.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "API reference",
+      "id": "api-reference"
+    }
+  ],
+  "url": "llms-txt#the-rest-of-your-code",
+  "links": []
+}

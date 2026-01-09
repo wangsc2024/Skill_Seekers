@@ -1,0 +1,8 @@
+{
+  "title": "By default we provide a StateBackend",
+  "content": "agent = create_deep_agent()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#by-default-we-provide-a-statebackend",
+  "links": []
+}

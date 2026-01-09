@@ -1,0 +1,48 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+  "title": "AgentChat — AutoGen",
+  "content": "AgentChat is a high-level API for building multi-agent applications. It is built on top of the autogen-core package. For beginner users, AgentChat is the recommended starting point. For advanced users, autogen-core’s event-driven programming model provides more flexibility and control over the underlying components.\n\nAgentChat provides intuitive defaults, such as Agents with preset behaviors and Teams with predefined multi-agent design patterns.\n\nHow to install AgentChat\n\nBuild your first agent\n\nStep-by-step guide to using AgentChat, learn about agents, teams, and more\n\nCreate your own agents with custom behaviors\n\nMulti-agent coordination through a shared context and centralized, customizable selector\n\nMulti-agent coordination through a shared context and localized, tool-based selector\n\nGet started with Magentic-One\n\nMulti-agent workflows through a directed graph of agents.\n\nAdd memory capabilities to your agents\n\nLog traces and internal messages\n\nSerialize and deserialize components\n\nSample code and use cases\n\nHow to migrate from AutoGen 0.2.x to 0.4.x.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "AgentChat#",
+      "id": ""
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html"
+  ]
+}

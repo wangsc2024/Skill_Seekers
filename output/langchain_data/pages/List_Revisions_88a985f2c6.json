@@ -1,0 +1,8 @@
+{
+  "title": "List Revisions",
+  "content": "Source: https://docs.langchain.com/api-reference/deployments-v2/list-revisions\n\nhttps://api.host.langchain.com/openapi.json get /v2/deployments/{deployment_id}/revisions\nList all revisions for a deployment.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#list-revisions",
+  "links": []
+}

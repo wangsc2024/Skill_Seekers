@@ -1,0 +1,8 @@
+{
+  "title": "Check if 'is_concise' returned False.",
+  "content": "failed = [r for r in results if not r[\"evaluation_results\"][\"results\"][0].score]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#check-if-'is_concise'-returned-false.",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Int4 QAT",
+  "content": "from torchao.quantization import Int4WeightOnlyConfig\nmodel.save_pretrained_torchao(\n    model, \"tokenizer\",\n    torchao_config = Int4WeightOnlyConfig(),\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#int4-qat",
+  "links": []
+}

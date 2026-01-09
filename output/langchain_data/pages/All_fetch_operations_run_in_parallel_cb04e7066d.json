@@ -1,0 +1,8 @@
+{
+  "title": "All fetch operations run in parallel",
+  "content": "workflow.add_edge(START, \"fetch_news\")\nworkflow.add_edge(START, \"fetch_weather\")\nworkflow.add_edge(START, \"fetch_stocks\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#all-fetch-operations-run-in-parallel",
+  "links": []
+}

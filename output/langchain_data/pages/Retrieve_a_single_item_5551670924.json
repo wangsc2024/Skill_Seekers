@@ -1,0 +1,8 @@
+{
+  "title": "Retrieve a single item.",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/store/retrieve-a-single-item\n\nlangsmith/agent-server-openapi.json get /store/items",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#retrieve-a-single-item.",
+  "links": []
+}

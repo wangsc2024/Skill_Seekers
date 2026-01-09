@@ -1,0 +1,19 @@
+{
+  "title": "baseline_results.to_pandas()",
+  "content": "python  theme={null}\ncandidate_results = await client.aevaluate(\n    agent.with_config(model=\"gpt-4o\"),\n    data=dataset_name,\n    evaluators=[lt_280_chars, gte_3_emojis, is_grounded],\n    experiment_prefix=\"candidate-gpt-4o\",\n)",
+  "code_samples": [
+    {
+      "code": "### Define and evaluate new system\n\nNow, let's define and evaluate our new system. In this example our new system will be the same as the old system, but will use GPT-4o instead of GPT-3.5. Since we've made our model configurable we can just update the default config passed to our agent:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Define and evaluate new system",
+      "id": "define-and-evaluate-new-system"
+    }
+  ],
+  "url": "llms-txt#baseline_results.to_pandas()",
+  "links": []
+}

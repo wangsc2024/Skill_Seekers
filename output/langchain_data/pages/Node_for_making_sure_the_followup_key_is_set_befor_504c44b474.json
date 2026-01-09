@@ -1,0 +1,8 @@
+{
+  "title": "Node for making sure the 'followup' key is set before our agent run completes.",
+  "content": "def compile_followup(state: State) -> dict:\n    \"\"\"Set the followup to be the last message if it hasn't explicitly been set.\"\"\"\n    if not state.get(\"followup\"):\n        return {\"followup\": state[\"messages\"][-1].content}\n    return {}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#node-for-making-sure-the-'followup'-key-is-set-before-our-agent-run-completes.",
+  "links": []
+}

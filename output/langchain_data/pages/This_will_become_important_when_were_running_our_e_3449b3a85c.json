@@ -1,0 +1,8 @@
+{
+  "title": "This will become important when we're running our evaluations.",
+  "content": "def refund(state: State, config: RunnableConfig) -> dict:\n    # Whether to mock the deletion. True if the configurable var 'env' is set to 'test'.\n    mock = config.get(\"configurable\", {}).get(\"env\", \"prod\") == \"test\"\n    refunded = _refund(\n        invoice_id=state[\"invoice_id\"], invoice_line_ids=state[\"invoice_line_ids\"], mock=mock\n    )\n    response = f\"You have been refunded a total of: ${refunded:.2f}. Is there anything else I can help with?\"\n    return {\n        \"messages\": [{\"role\": \"assistant\", \"content\": response}],\n        \"followup\": response,\n    }",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#this-will-become-important-when-we're-running-our-evaluations.",
+  "links": []
+}

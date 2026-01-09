@@ -1,0 +1,37 @@
+{
+  "title": "Add LangSmith processor SECOND (receives already-modified spans)",
+  "content": "langsmith_processor = OtelSpanProcessor(project=\"travel-assistant\")\nprovider.add_span_processor(langsmith_processor)\n\ndef get_flight_info(destination: str, departure_date: str) -> dict:\n    \"\"\"Get flight information for a destination.\"\"\"\n    return {\n        \"destination\": destination,\n        \"departure_date\": departure_date,\n        \"price\": \"$450\",\n        \"duration\": \"5h 30m\",\n        \"airline\": \"Example Airways\"\n    }\n\ndef get_hotel_recommendations(city: str, check_in: str) -> dict:\n    \"\"\"Get hotel recommendations for a city.\"\"\"\n    return {\n        \"city\": city,\n        \"check_in\": check_in,\n        \"hotels\": [\n            {\"name\": \"Grand Plaza Hotel\", \"rating\": 4.5, \"price\": \"$120/night\"},\n            {\"name\": \"City Center Inn\", \"rating\": 4.2, \"price\": \"$95/night\"}\n        ]\n    }\n\nasync def main():\n    # Prepare the attachment\n    receipt_path = Path(\"receipt-template-example.png\")\n    with open(receipt_path, \"rb\") as img_file:\n        image_bytes = img_file.read()\n        image_base64 = base64.b64encode(image_bytes).decode(\"ascii\")\n\nattachment_data = {\n        \"name\": \"receipt-template-example\",\n        \"content\": image_base64,\n        \"mime_type\": \"image/jpeg\",\n    }\n\nattachment_processor.set_attachment(attachment_data)\n\n# Create ADK agent\n    agent = LlmAgent(\n        name=\"travel_assistant\",\n        tools=[get_flight_info, get_hotel_recommendations],\n        model=\"gemini-2.0-flash-exp\",\n        instruction=\"You are a helpful travel assistant that can help with flights and hotels.\",\n    )\n\n# Set up session and runner\n    session_service = InMemorySessionService()\n    runner = Runner(\n        app_name=\"travel_app\",\n        agent=agent,\n        session_service=session_service\n    )\n\nawait session_service.create_session(\n        app_name=\"travel_app\",\n        user_id=\"traveler_456\",\n        session_id=\"session_789\"\n    )\n\n# Send a message to the agent\n    new_message = types.Content(\n        parts=[types.Part(text=\"I need to book a flight to Paris for March 15th and find a good hotel.\")],\n        role=\"user\",\n    )\n\n# Run the agent and process events\n    events = runner.run(\n        user_id=\"traveler_456\",\n        session_id=\"session_789\",\n        new_message=new_message,\n    )\n\nfor event in events:\n        print(event)\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\nyaml  theme={null}\n   receivers:\n     otlp:\n       protocols:\n         grpc:\n           endpoint: 0.0.0.0:4317\n         http:\n           endpoint: 0.0.0.0:4318\n\nprocessors:\n     batch:\n\nexporters:\n     otlphttp/langsmith:\n       endpoint: https://api.smith.langchain.com/otel/v1/traces\n       headers:\n         x-api-key: ${env:LANGSMITH_API_KEY}\n         Langsmith-Project: my_project\n     otlphttp/other_provider:\n       endpoint: https://otel.your-provider.com/v1/traces\n       headers:\n         api-key: ${env:OTHER_PROVIDER_API_KEY}\n\nservice:\n     pipelines:\n       traces:\n         receivers: [otlp]\n         processors: [batch]\n         exporters: [otlphttp/langsmith, otlphttp/other_provider]\n   python  theme={null}\n   import os\n   from opentelemetry import trace\n   from opentelemetry.sdk.trace import TracerProvider\n   from opentelemetry.sdk.trace.export import BatchSpanProcessor\n   from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter\n   from langchain_openai import ChatOpenAI\n   from langchain_core.prompts import ChatPromptTemplate\n\n# Point to your local OpenTelemetry Collector\n   otlp_exporter = OTLPSpanExporter(\n       endpoint=\"http://localhost:4318/v1/traces\"\n   )\n   provider = TracerProvider()\n   processor = BatchSpanProcessor(otlp_exporter)\n   provider.add_span_processor(processor)\n   trace.set_tracer_provider(provider)\n\n# Set environment variables for LangChain\n   os.environ[\"LANGSMITH_OTEL_ENABLED\"] = \"true\"\n   os.environ[\"LANGSMITH_TRACING\"] = \"true\"\n\n# Create and run a LangChain application\n   prompt = ChatPromptTemplate.from_template(\"Tell me a joke about {topic}\")\n   model = ChatOpenAI()\n   chain = prompt | model\n   result = chain.invoke({\"topic\": \"programming\"})\n   print(result.content)\n   python  theme={null}\nimport os\nfrom opentelemetry import trace\nfrom opentelemetry.propagate import inject, extract\nfrom opentelemetry.sdk.trace import TracerProvider\nfrom opentelemetry.sdk.trace.export import BatchSpanProcessor\nfrom opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter\nimport requests\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.prompts import ChatPromptTemplate",
+  "code_samples": [
+    {
+      "code": "Here is an [example](https://smith.langchain.com/public/9574f70a-b893-49fe-8c62-691bd114bf14/r) of what the resulting trace looks like in LangSmith.\n\n## Advanced configuration\n\n### Use OpenTelemetry Collector for fan-out\n\nFor more advanced scenarios, you can use the OpenTelemetry Collector to fan out your telemetry data to multiple destinations. This is a more scalable approach than configuring multiple exporters in your application code.\n\n1. [Install the OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started/) for your environment.\n\n2. Create a configuration file (e.g., `otel-collector-config.yaml`) that exports to multiple destinations:",
+      "language": "unknown"
+    },
+    {
+      "code": "3. Configure your application to send to the collector:",
+      "language": "unknown"
+    },
+    {
+      "code": "This approach offers several advantages:\n\n* Centralized configuration for all your telemetry destinations\n* Reduced overhead in your application code\n* Better scalability and resilience\n* Ability to add or remove destinations without changing application code\n\n### Distributed tracing with LangChain and OpenTelemetry\n\nDistributed tracing is essential when your LLM application spans multiple services or processes. OpenTelemetry's context propagation capabilities ensure that traces remain connected across service boundaries.\n\n#### Context propagation in distributed tracing\n\nIn distributed systems, context propagation passes trace metadata between services so that related spans are linked to the same trace:\n\n* **Trace ID**: A unique identifier for the entire trace\n* **Span ID**: A unique identifier for the current span\n* **Sampling Decision**: Indicates whether this trace should be sampled\n\n#### Set up distributed tracing with LangChain\n\nTo enable distributed tracing across multiple services:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Advanced configuration",
+      "id": "advanced-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Use OpenTelemetry Collector for fan-out",
+      "id": "use-opentelemetry-collector-for-fan-out"
+    },
+    {
+      "level": "h3",
+      "text": "Distributed tracing with LangChain and OpenTelemetry",
+      "id": "distributed-tracing-with-langchain-and-opentelemetry"
+    }
+  ],
+  "url": "llms-txt#add-langsmith-processor-second-(receives-already-modified-spans)",
+  "links": []
+}

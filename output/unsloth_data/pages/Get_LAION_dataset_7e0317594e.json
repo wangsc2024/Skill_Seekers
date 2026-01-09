@@ -1,0 +1,8 @@
+{
+  "title": "Get LAION dataset",
+  "content": "url = \"https://huggingface.co/datasets/laion/OIG/resolve/main/unified_chip2.jsonl\"\ndataset = load_dataset(\"json\", data_files = {\"train\" : url}, split = \"train\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-laion-dataset",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "We're installing the latest Torch, Triton, OpenAI's Triton kernels, Transformers and Unsloth!",
+  "content": "!pip install --upgrade -qqq uv\ntry: import numpy; install_numpy = f\"numpy=={numpy.__version__}\"\nexcept: install_numpy = \"numpy\"\n!uv pip install -qqq \\\n    \"torch>=2.8.0\" \"triton>=3.4.0\" {install_numpy} \\\n    \"unsloth_zoo[base] @ git+https://github.com/unslothai/unsloth-zoo\" \\\n    \"unsloth[base] @ git+https://github.com/unslothai/unsloth\" \\\n    torchvision bitsandbytes \\\n    git+https://github.com/huggingface/transformers \\\n    git+https://github.com/triton-lang/triton.git@05b2c186c1b6c9a08375389d5efe9cb4c401c075#subdirectory=python/triton_kernels\n```\n\n#### Configuring gpt-oss and Reasoning Effort\n\nWe’ll load **`gpt-oss-20b`** using Unsloth's [linearized version](https://docs.unsloth.ai/models/gpt-oss-how-to-run-and-fine-tune/..#making-efficient-gpt-oss-fine-tuning-work) (as no other version will work for QLoRA fine-tuning). Configure the following parameters:\n\n* `max_seq_length = 2048`\n  * Recommended for quick testing and initial experiments.\n* `load_in_4bit = True`\n  * Use `False` for LoRA training (note: setting this to `False` will need at least 43GB VRAM). You ***MUST*** also set **`model_name = \"unsloth/gpt-oss-20b-BF16\"`**\n\n<pre class=\"language-python\"><code class=\"lang-python\">from unsloth import FastLanguageModel\nimport torch\nmax_seq_length = 1024\ndtype = None",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#we're-installing-the-latest-torch,-triton,-openai's-triton-kernels,-transformers-and-unsloth!",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Get Assistant Subgraphs",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/assistants/get-assistant-subgraphs\n\nlangsmith/agent-server-openapi.json get /assistants/{assistant_id}/subgraphs\nGet an assistant's subgraphs.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-assistant-subgraphs",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Create child run",
+  "content": "child_run_id = uuid7()\npost_run(child_run_id, \"OpenAI Call\", \"llm\", {\"messages\": messages}, parent_run_id)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-child-run",
+  "links": []
+}

@@ -1,0 +1,283 @@
+{
+  "url": "https://react.dev/reference/react/Suspense",
+  "title": "<Suspense>",
+  "content": "<Suspense> lets you display a fallback until its children have finished loading.\n\nYou can wrap any part of your application with a Suspense boundary:\n\nReact will display your loading fallback until all the code and data needed by the children has been loaded.\n\nIn the example below, the Albums component suspends while fetching the list of albums. Until it’s ready to render, React switches the closest Suspense boundary above to show the fallback—your Loading component. Then, when the data loads, React hides the Loading fallback and renders the Albums component with data.\n\nOnly Suspense-enabled data sources will activate the Suspense component. They include:\n\nSuspense does not detect when data is fetched inside an Effect or event handler.\n\nThe exact way you would load data in the Albums component above depends on your framework. If you use a Suspense-enabled framework, you’ll find the details in its data fetching documentation.\n\nSuspense-enabled data fetching without the use of an opinionated framework is not yet supported. The requirements for implementing a Suspense-enabled data source are unstable and undocumented. An official API for integrating data sources with Suspense will be released in a future version of React.\n\nBy default, the whole tree inside Suspense is treated as a single unit. For example, even if only one of these components suspends waiting for some data, all of them together will be replaced by the loading indicator:\n\nThen, after all of them are ready to be displayed, they will all appear together at once.\n\nIn the example below, both Biography and Albums fetch some data. However, because they are grouped under a single Suspense boundary, these components always “pop in” together at the same time.\n\nComponents that load data don’t have to be direct children of the Suspense boundary. For example, you can move Biography and Albums into a new Details component. This doesn’t change the behavior. Biography and Albums share the same closest parent Suspense boundary, so their reveal is coordinated together.\n\nWhen a component suspends, the closest parent Suspense component shows the fallback. This lets you nest multiple Suspense components to create a loading sequence. Each Suspense boundary’s fallback will be filled in as the next level of content becomes available. For example, you can give the album list its own fallback:\n\nWith this change, displaying the Biography doesn’t need to “wait” for the Albums to load.\n\nThe sequence will be:\n\nSuspense boundaries let you coordinate which parts of your UI should always “pop in” together at the same time, and which parts should progressively reveal more content in a sequence of loading states. You can add, move, or delete Suspense boundaries in any place in the tree without affecting the rest of your app’s behavior.\n\nDon’t put a Suspense boundary around every component. Suspense boundaries should not be more granular than the loading sequence that you want the user to experience. If you work with a designer, ask them where the loading states should be placed—it’s likely that they’ve already included them in their design wireframes.\n\nIn this example, the SearchResults component suspends while fetching the search results. Type \"a\", wait for the results, and then edit it to \"ab\". The results for \"a\" will get replaced by the loading fallback.\n\nA common alternative UI pattern is to defer updating the list and to keep showing the previous results until the new results are ready. The useDeferredValue Hook lets you pass a deferred version of the query down:\n\nThe query will update immediately, so the input will display the new value. However, the deferredQuery will keep its previous value until the data has loaded, so SearchResults will show the stale results for a bit.\n\nTo make it more obvious to the user, you can add a visual indication when the stale result list is displayed:\n\nEnter \"a\" in the example below, wait for the results to load, and then edit the input to \"ab\". Notice how instead of the Suspense fallback, you now see the dimmed stale result list until the new results have loaded:\n\nBoth deferred values and Transitions let you avoid showing Suspense fallback in favor of inline indicators. Transitions mark the whole update as non-urgent so they are typically used by frameworks and router libraries for navigation. Deferred values, on the other hand, are mostly useful in application code where you want to mark a part of UI as non-urgent and let it “lag behind” the rest of the UI.\n\nWhen a component suspends, the closest parent Suspense boundary switches to showing the fallback. This can lead to a jarring user experience if it was already displaying some content. Try pressing this button:\n\nWhen you pressed the button, the Router component rendered ArtistPage instead of IndexPage. A component inside ArtistPage suspended, so the closest Suspense boundary started showing the fallback. The closest Suspense boundary was near the root, so the whole site layout got replaced by BigSpinner.\n\nTo prevent this, you can mark the navigation state update as a Transition with startTransition:\n\nThis tells React that the state transition is not urgent, and it’s better to keep showing the previous page instead of hiding any already revealed content. Now clicking the button “waits” for the Biography to load:\n\nA Transition doesn’t wait for all content to load. It only waits long enough to avoid hiding already revealed content. For example, the website Layout was already revealed, so it would be bad to hide it behind a loading spinner. However, the nested Suspense boundary around Albums is new, so the Transition doesn’t wait for it.\n\nSuspense-enabled routers are expected to wrap the navigation updates into Transitions by default.\n\nIn the above example, once you click the button, there is no visual indication that a navigation is in progress. To add an indicator, you can replace startTransition with useTransition which gives you a boolean isPending value. In the example below, it’s used to change the website header styling while a Transition is happening:\n\nDuring a Transition, React will avoid hiding already revealed content. However, if you navigate to a route with different parameters, you might want to tell React it is different content. You can express this with a key:\n\nImagine you’re navigating within a user’s profile page, and something suspends. If that update is wrapped in a Transition, it will not trigger the fallback for already visible content. That’s the expected behavior.\n\nHowever, now imagine you’re navigating between two different user profiles. In that case, it makes sense to show the fallback. For example, one user’s timeline is different content from another user’s timeline. By specifying a key, you ensure that React treats different users’ profiles as different components, and resets the Suspense boundaries during navigation. Suspense-integrated routers should do this automatically.\n\nIf you use one of the streaming server rendering APIs (or a framework that relies on them), React will also use your <Suspense> boundaries to handle errors on the server. If a component throws an error on the server, React will not abort the server render. Instead, it will find the closest <Suspense> component above it and include its fallback (such as a spinner) into the generated server HTML. The user will see a spinner at first.\n\nOn the client, React will attempt to render the same component again. If it errors on the client too, React will throw the error and display the closest Error Boundary. However, if it does not error on the client, React will not display the error to the user since the content was eventually displayed successfully.\n\nYou can use this to opt out some components from rendering on the server. To do this, throw an error in the server environment and then wrap them in a <Suspense> boundary to replace their HTML with fallbacks:\n\nThe server HTML will include the loading indicator. It will be replaced by the Chat component on the client.\n\nReplacing visible UI with a fallback creates a jarring user experience. This can happen when an update causes a component to suspend, and the nearest Suspense boundary is already showing content to the user.\n\nTo prevent this from happening, mark the update as non-urgent using startTransition. During a Transition, React will wait until enough data has loaded to prevent an unwanted fallback from appearing:\n\nThis will avoid hiding existing content. However, any newly rendered Suspense boundaries will still immediately display fallbacks to avoid blocking the UI and let the user see the content as it becomes available.\n\nReact will only prevent unwanted fallbacks during non-urgent updates. It will not delay a render if it’s the result of an urgent update. You must opt in with an API like startTransition or useDeferredValue.\n\nIf your router is integrated with Suspense, it should wrap its updates into startTransition automatically.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "<Suspense>",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "<Suspense>",
+      "id": "suspense"
+    },
+    {
+      "level": "h4",
+      "text": "Props",
+      "id": "props"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Displaying a fallback while content is loading",
+      "id": "displaying-a-fallback-while-content-is-loading"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Revealing content together at once",
+      "id": "revealing-content-together-at-once"
+    },
+    {
+      "level": "h3",
+      "text": "Revealing nested content as it loads",
+      "id": "revealing-nested-content-as-it-loads"
+    },
+    {
+      "level": "h3",
+      "text": "Showing stale content while fresh content is loading",
+      "id": "showing-stale-content-while-fresh-content-is-loading"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Preventing already revealed content from hiding",
+      "id": "preventing-already-revealed-content-from-hiding"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Indicating that a Transition is happening",
+      "id": "indicating-that-a-transition-is-happening"
+    },
+    {
+      "level": "h3",
+      "text": "Resetting Suspense boundaries on navigation",
+      "id": "resetting-suspense-boundaries-on-navigation"
+    },
+    {
+      "level": "h3",
+      "text": "Providing a fallback for server errors and client-only content",
+      "id": "providing-a-fallback-for-server-errors-and-client-only-content"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "How do I prevent the UI from being replaced by a fallback during an update?",
+      "id": "preventing-unwanted-fallbacks"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<Suspense fallback={<Loading />}>  <SomeComponent /></Suspense>",
+      "language": "jsx"
+    },
+    {
+      "code": "<Suspense fallback={<Loading />}>  <Albums /></Suspense>",
+      "language": "jsx"
+    },
+    {
+      "code": "<Suspense fallback={<Loading />}>  <Biography />  <Panel>    <Albums />  </Panel></Suspense>",
+      "language": "jsx"
+    },
+    {
+      "code": "<Suspense fallback={<Loading />}>  <Details artistId={artist.id} /></Suspense>function Details({ artistId }) {  return (    <>      <Biography artistId={artistId} />      <Panel>        <Albums artistId={artistId} />      </Panel>    </>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "<Suspense fallback={<BigSpinner />}>  <Biography />  <Suspense fallback={<AlbumsGlimmer />}>    <Panel>      <Albums />    </Panel>  </Suspense></Suspense>",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function App() {  const [query, setQuery] = useState('');  const deferredQuery = useDeferredValue(query);  return (    <>      <label>        Search albums:        <input value={query} onChange={e => setQuery(e.target.value)} />      </label>      <Suspense fallback={<h2>Loading...</h2>}>        <SearchResults query={deferredQuery} />      </Suspense>    </>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "<div style={{  opacity: query !== deferredQuery ? 0.5 : 1 }}>  <SearchResults query={deferredQuery} /></div>",
+      "language": "jsx"
+    },
+    {
+      "code": "function Router() {  const [page, setPage] = useState('/');  function navigate(url) {    startTransition(() => {      setPage(url);          });  }  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "<ProfilePage key={queryParams.id} />",
+      "language": "jsx"
+    },
+    {
+      "code": "<Suspense fallback={<Loading />}>  <Chat /></Suspense>function Chat() {  if (typeof window === 'undefined') {    throw Error('Chat should only render on the client.');  }  // ...}",
+      "language": "jsx"
+    },
+    {
+      "code": "function handleNextPageClick() {  // If this update suspends, don't hide the already displayed content  startTransition(() => {    setCurrentPage(currentPage + 1);  });}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

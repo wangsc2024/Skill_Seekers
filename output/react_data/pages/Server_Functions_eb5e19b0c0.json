@@ -1,0 +1,235 @@
+{
+  "url": "https://react.dev/reference/rsc/server-functions",
+  "title": "Server Functions",
+  "content": "Server Functions are for use in React Server Components.\n\nNote: Until September 2024, we referred to all Server Functions as “Server Actions”. If a Server Function is passed to an action prop or called from inside an action then it is a Server Action, but not all Server Functions are Server Actions. The naming in this documentation has been updated to reflect that Server Functions can be used for multiple purposes.\n\nServer Functions allow Client Components to call async functions executed on the server.\n\nWhile Server Functions in React 19 are stable and will not break between minor versions, the underlying APIs used to implement Server Functions in a React Server Components bundler or framework do not follow semver and may break between minors in React 19.x.\n\nTo support Server Functions as a bundler or framework, we recommend pinning to a specific React version, or using the Canary release. We will continue working with bundlers and frameworks to stabilize the APIs used to implement Server Functions in the future.\n\nWhen a Server Function is defined with the \"use server\" directive, your framework will automatically create a reference to the Server Function, and pass that reference to the Client Component. When that function is called on the client, React will send a request to the server to execute the function, and return the result.\n\nServer Functions can be created in Server Components and passed as props to Client Components, or they can be imported and used in Client Components.\n\nServer Components can define Server Functions with the \"use server\" directive:\n\nWhen React renders the EmptyNote Server Component, it will create a reference to the createNoteAction function, and pass that reference to the Button Client Component. When the button is clicked, React will send a request to the server to execute the createNoteAction function with the reference provided:\n\nFor more, see the docs for \"use server\".\n\nClient Components can import Server Functions from files that use the \"use server\" directive:\n\nWhen the bundler builds the EmptyNote Client Component, it will create a reference to the createNote function in the bundle. When the button is clicked, React will send a request to the server to execute the createNote function using the reference provided:\n\nFor more, see the docs for \"use server\".\n\nServer Functions can be called from Actions on the client:\n\nThis allows you to access the isPending state of the Server Function by wrapping it in an Action on the client.\n\nFor more, see the docs for Calling a Server Function outside of <form>\n\nServer Functions work with the new Form features in React 19.\n\nYou can pass a Server Function to a Form to automatically submit the form to the server:\n\nWhen the Form submission succeeds, React will automatically reset the form. You can add useActionState to access the pending state, last response, or to support progressive enhancement.\n\nFor more, see the docs for Server Functions in Forms.\n\nYou can call Server Functions with useActionState for the common case where you just need access to the action pending state and last returned response:\n\nWhen using useActionState with Server Functions, React will also automatically replay form submissions entered before hydration finishes. This means users can interact with your app even before the app has hydrated.\n\nFor more, see the docs for useActionState.\n\nServer Functions also support progressive enhancement with the third argument of useActionState.\n\nWhen the permalink is provided to useActionState, React will redirect to the provided URL if the form is submitted before the JavaScript bundle loads.\n\nFor more, see the docs for useActionState.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Server Functions",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "React Server Components",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "How do I build support for Server Functions?",
+      "id": "how-do-i-build-support-for-server-functions"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Creating a Server Function from a Server Component",
+      "id": "creating-a-server-function-from-a-server-component"
+    },
+    {
+      "level": "h3",
+      "text": "Importing Server Functions from Client Components",
+      "id": "importing-server-functions-from-client-components"
+    },
+    {
+      "level": "h3",
+      "text": "Server Functions with Actions",
+      "id": "server-functions-with-actions"
+    },
+    {
+      "level": "h3",
+      "text": "Server Functions with Form Actions",
+      "id": "using-server-functions-with-form-actions"
+    },
+    {
+      "level": "h3",
+      "text": "Server Functions with useActionState",
+      "id": "server-functions-with-use-action-state"
+    },
+    {
+      "level": "h3",
+      "text": "Progressive enhancement with useActionState",
+      "id": "progressive-enhancement-with-useactionstate"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// Server Componentimport Button from './Button';function EmptyNote () {  async function createNoteAction() {    // Server Function    'use server';        await db.notes.create();  }  return <Button onClick={createNoteAction}/>;}",
+      "language": "javascript"
+    },
+    {
+      "code": "\"use client\";export default function Button({onClick}) {   console.log(onClick);   // {$$typeof: Symbol.for(\"react.server.reference\"), $$id: 'createNoteAction'}  return <button onClick={() => onClick()}>Create Empty Note</button>}",
+      "language": "javascript"
+    },
+    {
+      "code": "\"use server\";export async function createNote() {  await db.notes.create();}",
+      "language": "javascript"
+    },
+    {
+      "code": "\"use client\";import {createNote} from './actions';function EmptyNote() {  console.log(createNote);  // {$$typeof: Symbol.for(\"react.server.reference\"), $$id: 'createNote'}  <button onClick={() => createNote()} />}",
+      "language": "jsx"
+    },
+    {
+      "code": "\"use server\";export async function updateName(name) {  if (!name) {    return {error: 'Name is required'};  }  await db.users.updateName(name);}",
+      "language": "javascript"
+    },
+    {
+      "code": "\"use client\";import {updateName} from './actions';function UpdateName() {  const [name, setName] = useState('');  const [error, setError] = useState(null);  const [isPending, startTransition] = useTransition();  const submitAction = async () => {    startTransition(async () => {      const {error} = await updateName(name);      if (error) {        setError(error);      } else {        setName('');      }    })  }    return (    <form action={submitAction}>      <input type=\"text\" name=\"name\" disabled={isPending}/>      {error && <span>Failed: {error}</span>}    </form>  )}",
+      "language": "jsx"
+    },
+    {
+      "code": "\"use client\";import {updateName} from './actions';function UpdateName() {  return (    <form action={updateName}>      <input type=\"text\" name=\"name\" />    </form>  )}",
+      "language": "jsx"
+    },
+    {
+      "code": "\"use client\";import {updateName} from './actions';function UpdateName() {  const [state, submitAction, isPending] = useActionState(updateName, {error: null});  return (    <form action={submitAction}>      <input type=\"text\" name=\"name\" disabled={isPending}/>      {state.error && <span>Failed: {state.error}</span>}    </form>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "\"use client\";import {updateName} from './actions';function UpdateName() {  const [, submitAction] = useActionState(updateName, null, `/name/update`);  return (    <form action={submitAction}>      ...    </form>  );}",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

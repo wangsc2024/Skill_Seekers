@@ -1,0 +1,44 @@
+{
+  "title": "This invocation will take ~1 second due to the slow_task execution",
+  "content": "try:\n    # First invocation will raise an exception due to the `get_info` task failing\n    main.invoke({'any_input': 'foobar'}, config=config)\nexcept ValueError:\n    pass  # Handle the failure gracefully\npython  theme={null}\nmain.invoke(None, config=config)\npycon  theme={null}\n'Ran slow task.'\npython  theme={null}\nfrom langgraph.func import entrypoint, task\nfrom langgraph.types import Command, interrupt\n\n@task\ndef step_1(input_query):\n    \"\"\"Append bar.\"\"\"\n    return f\"{input_query} bar\"\n\n@task\ndef human_feedback(input_query):\n    \"\"\"Append user input.\"\"\"\n    feedback = interrupt(f\"Please provide feedback: {input_query}\")\n    return f\"{input_query} {feedback}\"\n\n@task\ndef step_3(input_query):\n    \"\"\"Append qux.\"\"\"\n    return f\"{input_query} qux\"\npython  theme={null}\nfrom langgraph.checkpoint.memory import InMemorySaver\n\ncheckpointer = InMemorySaver()\n\n@entrypoint(checkpointer=checkpointer)\ndef graph(input_query):\n    result_1 = step_1(input_query).result()\n    result_2 = human_feedback(result_1).result()\n    result_3 = step_3(result_2).result()\n\nreturn result_3\npython  theme={null}\nconfig = {\"configurable\": {\"thread_id\": \"1\"}}\n\nfor event in graph.stream(\"foo\", config):\n    print(event)\n    print(\"\\n\")\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "When we resume execution, we won't need to re-run the `slow_task` as its result is already saved in the checkpoint.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Human-in-the-loop\n\nThe functional API supports [human-in-the-loop](/oss/python/langgraph/interrupts) workflows using the [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt) function and the `Command` primitive.\n\n### Basic human-in-the-loop workflow\n\nWe will create three [tasks](/oss/python/langgraph/functional-api#task):\n\n1. Append `\"bar\"`.\n2. Pause for human input. When resuming, append human input.\n3. Append `\"qux\"`.",
+      "language": "unknown"
+    },
+    {
+      "code": "We can now compose these tasks in an [entrypoint](/oss/python/langgraph/functional-api#entrypoint):",
+      "language": "unknown"
+    },
+    {
+      "code": "[interrupt()](/oss/python/langgraph/interrupts#pause-using-interrupt) is called inside a task, enabling a human to review and edit the output of the previous task. The results of prior tasks-- in this case `step_1`-- are persisted, so that they are not run again following the [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt).\n\nLet's send in a query string:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that we've paused with an [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt) after `step_1`. The interrupt provides instructions to resume the run. To resume, we issue a [`Command`](/oss/python/langgraph/interrupts#resuming-interrupts) containing the data expected by the `human_feedback` task.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Human-in-the-loop",
+      "id": "human-in-the-loop"
+    },
+    {
+      "level": "h3",
+      "text": "Basic human-in-the-loop workflow",
+      "id": "basic-human-in-the-loop-workflow"
+    }
+  ],
+  "url": "llms-txt#this-invocation-will-take-~1-second-due-to-the-slow_task-execution",
+  "links": []
+}

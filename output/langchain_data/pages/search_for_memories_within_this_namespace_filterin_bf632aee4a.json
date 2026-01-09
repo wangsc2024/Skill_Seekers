@@ -1,0 +1,19 @@
+{
+  "title": "search for \"memories\" within this namespace, filtering on content equivalence, sorted by vector similarity",
+  "content": "items = store.search( # [!code highlight]\n    namespace, filter={\"my-key\": \"my-value\"}, query=\"language preferences\"\n)\npython A tool the agent can use to look up user information theme={null}\nfrom dataclasses import dataclass\n\nfrom langchain_core.runnables import RunnableConfig\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\nfrom langgraph.store.memory import InMemoryStore\n\n@dataclass\nclass Context:\n    user_id: str",
+  "code_samples": [
+    {
+      "code": "For more information about the memory store, see the [Persistence](/oss/python/langgraph/persistence#memory-store) guide.\n\n## Read long-term memory in tools",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Read long-term memory in tools",
+      "id": "read-long-term-memory-in-tools"
+    }
+  ],
+  "url": "llms-txt#search-for-\"memories\"-within-this-namespace,-filtering-on-content-equivalence,-sorted-by-vector-similarity",
+  "links": []
+}

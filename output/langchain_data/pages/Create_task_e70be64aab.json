@@ -1,0 +1,8 @@
+{
+  "title": "Create task",
+  "content": "task = PipelineTask(\n    pipeline,\n    params=PipelineParams(enable_metrics=True),\n    enable_tracing=True,\n    enable_turn_tracking=True,  # Required for turn audio recording\n    conversation_id=conversation_id,\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-task",
+  "links": []
+}

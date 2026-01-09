@@ -1,0 +1,8 @@
+{
+  "title": "Delete Assistant",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/assistants/delete-assistant\n\nlangsmith/agent-server-openapi.json delete /assistants/{assistant_id}\nDelete an assistant by ID.\n\nAll versions of the assistant will be deleted as well.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#delete-assistant",
+  "links": []
+}

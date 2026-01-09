@@ -1,0 +1,31 @@
+{
+  "title": "Setting up Wandb",
+  "content": "os.environ[\"WANDB_PROJECT\"] = \"<name>\"\nos.environ[\"WANDB_LOG_MODEL\"] = \"checkpoint\"\n\nreport_to = \"wandb\",\nlogging_steps = 1, # Change if needed\nsave_steps = 100 # Change if needed\nrun_name = \"<name>\" # (Optional)\n\nimport wandb\nrun = wandb.init()\nartifact = run.use_artifact('<username>/<Wandb-project-name>/<run-id>', type='model')\nartifact_dir = artifact.download()\ntrainer.train(resume_from_checkpoint=artifact_dir)\npython\nfrom trl import SFTConfig, SFTTrainer\ntrainer = SFTTrainer(\n    args = SFTConfig(\n        fp16_full_eval = True,\n        per_device_eval_batch_size = 2,\n        eval_accumulation_steps = 4,\n        output_dir = \"training_checkpoints\", # location of saved checkpoints for early stopping\n        save_strategy = \"steps\",             # save model every N steps\n        save_steps = 10,                     # how many steps until we save the model\n        save_total_limit = 3,                # keep ony 3 saved checkpoints to save disk space\n        eval_strategy = \"steps\",             # evaluate every N steps\n        eval_steps = 10,                     # how many steps until we do evaluation\n        load_best_model_at_end = True,       # MUST USE for early stopping\n        metric_for_best_model = \"eval_loss\", # metric we want to early stop on\n        greater_is_better = False,           # the lower the eval loss, the better\n    ),\n    model = model,\n    tokenizer = tokenizer,\n    train_dataset = new_dataset[\"train\"],\n    eval_dataset = new_dataset[\"test\"],\n)\npython\nfrom transformers import EarlyStoppingCallback\nearly_stopping_callback = EarlyStoppingCallback(\n    early_stopping_patience = 3,     # How many steps we will wait if the eval loss doesn't decrease\n                                     # For example the loss might increase, but decrease after 3 steps\n    early_stopping_threshold = 0.0,  # Can set higher - sets how much loss should decrease by until\n                                     # we consider early stopping. For eg 0.01 means if loss was\n                                     # 0.02 then 0.01, we consider to early stop the run.\n)\ntrainer.add_callback(early_stopping_callback)\n```\n\nThen train the model as usual via `trainer.train() .`",
+  "code_samples": [
+    {
+      "code": "Then in `TrainingArguments()` set",
+      "language": "unknown"
+    },
+    {
+      "code": "To train the model, do `trainer.train()`; to resume training, do",
+      "language": "unknown"
+    },
+    {
+      "code": "## :question:How do I do Early Stopping?\n\nIf you want to stop or pause the finetuning / training run since the evaluation loss is not decreasing, then you can use early stopping which stops the training process. Use `EarlyStoppingCallback`.\n\nAs usual, set up your trainer and your evaluation dataset. The below is used to stop the training run if the `eval_loss` (the evaluation loss) is not decreasing after 3 steps or so.",
+      "language": "unknown"
+    },
+    {
+      "code": "We then add the callback which can also be customized:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": ":question:How do I do Early Stopping?",
+      "id": ":question:how-do-i-do-early-stopping?"
+    }
+  ],
+  "url": "llms-txt#setting-up-wandb",
+  "links": []
+}

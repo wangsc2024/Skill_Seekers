@@ -1,0 +1,8 @@
+{
+  "title": "Add to your pipeline",
+  "content": "pipeline = Pipeline([\n    transport.input(),\n    stt,\n    context_aggregator.user(),\n    llm,\n    tts,\n    audio_recorder,              # Full conversation recording\n    turn_audio_recorder,         # Per-turn audio snippets\n    transport.output(),\n    context_aggregator.assistant(),\n])",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-to-your-pipeline",
+  "links": []
+}

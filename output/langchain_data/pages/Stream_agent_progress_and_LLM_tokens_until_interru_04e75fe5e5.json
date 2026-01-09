@@ -1,0 +1,8 @@
+{
+  "title": "Stream agent progress and LLM tokens until interrupt",
+  "content": "for mode, chunk in agent.stream(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Delete old records from the database\"}]},\n    config=config,\n    stream_mode=[\"updates\", \"messages\"],  # [!code highlight]\n):\n    if mode == \"messages\":\n        # LLM token\n        token, metadata = chunk\n        if token.content:\n            print(token.content, end=\"\", flush=True)\n    elif mode == \"updates\":\n        # Check for interrupt\n        if \"__interrupt__\" in chunk:\n            print(f\"\\n\\nInterrupt: {chunk['__interrupt__']}\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#stream-agent-progress-and-llm-tokens-until-interrupt",
+  "links": []
+}

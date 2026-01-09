@@ -1,0 +1,8 @@
+{
+  "title": "Invoke the augmented LLM",
+  "content": "output = structured_llm.invoke(\"How does Calcium CT score relate to high cholesterol?\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#invoke-the-augmented-llm",
+  "links": []
+}

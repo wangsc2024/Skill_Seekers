@@ -1,0 +1,14 @@
+{
+  "title": "Cancel (abort the operation)",
+  "content": "ElicitResult(action=\"cancel\")\n```\n\n## Additional resources\n\n* [MCP documentation](https://modelcontextprotocol.io/introduction)\n* [MCP Transport documentation](https://modelcontextprotocol.io/docs/concepts/transports)\n* [`langchain-mcp-adapters`](https://github.com/langchain-ai/langchain-mcp-adapters)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/mcp.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Additional resources",
+      "id": "additional-resources"
+    }
+  ],
+  "url": "llms-txt#cancel-(abort-the-operation)",
+  "links": []
+}

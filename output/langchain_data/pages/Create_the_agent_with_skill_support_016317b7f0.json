@@ -1,0 +1,19 @@
+{
+  "title": "Create the agent with skill support",
+  "content": "agent = create_agent(\n    model,\n    system_prompt=(\n        \"You are a SQL query assistant that helps users \"\n        \"write queries against business databases.\"\n    ),\n    middleware=[SkillMiddleware()],  # [!code highlight]\n    checkpointer=InMemorySaver(),\n)\npython  theme={null}\nimport uuid",
+  "code_samples": [
+    {
+      "code": "The agent now has access to skill descriptions in its system prompt and can call `load_skill` to retrieve full skill content when needed. The checkpointer maintains conversation history across turns.\n\n## 5. Test progressive disclosure\n\nTest the agent with a question that requires skill-specific knowledge:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "5. Test progressive disclosure",
+      "id": "5.-test-progressive-disclosure"
+    }
+  ],
+  "url": "llms-txt#create-the-agent-with-skill-support",
+  "links": []
+}

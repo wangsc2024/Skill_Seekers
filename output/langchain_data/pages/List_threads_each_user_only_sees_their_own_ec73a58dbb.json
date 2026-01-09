@@ -1,0 +1,23 @@
+{
+  "title": "List threads - each user only sees their own",
+  "content": "alice_threads = await alice.threads.search()\nbob_threads = await bob.threads.search()\nprint(f\"✅ Alice sees {len(alice_threads)} thread\")\nprint(f\"✅ Bob sees {len(bob_threads)} thread\")\nbash  theme={null}\n✅ Alice created assistant: fc50fb08-78da-45a9-93cc-1d3928a3fc37\n✅ Alice created thread: 533179b7-05bc-4d48-b47a-a83cbdb5781d\n✅ Bob correctly denied access: Client error '404 Not Found' for url 'http://localhost:2024/threads/533179b7-05bc-4d48-b47a-a83cbdb5781d'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\n✅ Bob created his own thread: 437c36ed-dd45-4a1e-b484-28ba6eca8819\n✅ Alice sees 1 thread\n✅ Bob sees 1 thread\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "Output:",
+      "language": "unknown"
+    },
+    {
+      "code": "This means:\n\n1. Each user can create and chat in their own threads\n2. Users can't see each other's threads\n3. Listing threads only shows your own\n\n<a id=\"scoped-authorization\" />\n\n## 3. Add scoped authorization handlers\n\nThe broad `@auth.on` handler matches on all [authorization events](/langsmith/auth#supported-resources). This is concise, but it means the contents of the `value` dict are not well-scoped, and the same user-level access control is applied to every resource. If you want to be more fine-grained, you can also control specific actions on resources.\n\nUpdate `src/security/auth.py` to add handlers for specific resource types:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "3. Add scoped authorization handlers",
+      "id": "3.-add-scoped-authorization-handlers"
+    }
+  ],
+  "url": "llms-txt#list-threads---each-user-only-sees-their-own",
+  "links": []
+}

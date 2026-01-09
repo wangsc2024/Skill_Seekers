@@ -1,0 +1,28 @@
+{
+  "title": "Run backtests on a new version of an agent",
+  "content": "Source: https://docs.langchain.com/langsmith/run-backtests-new-agent\n\nDeploying your application is just the beginning of a continuous improvement process. After you deploy to production, you'll want to refine your system by enhancing prompts, language models, tools, and architectures. Backtesting involves assessing new versions of your application using historical data and comparing the new outputs to the original ones. Compared to evaluations using pre-production datasets, backtesting offers a clearer indication of whether the new version of your application is an improvement over the current deployment.\n\nHere are the basic steps for backtesting:\n\n1. Select sample runs from your production tracing project to test against.\n2. Transform the run inputs into a dataset and record the run outputs as an initial experiment against that dataset.\n3. Execute your new system on the new dataset and compare the results of the experiments.\n\nThis process will provide you with a new dataset of representative inputs, which you can version and use for backtesting your models.\n\n<Info>\n  Often, you won't have definitive \"ground truth\" answers available. In such cases, you can manually label the outputs or use evaluators that don't rely on reference data. If your application allows for capturing ground-truth labels, for example by allowing users to leave feedback, we strongly recommend doing so.\n</Info>\n\n### Configure the environment\n\nInstall and set environment variables. This guide requires `langsmith>=0.2.4`.\n\n<Info>\n  For convenience we'll use the LangChain OSS framework in this tutorial, but the LangSmith functionality shown is framework-agnostic.\n</Info>\n\n```python  theme={null}\nimport getpass\nimport os",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Configure the environment",
+      "id": "configure-the-environment"
+    }
+  ],
+  "url": "llms-txt#run-backtests-on-a-new-version-of-an-agent",
+  "links": []
+}

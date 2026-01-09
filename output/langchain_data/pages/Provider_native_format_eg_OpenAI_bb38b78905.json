@@ -1,0 +1,8 @@
+{
+  "title": "Provider-native format (e.g., OpenAI)",
+  "content": "human_message = HumanMessage(content=[\n    {\"type\": \"text\", \"text\": \"Hello, how are you?\"},\n    {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://example.com/image.jpg\"}}\n])",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#provider-native-format-(e.g.,-openai)",
+  "links": []
+}

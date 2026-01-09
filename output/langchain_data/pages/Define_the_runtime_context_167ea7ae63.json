@@ -1,0 +1,32 @@
+{
+  "title": "Define the runtime context",
+  "content": "class GraphContext(TypedDict):\n    model_name: Literal[\"anthropic\", \"openai\"]\n\nworkflow = StateGraph(AgentState, context_schema=GraphContext)\nworkflow.add_node(\"agent\", call_model)\nworkflow.add_node(\"action\", tool_node)\nworkflow.add_edge(START, \"agent\")\nworkflow.add_conditional_edges(\n    \"agent\",\n    should_continue,\n    {\n        \"continue\": \"action\",\n        \"end\": END,\n    },\n)\nworkflow.add_edge(\"action\", \"agent\")\n\ngraph = workflow.compile()\nbash  theme={null}\nmy-app/\n├── my_agent # all project code lies within here\n│   ├── utils # utilities for your graph\n│   │   ├── __init__.py\n│   │   ├── tools.py # tools for your graph\n│   │   ├── nodes.py # node functions for your graph\n│   │   └── state.py # state definition of your graph\n│   ├── __init__.py\n│   └── agent.py # code for constructing your graph\n├── .env\n└── pyproject.toml\njson  theme={null}\n{\n  \"dependencies\": [\".\"],\n  \"graphs\": {\n    \"agent\": \"./my_agent/agent.py:graph\"\n  },\n  \"env\": \".env\"\n}\nbash  theme={null}\nmy-app/\n├── my_agent # all project code lies within here\n│   ├── utils # utilities for your graph\n│   │   ├── __init__.py\n│   │   ├── tools.py # tools for your graph\n│   │   ├── nodes.py # node functions for your graph\n│   │   └── state.py # state definition of your graph\n│   ├── __init__.py\n│   └── agent.py # code for constructing your graph\n├── .env # environment variables\n├── langgraph.json  # configuration file for LangGraph\n└── pyproject.toml # dependencies for your project\n```\n\nAfter you setup your project and place it in a GitHub repository, it's time to [deploy your app](/langsmith/deployment-quickstart).\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/setup-pyproject.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "Example file directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Create the configuration file\n\nCreate a [configuration file](/langsmith/cli#configuration-file) called `langgraph.json`. See the [configuration file reference](/langsmith/cli#configuration-file) for detailed explanations of each key in the JSON object of the configuration file.\n\nExample `langgraph.json` file:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that the variable name of the `CompiledGraph` appears at the end of the value of each subkey in the top-level `graphs` key (i.e. `:<variable_name>`).\n\n<Warning>\n  **Configuration file location**\n  The configuration file must be placed in a directory that is at the same level or higher than the Python files that contain compiled graphs and associated dependencies.\n</Warning>\n\nExample file directory:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create the configuration file",
+      "id": "create-the-configuration-file"
+    },
+    {
+      "level": "h2",
+      "text": "Next",
+      "id": "next"
+    }
+  ],
+  "url": "llms-txt#define-the-runtime-context",
+  "links": []
+}

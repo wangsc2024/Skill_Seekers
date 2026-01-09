@@ -1,0 +1,154 @@
+{
+  "url": "https://react.dev/learn/scaling-up-with-reducer-and-context",
+  "title": "Scaling Up with Reducer and Context",
+  "content": "Reducers let you consolidate a component’s state update logic. Context lets you pass information deep down to other components. You can combine reducers and context together to manage state of a complex screen.\n\nIn this example from the introduction to reducers, the state is managed by a reducer. The reducer function contains all of the state update logic and is declared at the bottom of this file:\n\nA reducer helps keep the event handlers short and concise. However, as your app grows, you might run into another difficulty. Currently, the tasks state and the dispatch function are only available in the top-level TaskApp component. To let other components read the list of tasks or change it, you have to explicitly pass down the current state and the event handlers that change it as props.\n\nFor example, TaskApp passes a list of tasks and the event handlers to TaskList:\n\nAnd TaskList passes the event handlers to Task:\n\nIn a small example like this, this works well, but if you have tens or hundreds of components in the middle, passing down all state and functions can be quite frustrating!\n\nThis is why, as an alternative to passing them through props, you might want to put both the tasks state and the dispatch function into context. This way, any component below TaskApp in the tree can read the tasks and dispatch actions without the repetitive “prop drilling”.\n\nHere is how you can combine a reducer with context:\n\nThe useReducer Hook returns the current tasks and the dispatch function that lets you update them:\n\nTo pass them down the tree, you will create two separate contexts:\n\nExport them from a separate file so that you can later import them from other files:\n\nHere, you’re passing null as the default value to both contexts. The actual values will be provided by the TaskApp component.\n\nNow you can import both contexts in your TaskApp component. Take the tasks and dispatch returned by useReducer() and provide them to the entire tree below:\n\nFor now, you pass the information both via props and in context:\n\nIn the next step, you will remove prop passing.\n\nNow you don’t need to pass the list of tasks or the event handlers down the tree:\n\nInstead, any component that needs the task list can read it from the TasksContext:\n\nTo update the task list, any component can read the dispatch function from context and call it:\n\nThe TaskApp component does not pass any event handlers down, and the TaskList does not pass any event handlers to the Task component either. Each component reads the context that it needs:\n\nThe state still “lives” in the top-level TaskApp component, managed with useReducer. But its tasks and dispatch are now available to every component below in the tree by importing and using these contexts.\n\nYou don’t have to do this, but you could further declutter the components by moving both reducer and context into a single file. Currently, TasksContext.js contains only two context declarations:\n\nThis file is about to get crowded! You’ll move the reducer into that same file. Then you’ll declare a new TasksProvider component in the same file. This component will tie all the pieces together:\n\nThis removes all the complexity and wiring from your TaskApp component:\n\nYou can also export functions that use the context from TasksContext.js:\n\nWhen a component needs to read context, it can do it through these functions:\n\nThis doesn’t change the behavior in any way, but it lets you later split these contexts further or add some logic to these functions. Now all of the context and reducer wiring is in TasksContext.js. This keeps the components clean and uncluttered, focused on what they display rather than where they get the data:\n\nYou can think of TasksProvider as a part of the screen that knows how to deal with tasks, useTasks as a way to read them, and useTasksDispatch as a way to update them from any component below in the tree.\n\nFunctions like useTasks and useTasksDispatch are called Custom Hooks. Your function is considered a custom Hook if its name starts with use. This lets you use other Hooks, like useContext, inside it.\n\nAs your app grows, you may have many context-reducer pairs like this. This is a powerful way to scale your app and lift state up without too much work whenever you want to access the data deep in the tree.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Scaling Up with Reducer and Context",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Combining a reducer with context",
+      "id": "combining-a-reducer-with-context"
+    },
+    {
+      "level": "h3",
+      "text": "Step 1: Create the context",
+      "id": "step-1-create-the-context"
+    },
+    {
+      "level": "h3",
+      "text": "Step 2: Put state and dispatch into context",
+      "id": "step-2-put-state-and-dispatch-into-context"
+    },
+    {
+      "level": "h3",
+      "text": "Step 3: Use context anywhere in the tree",
+      "id": "step-3-use-context-anywhere-in-the-tree"
+    },
+    {
+      "level": "h2",
+      "text": "Moving all wiring into a single file",
+      "id": "moving-all-wiring-into-a-single-file"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<TaskList  tasks={tasks}  onChangeTask={handleChangeTask}  onDeleteTask={handleDeleteTask}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<Task  task={task}  onChange={onChangeTask}  onDelete={onDeleteTask}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);",
+      "language": "unknown"
+    },
+    {
+      "code": "import { TasksContext, TasksDispatchContext } from './TasksContext.js';export default function TaskApp() {  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);  // ...  return (    <TasksContext value={tasks}>      <TasksDispatchContext value={dispatch}>        ...      </TasksDispatchContext>    </TasksContext>  );}",
+      "language": "javascript"
+    },
+    {
+      "code": "<TasksContext value={tasks}>  <TasksDispatchContext value={dispatch}>    <h1>Day off in Kyoto</h1>    <AddTask />    <TaskList />  </TasksDispatchContext></TasksContext>",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function TaskList() {  const tasks = useContext(TasksContext);  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function AddTask() {  const [text, setText] = useState('');  const dispatch = useContext(TasksDispatchContext);  // ...  return (    // ...    <button onClick={() => {      setText('');      dispatch({        type: 'added',        id: nextId++,        text: text,      });    }}>Add</button>    // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "import { createContext } from 'react';export const TasksContext = createContext(null);export const TasksDispatchContext = createContext(null);",
+      "language": "javascript"
+    },
+    {
+      "code": "export function TasksProvider({ children }) {  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);  return (    <TasksContext value={tasks}>      <TasksDispatchContext value={dispatch}>        {children}      </TasksDispatchContext>    </TasksContext>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "export function useTasks() {  return useContext(TasksContext);}export function useTasksDispatch() {  return useContext(TasksDispatchContext);}",
+      "language": "javascript"
+    },
+    {
+      "code": "const tasks = useTasks();const dispatch = useTasksDispatch();",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react-dom"
+  ]
+}

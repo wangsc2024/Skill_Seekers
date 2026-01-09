@@ -1,0 +1,13 @@
+{
+  "title": "Compile the graph with the checkpointer and store",
+  "content": "graph = graph.compile(checkpointer=checkpointer, store=in_memory_store)\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "We invoke the graph with a `thread_id`, as before, and also with a `user_id`, which we'll use to namespace our memories to this particular user as we showed above.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#compile-the-graph-with-the-checkpointer-and-store",
+  "links": []
+}

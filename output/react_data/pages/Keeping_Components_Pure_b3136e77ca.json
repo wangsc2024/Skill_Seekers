@@ -1,0 +1,136 @@
+{
+  "url": "https://react.dev/learn/keeping-components-pure",
+  "title": "Keeping Components Pure",
+  "content": "Some JavaScript functions are pure. Pure functions only perform a calculation and nothing more. By strictly only writing your components as pure functions, you can avoid an entire class of baffling bugs and unpredictable behavior as your codebase grows. To get these benefits, though, there are a few rules you must follow.\n\nIn computer science (and especially the world of functional programming), a pure function is a function with the following characteristics:\n\nYou might already be familiar with one example of pure functions: formulas in math.\n\nConsider this math formula: y = 2x.\n\nIf x = 2 then y = 4. Always.\n\nIf x = 3 then y = 6. Always.\n\nIf x = 3, y won’t sometimes be 9 or –1 or 2.5 depending on the time of day or the state of the stock market.\n\nIf y = 2x and x = 3, y will always be 6.\n\nIf we made this into a JavaScript function, it would look like this:\n\nIn the above example, double is a pure function. If you pass it 3, it will return 6. Always.\n\nReact is designed around this concept. React assumes that every component you write is a pure function. This means that React components you write must always return the same JSX given the same inputs:\n\nWhen you pass drinkers={2} to Recipe, it will return JSX containing 2 cups of water. Always.\n\nIf you pass drinkers={4}, it will return JSX containing 4 cups of water. Always.\n\nJust like a math formula.\n\nYou could think of your components as recipes: if you follow them and don’t introduce new ingredients during the cooking process, you will get the same dish every time. That “dish” is the JSX that the component serves to React to render.\n\nIllustrated by Rachel Lee Nabors\n\nReact’s rendering process must always be pure. Components should only return their JSX, and not change any objects or variables that existed before rendering—that would make them impure!\n\nHere is a component that breaks this rule:\n\nThis component is reading and writing a guest variable declared outside of it. This means that calling this component multiple times will produce different JSX! And what’s more, if other components read guest, they will produce different JSX, too, depending on when they were rendered! That’s not predictable.\n\nGoing back to our formula y = 2x, now even if x = 2, we cannot trust that y = 4. Our tests could fail, our users would be baffled, planes would fall out of the sky—you can see how this would lead to confusing bugs!\n\nYou can fix this component by passing guest as a prop instead:\n\nNow your component is pure, as the JSX it returns only depends on the guest prop.\n\nIn general, you should not expect your components to be rendered in any particular order. It doesn’t matter if you call y = 2x before or after y = 5x: both formulas will resolve independently of each other. In the same way, each component should only “think for itself”, and not attempt to coordinate with or depend upon others during rendering. Rendering is like a school exam: each component should calculate JSX on their own!\n\nAlthough you might not have used them all yet, in React there are three kinds of inputs that you can read while rendering: props, state, and context. You should always treat these inputs as read-only.\n\nWhen you want to change something in response to user input, you should set state instead of writing to a variable. You should never change preexisting variables or objects while your component is rendering.\n\nReact offers a “Strict Mode” in which it calls each component’s function twice during development. By calling the component functions twice, Strict Mode helps find components that break these rules.\n\nNotice how the original example displayed “Guest #2”, “Guest #4”, and “Guest #6” instead of “Guest #1”, “Guest #2”, and “Guest #3”. The original function was impure, so calling it twice broke it. But the fixed pure version works even if the function is called twice every time. Pure functions only calculate, so calling them twice won’t change anything—just like calling double(2) twice doesn’t change what’s returned, and solving y = 2x twice doesn’t change what y is. Same inputs, same outputs. Always.\n\nStrict Mode has no effect in production, so it won’t slow down the app for your users. To opt into Strict Mode, you can wrap your root component into <React.StrictMode>. Some frameworks do this by default.\n\nIn the above example, the problem was that the component changed a preexisting variable while rendering. This is often called a “mutation” to make it sound a bit scarier. Pure functions don’t mutate variables outside of the function’s scope or objects that were created before the call—that makes them impure!\n\nHowever, it’s completely fine to change variables and objects that you’ve just created while rendering. In this example, you create an [] array, assign it to a cups variable, and then push a dozen cups into it:\n\nIf the cups variable or the [] array were created outside the TeaGathering function, this would be a huge problem! You would be changing a preexisting object by pushing items into that array.\n\nHowever, it’s fine because you’ve created them during the same render, inside TeaGathering. No code outside of TeaGathering will ever know that this happened. This is called “local mutation”—it’s like your component’s little secret.\n\nWhile functional programming relies heavily on purity, at some point, somewhere, something has to change. That’s kind of the point of programming! These changes—updating the screen, starting an animation, changing the data—are called side effects. They’re things that happen “on the side”, not during rendering.\n\nIn React, side effects usually belong inside event handlers. Event handlers are functions that React runs when you perform some action—for example, when you click a button. Even though event handlers are defined inside your component, they don’t run during rendering! So event handlers don’t need to be pure.\n\nIf you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a useEffect call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort.\n\nWhen possible, try to express your logic with rendering alone. You’ll be surprised how far this can take you!\n\nWriting pure functions takes some habit and discipline. But it also unlocks marvelous opportunities:\n\nEvery new React feature we’re building takes advantage of purity. From data fetching to animations to performance, keeping components pure unlocks the power of the React paradigm.\n\nThis component tries to set the <h1>’s CSS class to \"night\" during the time from midnight to six hours in the morning, and \"day\" at all other times. However, it doesn’t work. Can you fix this component?\n\nYou can verify whether your solution works by temporarily changing the computer’s timezone. When the current time is between midnight and six in the morning, the clock should have inverted colors!",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Keeping Components Pure",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Purity: Components as formulas",
+      "id": "purity-components-as-formulas"
+    },
+    {
+      "level": "h2",
+      "text": "Side Effects: (un)intended consequences",
+      "id": "side-effects-unintended-consequences"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Detecting impure calculations with StrictMode",
+      "id": "detecting-impure-calculations-with-strict-mode"
+    },
+    {
+      "level": "h3",
+      "text": "Local mutation: Your component’s little secret",
+      "id": "local-mutation-your-components-little-secret"
+    },
+    {
+      "level": "h2",
+      "text": "Where you can cause side effects",
+      "id": "where-you-_can_-cause-side-effects"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Why does React care about purity?",
+      "id": "why-does-react-care-about-purity"
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    },
+    {
+      "level": "h2",
+      "text": "Try out some challenges",
+      "id": "challenges"
+    },
+    {
+      "level": "h4",
+      "text": "Challenge 1 of 3: Fix a broken clock",
+      "id": "fix-a-broken-clock"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "function double(number) {  return 2 * number;}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react-dom"
+  ]
+}

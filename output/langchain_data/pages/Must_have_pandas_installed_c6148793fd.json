@@ -1,0 +1,13 @@
+{
+  "title": "Must have 'pandas' installed.",
+  "content": "df = experiment.to_pandas()\ndf[[\"inputs.question\", \"outputs.answer\", \"reference.answer\", \"feedback.is_concise\"]]\npython  theme={null}\n{'question': 'What is the largest mammal?'}\n{'answer': \"What is the largest mammal? is a good question. I don't know the answer.\"}\n{'question': 'What do mammals and birds have in common?'}\n{'answer': \"What do mammals and birds have in common? is a good question. I don't know the answer.\"}\n```\n\n|   | inputs.question                           | outputs.answer                                                                         | reference.answer           | feedback.is\\_concise |\n| - | ----------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------- | -------------------- |\n| 0 | What is the largest mammal?               | What is the largest mammal? is a good question. I don't know the answer.               | The blue whale             | False                |\n| 1 | What do mammals and birds have in common? | What do mammals and birds have in common? is a good question. I don't know the answer. | They are both warm-blooded | False                |\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/local.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#must-have-'pandas'-installed.",
+  "links": []
+}

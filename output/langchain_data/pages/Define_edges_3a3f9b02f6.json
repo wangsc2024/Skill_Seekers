@@ -1,0 +1,161 @@
+{
+  "title": "Define edges",
+  "content": "def route(state: State) -> Literal[\"b\", END]:\n    if len(state[\"aggregate\"]) < 7:\n        return \"b\"\n    else:\n        return END\n\nbuilder.add_edge(START, \"a\")\nbuilder.add_conditional_edges(\"a\", route)\nbuilder.add_edge(\"b\", \"a\")\ngraph = builder.compile()\npython  theme={null}\nfrom IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))\npython  theme={null}\ngraph.invoke({\"aggregate\": []})\n\nNode A sees []\nNode B sees ['A']\nNode A sees ['A', 'B']\nNode B sees ['A', 'B', 'A']\nNode A sees ['A', 'B', 'A', 'B']\nNode B sees ['A', 'B', 'A', 'B', 'A']\nNode A sees ['A', 'B', 'A', 'B', 'A', 'B']\npython  theme={null}\nfrom langgraph.errors import GraphRecursionError\n\ntry:\n    graph.invoke({\"aggregate\": []}, {\"recursion_limit\": 4})\nexcept GraphRecursionError:\n    print(\"Recursion Error\")\n\nNode A sees []\nNode B sees ['A']\nNode C sees ['A', 'B']\nNode D sees ['A', 'B']\nNode A sees ['A', 'B', 'C', 'D']\nRecursion Error\npython  theme={null}\n  import operator\n  from typing import Annotated, Literal\n  from typing_extensions import TypedDict\n  from langgraph.graph import StateGraph, START, END\n  from langgraph.managed.is_last_step import RemainingSteps\n\nclass State(TypedDict):\n      aggregate: Annotated[list, operator.add]\n      remaining_steps: RemainingSteps\n\ndef a(state: State):\n      print(f'Node A sees {state[\"aggregate\"]}')\n      return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n      print(f'Node B sees {state[\"aggregate\"]}')\n      return {\"aggregate\": [\"B\"]}\n\n# Define nodes\n  builder = StateGraph(State)\n  builder.add_node(a)\n  builder.add_node(b)\n\n# Define edges\n  def route(state: State) -> Literal[\"b\", END]:\n      if state[\"remaining_steps\"] <= 2:\n          return END\n      else:\n          return \"b\"\n\nbuilder.add_edge(START, \"a\")\n  builder.add_conditional_edges(\"a\", route)\n  builder.add_edge(\"b\", \"a\")\n  graph = builder.compile()\n\n# Test it out\n  result = graph.invoke({\"aggregate\": []}, {\"recursion_limit\": 4})\n  print(result)\n  \n  Node A sees []\n  Node B sees ['A']\n  Node A sees ['A', 'B']\n  {'aggregate': ['A', 'B', 'A']}\n  python  theme={null}\n  import operator\n  from typing import Annotated, Literal\n  from typing_extensions import TypedDict\n  from langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n      aggregate: Annotated[list, operator.add]\n\ndef a(state: State):\n      print(f'Node A sees {state[\"aggregate\"]}')\n      return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n      print(f'Node B sees {state[\"aggregate\"]}')\n      return {\"aggregate\": [\"B\"]}\n\ndef c(state: State):\n      print(f'Node C sees {state[\"aggregate\"]}')\n      return {\"aggregate\": [\"C\"]}\n\ndef d(state: State):\n      print(f'Node D sees {state[\"aggregate\"]}')\n      return {\"aggregate\": [\"D\"]}\n\n# Define nodes\n  builder = StateGraph(State)\n  builder.add_node(a)\n  builder.add_node(b)\n  builder.add_node(c)\n  builder.add_node(d)\n\n# Define edges\n  def route(state: State) -> Literal[\"b\", END]:\n      if len(state[\"aggregate\"]) < 7:\n          return \"b\"\n      else:\n          return END\n\nbuilder.add_edge(START, \"a\")\n  builder.add_conditional_edges(\"a\", route)\n  builder.add_edge(\"b\", \"c\")\n  builder.add_edge(\"b\", \"d\")\n  builder.add_edge([\"c\", \"d\"], \"a\")\n  graph = builder.compile()\n  python  theme={null}\n  from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))\n  python  theme={null}\n  result = graph.invoke({\"aggregate\": []})\n  \n  Node A sees []\n  Node B sees ['A']\n  Node D sees ['A', 'B']\n  Node C sees ['A', 'B']\n  Node A sees ['A', 'B', 'C', 'D']\n  Node B sees ['A', 'B', 'C', 'D', 'A']\n  Node D sees ['A', 'B', 'C', 'D', 'A', 'B']\n  Node C sees ['A', 'B', 'C', 'D', 'A', 'B']\n  Node A sees ['A', 'B', 'C', 'D', 'A', 'B', 'C', 'D']\n  python  theme={null}\n  from langgraph.errors import GraphRecursionError\n\ntry:\n      result = graph.invoke({\"aggregate\": []}, {\"recursion_limit\": 4})\n  except GraphRecursionError:\n      print(\"Recursion Error\")\n  \n  Node A sees []\n  Node B sees ['A']\n  Node C sees ['A', 'B']\n  Node D sees ['A', 'B']\n  Node A sees ['A', 'B', 'C', 'D']\n  Recursion Error\n  shell  theme={null}\n    pip install -U \"langchain[openai]\"\n    python init_chat_model theme={null}\n      import os\n      from langchain.chat_models import init_chat_model\n\nos.environ[\"OPENAI_API_KEY\"] = \"sk-...\"\n\nmodel = init_chat_model(\"gpt-4.1\")\n      python Model Class theme={null}\n      import os\n      from langchain_openai import ChatOpenAI\n\nos.environ[\"OPENAI_API_KEY\"] = \"sk-...\"\n\nmodel = ChatOpenAI(model=\"gpt-4.1\")\n      shell  theme={null}\n    pip install -U \"langchain[anthropic]\"\n    python init_chat_model theme={null}\n      import os\n      from langchain.chat_models import init_chat_model\n\nos.environ[\"ANTHROPIC_API_KEY\"] = \"sk-...\"\n\nmodel = init_chat_model(\"claude-sonnet-4-5-20250929\")\n      python Model Class theme={null}\n      import os\n      from langchain_anthropic import ChatAnthropic\n\nos.environ[\"ANTHROPIC_API_KEY\"] = \"sk-...\"\n\nmodel = ChatAnthropic(model=\"claude-sonnet-4-5-20250929\")\n      shell  theme={null}\n    pip install -U \"langchain[openai]\"\n    python init_chat_model theme={null}\n      import os\n      from langchain.chat_models import init_chat_model\n\nos.environ[\"AZURE_OPENAI_API_KEY\"] = \"...\"\n      os.environ[\"AZURE_OPENAI_ENDPOINT\"] = \"...\"\n      os.environ[\"OPENAI_API_VERSION\"] = \"2025-03-01-preview\"\n\nmodel = init_chat_model(\n          \"azure_openai:gpt-4.1\",\n          azure_deployment=os.environ[\"AZURE_OPENAI_DEPLOYMENT_NAME\"],\n      )\n      python Model Class theme={null}\n      import os\n      from langchain_openai import AzureChatOpenAI\n\nos.environ[\"AZURE_OPENAI_API_KEY\"] = \"...\"\n      os.environ[\"AZURE_OPENAI_ENDPOINT\"] = \"...\"\n      os.environ[\"OPENAI_API_VERSION\"] = \"2025-03-01-preview\"\n\nmodel = AzureChatOpenAI(\n          model=\"gpt-4.1\",\n          azure_deployment=os.environ[\"AZURE_OPENAI_DEPLOYMENT_NAME\"]\n      )\n      shell  theme={null}\n    pip install -U \"langchain[google-genai]\"\n    python init_chat_model theme={null}\n      import os\n      from langchain.chat_models import init_chat_model\n\nos.environ[\"GOOGLE_API_KEY\"] = \"...\"\n\nmodel = init_chat_model(\"google_genai:gemini-2.5-flash-lite\")\n      python Model Class theme={null}\n      import os\n      from langchain_google_genai import ChatGoogleGenerativeAI\n\nos.environ[\"GOOGLE_API_KEY\"] = \"...\"\n\nmodel = ChatGoogleGenerativeAI(model=\"gemini-2.5-flash-lite\")\n      shell  theme={null}\n    pip install -U \"langchain[aws]\"\n    python init_chat_model theme={null}\n      from langchain.chat_models import init_chat_model\n\n# Follow the steps here to configure your credentials:\n      # https://docs.aws.amazon.com/bedrock/latest/userguide/getting-started.html\n\nmodel = init_chat_model(\n          \"anthropic.claude-3-5-sonnet-20240620-v1:0\",\n          model_provider=\"bedrock_converse\",\n      )\n      python Model Class theme={null}\n      from langchain_aws import ChatBedrock\n\nmodel = ChatBedrock(model=\"anthropic.claude-3-5-sonnet-20240620-v1:0\")\n      shell  theme={null}\n    pip install -U \"langchain[huggingface]\"\n    python init_chat_model theme={null}\n      import os\n      from langchain.chat_models import init_chat_model\n\nos.environ[\"HUGGINGFACEHUB_API_TOKEN\"] = \"hf_...\"\n\nmodel = init_chat_model(\n          \"microsoft/Phi-3-mini-4k-instruct\",\n          model_provider=\"huggingface\",\n          temperature=0.7,\n          max_tokens=1024,\n      )\n      python Model Class theme={null}\n      import os\n      from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint\n\nos.environ[\"HUGGINGFACEHUB_API_TOKEN\"] = \"hf_...\"\n\nllm = HuggingFaceEndpoint(\n          repo_id=\"microsoft/Phi-3-mini-4k-instruct\",\n          temperature=0.7,\n          max_length=1024,\n      )\n      model = ChatHuggingFace(llm=llm)\n      python  theme={null}\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import MessagesState, StateGraph\n\nasync def node(state: MessagesState):  # [!code highlight]\n    new_message = await llm.ainvoke(state[\"messages\"])  # [!code highlight]\n    return {\"messages\": [new_message]}\n\nbuilder = StateGraph(MessagesState).add_node(node).set_entry_point(\"node\")\ngraph = builder.compile()\n\ninput_message = {\"role\": \"user\", \"content\": \"Hello\"}\nresult = await graph.ainvoke({\"messages\": [input_message]})  # [!code highlight]\npython  theme={null}\ndef my_node(state: State) -> Command[Literal[\"my_other_node\"]]:\n    return Command(\n        # state update\n        update={\"foo\": \"bar\"},\n        # control flow\n        goto=\"my_other_node\"\n    )\npython  theme={null}\nimport random\nfrom typing_extensions import TypedDict, Literal\nfrom langgraph.graph import StateGraph, START\nfrom langgraph.types import Command",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_7.png?fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=e1b99e7efe45b1fdc5836d590d5fbbc3\" alt=\"Simple loop graph\" data-og-width=\"188\" width=\"188\" data-og-height=\"249\" height=\"249\" data-path=\"oss/images/graph_api_image_7.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_7.png?w=280&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=a443c1ddc2f6a4e7c73f4482c7d63912 280w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_7.png?w=560&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=f65d82d8aaeb024beb5da1aa2948bcdb 560w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_7.png?w=840&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=b95f4df2fb69f28779a1d8dd113409d0 840w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_7.png?w=1100&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=bdb4011d05756c10a1c7b5dea683fdb7 1100w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_7.png?w=1650&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=dde791caa4279a6248b59b70df99dd2c 1650w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_7.png?w=2500&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=e4d568719f1761ff3a3d2ea9175241d8 2500w\" />\n\nThis architecture is similar to a [ReAct agent](/oss/python/langgraph/workflows-agents) in which node `\"a\"` is a tool-calling model, and node `\"b\"` represents the tools.\n\nIn our `route` conditional edge, we specify that we should end after the `\"aggregate\"` list in the state passes a threshold length.\n\nInvoking the graph, we see that we alternate between nodes `\"a\"` and `\"b\"` before terminating once we reach the termination condition.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Impose a recursion limit\n\nIn some applications, we may not have a guarantee that we will reach a given termination condition. In these cases, we can set the graph's [recursion limit](/oss/python/langgraph/graph-api#recursion-limit). This will raise a `GraphRecursionError` after a given number of [supersteps](/oss/python/langgraph/graph-api#graphs). We can then catch and handle this exception:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Extended example: return state on hitting recursion limit\">\n  Instead of raising `GraphRecursionError`, we can introduce a new key to the state that keeps track of the number of steps remaining until reaching the recursion limit. We can then use this key to determine if we should end the run.\n\n  LangGraph implements a special `RemainingSteps` annotation. Under the hood, it creates a `ManagedValue` channel -- a state channel that will exist for the duration of our graph run and no longer.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n<Accordion title=\"Extended example: loops with branches\">\n  To better understand how the recursion limit works, let's consider a more complex example. Below we implement a loop, but one step fans out into two nodes:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_8.png?fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=20e2a9e8c15760eb9ecb07fc411aa70e\" alt=\"Complex loop graph with branches\" data-og-width=\"297\" width=\"297\" data-og-height=\"348\" height=\"348\" data-path=\"oss/images/graph_api_image_8.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_8.png?w=280&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=65ee62a3adb7bedaf7571d9ecdacb908 280w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_8.png?w=560&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=e7c4c3341baeed9c747082f69d2b3ded 560w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_8.png?w=840&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=b64849cfc877d1b32422f6666d5f93a0 840w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_8.png?w=1100&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=3d384eba95e1082504c7ef1d5309dfae 1100w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_8.png?w=1650&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=2fef71e345a90e5c2321c0dfda15d91b 1650w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/graph_api_image_8.png?w=2500&fit=max&auto=format&n=dL5Sn6Cmy9pwtY0V&q=85&s=09cf8e8ac3215e359e6e4304c09b3a9f 2500w\" />\n\n  This graph looks complex, but can be conceptualized as loop of [supersteps](/oss/python/langgraph/graph-api#graphs):\n\n  1. Node A\n  2. Node B\n  3. Nodes C and D\n  4. Node A\n  5. ...\n\n  We have a loop of four supersteps, where nodes C and D are executed concurrently.\n\n  Invoking the graph as before, we see that we complete two full \"laps\" before hitting the termination condition:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "However, if we set the recursion limit to four, we only complete one lap because each lap is four supersteps:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Async\n\nUsing the async programming paradigm can produce significant performance improvements when running [IO-bound](https://en.wikipedia.org/wiki/I/O_bound) code concurrently (e.g., making concurrent API requests to a chat model provider).\n\nTo convert a `sync` implementation of the graph to an `async` implementation, you will need to:\n\n1. Update `nodes` use `async def` instead of `def`.\n2. Update the code inside to use `await` appropriately.\n3. Invoke the graph with `.ainvoke` or `.astream` as desired.\n\nBecause many LangChain objects implement the [Runnable Protocol](https://python.langchain.com/docs/expression_language/interface/) which has `async` variants of all the `sync` methods it's typically fairly quick to upgrade a `sync` graph to an `async` graph.\n\nSee example below. To demonstrate async invocations of underlying LLMs, we will include a chat model:\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n</Tabs>",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n  **Async streaming**\n  See the [streaming guide](/oss/python/langgraph/streaming) for examples of streaming with async.\n</Tip>\n\n## Combine control flow and state updates with `Command`\n\nIt can be useful to combine control flow (edges) and state updates (nodes). For example, you might want to BOTH perform state updates AND decide which node to go to next in the SAME node. LangGraph provides a way to do so by returning a [Command](https://langchain-ai.github.io/langgraph/reference/types/#langgraph.types.Command) object from node functions:",
+      "language": "unknown"
+    },
+    {
+      "code": "We show an end-to-end example below. Let's create a simple graph with 3 nodes: A, B and C. We will first execute node A, and then decide whether to go to Node B or Node C next based on the output of node A.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Impose a recursion limit",
+      "id": "impose-a-recursion-limit"
+    },
+    {
+      "level": "h2",
+      "text": "Async",
+      "id": "async"
+    },
+    {
+      "level": "h2",
+      "text": "Combine control flow and state updates with `Command`",
+      "id": "combine-control-flow-and-state-updates-with-`command`"
+    }
+  ],
+  "url": "llms-txt#define-edges",
+  "links": []
+}

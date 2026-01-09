@@ -1,0 +1,363 @@
+{
+  "url": "https://react.dev/reference/react/useTransition",
+  "title": "useTransition",
+  "content": "useTransition is a React Hook that lets you render a part of the UI in the background.\n\nCall useTransition at the top level of your component to mark some state updates as Transitions.\n\nSee more examples below.\n\nuseTransition does not take any parameters.\n\nuseTransition returns an array with exactly two items:\n\nThe startTransition function returned by useTransition lets you mark an update as a Transition.\n\nThe function passed to startTransition is called an “Action”. By convention, any callback called inside startTransition (such as a callback prop) should be named action or include the “Action” suffix:\n\nstartTransition does not return anything.\n\nuseTransition is a Hook, so it can only be called inside components or custom Hooks. If you need to start a Transition somewhere else (for example, from a data library), call the standalone startTransition instead.\n\nYou can wrap an update into a Transition only if you have access to the set function of that state. If you want to start a Transition in response to some prop or a custom Hook value, try useDeferredValue instead.\n\nThe function you pass to startTransition is called immediately, marking all state updates that happen while it executes as Transitions. If you try to perform state updates in a setTimeout, for example, they won’t be marked as Transitions.\n\nYou must wrap any state updates after any async requests in another startTransition to mark them as Transitions. This is a known limitation that we will fix in the future (see Troubleshooting).\n\nThe startTransition function has a stable identity, so you will often see it omitted from Effect dependencies, but including it will not cause the Effect to fire. If the linter lets you omit a dependency without errors, it is safe to do. Learn more about removing Effect dependencies.\n\nA state update marked as a Transition will be interrupted by other state updates. For example, if you update a chart component inside a Transition, but then start typing into an input while the chart is in the middle of a re-render, React will restart the rendering work on the chart component after handling the input update.\n\nTransition updates can’t be used to control text inputs.\n\nIf there are multiple ongoing Transitions, React currently batches them together. This is a limitation that may be removed in a future release.\n\nCall useTransition at the top of your component to create Actions, and access the pending state:\n\nuseTransition returns an array with exactly two items:\n\nTo start a Transition, pass a function to startTransition like this:\n\nThe function passed to startTransition is called the “Action”. You can update state and (optionally) perform side effects within an Action, and the work will be done in the background without blocking user interactions on the page. A Transition can include multiple Actions, and while a Transition is in progress, your UI stays responsive. For example, if the user clicks a tab but then changes their mind and clicks another tab, the second click will be immediately handled without waiting for the first update to finish.\n\nTo give the user feedback about in-progress Transitions, the isPending state switches to true at the first call to startTransition, and stays true until all Actions complete and the final state is shown to the user. Transitions ensure side effects in Actions to complete in order to prevent unwanted loading indicators, and you can provide immediate feedback while the Transition is in progress with useOptimistic.\n\nIn this example, the updateQuantity function simulates a request to the server to update the item’s quantity in the cart. This function is artificially slowed down so that it takes at least a second to complete the request.\n\nUpdate the quantity multiple times quickly. Notice that the pending “Total” state is shown while any requests are in progress, and the “Total” updates only after the final request is complete. Because the update is in an Action, the “quantity” can continue to be updated while the request is in progress.\n\nThis is a basic example to demonstrate how Actions work, but this example does not handle requests completing out of order. When updating the quantity multiple times, it’s possible for the previous requests to finish after later requests causing the quantity to update out of order. This is a known limitation that we will fix in the future (see Troubleshooting below).\n\nFor common use cases, React provides built-in abstractions such as:\n\nThese solutions handle request ordering for you. When using Transitions to build your own custom hooks or libraries that manage async state transitions, you have greater control over the request ordering, but you must handle it yourself.\n\nYou can expose an action prop from a component to allow a parent to call an Action.\n\nFor example, this TabButton component wraps its onClick logic in an action prop:\n\nBecause the parent component updates its state inside the action, that state update gets marked as a Transition. This means you can click on “Posts” and then immediately click “Contact” and it does not block user interactions:\n\nWhen exposing an action prop from a component, you should await it inside the transition.\n\nThis allows the action callback to be either synchronous or asynchronous without requiring an additional startTransition to wrap the await in the action.\n\nYou can use the isPending boolean value returned by useTransition to indicate to the user that a Transition is in progress. For example, the tab button can have a special “pending” visual state:\n\nNotice how clicking “Posts” now feels more responsive because the tab button itself updates right away:\n\nIn this example, the PostsTab component fetches some data using use. When you click the “Posts” tab, the PostsTab component suspends, causing the closest loading fallback to appear:\n\nHiding the entire tab container to show a loading indicator leads to a jarring user experience. If you add useTransition to TabButton, you can instead display the pending state in the tab button instead.\n\nNotice that clicking “Posts” no longer replaces the entire tab container with a spinner:\n\nRead more about using Transitions with Suspense.\n\nTransitions only “wait” long enough to avoid hiding already revealed content (like the tab container). If the Posts tab had a nested <Suspense> boundary, the Transition would not “wait” for it.\n\nIf you’re building a React framework or a router, we recommend marking page navigations as Transitions.\n\nThis is recommended for three reasons:\n\nHere is a simplified router example using Transitions for navigations.\n\nSuspense-enabled routers are expected to wrap the navigation updates into Transitions by default.\n\nIf a function passed to startTransition throws an error, you can display an error to your user with an error boundary. To use an error boundary, wrap the component where you are calling the useTransition in an error boundary. Once the function passed to startTransition errors, the fallback for the error boundary will be displayed.\n\nYou can’t use a Transition for a state variable that controls an input:\n\nThis is because Transitions are non-blocking, but updating an input in response to the change event should happen synchronously. If you want to run a Transition in response to typing, you have two options:\n\nWhen you wrap a state update in a Transition, make sure that it happens during the startTransition call:\n\nThe function you pass to startTransition must be synchronous. You can’t mark an update as a Transition like this:\n\nInstead, you could do this:\n\nWhen you use await inside a startTransition function, the state updates that happen after the await are not marked as Transitions. You must wrap state updates after each await in a startTransition call:\n\nHowever, this works instead:\n\nThis is a JavaScript limitation due to React losing the scope of the async context. In the future, when AsyncContext is available, this limitation will be removed.\n\nYou can’t call useTransition outside a component because it’s a Hook. In this case, use the standalone startTransition method instead. It works the same way, but it doesn’t provide the isPending indicator.\n\nIf you run this code, it will print 1, 2, 3:\n\nIt is expected to print 1, 2, 3. The function you pass to startTransition does not get delayed. Unlike with the browser setTimeout, it does not run the callback later. React executes your function immediately, but any state updates scheduled while it is running are marked as Transitions. You can imagine that it works like this:\n\nIf you await inside startTransition, you might see the updates happen out of order.\n\nIn this example, the updateQuantity function simulates a request to the server to update the item’s quantity in the cart. This function artificially returns every other request after the previous to simulate race conditions for network requests.\n\nTry updating the quantity once, then update it quickly multiple times. You might see the incorrect total:\n\nWhen clicking multiple times, it’s possible for previous requests to finish after later requests. When this happens, React currently has no way to know the intended order. This is because the updates are scheduled asynchronously, and React loses context of the order across the async boundary.\n\nThis is expected, because Actions within a Transition do not guarantee execution order. For common use cases, React provides higher-level abstractions like useActionState and <form> actions that handle ordering for you. For advanced use cases, you’ll need to implement your own queuing and abort logic to handle this.\n\nExample of useActionState handling execution order:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "useTransition",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "useTransition()",
+      "id": "usetransition"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h3",
+      "text": "startTransition(action)",
+      "id": "starttransition"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Functions called in startTransition are called “Actions”.",
+      "id": "functions-called-in-starttransition-are-called-actions"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "starttransition-parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "starttransition-returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "starttransition-caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Perform non-blocking updates with Actions",
+      "id": "perform-non-blocking-updates-with-actions"
+    },
+    {
+      "level": "h4",
+      "text": "The difference between Actions and regular event handling",
+      "id": "examples"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 2: Updating the quantity in an Action",
+      "id": "updating-the-quantity-in-an-action"
+    },
+    {
+      "level": "h3",
+      "text": "Exposing action prop from components",
+      "id": "exposing-action-props-from-components"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Displaying a pending visual state",
+      "id": "displaying-a-pending-visual-state"
+    },
+    {
+      "level": "h3",
+      "text": "Preventing unwanted loading indicators",
+      "id": "preventing-unwanted-loading-indicators"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Building a Suspense-enabled router",
+      "id": "building-a-suspense-enabled-router"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Displaying an error to users with an error boundary",
+      "id": "displaying-an-error-to-users-with-error-boundary"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Updating an input in a Transition doesn’t work",
+      "id": "updating-an-input-in-a-transition-doesnt-work"
+    },
+    {
+      "level": "h3",
+      "text": "React doesn’t treat my state update as a Transition",
+      "id": "react-doesnt-treat-my-state-update-as-a-transition"
+    },
+    {
+      "level": "h3",
+      "text": "React doesn’t treat my state update after await as a Transition",
+      "id": "react-doesnt-treat-my-state-update-after-await-as-a-transition"
+    },
+    {
+      "level": "h3",
+      "text": "I want to call useTransition from outside a component",
+      "id": "i-want-to-call-usetransition-from-outside-a-component"
+    },
+    {
+      "level": "h3",
+      "text": "The function I pass to startTransition executes immediately",
+      "id": "the-function-i-pass-to-starttransition-executes-immediately"
+    },
+    {
+      "level": "h3",
+      "text": "My state updates in Transitions are out of order",
+      "id": "my-state-updates-in-transitions-are-out-of-order"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "const [isPending, startTransition] = useTransition()",
+      "language": "unknown"
+    },
+    {
+      "code": "import { useTransition } from 'react';function TabContainer() {  const [isPending, startTransition] = useTransition();  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function TabContainer() {  const [isPending, startTransition] = useTransition();  const [tab, setTab] = useState('about');  function selectTab(nextTab) {    startTransition(() => {      setTab(nextTab);    });  }  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function SubmitButton({ submitAction }) {  const [isPending, startTransition] = useTransition();  return (    <button      disabled={isPending}      onClick={() => {        startTransition(async () => {          await submitAction();        });      }}    >      Submit    </button>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "import {useState, useTransition} from 'react';function CheckoutForm() {  const [isPending, startTransition] = useTransition();  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "import {useState, useTransition} from 'react';import {updateQuantity} from './api';function CheckoutForm() {  const [isPending, startTransition] = useTransition();  const [quantity, setQuantity] = useState(1);  function onSubmit(newQuantity) {    startTransition(async function () {      const savedQuantity = await updateQuantity(newQuantity);      startTransition(() => {        setQuantity(savedQuantity);      });    });  }  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function TabButton({ action, children, isActive }) {  const [isPending, startTransition] = useTransition();  if (isActive) {    return <b>{children}</b>  }  return (    <button onClick={() => {      startTransition(async () => {        // await the action that's passed in.        // This allows it to be either sync or async.        await action();      });    }}>      {children}    </button>  );}",
+      "language": "javascript"
+    },
+    {
+      "code": "function TabButton({ action, children, isActive }) {  const [isPending, startTransition] = useTransition();  // ...  if (isPending) {    return <b className=\"pending\">{children}</b>;  }  // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "function Router() {  const [page, setPage] = useState('/');  const [isPending, startTransition] = useTransition();  function navigate(url) {    startTransition(() => {      setPage(url);    });  }  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "const [text, setText] = useState('');// ...function handleChange(e) {  // ❌ Can't use Transitions for controlled input state  startTransition(() => {    setText(e.target.value);  });}// ...return <input value={text} onChange={handleChange} />;",
+      "language": "jsx"
+    },
+    {
+      "code": "startTransition(() => {  // ✅ Setting state *during* startTransition call  setPage('/about');});",
+      "language": "javascript"
+    },
+    {
+      "code": "startTransition(() => {  // ❌ Setting state *after* startTransition call  setTimeout(() => {    setPage('/about');  }, 1000);});",
+      "language": "javascript"
+    },
+    {
+      "code": "setTimeout(() => {  startTransition(() => {    // ✅ Setting state *during* startTransition call    setPage('/about');  });}, 1000);",
+      "language": "javascript"
+    },
+    {
+      "code": "startTransition(async () => {  await someAsyncFunction();  // ❌ Not using startTransition after await  setPage('/about');});",
+      "language": "javascript"
+    },
+    {
+      "code": "startTransition(async () => {  await someAsyncFunction();  // ✅ Using startTransition *after* await  startTransition(() => {    setPage('/about');  });});",
+      "language": "javascript"
+    },
+    {
+      "code": "console.log(1);startTransition(() => {  console.log(2);  setPage('/about');});console.log(3);",
+      "language": "javascript"
+    },
+    {
+      "code": "// A simplified version of how React workslet isInsideTransition = false;function startTransition(scope) {  isInsideTransition = true;  scope();  isInsideTransition = false;}function setState() {  if (isInsideTransition) {    // ... schedule a Transition state update ...  } else {    // ... schedule an urgent state update ...  }}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

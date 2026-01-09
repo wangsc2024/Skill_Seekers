@@ -1,0 +1,43 @@
+{
+  "title": "GLM-4.6: Run Locally Guide",
+  "content": "A guide on how to run Z.ai GLM-4.6 and GLM-4.6V-Flash model on your own local device!\n\nGLM-4.6 and **GLM-4.6V-Flash** are the latest reasoning models from **Z.ai**, achieving SOTA performance on coding and agent benchmarks while offering improved conversational chats. [**GLM-4.6V-Flash**](#glm-4.6v-flash) **the smaller 9B model was released in December, 2025 and you can run it now too.**\n\nThe full 355B parameter model requires **400GB** of disk space, while the Unsloth Dynamic 2-bit GGUF reduces the size to **135GB** (-**75%)**. [**GLM-4.6-GGUF**](https://huggingface.co/unsloth/GLM-4.6-GGUF)\n\n{% hint style=\"success\" %}\nWe did multiple [**chat template fixes**](#unsloth-chat-template-fixes) for GLM-4.6 to make `llama.cpp/llama-cli --jinja` work - please only use `--jinja` otherwise the output will be wrong!\n\nYou asked for benchmarks on our quants, so we’re showcasing Aider Polyglot results! Our Dynamic 3-bit DeepSeek V3.1 GGUF scores **75.6%**, surpassing many full-precision SOTA LLMs. [Read more.](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs/unsloth-dynamic-ggufs-on-aider-polyglot)\n{% endhint %}\n\nAll uploads use Unsloth [Dynamic 2.0](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs) for SOTA 5-shot MMLU and Aider performance, meaning you can run & fine-tune quantized GLM LLMs with minimal accuracy loss.\n\n**Tutorials navigation:**\n\n<a href=\"#glm-4.6v-flash\" class=\"button secondary\">Run GLM-4.6V-Flash</a><a href=\"#glm-4.6\" class=\"button secondary\">Run GLM-4.6</a>\n\n### Unsloth Chat Template fixes\n\nOne of the significant fixes we did addresses an issue with prompting GGUFs, where the second prompt wouldn’t work. We fixed this issue however, this problem still persists in GGUFs without our fixes. For example, when using any non-Unsloth GLM-4.6 GGUF, the first conversation works fine, but the second one breaks.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-f1a25a7b2dbbabd5d04d079ae4dcf352bc326964%2Ftool-calling-on-glm-4-6-with-unsloths-ggufs-v0-oys0k2088nuf1.webp?alt=media\" alt=\"\" width=\"563\"><figcaption></figcaption></figure>\n\nWe’ve resolved this in our chat template, so when using our version, conversations beyond the second (third, fourth, etc.) work without any errors. There are still some issues with tool-calling, which we haven’t fully investigated yet due to bandwidth limitations. We’ve already informed the GLM team about these remaining issues.\n\n## :gear: Usage Guide\n\nThe 2-bit dynamic quant UD-Q2\\_K\\_XL uses 135GB of disk space - this works well in a **1x24GB card and 128GB of RAM** with MoE offloading. The 1-bit UD-TQ1 GGUF also **works natively in Ollama**!\n\n{% hint style=\"info\" %}\nYou must use `--jinja` for llama.cpp quants - this uses our [fixed chat templates](#chat-template-bug-fixes) and enables the correct template! You might get incorrect results if you do not use `--jinja`\n{% endhint %}\n\nThe 4-bit quants will fit in a 1x 40GB GPU (with MoE layers offloaded to RAM). Expect around 5 tokens/s with this setup if you have bonus 165GB RAM as well. It is recommended to have at least 205GB RAM to run this 4-bit. For optimal performance you will need at least 205GB unified memory or 205GB combined RAM+VRAM for 5+ tokens/s. To learn how to increase generation speed and fit longer contexts, [read here](#improving-generation-speed).\n\n{% hint style=\"success\" %}\nThough not a must, for best performance, have your VRAM + RAM combined equal to the size of the quant you're downloading. If not, hard drive / SSD offloading will work with llama.cpp, just inference will be slower.\n{% endhint %}\n\n### Recommended Settings\n\nAccording to Z.ai, there are different settings for GLM-4.6V-Flash & GLM-4.6 inference:\n\n| GLM-4.6V-Flash                                                              | GLM-4.6                                                                                 |\n| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |\n| <mark style=\"background-color:green;\">**temperature = 0.8**</mark>          | <mark style=\"background-color:green;\">**temperature = 1.0**</mark>                      |\n| <mark style=\"background-color:green;\">**top\\_p = 0.6**</mark> (recommended) | <mark style=\"background-color:green;\">**top\\_p = 0.95**</mark> (recommended for coding) |\n| <mark style=\"background-color:green;\">**top\\_k = 2**</mark> (recommended)   | <mark style=\"background-color:green;\">**top\\_k = 40**</mark> (recommended for coding)   |\n| **128K context length** or less                                             | **200K context length** or less                                                         |\n| **repeat\\_penalty = 1.1**                                                   |                                                                                         |\n| **max\\_generate\\_tokens = 16,384**                                          | **max\\_generate\\_tokens = 16,384**                                                      |\n\n* Use `--jinja` for llama.cpp variants - we **fixed some chat template issues as well!**\n\n## Run GLM-4.6 Tutorials:\n\nSee our step-by-step guides for running [GLM-4.6V-Flash](#glm-4.6v-flash) and the large [GLM-4.6](#glm-4.6) models.\n\n{% hint style=\"success\" %}\n**NEW as of Dec 16, 2025: GLM-4.6-V is now updated with vision support!**\n{% endhint %}\n\n#### ✨ Run in llama.cpp\n\n{% stepper %}\n{% step %}\nObtain the latest `llama.cpp` on [GitHub](https://github.com/ggml-org/llama.cpp). You can also use the build instructions below. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n{% step %}\nIf you want to use `llama.cpp` directly to load models, you can do the below: (:Q8\\_K\\_XL) is the quantization type. You can also download via Hugging Face (point 3). This is similar to `ollama run` . Use `export LLAMA_CACHE=\"folder\"` to force `llama.cpp` to save to a specific location. Remember the model has only a maximum of 128K context length.\n\n{% step %}\nDownload the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose `UD-`Q4\\_K\\_XL (dynamic 4bit quant) or other quantized versions like `Q8_K_XL` .",
+  "code_samples": [
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggerganov/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-quantize llama-cli llama-gguf-split llama-mtmd-cli llama-server\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "export LLAMA_CACHE=\"unsloth/GLM-4.6V-Flash-GGUF\"\n./llama.cpp/llama-cli \\\n    --model GLM-4.6V-Flash-GGUF/UD-Q8_K_XL/GLM-4.6V-Flash-UD-Q8_K_XL.gguf \\\n    --n-gpu-layers 99 \\\n    --jinja \\\n    --ctx-size 16384 \\\n    --flash-attn on \\\n    --temp 0.8 \\\n    --top-p 0.6 \\\n    --top-k 2 \\\n    --ctx-size 16384 \\\n    --repeat_penalty 1.1 \\\n    -ot \".ffn_.*_exps.=CPU\"",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Unsloth Chat Template fixes",
+      "id": "unsloth-chat-template-fixes"
+    },
+    {
+      "level": "h2",
+      "text": ":gear: Usage Guide",
+      "id": ":gear:-usage-guide"
+    },
+    {
+      "level": "h3",
+      "text": "Recommended Settings",
+      "id": "recommended-settings"
+    },
+    {
+      "level": "h2",
+      "text": "Run GLM-4.6 Tutorials:",
+      "id": "run-glm-4.6-tutorials:"
+    },
+    {
+      "level": "h3",
+      "text": "GLM-4.6V-Flash",
+      "id": "glm-4.6v-flash"
+    }
+  ],
+  "url": "llms-txt#glm-4.6:-run-locally-guide",
+  "links": []
+}

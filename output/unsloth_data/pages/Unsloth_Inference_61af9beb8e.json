@@ -1,0 +1,13 @@
+{
+  "title": "Unsloth Inference",
+  "content": "Learn how to run your finetuned model with Unsloth's faster inference.\n\nUnsloth supports natively 2x faster inference. For our inference only notebook, click [here](https://colab.research.google.com/drive/1aqlNQi7MMJbynFDyOQteD2t0yVfjb9Zh?usp=sharing).\n\nAll QLoRA, LoRA and non LoRA inference paths are 2x faster. This requires no change of code or any new dependencies.\n\n<pre class=\"language-python\"><code class=\"lang-python\"><strong>from unsloth import FastLanguageModel\n</strong>model, tokenizer = FastLanguageModel.from_pretrained(\n    model_name = \"lora_model\", # YOUR MODEL YOU USED FOR TRAINING\n    max_seq_length = max_seq_length,\n    dtype = dtype,\n    load_in_4bit = load_in_4bit,\n)\nFastLanguageModel.for_inference(model) # Enable native 2x faster inference\ntext_streamer = TextStreamer(tokenizer)\n_ = model.generate(**inputs, streamer = text_streamer, max_new_tokens = 64)\n</code></pre>\n\n#### NotImplementedError: A UTF-8 locale is required. Got ANSI\n\nSometimes when you execute a cell [this error](https://github.com/googlecolab/colabtools/issues/3409) can appear. To solve this, in a new cell, run the below:",
+  "code_samples": [
+    {
+      "code": "import locale\nlocale.getpreferredencoding = lambda: \"UTF-8\"",
+      "language": "python"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#unsloth-inference",
+  "links": []
+}

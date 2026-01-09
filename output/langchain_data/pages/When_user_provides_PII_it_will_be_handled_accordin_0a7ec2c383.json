@@ -1,0 +1,19 @@
+{
+  "title": "When user provides PII, it will be handled according to the strategy",
+  "content": "result = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"My email is john.doe@example.com and card is 5105-1051-0510-5100\"}]\n})\npython  theme={null}\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import HumanInTheLoopMiddleware\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langgraph.types import Command\n\nagent = create_agent(\n    model=\"gpt-4o\",\n    tools=[search_tool, send_email_tool, delete_database_tool],\n    middleware=[\n        HumanInTheLoopMiddleware(\n            interrupt_on={\n                # Require approval for sensitive operations\n                \"send_email\": True,\n                \"delete_database\": True,\n                # Auto-approve safe operations\n                \"search\": False,\n            }\n        ),\n    ],\n    # Persist the state across interrupts\n    checkpointer=InMemorySaver(),\n)",
+  "code_samples": [
+    {
+      "code": "<Accordion title=\"Built-in PII types and configuration\">\n  **Built-in PII types:**\n\n  * `email` - Email addresses\n  * `credit_card` - Credit card numbers (Luhn validated)\n  * `ip` - IP addresses\n  * `mac_address` - MAC addresses\n  * `url` - URLs\n\n  **Configuration options:**\n\n  | Parameter               | Description                                                            | Default                |\n  | ----------------------- | ---------------------------------------------------------------------- | ---------------------- |\n  | `pii_type`              | Type of PII to detect (built-in or custom)                             | Required               |\n  | `strategy`              | How to handle detected PII (`\"block\"`, `\"redact\"`, `\"mask\"`, `\"hash\"`) | `\"redact\"`             |\n  | `detector`              | Custom detector function or regex pattern                              | `None` (uses built-in) |\n  | `apply_to_input`        | Check user messages before model call                                  | `True`                 |\n  | `apply_to_output`       | Check AI messages after model call                                     | `False`                |\n  | `apply_to_tool_results` | Check tool result messages after execution                             | `False`                |\n</Accordion>\n\nSee the [middleware documentation](/oss/python/langchain/middleware#pii-detection) for complete details on PII detection capabilities.\n\n### Human-in-the-loop\n\nLangChain provides built-in middleware for requiring human approval before executing sensitive operations. This is one of the most effective guardrails for high-stakes decisions.\n\nHuman-in-the-loop middleware is helpful for cases such as financial transactions and transfers, deleting or modifying production data, sending communications to external parties, and any operation with significant business impact.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Human-in-the-loop",
+      "id": "human-in-the-loop"
+    }
+  ],
+  "url": "llms-txt#when-user-provides-pii,-it-will-be-handled-according-to-the-strategy",
+  "links": []
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Mirror images for your LangSmith installation",
+  "content": "Source: https://docs.langchain.com/langsmith/self-host-mirroring-images\n\nBy default, LangSmith will pull images from our public Docker registry. However, if you are running LangSmith in an environment that does not have internet access, or if you would like to use a private Docker registry, you can mirror the images to your own registry and then configure your LangSmith installation to use those images.\n\n* Authenticated access to a Docker registry that your Kubernetes cluster/machine has access to.\n* Docker installed on your local machine or a machine that has access to the Docker registry.\n* A Kubernetes cluster or a machine where you can run LangSmith.\n\n## Mirroring the Images\n\nFor your convenience, we have provided a script that will mirror the images for you. You can find the script in the [LangSmith Helm Chart repository](https://github.com/langchain-ai/helm/blob/main/charts/langsmith/scripts/mirror_langsmith_images.sh)\n\nTo use the script, you will need to run the script with the following command specifying your registry and platform:\n\nWhere `<your-registry>` is the URL of your Docker registry (e.g. `myregistry.com`) and `<platform>` is the platform you are using (e.g. `linux/amd64`, `linux/arm64`, etc.). If you do not specify a platform, it will default to `linux/amd64`.\n\nFor example, if your registry is `myregistry.com`, your platform is `linux/arm64`, and you want to use the latest version of the images, you would run:\n\nNote that this script will assume that you have Docker installed and that you are authenticated to your registry. It will also push the images to the specified registry with the same repository/tag as the original images.\n\nAlternatively, you can pull, mirror, and push the images manually. The images that you will need to mirror are found in the `values.yaml` file of the LangSmith Helm Chart. These can be found here: [LangSmith Helm Chart values.yaml](https://github.com/langchain-ai/helm/blob/main/charts/langsmith/values.yaml#L14)\n\nHere is an example of how to mirror the images using Docker:\n\n```bash  theme={null}",
+  "code_samples": [
+    {
+      "code": "Where `<your-registry>` is the URL of your Docker registry (e.g. `myregistry.com`) and `<platform>` is the platform you are using (e.g. `linux/amd64`, `linux/arm64`, etc.). If you do not specify a platform, it will default to `linux/amd64`.\n\nFor example, if your registry is `myregistry.com`, your platform is `linux/arm64`, and you want to use the latest version of the images, you would run:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that this script will assume that you have Docker installed and that you are authenticated to your registry. It will also push the images to the specified registry with the same repository/tag as the original images.\n\nAlternatively, you can pull, mirror, and push the images manually. The images that you will need to mirror are found in the `values.yaml` file of the LangSmith Helm Chart. These can be found here: [LangSmith Helm Chart values.yaml](https://github.com/langchain-ai/helm/blob/main/charts/langsmith/values.yaml#L14)\n\nHere is an example of how to mirror the images using Docker:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Requirements",
+      "id": "requirements"
+    },
+    {
+      "level": "h2",
+      "text": "Mirroring the Images",
+      "id": "mirroring-the-images"
+    }
+  ],
+  "url": "llms-txt#mirror-images-for-your-langsmith-installation",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "build based on the provided config",
+  "content": "def make_graph(config: RunnableConfig):\n    user_id = config.get(\"configurable\", {}).get(\"user_id\")\n    # route to different graph state / structure based on the user ID\n    if user_id == \"1\":\n        return make_default_graph()\n    else:\n        return make_alternative_graph()\n\n{\n    \"dependencies\": [\".\"],\n    \"graphs\": {\n        \"openai_agent\": \"./openai_agent.py:make_graph\",\n    },\n    \"env\": \"./.env\"\n}\n```\n\nSee more info on LangGraph API configuration file [here](/langsmith/cli#configuration-file)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/graph-rebuild.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "Finally, you need to specify the path to your graph-making function (`make_graph`) in `langgraph.json`:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#build-based-on-the-provided-config",
+  "links": []
+}

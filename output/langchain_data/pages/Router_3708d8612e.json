@@ -1,0 +1,57 @@
+{
+  "title": "Router",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/multi-agent/router\n\nIn the **router** architecture, a routing step classifies input and directs it to specialized [agents](/oss/python/langchain/agents). This is useful when you have distinct **verticals**—separate knowledge domains that each require their own agent.\n\n## Key characteristics\n\n* Router decomposes the query\n* Zero or more specialized agents are invoked in parallel\n* Results are synthesized into a coherent response\n\nUse the router pattern when you have distinct verticals (separate knowledge domains that each require their own agent), need to query multiple sources in parallel, and want to synthesize results into a combined response.\n\n## Basic implementation\n\nThe router classifies the query and directs it to the appropriate agent(s). Use [`Command`](/oss/python/langgraph/graph-api#command) for single-agent routing or [`Send`](/oss/python/langgraph/graph-api#send) for parallel fan-out to multiple agents.\n\n<Tabs>\n  <Tab title=\"Single agent\">\n    Use `Command` to route to a single specialized agent:\n\n<Tab title=\"Multiple agents (parallel)\">\n    Use `Send` to fan out to multiple specialized agents in parallel:\n\nFor a complete implementation, see the tutorial below.\n\n<Card title=\"Tutorial: Build a multi-source knowledge base with routing\" icon=\"book\" href=\"/oss/python/langchain/multi-agent/router-knowledge-base\">\n  Build a router that queries GitHub, Notion, and Slack in parallel, then synthesizes results into a coherent answer. Covers state definition, specialized agents, parallel execution with `Send`, and result synthesis.\n</Card>\n\n## Stateless vs. stateful\n\n* [**Stateless routers**](#stateless) address each request independently\n* [**Stateful routers**](#stateful) maintain conversation history across requests\n\nEach request is routed independently—no memory between calls. For multi-turn conversations, see [Stateful routers](#stateful).\n\n<Tip>\n  **Router vs. Subagents**: Both patterns can dispatch work to multiple agents, but they differ in how routing decisions are made:\n\n* **Router**: A dedicated routing step (often a single LLM call or rule-based logic) that classifies the input and dispatches to agents. The router itself typically doesn't maintain conversation history or perform multi-turn orchestration—it's a preprocessing step.\n  * **Subagents**: An main supervisor agent dynamically decides which [subagents](/oss/python/langchain/multi-agent/subagents) to call as part of an ongoing conversation. The main agent maintains context, can call multiple subagents across turns, and orchestrates complex multi-step workflows.\n\nUse a **router** when you have clear input categories and want deterministic or lightweight classification. Use a **supervisor** when you need flexible, conversation-aware orchestration where the LLM decides what to do next based on evolving context.\n</Tip>\n\nFor multi-turn conversations, you need to maintain context across invocations.\n\nThe simplest approach: wrap the stateless router as a tool that a conversational agent can call. The conversational agent handles memory and context; the router stays stateless. This avoids the complexity of managing conversation history across multiple parallel agents.\n\n```python  theme={null}\n@tool\ndef search_docs(query: str) -> str:\n    \"\"\"Search across multiple documentation sources.\"\"\"\n    result = workflow.invoke({\"query\": query})  # [!code highlight]\n    return result[\"final_answer\"]",
+  "code_samples": [
+    {
+      "code": "## Key characteristics\n\n* Router decomposes the query\n* Zero or more specialized agents are invoked in parallel\n* Results are synthesized into a coherent response\n\n## When to use\n\nUse the router pattern when you have distinct verticals (separate knowledge domains that each require their own agent), need to query multiple sources in parallel, and want to synthesize results into a combined response.\n\n## Basic implementation\n\nThe router classifies the query and directs it to the appropriate agent(s). Use [`Command`](/oss/python/langgraph/graph-api#command) for single-agent routing or [`Send`](/oss/python/langgraph/graph-api#send) for parallel fan-out to multiple agents.\n\n<Tabs>\n  <Tab title=\"Single agent\">\n    Use `Command` to route to a single specialized agent:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Multiple agents (parallel)\">\n    Use `Send` to fan out to multiple specialized agents in parallel:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nFor a complete implementation, see the tutorial below.\n\n<Card title=\"Tutorial: Build a multi-source knowledge base with routing\" icon=\"book\" href=\"/oss/python/langchain/multi-agent/router-knowledge-base\">\n  Build a router that queries GitHub, Notion, and Slack in parallel, then synthesizes results into a coherent answer. Covers state definition, specialized agents, parallel execution with `Send`, and result synthesis.\n</Card>\n\n## Stateless vs. stateful\n\nTwo approaches:\n\n* [**Stateless routers**](#stateless) address each request independently\n* [**Stateful routers**](#stateful) maintain conversation history across requests\n\n## Stateless\n\nEach request is routed independently—no memory between calls. For multi-turn conversations, see [Stateful routers](#stateful).\n\n<Tip>\n  **Router vs. Subagents**: Both patterns can dispatch work to multiple agents, but they differ in how routing decisions are made:\n\n  * **Router**: A dedicated routing step (often a single LLM call or rule-based logic) that classifies the input and dispatches to agents. The router itself typically doesn't maintain conversation history or perform multi-turn orchestration—it's a preprocessing step.\n  * **Subagents**: An main supervisor agent dynamically decides which [subagents](/oss/python/langchain/multi-agent/subagents) to call as part of an ongoing conversation. The main agent maintains context, can call multiple subagents across turns, and orchestrates complex multi-step workflows.\n\n  Use a **router** when you have clear input categories and want deterministic or lightweight classification. Use a **supervisor** when you need flexible, conversation-aware orchestration where the LLM decides what to do next based on evolving context.\n</Tip>\n\n## Stateful\n\nFor multi-turn conversations, you need to maintain context across invocations.\n\n### Tool wrapper\n\nThe simplest approach: wrap the stateless router as a tool that a conversational agent can call. The conversational agent handles memory and context; the router stays stateless. This avoids the complexity of managing conversation history across multiple parallel agents.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Key characteristics",
+      "id": "key-characteristics"
+    },
+    {
+      "level": "h2",
+      "text": "When to use",
+      "id": "when-to-use"
+    },
+    {
+      "level": "h2",
+      "text": "Basic implementation",
+      "id": "basic-implementation"
+    },
+    {
+      "level": "h2",
+      "text": "Stateless vs. stateful",
+      "id": "stateless-vs.-stateful"
+    },
+    {
+      "level": "h2",
+      "text": "Stateless",
+      "id": "stateless"
+    },
+    {
+      "level": "h2",
+      "text": "Stateful",
+      "id": "stateful"
+    },
+    {
+      "level": "h3",
+      "text": "Tool wrapper",
+      "id": "tool-wrapper"
+    }
+  ],
+  "url": "llms-txt#router",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Get email from command line",
+  "content": "email = getpass(\"Enter your email: \")\nbase_email = email.split(\"@\")\npassword = \"secure-password\"  # CHANGEME\nemail1 = f\"{base_email[0]}+1@{base_email[1]}\"\nemail2 = f\"{base_email[0]}+2@{base_email[1]}\"\n\nSUPABASE_URL = os.environ.get(\"SUPABASE_URL\")\nif not SUPABASE_URL:\n    SUPABASE_URL = getpass(\"Enter your Supabase project URL: \")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-email-from-command-line",
+  "links": []
+}

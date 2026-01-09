@@ -1,0 +1,508 @@
+{
+  "url": "https://react.dev/reference/react-dom/components/common",
+  "title": "Common components (e.g. <div>)",
+  "content": "All built-in browser components, such as <div>, support some common props and events.\n\nSee more examples below.\n\nThese special React props are supported for all built-in components:\n\nchildren: A React node (an element, a string, a number, a portal, an empty node like null, undefined and booleans, or an array of other React nodes). Specifies the content inside the component. When you use JSX, you will usually specify the children prop implicitly by nesting tags like <div><span /></div>.\n\ndangerouslySetInnerHTML: An object of the form { __html: '<p>some html</p>' } with a raw HTML string inside. Overrides the innerHTML property of the DOM node and displays the passed HTML inside. This should be used with extreme caution! If the HTML inside isn’t trusted (for example, if it’s based on user data), you risk introducing an XSS vulnerability. Read more about using dangerouslySetInnerHTML.\n\nref: A ref object from useRef or createRef, or a ref callback function, or a string for legacy refs. Your ref will be filled with the DOM element for this node. Read more about manipulating the DOM with refs.\n\nsuppressContentEditableWarning: A boolean. If true, suppresses the warning that React shows for elements that both have children and contentEditable={true} (which normally do not work together). Use this if you’re building a text input library that manages the contentEditable content manually.\n\nsuppressHydrationWarning: A boolean. If you use server rendering, normally there is a warning when the server and the client render different content. In some rare cases (like timestamps), it is very hard or impossible to guarantee an exact match. If you set suppressHydrationWarning to true, React will not warn you about mismatches in the attributes and the content of that element. It only works one level deep, and is intended to be used as an escape hatch. Don’t overuse it. Read about suppressing hydration errors.\n\nstyle: An object with CSS styles, for example { fontWeight: 'bold', margin: 20 }. Similarly to the DOM style property, the CSS property names need to be written as camelCase, for example fontWeight instead of font-weight. You can pass strings or numbers as values. If you pass a number, like width: 100, React will automatically append px (“pixels”) to the value unless it’s a unitless property. We recommend using style only for dynamic styles where you don’t know the style values ahead of time. In other cases, applying plain CSS classes with className is more efficient. Read more about className and style.\n\nThese standard DOM props are also supported for all built-in components:\n\nYou can also pass custom attributes as props, for example mycustomprop=\"someValue\". This can be useful when integrating with third-party libraries. The custom attribute name must be lowercase and must not start with on. The value will be converted to a string. If you pass null or undefined, the custom attribute will be removed.\n\nThese events fire only for the <form> elements:\n\nThese events fire only for the <dialog> elements. Unlike browser events, they bubble in React:\n\nThese events fire only for the <details> elements. Unlike browser events, they bubble in React:\n\nThese events fire for <img>, <iframe>, <object>, <embed>, <link>, and SVG <image> elements. Unlike browser events, they bubble in React:\n\nThese events fire for resources like <audio> and <video>. Unlike browser events, they bubble in React:\n\nInstead of a ref object (like the one returned by useRef), you may pass a function to the ref attribute.\n\nSee an example of using the ref callback.\n\nWhen the <div> DOM node is added to the screen, React will call your ref callback with the DOM node as the argument. When that <div> DOM node is removed, React will call your the cleanup function returned from the callback.\n\nReact will also call your ref callback whenever you pass a different ref callback. In the above example, (node) => { ... } is a different function on every render. When your component re-renders, the previous function will be called with null as the argument, and the next function will be called with the DOM node.\n\nTo support backwards compatibility, if a cleanup function is not returned from the ref callback, node will be called with null when the ref is detached. This behavior will be removed in a future version.\n\nYour event handlers will receive a React event object. It is also sometimes known as a “synthetic event”.\n\nIt conforms to the same standard as the underlying DOM events, but fixes some browser inconsistencies.\n\nSome React events do not map directly to the browser’s native events. For example in onMouseLeave, e.nativeEvent will point to a mouseout event. The specific mapping is not part of the public API and may change in the future. If you need the underlying browser event for some reason, read it from e.nativeEvent.\n\nReact event objects implement some of the standard Event properties:\n\nAdditionally, React event objects provide these properties:\n\nReact event objects implement some of the standard Event methods:\n\nAdditionally, React event objects provide these methods:\n\nAn event handler type for the CSS animation events.\n\nAn event handler type for the Clipboard API events.\n\ne: A React event object with these extra ClipboardEvent properties:\n\nAn event handler type for the input method editor (IME) events.\n\nAn event handler type for the HTML Drag and Drop API events.\n\ne: A React event object with these extra DragEvent properties:\n\nIt also includes the inherited MouseEvent properties:\n\nIt also includes the inherited UIEvent properties:\n\nAn event handler type for the focus events.\n\ne: A React event object with these extra FocusEvent properties:\n\nIt also includes the inherited UIEvent properties:\n\nAn event handler type for generic events.\n\nAn event handler type for the onBeforeInput event.\n\nAn event handler type for keyboard events.\n\ne: A React event object with these extra KeyboardEvent properties:\n\nIt also includes the inherited UIEvent properties:\n\nAn event handler type for mouse events.\n\ne: A React event object with these extra MouseEvent properties:\n\nIt also includes the inherited UIEvent properties:\n\nAn event handler type for pointer events.\n\ne: A React event object with these extra PointerEvent properties:\n\nIt also includes the inherited MouseEvent properties:\n\nIt also includes the inherited UIEvent properties:\n\nAn event handler type for touch events.\n\ne: A React event object with these extra TouchEvent properties:\n\nIt also includes the inherited UIEvent properties:\n\nAn event handler type for the CSS transition events.\n\nAn event handler type for generic UI events.\n\nAn event handler type for the onWheel event.\n\ne: A React event object with these extra WheelEvent properties:\n\nIt also includes the inherited MouseEvent properties:\n\nIt also includes the inherited UIEvent properties:\n\nIn React, you specify a CSS class with className. It works like the class attribute in HTML:\n\nThen you write the CSS rules for it in a separate CSS file:\n\nReact does not prescribe how you add CSS files. In the simplest case, you’ll add a <link> tag to your HTML. If you use a build tool or a framework, consult its documentation to learn how to add a CSS file to your project.\n\nSometimes, the style values depend on data. Use the style attribute to pass some styles dynamically:\n\nIn the above example, style={{}} is not a special syntax, but a regular {} object inside the style={ } JSX curly braces. We recommend only using the style attribute when your styles depend on JavaScript variables.\n\nTo apply CSS classes conditionally, you need to produce the className string yourself using JavaScript.\n\nFor example, className={'row ' + (isSelected ? 'selected': '')} will produce either className=\"row\" or className=\"row selected\" depending on whether isSelected is true.\n\nTo make this more readable, you can use a tiny helper library like classnames:\n\nIt is especially convenient if you have multiple conditional classes:\n\nSometimes, you’ll need to get the browser DOM node associated with a tag in JSX. For example, if you want to focus an <input> when a button is clicked, you need to call focus() on the browser <input> DOM node.\n\nTo obtain the browser DOM node for a tag, declare a ref and pass it as the ref attribute to that tag:\n\nReact will put the DOM node into inputRef.current after it’s been rendered to the screen.\n\nRead more about manipulating DOM with refs and check out more examples.\n\nFor more advanced use cases, the ref attribute also accepts a callback function.\n\nYou can pass a raw HTML string to an element like so:\n\nThis is dangerous. As with the underlying DOM innerHTML property, you must exercise extreme caution! Unless the markup is coming from a completely trusted source, it is trivial to introduce an XSS vulnerability this way.\n\nFor example, if you use a Markdown library that converts Markdown to HTML, you trust that its parser doesn’t contain bugs, and the user only sees their own input, you can display the resulting HTML like this:\n\nThe {__html} object should be created as close to where the HTML is generated as possible, like the above example does in the renderMarkdownToHTML function. This ensures that all raw HTML being used in your code is explicitly marked as such, and that only variables that you expect to contain HTML are passed to dangerouslySetInnerHTML. It is not recommended to create the object inline like <div dangerouslySetInnerHTML={{__html: markup}} />.\n\nTo see why rendering arbitrary HTML is dangerous, replace the code above with this:\n\nThe code embedded in the HTML will run. A hacker could use this security hole to steal user information or to perform actions on their behalf. Only use dangerouslySetInnerHTML with trusted and sanitized data.\n\nThis example shows some common mouse events and when they fire.\n\nThis example shows some common pointer events and when they fire.\n\nIn React, focus events bubble. You can use the currentTarget and relatedTarget to differentiate if the focusing or blurring events originated from outside of the parent element. The example shows how to detect focusing a child, focusing the parent element, and how to detect focus entering or leaving the whole subtree.\n\nThis example shows some common keyboard events and when they fire.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Common components (e.g. <div>)",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "Common components (e.g. <div>)",
+      "id": "common"
+    },
+    {
+      "level": "h4",
+      "text": "Props",
+      "id": "common-props"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "common-caveats"
+    },
+    {
+      "level": "h3",
+      "text": "ref callback function",
+      "id": "ref-callback"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "ref-callback-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "React 19 added cleanup functions for ref callbacks.",
+      "id": "react-19-added-cleanup-functions-for-ref-callbacks"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h3",
+      "text": "React event object",
+      "id": "react-event-object"
+    },
+    {
+      "level": "h4",
+      "text": "Properties",
+      "id": "react-event-object-properties"
+    },
+    {
+      "level": "h4",
+      "text": "Methods",
+      "id": "react-event-object-methods"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "react-event-object-caveats"
+    },
+    {
+      "level": "h3",
+      "text": "AnimationEvent handler function",
+      "id": "animationevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "animationevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "ClipboardEvent handler function",
+      "id": "clipboadevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "clipboadevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "CompositionEvent handler function",
+      "id": "compositionevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "compositionevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "DragEvent handler function",
+      "id": "dragevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "dragevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "FocusEvent handler function",
+      "id": "focusevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "focusevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Event handler function",
+      "id": "event-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "event-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "InputEvent handler function",
+      "id": "inputevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "inputevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "KeyboardEvent handler function",
+      "id": "keyboardevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "keyboardevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "MouseEvent handler function",
+      "id": "mouseevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "mouseevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "PointerEvent handler function",
+      "id": "pointerevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "pointerevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "TouchEvent handler function",
+      "id": "touchevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "touchevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "TransitionEvent handler function",
+      "id": "transitionevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "transitionevent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "UIEvent handler function",
+      "id": "uievent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "uievent-handler-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "WheelEvent handler function",
+      "id": "wheelevent-handler"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "wheelevent-handler-parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Applying CSS styles",
+      "id": "applying-css-styles"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "How to apply multiple CSS classes conditionally?",
+      "id": "how-to-apply-multiple-css-classes-conditionally"
+    },
+    {
+      "level": "h3",
+      "text": "Manipulating a DOM node with a ref",
+      "id": "manipulating-a-dom-node-with-a-ref"
+    },
+    {
+      "level": "h3",
+      "text": "Dangerously setting the inner HTML",
+      "id": "dangerously-setting-the-inner-html"
+    },
+    {
+      "level": "h3",
+      "text": "Handling mouse events",
+      "id": "handling-mouse-events"
+    },
+    {
+      "level": "h3",
+      "text": "Handling pointer events",
+      "id": "handling-pointer-events"
+    },
+    {
+      "level": "h3",
+      "text": "Handling focus events",
+      "id": "handling-focus-events"
+    },
+    {
+      "level": "h3",
+      "text": "Handling keyboard events",
+      "id": "handling-keyboard-events"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<div className=\"wrapper\">Some content</div>",
+      "language": "jsx"
+    },
+    {
+      "code": "<div ref={(node) => {  console.log('Attached', node);  return () => {    console.log('Clean up', node)  }}}>",
+      "language": "jsx"
+    },
+    {
+      "code": "<button onClick={e => {  console.log(e); // React event object}} />",
+      "language": "jsx"
+    },
+    {
+      "code": "<div  onAnimationStart={e => console.log('onAnimationStart')}  onAnimationIteration={e => console.log('onAnimationIteration')}  onAnimationEnd={e => console.log('onAnimationEnd')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<input  onCopy={e => console.log('onCopy')}  onCut={e => console.log('onCut')}  onPaste={e => console.log('onPaste')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<input  onCompositionStart={e => console.log('onCompositionStart')}  onCompositionUpdate={e => console.log('onCompositionUpdate')}  onCompositionEnd={e => console.log('onCompositionEnd')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<>  <div    draggable={true}    onDragStart={e => console.log('onDragStart')}    onDragEnd={e => console.log('onDragEnd')}  >    Drag source  </div>  <div    onDragEnter={e => console.log('onDragEnter')}    onDragLeave={e => console.log('onDragLeave')}    onDragOver={e => { e.preventDefault(); console.log('onDragOver'); }}    onDrop={e => console.log('onDrop')}  >    Drop target  </div></>",
+      "language": "jsx"
+    },
+    {
+      "code": "<input  onFocus={e => console.log('onFocus')}  onBlur={e => console.log('onBlur')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<input onBeforeInput={e => console.log('onBeforeInput')} />",
+      "language": "jsx"
+    },
+    {
+      "code": "<input  onKeyDown={e => console.log('onKeyDown')}  onKeyUp={e => console.log('onKeyUp')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<div  onClick={e => console.log('onClick')}  onMouseEnter={e => console.log('onMouseEnter')}  onMouseOver={e => console.log('onMouseOver')}  onMouseDown={e => console.log('onMouseDown')}  onMouseUp={e => console.log('onMouseUp')}  onMouseLeave={e => console.log('onMouseLeave')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<div  onPointerEnter={e => console.log('onPointerEnter')}  onPointerMove={e => console.log('onPointerMove')}  onPointerDown={e => console.log('onPointerDown')}  onPointerUp={e => console.log('onPointerUp')}  onPointerLeave={e => console.log('onPointerLeave')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<div  onTouchStart={e => console.log('onTouchStart')}  onTouchMove={e => console.log('onTouchMove')}  onTouchEnd={e => console.log('onTouchEnd')}  onTouchCancel={e => console.log('onTouchCancel')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<div  onTransitionEnd={e => console.log('onTransitionEnd')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<div  onScroll={e => console.log('onScroll')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<div  onWheel={e => console.log('onWheel')}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<img className=\"avatar\" />",
+      "language": "jsx"
+    },
+    {
+      "code": "/* In your CSS */.avatar {  border-radius: 50%;}",
+      "language": "css"
+    },
+    {
+      "code": "<img  className=\"avatar\"  style={{    width: user.imageSize,    height: user.imageSize  }}/>",
+      "language": "jsx"
+    },
+    {
+      "code": "import cn from 'classnames';function Row({ isSelected }) {  return (    <div className={cn('row', isSelected && 'selected')}>      ...    </div>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "import cn from 'classnames';function Row({ isSelected, size }) {  return (    <div className={cn('row', {      selected: isSelected,      large: size === 'large',      small: size === 'small',    })}>      ...    </div>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "import { useRef } from 'react';export default function Form() {  const inputRef = useRef(null);  // ...  return (    <input ref={inputRef} />    // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "const markup = { __html: '<p>some raw html</p>' };return <div dangerouslySetInnerHTML={markup} />;",
+      "language": "jsx"
+    },
+    {
+      "code": "const post = {  // Imagine this content is stored in the database.  content: `<img src=\"\" onerror='alert(\"you were hacked\")'>`};export default function MarkdownPreview() {  // 🔴 SECURITY HOLE: passing untrusted input to dangerouslySetInnerHTML  const markup = { __html: post.content };  return <div dangerouslySetInnerHTML={markup} />;}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

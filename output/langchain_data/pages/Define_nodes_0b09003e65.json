@@ -1,0 +1,8 @@
+{
+  "title": "Define nodes",
+  "content": "builder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-nodes",
+  "links": []
+}

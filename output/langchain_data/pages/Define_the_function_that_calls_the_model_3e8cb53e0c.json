@@ -1,0 +1,8 @@
+{
+  "title": "Define the function that calls the model",
+  "content": "def call_model(state: State):\n    messages = state['messages']\n    response = model.invoke(messages)\n\n# We return a list, because this will get added to the existing list\n    return {\"messages\": [response]}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-the-function-that-calls-the-model",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Setup recording directory",
+  "content": "recordings_dir = Path(__file__).parent / \"recordings\"\nrecordings_dir.mkdir(exist_ok=True)\ntimestamp = datetime.now().strftime(\"%Y%m%d_%H%M%S\")\nrecording_path = recordings_dir / f\"conversation_{timestamp}.wav\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#setup-recording-directory",
+  "links": []
+}

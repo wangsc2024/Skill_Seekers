@@ -1,0 +1,8 @@
+{
+  "title": "Define the node that processes the input and generates an answer",
+  "content": "def answer_node(state: InputState):\n    # Example answer and an extra key\n    return {\"answer\": \"bye\", \"question\": state[\"question\"]}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-the-node-that-processes-the-input-and-generates-an-answer",
+  "links": []
+}

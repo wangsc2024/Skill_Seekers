@@ -1,0 +1,8 @@
+{
+  "title": "Try to access without a token",
+  "content": "unauthenticated_client = get_client(url=\"http://localhost:2024\")\ntry:\n    await unauthenticated_client.threads.create()\n    print(\"❌ Unauthenticated access should fail!\")\nexcept Exception as e:\n    print(\"✅ Unauthenticated access blocked:\", e)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#try-to-access-without-a-token",
+  "links": []
+}

@@ -1,0 +1,189 @@
+{
+  "url": "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+  "title": "Extracting State Logic into a Reducer",
+  "content": "Components with many state updates spread across many event handlers can get overwhelming. For these cases, you can consolidate all the state update logic outside your component in a single function, called a reducer.\n\nAs your components grow in complexity, it can get harder to see at a glance all the different ways in which a component’s state gets updated. For example, the TaskApp component below holds an array of tasks in state and uses three different event handlers to add, remove, and edit tasks:\n\nEach of its event handlers calls setTasks in order to update the state. As this component grows, so does the amount of state logic sprinkled throughout it. To reduce this complexity and keep all your logic in one easy-to-access place, you can move that state logic into a single function outside your component, called a “reducer”.\n\nReducers are a different way to handle state. You can migrate from useState to useReducer in three steps:\n\nYour event handlers currently specify what to do by setting state:\n\nRemove all the state setting logic. What you are left with are three event handlers:\n\nManaging state with reducers is slightly different from directly setting state. Instead of telling React “what to do” by setting state, you specify “what the user just did” by dispatching “actions” from your event handlers. (The state update logic will live elsewhere!) So instead of “setting tasks” via an event handler, you’re dispatching an “added/changed/deleted a task” action. This is more descriptive of the user’s intent.\n\nThe object you pass to dispatch is called an “action”:\n\nIt is a regular JavaScript object. You decide what to put in it, but generally it should contain the minimal information about what happened. (You will add the dispatch function itself in a later step.)\n\nAn action object can have any shape.\n\nBy convention, it is common to give it a string type that describes what happened, and pass any additional information in other fields. The type is specific to a component, so in this example either 'added' or 'added_task' would be fine. Choose a name that says what happened!\n\nA reducer function is where you will put your state logic. It takes two arguments, the current state and the action object, and it returns the next state:\n\nReact will set the state to what you return from the reducer.\n\nTo move your state setting logic from your event handlers to a reducer function in this example, you will:\n\nHere is all the state setting logic migrated to a reducer function:\n\nBecause the reducer function takes state (tasks) as an argument, you can declare it outside of your component. This decreases the indentation level and can make your code easier to read.\n\nThe code above uses if/else statements, but it’s a convention to use switch statements inside reducers. The result is the same, but it can be easier to read switch statements at a glance.\n\nWe’ll be using them throughout the rest of this documentation like so:\n\nWe recommend wrapping each case block into the { and } curly braces so that variables declared inside of different cases don’t clash with each other. Also, a case should usually end with a return. If you forget to return, the code will “fall through” to the next case, which can lead to mistakes!\n\nIf you’re not yet comfortable with switch statements, using if/else is completely fine.\n\nAlthough reducers can “reduce” the amount of code inside your component, they are actually named after the reduce() operation that you can perform on arrays.\n\nThe reduce() operation lets you take an array and “accumulate” a single value out of many:\n\nThe function you pass to reduce is known as a “reducer”. It takes the result so far and the current item, then it returns the next result. React reducers are an example of the same idea: they take the state so far and the action, and return the next state. In this way, they accumulate actions over time into state.\n\nYou could even use the reduce() method with an initialState and an array of actions to calculate the final state by passing your reducer function to it:\n\nYou probably won’t need to do this yourself, but this is similar to what React does!\n\nFinally, you need to hook up the tasksReducer to your component. Import the useReducer Hook from React:\n\nThen you can replace useState:\n\nwith useReducer like so:\n\nThe useReducer Hook is similar to useState—you must pass it an initial state and it returns a stateful value and a way to set state (in this case, the dispatch function). But it’s a little different.\n\nThe useReducer Hook takes two arguments:\n\nNow it’s fully wired up! Here, the reducer is declared at the bottom of the component file:\n\nIf you want, you can even move the reducer to a different file:\n\nComponent logic can be easier to read when you separate concerns like this. Now the event handlers only specify what happened by dispatching actions, and the reducer function determines how the state updates in response to them.\n\nReducers are not without downsides! Here’s a few ways you can compare them:\n\nWe recommend using a reducer if you often encounter bugs due to incorrect state updates in some component, and want to introduce more structure to its code. You don’t have to use reducers for everything: feel free to mix and match! You can even useState and useReducer in the same component.\n\nKeep these two tips in mind when writing reducers:\n\nJust like with updating objects and arrays in regular state, you can use the Immer library to make reducers more concise. Here, useImmerReducer lets you mutate the state with push or arr[i] = assignment:\n\nReducers must be pure, so they shouldn’t mutate state. But Immer provides you with a special draft object which is safe to mutate. Under the hood, Immer will create a copy of your state with the changes you made to the draft. This is why reducers managed by useImmerReducer can mutate their first argument and don’t need to return state.\n\nCurrently, the event handlers in ContactList.js and Chat.js have // TODO comments. This is why typing into the input doesn’t work, and clicking on the buttons doesn’t change the selected recipient.\n\nReplace these two // TODOs with the code to dispatch the corresponding actions. To see the expected shape and the type of the actions, check the reducer in messengerReducer.js. The reducer is already written so you won’t need to change it. You only need to dispatch the actions in ContactList.js and Chat.js.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Extracting State Logic into a Reducer",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Consolidate state logic with a reducer",
+      "id": "consolidate-state-logic-with-a-reducer"
+    },
+    {
+      "level": "h3",
+      "text": "Step 1: Move from setting state to dispatching actions",
+      "id": "step-1-move-from-setting-state-to-dispatching-actions"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Step 2: Write a reducer function",
+      "id": "step-2-write-a-reducer-function"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Why are reducers called this way?",
+      "id": "why-are-reducers-called-this-way"
+    },
+    {
+      "level": "h3",
+      "text": "Step 3: Use the reducer from your component",
+      "id": "step-3-use-the-reducer-from-your-component"
+    },
+    {
+      "level": "h2",
+      "text": "Comparing useState and useReducer",
+      "id": "comparing-usestate-and-usereducer"
+    },
+    {
+      "level": "h2",
+      "text": "Writing reducers well",
+      "id": "writing-reducers-well"
+    },
+    {
+      "level": "h2",
+      "text": "Writing concise reducers with Immer",
+      "id": "writing-concise-reducers-with-immer"
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    },
+    {
+      "level": "h2",
+      "text": "Try out some challenges",
+      "id": "challenges"
+    },
+    {
+      "level": "h4",
+      "text": "Challenge 1 of 4: Dispatch actions from event handlers",
+      "id": "dispatch-actions-from-event-handlers"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "function handleAddTask(text) {  setTasks([    ...tasks,    {      id: nextId++,      text: text,      done: false,    },  ]);}function handleChangeTask(task) {  setTasks(    tasks.map((t) => {      if (t.id === task.id) {        return task;      } else {        return t;      }    })  );}function handleDeleteTask(taskId) {  setTasks(tasks.filter((t) => t.id !== taskId));}",
+      "language": "javascript"
+    },
+    {
+      "code": "function handleAddTask(text) {  dispatch({    type: 'added',    id: nextId++,    text: text,  });}function handleChangeTask(task) {  dispatch({    type: 'changed',    task: task,  });}function handleDeleteTask(taskId) {  dispatch({    type: 'deleted',    id: taskId,  });}",
+      "language": "javascript"
+    },
+    {
+      "code": "function handleDeleteTask(taskId) {  dispatch(    // \"action\" object:    {      type: 'deleted',      id: taskId,    }  );}",
+      "language": "javascript"
+    },
+    {
+      "code": "dispatch({  // specific to component  type: 'what_happened',  // other fields go here});",
+      "language": "unknown"
+    },
+    {
+      "code": "function yourReducer(state, action) {  // return next state for React to set}",
+      "language": "javascript"
+    },
+    {
+      "code": "function tasksReducer(tasks, action) {  if (action.type === 'added') {    return [      ...tasks,      {        id: action.id,        text: action.text,        done: false,      },    ];  } else if (action.type === 'changed') {    return tasks.map((t) => {      if (t.id === action.task.id) {        return action.task;      } else {        return t;      }    });  } else if (action.type === 'deleted') {    return tasks.filter((t) => t.id !== action.id);  } else {    throw Error('Unknown action: ' + action.type);  }}",
+      "language": "javascript"
+    },
+    {
+      "code": "function tasksReducer(tasks, action) {  switch (action.type) {    case 'added': {      return [        ...tasks,        {          id: action.id,          text: action.text,          done: false,        },      ];    }    case 'changed': {      return tasks.map((t) => {        if (t.id === action.task.id) {          return action.task;        } else {          return t;        }      });    }    case 'deleted': {      return tasks.filter((t) => t.id !== action.id);    }    default: {      throw Error('Unknown action: ' + action.type);    }  }}",
+      "language": "javascript"
+    },
+    {
+      "code": "const arr = [1, 2, 3, 4, 5];const sum = arr.reduce(  (result, number) => result + number); // 1 + 2 + 3 + 4 + 5",
+      "language": "javascript"
+    },
+    {
+      "code": "import { useReducer } from 'react';",
+      "language": "sql"
+    },
+    {
+      "code": "const [tasks, setTasks] = useState(initialTasks);",
+      "language": "jsx"
+    },
+    {
+      "code": "const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react-dom"
+  ]
+}

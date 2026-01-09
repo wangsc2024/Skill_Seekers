@@ -1,0 +1,8 @@
+{
+  "title": "Target function for running the relevant step",
+  "content": "async def run_intent_classifier(inputs: dict) -> dict:\n    # Note that we can access and run the intent_classifier node of our graph directly.\n    command = await graph.nodes['intent_classifier'].ainvoke(inputs)\n    return {\"route\": command.goto}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#target-function-for-running-the-relevant-step",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Common OTEL settings",
+  "content": "OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT=4095\nOTEL_EXPORTER_OTLP_COMPRESSION=gzip\nOTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf\nOTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=delta",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#common-otel-settings",
+  "links": []
+}

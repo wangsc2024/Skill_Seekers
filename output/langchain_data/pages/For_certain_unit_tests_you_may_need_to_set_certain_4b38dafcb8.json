@@ -1,0 +1,8 @@
+{
+  "title": "For certain unit tests, you may need to set certain flags and environment variables:",
+  "content": "TIKTOKEN_CACHE_DIR=tiktoken_cache uv run --group test pytest --disable-socket --allow-unix-socket tests/unit_tests/",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#for-certain-unit-tests,-you-may-need-to-set-certain-flags-and-environment-variables:",
+  "links": []
+}

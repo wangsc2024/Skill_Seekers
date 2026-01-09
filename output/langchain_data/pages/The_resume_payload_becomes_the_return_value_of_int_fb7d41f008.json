@@ -1,0 +1,28 @@
+{
+  "title": "The resume payload becomes the return value of interrupt() inside the node",
+  "content": "graph.invoke(Command(resume=True), config=config)\npython  theme={null}\nfrom typing import Literal\nfrom langgraph.types import interrupt, Command\n\ndef approval_node(state: State) -> Command[Literal[\"proceed\", \"cancel\"]]:\n    # Pause execution; payload shows up under result[\"__interrupt__\"]\n    is_approved = interrupt({\n        \"question\": \"Do you want to proceed with this action?\",\n        \"details\": state[\"action_details\"]\n    })\n\n# Route based on the response\n    if is_approved:\n        return Command(goto=\"proceed\")  # Runs after the resume payload is provided\n    else:\n        return Command(goto=\"cancel\")\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "**Key points about resuming:**\n\n* You must use the **same thread ID** when resuming that was used when the interrupt occurred\n* The value passed to `Command(resume=...)` becomes the return value of the [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt) call\n* The node restarts from the beginning of the node where the [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt) was called when resumed, so any code before the [`interrupt`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt) runs again\n* You can pass any JSON-serializable value as the resume value\n\n## Common patterns\n\nThe key thing that interrupts unlock is the ability to pause execution and wait for external input. This is useful for a variety of use cases, including:\n\n* <Icon icon=\"check-circle\" /> [Approval workflows](#approve-or-reject): Pause before executing critical actions (API calls, database changes, financial transactions)\n* <Icon icon=\"pencil\" /> [Review and edit](#review-and-edit-state): Let humans review and modify LLM outputs or tool calls before continuing\n* <Icon icon=\"wrench\" /> [Interrupting tool calls](#interrupts-in-tools): Pause before executing tool calls to review and edit the tool call before execution\n* <Icon icon=\"shield-check\" /> [Validating human input](#validating-human-input): Pause before proceeding to the next step to validate human input\n\n### Approve or reject\n\nOne of the most common uses of interrupts is to pause before a critical action and ask for approval. For example, you might want to ask a human to approve an API call, a database change, or any other important decision.",
+      "language": "unknown"
+    },
+    {
+      "code": "When you resume the graph, pass `true` to approve or `false` to reject:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Common patterns",
+      "id": "common-patterns"
+    },
+    {
+      "level": "h3",
+      "text": "Approve or reject",
+      "id": "approve-or-reject"
+    }
+  ],
+  "url": "llms-txt#the-resume-payload-becomes-the-return-value-of-interrupt()-inside-the-node",
+  "links": []
+}

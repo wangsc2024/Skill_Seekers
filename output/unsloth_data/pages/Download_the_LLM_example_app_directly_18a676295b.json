@@ -1,0 +1,19 @@
+{
+  "title": "Download the LLM example app directly",
+  "content": "curl -L https://github.com/meta-pytorch/executorch-examples/archive/main.tar.gz | \\\n  tar -xz --strip-components=2 executorch-examples-main/llm/apple\nbash",
+  "code_samples": [
+    {
+      "code": "{% columns %}\n{% column %}\n**Open in Xcode**\n\n1. Open `apple/etLLM.xcodeproj` in Xcode\n2. In the top toolbar, select `iPhone 16 Pro` Simulator as your target device\n3. Hit Play (▶️) to build and run\n\n🎉 Success! The app should now launch in the simulator. It won't work yet, we need to add your model.\n{% endcolumn %}\n\n{% column %}\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FA4n2u44u9sLlauCkhf1b%2Funknown.png?alt=media&#x26;token=c93fef18-aab6-47cb-b301-d895466314f6\" alt=\"\" width=\"563\"><figcaption></figcaption></figure>\n{% endcolumn %}\n{% endcolumns %}\n\n### Deploying to Simulator\n\n&#x20;**No Developer Account is needed.**\n\n**Prepare Your Model Files**\n\n1. Stop the simulator in Xcode (press the stop button)\n2. Navigate to your HuggingFace Hub repo (if not saved locally)\n3. Download these two files:\n   1. `qwen3_0.6B_model.pte` (your exported model)\n   2. tokenizer.json (the tokenizer)\n\n**Create a Shared Folder on the Simulator**\n\n1. Click the virtual Home button on the simulator\n2. Open the Files App → Browse → On My iPhone\n3. Tap the ellipsis (•••) button and create a new folder named `Qwen3test`\n\n**Transfer Files Using the Terminal**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Deploying to Simulator",
+      "id": "deploying-to-simulator"
+    }
+  ],
+  "url": "llms-txt#download-the-llm-example-app-directly",
+  "links": []
+}

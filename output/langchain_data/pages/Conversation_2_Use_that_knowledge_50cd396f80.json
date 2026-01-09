@@ -1,0 +1,8 @@
+{
+  "title": "Conversation 2: Use that knowledge",
+  "content": "agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"What framework are we using?\"}]\n})",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#conversation-2:-use-that-knowledge",
+  "links": []
+}

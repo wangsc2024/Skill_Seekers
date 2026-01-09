@@ -1,0 +1,19 @@
+{
+  "title": "DeepSeek-R1: How to Run Locally",
+  "content": "A guide on how you can run our 1.58-bit Dynamic Quants for DeepSeek-R1 using llama.cpp.\n\n{% hint style=\"success\" %}\nPlease see <https://docs.unsloth.ai/basics/deepseek-r1-0528-how-to-run-locally> for an updated DeepSeek R1-0528 (May 28th 2025 version)\n{% endhint %}\n\n## Using llama.cpp (recommended)\n\n1. Do not forget about `<｜User｜>` and `<｜Assistant｜>` tokens! - Or use a chat template formatter\n2. Obtain the latest `llama.cpp` at: [github.com/ggerganov/llama.cpp](https://github.com/ggerganov/llama.cpp). You can follow the build instructions below as well:\n\n3. It's best to use `--min-p 0.05` to counteract very rare token predictions - I found this to work well especially for the 1.58bit model.\n4. Download the model via:",
+  "code_samples": [
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggerganov/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=ON -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-quantize llama-cli llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Using llama.cpp (recommended)",
+      "id": "using-llama.cpp-(recommended)"
+    }
+  ],
+  "url": "llms-txt#deepseek-r1:-how-to-run-locally",
+  "links": []
+}

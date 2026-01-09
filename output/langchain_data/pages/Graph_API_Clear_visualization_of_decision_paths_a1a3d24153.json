@@ -1,0 +1,13 @@
+{
+  "title": "Graph API: Clear visualization of decision paths",
+  "content": "from langgraph.graph import StateGraph\nfrom typing import TypedDict\n\nclass AgentState(TypedDict):\n    messages: list\n    current_tool: str\n    retry_count: int\n\ndef should_continue(state):\n    if state[\"retry_count\"] > 3:\n        return \"end\"\n    elif state[\"current_tool\"] == \"search\":\n        return \"process_search\"\n    else:\n        return \"call_llm\"\n\nworkflow = StateGraph(AgentState)\nworkflow.add_node(\"call_llm\", call_llm_node)\nworkflow.add_node(\"process_search\", search_node)\nworkflow.add_conditional_edges(\"call_llm\", should_continue)\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "**2. State management across multiple components**\n\nWhen you need to share and coordinate state between different parts of your workflow, the Graph API's explicit state management is beneficial.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#graph-api:-clear-visualization-of-decision-paths",
+  "links": []
+}

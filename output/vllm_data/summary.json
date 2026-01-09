@@ -1,0 +1,2009 @@
+{
+  "name": "vllm",
+  "total_pages": 500,
+  "base_url": "https://docs.vllm.ai/en/latest/",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "vLLM",
+      "url": "https://docs.vllm.ai/en/latest/"
+    },
+    {
+      "title": "Using vLLM - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/usage/"
+    },
+    {
+      "title": "Contributing to vLLM - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/"
+    },
+    {
+      "title": "Benchmark Suites - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/benchmarking/"
+    },
+    {
+      "title": "Summary - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/"
+    },
+    {
+      "title": "vLLM CLI Guide - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/cli/"
+    },
+    {
+      "title": "Contact Us - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/community/contact_us/"
+    },
+    {
+      "title": "Quickstart - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/getting_started/quickstart/"
+    },
+    {
+      "title": "Installation - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/getting_started/installation/"
+    },
+    {
+      "title": "GPU - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/getting_started/installation/gpu/"
+    },
+    {
+      "title": "CPU - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/getting_started/installation/cpu/"
+    },
+    {
+      "title": "Examples - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/"
+    },
+    {
+      "title": "Async LLM Streaming - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/async_llm_streaming/"
+    },
+    {
+      "title": "Audio Language - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/audio_language/"
+    },
+    {
+      "title": "Automatic Prefix Caching - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/automatic_prefix_caching/"
+    },
+    {
+      "title": "Basic - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/basic/"
+    },
+    {
+      "title": "Batch LLM Inference - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/batch_llm_inference/"
+    },
+    {
+      "title": "Chat With Tools - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/chat_with_tools/"
+    },
+    {
+      "title": "Context Extension - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/context_extension/"
+    },
+    {
+      "title": "Data Parallel - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/data_parallel/"
+    },
+    {
+      "title": "Disaggregated Prefill V1 - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/disaggregated-prefill-v1/"
+    },
+    {
+      "title": "Disaggregated Prefill - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/disaggregated_prefill/"
+    },
+    {
+      "title": "Encoder Decoder Multimodal - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/encoder_decoder_multimodal/"
+    },
+    {
+      "title": "KV Load Failure Recovery Test - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/kv_load_failure_recovery/"
+    },
+    {
+      "title": "LLM Engine Example - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/llm_engine_example/"
+    },
+    {
+      "title": "LLM Engine Reset Kv - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/llm_engine_reset_kv/"
+    },
+    {
+      "title": "Load Sharded State - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/load_sharded_state/"
+    },
+    {
+      "title": "Logits Processor - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/logits_processor/"
+    },
+    {
+      "title": "LoRA With Quantization Inference - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/lora_with_quantization_inference/"
+    },
+    {
+      "title": "Metrics - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/metrics/"
+    },
+    {
+      "title": "Mistral-Small - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/mistral-small/"
+    },
+    {
+      "title": "MLPSpeculator - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/mlpspeculator/"
+    },
+    {
+      "title": "MultiLoRA Inference - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/multilora_inference/"
+    },
+    {
+      "title": "Offline Inference with the OpenAI Batch file format - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/openai_batch/"
+    },
+    {
+      "title": "Prefix Caching - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/prefix_caching/"
+    },
+    {
+      "title": "Prompt Embed Inference - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/prompt_embed_inference/"
+    },
+    {
+      "title": "Qwen2.5-Omni Offline Inference Examples - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/qwen2_5_omni/"
+    },
+    {
+      "title": "Qwen3 Omni - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/qwen3_omni/"
+    },
+    {
+      "title": "Qwen 1M - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/qwen_1m/"
+    },
+    {
+      "title": "Reproducibility - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/reproducibility/"
+    },
+    {
+      "title": "RLHF - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/rlhf/"
+    },
+    {
+      "title": "RLHF Colocate - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/rlhf_colocate/"
+    },
+    {
+      "title": "RLHF Online Quant - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/rlhf_online_quant/"
+    },
+    {
+      "title": "RLHF Utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/rlhf_utils/"
+    },
+    {
+      "title": "Save Sharded State - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/save_sharded_state/"
+    },
+    {
+      "title": "Simple Profiling - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/simple_profiling/"
+    },
+    {
+      "title": "Skip Loading Weights In Engine Init - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/skip_loading_weights_in_engine_init/"
+    },
+    {
+      "title": "Spec Decode - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/spec_decode/"
+    },
+    {
+      "title": "Structured Outputs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/structured_outputs/"
+    },
+    {
+      "title": "Torchrun Dp Example - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/torchrun_dp_example/"
+    },
+    {
+      "title": "Torchrun Example - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/torchrun_example/"
+    },
+    {
+      "title": "Vision Language - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/vision_language/"
+    },
+    {
+      "title": "Vision Language Multi Image - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/offline_inference/vision_language_multi_image/"
+    },
+    {
+      "title": "API Client - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/api_client/"
+    },
+    {
+      "title": "Helm Charts - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/chart-helm/"
+    },
+    {
+      "title": "Monitoring Dashboards - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/dashboards/"
+    },
+    {
+      "title": "Disaggregated Encoder - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/disaggregated_encoder/"
+    },
+    {
+      "title": "Disaggregated Prefill - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/disaggregated_prefill/"
+    },
+    {
+      "title": "Disaggregated Serving - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/disaggregated_serving/"
+    },
+    {
+      "title": "Disaggregated Serving P2P Nccl Xpyd - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/disaggregated_serving_p2p_nccl_xpyd/"
+    },
+    {
+      "title": "Elastic Ep - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/elastic_ep/"
+    },
+    {
+      "title": "Gradio OpenAI Chatbot Webserver - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/gradio_openai_chatbot_webserver/"
+    },
+    {
+      "title": "Gradio Webserver - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/gradio_webserver/"
+    },
+    {
+      "title": "Kv Events Subscriber - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/kv_events_subscriber/"
+    },
+    {
+      "title": "Multi-Node-Serving - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/multi-node-serving/"
+    },
+    {
+      "title": "Multi Instance Data Parallel - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/multi_instance_data_parallel/"
+    },
+    {
+      "title": "OpenAI Chat Completion Client - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_chat_completion_client/"
+    },
+    {
+      "title": "OpenAI Chat Completion Client For Multimodal - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_chat_completion_client_for_multimodal/"
+    },
+    {
+      "title": "OpenAI Chat Completion Client With Tools - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_chat_completion_client_with_tools/"
+    },
+    {
+      "title": "OpenAI Chat Completion Client With Tools Required - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_chat_completion_client_with_tools_required/"
+    },
+    {
+      "title": "OpenAI Chat Completion Client With Tools Xlam - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_chat_completion_client_with_tools_xlam/"
+    },
+    {
+      "title": "OpenAI Chat Completion Client With Tools Xlam Streaming - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_chat_completion_client_with_tools_xlam_streaming/"
+    },
+    {
+      "title": "OpenAI Chat Completion Tool Calls With Reasoning - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_chat_completion_tool_calls_with_reasoning/"
+    },
+    {
+      "title": "OpenAI Chat Completion With Reasoning - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_chat_completion_with_reasoning/"
+    },
+    {
+      "title": "OpenAI Chat Completion With Reasoning Streaming - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_chat_completion_with_reasoning_streaming/"
+    },
+    {
+      "title": "OpenAI Completion Client - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_completion_client/"
+    },
+    {
+      "title": "OpenAI Responses Client - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_responses_client/"
+    },
+    {
+      "title": "OpenAI Responses Client With Mcp Tools - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_responses_client_with_mcp_tools/"
+    },
+    {
+      "title": "OpenAI Responses Client With Tools - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_responses_client_with_tools/"
+    },
+    {
+      "title": "OpenAI Transcription Client - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_transcription_client/"
+    },
+    {
+      "title": "OpenAI Translation Client - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/openai_translation_client/"
+    },
+    {
+      "title": "Setup OpenTelemetry POC - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/opentelemetry/"
+    },
+    {
+      "title": "Prometheus and Grafana - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/prometheus_grafana/"
+    },
+    {
+      "title": "Prompt Embed Inference With OpenAI Client - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/prompt_embed_inference_with_openai_client/"
+    },
+    {
+      "title": "Ray Serve Deepseek - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/ray_serve_deepseek/"
+    },
+    {
+      "title": "Retrieval Augmented Generation With Langchain - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/retrieval_augmented_generation_with_langchain/"
+    },
+    {
+      "title": "Retrieval Augmented Generation With Llamaindex - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/retrieval_augmented_generation_with_llamaindex/"
+    },
+    {
+      "title": "Run Cluster - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/run_cluster/"
+    },
+    {
+      "title": "Sagemaker-Entrypoint - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/sagemaker-entrypoint/"
+    },
+    {
+      "title": "Streamlit OpenAI Chatbot Webserver - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/streamlit_openai_chatbot_webserver/"
+    },
+    {
+      "title": "Structured Outputs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/structured_outputs/"
+    },
+    {
+      "title": "Token Generation Client - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/token_generation_client/"
+    },
+    {
+      "title": "Utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/online_serving/utils/"
+    },
+    {
+      "title": "LMCache Examples - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/others/lmcache/"
+    },
+    {
+      "title": "Logging Configuration - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/others/logging_configuration/"
+    },
+    {
+      "title": "Tensorize vLLM Model - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/others/tensorize_vllm_model/"
+    },
+    {
+      "title": "Classify - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/pooling/classify/"
+    },
+    {
+      "title": "Embed - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/pooling/embed/"
+    },
+    {
+      "title": "Plugin - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/pooling/plugin/"
+    },
+    {
+      "title": "Pooling - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/pooling/pooling/"
+    },
+    {
+      "title": "Score - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/pooling/score/"
+    },
+    {
+      "title": "Token Classify - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/pooling/token_classify/"
+    },
+    {
+      "title": "Token Embed - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/examples/pooling/token_embed/"
+    },
+    {
+      "title": "vLLM V1 - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/usage/v1_guide/"
+    },
+    {
+      "title": "Frequently Asked Questions - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/usage/faq/"
+    },
+    {
+      "title": "Production Metrics - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/usage/metrics/"
+    },
+    {
+      "title": "Reproducibility - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/usage/reproducibility/"
+    },
+    {
+      "title": "Security - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/usage/security/"
+    },
+    {
+      "title": "Troubleshooting - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/usage/troubleshooting/"
+    },
+    {
+      "title": "Usage Stats Collection - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/usage/usage_stats/"
+    },
+    {
+      "title": "Offline Inference - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/serving/offline_inference/"
+    },
+    {
+      "title": "OpenAI-Compatible Server - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/serving/openai_compatible_server/"
+    },
+    {
+      "title": "Context Parallel Deployment - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/serving/context_parallel_deployment/"
+    },
+    {
+      "title": "Data Parallel Deployment - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/serving/data_parallel_deployment/"
+    },
+    {
+      "title": "Troubleshooting distributed deployments - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/serving/distributed_troubleshooting/"
+    },
+    {
+      "title": "Expert Parallel Deployment - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/serving/expert_parallel_deployment/"
+    },
+    {
+      "title": "Parallelism and Scaling - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/serving/parallelism_scaling/"
+    },
+    {
+      "title": "LangChain - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/serving/integrations/langchain/"
+    },
+    {
+      "title": "LlamaIndex - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/serving/integrations/llamaindex/"
+    },
+    {
+      "title": "Using Docker - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/docker/"
+    },
+    {
+      "title": "Using Kubernetes - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/k8s/"
+    },
+    {
+      "title": "Using Nginx - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/nginx/"
+    },
+    {
+      "title": "Anyscale - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/anyscale/"
+    },
+    {
+      "title": "AnythingLLM - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/anything-llm/"
+    },
+    {
+      "title": "AutoGen - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/autogen/"
+    },
+    {
+      "title": "BentoML - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/bentoml/"
+    },
+    {
+      "title": "Cerebrium - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/cerebrium/"
+    },
+    {
+      "title": "Chatbox - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/chatbox/"
+    },
+    {
+      "title": "Dify - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/dify/"
+    },
+    {
+      "title": "dstack - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/dstack/"
+    },
+    {
+      "title": "Haystack - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/haystack/"
+    },
+    {
+      "title": "Helm - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/helm/"
+    },
+    {
+      "title": "Hugging Face Inference Endpoints - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/hf_inference_endpoints/"
+    },
+    {
+      "title": "LiteLLM - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/litellm/"
+    },
+    {
+      "title": "Lobe Chat - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/lobe-chat/"
+    },
+    {
+      "title": "LWS - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/lws/"
+    },
+    {
+      "title": "Modal - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/modal/"
+    },
+    {
+      "title": "Open WebUI - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/open-webui/"
+    },
+    {
+      "title": "Retrieval-Augmented Generation - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/retrieval_augmented_generation/"
+    },
+    {
+      "title": "SkyPilot - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/skypilot/"
+    },
+    {
+      "title": "Streamlit - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/streamlit/"
+    },
+    {
+      "title": "NVIDIA Triton - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/frameworks/triton/"
+    },
+    {
+      "title": "KAITO - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/integrations/kaito/"
+    },
+    {
+      "title": "KServe - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/integrations/kserve/"
+    },
+    {
+      "title": "Kthena - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/integrations/kthena/"
+    },
+    {
+      "title": "KubeAI - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/integrations/kubeai/"
+    },
+    {
+      "title": "KubeRay - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/integrations/kuberay/"
+    },
+    {
+      "title": "Llama Stack - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/integrations/llamastack/"
+    },
+    {
+      "title": "llm-d - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/integrations/llm-d/"
+    },
+    {
+      "title": "llmaz - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/integrations/llmaz/"
+    },
+    {
+      "title": "Production stack - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/deployment/integrations/production-stack/"
+    },
+    {
+      "title": "Reinforcement Learning from Human Feedback - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/training/rlhf/"
+    },
+    {
+      "title": "Transformers Reinforcement Learning - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/training/trl/"
+    },
+    {
+      "title": "Configuration Options - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/configuration/"
+    },
+    {
+      "title": "Conserving Memory - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/configuration/conserving_memory/"
+    },
+    {
+      "title": "Engine Arguments - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/configuration/engine_args/"
+    },
+    {
+      "title": "Environment Variables - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/configuration/env_vars/"
+    },
+    {
+      "title": "Model Resolution - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/configuration/model_resolution/"
+    },
+    {
+      "title": "Optimization and Tuning - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/configuration/optimization/"
+    },
+    {
+      "title": "Server Arguments - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/configuration/serve_args/"
+    },
+    {
+      "title": "Supported Models - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/models/supported_models/"
+    },
+    {
+      "title": "Generative Models - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/models/generative_models/"
+    },
+    {
+      "title": "Pooling Models - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/models/pooling_models/"
+    },
+    {
+      "title": "Loading Model weights with fastsafetensors - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/models/extensions/fastsafetensor/"
+    },
+    {
+      "title": "Loading models with Run:ai Model Streamer - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/models/extensions/runai_model_streamer/"
+    },
+    {
+      "title": "Loading models with CoreWeave's Tensorizer - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/models/extensions/tensorizer/"
+    },
+    {
+      "title": "CPU - Intel® Xeon® - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/models/hardware_supported_models/cpu/"
+    },
+    {
+      "title": "XPU - Intel® GPUs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/models/hardware_supported_models/xpu/"
+    },
+    {
+      "title": "Features - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/"
+    },
+    {
+      "title": "Automatic Prefix Caching - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/automatic_prefix_caching/"
+    },
+    {
+      "title": "Batch Invariance - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/batch_invariance/"
+    },
+    {
+      "title": "Custom Arguments - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/custom_arguments/"
+    },
+    {
+      "title": "Custom Logits Processors - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/custom_logitsprocs/"
+    },
+    {
+      "title": "Disaggregated Encoder - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/disagg_encoder/"
+    },
+    {
+      "title": "Disaggregated Prefilling (experimental) - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/disagg_prefill/"
+    },
+    {
+      "title": "Interleaved Thinking - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/interleaved_thinking/"
+    },
+    {
+      "title": "LoRA Adapters - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/lora/"
+    },
+    {
+      "title": "MooncakeConnector Usage Guide - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/mooncake_connector_usage/"
+    },
+    {
+      "title": "Multimodal Inputs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/multimodal_inputs/"
+    },
+    {
+      "title": "NixlConnector Usage Guide - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/nixl_connector_usage/"
+    },
+    {
+      "title": "Prompt Embedding Inputs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/prompt_embeds/"
+    },
+    {
+      "title": "Reasoning Outputs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/reasoning_outputs/"
+    },
+    {
+      "title": "Sleep Mode - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/sleep_mode/"
+    },
+    {
+      "title": "Speculative Decoding - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/spec_decode/"
+    },
+    {
+      "title": "Structured Outputs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/structured_outputs/"
+    },
+    {
+      "title": "Tool Calling - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/tool_calling/"
+    },
+    {
+      "title": "Quantization - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/"
+    },
+    {
+      "title": "AutoAWQ - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/auto_awq/"
+    },
+    {
+      "title": "AutoRound - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/auto_round/"
+    },
+    {
+      "title": "BitBLAS - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/bitblas/"
+    },
+    {
+      "title": "BitsAndBytes - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/bnb/"
+    },
+    {
+      "title": "FP8 W8A8 - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/fp8/"
+    },
+    {
+      "title": "GGUF - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/gguf/"
+    },
+    {
+      "title": "GPTQModel - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/gptqmodel/"
+    },
+    {
+      "title": "FP8 INC - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/inc/"
+    },
+    {
+      "title": "INT4 W4A16 - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/int4/"
+    },
+    {
+      "title": "INT8 W8A8 - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/int8/"
+    },
+    {
+      "title": "NVIDIA Model Optimizer - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/modelopt/"
+    },
+    {
+      "title": "Quantized KV Cache - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/quantized_kvcache/"
+    },
+    {
+      "title": "AMD Quark - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/quark/"
+    },
+    {
+      "title": "TorchAO - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/features/quantization/torchao/"
+    },
+    {
+      "title": "Deprecation Policy - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/deprecation_policy/"
+    },
+    {
+      "title": "Dockerfile - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/dockerfile/dockerfile/"
+    },
+    {
+      "title": "Incremental Compilation Workflow - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/incremental_build/"
+    },
+    {
+      "title": "Profiling vLLM - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/profiling/"
+    },
+    {
+      "title": "Vulnerability Management - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/vulnerability_management/"
+    },
+    {
+      "title": "Summary - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/model/"
+    },
+    {
+      "title": "Basic Model - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/model/basic/"
+    },
+    {
+      "title": "Registering a Model - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/model/registration/"
+    },
+    {
+      "title": "Unit Testing - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/model/tests/"
+    },
+    {
+      "title": "Multi-Modal Support - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/model/multimodal/"
+    },
+    {
+      "title": "Speech-to-Text (Transcription/Translation) Support - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/model/transcription/"
+    },
+    {
+      "title": "CI Failures - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/ci/failures/"
+    },
+    {
+      "title": "Nightly Builds of vLLM Wheels - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/ci/nightly_builds/"
+    },
+    {
+      "title": "Update PyTorch version on vLLM OSS CI/CD - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/contributing/ci/update_pytorch_version/"
+    },
+    {
+      "title": "IO Processor Plugins - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/io_processor_plugins/"
+    },
+    {
+      "title": "LoRA Resolver Plugins - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/lora_resolver_plugins/"
+    },
+    {
+      "title": "Plugin System - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/plugin_system/"
+    },
+    {
+      "title": "Architecture Overview - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/arch_overview/"
+    },
+    {
+      "title": "CUDA Graphs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/cuda_graphs/"
+    },
+    {
+      "title": "Dual Batch Overlap - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/dbo/"
+    },
+    {
+      "title": "How to debug the vLLM-torch.compile integration - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/debug_vllm_compile/"
+    },
+    {
+      "title": "Fused MoE Modular Kernel - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/fused_moe_modular_kernel/"
+    },
+    {
+      "title": "Integration with Hugging Face - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/huggingface_integration/"
+    },
+    {
+      "title": "Hybrid KV Cache Manager - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/hybrid_kv_cache_manager/"
+    },
+    {
+      "title": "Logits Processors - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/logits_processors/"
+    },
+    {
+      "title": "Metrics - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/metrics/"
+    },
+    {
+      "title": "Multi-Modal Data Processing - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/mm_processing/"
+    },
+    {
+      "title": "Fused MoE Kernel Features - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/moe_kernel_features/"
+    },
+    {
+      "title": "Python Multiprocessing - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/multiprocessing/"
+    },
+    {
+      "title": "Optimization levels - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/optimization_levels/"
+    },
+    {
+      "title": "P2P NCCL Connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/p2p_nccl_connector/"
+    },
+    {
+      "title": "Paged Attention - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/paged_attention/"
+    },
+    {
+      "title": "Automatic Prefix Caching - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/prefix_caching/"
+    },
+    {
+      "title": "torch.compile integration - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/design/torch_compile/"
+    },
+    {
+      "title": "Benchmark CLI - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/benchmarking/cli/"
+    },
+    {
+      "title": "Parameter Sweeps - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/benchmarking/sweeps/"
+    },
+    {
+      "title": "Performance Dashboard - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/benchmarking/dashboard/"
+    },
+    {
+      "title": "vllm - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/"
+    },
+    {
+      "title": "beam_search - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/beam_search/"
+    },
+    {
+      "title": "collect_env - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/collect_env/"
+    },
+    {
+      "title": "connections - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/connections/"
+    },
+    {
+      "title": "env_override - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/env_override/"
+    },
+    {
+      "title": "envs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/envs/"
+    },
+    {
+      "title": "forward_context - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/forward_context/"
+    },
+    {
+      "title": "logger - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/logger/"
+    },
+    {
+      "title": "logits_process - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/logits_process/"
+    },
+    {
+      "title": "logprobs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/logprobs/"
+    },
+    {
+      "title": "outputs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/outputs/"
+    },
+    {
+      "title": "pooling_params - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/pooling_params/"
+    },
+    {
+      "title": "sampling_params - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/sampling_params/"
+    },
+    {
+      "title": "scalar_type - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/scalar_type/"
+    },
+    {
+      "title": "scripts - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/scripts/"
+    },
+    {
+      "title": "sequence - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/sequence/"
+    },
+    {
+      "title": "tasks - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/tasks/"
+    },
+    {
+      "title": "tracing - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/tracing/"
+    },
+    {
+      "title": "version - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/version/"
+    },
+    {
+      "title": "assets - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/assets/"
+    },
+    {
+      "title": "audio - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/assets/audio/"
+    },
+    {
+      "title": "base - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/assets/base/"
+    },
+    {
+      "title": "image - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/assets/image/"
+    },
+    {
+      "title": "video - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/assets/video/"
+    },
+    {
+      "title": "attention - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/"
+    },
+    {
+      "title": "layer - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/layer/"
+    },
+    {
+      "title": "selector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/selector/"
+    },
+    {
+      "title": "backends - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/backends/"
+    },
+    {
+      "title": "abstract - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/backends/abstract/"
+    },
+    {
+      "title": "registry - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/backends/registry/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/backends/utils/"
+    },
+    {
+      "title": "layers - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/layers/"
+    },
+    {
+      "title": "chunked_local_attention - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/layers/chunked_local_attention/"
+    },
+    {
+      "title": "cross_attention - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/layers/cross_attention/"
+    },
+    {
+      "title": "encoder_only_attention - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/layers/encoder_only_attention/"
+    },
+    {
+      "title": "mm_encoder_attention - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/layers/mm_encoder_attention/"
+    },
+    {
+      "title": "ops - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/"
+    },
+    {
+      "title": "chunked_prefill_paged_decode - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/chunked_prefill_paged_decode/"
+    },
+    {
+      "title": "common - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/common/"
+    },
+    {
+      "title": "flashmla - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/flashmla/"
+    },
+    {
+      "title": "merge_attn_states - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/merge_attn_states/"
+    },
+    {
+      "title": "paged_attn - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/paged_attn/"
+    },
+    {
+      "title": "pallas_kv_cache_update - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/pallas_kv_cache_update/"
+    },
+    {
+      "title": "prefix_prefill - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/prefix_prefill/"
+    },
+    {
+      "title": "rocm_aiter_mla_sparse - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/rocm_aiter_mla_sparse/"
+    },
+    {
+      "title": "triton_decode_attention - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/triton_decode_attention/"
+    },
+    {
+      "title": "triton_merge_attn_states - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/triton_merge_attn_states/"
+    },
+    {
+      "title": "triton_reshape_and_cache_flash - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/triton_reshape_and_cache_flash/"
+    },
+    {
+      "title": "triton_unified_attention - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/triton_unified_attention/"
+    },
+    {
+      "title": "vit_attn_wrappers - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/ops/vit_attn_wrappers/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/utils/"
+    },
+    {
+      "title": "fa_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/utils/fa_utils/"
+    },
+    {
+      "title": "kv_sharing_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/utils/kv_sharing_utils/"
+    },
+    {
+      "title": "kv_transfer_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/attention/utils/kv_transfer_utils/"
+    },
+    {
+      "title": "benchmarks - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/"
+    },
+    {
+      "title": "datasets - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/datasets/"
+    },
+    {
+      "title": "latency - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/latency/"
+    },
+    {
+      "title": "serve - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/serve/"
+    },
+    {
+      "title": "startup - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/startup/"
+    },
+    {
+      "title": "throughput - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/throughput/"
+    },
+    {
+      "title": "lib - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/lib/"
+    },
+    {
+      "title": "endpoint_request_func - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/lib/endpoint_request_func/"
+    },
+    {
+      "title": "ready_checker - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/lib/ready_checker/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/lib/utils/"
+    },
+    {
+      "title": "sweep - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/"
+    },
+    {
+      "title": "cli - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/cli/"
+    },
+    {
+      "title": "param_sweep - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/param_sweep/"
+    },
+    {
+      "title": "plot - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/plot/"
+    },
+    {
+      "title": "plot_pareto - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/plot_pareto/"
+    },
+    {
+      "title": "serve - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/serve/"
+    },
+    {
+      "title": "serve_sla - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/serve_sla/"
+    },
+    {
+      "title": "server - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/server/"
+    },
+    {
+      "title": "sla_sweep - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/sla_sweep/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/benchmarks/sweep/utils/"
+    },
+    {
+      "title": "compilation - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/"
+    },
+    {
+      "title": "activation_quant_fusion - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/activation_quant_fusion/"
+    },
+    {
+      "title": "backends - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/backends/"
+    },
+    {
+      "title": "base_static_graph - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/base_static_graph/"
+    },
+    {
+      "title": "caching - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/caching/"
+    },
+    {
+      "title": "collective_fusion - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/collective_fusion/"
+    },
+    {
+      "title": "compiler_interface - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/compiler_interface/"
+    },
+    {
+      "title": "counter - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/counter/"
+    },
+    {
+      "title": "cuda_graph - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/cuda_graph/"
+    },
+    {
+      "title": "decorators - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/decorators/"
+    },
+    {
+      "title": "fix_functionalization - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/fix_functionalization/"
+    },
+    {
+      "title": "fusion - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/fusion/"
+    },
+    {
+      "title": "fusion_attn - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/fusion_attn/"
+    },
+    {
+      "title": "fx_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/fx_utils/"
+    },
+    {
+      "title": "inductor_pass - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/inductor_pass/"
+    },
+    {
+      "title": "matcher_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/matcher_utils/"
+    },
+    {
+      "title": "monitor - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/monitor/"
+    },
+    {
+      "title": "noop_elimination - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/noop_elimination/"
+    },
+    {
+      "title": "partition_rules - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/partition_rules/"
+    },
+    {
+      "title": "pass_manager - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/pass_manager/"
+    },
+    {
+      "title": "piecewise_backend - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/piecewise_backend/"
+    },
+    {
+      "title": "post_cleanup - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/post_cleanup/"
+    },
+    {
+      "title": "qk_norm_rope_fusion - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/qk_norm_rope_fusion/"
+    },
+    {
+      "title": "rocm_aiter_fusion - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/rocm_aiter_fusion/"
+    },
+    {
+      "title": "sequence_parallelism - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/sequence_parallelism/"
+    },
+    {
+      "title": "torch25_custom_graph_pass - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/torch25_custom_graph_pass/"
+    },
+    {
+      "title": "vllm_inductor_pass - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/vllm_inductor_pass/"
+    },
+    {
+      "title": "wrapper - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/compilation/wrapper/"
+    },
+    {
+      "title": "config - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/"
+    },
+    {
+      "title": "attention - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/attention/"
+    },
+    {
+      "title": "cache - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/cache/"
+    },
+    {
+      "title": "compilation - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/compilation/"
+    },
+    {
+      "title": "device - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/device/"
+    },
+    {
+      "title": "ec_transfer - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/ec_transfer/"
+    },
+    {
+      "title": "kv_events - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/kv_events/"
+    },
+    {
+      "title": "kv_transfer - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/kv_transfer/"
+    },
+    {
+      "title": "load - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/load/"
+    },
+    {
+      "title": "lora - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/lora/"
+    },
+    {
+      "title": "model - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/model/"
+    },
+    {
+      "title": "multimodal - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/multimodal/"
+    },
+    {
+      "title": "observability - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/observability/"
+    },
+    {
+      "title": "parallel - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/parallel/"
+    },
+    {
+      "title": "pooler - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/pooler/"
+    },
+    {
+      "title": "profiler - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/profiler/"
+    },
+    {
+      "title": "scheduler - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/scheduler/"
+    },
+    {
+      "title": "speculative - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/speculative/"
+    },
+    {
+      "title": "speech_to_text - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/speech_to_text/"
+    },
+    {
+      "title": "structured_outputs - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/structured_outputs/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/utils/"
+    },
+    {
+      "title": "vllm - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/config/vllm/"
+    },
+    {
+      "title": "device_allocator - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/device_allocator/"
+    },
+    {
+      "title": "cumem - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/device_allocator/cumem/"
+    },
+    {
+      "title": "distributed - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/"
+    },
+    {
+      "title": "communication_op - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/communication_op/"
+    },
+    {
+      "title": "kv_events - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_events/"
+    },
+    {
+      "title": "parallel_state - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/parallel_state/"
+    },
+    {
+      "title": "tpu_distributed_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/tpu_distributed_utils/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/utils/"
+    },
+    {
+      "title": "device_communicators - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/"
+    },
+    {
+      "title": "all2all - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/all2all/"
+    },
+    {
+      "title": "all_reduce_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/all_reduce_utils/"
+    },
+    {
+      "title": "base_device_communicator - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/base_device_communicator/"
+    },
+    {
+      "title": "cpu_communicator - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/cpu_communicator/"
+    },
+    {
+      "title": "cuda_communicator - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/cuda_communicator/"
+    },
+    {
+      "title": "cuda_wrapper - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/cuda_wrapper/"
+    },
+    {
+      "title": "custom_all_reduce - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/custom_all_reduce/"
+    },
+    {
+      "title": "mnnvl_compat - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/mnnvl_compat/"
+    },
+    {
+      "title": "pynccl - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/pynccl/"
+    },
+    {
+      "title": "pynccl_allocator - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/pynccl_allocator/"
+    },
+    {
+      "title": "pynccl_wrapper - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/pynccl_wrapper/"
+    },
+    {
+      "title": "quick_all_reduce - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/quick_all_reduce/"
+    },
+    {
+      "title": "ray_communicator - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/ray_communicator/"
+    },
+    {
+      "title": "shm_broadcast - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/shm_broadcast/"
+    },
+    {
+      "title": "shm_object_storage - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/shm_object_storage/"
+    },
+    {
+      "title": "symm_mem - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/symm_mem/"
+    },
+    {
+      "title": "tpu_communicator - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/tpu_communicator/"
+    },
+    {
+      "title": "xpu_communicator - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/device_communicators/xpu_communicator/"
+    },
+    {
+      "title": "ec_transfer - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/ec_transfer/"
+    },
+    {
+      "title": "ec_transfer_state - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/ec_transfer/ec_transfer_state/"
+    },
+    {
+      "title": "ec_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/ec_transfer/ec_connector/"
+    },
+    {
+      "title": "base - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/ec_transfer/ec_connector/base/"
+    },
+    {
+      "title": "example_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/ec_transfer/ec_connector/example_connector/"
+    },
+    {
+      "title": "factory - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/ec_transfer/ec_connector/factory/"
+    },
+    {
+      "title": "eplb - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/eplb/"
+    },
+    {
+      "title": "async_worker - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/eplb/async_worker/"
+    },
+    {
+      "title": "eplb_state - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/eplb/eplb_state/"
+    },
+    {
+      "title": "rebalance_execute - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/eplb/rebalance_execute/"
+    },
+    {
+      "title": "policy - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/eplb/policy/"
+    },
+    {
+      "title": "abstract - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/eplb/policy/abstract/"
+    },
+    {
+      "title": "default - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/eplb/policy/default/"
+    },
+    {
+      "title": "kv_transfer - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/"
+    },
+    {
+      "title": "kv_transfer_state - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_transfer_state/"
+    },
+    {
+      "title": "kv_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/"
+    },
+    {
+      "title": "base - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/base/"
+    },
+    {
+      "title": "factory - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/factory/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/utils/"
+    },
+    {
+      "title": "v1 - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/"
+    },
+    {
+      "title": "base - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/base/"
+    },
+    {
+      "title": "decode_bench_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/decode_bench_connector/"
+    },
+    {
+      "title": "example_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/example_connector/"
+    },
+    {
+      "title": "lmcache_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/lmcache_connector/"
+    },
+    {
+      "title": "lmcache_mp_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/lmcache_mp_connector/"
+    },
+    {
+      "title": "metrics - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/metrics/"
+    },
+    {
+      "title": "mooncake_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/mooncake_connector/"
+    },
+    {
+      "title": "multi_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/multi_connector/"
+    },
+    {
+      "title": "nixl_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/nixl_connector/"
+    },
+    {
+      "title": "offloading_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/offloading_connector/"
+    },
+    {
+      "title": "lmcache_integration - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/lmcache_integration/"
+    },
+    {
+      "title": "multi_process_adapter - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/lmcache_integration/multi_process_adapter/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/lmcache_integration/utils/"
+    },
+    {
+      "title": "vllm_v1_adapter - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/lmcache_integration/vllm_v1_adapter/"
+    },
+    {
+      "title": "p2p - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/p2p/"
+    },
+    {
+      "title": "p2p_nccl_connector - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector/"
+    },
+    {
+      "title": "p2p_nccl_engine - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_engine/"
+    },
+    {
+      "title": "tensor_memory_pool - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/distributed/kv_transfer/kv_connector/v1/p2p/tensor_memory_pool/"
+    },
+    {
+      "title": "engine - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/engine/"
+    },
+    {
+      "title": "arg_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/engine/arg_utils/"
+    },
+    {
+      "title": "async_llm_engine - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/engine/async_llm_engine/"
+    },
+    {
+      "title": "llm_engine - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/engine/llm_engine/"
+    },
+    {
+      "title": "protocol - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/engine/protocol/"
+    },
+    {
+      "title": "entrypoints - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/"
+    },
+    {
+      "title": "api_server - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/api_server/"
+    },
+    {
+      "title": "chat_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/chat_utils/"
+    },
+    {
+      "title": "constants - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/constants/"
+    },
+    {
+      "title": "context - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/context/"
+    },
+    {
+      "title": "launcher - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/launcher/"
+    },
+    {
+      "title": "llm - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/llm/"
+    },
+    {
+      "title": "logger - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/logger/"
+    },
+    {
+      "title": "renderer - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/renderer/"
+    },
+    {
+      "title": "responses_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/responses_utils/"
+    },
+    {
+      "title": "score_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/score_utils/"
+    },
+    {
+      "title": "ssl - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/ssl/"
+    },
+    {
+      "title": "tool - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/tool/"
+    },
+    {
+      "title": "tool_server - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/tool_server/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/utils/"
+    },
+    {
+      "title": "anthropic - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/anthropic/"
+    },
+    {
+      "title": "protocol - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/anthropic/protocol/"
+    },
+    {
+      "title": "serving_messages - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/anthropic/serving_messages/"
+    },
+    {
+      "title": "cli - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/"
+    },
+    {
+      "title": "collect_env - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/collect_env/"
+    },
+    {
+      "title": "main - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/main/"
+    },
+    {
+      "title": "openai - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/openai/"
+    },
+    {
+      "title": "run_batch - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/run_batch/"
+    },
+    {
+      "title": "serve - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/serve/"
+    },
+    {
+      "title": "types - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/types/"
+    },
+    {
+      "title": "benchmark - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/benchmark/"
+    },
+    {
+      "title": "base - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/benchmark/base/"
+    },
+    {
+      "title": "latency - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/benchmark/latency/"
+    },
+    {
+      "title": "main - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/benchmark/main/"
+    },
+    {
+      "title": "serve - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/benchmark/serve/"
+    },
+    {
+      "title": "startup - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/benchmark/startup/"
+    },
+    {
+      "title": "sweep - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/benchmark/sweep/"
+    },
+    {
+      "title": "throughput - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/cli/benchmark/throughput/"
+    },
+    {
+      "title": "openai - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/"
+    },
+    {
+      "title": "api_server - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/api_server/"
+    },
+    {
+      "title": "cli_args - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/cli_args/"
+    },
+    {
+      "title": "orca_metrics - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/orca_metrics/"
+    },
+    {
+      "title": "protocol - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/protocol/"
+    },
+    {
+      "title": "run_batch - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/run_batch/"
+    },
+    {
+      "title": "serving_chat - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/serving_chat/"
+    },
+    {
+      "title": "serving_chat_stream_harmony - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/serving_chat_stream_harmony/"
+    },
+    {
+      "title": "serving_completion - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/serving_completion/"
+    },
+    {
+      "title": "serving_engine - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/serving_engine/"
+    },
+    {
+      "title": "serving_models - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/serving_models/"
+    },
+    {
+      "title": "serving_responses - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/serving_responses/"
+    },
+    {
+      "title": "serving_transcription - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/serving_transcription/"
+    },
+    {
+      "title": "speech_to_text - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/speech_to_text/"
+    },
+    {
+      "title": "utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/utils/"
+    },
+    {
+      "title": "parser - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/parser/"
+    },
+    {
+      "title": "harmony_utils - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/parser/harmony_utils/"
+    },
+    {
+      "title": "responses_parser - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/openai/parser/responses_parser/"
+    },
+    {
+      "title": "pooling - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/"
+    },
+    {
+      "title": "classify - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/classify/"
+    },
+    {
+      "title": "api_router - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/classify/api_router/"
+    },
+    {
+      "title": "protocol - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/classify/protocol/"
+    },
+    {
+      "title": "serving - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/classify/serving/"
+    },
+    {
+      "title": "embed - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/embed/"
+    },
+    {
+      "title": "api_router - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/embed/api_router/"
+    },
+    {
+      "title": "conftest - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/embed/conftest/"
+    },
+    {
+      "title": "protocol - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/embed/protocol/"
+    },
+    {
+      "title": "serving - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/embed/serving/"
+    },
+    {
+      "title": "pooling - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/pooling/"
+    },
+    {
+      "title": "api_router - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/pooling/api_router/"
+    },
+    {
+      "title": "protocol - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/pooling/protocol/"
+    },
+    {
+      "title": "serving - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/pooling/serving/"
+    },
+    {
+      "title": "score - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/score/"
+    },
+    {
+      "title": "api_router - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/score/api_router/"
+    },
+    {
+      "title": "protocol - vLLM",
+      "url": "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/pooling/score/protocol/"
+    }
+  ]
+}

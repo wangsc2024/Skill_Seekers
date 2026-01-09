@@ -1,0 +1,84 @@
+{
+  "title": "Egress for subscription metrics and operational metadata",
+  "content": "Source: https://docs.langchain.com/langsmith/self-host-egress\n\n<Info>\n  This section only applies to customers who are not running in offline mode and assumes you are using a self-hosted LangSmith instance serving version 0.9.0 or later. Previous versions of LangSmith did not have this feature.\n</Info>\n\nSelf-Hosted LangSmith instances store all information locally and will never send sensitive information outside of your network. We currently only track platform usage for billing purposes according to the entitlements in your order. In order to better remotely support our customers, we do require egress to `https://beacon.langchain.com`.\n\nIn the future, we will be introducing support diagnostics to help us ensure that LangSmith is running at an optimal level within your environment.\n\n<Warning>\n  **This will require egress to `https://beacon.langchain.com` from your network. Refer to the [allowlisting IP section](/langsmith/cloud#allowlisting-ip-addresses) for static IP addresses, if needed.**\n</Warning>\n\nGenerally, data that we send to Beacon can be categorized as follows:\n\n* Subscription Metrics\n\n* Subscription metrics are used to determine level of access and utilization of LangSmith. This includes, but are not limited to:\n\n* Number of traces\n    * Seats allocated per contract\n    * Seats in currently use\n\n* Operational Metadata\n  * This metadata will contain and collect the above subscription metrics to assist with remote support, allowing the LangChain team to diagnose and troubleshoot performance issues more effectively and proactively.\n\n## LangSmith Telemetry\n\nAs of version ***0.11***, LangSmith deployments will by default send telemetry data back to our backend. All telemetry data is associated with an organization and deployment, but never identified with individual users. We ***do not collect PII*** (personally identifiable information) in any form.\n\n### What we use it for\n\n* To provide more proactive support and faster troubleshooting of self-hosted instances.\n* Assisting with performance tuning.\n* Understanding real-world usage to prioritize improvements.\n\n* **Request metadata**: anonymized request counts, sizes, and durations.\n* **Database metrics**: query durations, error rates, and performance counters.\n* **Operational LangSmith traces**: traces with timing and error information for high-latency or failed requests. These are **not** customer traces, these are operational traces about the functioning of the LangSmith instance.\n\n<Info>\n  We do not collect actual payload contents, database records, or any data that can identify your end users or customers.\n</Info>\n\nSet the following values in your `langsmith_config.yaml` file:\n\nIn an effort to maximize transparency, we provide sample payloads here:\n\n### License Verification\n\n`POST beacon.langchain.com/v1/beacon/verify`\n\n`POST beacon.langchain.com/v1/beacon/ingest-traces`\n\n### Telemetry: Operational LangSmith Metrics\n\n`POST beacon.langchain.com/v1/beacon/v1/metrics`\n\n### Telemetry: Operational LangSmith Traces\n\n`POST beacon.langchain.com/v1/beacon/v1/traces`\n\nLangChain will not store any sensitive information in the Subscription Metrics or Operational Metadata. Any data collected will not be shared with a third party. If you have any concerns about the data being sent, please reach out to your account team.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/self-host-egress.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## Example payloads\n\nIn an effort to maximize transparency, we provide sample payloads here:\n\n### License Verification\n\n**Endpoint:**\n\n`POST beacon.langchain.com/v1/beacon/verify`\n\n**Request:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Response:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Usage Reporting\n\n**Endpoint:**\n\n`POST beacon.langchain.com/v1/beacon/ingest-traces`\n\n**Request:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Response:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Telemetry: Operational LangSmith Metrics\n\n**Endpoint:**\n\n`POST beacon.langchain.com/v1/beacon/v1/metrics`\n\n**Request:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Telemetry: Operational LangSmith Traces\n\n**Endpoint:**\n\n`POST beacon.langchain.com/v1/beacon/v1/traces`\n\n**Request:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "LangSmith Telemetry",
+      "id": "langsmith-telemetry"
+    },
+    {
+      "level": "h3",
+      "text": "What we use it for",
+      "id": "what-we-use-it-for"
+    },
+    {
+      "level": "h3",
+      "text": "What we collect",
+      "id": "what-we-collect"
+    },
+    {
+      "level": "h3",
+      "text": "How to disable",
+      "id": "how-to-disable"
+    },
+    {
+      "level": "h2",
+      "text": "Example payloads",
+      "id": "example-payloads"
+    },
+    {
+      "level": "h3",
+      "text": "License Verification",
+      "id": "license-verification"
+    },
+    {
+      "level": "h3",
+      "text": "Usage Reporting",
+      "id": "usage-reporting"
+    },
+    {
+      "level": "h3",
+      "text": "Telemetry: Operational LangSmith Metrics",
+      "id": "telemetry:-operational-langsmith-metrics"
+    },
+    {
+      "level": "h3",
+      "text": "Telemetry: Operational LangSmith Traces",
+      "id": "telemetry:-operational-langsmith-traces"
+    },
+    {
+      "level": "h2",
+      "text": "Our Commitment",
+      "id": "our-commitment"
+    }
+  ],
+  "url": "llms-txt#egress-for-subscription-metrics-and-operational-metadata",
+  "links": []
+}

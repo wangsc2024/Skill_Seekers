@@ -1,0 +1,8 @@
+{
+  "title": "Get Thread State",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/threads/get-thread-state\n\nlangsmith/agent-server-openapi.json get /threads/{thread_id}/state\nGet state for a thread.\n\nThe latest state of the thread (i.e. latest checkpoint) is returned.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-thread-state",
+  "links": []
+}

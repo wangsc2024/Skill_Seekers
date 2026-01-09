@@ -1,0 +1,24 @@
+{
+  "title": "minReplicas: 3",
+  "content": "## Ensure your Redis cache is at least 200 GB\nredis:\n  external:\n    enabled: true\n    existingSecretName: langsmith-redis-secret # Set the connection url for your external Redis instance (200+ GB)\n\nclickhouse:\n  statefulSet:\n    persistence:\n      # This may depend on your configured TTL (see config section).\n      # We recommend 600Gi for every shortlived TTL day if operating at this scale constantly.\n      size: 4200Gi # This assumes 7 days TTL and operating a this scale constantly.\n    resources:\n      requests:\n        cpu: \"10\"\n        memory: \"32Gi\"\n      limits:\n        cpu: \"16\"\n        memory: \"48Gi\"\n\ncommonEnv:\n  - name: \"CLICKHOUSE_ASYNC_INSERT_WAIT_PCT_FLOAT\"\n    value: \"0\"\nyaml  theme={null}\nconfig:\n  blobStorage:\n    # Please also set the other keys to connect to your blob storage. See configuration section.\n    enabled: true\n\nfrontend:\n  deployment:\n    replicas: 2\n\nqueue:\n  deployment:\n    replicas: 6 # OR enable autoscaling to this level (example below)",
+  "code_samples": [
+    {
+      "code": "### High reads, low writes <a name=\"high-reads-low-writes\" />\n\nYou have a relatively low scale of trace ingestions, but many frontend users querying traces and/or have scripts that hit the `/runs/query` or `/runs/<run-id>` endpoints frequently.\n\n**For this, we strongly recommend setting up a replicated ClickHouse cluster to enable high read scale at low latency.** See our [external ClickHouse doc](/langsmith/self-host-external-clickhouse#ha-replicated-clickhouse-cluster) for more guidance on how to setup a replicated ClickHouse cluster. For this load pattern, we recommend using a 3 node replicated setup, where each replica in the cluster should have resource requests of 8+ cores and 16+ GB memory, and resource limit of 12 cores and 32 GB memory.\n\nFor this, we recommend a configuration like this:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Ensure your Redis cache is at least 200 GB",
+      "id": "ensure-your-redis-cache-is-at-least-200-gb"
+    },
+    {
+      "level": "h3",
+      "text": "High reads, low writes <a name=\"high-reads-low-writes\" />",
+      "id": "high-reads,-low-writes-<a-name=\"high-reads-low-writes\"-/>"
+    }
+  ],
+  "url": "llms-txt#minreplicas:-3",
+  "links": []
+}

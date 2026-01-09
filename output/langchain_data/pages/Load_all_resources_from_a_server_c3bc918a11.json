@@ -1,0 +1,8 @@
+{
+  "title": "Load all resources from a server",
+  "content": "blobs = await client.get_resources(\"server_name\")  # [!code highlight]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#load-all-resources-from-a-server",
+  "links": []
+}

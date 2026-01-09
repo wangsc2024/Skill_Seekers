@@ -1,0 +1,8 @@
+{
+  "title": "Graph node for looking up the users purchases",
+  "content": "def lookup(state: State) -> dict:\n    args = (\n        state[k]\n        for k in (\n            \"customer_first_name\",\n            \"customer_last_name\",\n            \"customer_phone\",\n            \"track_name\",\n            \"album_title\",\n            \"artist_name\",\n            \"purchase_date_iso_8601\",\n        )\n    )\n    results = _lookup(*args)\n    if not results:\n        response = \"We did not find any purchases associated with the information you've provided. Are you sure you've entered all of your information correctly?\"\n        followup = response\n    else:\n        response = f\"Which of the following purchases would you like to be refunded for?\\n\\n\"\n        followup = f\"Which of the following purchases would you like to be refunded for?\\n\\n{tabulate(results, headers='keys')}\"\n    return {\n        \"messages\": [{\"role\": \"assistant\", \"content\": response}],\n        \"followup\": followup,\n        \"invoice_line_ids\": [res[\"invoice_line_id\"] for res in results],\n    }",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#graph-node-for-looking-up-the-users-purchases",
+  "links": []
+}

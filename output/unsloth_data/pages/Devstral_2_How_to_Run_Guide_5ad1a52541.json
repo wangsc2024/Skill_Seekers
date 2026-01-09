@@ -1,0 +1,33 @@
+{
+  "title": "Devstral 2 - How to Run Guide",
+  "content": "Guide for local running Mistral Devstral 2 models: 123B-Instruct-2512 and Small-2-24B-Instruct-2512.\n\nDevstral 2 are Mistral’s new coding and agentic LLMs for software engineering, available in [24B](#devstral-small-2-24b) and [123B](#devstral-2-123b) sizes. The 123B model achieves SOTA in SWE-bench, coding, tool-calling and agent use-cases. The 24B model fits in 25GB RAM/VRAM and 123B fits in 128GB.\n\n{% hint style=\"success\" %}\n**13th December 2025 Update**\n\n**We’ve resolved issues in Devstral’s chat template, and results should be significantly better. The 24B & 123B have been updated. Also install the latest llama.cpp as at 13th Dec 2025!**\n{% endhint %}\n\nDevstral 2 supports vision capabilities, a 256k context window and uses the same architecture as [Ministral 3](https://docs.unsloth.ai/models/ministral-3). You can now run and **fine-tune** both models locally with Unsloth.\n\nAll Devstral 2 uploads use our Unsloth [Dynamic 2.0](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs) methodology, delivering the best performance on [Aider Polyglot](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs/unsloth-dynamic-ggufs-on-aider-polyglot) and 5-shot MMLU benchmarks.\n\n<a href=\"#devstral-small-2-24b\" class=\"button primary\">Devstral-Small-2-24B</a><a href=\"#devstral-2-123b\" class=\"button primary\">Devstral-2-123B</a>\n\n#### **Devstral 2 - Unsloth Dynamic** GGUFs:\n\n| Devstral-Small-2-24B-Instruct-2512                                                                                    | Devstral-2-123B-Instruct-2512                                                                               |\n| --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |\n| [Devstral-Small-2-**24B**-Instruct-2512-GGUF](https://huggingface.co/unsloth/Devstral-Small-2-24B-Instruct-2512-GGUF) | [Devstral-2-**123B**-Instruct-2512-GGUF](https://huggingface.co/unsloth/Devstral-2-123B-Instruct-2512-GGUF) |\n\n## 🖥️ **Running Devstral 2**\n\nSee our step-by-step guides for running [Devstral 24B](#devstral-small-2-24b) and the large [Devstral 123B](#devstral-2-123b) models. Both models support vision support but currently **vision is not supported** in llama.cpp\n\n### :gear: Usage Guide\n\nHere are the recommended settings for inference:\n\n* <mark style=\"background-color:blue;\">**Temperature \\~0.15**</mark>\n* Min\\_P of 0.01 (optional, but 0.01 works well, llama.cpp default is 0.1)\n* **Use `--jinja` to enable the system prompt.**\n* Max context length = 262,144\n* Recommended minimum context: 16,384\n* Install the latest llama.cpp since a [December 13th 2025 pull request](https://github.com/ggml-org/llama.cpp/pull/17945) fixes issues.\n\n### :tophat:Devstral-Small-2-24B\n\nThe full precision (Q8) Devstral-Small-2-24B GGUF will fit in 25GB RAM/VRAM. Text only for now.\n\n#### ✨ Run Devstral-Small-2-24B-Instruct-2512 in llama.cpp\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n{% code overflow=\"wrap\" %}\n\n2. If you want to use `llama.cpp` directly to load models, you can do the below: (:`Q4_K_XL`) is the quantization type. You can also directly pull from Hugging Face:\n\n3. Download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose `UD_Q4_K_XL` or other quantized versions.",
+  "code_samples": [
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-mtmd-cli llama-server llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-mtmd-cli \\\n    -hf unsloth/Devstral-Small-2-24B-Instruct-2512-GGUF:UD-Q4_K_XL \\\n    --jinja -ngl 99 --threads -1 --ctx-size 16384 \\\n    --temp 0.15",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "🖥️ **Running Devstral 2**",
+      "id": "🖥️-**running-devstral-2**"
+    },
+    {
+      "level": "h3",
+      "text": ":gear: Usage Guide",
+      "id": ":gear:-usage-guide"
+    },
+    {
+      "level": "h3",
+      "text": ":tophat:Devstral-Small-2-24B",
+      "id": ":tophat:devstral-small-2-24b"
+    }
+  ],
+  "url": "llms-txt#devstral-2---how-to-run-guide",
+  "links": []
+}

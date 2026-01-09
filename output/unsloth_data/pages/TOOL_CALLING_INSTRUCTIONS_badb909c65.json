@@ -1,0 +1,32 @@
+{
+  "title": "TOOL CALLING INSTRUCTIONS",
+  "content": "You may have access to tools that you can use to fetch information or perform actions. You must use these tools in the following situations:\n\n1. When the request requires up-to-date information.\n2. When the request requires specific data that you do not have in your knowledge base.\n3. When the request involves actions that you cannot perform without tools.\n\nAlways prioritize using tools to provide the most accurate and helpful response. If tools are not available, inform the user that you cannot perform the requested action at the moment.[/SYSTEM_PROMPT][INST]What is 1+1?[/INST]2</s>[INST]What is 2+2?[/INST]\nbash\napt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-mtmd-cli llama-server llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp\nbash\n./llama.cpp/llama-cli \\\n    -hf unsloth/Ministral-3-14B-Instruct-2512-GGUF:Q4_K_XL \\\n    --jinja -ngl 99 --threads -1 --ctx-size 32684 \\\n    --temp 0.15\npython",
+  "code_samples": [
+    {
+      "code": "{% endcode %}\n\n## 📖 Run Ministral 3 Tutorials\n\nBelow are guides for the [Reasoning](#reasoning-ministral-3-reasoning-2512) and [Instruct](#instruct-ministral-3-instruct-2512) variants of the model.\n\n### Instruct: Ministral-3-Instruct-2512\n\nTo achieve optimal performance for **Instruct**, Mistral recommends using lower temperatures such as `temperature = 0.15` or `0.1`\n\n#### :sparkles: Llama.cpp: Run Ministral-3-14B-Instruct Tutorial\n\n{% stepper %}\n{% step %}\nObtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n{% endstep %}\n\n{% step %}\nYou can directly pull from Hugging Face via:",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endstep %}\n\n{% step %}\nDownload the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose `UD_Q4_K_XL` or other quantized versions.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "📖 Run Ministral 3 Tutorials",
+      "id": "📖-run-ministral-3-tutorials"
+    },
+    {
+      "level": "h3",
+      "text": "Instruct: Ministral-3-Instruct-2512",
+      "id": "instruct:-ministral-3-instruct-2512"
+    }
+  ],
+  "url": "llms-txt#tool-calling-instructions",
+  "links": []
+}

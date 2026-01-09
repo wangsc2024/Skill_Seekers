@@ -1,0 +1,8 @@
+{
+  "title": "Join Run",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/thread-runs/join-run\n\nlangsmith/agent-server-openapi.json get /threads/{thread_id}/runs/{run_id}/join\nWait for a run to finish.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#join-run",
+  "links": []
+}

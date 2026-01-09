@@ -1,0 +1,8 @@
+{
+  "title": "Colors",
+  "content": "pipe_colors = [(0, 100, 0), (210, 180, 140), (50, 50, 50)]\nland_colors = [(139, 69, 19), (255, 255, 0)]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#colors",
+  "links": []
+}

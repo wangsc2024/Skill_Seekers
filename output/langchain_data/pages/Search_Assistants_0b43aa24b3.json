@@ -1,0 +1,8 @@
+{
+  "title": "Search Assistants",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/assistants/search-assistants\n\nlangsmith/agent-server-openapi.json post /assistants/search\nSearch for assistants.\n\nThis endpoint also functions as the endpoint to list all assistants.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#search-assistants",
+  "links": []
+}

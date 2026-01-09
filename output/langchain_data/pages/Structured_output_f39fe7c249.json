@@ -1,0 +1,147 @@
+{
+  "title": "Structured output",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/structured-output\n\nStructured output allows agents to return data in a specific, predictable format. Instead of parsing natural language responses, you get structured data in the form of JSON objects, Pydantic models, or dataclasses that your application can directly use.\n\nLangChain's [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) handles structured output automatically. The user sets their desired structured output schema, and when the model generates the structured data, it's captured, validated, and returned in the `'structured_response'` key of the agent's state.\n\nControls how the agent returns structured data:\n\n* **`ToolStrategy[StructuredResponseT]`**: Uses tool calling for structured output\n* **`ProviderStrategy[StructuredResponseT]`**: Uses provider-native structured output\n* **`type[StructuredResponseT]`**: Schema type - automatically selects best strategy based on model capabilities\n* **`None`**: No structured output\n\nWhen a schema type is provided directly, LangChain automatically chooses:\n\n* `ProviderStrategy` for models supporting native structured output (e.g. [OpenAI](/oss/python/integrations/providers/openai), [Anthropic](/oss/python/integrations/providers/anthropic), or [Grok](/oss/python/integrations/providers/xai)).\n* `ToolStrategy` for all other models.\n\n<Tip>\n  Support for native structured output features is read dynamically from the model's [profile data](/oss/python/langchain/models#model-profiles) if using `langchain>=1.1`. If data are not available, use another condition or specify manually:\n\nIf tools are specified, the model must support simultaneous use of tools and structured output.\n</Tip>\n\nThe structured response is returned in the `structured_response` key of the agent's final state.\n\nSome model providers support structured output natively through their APIs (e.g. OpenAI, Grok, Gemini). This is the most reliable method when available.\n\nTo use this strategy, configure a `ProviderStrategy`:\n\n<Info>\n  The `strict` param requires `langchain>=1.2`.\n</Info>\n\n<ParamField path=\"schema\" required>\n  The schema defining the structured output format. Supports:\n\n* **Pydantic models**: `BaseModel` subclasses with field validation\n  * **Dataclasses**: Python dataclasses with type annotations\n  * **TypedDict**: Typed dictionary classes\n  * **JSON Schema**: Dictionary with JSON schema specification\n</ParamField>\n\n<ParamField path=\"strict\">\n  Optional boolean parameter to enable strict schema adherence. Supported by some providers (e.g., [OpenAI](/oss/python/integrations/chat/openai) and [xAI](/oss/python/integrations/chat/xai)). Defaults to `None` (disabled).\n</ParamField>\n\nLangChain automatically uses `ProviderStrategy` when you pass a schema type directly to [`create_agent.response_format`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent\\(response_format\\)) and the model supports native structured output:\n\nProvider-native structured output provides high reliability and strict validation because the model provider enforces the schema. Use it when available.\n\n<Note>\n  If the provider natively supports structured output for your model choice, it is functionally equivalent to write `response_format=ProductReview` instead of `response_format=ProviderStrategy(ProductReview)`. In either case, if structured output is not supported, the agent will fall back to a tool calling strategy.\n</Note>\n\n## Tool calling strategy\n\nFor models that don't support native structured output, LangChain uses tool calling to achieve the same result. This works with all models that support tool calling, which is most modern models.\n\nTo use this strategy, configure a `ToolStrategy`:\n\n<ParamField path=\"schema\" required>\n  The schema defining the structured output format. Supports:\n\n* **Pydantic models**: `BaseModel` subclasses with field validation\n  * **Dataclasses**: Python dataclasses with type annotations\n  * **TypedDict**: Typed dictionary classes\n  * **JSON Schema**: Dictionary with JSON schema specification\n  * **Union types**: Multiple schema options. The model will choose the most appropriate schema based on the context.\n</ParamField>\n\n<ParamField path=\"tool_message_content\">\n  Custom content for the tool message returned when structured output is generated.\n  If not provided, defaults to a message showing the structured response data.\n</ParamField>\n\n<ParamField path=\"handle_errors\">\n  Error handling strategy for structured output validation failures. Defaults to `True`.\n\n* **`True`**: Catch all errors with default error template\n  * **`str`**: Catch all errors with this custom message\n  * **`type[Exception]`**: Only catch this exception type with default message\n  * **`tuple[type[Exception], ...]`**: Only catch these exception types with default message\n  * **`Callable[[Exception], str]`**: Custom function that returns error message\n  * **`False`**: No retry, let exceptions propagate\n</ParamField>\n\n### Custom tool message content\n\nThe `tool_message_content` parameter allows you to customize the message that appears in the conversation history when structured output is generated:\n\nWithout `tool_message_content`, our final [`ToolMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.ToolMessage) would be:\n\nModels can make mistakes when generating structured output via tool calling. LangChain provides intelligent retry mechanisms to handle these errors automatically.\n\n#### Multiple structured outputs error\n\nWhen a model incorrectly calls multiple structured output tools, the agent provides error feedback in a [`ToolMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.ToolMessage) and prompts the model to retry:\n\n#### Schema validation error\n\nWhen structured output doesn't match the expected schema, the agent provides specific error feedback:\n\n#### Error handling strategies\n\nYou can customize how errors are handled using the `handle_errors` parameter:\n\n**Custom error message:**\n\nIf `handle_errors` is a string, the agent will *always* prompt the model to re-try with a fixed tool message:\n\n**Handle specific exceptions only:**\n\nIf `handle_errors` is an exception type, the agent will only retry (using the default error message) if the exception raised is the specified type. In all other cases, the exception will be raised.\n\n**Handle multiple exception types:**\n\nIf `handle_errors` is a tuple of exceptions, the agent will only retry (using the default error message) if the exception raised is one of the specified types. In all other cases, the exception will be raised.\n\n**Custom error handler function:**\n\nOn `StructuredOutputValidationError`:\n\nOn `MultipleStructuredOutputsError`:\n\n**No error handling:**\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/structured-output.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## Response Format\n\nControls how the agent returns structured data:\n\n* **`ToolStrategy[StructuredResponseT]`**: Uses tool calling for structured output\n* **`ProviderStrategy[StructuredResponseT]`**: Uses provider-native structured output\n* **`type[StructuredResponseT]`**: Schema type - automatically selects best strategy based on model capabilities\n* **`None`**: No structured output\n\nWhen a schema type is provided directly, LangChain automatically chooses:\n\n* `ProviderStrategy` for models supporting native structured output (e.g. [OpenAI](/oss/python/integrations/providers/openai), [Anthropic](/oss/python/integrations/providers/anthropic), or [Grok](/oss/python/integrations/providers/xai)).\n* `ToolStrategy` for all other models.\n\n<Tip>\n  Support for native structured output features is read dynamically from the model's [profile data](/oss/python/langchain/models#model-profiles) if using `langchain>=1.1`. If data are not available, use another condition or specify manually:",
+      "language": "unknown"
+    },
+    {
+      "code": "If tools are specified, the model must support simultaneous use of tools and structured output.\n</Tip>\n\nThe structured response is returned in the `structured_response` key of the agent's final state.\n\n## Provider strategy\n\nSome model providers support structured output natively through their APIs (e.g. OpenAI, Grok, Gemini). This is the most reliable method when available.\n\nTo use this strategy, configure a `ProviderStrategy`:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Info>\n  The `strict` param requires `langchain>=1.2`.\n</Info>\n\n<ParamField path=\"schema\" required>\n  The schema defining the structured output format. Supports:\n\n  * **Pydantic models**: `BaseModel` subclasses with field validation\n  * **Dataclasses**: Python dataclasses with type annotations\n  * **TypedDict**: Typed dictionary classes\n  * **JSON Schema**: Dictionary with JSON schema specification\n</ParamField>\n\n<ParamField path=\"strict\">\n  Optional boolean parameter to enable strict schema adherence. Supported by some providers (e.g., [OpenAI](/oss/python/integrations/chat/openai) and [xAI](/oss/python/integrations/chat/xai)). Defaults to `None` (disabled).\n</ParamField>\n\nLangChain automatically uses `ProviderStrategy` when you pass a schema type directly to [`create_agent.response_format`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent\\(response_format\\)) and the model supports native structured output:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nProvider-native structured output provides high reliability and strict validation because the model provider enforces the schema. Use it when available.\n\n<Note>\n  If the provider natively supports structured output for your model choice, it is functionally equivalent to write `response_format=ProductReview` instead of `response_format=ProviderStrategy(ProductReview)`. In either case, if structured output is not supported, the agent will fall back to a tool calling strategy.\n</Note>\n\n## Tool calling strategy\n\nFor models that don't support native structured output, LangChain uses tool calling to achieve the same result. This works with all models that support tool calling, which is most modern models.\n\nTo use this strategy, configure a `ToolStrategy`:",
+      "language": "unknown"
+    },
+    {
+      "code": "<ParamField path=\"schema\" required>\n  The schema defining the structured output format. Supports:\n\n  * **Pydantic models**: `BaseModel` subclasses with field validation\n  * **Dataclasses**: Python dataclasses with type annotations\n  * **TypedDict**: Typed dictionary classes\n  * **JSON Schema**: Dictionary with JSON schema specification\n  * **Union types**: Multiple schema options. The model will choose the most appropriate schema based on the context.\n</ParamField>\n\n<ParamField path=\"tool_message_content\">\n  Custom content for the tool message returned when structured output is generated.\n  If not provided, defaults to a message showing the structured response data.\n</ParamField>\n\n<ParamField path=\"handle_errors\">\n  Error handling strategy for structured output validation failures. Defaults to `True`.\n\n  * **`True`**: Catch all errors with default error template\n  * **`str`**: Catch all errors with this custom message\n  * **`type[Exception]`**: Only catch this exception type with default message\n  * **`tuple[type[Exception], ...]`**: Only catch these exception types with default message\n  * **`Callable[[Exception], str]`**: Custom function that returns error message\n  * **`False`**: No retry, let exceptions propagate\n</ParamField>\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Custom tool message content\n\nThe `tool_message_content` parameter allows you to customize the message that appears in the conversation history when structured output is generated:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "Without `tool_message_content`, our final [`ToolMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.ToolMessage) would be:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Error handling\n\nModels can make mistakes when generating structured output via tool calling. LangChain provides intelligent retry mechanisms to handle these errors automatically.\n\n#### Multiple structured outputs error\n\nWhen a model incorrectly calls multiple structured output tools, the agent provides error feedback in a [`ToolMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.ToolMessage) and prompts the model to retry:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Schema validation error\n\nWhen structured output doesn't match the expected schema, the agent provides specific error feedback:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Error handling strategies\n\nYou can customize how errors are handled using the `handle_errors` parameter:\n\n**Custom error message:**",
+      "language": "unknown"
+    },
+    {
+      "code": "If `handle_errors` is a string, the agent will *always* prompt the model to re-try with a fixed tool message:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Handle specific exceptions only:**",
+      "language": "unknown"
+    },
+    {
+      "code": "If `handle_errors` is an exception type, the agent will only retry (using the default error message) if the exception raised is the specified type. In all other cases, the exception will be raised.\n\n**Handle multiple exception types:**",
+      "language": "unknown"
+    },
+    {
+      "code": "If `handle_errors` is a tuple of exceptions, the agent will only retry (using the default error message) if the exception raised is one of the specified types. In all other cases, the exception will be raised.\n\n**Custom error handler function:**",
+      "language": "unknown"
+    },
+    {
+      "code": "On `StructuredOutputValidationError`:",
+      "language": "unknown"
+    },
+    {
+      "code": "On `MultipleStructuredOutputsError`:",
+      "language": "unknown"
+    },
+    {
+      "code": "On other errors:",
+      "language": "unknown"
+    },
+    {
+      "code": "**No error handling:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Response Format",
+      "id": "response-format"
+    },
+    {
+      "level": "h2",
+      "text": "Provider strategy",
+      "id": "provider-strategy"
+    },
+    {
+      "level": "h2",
+      "text": "Tool calling strategy",
+      "id": "tool-calling-strategy"
+    },
+    {
+      "level": "h3",
+      "text": "Custom tool message content",
+      "id": "custom-tool-message-content"
+    },
+    {
+      "level": "h3",
+      "text": "Error handling",
+      "id": "error-handling"
+    }
+  ],
+  "url": "llms-txt#structured-output",
+  "links": []
+}

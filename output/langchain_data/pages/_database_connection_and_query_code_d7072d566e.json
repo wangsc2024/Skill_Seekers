@@ -1,0 +1,27 @@
+{
+  "title": "... database connection and query code",
+  "content": "[(1, 'AC/DC'), (2, 'Accept'), (3, 'Aerosmith'), (4, 'Alanis Morissette'), (5, 'Alice In Chains'), (6, 'Antônio Carlos Jobim'), (7, 'Apocalyptica'), (8, 'Audioslave'), (9, 'BackBeat'), (10, 'Billy Cobham')]\npython  theme={null}\nimport sqlite3\n\ndef _refund(invoice_id: int | None, invoice_line_ids: list[int] | None, mock: bool = False) -> float:\n    ...\n\ndef _lookup( ...\n`python  theme={null}\nfrom typing import Literal\nimport json\n\nfrom langchain.chat_models import init_chat_model\nfrom langchain_core.runnables import RunnableConfig\nfrom langgraph.graph import END, StateGraph\nfrom langgraph.graph.message import AnyMessage, add_messages\nfrom langgraph.types import Command, interrupt\nfrom tabulate import tabulate\nfrom typing_extensions import Annotated, TypedDict",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "And here's the database schema (image from [https://github.com/lerocha/chinook-database](https://github.com/lerocha/chinook-database)):\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/chinook-diagram.png?fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=5da2a8dcca68f02dfcec11f9c472d341\" alt=\"Chinook DB\" data-og-width=\"1672\" width=\"1672\" data-og-height=\"1132\" height=\"1132\" data-path=\"langsmith/images/chinook-diagram.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/chinook-diagram.png?w=280&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=ea7b3a27e9780b556aa90f6914dcef30 280w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/chinook-diagram.png?w=560&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=d9cf3ddad46562213014ffb1a77b1e45 560w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/chinook-diagram.png?w=840&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=2c9e1e70e9be2cf07111b2211e1ef9b7 840w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/chinook-diagram.png?w=1100&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=970f7f48c80222219b493211331ee22f 1100w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/chinook-diagram.png?w=1650&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=3188acb57c4abc0156f8687fa9e229d8 1650w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/chinook-diagram.png?w=2500&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=86b9655b9fd1bc38fcf9e054b11833df 2500w\" />\n\n### Define the customer support agent\n\nWe'll create a [LangGraph](https://langchain-ai.github.io/langgraph/) agent with limited access to our database. For demo purposes, our agent will support two basic types of requests:\n\n* Lookup: The customer can look up song titles, artist names, and albums based on other identifying information. For example: \"What songs do you have by Jimi Hendrix?\"\n* Refund: The customer can request a refund on their past purchases. For example: \"My name is Claude Shannon and I'd like a refund on a purchase I made last week, could you help me?\"\n\nFor simplicity in this demo, we'll implement refunds by deleting the corresponding database records. We'll skip implementing user authentication and other production security measures.\n\nThe agent's logic will be structured as two separate subgraphs (one for lookups and one for refunds), with a parent graph that routes requests to the appropriate subgraph.\n\n#### Refund agent\n\nLet's build the refund processing agent. This agent needs to:\n\n1. Find the customer's purchase records in the database\n2. Delete the relevant Invoice and InvoiceLine records to process the refund\n\nWe'll create two SQL helper functions:\n\n1. A function to execute the refund by deleting records\n2. A function to look up a customer's purchase history\n\nTo make testing easier, we'll add a \"mock\" mode to these functions. When mock mode is enabled, the functions will simulate database operations without actually modifying any data.",
+      "language": "unknown"
+    },
+    {
+      "code": "Now let's define our graph. We'll use a simple architecture with three main paths:\n\n1. Extract customer and purchase information from the conversation\n\n2. Route the request to one of three paths:\n\n   * Refund path: If we have sufficient purchase details (Invoice ID or Invoice Line IDs) to process a refund\n   * Lookup path: If we have enough customer information (name and phone) to search their purchase history\n   * Response path: If we need more information, respond to the user requesting the specific details needed\n\nThe graph's state will track:\n\n* The conversation history (messages between user and agent)\n* All customer and purchase information extracted from the conversation\n* The next message to send to the user (followup text)",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Define the customer support agent",
+      "id": "define-the-customer-support-agent"
+    }
+  ],
+  "url": "llms-txt#...-database-connection-and-query-code",
+  "links": []
+}

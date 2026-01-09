@@ -1,0 +1,42 @@
+{
+  "title": "Continued Pretraining",
+  "content": "AKA as Continued Finetuning. Unsloth allows you to continually pretrain so a model can learn a new language.\n\n* The [text completion notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Mistral_\\(7B\\)-Text_Completion.ipynb) is for continued pretraining/raw text.\n* The [continued pretraining notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Mistral_v0.3_\\(7B\\)-CPT.ipynb) is for learning another language.\n\nYou can read more about continued pretraining and our release in our [blog post](https://unsloth.ai/blog/contpretraining).\n\n## What is Continued Pretraining?\n\nContinued or continual pretraining (CPT) is necessary to “steer” the language model to understand new domains of knowledge, or out of distribution domains. Base models like Llama-3 8b or Mistral 7b are first pretrained on gigantic datasets of trillions of tokens (Llama-3 for e.g. is 15 trillion).\n\nBut sometimes these models have not been well trained on other languages, or text specific domains, like law, medicine or other areas. So continued pretraining (CPT) is necessary to make the language model learn new tokens or datasets.\n\n## Advanced Features:\n\n### Loading LoRA adapters for continued finetuning\n\nIf you saved a LoRA adapter through Unsloth, you can also continue training using your LoRA weights. The optimizer state will be reset as well. To load even optimizer states to continue finetuning, see the next section.\n\n### Continued Pretraining & Finetuning the `lm_head` and `embed_tokens` matrices\n\nAdd `lm_head` and `embed_tokens`. For Colab, sometimes you will go out of memory for Llama-3 8b. If so, just add `lm_head`.\n\nThen use 2 different learning rates - a 2-10x smaller one for the `lm_head` or `embed_tokens` like so:",
+  "code_samples": [
+    {
+      "code": "from unsloth import FastLanguageModel\nmodel, tokenizer = FastLanguageModel.from_pretrained(\n    model_name = \"LORA_MODEL_NAME\",\n    max_seq_length = max_seq_length,\n    dtype = dtype,\n    load_in_4bit = load_in_4bit,\n)\ntrainer = Trainer(...)\ntrainer.train()",
+      "language": "python"
+    },
+    {
+      "code": "model = FastLanguageModel.get_peft_model(\n    model,\n    r = 16,\n    target_modules = [\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\",\n                      \"gate_proj\", \"up_proj\", \"down_proj\",\n                      \"lm_head\", \"embed_tokens\",],\n    lora_alpha = 16,\n)",
+      "language": "python"
+    },
+    {
+      "code": "from unsloth import UnslothTrainer, UnslothTrainingArguments\n\ntrainer = UnslothTrainer(\n    ....\n    args = UnslothTrainingArguments(\n        ....\n        learning_rate = 5e-5,\n        embedding_learning_rate = 5e-6, # 2-10x smaller than learning_rate\n    ),\n)",
+      "language": "python"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What is Continued Pretraining?",
+      "id": "what-is-continued-pretraining?"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Features:",
+      "id": "advanced-features:"
+    },
+    {
+      "level": "h3",
+      "text": "Loading LoRA adapters for continued finetuning",
+      "id": "loading-lora-adapters-for-continued-finetuning"
+    },
+    {
+      "level": "h3",
+      "text": "Continued Pretraining & Finetuning the `lm_head` and `embed_tokens` matrices",
+      "id": "continued-pretraining-&-finetuning-the-`lm_head`-and-`embed_tokens`-matrices"
+    }
+  ],
+  "url": "llms-txt#continued-pretraining",
+  "links": []
+}

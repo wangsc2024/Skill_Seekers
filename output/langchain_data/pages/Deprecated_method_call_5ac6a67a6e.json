@@ -1,0 +1,24 @@
+{
+  "title": "Deprecated method call",
+  "content": "text = response.text()\n```\n\nExisting usage patterns (i.e., `.text()`) will continue to function but now emit a warning. The method form will be removed in v2.\n\n### `example` parameter removed from `AIMessage`\n\nThe `example` parameter has been removed from [`AIMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.AIMessage) objects. We recommend migrating to use `additional_kwargs` for passing extra metadata as needed.\n\n* `AIMessageChunk` objects now include a `chunk_position` attribute with position `'last'` to indicate the final chunk in a stream. This allows for clearer handling of streamed messages. If the chunk is not the final one, `chunk_position` will be `None`.\n* `LanguageModelOutputVar` is now typed to [`AIMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.AIMessage) instead of [`BaseMessage`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.messages.BaseMessage).\n* The logic for merging message chunks (`AIMessageChunk.add`) has been updated with more sophisticated selection handling for the final id for the merged chunk. It prioritizes provider-assigned IDs over LangChain-generated IDs.\n* We now open files with `utf-8` encoding by default.\n* Standard tests now use multimodal content blocks.\n\nOld docs are archived for reference:\n\n* [v0.3 docs content](https://github.com/langchain-ai/langchain/tree/v0.3/docs/docs)\n* [v0.3 API reference](https://reference.langchain.com/v0.3/python/)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/python/migrate/langchain-v1.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "`example` parameter removed from `AIMessage`",
+      "id": "`example`-parameter-removed-from-`aimessage`"
+    },
+    {
+      "level": "h2",
+      "text": "Minor changes",
+      "id": "minor-changes"
+    },
+    {
+      "level": "h2",
+      "text": "Archived docs",
+      "id": "archived-docs"
+    }
+  ],
+  "url": "llms-txt#deprecated-method-call",
+  "links": []
+}

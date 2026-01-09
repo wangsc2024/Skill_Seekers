@@ -1,0 +1,13 @@
+{
+  "title": "server.py",
+  "content": "import langsmith as ls\nfrom fastapi import FastAPI, Request\n\n@ls.traceable\nasync def my_application():\n    ...\n\napp = FastAPI()  # Or Flask, Django, or any other framework\n\n@app.post(\"/my-route\")\nasync def fake_route(request: Request):\n    # request.headers:  {\"langsmith-trace\": \"...\"}\n    # as well as optional metadata/tags in `baggage`\n    with ls.tracing_context(parent=request.headers):\n        return await my_application()\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "The example above uses the `tracing_context` context manager. You can also directly specify the parent run context in the `langsmith_extra` parameter of a method wrapped with `@traceable`.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#server.py",
+  "links": []
+}

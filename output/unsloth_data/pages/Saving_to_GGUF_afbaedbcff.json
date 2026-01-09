@@ -1,0 +1,17 @@
+{
+  "title": "Saving to GGUF",
+  "content": "Saving models to 16bit for GGUF so you can use it for Ollama, Jan AI, Open WebUI and more!\n\n{% tabs %}\n{% tab title=\"Locally\" %}\nTo save to GGUF, use the below to save locally:\n\nTo push to Hugging Face hub:\n\nAll supported quantization options for `quantization_method` are listed below:",
+  "code_samples": [
+    {
+      "code": "model.save_pretrained_gguf(\"directory\", tokenizer, quantization_method = \"q4_k_m\")\nmodel.save_pretrained_gguf(\"directory\", tokenizer, quantization_method = \"q8_0\")\nmodel.save_pretrained_gguf(\"directory\", tokenizer, quantization_method = \"f16\")",
+      "language": "python"
+    },
+    {
+      "code": "model.push_to_hub_gguf(\"hf_username/directory\", tokenizer, quantization_method = \"q4_k_m\")\nmodel.push_to_hub_gguf(\"hf_username/directory\", tokenizer, quantization_method = \"q8_0\")",
+      "language": "python"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#saving-to-gguf",
+  "links": []
+}

@@ -1,0 +1,46 @@
+{
+  "title": "Remember that langgraph graphs are also langchain runnables.",
+  "content": "target = example_to_state | app\n\nexperiment_results = await aevaluate(\n    target,\n    data=\"weather agent\",\n    evaluators=[correct],\n    max_concurrency=4,  # optional\n    experiment_prefix=\"claude-3.5-baseline\",  # optional\n)\npython  theme={null}\ndef right_tool(outputs: dict) -> bool:\n    tool_calls = outputs[\"messages\"][1].tool_calls\n    return bool(tool_calls and tool_calls[0][\"name\"] == \"search\")\n\nexperiment_results = await aevaluate(\n    target,\n    data=\"weather agent\",\n    evaluators=[correct, right_tool],\n    max_concurrency=4,  # optional\n    experiment_prefix=\"claude-3.5-baseline\",  # optional\n)\npython  theme={null}\nfrom langsmith.schemas import Run, Example\n\ndef right_tool_from_run(run: Run, example: Example) -> dict:\n    # Get documents and answer\n    first_model_run = next(run for run in root_run.child_runs if run.name == \"agent\")\n    tool_calls = first_model_run.outputs[\"messages\"][-1].tool_calls\n    right_tool = bool(tool_calls and tool_calls[0][\"name\"] == \"search\")\n    return {\"key\": \"right_tool\", \"value\": right_tool}\n\nexperiment_results = await aevaluate(\n    target,\n    data=\"weather agent\",\n    evaluators=[correct, right_tool_from_run],\n    max_concurrency=4,  # optional\n    experiment_prefix=\"claude-3.5-baseline\",  # optional\n)\npython  theme={null}\nnode_target = example_to_state | app.nodes[\"agent\"]\n\nnode_experiment_results = await aevaluate(\n    node_target,\n    data=\"weather agent\",\n    evaluators=[right_tool_from_run],\n    max_concurrency=4,  # optional\n    experiment_prefix=\"claude-3.5-model-node\",  # optional\n)\npython  theme={null}\n  from typing import Annotated, Literal, TypedDict\n  from langchain.chat_models import init_chat_model\n  from langchain.tools import tool\n  from langgraph.prebuilt import ToolNode\n  from langgraph.graph import END, START, StateGraph\n  from langgraph.graph.message import add_messages\n  from langsmith import Client, aevaluate\n\n# Define a graph\n  class State(TypedDict):\n      # Messages have the type \"list\". The 'add_messages' function\n      # in the annotation defines how this state key should be updated\n      # (in this case, it appends messages to the list, rather than overwriting them)\n      messages: Annotated[list, add_messages]\n\n# Define the tools for the agent to use\n  @tool\n  def search(query: str) -> str:\n      \"\"\"Call to surf the web.\"\"\"\n      # This is a placeholder, but don't tell the LLM that...\n      if \"sf\" in query.lower() or \"san francisco\" in query.lower():\n          return \"It's 60 degrees and foggy.\"\n      return \"It's 90 degrees and sunny.\"\n\ntools = [search]\n  tool_node = ToolNode(tools)\n  model = init_chat_model(\"claude-sonnet-4-5-20250929\").bind_tools(tools)\n\n# Define the function that determines whether to continue or not\n  def should_continue(state: State) -> Literal[\"tools\", END]:\n      messages = state['messages']\n      last_message = messages[-1]\n\n# If the LLM makes a tool call, then we route to the \"tools\" node\n      if last_message.tool_calls:\n          return \"tools\"\n\n# Otherwise, we stop (reply to the user)\n      return END\n\n# Define the function that calls the model\n  def call_model(state: State):\n      messages = state['messages']\n      response = model.invoke(messages)\n      # We return a list, because this will get added to the existing list\n      return {\"messages\": [response]}\n\n# Define a new graph\n  workflow = StateGraph(State)\n\n# Define the two nodes we will cycle between\n  workflow.add_node(\"agent\", call_model)\n  workflow.add_node(\"tools\", tool_node)\n\n# Set the entrypoint as 'agent'\n  # This means that this node is the first one called\n  workflow.add_edge(START, \"agent\")\n\n# We now add a conditional edge\n  workflow.add_conditional_edges(\n      # First, we define the start node. We use 'agent'.\n      # This means these are the edges taken after the 'agent' node is called.\n      \"agent\",\n      # Next, we pass in the function that will determine which node is called next.\n      should_continue,\n  )\n\n# We now add a normal edge from 'tools' to 'agent'.\n  # This means that after 'tools' is called, 'agent' node is called next.\n  workflow.add_edge(\"tools\", 'agent')\n\n# Finally, we compile it!\n  # This compiles it into a LangChain Runnable,\n  # meaning you can use it as you would any other runnable.\n  # Note that we're (optionally) passing the memory when compiling the graph\n  app = workflow.compile()\n\nquestions = [\n      \"what's the weather in sf\",\n      \"whats the weather in san fran\",\n      \"whats the weather in tangier\"\n  ]\n\nanswers = [\n      \"It's 60 degrees and foggy.\",\n      \"It's 60 degrees and foggy.\",\n      \"It's 90 degrees and sunny.\",\n  ]\n\n# Create a dataset\n  ls_client = Client()\n  dataset = ls_client.create_dataset(\n      \"weather agent\",\n      inputs=[{\"question\": q} for q in questions],\n      outputs=[{\"answers\": a} for a in answers],\n  )\n\n# Define evaluators\n  async def correct(outputs: dict, reference_outputs: dict) -> bool:\n      instructions = (\n          \"Given an actual answer and an expected answer, determine whether\"\n          \" the actual answer contains all of the information in the\"\n          \" expected answer. Respond with 'CORRECT' if the actual answer\"\n          \" does contain all of the expected information and 'INCORRECT'\"\n          \" otherwise. Do not include anything else in your response.\"\n      )\n      # Our graph outputs a State dictionary, which in this case means\n      # we'll have a 'messages' key and the final message should\n      # be our actual answer.\n      actual_answer = outputs[\"messages\"][-1].content\n      expected_answer = reference_outputs[\"answer\"]\n      user_msg = (\n          f\"ACTUAL ANSWER: {actual_answer}\"\n          f\"\\n\\nEXPECTED ANSWER: {expected_answer}\"\n      )\n      response = await judge_llm.ainvoke(\n          [\n              {\"role\": \"system\", \"content\": instructions},\n              {\"role\": \"user\", \"content\": user_msg}\n          ]\n      )\n      return response.content.upper() == \"CORRECT\"\n\ndef right_tool(outputs: dict) -> bool:\n      tool_calls = outputs[\"messages\"][1].tool_calls\n      return bool(tool_calls and tool_calls[0][\"name\"] == \"search\")\n\n# Run evaluation\n  experiment_results = await aevaluate(\n      target,\n      data=\"weather agent\",\n      evaluators=[correct, right_tool],\n      max_concurrency=4,  # optional\n      experiment_prefix=\"claude-3.5-baseline\",  # optional\n  )\n  ```\n</Accordion>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/evaluate-graph.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## Evaluating intermediate steps\n\nOften it is valuable to evaluate not only the final output of an agent but also the intermediate steps it has taken. What's nice about `langgraph` is that the output of a graph is a state object that often already carries information about the intermediate steps taken. Usually we can evaluate whatever we're interested in just by looking at the messages in our state. For example, we can look at the messages to assert that the model invoked the 'search' tool upon as a first step.\n\nRequires `langsmith>=0.2.0`",
+      "language": "unknown"
+    },
+    {
+      "code": "If we need access to information about intermediate steps that isn't in state, we can look at the Run object. This contains the full traces for all node inputs and outputs:\n\n<Check>\n  See more about what arguments you can pass to custom evaluators in this [how-to guide](/langsmith/code-evaluator).\n</Check>",
+      "language": "unknown"
+    },
+    {
+      "code": "## Running and evaluating individual nodes\n\nSometimes you want to evaluate a single node directly to save time and costs. `langgraph` makes it easy to do this. In this case we can even continue using the evaluators we've been using.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Related\n\n* [`langgraph` evaluation docs](https://langchain-ai.github.io/langgraph/tutorials/#evaluation)\n\n## Reference code\n\n<Accordion title=\"Click to see a consolidated code snippet\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Evaluating intermediate steps",
+      "id": "evaluating-intermediate-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Running and evaluating individual nodes",
+      "id": "running-and-evaluating-individual-nodes"
+    },
+    {
+      "level": "h2",
+      "text": "Related",
+      "id": "related"
+    },
+    {
+      "level": "h2",
+      "text": "Reference code",
+      "id": "reference-code"
+    }
+  ],
+  "url": "llms-txt#remember-that-langgraph-graphs-are-also-langchain-runnables.",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Use the exact same config as QAT (convenient function)",
+  "content": "model.save_pretrained_torchao(\n    model, \"tokenizer\", \n    torchao_config = model._torchao_config.base_config,\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-the-exact-same-config-as-qat-(convenient-function)",
+  "links": []
+}

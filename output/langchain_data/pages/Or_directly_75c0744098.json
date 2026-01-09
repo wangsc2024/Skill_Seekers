@@ -1,0 +1,91 @@
+{
+  "title": "Or directly:",
+  "content": "uv run --group test pytest tests/unit_tests\nbash  theme={null}\nmake integration_tests\npython  theme={null}\n    def process_documents(\n        docs: list[Document],\n        processor: DocumentProcessor,\n        *,\n        batch_size: int = 100\n    ) -> ProcessingResult:\n        \"\"\"Process documents in batches.\n\nArgs:\n            docs: List of documents to process.\n            processor: Document processing instance.\n            batch_size: Number of documents per batch.\n\nReturns:\n            Processing results with success/failure counts.\n        \"\"\"\n    `python  theme={null}\n        class ChatAnthropic(BaseChatModel):\n            \"\"\"Interface to Claude chat models.\n\nSee the [usage guide](https://docs.langchain.com/oss/python/integrations/chat/anthropic)\n            for tutorials, feature walkthroughs, and examples.\n\nArgs:\n                model: Model identifier (e.g., `'claude-sonnet-4-5-20250929'`).\n                temperature: Sampling temperature between `0` and `1`.\n                max_tokens: Maximum number of tokens to generate.\n                api_key: Anthropic API key.\n\nIf not provided, reads from the `ANTHROPIC_API_KEY`\n                    environment variable.\n                timeout: Request timeout in seconds.\n                max_retries: Maximum number of retries for failed requests.\n\nReturns:\n                A chat model instance that can be invoked with messages.\n\nRaises:\n                ValueError: If the model identifier is not recognized.\n                AuthenticationError: If the API key is invalid.\n\nExample:\n                \n            \"\"\"\n        python  theme={null}\n          \"\"\"\n          ...\n\nSee the [extended thinking guide](https://docs.langchain.com/oss/integrations/chat/anthropic#extended-thinking)\n          for configuration options.\n\n...\n          \"\"\"\n          python  theme={null}\n          \"\"\"\n          Example:\n              \\`\\`\\`python\n              message = HumanMessage(content=[\n                  {\"type\": \"image\", \"url\": \"https://example.com/image.jpg\"}\n              ])\n              \\`\\`\\`\n\nSee the [multimodal guide](https://docs.langchain.com/oss/integrations/chat/anthropic#multimodal)\n          for all supported input formats.\n          \"\"\"\n          bash  theme={null}\n    make format  # Apply formatting\n    make lint    # Check style and types\n    bash  theme={null}\n        make test\n        bash  theme={null}\n        make integration_tests\n        bash  theme={null}\n        make format\n        make lint\n        bash  theme={null}\n        make type_check\n        python  theme={null}\n    def test_document_processor_handles_empty_input():\n        \"\"\"Test processor gracefully handles empty document list.\"\"\"\n        processor = DocumentProcessor()\n\nresult = processor.process([])\n\nassert result.success\n        assert result.processed_count == 0\n        assert len(result.errors) == 0\n    python  theme={null}\n    @pytest.mark.requires(\"openai\")\n    def test_openai_chat_integration():\n        \"\"\"Test OpenAI chat integration with real API.\"\"\"\n\nchat = ChatOpenAI()\n        response = chat.invoke(\"Hello\")\n\nassert isinstance(response.content, str)\n        assert len(response.content) > 0\n    python  theme={null}\n    def test_retry_mechanism(mocker):\n        \"\"\"Test retry mechanism handles transient failures.\"\"\"\n        mock_client = mocker.Mock()\n        mock_client.call.side_effect = [\n            ConnectionError(\"Temporary failure\"),\n            {\"result\": \"success\"}\n        ]\n\nservice = APIService(client=mock_client)\n        result = service.call_with_retry()\n\nassert result[\"result\"] == \"success\"\n        assert mock_client.call.call_count == 2\n    ```\n  </Tab>\n</Tabs>\n\nOur goal is to have the most accessible developer setup possible. Should you experience any difficulty getting setup, please ask in the [community slack](https://www.langchain.com/join-community) or open a [forum post](https://forum.langchain.com/).\n\n<Check>\n  You're now ready to contribute high-quality code to LangChain!\n</Check>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/contributing/code.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "#### Integration tests\n\n**Location**: `tests/integration_tests/`\n\nIntegration tests require access to external services/ provider APIs (which can cost money) and therefore are not run by default.\n\nNot every code change will require an integration test, but keep in mind that we'll require/ run integration tests separately as apart of our review process.\n\n**Requirements**:\n\n* Test real integrations with external services\n* Use environment variables for API keys\n* Skip gracefully if credentials unavailable",
+      "language": "unknown"
+    },
+    {
+      "code": "### Code quality standards\n\nContributions must adhere to the following quality requirements:\n\n<Tabs>\n  <Tab title=\"Type hints\">\n    **Required**: Complete type annotations for all functions",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Documentation\">\n    **Required**: [Google-style docstrings](https://google.github.io/styleguide/pyguide.html) for all public functions.\n\n    **Guiding principle**: Docstrings describe \"what\"; docs on this site explain the \"how\" and \"why.\"\n\n    | Content type                | Location   | Purpose                           |\n    | --------------------------- | ---------- | --------------------------------- |\n    | Parameter descriptions      | Docstrings | Auto-generates into API reference |\n    | Return types and exceptions | Docstrings | API reference                     |\n    | Minimal usage example       | Docstrings | Show basic instantiation pattern  |\n    | Feature tutorials           | This site  | In-depth walkthroughs             |\n    | End-to-end examples         | This site  | Real-world usage patterns         |\n    | Conceptual explanations     | This site  | Understanding and context         |\n\n    **Docstrings should contain:**\n\n    1. One-line summary of what the class/function does\n    2. Link to this site for tutorials, guides, and usage patterns\n    3. Parameter documentation with types and descriptions\n    4. Return value description\n    5. Exceptions that may be raised\n    6. Single minimal example showing basic instantiation/usage as necessary\n\n    <AccordionGroup>\n      <Accordion title=\"Good docstring example\">",
+      "language": "unknown"
+    },
+    {
+      "code": "from langchain_anthropic import ChatAnthropic\n\n                model = ChatAnthropic(model=\"claude-sonnet-4-5-20250929\")\n                response = model.invoke(\"Hello!\")",
+      "language": "python"
+    },
+    {
+      "code": "</Accordion>\n\n      <Accordion title=\"What does NOT belong in docstrings\">\n        Avoid duplicating content that belongs in OSS docs:\n\n        * **Feature tutorials**: Don't include extended walkthroughs. Instead, link to this site:",
+      "language": "unknown"
+    },
+    {
+      "code": "* **Multiple example variations**: Include one minimal example, then link to comprehensive guides:",
+      "language": "unknown"
+    },
+    {
+      "code": "* **Conceptual explanations**: Keep to factual parameter descriptions. Link to docs for deeper context.\n\n        * **MkDocs-specific syntax**: Avoid `???+`, accordions, or tabs in docstrings. They don't render in IDEs.\n      </Accordion>\n    </AccordionGroup>\n  </Tab>\n\n  <Tab title=\"Code style\">\n    **Automated**: Formatting and linting via [`ruff`](https://docs.astral.sh/ruff/)",
+      "language": "unknown"
+    },
+    {
+      "code": "**Standards**:\n\n    * Descriptive variable names\n    * Break up complex functions (aim for fewer than 20 lines)\n    * Follow existing patterns in the codebase\n  </Tab>\n</Tabs>\n\n***\n\n## Testing and validation\n\n### Running tests locally\n\nBefore submitting your PR, ensure you have completed the following steps. Note that the requirements differ slightly between LangChain and LangGraph.\n\n<Tabs>\n  <Tab title=\"LangChain\" icon=\"link\">\n    <Steps>\n      <Step title=\"Unit tests\">",
+      "language": "unknown"
+    },
+    {
+      "code": "All unit tests must pass\n      </Step>\n\n      <Step title=\"Integration tests\">",
+      "language": "unknown"
+    },
+    {
+      "code": "(Run if your changes affect integrations)\n      </Step>\n\n      <Step title=\"Formatting\">",
+      "language": "unknown"
+    },
+    {
+      "code": "Code must pass all style checks\n      </Step>\n\n      <Step title=\"Type checking\">",
+      "language": "unknown"
+    },
+    {
+      "code": "All type hints must be valid\n      </Step>\n\n      <Step title=\"PR submission\">\n        Push your branch and open a pull request. Follow the provided form template. Note related issues using a [closing keyword](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword). After submitting, wait, and check to ensure the CI checks pass. If any checks fail, address the issues promptly - maintainers may close PRs that do not pass CI within a reasonable timeframe.\n      </Step>\n    </Steps>\n  </Tab>\n\n  <Tab title=\"LangGraph\" icon=\"circle-nodes\">\n    WIP - coming soon! In the meantime, follow instructions for LangChain.\n  </Tab>\n</Tabs>\n\n### Test writing guidelines\n\nIn order to write effective tests, there's a few good practices to follow:\n\n* Use natural language to describe the test in docstrings\n* Use descriptive variable names\n* Be exhaustive with assertions\n\n<Tabs>\n  <Tab title=\"Unit tests\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Integration tests\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Mock usage\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Code quality standards",
+      "id": "code-quality-standards"
+    },
+    {
+      "level": "h2",
+      "text": "Testing and validation",
+      "id": "testing-and-validation"
+    },
+    {
+      "level": "h3",
+      "text": "Running tests locally",
+      "id": "running-tests-locally"
+    },
+    {
+      "level": "h3",
+      "text": "Test writing guidelines",
+      "id": "test-writing-guidelines"
+    },
+    {
+      "level": "h2",
+      "text": "Getting help",
+      "id": "getting-help"
+    }
+  ],
+  "url": "llms-txt#or-directly:",
+  "links": []
+}

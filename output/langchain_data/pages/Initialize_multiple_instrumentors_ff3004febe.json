@@ -1,0 +1,8 @@
+{
+  "title": "Initialize multiple instrumentors",
+  "content": "OpenAIInstrumentor().instrument()\nDSPyInstrumentor().instrument()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#initialize-multiple-instrumentors",
+  "links": []
+}

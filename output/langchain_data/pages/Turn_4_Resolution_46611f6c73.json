@@ -1,0 +1,60 @@
+{
+  "title": "Turn 4: Resolution",
+  "content": "print(\"\\n=== Turn 4: Resolution ===\")\nresult = agent.invoke(\n    {\"messages\": [HumanMessage(\"What should I do?\")]},\n    config\n)\nfor msg in result['messages']:\n    msg.pretty_print()\npython  theme={null}\n{\n    \"messages\": [HumanMessage(\"Hi, my phone screen is cracked\")],\n    \"current_step\": \"warranty_collector\"  # Default value\n}\npython  theme={null}\nCommand(update={\n    \"warranty_status\": \"in_warranty\",\n    \"current_step\": \"issue_classifier\"  # State transition!\n})\npython  theme={null}\nCommand(update={\n    \"issue_type\": \"hardware\",\n    \"current_step\": \"resolution_specialist\"  # State transition!\n})\npython  theme={null}\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import SummarizationMiddleware  # [!code highlight]\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(\n    model,\n    tools=all_tools,\n    state_schema=SupportState,\n    middleware=[\n        apply_step_config,\n        SummarizationMiddleware(  # [!code highlight]\n            model=\"gpt-4o-mini\",\n            trigger=(\"tokens\", 4000),\n            keep=(\"messages\", 10)\n        )\n    ],\n    checkpointer=InMemorySaver(),\n)\npython  theme={null}\n@tool\ndef go_back_to_warranty() -> Command:  # [!code highlight]\n    \"\"\"Go back to warranty verification step.\"\"\"\n    return Command(update={\"current_step\": \"warranty_collector\"})  # [!code highlight]\n\n@tool\ndef go_back_to_classification() -> Command:  # [!code highlight]\n    \"\"\"Go back to issue classification step.\"\"\"\n    return Command(update={\"current_step\": \"issue_classifier\"})  # [!code highlight]",
+  "code_samples": [
+    {
+      "code": "Expected flow:\n\n1. **Warranty verification step**: Asks about warranty status\n2. **Issue classification step**: Asks about the problem, determines it's hardware\n3. **Resolution step**: Provides warranty repair instructions\n\n## 7. Understanding state transitions\n\nLet's trace what happens at each turn:\n\n### Turn 1: Initial message",
+      "language": "unknown"
+    },
+    {
+      "code": "Middleware applies:\n\n* System prompt: `WARRANTY_COLLECTOR_PROMPT`\n* Tools: `[record_warranty_status]`\n\n### Turn 2: After warranty recorded\n\nTool call: `record_warranty_status(\"in_warranty\")` returns:",
+      "language": "unknown"
+    },
+    {
+      "code": "Next turn, middleware applies:\n\n* System prompt: `ISSUE_CLASSIFIER_PROMPT` (formatted with `warranty_status=\"in_warranty\"`)\n* Tools: `[record_issue_type]`\n\n### Turn 3: After issue classified\n\nTool call: `record_issue_type(\"hardware\")` returns:",
+      "language": "unknown"
+    },
+    {
+      "code": "Next turn, middleware applies:\n\n* System prompt: `RESOLUTION_SPECIALIST_PROMPT` (formatted with `warranty_status` and `issue_type`)\n* Tools: `[provide_solution, escalate_to_human]`\n\nThe key insight: **Tools drive the workflow** by updating `current_step`, and **middleware responds** by applying the appropriate configuration on the next turn.\n\n## 8. Manage message history\n\nAs the agent progresses through steps, message history grows. Use [summarization middleware](/oss/python/langchain/short-term-memory#summarize-messages) to compress earlier messages while preserving conversational context:",
+      "language": "unknown"
+    },
+    {
+      "code": "See the [short-term memory guide](/oss/python/langchain/short-term-memory) for other memory management techniques.\n\n## 9. Add flexibility: Go back\n\nSome workflows need to allow users to return to previous steps to correct information (e.g., changing warranty status or issue classification). However, not all transitions make sense—for example, you typically can't go back once a refund has been processed. For this support workflow, we'll add tools to return to the warranty verification and issue classification steps.\n\n<Tip>\n  If your workflow requires arbitrary transitions between most steps, consider whether you need a structured workflow at all. This pattern works best when steps follow a clear sequential progression with occasional backwards transitions for corrections.\n</Tip>\n\nAdd \"go back\" tools to the resolution step:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "7. Understanding state transitions",
+      "id": "7.-understanding-state-transitions"
+    },
+    {
+      "level": "h3",
+      "text": "Turn 1: Initial message",
+      "id": "turn-1:-initial-message"
+    },
+    {
+      "level": "h3",
+      "text": "Turn 2: After warranty recorded",
+      "id": "turn-2:-after-warranty-recorded"
+    },
+    {
+      "level": "h3",
+      "text": "Turn 3: After issue classified",
+      "id": "turn-3:-after-issue-classified"
+    },
+    {
+      "level": "h2",
+      "text": "8. Manage message history",
+      "id": "8.-manage-message-history"
+    },
+    {
+      "level": "h2",
+      "text": "9. Add flexibility: Go back",
+      "id": "9.-add-flexibility:-go-back"
+    }
+  ],
+  "url": "llms-txt#turn-4:-resolution",
+  "links": []
+}

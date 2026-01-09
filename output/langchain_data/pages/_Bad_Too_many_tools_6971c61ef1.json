@@ -1,0 +1,82 @@
+{
+  "title": "❌ Bad: Too many tools",
+  "content": "email_agent = {\n    \"name\": \"email-sender\",\n    \"tools\": [send_email, web_search, database_query, file_upload],  # Unfocused\n}\npython  theme={null}\nsubagents = [\n    {\n        \"name\": \"contract-reviewer\",\n        \"description\": \"Reviews legal documents and contracts\",\n        \"system_prompt\": \"You are an expert legal reviewer...\",\n        \"tools\": [read_document, analyze_contract],\n        \"model\": \"claude-sonnet-4-5-20250929\",  # Large context for long documents\n    },\n    {\n        \"name\": \"financial-analyst\",\n        \"description\": \"Analyzes financial data and market trends\",\n        \"system_prompt\": \"You are an expert financial analyst...\",\n        \"tools\": [get_stock_price, analyze_fundamentals],\n        \"model\": \"openai:gpt-5\",  # Better for numerical analysis\n    },\n]\npython  theme={null}\ndata_analyst = {\n    \"system_prompt\": \"\"\"Analyze the data and return:\n    1. Key insights (3-5 bullet points)\n    2. Overall confidence score\n    3. Recommended next actions\n\nDo NOT include:\n    - Raw data\n    - Intermediate calculations\n    - Detailed tool outputs\n\nKeep response under 300 words.\"\"\"\n}\npython  theme={null}\nfrom deepagents import create_deep_agent\n\nsubagents = [\n    {\n        \"name\": \"data-collector\",\n        \"description\": \"Gathers raw data from various sources\",\n        \"system_prompt\": \"Collect comprehensive data on the topic\",\n        \"tools\": [web_search, api_call, database_query],\n    },\n    {\n        \"name\": \"data-analyzer\",\n        \"description\": \"Analyzes collected data for insights\",\n        \"system_prompt\": \"Analyze data and extract key insights\",\n        \"tools\": [statistical_analysis],\n    },\n    {\n        \"name\": \"report-writer\",\n        \"description\": \"Writes polished reports from analysis\",\n        \"system_prompt\": \"Create professional reports from insights\",\n        \"tools\": [format_document],\n    },\n]\n\nagent = create_deep_agent(\n    model=\"claude-sonnet-4-5-20250929\",\n    system_prompt=\"You coordinate data analysis and reporting. Use subagents for specialized tasks.\",\n    subagents=subagents\n)\npython  theme={null}\n   # ✅ Good\n   {\"name\": \"research-specialist\", \"description\": \"Conducts in-depth research on specific topics using web search. Use when you need detailed information that requires multiple searches.\"}\n\n# ❌ Bad\n   {\"name\": \"helper\", \"description\": \"helps with stuff\"}\n   python  theme={null}\n   agent = create_deep_agent(\n       system_prompt=\"\"\"...your instructions...\n\nIMPORTANT: For complex tasks, delegate to your subagents using the task() tool.\n       This keeps your context clean and improves results.\"\"\",\n       subagents=[...]\n   )\n   python  theme={null}\n   system_prompt=\"\"\"...\n\nIMPORTANT: Return only the essential summary.\n   Do NOT include raw data, intermediate search results, or detailed tool outputs.\n   Your response should be under 500 words.\"\"\"\n   python  theme={null}\n   system_prompt=\"\"\"When you gather large amounts of data:\n   1. Save raw data to /data/raw_results.txt\n   2. Process and analyze the data\n   3. Return only the analysis summary\n\nThis keeps context clean.\"\"\"\n   python  theme={null}\nsubagents = [\n    {\n        \"name\": \"quick-researcher\",\n        \"description\": \"For simple, quick research questions that need 1-2 searches. Use when you need basic facts or definitions.\",\n    },\n    {\n        \"name\": \"deep-researcher\",\n        \"description\": \"For complex, in-depth research requiring multiple searches, synthesis, and analysis. Use for comprehensive reports.\",\n    }\n]\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/deepagents/subagents.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "### Choose models by task\n\nDifferent models excel at different tasks:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Return concise results\n\nInstruct subagents to return summaries, not raw data:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Common patterns\n\n### Multiple specialized subagents\n\nCreate specialized subagents for different domains:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Workflow:**\n\n1. Main agent creates high-level plan\n2. Delegates data collection to data-collector\n3. Passes results to data-analyzer\n4. Sends insights to report-writer\n5. Compiles final output\n\nEach subagent works with clean context focused only on its task.\n\n## Troubleshooting\n\n### Subagent not being called\n\n**Problem**: Main agent tries to do work itself instead of delegating.\n\n**Solutions**:\n\n1. **Make descriptions more specific:**",
+      "language": "unknown"
+    },
+    {
+      "code": "2. **Instruct main agent to delegate:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Context still getting bloated\n\n**Problem**: Context fills up despite using subagents.\n\n**Solutions**:\n\n1. **Instruct subagent to return concise results:**",
+      "language": "unknown"
+    },
+    {
+      "code": "2. **Use filesystem for large data:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Wrong subagent being selected\n\n**Problem**: Main agent calls inappropriate subagent for the task.\n\n**Solution**: Differentiate subagents clearly in descriptions:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Choose models by task",
+      "id": "choose-models-by-task"
+    },
+    {
+      "level": "h3",
+      "text": "Return concise results",
+      "id": "return-concise-results"
+    },
+    {
+      "level": "h2",
+      "text": "Common patterns",
+      "id": "common-patterns"
+    },
+    {
+      "level": "h3",
+      "text": "Multiple specialized subagents",
+      "id": "multiple-specialized-subagents"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Subagent not being called",
+      "id": "subagent-not-being-called"
+    },
+    {
+      "level": "h3",
+      "text": "Context still getting bloated",
+      "id": "context-still-getting-bloated"
+    },
+    {
+      "level": "h3",
+      "text": "Wrong subagent being selected",
+      "id": "wrong-subagent-being-selected"
+    }
+  ],
+  "url": "llms-txt#❌-bad:-too-many-tools",
+  "links": []
+}

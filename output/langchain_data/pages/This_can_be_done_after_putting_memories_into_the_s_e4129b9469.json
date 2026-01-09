@@ -1,0 +1,13 @@
+{
+  "title": "(This can be done after putting memories into the store)",
+  "content": "memories = store.search(\n    namespace_for_memory,\n    query=\"What does the user like to eat?\",\n    limit=3  # Return top 3 matches\n)\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "You can control which parts of your memories get embedded by configuring the `fields` parameter or by specifying the `index` parameter when storing memories:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#(this-can-be-done-after-putting-memories-into-the-store)",
+  "links": []
+}

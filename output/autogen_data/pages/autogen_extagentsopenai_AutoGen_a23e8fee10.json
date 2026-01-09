@@ -1,0 +1,148 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html",
+  "title": "autogen_ext.agents.openai — AutoGen",
+  "content": "Bases: BaseChatAgent, Component[OpenAIAgentConfig]\n\nAn agent implementation that uses the OpenAI Responses API to generate responses.\n\nThis agent leverages the Responses API to generate responses with capabilities like:\n\nMulti-turn conversations\n\nBuilt-in tool support (file_search, code_interpreter, web_search_preview, etc.)\n\nCurrently, custom tools are not supported.\n\nChanged in version v0.7.0: Added support for built-in tool types like file_search, web_search_preview, code_interpreter, computer_use_preview, image_generation, and mcp. Added support for tool configurations with required and optional parameters.\n\nBuilt-in tools are split into two categories:\n\nTools that can use string format (no required parameters):\n\nweb_search_preview: Can be used as “web_search_preview” or with optional config (user_location, search_context_size)\n\nimage_generation: Can be used as “image_generation” or with optional config (background, input_image_mask)\n\nlocal_shell: Can be used as “local_shell” (WARNING: Only works with codex-mini-latest model)\n\nTools that REQUIRE dict configuration (have required parameters):\n\nfile_search: MUST use dict with vector_store_ids (List[str])\n\ncomputer_use_preview: MUST use dict with display_height (int), display_width (int), environment (str)\n\ncode_interpreter: MUST use dict with container (str)\n\nmcp: MUST use dict with server_label (str), server_url (str)\n\nUsing required-parameter tools in string format will raise a ValueError with helpful error messages. The tools parameter type annotation only accepts string values for tools that don’t require parameters.\n\nCustom tools (autogen FunctionTool or other user-defined tools) are not supported by this agent. Only OpenAI built-in tools provided via the Responses API are supported.\n\nname (str) – Name of the agent\n\ndescription (str) – Description of the agent’s purpose\n\nclient (Union[AsyncOpenAI, AsyncAzureOpenAI]) – OpenAI client instance\n\nmodel (str) – Model to use (e.g. “gpt-4.1”)\n\ninstructions (str) – System instructions for the agent\n\ntools (Optional[Iterable[Union[str, BuiltinToolConfig]]]) – Tools the agent can use. Supported string values (no required parameters): “web_search_preview”, “image_generation”, “local_shell”. Dict values can provide configuration for built-in tools with parameters. Required parameters for built-in tools: - file_search: vector_store_ids (List[str]) - computer_use_preview: display_height (int), display_width (int), environment (str) - code_interpreter: container (str) - mcp: server_label (str), server_url (str) Optional parameters for built-in tools: - file_search: max_num_results (int), ranking_options (dict), filters (dict) - web_search_preview: user_location (str or dict), search_context_size (int) - image_generation: background (str), input_image_mask (str) - mcp: allowed_tools (List[str]), headers (dict), require_approval (bool) Special tools with model restrictions: - local_shell: Only works with “codex-mini-latest” model (WARNING: Very limited support) Custom tools are not supported.\n\ntemperature (Optional[float]) – Temperature for response generation (default: 1)\n\nmax_output_tokens (Optional[int]) – Maximum output tokens\n\njson_mode (bool) – Whether to use JSON mode (default: False)\n\nstore (bool) – Whether to store conversations (default: True)\n\ntruncation (str) – Truncation strategy (default: “disabled”)\n\nBasic usage with built-in tools:\n\nUsage with configured built-in tools:\n\nCustom tools are not supported by OpenAIAgent. Use only built-in tools from the Responses API.\n\nalias of OpenAIAgentConfig\n\nOverride the provider string for the component. This should be used to prevent internal module names being a part of the module name.\n\nReturn the types of messages that this agent can produce.\n\nHandles incoming messages and returns a response.\n\nAgents are stateful and the messages passed to this method should be the new messages since the last call to this method. The agent should maintain its state between calls to this method. For example, if the agent needs to remember the previous messages to respond to the current message, it should store the previous messages in the agent state.\n\nHandles incoming messages and returns a stream of messages and and the final item is the response. The base implementation in BaseChatAgent simply calls on_messages() and yields the messages in the response.\n\nAgents are stateful and the messages passed to this method should be the new messages since the last call to this method. The agent should maintain its state between calls to this method. For example, if the agent needs to remember the previous messages to respond to the current message, it should store the previous messages in the agent state.\n\nResets the agent to its initialization state.\n\nExport state. Default implementation for stateless agents.\n\nRestore agent from saved state. Default implementation for stateless agents.\n\nPublic wrapper for the private _to_config method.\n\nPublic wrapper for the private _from_config classmethod.\n\nPublic access to the agent’s tools.\n\nPublic access to the agent’s model.\n\nAn agent implementation that uses the Assistant API to generate responses.\n\nThis agent leverages the Assistant API to create AI assistants with capabilities like:\n\nCode interpretation and execution\n\nFile handling and search\n\nCustom function calling\n\nMulti-turn conversations\n\nThe agent maintains a thread of conversation and can use various tools including\n\nCode interpreter: For executing code and working with files\n\nFile search: For searching through uploaded documents\n\nCustom functions: For extending capabilities with user-defined tools\n\nSupports multiple file formats including code, documents, images\n\nCan handle up to 128 tools per assistant\n\nMaintains conversation context in threads\n\nSupports file uploads for code interpreter and search\n\nVector store integration for efficient file search\n\nAutomatic file parsing and embedding\n\nYou can use an existing thread or assistant by providing the thread_id or assistant_id parameters.\n\nUse the assistant to analyze data in a CSV file:\n\nUse Azure OpenAI Assistant with AAD authentication:\n\nname (str) – Name of the assistant\n\ndescription (str) – Description of the assistant’s purpose\n\nclient (AsyncOpenAI | AsyncAzureOpenAI) – OpenAI client or Azure OpenAI client instance\n\nmodel (str) – Model to use (e.g. “gpt-4”)\n\ninstructions (str) – System instructions for the assistant\n\ntools (Optional[Iterable[Union[Literal[\"code_interpreter\", \"file_search\"], Tool | Callable[..., Any] | Callable[..., Awaitable[Any]]]]]) – Tools the assistant can use\n\nassistant_id (Optional[str]) – ID of existing assistant to use\n\nthread_id (Optional[str]) – ID of existing thread to use\n\nmetadata (Optional[Dict[str, str]]) – Additional metadata for the assistant.\n\nresponse_format (Optional[AssistantResponseFormatOptionParam]) – Response format settings\n\ntemperature (Optional[float]) – Temperature for response generation\n\ntool_resources (Optional[ToolResources]) – Additional tool configuration\n\ntop_p (Optional[float]) – Top p sampling parameter\n\nThe types of messages that the assistant agent produces.\n\nHandle incoming messages and return a response.\n\nHandle incoming messages and return a response.\n\nHandle regular text messages by adding them to the thread.\n\nHandle reset command by deleting new messages and runs since initialization.\n\nHandle file uploads for the code interpreter.\n\nHandle file uploads for file search.\n\nDelete all files that were uploaded by this agent instance.\n\nDelete the assistant if it was created by this instance.\n\nDelete the vector store if it was created by this instance.\n\nExport state. Default implementation for stateless agents.\n\nRestore agent from saved state. Default implementation for stateless agents.\n\nautogen_ext.agents.magentic_one\n\nautogen_ext.agents.video_surfer",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "autogen_ext.agents.openai#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "pip install \"autogen-ext[openai]\"\n# pip install \"autogen-ext[openai,azure]\"  # For Azure OpenAI Assistant",
+      "language": "markdown"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai]\"\n# pip install \"autogen-ext[openai,azure]\"  # For Azure OpenAI Assistant",
+      "language": "markdown"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.agents.openai import OpenAIAgent\nfrom openai import AsyncOpenAI\n\n\nasync def example():\n    client = AsyncOpenAI()\n    agent = OpenAIAgent(\n        name=\"SimpleAgent\",\n        description=\"A simple OpenAI agent using the Responses API\",\n        client=client,\n        model=\"gpt-4.1\",\n        instructions=\"You are a helpful assistant.\",\n        tools=[\"web_search_preview\"],  # Only tools without required params\n    )\n    await Console(agent.run_stream(task=\"Search for recent AI developments\"))\n\n\nasyncio.run(example())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.agents.openai import OpenAIAgent\nfrom openai import AsyncOpenAI\n\n\nasync def example():\n    client = AsyncOpenAI()\n    agent = OpenAIAgent(\n        name=\"SimpleAgent\",\n        description=\"A simple OpenAI agent using the Responses API\",\n        client=client,\n        model=\"gpt-4.1\",\n        instructions=\"You are a helpful assistant.\",\n        tools=[\"web_search_preview\"],  # Only tools without required params\n    )\n    await Console(agent.run_stream(task=\"Search for recent AI developments\"))\n\n\nasyncio.run(example())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.agents.openai import OpenAIAgent\nfrom openai import AsyncOpenAI\n\n\nasync def example_with_configs():\n    client = AsyncOpenAI()\n    # Configure tools with required and optional parameters\n    tools = [\n        # {\n        #     \"type\": \"file_search\",\n        #     \"vector_store_ids\": [\"vs_abc123\"],  # required\n        #     \"max_num_results\": 10,  # optional\n        # },\n        # {\n        #     \"type\": \"computer_use_preview\",\n        #     \"display_height\": 1024,  # required\n        #     \"display_width\": 1280,  # required\n        #     \"environment\": \"linux\",  # required\n        # },\n        {\n            \"type\": \"code_interpreter\",\n            \"container\": {\"type\": \"auto\"},  # required\n        },\n        # {\n        #     \"type\": \"mcp\",\n        #     \"server_label\": \"my-mcp-server\",  # required\n        #     \"server_url\": \"http://localhost:3000\",  # required\n        # },\n        {\n            \"type\": \"web_search_preview\",\n            \"user_location\": {  # optional - structured location\n                \"type\": \"approximate\",  # required: \"approximate\" or \"exact\"\n                \"country\": \"US\",  # optional\n                \"region\": \"CA\",  # optional\n                \"city\": \"San Francisco\",  # optional\n            },\n            \"search_context_size\": \"low\",  # optional\n        },\n        # \"image_generation\",  # Simple tools can still use string format\n    ]\n\n    agent = OpenAIAgent(\n        name=\"ConfiguredAgent\",\n        description=\"An agent with configured tools\",\n        client=client,\n        model=\"gpt-4.1\",\n        instructions=\"You are a helpful assistant with specialized tools.\",\n        tools=tools,  # type: ignore\n    )\n    await Console(agent.run_stream(task=\"Search for recent AI developments\"))\n\n\nasyncio.run(example_with_configs())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.agents.openai import OpenAIAgent\nfrom openai import AsyncOpenAI\n\n\nasync def example_with_configs():\n    client = AsyncOpenAI()\n    # Configure tools with required and optional parameters\n    tools = [\n        # {\n        #     \"type\": \"file_search\",\n        #     \"vector_store_ids\": [\"vs_abc123\"],  # required\n        #     \"max_num_results\": 10,  # optional\n        # },\n        # {\n        #     \"type\": \"computer_use_preview\",\n        #     \"display_height\": 1024,  # required\n        #     \"display_width\": 1280,  # required\n        #     \"environment\": \"linux\",  # required\n        # },\n        {\n            \"type\": \"code_interpreter\",\n            \"container\": {\"type\": \"auto\"},  # required\n        },\n        # {\n        #     \"type\": \"mcp\",\n        #     \"server_label\": \"my-mcp-server\",  # required\n        #     \"server_url\": \"http://localhost:3000\",  # required\n        # },\n        {\n            \"type\": \"web_search_preview\",\n            \"user_location\": {  # optional - structured location\n                \"type\": \"approximate\",  # required: \"approximate\" or \"exact\"\n                \"country\": \"US\",  # optional\n                \"region\": \"CA\",  # optional\n                \"city\": \"San Francisco\",  # optional\n            },\n            \"search_context_size\": \"low\",  # optional\n        },\n        # \"image_generation\",  # Simple tools can still use string format\n    ]\n\n    agent = OpenAIAgent(\n        name=\"ConfiguredAgent\",\n        description=\"An agent with configured tools\",\n        client=client,\n        model=\"gpt-4.1\",\n        instructions=\"You are a helpful assistant with specialized tools.\",\n        tools=tools,  # type: ignore\n    )\n    await Console(agent.run_stream(task=\"Search for recent AI developments\"))\n\n\nasyncio.run(example_with_configs())",
+      "language": "python"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai]\"  # For OpenAI Assistant\n# pip install \"autogen-ext[openai,azure]\"  # For Azure OpenAI Assistant",
+      "language": "markdown"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai]\"  # For OpenAI Assistant\n# pip install \"autogen-ext[openai,azure]\"  # For Azure OpenAI Assistant",
+      "language": "markdown"
+    },
+    {
+      "code": "from openai import AsyncOpenAI\nfrom autogen_core import CancellationToken\nimport asyncio\nfrom autogen_ext.agents.openai import OpenAIAssistantAgent\nfrom autogen_agentchat.messages import TextMessage\n\n\nasync def example():\n    cancellation_token = CancellationToken()\n\n    # Create an OpenAI client\n    client = AsyncOpenAI(api_key=\"your-api-key\", base_url=\"your-base-url\")\n\n    # Create an assistant with code interpreter\n    assistant = OpenAIAssistantAgent(\n        name=\"PythonHelper\",\n        description=\"Helps with Python programming\",\n        client=client,\n        model=\"gpt-4\",\n        instructions=\"You are a helpful Python programming assistant.\",\n        tools=[\"code_interpreter\"],\n    )\n\n    # Upload files for the assistant to use\n    await assistant.on_upload_for_code_interpreter(\"data.csv\", cancellation_token)\n\n    # Get response from the assistant\n    response = await assistant.on_messages(\n        [TextMessage(source=\"user\", content=\"Analyze the data in data.csv\")], cancellation_token\n    )\n\n    print(response)\n\n    # Clean up resources\n    await assistant.delete_uploaded_files(cancellation_token)\n    await assistant.delete_assistant(cancellation_token)\n\n\nasyncio.run(example())",
+      "language": "python"
+    },
+    {
+      "code": "from openai import AsyncOpenAI\nfrom autogen_core import CancellationToken\nimport asyncio\nfrom autogen_ext.agents.openai import OpenAIAssistantAgent\nfrom autogen_agentchat.messages import TextMessage\n\n\nasync def example():\n    cancellation_token = CancellationToken()\n\n    # Create an OpenAI client\n    client = AsyncOpenAI(api_key=\"your-api-key\", base_url=\"your-base-url\")\n\n    # Create an assistant with code interpreter\n    assistant = OpenAIAssistantAgent(\n        name=\"PythonHelper\",\n        description=\"Helps with Python programming\",\n        client=client,\n        model=\"gpt-4\",\n        instructions=\"You are a helpful Python programming assistant.\",\n        tools=[\"code_interpreter\"],\n    )\n\n    # Upload files for the assistant to use\n    await assistant.on_upload_for_code_interpreter(\"data.csv\", cancellation_token)\n\n    # Get response from the assistant\n    response = await assistant.on_messages(\n        [TextMessage(source=\"user\", content=\"Analyze the data in data.csv\")], cancellation_token\n    )\n\n    print(response)\n\n    # Clean up resources\n    await assistant.delete_uploaded_files(cancellation_token)\n    await assistant.delete_assistant(cancellation_token)\n\n\nasyncio.run(example())",
+      "language": "python"
+    },
+    {
+      "code": "from openai import AsyncAzureOpenAI\nimport asyncio\nfrom azure.identity import DefaultAzureCredential, get_bearer_token_provider\nfrom autogen_core import CancellationToken\nfrom autogen_ext.agents.openai import OpenAIAssistantAgent\nfrom autogen_agentchat.messages import TextMessage\n\n\nasync def example():\n    cancellation_token = CancellationToken()\n\n    # Create an Azure OpenAI client\n    token_provider = get_bearer_token_provider(DefaultAzureCredential())\n    client = AsyncAzureOpenAI(\n        azure_deployment=\"YOUR_AZURE_DEPLOYMENT\",\n        api_version=\"YOUR_API_VERSION\",\n        azure_endpoint=\"YOUR_AZURE_ENDPOINT\",\n        azure_ad_token_provider=token_provider,\n    )\n\n    # Create an assistant with code interpreter\n    assistant = OpenAIAssistantAgent(\n        name=\"PythonHelper\",\n        description=\"Helps with Python programming\",\n        client=client,\n        model=\"gpt-4o\",\n        instructions=\"You are a helpful Python programming assistant.\",\n        tools=[\"code_interpreter\"],\n    )\n\n    # Get response from the assistant\n    response = await assistant.on_messages([TextMessage(source=\"user\", content=\"Hello.\")], cancellation_token)\n\n    print(response)\n\n    # Clean up resources\n    await assistant.delete_assistant(cancellation_token)\n\n\nasyncio.run(example())",
+      "language": "python"
+    },
+    {
+      "code": "from openai import AsyncAzureOpenAI\nimport asyncio\nfrom azure.identity import DefaultAzureCredential, get_bearer_token_provider\nfrom autogen_core import CancellationToken\nfrom autogen_ext.agents.openai import OpenAIAssistantAgent\nfrom autogen_agentchat.messages import TextMessage\n\n\nasync def example():\n    cancellation_token = CancellationToken()\n\n    # Create an Azure OpenAI client\n    token_provider = get_bearer_token_provider(DefaultAzureCredential())\n    client = AsyncAzureOpenAI(\n        azure_deployment=\"YOUR_AZURE_DEPLOYMENT\",\n        api_version=\"YOUR_API_VERSION\",\n        azure_endpoint=\"YOUR_AZURE_ENDPOINT\",\n        azure_ad_token_provider=token_provider,\n    )\n\n    # Create an assistant with code interpreter\n    assistant = OpenAIAssistantAgent(\n        name=\"PythonHelper\",\n        description=\"Helps with Python programming\",\n        client=client,\n        model=\"gpt-4o\",\n        instructions=\"You are a helpful Python programming assistant.\",\n        tools=[\"code_interpreter\"],\n    )\n\n    # Get response from the assistant\n    response = await assistant.on_messages([TextMessage(source=\"user\", content=\"Hello.\")], cancellation_token)\n\n    print(response)\n\n    # Clean up resources\n    await assistant.delete_assistant(cancellation_token)\n\n\nasyncio.run(example())",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.state.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.code_executor.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.exceptions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.logging.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tool_agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.file_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.auth.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.diskcache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker_jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.local.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.canvas.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.chromadb.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.mem0.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.llama_cpp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.replay.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.code_execution.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.http.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.playwright_controller.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2_grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2_grpc.html"
+  ]
+}

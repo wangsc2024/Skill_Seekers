@@ -1,0 +1,8 @@
+{
+  "title": "Alice creates an assistant",
+  "content": "alice_assistant = await alice.assistants.create()\nprint(f\"✅ Alice created assistant: {alice_assistant['assistant_id']}\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#alice-creates-an-assistant",
+  "links": []
+}

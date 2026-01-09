@@ -1,0 +1,21 @@
+{
+  "title": "Unsloth Installation",
+  "content": "Learn to install Unsloth locally or online.\n\nUnsloth works on Linux, Windows, NVIDIA, AMD, Google Colab and more. See our [system requirements](https://docs.unsloth.ai/get-started/fine-tuning-for-beginners/unsloth-requirements).\n\n{% columns %}\n{% column width=\"50%\" %}\n**Recommended install methods:**\n\n{% column width=\"50%\" %}\n**To update Unsloth**\n\n{% code overflow=\"wrap\" %}\n\n{% endcode %}\n{% endcolumn %}\n{% endcolumns %}\n\n<table data-view=\"cards\"><thead><tr><th data-type=\"content-ref\"></th><th data-hidden data-card-target data-type=\"content-ref\"></th></tr></thead><tbody><tr><td><a href=\"install-and-update/pip-install\">pip-install</a></td><td><a href=\"install-and-update/pip-install\">pip-install</a></td></tr><tr><td><a href=\"install-and-update/docker\">docker</a></td><td></td></tr><tr><td><a href=\"install-and-update/windows-installation\">windows-installation</a></td><td></td></tr><tr><td><a href=\"install-and-update/updating\">updating</a></td><td><a href=\"install-and-update/updating\">updating</a></td></tr><tr><td><a href=\"install-and-update/amd\">amd</a></td><td></td></tr><tr><td><a href=\"install-and-update/conda-install\">conda-install</a></td><td><a href=\"install-and-update/conda-install\">conda-install</a></td></tr><tr><td><a href=\"install-and-update/google-colab\">google-colab</a></td><td><a href=\"install-and-update/google-colab\">google-colab</a></td></tr></tbody></table>",
+  "code_samples": [
+    {
+      "code": "pip install unsloth",
+      "language": "bash"
+    },
+    {
+      "code": "uv pip install unsloth",
+      "language": "bash"
+    },
+    {
+      "code": "pip install --upgrade unsloth",
+      "language": "bash"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#unsloth-installation",
+  "links": []
+}

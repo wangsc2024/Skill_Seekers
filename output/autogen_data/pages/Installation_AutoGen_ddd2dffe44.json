@@ -1,0 +1,41 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/installation.html",
+  "title": "Installation — AutoGen",
+  "content": "First-part maintained extensions are available in the autogen-ext package.\n\nlangchain needed for LangChainToolAdapter\n\nazure needed for ACADynamicSessionsCodeExecutor\n\ndocker needed for DockerCommandLineCodeExecutor\n\nopenai needed for OpenAIChatCompletionClient\n\nDiscover community projects",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Installation#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "pip install \"autogen-ext\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext\"",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/discover.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/create-your-own.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-container-code-executor.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-foundry-agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html"
+  ]
+}

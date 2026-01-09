@@ -1,0 +1,147 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+  "title": "User Approval for Tool Execution using Intervention Handler — AutoGen",
+  "content": "This cookbook shows how to intercept the tool execution using an intervention hanlder, and prompt the user for permission to execute the tool.\n\nLet’s define a simple message type that carries a string content.\n\nLet’s create a simple tool use agent that is capable of using tools through a ToolAgent.\n\nThe tool use agent sends tool call requests to the tool agent to execute tools, so we can intercept the messages sent by the tool use agent to the tool agent to prompt the user for permission to execute the tool.\n\nLet’s create an intervention handler that intercepts the messages and prompts user for before allowing the tool execution.\n\nNow, we can create a runtime with the intervention handler registered.\n\nIn this example, we will use a tool for Python code execution. First, we create a Docker-based command-line code executor using DockerCommandLineCodeExecutor, and then use it to instantiate a built-in Python code execution tool PythonCodeExecutionTool that runs code in a Docker container.\n\nRegister the agents with tools and tool schema.\n\nRun the agents by starting the runtime and sending a message to the tool use agent. The intervention handler will prompt you for permission to execute the tool.\n\nTermination using Intervention Handler\n\nExtracting Results with an Agent",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "User Approval for Tool Execution using Intervention Handler#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from dataclasses import dataclass\nfrom typing import Any, List\n\nfrom autogen_core import (\n    AgentId,\n    AgentType,\n    DefaultInterventionHandler,\n    DropMessage,\n    FunctionCall,\n    MessageContext,\n    RoutedAgent,\n    SingleThreadedAgentRuntime,\n    message_handler,\n)\nfrom autogen_core.models import (\n    ChatCompletionClient,\n    LLMMessage,\n    SystemMessage,\n    UserMessage,\n)\nfrom autogen_core.tool_agent import ToolAgent, ToolException, tool_agent_caller_loop\nfrom autogen_core.tools import ToolSchema\nfrom autogen_ext.code_executors.docker import DockerCommandLineCodeExecutor\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_ext.tools.code_execution import PythonCodeExecutionTool",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\nfrom typing import Any, List\n\nfrom autogen_core import (\n    AgentId,\n    AgentType,\n    DefaultInterventionHandler,\n    DropMessage,\n    FunctionCall,\n    MessageContext,\n    RoutedAgent,\n    SingleThreadedAgentRuntime,\n    message_handler,\n)\nfrom autogen_core.models import (\n    ChatCompletionClient,\n    LLMMessage,\n    SystemMessage,\n    UserMessage,\n)\nfrom autogen_core.tool_agent import ToolAgent, ToolException, tool_agent_caller_loop\nfrom autogen_core.tools import ToolSchema\nfrom autogen_ext.code_executors.docker import DockerCommandLineCodeExecutor\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_ext.tools.code_execution import PythonCodeExecutionTool",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: str",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: str",
+      "language": "python"
+    },
+    {
+      "code": "class ToolUseAgent(RoutedAgent):\n    \"\"\"An agent that uses tools to perform tasks. It executes the tools\n    by itself by sending the tool execution task to a ToolAgent.\"\"\"\n\n    def __init__(\n        self,\n        description: str,\n        system_messages: List[SystemMessage],\n        model_client: ChatCompletionClient,\n        tool_schema: List[ToolSchema],\n        tool_agent_type: AgentType,\n    ) -> None:\n        super().__init__(description)\n        self._model_client = model_client\n        self._system_messages = system_messages\n        self._tool_schema = tool_schema\n        self._tool_agent_id = AgentId(type=tool_agent_type, key=self.id.key)\n\n    @message_handler\n    async def handle_user_message(self, message: Message, ctx: MessageContext) -> Message:\n        \"\"\"Handle a user message, execute the model and tools, and returns the response.\"\"\"\n        session: List[LLMMessage] = [UserMessage(content=message.content, source=\"User\")]\n        # Use the tool agent to execute the tools, and get the output messages.\n        output_messages = await tool_agent_caller_loop(\n            self,\n            tool_agent_id=self._tool_agent_id,\n            model_client=self._model_client,\n            input_messages=session,\n            tool_schema=self._tool_schema,\n            cancellation_token=ctx.cancellation_token,\n        )\n        # Extract the final response from the output messages.\n        final_response = output_messages[-1].content\n        assert isinstance(final_response, str)\n        return Message(content=final_response)",
+      "language": "python"
+    },
+    {
+      "code": "class ToolUseAgent(RoutedAgent):\n    \"\"\"An agent that uses tools to perform tasks. It executes the tools\n    by itself by sending the tool execution task to a ToolAgent.\"\"\"\n\n    def __init__(\n        self,\n        description: str,\n        system_messages: List[SystemMessage],\n        model_client: ChatCompletionClient,\n        tool_schema: List[ToolSchema],\n        tool_agent_type: AgentType,\n    ) -> None:\n        super().__init__(description)\n        self._model_client = model_client\n        self._system_messages = system_messages\n        self._tool_schema = tool_schema\n        self._tool_agent_id = AgentId(type=tool_agent_type, key=self.id.key)\n\n    @message_handler\n    async def handle_user_message(self, message: Message, ctx: MessageContext) -> Message:\n        \"\"\"Handle a user message, execute the model and tools, and returns the response.\"\"\"\n        session: List[LLMMessage] = [UserMessage(content=message.content, source=\"User\")]\n        # Use the tool agent to execute the tools, and get the output messages.\n        output_messages = await tool_agent_caller_loop(\n            self,\n            tool_agent_id=self._tool_agent_id,\n            model_client=self._model_client,\n            input_messages=session,\n            tool_schema=self._tool_schema,\n            cancellation_token=ctx.cancellation_token,\n        )\n        # Extract the final response from the output messages.\n        final_response = output_messages[-1].content\n        assert isinstance(final_response, str)\n        return Message(content=final_response)",
+      "language": "python"
+    },
+    {
+      "code": "class ToolInterventionHandler(DefaultInterventionHandler):\n    async def on_send(\n        self, message: Any, *, message_context: MessageContext, recipient: AgentId\n    ) -> Any | type[DropMessage]:\n        if isinstance(message, FunctionCall):\n            # Request user prompt for tool execution.\n            user_input = input(\n                f\"Function call: {message.name}\\nArguments: {message.arguments}\\nDo you want to execute the tool? (y/n): \"\n            )\n            if user_input.strip().lower() != \"y\":\n                raise ToolException(content=\"User denied tool execution.\", call_id=message.id, name=message.name)\n        return message",
+      "language": "python"
+    },
+    {
+      "code": "class ToolInterventionHandler(DefaultInterventionHandler):\n    async def on_send(\n        self, message: Any, *, message_context: MessageContext, recipient: AgentId\n    ) -> Any | type[DropMessage]:\n        if isinstance(message, FunctionCall):\n            # Request user prompt for tool execution.\n            user_input = input(\n                f\"Function call: {message.name}\\nArguments: {message.arguments}\\nDo you want to execute the tool? (y/n): \"\n            )\n            if user_input.strip().lower() != \"y\":\n                raise ToolException(content=\"User denied tool execution.\", call_id=message.id, name=message.name)\n        return message",
+      "language": "python"
+    },
+    {
+      "code": "# Create the runtime with the intervention handler.\nruntime = SingleThreadedAgentRuntime(intervention_handlers=[ToolInterventionHandler()])",
+      "language": "markdown"
+    },
+    {
+      "code": "# Create the runtime with the intervention handler.\nruntime = SingleThreadedAgentRuntime(intervention_handlers=[ToolInterventionHandler()])",
+      "language": "markdown"
+    },
+    {
+      "code": "# Create the docker executor for the Python code execution tool.\ndocker_executor = DockerCommandLineCodeExecutor()\n\n# Create the Python code execution tool.\npython_tool = PythonCodeExecutionTool(executor=docker_executor)",
+      "language": "markdown"
+    },
+    {
+      "code": "# Create the docker executor for the Python code execution tool.\ndocker_executor = DockerCommandLineCodeExecutor()\n\n# Create the Python code execution tool.\npython_tool = PythonCodeExecutionTool(executor=docker_executor)",
+      "language": "markdown"
+    },
+    {
+      "code": "# Register agents.\ntool_agent_type = await ToolAgent.register(\n    runtime,\n    \"tool_executor_agent\",\n    lambda: ToolAgent(\n        description=\"Tool Executor Agent\",\n        tools=[python_tool],\n    ),\n)\nmodel_client = OpenAIChatCompletionClient(model=\"gpt-4o-mini\")\nawait ToolUseAgent.register(\n    runtime,\n    \"tool_enabled_agent\",\n    lambda: ToolUseAgent(\n        description=\"Tool Use Agent\",\n        system_messages=[SystemMessage(content=\"You are a helpful AI Assistant. Use your tools to solve problems.\")],\n        model_client=model_client,\n        tool_schema=[python_tool.schema],\n        tool_agent_type=tool_agent_type,\n    ),\n)",
+      "language": "markdown"
+    },
+    {
+      "code": "# Register agents.\ntool_agent_type = await ToolAgent.register(\n    runtime,\n    \"tool_executor_agent\",\n    lambda: ToolAgent(\n        description=\"Tool Executor Agent\",\n        tools=[python_tool],\n    ),\n)\nmodel_client = OpenAIChatCompletionClient(model=\"gpt-4o-mini\")\nawait ToolUseAgent.register(\n    runtime,\n    \"tool_enabled_agent\",\n    lambda: ToolUseAgent(\n        description=\"Tool Use Agent\",\n        system_messages=[SystemMessage(content=\"You are a helpful AI Assistant. Use your tools to solve problems.\")],\n        model_client=model_client,\n        tool_schema=[python_tool.schema],\n        tool_agent_type=tool_agent_type,\n    ),\n)",
+      "language": "markdown"
+    },
+    {
+      "code": "AgentType(type='tool_enabled_agent')",
+      "language": "unknown"
+    },
+    {
+      "code": "AgentType(type='tool_enabled_agent')",
+      "language": "unknown"
+    },
+    {
+      "code": "# Start the runtime and the docker executor.\nawait docker_executor.start()\nruntime.start()\n\n# Send a task to the tool user.\nresponse = await runtime.send_message(\n    Message(\"Run the following Python code: print('Hello, World!')\"), AgentId(\"tool_enabled_agent\", \"default\")\n)\nprint(response.content)\n\n# Stop the runtime and the docker executor.\nawait runtime.stop()\nawait docker_executor.stop()\n\n# Close the connection to the model client.\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "# Start the runtime and the docker executor.\nawait docker_executor.start()\nruntime.start()\n\n# Send a task to the tool user.\nresponse = await runtime.send_message(\n    Message(\"Run the following Python code: print('Hello, World!')\"), AgentId(\"tool_enabled_agent\", \"default\")\n)\nprint(response.content)\n\n# Stop the runtime and the docker executor.\nawait runtime.stop()\nawait docker_executor.stop()\n\n# Close the connection to the model client.\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "The output of the code is: **Hello, World!**",
+      "language": "unknown"
+    },
+    {
+      "code": "The output of the code is: **Hello, World!**",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tool_agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "title": "Separate loop to avoid logging at the same time as logs from evaluate()",
+  "content": "for result in aggregated_results:\n    print(\"Input:\", result[\"run\"].inputs)\n    print(\"Output:\", result[\"run\"].outputs)\n    print(\"Evaluation Results:\", result[\"evaluation_results\"][\"results\"])\n    print(\"--------------------------------\")\n\nInput: {'input': 'MY INPUT'}\nOutput: {'output': 'MY OUTPUT'}\nEvaluation Results: [EvaluationResult(key='randomness', score=1, value=None, comment=None, correction=None, evaluator_info={}, feedback_config=None, source_run_id=UUID('7ebb4900-91c0-40b0-bb10-f2f6a451fd3c'), target_run_id=None, extra=None)]\n--------------------------------\npython  theme={null}\nfrom langsmith import Client\nimport sys\n\ndef my_application(inputs):\n    # Your application logic\n    return {\"response\": \"...\"}\n\ndef accuracy_evaluator(run, example):\n    # Your evaluation logic\n    is_correct = run.outputs[\"response\"] == example.outputs[\"expected\"]\n    return {\"key\": \"accuracy\", \"score\": 1 if is_correct else 0}",
+  "code_samples": [
+    {
+      "code": "This produces output like:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Understand the result structure\n\nEach result in the iterator contains:\n\n* `result[\"run\"]`: The execution of your target function.\n  * `result[\"run\"].inputs`: The inputs from your [dataset](/langsmith/evaluation-concepts#datasets) example.\n  * `result[\"run\"].outputs`: The outputs produced by your target function.\n  * `result[\"run\"].id`: The unique ID for this run.\n\n* `result[\"evaluation_results\"][\"results\"]`: A list of `EvaluationResult` objects, one per evaluator.\n  * `key`: The metric name (from your evaluator's return value).\n  * `score`: The numeric score (typically 0-1 or boolean).\n  * `comment`: Optional explanatory text.\n  * `source_run_id`: The ID of the evaluator run.\n\n* `result[\"example\"]`: The dataset example that was evaluated.\n  * `result[\"example\"].inputs`: The input values.\n  * `result[\"example\"].outputs`: The reference outputs (if any).\n\n## Examples\n\n### Implement a quality gate\n\nThis example uses evaluation results to pass or fail a CI/CD build automatically based on quality thresholds. The script iterates through results, calculates an average accuracy score, and exits with a non-zero status code if the accuracy falls below 85%. This ensures that you can deploy code changes that meet quality standards.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Understand the result structure",
+      "id": "understand-the-result-structure"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Implement a quality gate",
+      "id": "implement-a-quality-gate"
+    }
+  ],
+  "url": "llms-txt#separate-loop-to-avoid-logging-at-the-same-time-as-logs-from-evaluate()",
+  "links": []
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Invoke the graph with the initial state",
+  "content": "response = graph.invoke(\n    {\n        \"a\": \"set at start\",\n    }\n)\n\nprint()\nprint(f\"Output of graph invocation: {response}\")\n\nEntered node `node_1`:\n    Input: {'a': 'set at start'}.\n    Returned: {'private_data': 'set by node_1'}\nEntered node `node_2`:\n    Input: {'private_data': 'set by node_1'}.\n    Returned: {'a': 'set by node_2'}\nEntered node `node_3`:\n    Input: {'a': 'set by node_2'}.\n    Returned: {'a': 'set by node_3'}\n\nOutput of graph invocation: {'a': 'set by node_3'}\npython  theme={null}\nfrom langgraph.graph import StateGraph, START, END\nfrom typing_extensions import TypedDict\nfrom pydantic import BaseModel",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Use Pydantic models for graph state\n\nA [StateGraph](https://langchain-ai.github.io/langgraph/reference/graphs.md#langgraph.graph.StateGraph) accepts a [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) argument on initialization that specifies the \"shape\" of the state that the nodes in the graph can access and update.\n\nIn our examples, we typically use a python-native `TypedDict` or [`dataclass`](https://docs.python.org/3/library/dataclasses.html) for `state_schema`, but [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) can be any [type](https://docs.python.org/3/library/stdtypes.html#type-objects).\n\nHere, we'll see how a [Pydantic BaseModel](https://docs.pydantic.dev/latest/api/base_model/) can be used for [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) to add run-time validation on **inputs**.\n\n<Note>\n  **Known Limitations**\n\n  * Currently, the output of the graph will **NOT** be an instance of a pydantic model.\n  * Run-time validation only occurs on inputs to the first node in the graph, not on subsequent nodes or outputs.\n  * The validation error trace from pydantic does not show which node the error arises in.\n  * Pydantic's recursive validation can be slow. For performance-sensitive applications, you may want to consider using a `dataclass` instead.\n</Note>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Use Pydantic models for graph state",
+      "id": "use-pydantic-models-for-graph-state"
+    }
+  ],
+  "url": "llms-txt#invoke-the-graph-with-the-initial-state",
+  "links": []
+}

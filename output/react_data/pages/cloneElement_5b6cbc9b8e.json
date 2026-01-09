@@ -1,0 +1,277 @@
+{
+  "url": "https://react.dev/reference/react/cloneElement",
+  "title": "cloneElement",
+  "content": "Using cloneElement is uncommon and can lead to fragile code. See common alternatives.\n\ncloneElement lets you create a new React element using another element as a starting point.\n\nCall cloneElement to create a React element based on the element, but with different props and children:\n\nSee more examples below.\n\nelement: The element argument must be a valid React element. For example, it could be a JSX node like <Something />, the result of calling createElement, or the result of another cloneElement call.\n\nprops: The props argument must either be an object or null. If you pass null, the cloned element will retain all of the original element.props. Otherwise, for every prop in the props object, the returned element will “prefer” the value from props over the value from element.props. The rest of the props will be filled from the original element.props. If you pass props.key or props.ref, they will replace the original ones.\n\noptional ...children: Zero or more child nodes. They can be any React nodes, including React elements, strings, numbers, portals, empty nodes (null, undefined, true, and false), and arrays of React nodes. If you don’t pass any ...children arguments, the original element.props.children will be preserved.\n\ncloneElement returns a React element object with a few properties:\n\nUsually, you’ll return the element from your component or make it a child of another element. Although you may read the element’s properties, it’s best to treat every element as opaque after it’s created, and only render it.\n\nCloning an element does not modify the original element.\n\nYou should only pass children as multiple arguments to cloneElement if they are all statically known, like cloneElement(element, null, child1, child2, child3). If your children are dynamic, pass the entire array as the third argument: cloneElement(element, null, listItems). This ensures that React will warn you about missing keys for any dynamic lists. For static lists this is not necessary because they never reorder.\n\ncloneElement makes it harder to trace the data flow, so try the alternatives instead.\n\nTo override the props of some React element, pass it to cloneElement with the props you want to override:\n\nHere, the resulting cloned element will be <Row title=\"Cabbage\" isHighlighted={true} />.\n\nLet’s walk through an example to see when it’s useful.\n\nImagine a List component that renders its children as a list of selectable rows with a “Next” button that changes which row is selected. The List component needs to render the selected Row differently, so it clones every <Row> child that it has received, and adds an extra isHighlighted: true or isHighlighted: false prop:\n\nLet’s say the original JSX received by List looks like this:\n\nBy cloning its children, the List can pass extra information to every Row inside. The result looks like this:\n\nNotice how pressing “Next” updates the state of the List, and highlights a different row:\n\nTo summarize, the List cloned the <Row /> elements it received and added an extra prop to them.\n\nCloning children makes it hard to tell how the data flows through your app. Try one of the alternatives.\n\nInstead of using cloneElement, consider accepting a render prop like renderItem. Here, List receives renderItem as a prop. List calls renderItem for every item and passes isHighlighted as an argument:\n\nThe renderItem prop is called a “render prop” because it’s a prop that specifies how to render something. For example, you can pass a renderItem implementation that renders a <Row> with the given isHighlighted value:\n\nThe end result is the same as with cloneElement:\n\nHowever, you can clearly trace where the isHighlighted value is coming from.\n\nThis pattern is preferred to cloneElement because it is more explicit.\n\nAnother alternative to cloneElement is to pass data through context.\n\nFor example, you can call createContext to define a HighlightContext:\n\nYour List component can wrap every item it renders into a HighlightContext provider:\n\nWith this approach, Row does not need to receive an isHighlighted prop at all. Instead, it reads the context:\n\nThis allows the calling component to not know or worry about passing isHighlighted to <Row>:\n\nInstead, List and Row coordinate the highlighting logic through context.\n\nLearn more about passing data through context.\n\nAnother approach you can try is to extract the “non-visual” logic into your own Hook, and use the information returned by your Hook to decide what to render. For example, you could write a useList custom Hook like this:\n\nThen you could use it like this:\n\nThe data flow is explicit, but the state is inside the useList custom Hook that you can use from any component:\n\nThis approach is particularly useful if you want to reuse this logic between different components.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "cloneElement",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "cloneElement(element, props, ...children)",
+      "id": "cloneelement"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Overriding props of an element",
+      "id": "overriding-props-of-an-element"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Alternatives",
+      "id": "alternatives"
+    },
+    {
+      "level": "h3",
+      "text": "Passing data with a render prop",
+      "id": "passing-data-with-a-render-prop"
+    },
+    {
+      "level": "h3",
+      "text": "Passing data through context",
+      "id": "passing-data-through-context"
+    },
+    {
+      "level": "h3",
+      "text": "Extracting logic into a custom Hook",
+      "id": "extracting-logic-into-a-custom-hook"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "const clonedElement = cloneElement(element, props, ...children)",
+      "language": "javascript"
+    },
+    {
+      "code": "import { cloneElement } from 'react';// ...const clonedElement = cloneElement(  <Row title=\"Cabbage\">    Hello  </Row>,  { isHighlighted: true },  'Goodbye');console.log(clonedElement); // <Row title=\"Cabbage\" isHighlighted={true}>Goodbye</Row>",
+      "language": "jsx"
+    },
+    {
+      "code": "import { cloneElement } from 'react';// ...const clonedElement = cloneElement(  <Row title=\"Cabbage\" />,  { isHighlighted: true });",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function List({ children }) {  const [selectedIndex, setSelectedIndex] = useState(0);  return (    <div className=\"List\">      {Children.map(children, (child, index) =>        cloneElement(child, {          isHighlighted: index === selectedIndex         })      )}",
+      "language": "jsx"
+    },
+    {
+      "code": "<List>  <Row title=\"Cabbage\" />  <Row title=\"Garlic\" />  <Row title=\"Apple\" /></List>",
+      "language": "jsx"
+    },
+    {
+      "code": "<List>  <Row    title=\"Cabbage\"    isHighlighted={true}   />  <Row    title=\"Garlic\"    isHighlighted={false}   />  <Row    title=\"Apple\"    isHighlighted={false}   /></List>",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function List({ items, renderItem }) {  const [selectedIndex, setSelectedIndex] = useState(0);  return (    <div className=\"List\">      {items.map((item, index) => {        const isHighlighted = index === selectedIndex;        return renderItem(item, isHighlighted);      })}",
+      "language": "jsx"
+    },
+    {
+      "code": "<List  items={products}  renderItem={(product, isHighlighted) =>    <Row      key={product.id}      title={product.title}      isHighlighted={isHighlighted}    />  }/>",
+      "language": "jsx"
+    },
+    {
+      "code": "<List>  <Row    title=\"Cabbage\"    isHighlighted={true}   />  <Row    title=\"Garlic\"    isHighlighted={false}   />  <Row    title=\"Apple\"    isHighlighted={false}   /></List>",
+      "language": "jsx"
+    },
+    {
+      "code": "export const HighlightContext = createContext(false);",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function List({ items, renderItem }) {  const [selectedIndex, setSelectedIndex] = useState(0);  return (    <div className=\"List\">      {items.map((item, index) => {        const isHighlighted = index === selectedIndex;        return (          <HighlightContext key={item.id} value={isHighlighted}>            {renderItem(item)}          </HighlightContext>        );      })}",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function Row({ title }) {  const isHighlighted = useContext(HighlightContext);  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "<List  items={products}  renderItem={product =>    <Row title={product.title} />  }/>",
+      "language": "jsx"
+    },
+    {
+      "code": "import { useState } from 'react';export default function useList(items) {  const [selectedIndex, setSelectedIndex] = useState(0);  function onNext() {    setSelectedIndex(i =>      (i + 1) % items.length    );  }  const selected = items[selectedIndex];  return [selected, onNext];}",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function App() {  const [selected, onNext] = useList(products);  return (    <div className=\"List\">      {products.map(product =>        <Row          key={product.id}          title={product.title}          isHighlighted={selected === product}        />      )}      <hr />      <button onClick={onNext}>        Next      </button>    </div>  );}",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

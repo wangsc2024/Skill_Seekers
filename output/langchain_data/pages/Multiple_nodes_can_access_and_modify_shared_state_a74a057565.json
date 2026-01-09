@@ -1,0 +1,13 @@
+{
+  "title": "Multiple nodes can access and modify shared state",
+  "content": "class WorkflowState(TypedDict):\n    user_input: str\n    search_results: list\n    generated_response: str\n    validation_status: str\n\ndef search_node(state):\n    # Access shared state\n    results = search(state[\"user_input\"])\n    return {\"search_results\": results}\n\ndef validation_node(state):\n    # Access results from previous node\n    is_valid = validate(state[\"generated_response\"])\n    return {\"validation_status\": \"valid\" if is_valid else \"invalid\"}\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "**3. Parallel processing with synchronization**\n\nWhen you need to run multiple operations in parallel and then combine their results, the Graph API handles this naturally.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#multiple-nodes-can-access-and-modify-shared-state",
+  "links": []
+}

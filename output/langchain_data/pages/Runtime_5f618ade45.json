@@ -1,0 +1,38 @@
+{
+  "title": "Runtime",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/runtime\n\nLangChain's [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) runs on LangGraph's runtime under the hood.\n\nLangGraph exposes a [`Runtime`](https://reference.langchain.com/python/langgraph/runtime/#langgraph.runtime.Runtime) object with the following information:\n\n1. **Context**: static information like user id, db connections, or other dependencies for an agent invocation\n2. **Store**: a [BaseStore](https://reference.langchain.com/python/langgraph/store/#langgraph.store.base.BaseStore) instance used for [long-term memory](/oss/python/langchain/long-term-memory)\n3. **Stream writer**: an object used for streaming information via the `\"custom\"` stream mode\n\n<Tip>\n  Runtime context provides **dependency injection** for your tools and middleware. Instead of hardcoding values or using global state, you can inject runtime dependencies (like database connections, user IDs, or configuration) when invoking your agent. This makes your tools more testable, reusable, and flexible.\n</Tip>\n\nYou can access the runtime information within [tools](#inside-tools) and [middleware](#inside-middleware).\n\nWhen creating an agent with [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent), you can specify a `context_schema` to define the structure of the `context` stored in the agent [`Runtime`](https://reference.langchain.com/python/langgraph/runtime/#langgraph.runtime.Runtime).\n\nWhen invoking the agent, pass the `context` argument with the relevant configuration for the run:\n\nYou can access the runtime information inside tools to:\n\n* Access the context\n* Read or write long-term memory\n* Write to the [custom stream](/oss/python/langchain/streaming#custom-updates) (ex, tool progress / updates)\n\nUse the `ToolRuntime` parameter to access the [`Runtime`](https://reference.langchain.com/python/langgraph/runtime/#langgraph.runtime.Runtime) object inside a tool.\n\n### Inside middleware\n\nYou can access runtime information in middleware to create dynamic prompts, modify messages, or control agent behavior based on user context.\n\nUse `request.runtime` to access the [`Runtime`](https://reference.langchain.com/python/langgraph/runtime/#langgraph.runtime.Runtime) object inside middleware decorators. The runtime object is available in the [`ModelRequest`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.ModelRequest) parameter passed to middleware functions.\n\n```python  theme={null}\nfrom dataclasses import dataclass\n\nfrom langchain.messages import AnyMessage\nfrom langchain.agents import create_agent, AgentState\nfrom langchain.agents.middleware import dynamic_prompt, ModelRequest, before_model, after_model\nfrom langgraph.runtime import Runtime\n\n@dataclass\nclass Context:\n    user_name: str",
+  "code_samples": [
+    {
+      "code": "### Inside tools\n\nYou can access the runtime information inside tools to:\n\n* Access the context\n* Read or write long-term memory\n* Write to the [custom stream](/oss/python/langchain/streaming#custom-updates) (ex, tool progress / updates)\n\nUse the `ToolRuntime` parameter to access the [`Runtime`](https://reference.langchain.com/python/langgraph/runtime/#langgraph.runtime.Runtime) object inside a tool.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Inside middleware\n\nYou can access runtime information in middleware to create dynamic prompts, modify messages, or control agent behavior based on user context.\n\nUse `request.runtime` to access the [`Runtime`](https://reference.langchain.com/python/langgraph/runtime/#langgraph.runtime.Runtime) object inside middleware decorators. The runtime object is available in the [`ModelRequest`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.ModelRequest) parameter passed to middleware functions.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Access",
+      "id": "access"
+    },
+    {
+      "level": "h3",
+      "text": "Inside tools",
+      "id": "inside-tools"
+    },
+    {
+      "level": "h3",
+      "text": "Inside middleware",
+      "id": "inside-middleware"
+    }
+  ],
+  "url": "llms-txt#runtime",
+  "links": []
+}

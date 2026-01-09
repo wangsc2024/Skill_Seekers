@@ -1,0 +1,8 @@
+{
+  "title": "Agent building",
+  "content": "from langchain.agents import create_agent",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#agent-building",
+  "links": []
+}

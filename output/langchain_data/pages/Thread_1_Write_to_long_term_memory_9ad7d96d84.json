@@ -1,0 +1,8 @@
+{
+  "title": "Thread 1: Write to long-term memory",
+  "content": "config1 = {\"configurable\": {\"thread_id\": str(uuid.uuid4())}}\nagent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Save my preferences to /memories/preferences.txt\"}]\n}, config=config1)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#thread-1:-write-to-long-term-memory",
+  "links": []
+}

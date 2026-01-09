@@ -1,0 +1,13 @@
+{
+  "title": "Constants",
+  "content": "WIDTH, HEIGHT = 800, 600\nGROUND_HEIGHT = 20\nGRAVITY = 0.7\nPIPE_SPEED = -3\nBIRD_SIZE = 45\nMIN_GAP = 130\nMAX_GAP = 200\nPIPE_COLORS = [(0, 96, 0), (205, 133, 63), (89, 97, 107)]\nDARK_BROWN = (94, 72, 4)\nYELLOW = (252, 228, 6)\n\nscreen = pygame.display.set_mode((WIDTH, HEIGHT))\nclock = pygame.time.Clock()\n\ndef random_light_color():\n    return (\n        random.randint(180, 230),\n        random.randint(190, 300),\n        random.randint(250, 255)\n    )\n\ndef reset_game():\n    global bird_x, bird_y\n    global pipes, score\n    global background_color, land_color\n    global bird_shape, bird_color\n\n# Bird properties\n    bird_x = WIDTH * 0.3\n    bird_y = HEIGHT // 2\n    bird_vel = -5  # Initial upward thrust\n\npipes.clear() ### <<< NameError: name 'pipes' is not defined. Did you forget to import 'pipes'?\npython\nimport pygame\nfrom random import randint  # For generating colors/shapes/positions randomly \npygame.init()",
+  "code_samples": [
+    {
+      "code": "{% endcode %}\n\n8. If you use `--repeat-penalty 1.5`, it gets even worse and more obvious, with actually totally incorrect syntax.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#constants",
+  "links": []
+}

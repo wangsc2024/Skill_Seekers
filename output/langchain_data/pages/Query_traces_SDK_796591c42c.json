@@ -1,0 +1,328 @@
+{
+  "title": "Query traces (SDK)",
+  "content": "Source: https://docs.langchain.com/langsmith/export-traces\n\n<Tip>\n  **Recommended Reading**\n\nBefore diving into this content, it might be helpful to read the following:\n\n* [Run (span) data format](/langsmith/run-data-format)\n  * <RegionalUrl type=\"api\" suffix=\"/redoc\" text=\"LangSmith API Reference\" />\n  * [LangSmith trace query syntax](/langsmith/trace-query-syntax)\n</Tip>\n\n<Note>\n  **If you are looking to export a large volume of traces, we recommend that you use the [Bulk Data Export](./data-export) functionality, as it will better handle large data volumes and will support automatic retries and parallelization across partitions.**\n</Note>\n\nThe recommended way to query runs (the span data in LangSmith traces) is to use the `list_runs` method in the SDK or `/runs/query` endpoint in the API.\n\nLangSmith stores traces in a simple format that is specified in the [Run (span) data format](/langsmith/run-data-format).\n\n## Use filter arguments\n\nFor simple queries, you don't have to rely on our query syntax. You can use the filter arguments specified in the [filter arguments reference](/langsmith/trace-query-syntax#filter-arguments).\n\n<Warning>\n  **Prerequisites**\n\nInitialize the client before running the below code snippets.\n</Warning>\n\nBelow are some examples of ways to list runs using keyword arguments:\n\n### List all runs in a project\n\n### List LLM and Chat runs in the last 24 hours\n\n### List root runs in a project\n\nRoot runs are runs that have no parents. These are assigned a value of `True` for `is_root`. You can use this to filter for root runs.\n\n### List runs without errors\n\n### List runs by run ID\n\n<Warning>\n  **Ignores Other Arguments**\n\nIf you provide a list of run IDs in the way described above, it will ignore all other filtering arguments like `project_name`, `run_type`, etc. and directly return the runs matching the given IDs.\n</Warning>\n\nIf you have a list of run IDs, you can list them directly:\n\n## Use filter query language\n\nFor more complex queries, you can use the query language described in the [filter query language reference](/langsmith/trace-query-syntax#filter-query-language).\n\n### List all root runs in a conversational thread\n\nThis is the way to fetch runs in a conversational thread. For more information on setting up threads, refer to our [how-to guide on setting up threads](./threads).\nThreads are grouped by setting a shared thread ID. The LangSmith UI lets you use any one of the following three metadata keys: `session_id`, `conversation_id`, or `thread_id`. The session ID is also known as the tracing project ID. The following query matches on any of them.\n\n### List all runs called \"extractor\" whose root of the trace was assigned feedback \"user\\_score\" score of 1\n\n### List runs with \"star\\_rating\" key whose score is greater than 4\n\n### List runs that took longer than 5 seconds to complete\n\n### List all runs that have \"error\" not equal to null\n\n### List all runs where start\\_time is greater than a specific timestamp\n\n### List all runs that contain the string \"substring\"\n\n### List all runs that are tagged with the git hash \"2aa1cf4\"\n\n### List all runs that started after a specific timestamp and either have \"error\" not equal to null or a \"Correctness\" feedback score equal to 0\n\n### Complex query: List all runs where tags include \"experimental\" or \"beta\" and latency is greater than 2 seconds\n\n### Search trace trees by full text\n\nYou can use the `search()` function without any specific field to do a full text search across all string fields in a run. This allows you to quickly find traces that match a search term.\n\n### Check for presence of metadata\n\nIf you want to check for the presence of metadata, you can use the `eq` operator, optionally with an `and` statement to match by value. This is useful if you want to log more structured information about your runs.\n\n### Check for environment details in metadata\n\nA common pattern is to add environment information to your traces via metadata. If you want to filter for runs containing environment metadata, you can use the same pattern as above:\n\n### Check for conversation ID in metadata\n\nAnother common way to associate traces in the same conversation is by using a shared conversation ID. If you want to filter runs based on a conversation ID in this way, you can search for that ID in the metadata.\n\n### Negative filtering on key-value pairs\n\nYou can use negative filtering on metadata, input, and output key-value pairs to exclude specific runs from your results. Here are some examples for metadata key-value pairs but the same logic applies to input and output key-value pairs.\n\n### Combine multiple filters\n\nIf you want to combine multiple conditions to refine your search, you can use the `and` operator along with other filtering functions. Here's how you can search for runs named \"ChatOpenAI\" that also have a specific `conversation_id` in their metadata:\n\nList all runs named \"RetrieveDocs\" whose root run has a \"user\\_score\" feedback of 1 and any run in the full trace is named \"ExpandQuery\".\n\nThis type of query is useful if you want to extract a specific run conditional on various states or steps being reached within the trace.\n\n### Advanced: export flattened trace view with child tool usage\n\nThe following Python example demonstrates how to export a flattened view of traces, including information on the tools (from nested runs) used by the agent within each trace.\nThis can be used to analyze the behavior of your agents across multiple traces.\n\nThis example queries all tool runs within a specified number of days and groups them by their parent (root) run ID. It then fetches the relevant information for each root run, such as the run name, inputs, outputs, and combines that information with the child run information.\n\nTo optimize the query, the example:\n\n1. Selects only the necessary fields when querying tool runs to reduce query time.\n2. Fetches root runs in batches while processing tool runs concurrently.\n\n<CodeGroup>\n  \n</CodeGroup>\n\n### Advanced: export retriever IO for traces with feedback\n\nThis query is useful if you want to fine-tune embeddings or diagnose end-to-end system performance issues based on retriever behavior.\nThe following Python example demonstrates how to export retriever inputs and outputs within traces that have a specific feedback score.\n\n<CodeGroup>\n  \n</CodeGroup>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/export-traces.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nBelow are some examples of ways to list runs using keyword arguments:\n\n### List all runs in a project\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List LLM and Chat runs in the last 24 hours\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List root runs in a project\n\nRoot runs are runs that have no parents. These are assigned a value of `True` for `is_root`. You can use this to filter for root runs.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List runs without errors\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List runs by run ID\n\n<Warning>\n  **Ignores Other Arguments**\n\n  If you provide a list of run IDs in the way described above, it will ignore all other filtering arguments like `project_name`, `run_type`, etc. and directly return the runs matching the given IDs.\n</Warning>\n\nIf you have a list of run IDs, you can list them directly:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Use filter query language\n\nFor more complex queries, you can use the query language described in the [filter query language reference](/langsmith/trace-query-syntax#filter-query-language).\n\n### List all root runs in a conversational thread\n\nThis is the way to fetch runs in a conversational thread. For more information on setting up threads, refer to our [how-to guide on setting up threads](./threads).\nThreads are grouped by setting a shared thread ID. The LangSmith UI lets you use any one of the following three metadata keys: `session_id`, `conversation_id`, or `thread_id`. The session ID is also known as the tracing project ID. The following query matches on any of them.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List all runs called \"extractor\" whose root of the trace was assigned feedback \"user\\_score\" score of 1\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List runs with \"star\\_rating\" key whose score is greater than 4\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List runs that took longer than 5 seconds to complete\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List all runs that have \"error\" not equal to null\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List all runs where start\\_time is greater than a specific timestamp\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List all runs that contain the string \"substring\"\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List all runs that are tagged with the git hash \"2aa1cf4\"\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### List all runs that started after a specific timestamp and either have \"error\" not equal to null or a \"Correctness\" feedback score equal to 0\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Complex query: List all runs where tags include \"experimental\" or \"beta\" and latency is greater than 2 seconds\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Search trace trees by full text\n\nYou can use the `search()` function without any specific field to do a full text search across all string fields in a run. This allows you to quickly find traces that match a search term.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Check for presence of metadata\n\nIf you want to check for the presence of metadata, you can use the `eq` operator, optionally with an `and` statement to match by value. This is useful if you want to log more structured information about your runs.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Check for environment details in metadata\n\nA common pattern is to add environment information to your traces via metadata. If you want to filter for runs containing environment metadata, you can use the same pattern as above:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Check for conversation ID in metadata\n\nAnother common way to associate traces in the same conversation is by using a shared conversation ID. If you want to filter runs based on a conversation ID in this way, you can search for that ID in the metadata.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Negative filtering on key-value pairs\n\nYou can use negative filtering on metadata, input, and output key-value pairs to exclude specific runs from your results. Here are some examples for metadata key-value pairs but the same logic applies to input and output key-value pairs.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Combine multiple filters\n\nIf you want to combine multiple conditions to refine your search, you can use the `and` operator along with other filtering functions. Here's how you can search for runs named \"ChatOpenAI\" that also have a specific `conversation_id` in their metadata:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Tree Filter\n\nList all runs named \"RetrieveDocs\" whose root run has a \"user\\_score\" feedback of 1 and any run in the full trace is named \"ExpandQuery\".\n\nThis type of query is useful if you want to extract a specific run conditional on various states or steps being reached within the trace.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Advanced: export flattened trace view with child tool usage\n\nThe following Python example demonstrates how to export a flattened view of traces, including information on the tools (from nested runs) used by the agent within each trace.\nThis can be used to analyze the behavior of your agents across multiple traces.\n\nThis example queries all tool runs within a specified number of days and groups them by their parent (root) run ID. It then fetches the relevant information for each root run, such as the run name, inputs, outputs, and combines that information with the child run information.\n\nTo optimize the query, the example:\n\n1. Selects only the necessary fields when querying tool runs to reduce query time.\n2. Fetches root runs in batches while processing tool runs concurrently.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Advanced: export retriever IO for traces with feedback\n\nThis query is useful if you want to fine-tune embeddings or diagnose end-to-end system performance issues based on retriever behavior.\nThe following Python example demonstrates how to export retriever inputs and outputs within traces that have a specific feedback score.\n\n<CodeGroup>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Use filter arguments",
+      "id": "use-filter-arguments"
+    },
+    {
+      "level": "h3",
+      "text": "List all runs in a project",
+      "id": "list-all-runs-in-a-project"
+    },
+    {
+      "level": "h3",
+      "text": "List LLM and Chat runs in the last 24 hours",
+      "id": "list-llm-and-chat-runs-in-the-last-24-hours"
+    },
+    {
+      "level": "h3",
+      "text": "List root runs in a project",
+      "id": "list-root-runs-in-a-project"
+    },
+    {
+      "level": "h3",
+      "text": "List runs without errors",
+      "id": "list-runs-without-errors"
+    },
+    {
+      "level": "h3",
+      "text": "List runs by run ID",
+      "id": "list-runs-by-run-id"
+    },
+    {
+      "level": "h2",
+      "text": "Use filter query language",
+      "id": "use-filter-query-language"
+    },
+    {
+      "level": "h3",
+      "text": "List all root runs in a conversational thread",
+      "id": "list-all-root-runs-in-a-conversational-thread"
+    },
+    {
+      "level": "h3",
+      "text": "List all runs called \"extractor\" whose root of the trace was assigned feedback \"user\\_score\" score of 1",
+      "id": "list-all-runs-called-\"extractor\"-whose-root-of-the-trace-was-assigned-feedback-\"user\\_score\"-score-of-1"
+    },
+    {
+      "level": "h3",
+      "text": "List runs with \"star\\_rating\" key whose score is greater than 4",
+      "id": "list-runs-with-\"star\\_rating\"-key-whose-score-is-greater-than-4"
+    },
+    {
+      "level": "h3",
+      "text": "List runs that took longer than 5 seconds to complete",
+      "id": "list-runs-that-took-longer-than-5-seconds-to-complete"
+    },
+    {
+      "level": "h3",
+      "text": "List all runs that have \"error\" not equal to null",
+      "id": "list-all-runs-that-have-\"error\"-not-equal-to-null"
+    },
+    {
+      "level": "h3",
+      "text": "List all runs where start\\_time is greater than a specific timestamp",
+      "id": "list-all-runs-where-start\\_time-is-greater-than-a-specific-timestamp"
+    },
+    {
+      "level": "h3",
+      "text": "List all runs that contain the string \"substring\"",
+      "id": "list-all-runs-that-contain-the-string-\"substring\""
+    },
+    {
+      "level": "h3",
+      "text": "List all runs that are tagged with the git hash \"2aa1cf4\"",
+      "id": "list-all-runs-that-are-tagged-with-the-git-hash-\"2aa1cf4\""
+    },
+    {
+      "level": "h3",
+      "text": "List all runs that started after a specific timestamp and either have \"error\" not equal to null or a \"Correctness\" feedback score equal to 0",
+      "id": "list-all-runs-that-started-after-a-specific-timestamp-and-either-have-\"error\"-not-equal-to-null-or-a-\"correctness\"-feedback-score-equal-to-0"
+    },
+    {
+      "level": "h3",
+      "text": "Complex query: List all runs where tags include \"experimental\" or \"beta\" and latency is greater than 2 seconds",
+      "id": "complex-query:-list-all-runs-where-tags-include-\"experimental\"-or-\"beta\"-and-latency-is-greater-than-2-seconds"
+    },
+    {
+      "level": "h3",
+      "text": "Search trace trees by full text",
+      "id": "search-trace-trees-by-full-text"
+    },
+    {
+      "level": "h3",
+      "text": "Check for presence of metadata",
+      "id": "check-for-presence-of-metadata"
+    },
+    {
+      "level": "h3",
+      "text": "Check for environment details in metadata",
+      "id": "check-for-environment-details-in-metadata"
+    },
+    {
+      "level": "h3",
+      "text": "Check for conversation ID in metadata",
+      "id": "check-for-conversation-id-in-metadata"
+    },
+    {
+      "level": "h3",
+      "text": "Negative filtering on key-value pairs",
+      "id": "negative-filtering-on-key-value-pairs"
+    },
+    {
+      "level": "h3",
+      "text": "Combine multiple filters",
+      "id": "combine-multiple-filters"
+    },
+    {
+      "level": "h3",
+      "text": "Tree Filter",
+      "id": "tree-filter"
+    },
+    {
+      "level": "h3",
+      "text": "Advanced: export flattened trace view with child tool usage",
+      "id": "advanced:-export-flattened-trace-view-with-child-tool-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Advanced: export retriever IO for traces with feedback",
+      "id": "advanced:-export-retriever-io-for-traces-with-feedback"
+    }
+  ],
+  "url": "llms-txt#query-traces-(sdk)",
+  "links": []
+}

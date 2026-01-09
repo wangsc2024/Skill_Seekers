@@ -1,0 +1,23 @@
+{
+  "title": "Fine-tuning LLMs with NVIDIA DGX Spark and Unsloth",
+  "content": "Tutorial on how to fine-tune and do reinforcement learning (RL) with OpenAI gpt-oss on NVIDIA DGX Spark.\n\nUnsloth enables local fine-tuning of LLMs with up to **200B parameters** on the NVIDIA DGX™ Spark. With 128 GB of unified memory, you can train massive models such as **gpt-oss-120b**, and run or deploy inference directly on DGX Spark.\n\nAs shown at [OpenAI DevDay](https://x.com/UnslothAI/status/1976284209842118714), gpt-oss-20b was trained with RL and Unsloth on DGX Spark to auto-win 2048. You can train using Unsloth in a Docker container or virtual environment on DGX Spark.\n\n<div align=\"center\" data-full-width=\"false\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-ff5c4752dccb8f922b937f8e3b0db58e2d836507%2Funsloth%20nvidia%20dgx%20spark.png?alt=media\" alt=\"\" width=\"375\"><figcaption></figcaption></figure> <figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-a8472482c49e1763378b609f8f537ca89df60260%2FNotebooks%20on%20dgx.png?alt=media\" alt=\"\" width=\"375\"><figcaption></figcaption></figure></div>\n\nIn this tutorial, we’ll train gpt-oss-20b with RL using Unsloth notebooks after installing Unsloth on your DGX Spark. gpt-oss-120b will use around **68GB** of unified memory.\n\nAfter 1,000 steps and 4 hours of RL training, the gpt-oss model greatly outperforms the original on 2048, and longer training would further improve results.\n\n<div><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-3bdcb0fda2ad188142e58f04c855b6dcfbd5ba94%2Fopenai%20devday%20unsloth%20feature.png?alt=media\" alt=\"\" width=\"375\"><figcaption><p>You can watch Unsloth featured on OpenAI DevDay 2025 <a href=\"https://youtu.be/1HL2YHRj270?si=8SR6EChF34B1g-5r&#x26;t=1080\">here</a>.</p></figcaption></figure> <figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-4a8bd4ecc7ee3d123c19158df5dfdcec35df8532%2FScreenshot%202025-10-13%20at%204.22.32%E2%80%AFPM.png?alt=media\" alt=\"\" width=\"375\"><figcaption><p>gpt-oss trained with RL consistently outperforms on 2048.</p></figcaption></figure></div>\n\n### ⚡ Step-by-Step Tutorial\n\n{% stepper %}\n{% step %}\n**Start with Unsloth Docker image for DGX Spark**\n\nFirst, build the Docker image using the DGX Spark Dockerfile which can be [found here](https://raw.githubusercontent.com/unslothai/notebooks/main/Dockerfile_DGX_Spark). You can also run the below in a Terminal in the DGX Spark:\n\nThen, build the training Docker image using saved Dockerfile:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-7ebcf195c154b0e569115e1f9513cf002ee57b16%2Fdgx1.png?alt=media\" alt=\"\" width=\"563\"><figcaption></figcaption></figure>\n\n<summary>You can also click to see the full DGX Spark Dockerfile</summary>\n\n```python\nFROM nvcr.io/nvidia/pytorch:25.09-py3",
+  "code_samples": [
+    {
+      "code": "sudo apt update && sudo apt install -y wget\nwget -O Dockerfile \"https://raw.githubusercontent.com/unslothai/notebooks/main/Dockerfile_DGX_Spark\"",
+      "language": "bash"
+    },
+    {
+      "code": "docker build -f Dockerfile -t unsloth-dgx-spark .",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "⚡ Step-by-Step Tutorial",
+      "id": "⚡-step-by-step-tutorial"
+    }
+  ],
+  "url": "llms-txt#fine-tuning-llms-with-nvidia-dgx-spark-and-unsloth",
+  "links": []
+}

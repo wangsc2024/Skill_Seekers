@@ -1,0 +1,17 @@
+{
+  "title": "The states are returned in reverse chronological order.",
+  "content": "states = list(graph.get_state_history(config))\n\nfor state in states:\n    print(state.next)\n    print(state.config[\"configurable\"][\"checkpoint_id\"])\n    print()\n\n()\n1f02ac4a-ec9f-6524-8002-8f7b0bbeed0e\n\n('write_joke',)\n1f02ac4a-ce2a-6494-8001-cb2e2d651227\n\n('generate_topic',)\n1f02ac4a-a4e0-630d-8000-b73c254ba748\n\n('__start__',)\n1f02ac4a-a4dd-665e-bfff-e6c8c44315d9\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "**Output:**",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#the-states-are-returned-in-reverse-chronological-order.",
+  "links": []
+}

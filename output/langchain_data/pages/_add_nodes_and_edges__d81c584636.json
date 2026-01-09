@@ -1,0 +1,32 @@
+{
+  "title": "... add nodes and edges ...",
+  "content": "my_graph = builder.compile()\n\n@contextlib.contextmanager\nasync def graph(config):\n    configurable = config.get(\"configurable\", {})\n    parent_trace = configurable.get(\"langsmith-trace\")\n    parent_project = configurable.get(\"langsmith-project\")\n    # If you want to also include metadata and tags from the client\n    metadata = configurable.get(\"langsmith-metadata\")\n    tags = configurable.get(\"langsmith-tags\")\n    with ls.tracing_context(parent=parent_trace, project_name=parent_project, metadata=metadata, tags=tags):\n        yield my_graph\njson  theme={null}\n{\n  \"graphs\": {\n    \"agent\": \"./src/agent.py:graph\"\n  }\n}\npython  theme={null}\n    from langgraph.graph import StateGraph\n    from langgraph.pregel.remote import RemoteGraph\n\nremote_graph = RemoteGraph(\n        \"agent\",\n        url=\"<DEPLOYMENT_URL>\",\n        distributed_tracing=True,  # Enable trace propagation\n    )\n\ndef subgraph_node(query: str):\n        # Trace context is automatically propagated\n        return remote_graph.invoke({\n            \"messages\": [{\"role\": \"user\", \"content\": query}]\n        })['messages'][-1]['content']\n\n# The RemoteGraph is called in the context of some on going work.\n    # This could be a parent LangGraph agent, code traced with `@ls.traceable`,\n    # or any other instrumented code.\n    graph = (\n            StateGraph(str)\n                .add_node(subgraph_node)\n                .add_edge(\"__start__\", \"subgraph_node\")\n                .compile()\n    )\n    # The remote graph's execution will appear as a child of this trace\n    result = graph.invoke(\"What's the weather in SF?\")\n    python  theme={null}\n    from langgraph_sdk import get_client\n    import langsmith as ls\n\nclient = get_client(url=\"<DEPLOYMENT_URL>\")\n\nwith ls.trace(\"call_remote_agent\", inputs={\"query\": query}) as rt:\n        headers = rt.to_headers()\n        async for chunk in client.runs.stream(\n            thread_id=None,\n            assistant_id=\"agent\",\n            input={\"messages\": [{\"role\": \"user\", \"content\": query}]},\n            stream_mode=\"values\",\n            headers=headers,  # Pass trace headers\n        ):\n            pass\n        return chunk\n\nresult = await call_remote_agent(\"What's the weather in SF?\")\n    ```\n  </Tab>\n</Tabs>\n\n* [Distributed tracing](/langsmith/distributed-tracing): General distributed tracing concepts and patterns\n* [RemoteGraph](/langsmith/use-remote-graph): Full guide to interacting with deployments using RemoteGraph\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/agent-server-distributed-tracing.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "Export this `graph` function in your `langgraph.json`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Connect from the client\n\n<Tabs>\n  <Tab title=\"RemoteGraph\">\n    Set `distributed_tracing=True` when initializing [`RemoteGraph`](https://reference.langchain.com/python/langsmith/deployment/remote_graph/). This automatically propagates trace headers on all requests.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"SDK\">\n    If you're using the [LangGraph SDK](/langsmith/reference) directly, propagate trace headers manually using `run_tree.to_headers()`:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Connect from the client",
+      "id": "connect-from-the-client"
+    },
+    {
+      "level": "h2",
+      "text": "Related",
+      "id": "related"
+    }
+  ],
+  "url": "llms-txt#...-add-nodes-and-edges-...",
+  "links": []
+}

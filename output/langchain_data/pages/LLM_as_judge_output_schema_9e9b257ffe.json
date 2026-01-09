@@ -1,0 +1,8 @@
+{
+  "title": "LLM-as-judge output schema",
+  "content": "class Grade(TypedDict):\n    \"\"\"Compare the expected and actual answers and grade the actual answer.\"\"\"\n    reasoning: Annotated[str, ..., \"Explain your reasoning for whether the actual response is correct or not.\"]\n    is_correct: Annotated[bool, ..., \"True if the student response is mostly or exactly correct, otherwise False.\"]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#llm-as-judge-output-schema",
+  "links": []
+}

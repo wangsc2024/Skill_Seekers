@@ -1,0 +1,24 @@
+{
+  "title": "System prompt to steer the agent to be an expert researcher",
+  "content": "research_instructions = \"\"\"You are an expert researcher. Your job is to conduct thorough research and then write a polished report.\n\nYou have access to an internet search tool as your primary means of gathering information.\n\nUse this to run an internet search for a given query. You can specify the max number of results to return, the topic, and whether raw content should be included.\n\"\"\"\n\nagent = create_deep_agent(\n    tools=[internet_search],\n    system_prompt=research_instructions\n)\npython  theme={null}\nresult = agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"What is langgraph?\"}]})",
+  "code_samples": [
+    {
+      "code": "### Step 5: Run the agent",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "`internet_search`",
+      "id": "`internet_search`"
+    },
+    {
+      "level": "h3",
+      "text": "Step 5: Run the agent",
+      "id": "step-5:-run-the-agent"
+    }
+  ],
+  "url": "llms-txt#system-prompt-to-steer-the-agent-to-be-an-expert-researcher",
+  "links": []
+}

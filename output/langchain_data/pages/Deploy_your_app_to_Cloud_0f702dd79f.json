@@ -1,0 +1,69 @@
+{
+  "title": "Deploy your app to Cloud",
+  "content": "Source: https://docs.langchain.com/langsmith/deployment-quickstart\n\nThis is a quickstart guide for deploying your first application to LangSmith Cloud.\n\n<Tip>\n  For a comprehensive Cloud deployment guide with all configuration options, refer to the [Cloud deployment setup guide](/langsmith/deploy-to-cloud).\n</Tip>\n\nBefore you begin, ensure you have the following:\n\n* A [GitHub account](https://github.com/)\n* A [LangSmith account](https://smith.langchain.com/) (free to sign up)\n\n## 1. Create a repository on GitHub\n\nTo deploy an application to **LangSmith**, your application code must reside in a GitHub repository. Both public and private repositories are supported. For this quickstart, use the [`new-langgraph-project` template](https://github.com/langchain-ai/react-agent) for your application:\n\n1. Go to the [`new-langgraph-project` repository](https://github.com/langchain-ai/new-langgraph-project) or [`new-langgraphjs-project` template](https://github.com/langchain-ai/new-langgraphjs-project).\n2. Click the `Fork` button in the top right corner to fork the repository to your GitHub account.\n3. Click **Create fork**.\n\n## 2. Deploy to LangSmith\n\n1. Log in to [LangSmith](https://smith.langchain.com/).\n2. In the left sidebar, select **Deployments**.\n3. Click the **+ New Deployment** button. A pane will open where you can fill in the required fields.\n4. If you are a first time user or adding a private repository that has not been previously connected, click the **Import from GitHub** button and follow the instructions to connect your GitHub account.\n5. Select your New LangGraph Project repository.\n6. Click **Submit** to deploy.\n   This may take about 15 minutes to complete. You can check the status in the **Deployment details** view.\n\n## 3. Test your application in Studio\n\nOnce your application is deployed:\n\n1. Select the deployment you just created to view more details.\n2. Click the **Studio** button in the top right corner. [Studio](/langsmith/studio) will open to display your graph.\n\n## 4. Get the API URL for your deployment\n\n1. In the **Deployment details** view, click the **API URL** to copy it to your clipboard.\n2. Click the `URL` to copy it to the clipboard.\n\nYou can now test the API:\n\n<Tabs>\n  <Tab title=\"Python SDK (Async)\">\n    1. Install the LangGraph Python SDK:\n\n2. Send a message to the assistant (threadless run):\n\n<Tab title=\"Python SDK (Sync)\">\n    1. Install the LangGraph Python SDK:\n\n2. Send a message to the assistant (threadless run):\n\n<Tab title=\"JavaScript SDK\">\n    1. Install the LangGraph JS SDK\n\n2. Send a message to the assistant (threadless run):\n\n<Tab title=\"Rest API\">\n    \n  </Tab>\n</Tabs>\n\nYou've successfully deployed your application to LangSmith Cloud. Here are some next steps:\n\n* **Explore Studio**: Use [Studio](/langsmith/studio) to visualize and debug your graph interactively.\n* **Monitor your app**: Set up [observability](/langsmith/observability) with traces, dashboards, and alerts.\n* **Learn more about Cloud**: See the [complete Cloud setup guide](/langsmith/deploy-to-cloud) for all configuration options.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/deployment-quickstart.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "2. Send a message to the assistant (threadless run):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Python SDK (Sync)\">\n    1. Install the LangGraph Python SDK:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Send a message to the assistant (threadless run):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript SDK\">\n    1. Install the LangGraph JS SDK",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Send a message to the assistant (threadless run):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Rest API\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Create a repository on GitHub",
+      "id": "1.-create-a-repository-on-github"
+    },
+    {
+      "level": "h2",
+      "text": "2. Deploy to LangSmith",
+      "id": "2.-deploy-to-langsmith"
+    },
+    {
+      "level": "h2",
+      "text": "3. Test your application in Studio",
+      "id": "3.-test-your-application-in-studio"
+    },
+    {
+      "level": "h2",
+      "text": "4. Get the API URL for your deployment",
+      "id": "4.-get-the-api-url-for-your-deployment"
+    },
+    {
+      "level": "h2",
+      "text": "5. Test the API",
+      "id": "5.-test-the-api"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#deploy-your-app-to-cloud",
+  "links": []
+}

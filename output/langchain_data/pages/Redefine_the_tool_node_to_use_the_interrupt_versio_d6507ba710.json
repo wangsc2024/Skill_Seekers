@@ -1,0 +1,35 @@
+{
+  "title": "Redefine the tool node to use the interrupt version",
+  "content": "run_query_node = ToolNode([run_query_tool_with_interrupt], name=\"run_query\") # [!code highlight]\npython  theme={null}\nfrom langgraph.checkpoint.memory import InMemorySaver\n\ndef should_continue(state: MessagesState) -> Literal[END, \"run_query\"]:\n    messages = state[\"messages\"]\n    last_message = messages[-1]\n    if not last_message.tool_calls:\n        return END\n    else:\n        return \"run_query\"\n\nbuilder = StateGraph(MessagesState)\nbuilder.add_node(list_tables)\nbuilder.add_node(call_get_schema)\nbuilder.add_node(get_schema_node, \"get_schema\")\nbuilder.add_node(generate_query)\nbuilder.add_node(run_query_node, \"run_query\")\n\nbuilder.add_edge(START, \"list_tables\")\nbuilder.add_edge(\"list_tables\", \"call_get_schema\")\nbuilder.add_edge(\"call_get_schema\", \"get_schema\")\nbuilder.add_edge(\"get_schema\", \"generate_query\")\nbuilder.add_conditional_edges(\n    \"generate_query\",\n    should_continue,\n)\nbuilder.add_edge(\"run_query\", \"generate_query\")\n\ncheckpointer = InMemorySaver() # [!code highlight]\nagent = builder.compile(checkpointer=checkpointer) # [!code highlight]\npython  theme={null}\nimport json\n\nconfig = {\"configurable\": {\"thread_id\": \"1\"}}\n\nquestion = \"Which genre on average has the longest tracks?\"\n\nfor step in agent.stream(\n    {\"messages\": [{\"role\": \"user\", \"content\": question}]},\n    config,\n    stream_mode=\"values\",\n):\n    if \"messages\" in step:\n        step[\"messages\"][-1].pretty_print()\n    elif \"__interrupt__\" in step:\n        action = step[\"__interrupt__\"][0]\n        print(\"INTERRUPTED:\")\n        for request in action.value:\n            print(json.dumps(request, indent=2))\n    else:\n        pass\n\nINTERRUPTED:\n{\n  \"action\": \"sql_db_query\",\n  \"args\": {\n    \"query\": \"SELECT Genre.Name, AVG(Track.Milliseconds) AS AvgLength FROM Track JOIN Genre ON Track.GenreId = Genre.GenreId GROUP BY Genre.Name ORDER BY AvgLength DESC LIMIT 5;\"\n  },\n  \"description\": \"Please review the tool call\"\n}\npython  theme={null}\nfrom langgraph.types import Command\n\nfor step in agent.stream(\n    Command(resume={\"type\": \"accept\"}),\n    # Command(resume={\"type\": \"edit\", \"args\": {\"query\": \"...\"}}),\n    config,\n    stream_mode=\"values\",\n):\n    if \"messages\" in step:\n        step[\"messages\"][-1].pretty_print()\n    elif \"__interrupt__\" in step:\n        action = step[\"__interrupt__\"][0]\n        print(\"INTERRUPTED:\")\n        for request in action.value:\n            print(json.dumps(request, indent=2))\n    else:\n        pass\n\n================================== Ai Message ==================================\nTool Calls:\n  sql_db_query (call_t4yXkD6shwdTPuelXEmY3sAY)\n Call ID: call_t4yXkD6shwdTPuelXEmY3sAY\n  Args:\n    query: SELECT Genre.Name, AVG(Track.Milliseconds) AS AvgLength FROM Track JOIN Genre ON Track.GenreId = Genre.GenreId GROUP BY Genre.Name ORDER BY AvgLength DESC LIMIT 5;\n================================= Tool Message =================================\nName: sql_db_query\n\n[('Sci Fi & Fantasy', 2911783.0384615385), ('Science Fiction', 2625549.076923077), ('Drama', 2575283.78125), ('TV Shows', 2145041.0215053763), ('Comedy', 1585263.705882353)]\n================================== Ai Message ==================================\n\nThe genre with the longest average track length is \"Sci Fi & Fantasy\" with an average length of about 2,911,783 milliseconds. Other genres with long average track lengths include \"Science Fiction,\" \"Drama,\" \"TV Shows,\" and \"Comedy.\"\n```\n\nRefer to the [human-in-the-loop guide](/oss/python/langgraph/interrupts) for details.\n\nCheck out the [Evaluate a graph](/langsmith/evaluate-graph) guide for evaluating LangGraph applications, including SQL agents like this one, using LangSmith.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/sql-agent.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "<Note>\n  The above implementation follows the [tool interrupt example](/oss/python/langgraph/interrupts#configuring-interrupts) in the broader [human-in-the-loop](/oss/python/langgraph/interrupts) guide. Refer to that guide for details and alternatives.\n</Note>\n\nLet's now re-assemble our graph. We will replace the programmatic check with human review. Note that we now include a [checkpointer](/oss/python/langgraph/persistence); this is required to pause and resume the run.",
+      "language": "unknown"
+    },
+    {
+      "code": "We can invoke the graph as before. This time, execution is interrupted:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "We can accept or edit the tool call using [Command](/oss/python/langgraph/use-graph-api#combine-control-flow-and-state-updates-with-command):",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#redefine-the-tool-node-to-use-the-interrupt-version",
+  "links": []
+}

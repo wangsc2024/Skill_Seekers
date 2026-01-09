@@ -1,0 +1,19 @@
+{
+  "title": "Keep our resource authorization from the previous tutorial",
+  "content": "@auth.on\nasync def add_owner(ctx, value):\n    \"\"\"Make resources private to their creator using resource metadata.\"\"\"\n    filters = {\"owner\": ctx.user.identity}\n    metadata = value.setdefault(\"metadata\", {})\n    metadata.update(filters)\n    return filters\npython  theme={null}\nimport os\nimport httpx\nfrom getpass import getpass\nfrom langgraph_sdk import get_client",
+  "code_samples": [
+    {
+      "code": "The most important change is that we're now validating tokens with a real authentication server. Our authentication handler has the private key for our Supabase project, which we can use to validate the user's token and extract their information.\n\n## 4. Test authentication flow\n\nLet's test out the new authentication flow. You can run the following code in a file or notebook. You will need to provide:\n\n* A valid email address\n* A Supabase project URL (from [above](#setup-auth-provider))\n* A Supabase anon **public key** (also from [above](#setup-auth-provider))",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "4. Test authentication flow",
+      "id": "4.-test-authentication-flow"
+    }
+  ],
+  "url": "llms-txt#keep-our-resource-authorization-from-the-previous-tutorial",
+  "links": []
+}

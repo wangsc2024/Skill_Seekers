@@ -1,0 +1,58 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/index.html",
+  "title": "AutoGen — AutoGen",
+  "content": "An web-based UI for prototyping with agents without writing code. Built on AgentChat.\n\nStart here if you are new to AutoGen and want to prototype with agents without writing code.\n\nStart here if you are prototyping with agents using Python. Migrating from AutoGen 0.2?.\n\nAn event-driven programming framework for building scalable multi-agent AI systems. Example scenarios:\n\nDeterministic and dynamic agentic workflows for business processes.\n\nResearch on multi-agent collaboration.\n\nDistributed agents for multi-language applications.\n\nStart here if you are getting serious about building multi-agent systems.\n\nImplementations of Core and AgentChat components that interface with external services or other libraries. You can find and use community extensions or create your own. Examples of built-in extensions:\n\nMcpWorkbench for using Model-Context Protocol (MCP) servers.\n\nOpenAIAssistantAgent for using Assistant API.\n\nDockerCommandLineCodeExecutor for running model-generated code in a Docker container.\n\nGrpcWorkerAgentRuntime for distributed agents.\n\nDiscover Community Extensions Create New Extension",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "AutoGen#",
+      "id": ""
+    },
+    {
+      "level": "h1",
+      "text": "AutoGen",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "A framework for building AI agents and applications",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "pip install -U autogenstudio\nautogenstudio ui --port 8080 --appdir ./myapp",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install -U autogenstudio\nautogenstudio ui --port 8080 --appdir ./myapp",
+      "language": "unknown"
+    },
+    {
+      "code": "# pip install -U \"autogen-agentchat\" \"autogen-ext[openai]\"\nimport asyncio\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\nasync def main() -> None:\n    agent = AssistantAgent(\"assistant\", OpenAIChatCompletionClient(model=\"gpt-4o\"))\n    print(await agent.run(task=\"Say 'Hello World!'\"))\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "# pip install -U \"autogen-agentchat\" \"autogen-ext[openai]\"\nimport asyncio\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\nasync def main() -> None:\n    agent = AssistantAgent(\"assistant\", OpenAIChatCompletionClient(model=\"gpt-4o\"))\n    print(await agent.run(task=\"Say 'Hello World!'\"))\n\nasyncio.run(main())",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/discover.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/create-your-own.html"
+  ]
+}

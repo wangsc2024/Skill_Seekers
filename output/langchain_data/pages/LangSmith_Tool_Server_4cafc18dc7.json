@@ -1,0 +1,72 @@
+{
+  "title": "LangSmith Tool Server",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-builder-mcp-framework\n\nThe LangSmith Tool Server is a standalone MCP framework for building and deploying tools with built-in authentication and authorization. Use the Tool Server when you want to:\n\n* [Create custom tools](#create-a-custom-toolkit) that integrate with LangSmith's [Agent Auth](/langsmith/agent-auth) for OAuth authentication\n* [Build an MCP gateway](#use-as-an-mcp-gateway) for agents you're building yourself (outside of Agent Builder)\n\n<Note>\n  If you're using [Agent Builder](/langsmith/agent-builder), you don't need to interact with the Tool Server directly. Agent Builder provides [built-in tools](/langsmith/agent-builder-tools) and supports [remote MCP servers](/langsmith/agent-builder-tools#using-remote-mcp-servers) without requiring Tool Server setup.\n\nHowever, you can configure the associated tool server instance as an MCP server, which will allow you to use your custom MCP servers in your agent.\n</Note>\n\nDownload the [PyPi package](https://pypi.org/project/langsmith-tool-server/) to get started.\n\n## Create a custom toolkit\n\nInstall the LangSmith Tool Server and LangChain CLI:\n\nCreate a new toolkit:\n\nThis creates a toolkit with the following structure:\n\nDefine your tools using the `@tool` decorator:\n\nYour tool server will start on `http://localhost:8000`.\n\n## Call tools via MCP protocol\n\nBelow is an example that lists available tools and calls the `add` tool:\n\n## Use as an MCP gateway\n\nThe LangSmith Tool Server can act as an MCP gateway, aggregating tools from multiple MCP servers into a single endpoint. Configure MCP servers in your `toolkit.toml`:\n\nAll tools from connected MCP servers are exposed through your server's `/mcp` endpoint. MCP tools are prefixed with their server name to avoid conflicts (e.g., `weather_get_forecast`, `math_add`).\n\n### OAuth for third-party APIs\n\nFor tools that need to access third-party APIs (like Google, GitHub, Slack, etc.), you can use OAuth authentication with [Agent Auth](/langsmith/agent-auth).\n\nBefore using OAuth in your tools, you'll need to configure an OAuth provider in your LangSmith workspace settings. See the [Agent Auth documentation](/langsmith/agent-auth) for setup instructions.\n\nOnce configured, specify the `auth_provider` in your tool decorator:\n\nTools with `auth_provider` must:\n\n* Have `context: Context` as the first parameter\n* Specify at least one scope\n* Use `context.token` to make authenticated API calls\n\n### Custom request authentication\n\nCustom authentication allows you to validate requests and integrate with your identity provider. Define an authentication handler in your `auth.py` file:\n\nThe handler runs on every request and must return a dict with `identity` (and optionally `permissions`).\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/agent-builder-mcp-framework.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "Create a new toolkit:",
+      "language": "unknown"
+    },
+    {
+      "code": "This creates a toolkit with the following structure:",
+      "language": "unknown"
+    },
+    {
+      "code": "Define your tools using the `@tool` decorator:",
+      "language": "unknown"
+    },
+    {
+      "code": "Run the server:",
+      "language": "unknown"
+    },
+    {
+      "code": "Your tool server will start on `http://localhost:8000`.\n\n## Call tools via MCP protocol\n\nBelow is an example that lists available tools and calls the `add` tool:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Use as an MCP gateway\n\nThe LangSmith Tool Server can act as an MCP gateway, aggregating tools from multiple MCP servers into a single endpoint. Configure MCP servers in your `toolkit.toml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "All tools from connected MCP servers are exposed through your server's `/mcp` endpoint. MCP tools are prefixed with their server name to avoid conflicts (e.g., `weather_get_forecast`, `math_add`).\n\n## Authenticate\n\n### OAuth for third-party APIs\n\nFor tools that need to access third-party APIs (like Google, GitHub, Slack, etc.), you can use OAuth authentication with [Agent Auth](/langsmith/agent-auth).\n\nBefore using OAuth in your tools, you'll need to configure an OAuth provider in your LangSmith workspace settings. See the [Agent Auth documentation](/langsmith/agent-auth) for setup instructions.\n\nOnce configured, specify the `auth_provider` in your tool decorator:",
+      "language": "unknown"
+    },
+    {
+      "code": "Tools with `auth_provider` must:\n\n* Have `context: Context` as the first parameter\n* Specify at least one scope\n* Use `context.token` to make authenticated API calls\n\n### Custom request authentication\n\nCustom authentication allows you to validate requests and integrate with your identity provider. Define an authentication handler in your `auth.py` file:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create a custom toolkit",
+      "id": "create-a-custom-toolkit"
+    },
+    {
+      "level": "h2",
+      "text": "Call tools via MCP protocol",
+      "id": "call-tools-via-mcp-protocol"
+    },
+    {
+      "level": "h2",
+      "text": "Use as an MCP gateway",
+      "id": "use-as-an-mcp-gateway"
+    },
+    {
+      "level": "h2",
+      "text": "Authenticate",
+      "id": "authenticate"
+    },
+    {
+      "level": "h3",
+      "text": "OAuth for third-party APIs",
+      "id": "oauth-for-third-party-apis"
+    },
+    {
+      "level": "h3",
+      "text": "Custom request authentication",
+      "id": "custom-request-authentication"
+    }
+  ],
+  "url": "llms-txt#langsmith-tool-server",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "We now add a conditional edge",
+  "content": "workflow.add_conditional_edges(\n    # First, we define the start node. We use 'agent'.\n    # This means these are the edges taken after the 'agent' node is called.\n    \"agent\",\n    # Next, we pass in the function that will determine which node is called next.\n    should_continue,\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#we-now-add-a-conditional-edge",
+  "links": []
+}

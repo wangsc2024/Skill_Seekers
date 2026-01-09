@@ -1,0 +1,13 @@
+{
+  "title": "Building our graph",
+  "content": "graph_builder = StateGraph(State)\n\ngraph_builder.add_node(gather_info)\ngraph_builder.add_node(refund)\ngraph_builder.add_node(lookup)\n\ngraph_builder.set_entry_point(\"gather_info\")\ngraph_builder.add_edge(\"lookup\", END)\ngraph_builder.add_edge(\"refund\", END)\n\nrefund_graph = graph_builder.compile()",
+  "code_samples": [
+    {
+      "code": "We can visualize our refund graph:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#building-our-graph",
+  "links": []
+}

@@ -1,0 +1,184 @@
+{
+  "url": "https://react.dev/learn/passing-data-deeply-with-context",
+  "title": "Passing Data Deeply with Context",
+  "content": "Usually, you will pass information from a parent component to a child component via props. But passing props can become verbose and inconvenient if you have to pass them through many components in the middle, or if many components in your app need the same information. Context lets the parent component make some information available to any component in the tree below it—no matter how deep—without passing it explicitly through props.\n\nPassing props is a great way to explicitly pipe data through your UI tree to the components that use it.\n\nBut passing props can become verbose and inconvenient when you need to pass some prop deeply through the tree, or if many components need the same prop. The nearest common ancestor could be far removed from the components that need data, and lifting state up that high can lead to a situation called “prop drilling”.\n\nWouldn’t it be great if there were a way to “teleport” data to the components in the tree that need it without passing props? With React’s context feature, there is!\n\nContext lets a parent component provide data to the entire tree below it. There are many uses for context. Here is one example. Consider this Heading component that accepts a level for its size:\n\nLet’s say you want multiple headings within the same Section to always have the same size:\n\nCurrently, you pass the level prop to each <Heading> separately:\n\nIt would be nice if you could pass the level prop to the <Section> component instead and remove it from the <Heading>. This way you could enforce that all headings in the same section have the same size:\n\nBut how can the <Heading> component know the level of its closest <Section>? That would require some way for a child to “ask” for data from somewhere above in the tree.\n\nYou can’t do it with props alone. This is where context comes into play. You will do it in three steps:\n\nContext lets a parent—even a distant one!—provide some data to the entire tree inside of it.\n\nUsing context in close children\n\nUsing context in distant children\n\nFirst, you need to create the context. You’ll need to export it from a file so that your components can use it:\n\nThe only argument to createContext is the default value. Here, 1 refers to the biggest heading level, but you could pass any kind of value (even an object). You will see the significance of the default value in the next step.\n\nImport the useContext Hook from React and your context:\n\nCurrently, the Heading component reads level from props:\n\nInstead, remove the level prop and read the value from the context you just imported, LevelContext:\n\nuseContext is a Hook. Just like useState and useReducer, you can only call a Hook immediately inside a React component (not inside loops or conditions). useContext tells React that the Heading component wants to read the LevelContext.\n\nNow that the Heading component doesn’t have a level prop, you don’t need to pass the level prop to Heading in your JSX like this anymore:\n\nUpdate the JSX so that it’s the Section that receives it instead:\n\nAs a reminder, this is the markup that you were trying to get working:\n\nNotice this example doesn’t quite work, yet! All the headings have the same size because even though you’re using the context, you have not provided it yet. React doesn’t know where to get it!\n\nIf you don’t provide the context, React will use the default value you’ve specified in the previous step. In this example, you specified 1 as the argument to createContext, so useContext(LevelContext) returns 1, setting all those headings to <h1>. Let’s fix this problem by having each Section provide its own context.\n\nThe Section component currently renders its children:\n\nWrap them with a context provider to provide the LevelContext to them:\n\nThis tells React: “if any component inside this <Section> asks for LevelContext, give them this level.” The component will use the value of the nearest <LevelContext> in the UI tree above it.\n\nIt’s the same result as the original code, but you did not need to pass the level prop to each Heading component! Instead, it “figures out” its heading level by asking the closest Section above:\n\nCurrently, you still have to specify each section’s level manually:\n\nSince context lets you read information from a component above, each Section could read the level from the Section above, and pass level + 1 down automatically. Here is how you could do it:\n\nWith this change, you don’t need to pass the level prop either to the <Section> or to the <Heading>:\n\nNow both Heading and Section read the LevelContext to figure out how “deep” they are. And the Section wraps its children into the LevelContext to specify that anything inside of it is at a “deeper” level.\n\nThis example uses heading levels because they show visually how nested components can override context. But context is useful for many other use cases too. You can pass down any information needed by the entire subtree: the current color theme, the currently logged in user, and so on.\n\nYou can insert as many components as you like between the component that provides context and the one that uses it. This includes both built-in components like <div> and components you might build yourself.\n\nIn this example, the same Post component (with a dashed border) is rendered at two different nesting levels. Notice that the <Heading> inside of it gets its level automatically from the closest <Section>:\n\nYou didn’t do anything special for this to work. A Section specifies the context for the tree inside it, so you can insert a <Heading> anywhere, and it will have the correct size. Try it in the sandbox above!\n\nContext lets you write components that “adapt to their surroundings” and display themselves differently depending on where (or, in other words, in which context) they are being rendered.\n\nHow context works might remind you of CSS property inheritance. In CSS, you can specify color: blue for a <div>, and any DOM node inside of it, no matter how deep, will inherit that color unless some other DOM node in the middle overrides it with color: green. Similarly, in React, the only way to override some context coming from above is to wrap children into a context provider with a different value.\n\nIn CSS, different properties like color and background-color don’t override each other. You can set all <div>’s color to red without impacting background-color. Similarly, different React contexts don’t override each other. Each context that you make with createContext() is completely separate from other ones, and ties together components using and providing that particular context. One component may use or provide many different contexts without a problem.\n\nContext is very tempting to use! However, this also means it’s too easy to overuse it. Just because you need to pass some props several levels deep doesn’t mean you should put that information into context.\n\nHere’s a few alternatives you should consider before using context:\n\nIf neither of these approaches works well for you, consider context.\n\nContext is not limited to static values. If you pass a different value on the next render, React will update all the components reading it below! This is why context is often used in combination with state.\n\nIn general, if some information is needed by distant components in different parts of the tree, it’s a good indication that context will help you.\n\nIn this example, toggling the checkbox changes the imageSize prop passed to each <PlaceImage>. The checkbox state is held in the top-level App component, but each <PlaceImage> needs to be aware of it.\n\nCurrently, App passes imageSize to List, which passes it to each Place, which passes it to the PlaceImage. Remove the imageSize prop, and instead pass it from the App component directly to PlaceImage.\n\nYou can declare context in Context.js.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Passing Data Deeply with Context",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "The problem with passing props",
+      "id": "the-problem-with-passing-props"
+    },
+    {
+      "level": "h2",
+      "text": "Context: an alternative to passing props",
+      "id": "context-an-alternative-to-passing-props"
+    },
+    {
+      "level": "h3",
+      "text": "Step 1: Create the context",
+      "id": "step-1-create-the-context"
+    },
+    {
+      "level": "h3",
+      "text": "Step 2: Use the context",
+      "id": "step-2-use-the-context"
+    },
+    {
+      "level": "h3",
+      "text": "Step 3: Provide the context",
+      "id": "step-3-provide-the-context"
+    },
+    {
+      "level": "h2",
+      "text": "Using and providing context from the same component",
+      "id": "using-and-providing-context-from-the-same-component"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Context passes through intermediate components",
+      "id": "context-passes-through-intermediate-components"
+    },
+    {
+      "level": "h2",
+      "text": "Before you use context",
+      "id": "before-you-use-context"
+    },
+    {
+      "level": "h2",
+      "text": "Use cases for context",
+      "id": "use-cases-for-context"
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    },
+    {
+      "level": "h2",
+      "text": "Try out some challenges",
+      "id": "challenges"
+    },
+    {
+      "level": "h4",
+      "text": "Challenge 1 of 1: Replace prop drilling with context",
+      "id": "replace-prop-drilling-with-context"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<Section>  <Heading level={3}>About</Heading>  <Heading level={3}>Photos</Heading>  <Heading level={3}>Videos</Heading></Section>",
+      "language": "jsx"
+    },
+    {
+      "code": "<Section level={3}>  <Heading>About</Heading>  <Heading>Photos</Heading>  <Heading>Videos</Heading></Section>",
+      "language": "jsx"
+    },
+    {
+      "code": "import { useContext } from 'react';import { LevelContext } from './LevelContext.js';",
+      "language": "sql"
+    },
+    {
+      "code": "export default function Heading({ level, children }) {  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function Heading({ children }) {  const level = useContext(LevelContext);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "<Section>  <Heading level={4}>Sub-sub-heading</Heading>  <Heading level={4}>Sub-sub-heading</Heading>  <Heading level={4}>Sub-sub-heading</Heading></Section>",
+      "language": "jsx"
+    },
+    {
+      "code": "<Section level={4}>  <Heading>Sub-sub-heading</Heading>  <Heading>Sub-sub-heading</Heading>  <Heading>Sub-sub-heading</Heading></Section>",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function Section({ children }) {  return (    <section className=\"section\">      {children}    </section>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "import { LevelContext } from './LevelContext.js';export default function Section({ level, children }) {  return (    <section className=\"section\">      <LevelContext value={level}>        {children}      </LevelContext>    </section>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function Page() {  return (    <Section level={1}>      ...      <Section level={2}>        ...        <Section level={3}>          ...",
+      "language": "javascript"
+    },
+    {
+      "code": "import { useContext } from 'react';import { LevelContext } from './LevelContext.js';export default function Section({ children }) {  const level = useContext(LevelContext);  return (    <section className=\"section\">      <LevelContext value={level + 1}>        {children}      </LevelContext>    </section>  );}",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react-dom"
+  ]
+}

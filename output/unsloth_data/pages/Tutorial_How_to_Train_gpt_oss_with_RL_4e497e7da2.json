@@ -1,0 +1,85 @@
+{
+  "title": "Tutorial: How to Train gpt-oss with RL",
+  "content": "Learn to train OpenAI gpt-oss with GRPO to autonomously beat 2048 locally or on Colab.\n\nLLMs often struggle with tasks that involve complex environments. However, by applying [reinforcement learning](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide) (RL) and designing a custom [reward function](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide#reward-functions-verifiers), these challenges can be overcome.\n\nRL can be adapted for tasks such as auto kernel or strategy creation. This tutorial shows how to train **gpt-oss** with [**GRPO**](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide#from-rlhf-ppo-to-grpo-and-rlvr) and Unsloth to autonomously beat 2048.\n\n| [2048 notebook](https://colab.research.google.com/github/openai/gpt-oss/blob/main/examples/reinforcement-fine-tuning.ipynb) (Official OpenAI example) | [Kernel generation notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/gpt-oss-\\(20B\\)-GRPO.ipynb) |\n| ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |\n\n**What you’ll build:**\n\n* Train gpt-oss-20b so the model can automatically win 2048\n* Create a minimal 2048 environment the model can interact with\n* Define **reward functions** that:\n  1. Check the generated strategy compiles and runs,\n  2. Prevent reward hacking (disallow external imports), and\n  3. Reward actual game success\n* Run inference and export the model (MXFP4 4‑bit or merged FP16)\n\n{% hint style=\"info\" %}\n**Hardware:** The 2048 example runs on a free Colab T4, but training will be slow. A100/H100 is much faster. 4‑bit loading + LoRA lets you fit a 20B model into modest VRAM.\n{% endhint %}\n\n{% stepper %}\n{% step %}\n\nRun this cell at the top of a notebook (works on Colab).\n\n#### Load gpt-oss with Unsloth\n\nLoad the 20B model in 4‑bit QLoRA for memory efficiency, then wrap it with a LoRA adapter. You can also train it in 16-bit LoRA but it will use 4x more memory. For more settings view our [configuration guide](https://docs.unsloth.ai/get-started/fine-tuning-llms-guide#id-2.-choose-the-right-model--method).\n\n{% hint style=\"info\" %}\nIf you hit OOM, try lowering `max_seq_length`, `lora_rank`, or `num_generations` (later), and keep `load_in_4bit=True`.\n{% endhint %}\n{% endstep %}\n\n#### 2048 game environment (minimal)\n\n* A `GameBoard` class supporting **W/A/S/D** moves\n* Merge/score logic\n* `execute_with_time_limit` wrapper so poorly written strategies can’t hang the kernel\n\nYou can quickly smoke‑test with a trivial policy:\n\n#### Safe code execution & anti‑cheat checks\n\nGenerated strategies are **Python functions**. To keep execution safe and prevent reward hacking:\n\n* **Module whitelist check** — only allow Python stdlib symbols:\n\n* **Block disallowed imports** (e.g., NumPy):\n\n* **Lock down execution** to a sandboxed function:\n\n* **Enforce a hard wall‑clock limit** on strategy runs:\n\n{% step %}\n\\### Prompt & dataset\n\nWe prompt the model to **emit a short strategy function** inside triple backticks:\n\npython\ndef strategy(board):\n    return \"W\"  # Example\n`\n\nCreate a tiny synthetic dataset (reusing the same prompt) and compute the prompt length so GRPO knows how many completion tokens to sample:\n\n{% hint style=\"info\" %} You can replace this dataset with real prompts for your own RL task. {% endhint %} {% endstep %}\n\n#### Reward function time!\n\n1. **Extract the code block** from the model’s reply:\n\n\") >= 2:\n           first = text.find(\"\", first)\n           fx = text[first:second].strip()\n           fx = fx.removeprefix(\"python\\n\")\n           fx = fx[fx.find(\"def\"):]\n           if fx.startswith(\"def strategy(board):\"):\n               return fx\n       return None\n   python\n   from unsloth import create_locked_down_function, check_python_modules\n\ndef function_works(completions, **kwargs):\n       scores = []\n       for completion in completions:\n           response = completion[0][\"content\"]\n           function = extract_function(response)\n           if function is None:\n               scores.append(-2.0)\n               continue\n           ok, info = check_python_modules(function)\n           if \"error\" in info:\n               scores.append(-2.0)\n               continue\n           try:\n               _ = create_locked_down_function(function)\n               scores.append(1.0)\n           except Exception:\n               scores.append(-0.5)\n       return scores\n   python\n   def no_cheating(completions, **kwargs):\n       scores = []\n       for completion in completions:\n           response = completion[0][\"content\"]\n           function = extract_function(response)\n           if function is None:\n               scores.append(-1.0)\n               continue\n           ok, _ = check_python_modules(function)\n           scores.append(1.0 if ok else -20.0)  # heavy penalty if cheating\n       return scores\n   python\n   import numpy as np\n\nPRINTER = 0  # occasionally print for debugging\n\ndef strategy_succeeds(completions, **kwargs):\n       global PRINTER\n       scores = []\n       seed = np.random.randint(10000)\n       for completion in completions:\n           response = completion[0][\"content\"]\n           function = extract_function(response)\n           if function is None:\n               scores.append(-2.0)\n               continue\n           try:\n               new_strategy = create_locked_down_function(function)\n           except Exception:\n               scores.append(0.0)\n               continue\n           try:\n               game = GameBoard(size=6, seed=seed, target=2048, probability_fours=0.10)\n               steps, state = execute_strategy(new_strategy, game)\n               if PRINTER % 5 == 0:\n                   print(function)\n                   print(f\"Steps={steps} State={state}\")\n                   print(game.board().pretty())\n               PRINTER += 1\n               if state == \"success\":\n                   scores.append(20.0)\n               else:\n                   scores.append(2.0)   # worked but didn’t reach 2048\n           except TimeoutError:\n               scores.append(-1.0)      # timed out\n           except Exception:\n               scores.append(-3.0)      # crashed\n       return scores\n   python\nfrom trl import GRPOConfig, GRPOTrainer\n\nmax_prompt_length     = maximum_length + 1\nmax_completion_length = max_seq_length - max_prompt_length\n\ntraining_args = GRPOConfig(\n    temperature=1.0,\n    learning_rate=5e-5,\n    weight_decay=0.01,\n    warmup_ratio=0.1,\n    lr_scheduler_type=\"linear\",\n    optim=\"adamw_8bit\",\n    logging_steps=1,\n    per_device_train_batch_size=1,\n    gradient_accumulation_steps=1,    # bump to 4 for smoother reward signals\n    num_generations=2,                # lower if you OOM\n    max_prompt_length=max_prompt_length,\n    max_completion_length=max_completion_length,\n    max_steps=1000,                   # or set num_train_epochs=1\n    save_steps=100,\n    report_to=\"none\",\n    output_dir=\"outputs\",\n)\n\ntrainer = GRPOTrainer(\n    model=model,\n    processing_class=tokenizer,\n    reward_funcs=[function_works, no_cheating, strategy_succeeds],\n    args=training_args,\n    train_dataset=dataset,\n    # Optional eval split:\n    # train_dataset=new_dataset[\"train\"],\n    # eval_dataset=new_dataset[\"test\"],\n)\npython\ntrainer.train()\npython\nfrom transformers import TextStreamer\n\ntext = tokenizer.apply_chat_template(\n    [{\"role\": \"user\", \"content\": prompt}],\n    tokenize=False,\n    add_generation_prompt=True,\n    reasoning_effort=\"low\",\n)\n\n_ = model.generate(\n    **tokenizer(text, return_tensors=\"pt\").to(\"cuda\"),\n    temperature=1.0,\n    max_new_tokens=1024,\n    streamer=TextStreamer(tokenizer, skip_prompt=False)\n\npython\n  model.save_pretrained_merged(\"finetuned_model\", tokenizer, save_method=\"merged_16bit\")\n  # or push\n  model.push_to_hub_merged(\"<org_or_user>/<repo>\", tokenizer, token=\"<hf_token>\", save_method=\"merged_16bit\")\n  ```\n\n#### Troubleshooting & tips\n\n* **OOM / slow**: reduce `max_seq_length`, `num_generations`, `lora_rank`; keep 4‑bit; try A100 if available.\n* **No reward improvement**: increase training steps, soften penalties, or add curriculum (start with smaller boards / lower targets).\n* **Reward hacking**: keep `check_python_modules` strict; validate strategy behavior across multiple random seeds.\n* **Unstable training**: raise `gradient_accumulation_steps` to smooth updates; lower `learning_rate` (e.g., 2e‑5).\n* **Long hangs**: ensure `execute_with_time_limit` wraps any strategy execution.\n  {% endstep %}\n\n#### Adapt to your own RL task\n\n* Replace the 2048 env with your own environment and **three rewards**: (a) syntax/compilation, (b) anti‑cheat/safety, (c) task success.\n* Update the **prompt** to request the kind of function or output you need.\n* Keep the same Unsloth + GRPO scaffolding; only swap the env and rewards.\n  {% endstep %}\n  {% endstepper %}",
+  "code_samples": [
+    {
+      "code": "!pip install --upgrade -qqq uv\ntry: import numpy; get_numpy = f\"numpy=={numpy.__version__}\"\nexcept: get_numpy = \"numpy\"\n!uv pip install -qqq \\\n    \"torch>=2.8.0\" \"triton>=3.4.0\" {get_numpy} torchvision bitsandbytes \"transformers==4.56.2\" \\\n    \"unsloth_zoo[base] @ git+https://github.com/unslothai/unsloth-zoo\" \\\n    \"unsloth[base] @ git+https://github.com/unslothai/unsloth\" \\\n    git+https://github.com/triton-lang/triton.git@05b2c186c1b6c9a08375389d5efe9cb4c401c075#subdirectory=python/triton_kernels\n!uv pip install --upgrade --no-deps transformers==4.56.2 tokenizers\n!uv pip install --no-deps trl==0.22.2",
+      "language": "bash"
+    },
+    {
+      "code": "from unsloth import FastLanguageModel\nimport torch\n\nmax_seq_length = 768        # Increase if your task needs longer outputs\nlora_rank      = 4          # Higher rank → better but more VRAM/compute\n\nmodel, tokenizer = FastLanguageModel.from_pretrained(\n    model_name        = \"unsloth/gpt-oss-20b\",  # or unsloth/gpt-oss-20b-BF16 on H100\n    max_seq_length    = max_seq_length,\n    load_in_4bit      = True,                    # False for 16‑bit\n    offload_embedding = True,                    # saves ~1GB VRAM\n)\n\nmodel = FastLanguageModel.get_peft_model(\n    model,\n    r = lora_rank,\n    target_modules = [\n        \"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\",\n        \"gate_proj\", \"up_proj\", \"down_proj\",\n    ],\n    lora_alpha = lora_rank * 2,\n    use_gradient_checkpointing = \"unsloth\",     # big memory saver\n    random_state = 3407,\n)",
+      "language": "python"
+    },
+    {
+      "code": "def always_move_left(board):\n    return \"W\"\n\nsteps, outcome = execute_strategy(always_move_left, GameBoard(size=8, seed=42, target=2048, probability_fours=0.10))",
+      "language": "python"
+    },
+    {
+      "code": "from unsloth import check_python_modules\n  ok, info = check_python_modules(\"\"\"\n  def strategy(board):\n      import math\n      from typing import Callable\n      return \"W\"\n  \"\"\")\n  # ok == True means only Python‑level imports were used",
+      "language": "python"
+    },
+    {
+      "code": "sample = \"\"\"\n  def strategy(board):\n      from numpy import matmul\n      return \"W\"\n  \"\"\"\n  ok, info = check_python_modules(sample)  # ok => False",
+      "language": "python"
+    },
+    {
+      "code": "from unsloth import create_locked_down_function\n  function = \"\"\"\n  def add(a, b):\n      def adder(a):\n          return a + b\n      return adder(b) + b\n  \"\"\"\n  f = create_locked_down_function(function)  # errors if globals / imports are used",
+      "language": "python"
+    },
+    {
+      "code": "from unsloth import execute_with_time_limit\n  @execute_with_time_limit(2)\n  def execute_strategy(strategy, game):\n      # loop until game ends or timeout\n      ...",
+      "language": "python"
+    },
+    {
+      "code": "Create a new short 2048 strategy using only native Python code.\nYou are given a list of list of numbers for the current board state.\nOutput one action for \"W\", \"A\", \"S\", \"D\" on what is the optimal next step.\nOutput your new short function in backticks using the format below:",
+      "language": "unknown"
+    },
+    {
+      "code": "All helper functions should be inside def strategy. Only output the short function `strategy`.",
+      "language": "unknown"
+    },
+    {
+      "code": "from datasets import Dataset\n\nprompt = ...  # as above\n\nmaximum_length = len(tokenizer.apply_chat_template(\n    [{\"role\": \"user\", \"content\": prompt}], add_generation_prompt=True\n))\n\ndataset = Dataset.from_list([\n    {\"prompt\": [{\"role\": \"user\", \"content\": prompt}], \"answer\": 0, \"reasoning_effort\": \"low\"}\n] * 1000)",
+      "language": "python"
+    },
+    {
+      "code": "def extract_function(text):\n       if text.count(\"",
+      "language": "python"
+    },
+    {
+      "code": "2. **`function_works`** - Does it compile & create a callable?",
+      "language": "unknown"
+    },
+    {
+      "code": "3. **`no_cheating`** - No non‑stdlib imports allowed:",
+      "language": "unknown"
+    },
+    {
+      "code": "4. **`strategy_succeeds`** - Play a random board; reward success:",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endstep %}\n\n{% step %}\n\n#### Configure GRPO\n\nWe will use the **GRPOTrainer**. Set the prompt/completion lengths, then build a `GRPOConfig`. Keep in mind you could also set the RL algorithm type to others such as [GSPO](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide/gspo-reinforcement-learning) or Dr. GRPO.",
+      "language": "unknown"
+    },
+    {
+      "code": "{% hint style=\"info\" %} **Reading logs:** Look at `reward` and `reward_std`. It’s normal to see low/zero rewards early (first \\~100–200 steps on small GPUs). {% endhint %} {% endstep %}\n\n{% step %}\n\n#### Train your model",
+      "language": "unknown"
+    },
+    {
+      "code": "This launches the full RL loop: sample completions → score with your rewards → optimize the policy (LoRA). {% endstep %}\n\n{% step %}\n\n#### Inference (after training)\n\nGenerate a fresh strategy with the trained adapter:",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endstep %}\n\n{% step %}\n\n#### Save / Export your fine-tuned mode\n\n* **Merge & save 4‑bit (MXFP4)**",
+      "language": "unknown"
+    },
+    {
+      "code": "python model.save\\_pretrained\\_merged(\"finetuned\\_model\", tokenizer, save\\_method=\"mxfp4\") # or push model.push\\_to\\_hub\\_merged(\"\\<org\\_or\\_user>/\", tokenizer, token=\"\\<hf\\_token>\", save\\_method=\"mxfp4\") \\`\\`\\`\n\n* **Merge & save 16‑bit**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#tutorial:-how-to-train-gpt-oss-with-rl",
+  "links": []
+}

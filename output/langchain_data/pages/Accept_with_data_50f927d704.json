@@ -1,0 +1,8 @@
+{
+  "title": "Accept with data",
+  "content": "ElicitResult(action=\"accept\", content={\"email\": \"user@example.com\", \"age\": 25})",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#accept-with-data",
+  "links": []
+}

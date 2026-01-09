@@ -1,0 +1,8 @@
+{
+  "title": "Define tools",
+  "content": "@tool\ndef multiply(a: int, b: int) -> int:\n    \"\"\"Multiply `a` and `b`.\n\nArgs:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a * b\n\n@tool\ndef add(a: int, b: int) -> int:\n    \"\"\"Adds `a` and `b`.\n\nArgs:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a + b\n\n@tool\ndef divide(a: int, b: int) -> float:\n    \"\"\"Divide `a` and `b`.\n\nArgs:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a / b",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-tools",
+  "links": []
+}

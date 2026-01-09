@@ -1,0 +1,73 @@
+{
+  "title": "Reject Concurrent",
+  "content": "Source: https://docs.langchain.com/langsmith/reject-concurrent\n\nThis guide assumes knowledge of what double-texting is, which you can learn about in the [double-texting conceptual guide](/langsmith/double-texting).\n\nThe guide covers the `reject` option for double texting, which rejects the new run of the graph by throwing an error and continues with the original run until completion. Below is a quick example of using the `reject` option.\n\nFirst, we will define a quick helper function for printing out JS and CURL model outputs (you can skip this if using Python):\n\n<Tabs>\n  <Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nNow, let's import our required packages and instantiate our client, assistant, and thread.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nNow we can run a thread and try to run a second one with the \"reject\" option, which should fail since we have already started a run:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nWe can verify that the original thread finished executing:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/reject-concurrent.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nNow, let's import our required packages and instantiate our client, assistant, and thread.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Create runs\n\nNow we can run a thread and try to run a second one with the \"reject\" option, which should fail since we have already started a run:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    },
+    {
+      "code": "## View run results\n\nWe can verify that the original thread finished executing:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "Create runs",
+      "id": "create-runs"
+    },
+    {
+      "level": "h2",
+      "text": "View run results",
+      "id": "view-run-results"
+    }
+  ],
+  "url": "llms-txt#reject-concurrent",
+  "links": []
+}

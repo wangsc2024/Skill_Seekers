@@ -1,0 +1,31 @@
+{
+  "title": "and this is also supported",
+  "content": "{\"messages\": [{\"type\": \"human\", \"content\": \"message\"}]}\npython  theme={null}\nfrom langchain.messages import AnyMessage\nfrom langgraph.graph.message import add_messages\nfrom typing import Annotated\nfrom typing_extensions import TypedDict\n\nclass GraphState(TypedDict):\n    messages: Annotated[list[AnyMessage], add_messages]\npython  theme={null}\nfrom langgraph.graph import MessagesState\n\nclass State(MessagesState):\n    documents: list[str]\npython  theme={null}\nfrom dataclasses import dataclass\nfrom typing_extensions import TypedDict\n\nfrom langchain_core.runnables import RunnableConfig\nfrom langgraph.graph import StateGraph\nfrom langgraph.runtime import Runtime\n\nclass State(TypedDict):\n    input: str\n    results: str\n\n@dataclass\nclass Context:\n    user_id: str\n\nbuilder = StateGraph(State)\n\ndef plain_node(state: State):\n    return state\n\ndef node_with_runtime(state: State, runtime: Runtime[Context]):\n    print(\"In node: \", runtime.context.user_id)\n    return {\"results\": f\"Hello, {state['input']}!\"}\n\ndef node_with_config(state: State, config: RunnableConfig):\n    print(\"In node with thread_id: \", config[\"configurable\"][\"thread_id\"])\n    return {\"results\": f\"Hello, {state['input']}!\"}\n\nbuilder.add_node(\"plain_node\", plain_node)\nbuilder.add_node(\"node_with_runtime\", node_with_runtime)\nbuilder.add_node(\"node_with_config\", node_with_config)\n...\npython  theme={null}\nbuilder.add_node(my_node)",
+  "code_samples": [
+    {
+      "code": "Since the state updates are always deserialized into LangChain `Messages` when using [`add_messages`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.message.add_messages), you should use dot notation to access message attributes, like `state[\"messages\"][-1].content`.\n\nBelow is an example of a graph that uses [`add_messages`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.message.add_messages) as its reducer function.",
+      "language": "unknown"
+    },
+    {
+      "code": "#### MessagesState\n\nSince having a list of messages in your state is so common, there exists a prebuilt state called `MessagesState` which makes it easy to use messages. `MessagesState` is defined with a single `messages` key which is a list of `AnyMessage` objects and uses the [`add_messages`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.message.add_messages) reducer. Typically, there is more state to track than just messages, so we see people subclass this state and add more fields, like:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Nodes\n\nIn LangGraph, nodes are Python functions (either synchronous or asynchronous) that accept the following arguments:\n\n1. `state` – The [state](#state) of the graph\n2. `config` – A [`RunnableConfig`](https://reference.langchain.com/python/langchain_core/runnables/#langchain_core.runnables.RunnableConfig) object that contains configuration information like `thread_id` and tracing information like `tags`\n3. `runtime` – A `Runtime` object that contains [runtime `context`](#runtime-context) and other information like `store` and `stream_writer`\n\nSimilar to `NetworkX`, you add these nodes to a graph using the [`add_node`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_node) method:",
+      "language": "unknown"
+    },
+    {
+      "code": "Behind the scenes, functions are converted to [`RunnableLambda`](https://python.langchain.com/api_reference/core/runnables/langchain_core.runnables.base.RunnableLambda.html), which add batch and async support to your function, along with native tracing and debugging.\n\nIf you add a node to a graph without specifying a name, it will be given a default name equivalent to the function name.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Nodes",
+      "id": "nodes"
+    }
+  ],
+  "url": "llms-txt#and-this-is-also-supported",
+  "links": []
+}

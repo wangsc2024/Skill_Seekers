@@ -1,0 +1,186 @@
+{
+  "title": "Datasets Guide",
+  "content": "Learn how to create & prepare a dataset for fine-tuning.\n\n## What is a Dataset?\n\nFor LLMs, datasets are collections of data that can be used to train our models. In order to be useful for training, text data needs to be in a format that can be tokenized. You'll also learn how to [use datasets inside of Unsloth](#applying-chat-templates-with-unsloth).\n\nOne of the key parts of creating a dataset is your [chat template](https://docs.unsloth.ai/basics/chat-templates) and how you are going to design it. Tokenization is also important as it breaks text into tokens, which can be words, sub-words, or characters so LLMs can process it effectively. These tokens are then turned into embeddings and are adjusted to help the model understand the meaning and context.\n\nTo enable the process of tokenization, datasets need to be in a format that can be read by a tokenizer.\n\n<table data-full-width=\"false\"><thead><tr><th>Format</th><th>Description</th><th>Training Type</th></tr></thead><tbody><tr><td>Raw Corpus</td><td>Raw text from a source such as a website, book, or article.</td><td>Continued Pretraining (CPT)</td></tr><tr><td>Instruct</td><td>Instructions for the model to follow and an example of the output to aim for.</td><td>Supervised fine-tuning (SFT)</td></tr><tr><td>Conversation</td><td>Multiple-turn conversation between a user and an AI assistant.</td><td>Supervised fine-tuning (SFT)</td></tr><tr><td>RLHF</td><td>Conversation between a user and an AI assistant, with the assistant's responses being ranked by a script, another model or human evaluator.</td><td>Reinforcement Learning (RL)</td></tr></tbody></table>\n\n{% hint style=\"info\" %}\nIt's worth noting that different styles of format exist for each of these types.\n{% endhint %}\n\nBefore we format our data, we want to identify the following:\n\n{% stepper %}\n{% step %} <mark style=\"color:green;\">Purpose of dataset</mark>\n\nKnowing the purpose of the dataset will help us determine what data we need and format to use.\n\nThe purpose could be, adapting a model to a new task such as summarization or improving a model's ability to role-play a specific character. For example:\n\n* Chat-based dialogues (Q\\&A, learn a new language, customer support, conversations).\n* Structured tasks ([classification](https://colab.research.google.com/github/timothelaborie/text_classification_scripts/blob/main/unsloth_classification.ipynb), summarization, generation tasks).\n* Domain-specific data (medical, finance, technical).\n  {% endstep %}\n\n{% step %} <mark style=\"color:green;\">Style of output</mark>\n\nThe style of output will let us know what sources of data we will use to reach our desired output.\n\nFor example, the type of output you want to achieve could be JSON, HTML, text or code. Or perhaps you want it to be Spanish, English or German etc.\n{% endstep %}\n\n{% step %} <mark style=\"color:green;\">Data source</mark>\n\nWhen we know the purpose and style of the data we need, we need to analyze the quality and [quantity](#how-big-should-my-dataset-be) of the data. Hugging Face and Wikipedia are great sources of datasets and Wikipedia is especially useful if you are looking to train a model to learn a language.\n\nThe Source of data can be a CSV file, PDF or even a website. You can also [synthetically generate](#synthetic-data-generation) data but extra care is required to make sure each example is high quality and relevant.\n{% endstep %}\n{% endstepper %}\n\n{% hint style=\"success\" %}\nOne of the best ways to create a better dataset is by combining it with a more generalized dataset from Hugging Face like ShareGPT to make your model smarter and diverse. You could also add [synthetically generated data](#synthetic-data-generation).\n{% endhint %}\n\n## Formatting the Data\n\nWhen we have identified the relevant criteria, and collected the necessary data, we can then format our data into a machine readable format that is ready for training.\n\n### Common Data Formats for LLM Training\n\nFor [**continued pretraining**](https://docs.unsloth.ai/basics/continued-pretraining), we use raw text format without specific structure:\n\nThis format preserves natural language flow and allows the model to learn from continuous text.\n\nIf we are adapting a model to a new task, and intend for the model to output text in a single turn based on a specific set of instructions, we can use **Instruction** format in [Alpaca style](https://docs.unsloth.ai/basics/tutorial-how-to-finetune-llama-3-and-use-in-ollama#id-6.-alpaca-dataset)\n\nWhen we want multiple turns of conversation we can use the ShareGPT format:\n\nThe template format uses the \"from\"/\"value\" attribute keys and messages alternates between `human`and `gpt`, allowing for natural dialogue flow.\n\nThe other common format is OpenAI's ChatML format and is what Hugging Face defaults to. This is probably the most used format, and alternates between `user` and `assistant`\n\n### Applying Chat Templates with Unsloth\n\nFor datasets that usually follow the common chatml format, the process of preparing the dataset for training or finetuning, consists of four simple steps:\n\n* Check the chat templates that Unsloth currently supports:\\\\\n\n\\\n  This will print out the list of templates currently supported by Unsloth. Here is an example output:\\\\\n\n\\\\\n* Use `get_chat_template` to apply the right chat template to your tokenizer:\\\\\n\n\\\\\n* Define your formatting function. Here's an example:\\\\\n\n\\\n  \\\n  This function loops through your dataset applying the chat template you defined to each sample.\\\\\n* Finally, let's load the dataset and apply the required modifications to our dataset: \\\\\n\n\\\n  If your dataset uses the ShareGPT format with \"from\"/\"value\" keys instead of the ChatML \"role\"/\"content\" format, you can use the `standardize_sharegpt` function to convert it first. The revised code will now look as follows:\\\n  \\\\\n\n### Formatting Data Q\\&A\n\n<mark style=\"color:green;\">**Q:**</mark> How can I use the Alpaca instruct format?\n\n<mark style=\"color:green;\">**A:**</mark> If your dataset is already formatted in the Alpaca format, then follow the formatting steps as shown in the Llama3.1 [notebook ](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.1_\\(8B\\)-Alpaca.ipynb#scrollTo=LjY75GoYUCB8). If you need to convert your data to the Alpaca format, one approach is to create a Python script to process your raw data. If you're working on a summarization task, you can use a local LLM to generate instructions and outputs for each example.\n\n<mark style=\"color:green;\">**Q:**</mark> Should I always use the standardize\\_sharegpt method?\n\n<mark style=\"color:green;\">**A:**</mark> Only use the standardize\\_sharegpt method if your target dataset is formatted in the sharegpt format, but your model expect a ChatML format instead.\n\n\\ <mark style=\"color:green;\">**Q:**</mark> Why not use the apply\\_chat\\_template function that comes with the tokenizer.\n\n<mark style=\"color:green;\">**A:**</mark> The `chat_template` attribute when a model is first uploaded by the original model owners sometimes contains errors and may take time to be updated. In contrast, at Unsloth, we thoroughly check and fix any errors in the `chat_template` for every model when we upload the quantized versions to our repositories. Additionally, our `get_chat_template` and `apply_chat_template` methods offer advanced data manipulation features, which are fully documented on our Chat Templates documentation [page](https://docs.unsloth.ai/basics/chat-templates).\n\n<mark style=\"color:green;\">**Q:**</mark> What if my template is not currently supported by Unsloth?\n\n<mark style=\"color:green;\">**A:**</mark> Submit a feature request on the unsloth github issues [forum](https://github.com/unslothai/unsloth). As a temporary workaround, you could also use the tokenizer's own apply\\_chat\\_template function until your feature request is approved and merged.\n\n## Synthetic Data Generation\n\nYou can also use any local LLM like Llama 3.3 (70B) or OpenAI's GPT 4.5 to generate synthetic data. Generally, it is better to use a bigger like Llama 3.3 (70B) to ensure the highest quality outputs. You can directly use inference engines like vLLM, Ollama or llama.cpp to generate synthetic data but it will require some manual work to collect it and prompt for more data. There's 3 goals for synthetic data:\n\n* Produce entirely new data - either from scratch or from your existing dataset\n* Diversify your dataset so your model does not [overfit](https://docs.unsloth.ai/get-started/lora-hyperparameters-guide#avoiding-overfitting-and-underfitting) and become too specific\n* Augment existing data e.g. automatically structure your dataset in the correct chosen format\n\n### Synthetic Dataset Notebook\n\nWe collaborated with Meta to launch a free notebook for creating Synthetic Datasets automatically using local models like Llama 3.2. [Access the notebook here.](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Meta_Synthetic_Data_Llama3_2_\\(3B\\).ipynb)\n\nWhat the notebook does:\n\n* Auto-parses PDFs, websites, YouTube videos and more\n* Uses Meta’s Synthetic Data Kit + Llama 3.2 (3B) to generate QA pairs\n* Cleans and filters the data automatically\n* Fine-tunes the dataset with Unsloth + Llama\n* Notebook is fully done locally with no API calling necessary\n\n### Using a local LLM or ChatGPT for synthetic data\n\nYour goal is to prompt the model to generate and process QA data that is in your specified format. The model will need to learn the structure that you provided and also the context so ensure you at least have 10 examples of data already. Examples prompts:\n\n* **Prompt for generating more dialogue on an existing dataset**:\n\n<pre data-overflow=\"wrap\"><code><strong>Using the dataset example I provided, follow the structure and generate conversations based on the examples.\n  </strong></code></pre>\n* **Prompt if you no have dataset**:\n\n{% code overflow=\"wrap\" %}\n\n{% endcode %}\n* **Prompt for a dataset without formatting**:\n\n{% code overflow=\"wrap\" %}\n\nIt is recommended to check the quality of generated data to remove or improve on irrelevant or poor-quality responses. Depending on your dataset it may also have to be balanced in many areas so your model does not overfit. You can then feed this cleaned dataset back into your LLM to regenerate data, now with even more guidance.\n\n## Dataset FAQ + Tips\n\n### How big should my dataset be?\n\nWe generally recommend using a bare minimum of at least 100 rows of data for fine-tuning to achieve reasonable results. For optimal performance, a dataset with over 1,000 rows is preferable, and in this case, more data usually leads to better outcomes. If your dataset is too small you can also add synthetic data or add a dataset from Hugging Face to diversify it. However, the effectiveness of your fine-tuned model depends heavily on the quality of the dataset, so be sure to thoroughly clean and prepare your data.\n\n### How should I structure my dataset if I want to fine-tune a reasoning model?\n\nIf you want to fine-tune a model that already has reasoning capabilities like the distilled versions of DeepSeek-R1 (e.g. DeepSeek-R1-Distill-Llama-8B), you will need to still follow question/task and answer pairs however, for your answer you will need to change the answer so it includes reasoning/chain-of-thought process and the steps it took to derive the answer.\\\n\\\nFor a model that does not have reasoning and you want to train it so that it later encompasses reasoning capabilities, you will need to utilize a standard dataset but this time without reasoning in its answers. This is training process is known as [Reinforcement Learning and GRPO](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide).\n\n### Multiple datasets\n\nIf you have multiple datasets for fine-tuning, you can either:\n\n* Standardize the format of all datasets, combine them into a single dataset, and fine-tune on this unified dataset.\n* Use the [Multiple Datasets](https://colab.research.google.com/drive/1njCCbE1YVal9xC83hjdo2hiGItpY_D6t?usp=sharing) notebook to fine-tune on multiple datasets directly.\n\n### Can I fine-tune the same model multiple times?\n\nYou can fine-tune an already fine-tuned model multiple times, but it's best to combine all the datasets and perform the fine-tuning in a single process instead. Training an already fine-tuned model can potentially alter the quality and knowledge acquired during the previous fine-tuning process.\n\n## Using Datasets in Unsloth\n\nSee an example of using the Alpaca dataset inside of Unsloth on Google Colab:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-1d66d8714e44d90513dd87b9356eec67886ab3f7%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nWe will now use the Alpaca Dataset created by calling GPT-4 itself. It is a list of 52,000 instructions and outputs which was very popular when Llama-1 was released, since it made finetuning a base LLM be competitive with ChatGPT itself.\n\nYou can access the GPT4 version of the Alpaca dataset [here](https://huggingface.co/datasets/vicgalle/alpaca-gpt4.). Below shows some examples of the dataset:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-0dde50e386e7b245d3e8a57e10a4a81755b3769a%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nYou can see there are 3 columns in each row - an instruction, and input and an output. We essentially combine each row into 1 large prompt like below. We then use this to finetune the language model, and this made it very similar to ChatGPT. We call this process **supervised instruction finetuning**.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-8b3663c5d80adcb935ff77661500f08e13c9af2d%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\n### Multiple columns for finetuning\n\nBut a big issue is for ChatGPT style assistants, we only allow 1 instruction / 1 prompt, and not multiple columns / inputs. For example in ChatGPT, you can see we must submit 1 prompt, and not multiple prompts.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-d90162c2685ced871f4151369aadcaee40a9c54f%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nThis essentially means we have to \"merge\" multiple columns into 1 large prompt for finetuning to actually function!\n\nFor example the very famous Titanic dataset has many many columns. Your job was to predict whether a passenger has survived or died based on their age, passenger class, fare price etc. We can't simply pass this into ChatGPT, but rather, we have to \"merge\" this information into 1 large prompt.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-a2df04874bfc879182cb66c789341d49700227ea%2FMerge.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nFor example, if we ask ChatGPT with our \"merged\" single prompt which includes all the information for that passenger, we can then ask it to guess or predict whether the passenger has died or survived.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-b3da2b36afe37469cd3962f37186e758871864a5%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nOther finetuning libraries require you to manually prepare your dataset for finetuning, by merging all your columns into 1 prompt. In Unsloth, we simply provide the function called `to_sharegpt` which does this in 1 go!\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-62b94dc44f2e343020d31de575f52eb22be4b0fc%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nNow this is a bit more complicated, since we allow a lot of customization, but there are a few points:\n\n* You must enclose all columns in curly braces `{}`. These are the column names in the actual CSV / Excel file.\n* Optional text components must be enclosed in `[[]]`. For example if the column \"input\" is empty, the merging function will not show the text and skip this. This is useful for datasets with missing values.\n* Select the output or target / prediction column in `output_column_name`. For the Alpaca dataset, this will be `output`.\n\nFor example in the Titanic dataset, we can create a large merged prompt format like below, where each column / piece of text becomes optional.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-e6228cf6e5c0bb4e4b45e6f3e045910d567c33d2%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nFor example, pretend the dataset looks like this with a lot of missing data:\n\n| Embarked | Age | Fare |\n| -------- | --- | ---- |\n| S        | 23  |      |\n|          | 18  | 7.25 |\n\nThen, we do not want the result to be:\n\n1. The passenger embarked from S. Their age is 23. Their fare is **EMPTY**.\n2. The passenger embarked from **EMPTY**. Their age is 18. Their fare is $7.25.\n\nInstead by optionally enclosing columns using `[[]]`, we can exclude this information entirely.\n\n1. \\[\\[The passenger embarked from S.]] \\[\\[Their age is 23.]] \\[\\[Their fare is **EMPTY**.]]\n2. \\[\\[The passenger embarked from **EMPTY**.]] \\[\\[Their age is 18.]] \\[\\[Their fare is $7.25.]]\n\n1. The passenger embarked from S. Their age is 23.\n2. Their age is 18. Their fare is $7.25.\n\n### Multi turn conversations\n\nA bit issue if you didn't notice is the Alpaca dataset is single turn, whilst remember using ChatGPT was interactive and you can talk to it in multiple turns. For example, the left is what we want, but the right which is the Alpaca dataset only provides singular conversations. We want the finetuned language model to somehow learn how to do multi turn conversations just like ChatGPT.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-2a65cd74ddd03a6bcbbc9827d9d034e4879a8e6a%2Fdiff.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nSo we introduced the `conversation_extension` parameter, which essentially selects some random rows in your single turn dataset, and merges them into 1 conversation! For example, if you set it to 3, we randomly select 3 rows and merge them into 1! Setting them too long can make training slower, but could make your chatbot and final finetune much better!\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-2b1b3494b260f1102942d86143a885225c6a06f2%2Fcombine.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nThen set `output_column_name` to the prediction / output column. For the Alpaca dataset dataset, it would be the output column.\n\nWe then use the `standardize_sharegpt` function to just make the dataset in a correct format for finetuning! Always call this!\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-7bf83bf802191bda9e417bbe45afa181e7f24f38%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\n## Vision Fine-tuning\n\nThe dataset for fine-tuning a vision or multimodal model also includes image inputs. For example, the [Llama 3.2 Vision Notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.2_\\(11B\\)-Vision.ipynb#scrollTo=vITh0KVJ10qX) uses a radiography case to show how AI can help medical professionals analyze X-rays, CT scans, and ultrasounds more efficiently.\n\nWe'll be using a sampled version of the ROCO radiography dataset. You can access the dataset [here](https://www.google.com/url?q=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Funsloth%2FRadiology_mini). The dataset includes X-rays, CT scans and ultrasounds showcasing medical conditions and diseases. Each image has a caption written by experts describing it. The goal is to finetune a VLM to make it a useful analysis tool for medical professionals.\n\nLet's take a look at the dataset, and check what the 1st example shows:\n\n| Image                                                                                                                                                                                                                                                                              | Caption                                                                                                                                       |\n| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |\n| <div><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-97d4489827403bd4795494f33d01a10979788c30%2Fxray.png?alt=media\" alt=\"\" width=\"164\"><figcaption></figcaption></figure></div> | Panoramic radiography shows an osteolytic lesion in the right posterior maxilla with resorption of the floor of the maxillary sinus (arrows). |\n\nTo format the dataset, all vision finetuning tasks should be formatted as follows:\n\nWe will craft an custom instruction asking the VLM to be an expert radiographer. Notice also instead of just 1 instruction, you can add multiple turns to make it a dynamic conversation.\n\nLet's convert the dataset into the \"correct\" format for finetuning:\n\nThe first example is now structured like below:\n\n{% code overflow=\"wrap\" %}\n\nBefore we do any finetuning, maybe the vision model already knows how to analyse the images? Let's check if this is the case!\n\nFor more details, view our dataset section in the [notebook here](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.2_\\(11B\\)-Vision.ipynb#scrollTo=vITh0KVJ10qX).",
+  "code_samples": [
+    {
+      "code": "\"text\": \"Pasta carbonara is a traditional Roman pasta dish. The sauce is made by mixing raw eggs with grated Pecorino Romano cheese and black pepper. The hot pasta is then tossed with crispy guanciale (cured pork cheek) and the egg mixture, creating a creamy sauce from the residual heat. Despite popular belief, authentic carbonara never contains cream or garlic. The dish likely originated in Rome in the mid-20th century, though its exact origins are debated...\"",
+      "language": "json"
+    },
+    {
+      "code": "\"Instruction\": \"Task we want the model to perform.\"\n\n\"Input\": \"Optional, but useful, it will essentially be the user's query.\"\n\n\"Output\": \"The expected result of the task and the output of the model.\"",
+      "language": "json"
+    },
+    {
+      "code": "{\n  \"conversations\": [\n    {\n      \"from\": \"human\",\n      \"value\": \"Can you help me make pasta carbonara?\"\n    },\n    {\n      \"from\": \"gpt\",\n      \"value\": \"Would you like the traditional Roman recipe, or a simpler version?\"\n    },\n    {\n      \"from\": \"human\",\n      \"value\": \"The traditional version please\"\n    },\n    {\n      \"from\": \"gpt\",\n      \"value\": \"The authentic Roman carbonara uses just a few ingredients: pasta, guanciale, eggs, Pecorino Romano, and black pepper. Would you like the detailed recipe?\"\n    }\n  ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"What is 1+1?\"\n    },\n    {\n      \"role\": \"assistant\",\n      \"content\": \"It's 2!\"\n    },\n  ]\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "from unsloth.chat_templates import CHAT_TEMPLATES\n  print(list(CHAT_TEMPLATES.keys()))",
+      "language": "unknown"
+    },
+    {
+      "code": "['unsloth', 'zephyr', 'chatml', 'mistral', 'llama', 'vicuna', 'vicuna_old', 'vicuna old', 'alpaca', 'gemma', 'gemma_chatml', 'gemma2', 'gemma2_chatml', 'llama-3', 'llama3', 'phi-3', 'phi-35', 'phi-3.5', 'llama-3.1', 'llama-31', 'llama-3.2', 'llama-3.3', 'llama-32', 'llama-33', 'qwen-2.5', 'qwen-25', 'qwen25', 'qwen2.5', 'phi-4', 'gemma-3', 'gemma3']",
+      "language": "unknown"
+    },
+    {
+      "code": "from unsloth.chat_templates import get_chat_template\n\n  tokenizer = get_chat_template(\n      tokenizer,\n      chat_template = \"gemma-3\", # change this to the right chat_template name\n  )",
+      "language": "unknown"
+    },
+    {
+      "code": "def formatting_prompts_func(examples):\n     convos = examples[\"conversations\"]\n     texts = [tokenizer.apply_chat_template(convo, tokenize = False, add_generation_prompt = False) for convo in convos]\n     return { \"text\" : texts, }",
+      "language": "unknown"
+    },
+    {
+      "code": "# Import and load dataset\n  from datasets import load_dataset\n  dataset = load_dataset(\"repo_name/dataset_name\", split = \"train\")\n\n  # Apply the formatting function to your dataset using the map method\n  dataset = dataset.map(formatting_prompts_func, batched = True,)",
+      "language": "unknown"
+    },
+    {
+      "code": "# Import dataset\n  from datasets import load_dataset\n  dataset = load_dataset(\"mlabonne/FineTome-100k\", split = \"train\")\n\n  # Convert your dataset to the \"role\"/\"content\" format if necessary\n  from unsloth.chat_templates import standardize_sharegpt\n  dataset = standardize_sharegpt(dataset)\n\n  # Apply the formatting function to your dataset using the map method\n  dataset = dataset.map(formatting_prompts_func, batched = True,)",
+      "language": "unknown"
+    },
+    {
+      "code": "Create 10 examples of product reviews for Coca-Coca classified as either positive, negative, or neutral.",
+      "language": "unknown"
+    },
+    {
+      "code": "Structure my dataset so it is in a QA ChatML format for fine-tuning. Then generate 5 synthetic data examples with the same topic and format.",
+      "language": "unknown"
+    },
+    {
+      "code": "Dataset({\n    features: ['image', 'image_id', 'caption', 'cui'],\n    num_rows: 1978\n})",
+      "language": "unknown"
+    },
+    {
+      "code": "[\n{ \"role\": \"user\",\n  \"content\": [{\"type\": \"text\",  \"text\": instruction}, {\"type\": \"image\", \"image\": image} ]\n},\n{ \"role\": \"assistant\",\n  \"content\": [{\"type\": \"text\",  \"text\": answer} ]\n},\n]",
+      "language": "python"
+    },
+    {
+      "code": "Let's convert the dataset into the \"correct\" format for finetuning:",
+      "language": "unknown"
+    },
+    {
+      "code": "The first example is now structured like below:",
+      "language": "unknown"
+    },
+    {
+      "code": "{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\nBefore we do any finetuning, maybe the vision model already knows how to analyse the images? Let's check if this is the case!",
+      "language": "unknown"
+    },
+    {
+      "code": "And the result:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What is a Dataset?",
+      "id": "what-is-a-dataset?"
+    },
+    {
+      "level": "h3",
+      "text": "Data Format",
+      "id": "data-format"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "Formatting the Data",
+      "id": "formatting-the-data"
+    },
+    {
+      "level": "h3",
+      "text": "Common Data Formats for LLM Training",
+      "id": "common-data-formats-for-llm-training"
+    },
+    {
+      "level": "h3",
+      "text": "Applying Chat Templates with Unsloth",
+      "id": "applying-chat-templates-with-unsloth"
+    },
+    {
+      "level": "h3",
+      "text": "Formatting Data Q\\&A",
+      "id": "formatting-data-q\\&a"
+    },
+    {
+      "level": "h2",
+      "text": "Synthetic Data Generation",
+      "id": "synthetic-data-generation"
+    },
+    {
+      "level": "h3",
+      "text": "Synthetic Dataset Notebook",
+      "id": "synthetic-dataset-notebook"
+    },
+    {
+      "level": "h3",
+      "text": "Using a local LLM or ChatGPT for synthetic data",
+      "id": "using-a-local-llm-or-chatgpt-for-synthetic-data"
+    },
+    {
+      "level": "h2",
+      "text": "Dataset FAQ + Tips",
+      "id": "dataset-faq-+-tips"
+    },
+    {
+      "level": "h3",
+      "text": "How big should my dataset be?",
+      "id": "how-big-should-my-dataset-be?"
+    },
+    {
+      "level": "h3",
+      "text": "How should I structure my dataset if I want to fine-tune a reasoning model?",
+      "id": "how-should-i-structure-my-dataset-if-i-want-to-fine-tune-a-reasoning-model?"
+    },
+    {
+      "level": "h3",
+      "text": "Multiple datasets",
+      "id": "multiple-datasets"
+    },
+    {
+      "level": "h3",
+      "text": "Can I fine-tune the same model multiple times?",
+      "id": "can-i-fine-tune-the-same-model-multiple-times?"
+    },
+    {
+      "level": "h2",
+      "text": "Using Datasets in Unsloth",
+      "id": "using-datasets-in-unsloth"
+    },
+    {
+      "level": "h3",
+      "text": "Alpaca Dataset",
+      "id": "alpaca-dataset"
+    },
+    {
+      "level": "h3",
+      "text": "Multiple columns for finetuning",
+      "id": "multiple-columns-for-finetuning"
+    },
+    {
+      "level": "h3",
+      "text": "Multi turn conversations",
+      "id": "multi-turn-conversations"
+    },
+    {
+      "level": "h2",
+      "text": "Vision Fine-tuning",
+      "id": "vision-fine-tuning"
+    }
+  ],
+  "url": "llms-txt#datasets-guide",
+  "links": []
+}

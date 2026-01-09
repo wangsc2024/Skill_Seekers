@@ -1,0 +1,56 @@
+{
+  "title": "Main agent with subagent as a tool",
+  "content": "main_agent = create_agent(model=\"anthropic:claude-sonnet-4-20250514\", tools=[call_research_agent])\nmermaid  theme={null}\nsequenceDiagram\n    participant User\n    participant Main Agent\n    participant Research Subagent\n\nUser->>Main Agent: \"What's the weather in Tokyo?\"\n    Main Agent->>Research Subagent: research(\"Tokyo weather\")\n    Note over Main Agent: Waiting for result...\n    Research Subagent-->>Main Agent: \"Currently 72°F, sunny\"\n    Main Agent-->>User: \"It's 72°F and sunny in Tokyo\"\nmermaid  theme={null}\nsequenceDiagram\n    participant User\n    participant Main Agent\n    participant Job System\n    participant Contract Reviewer\n\nUser->>Main Agent: \"Review this M&A contract\"\n    Main Agent->>Job System: run_agent(\"legal_reviewer\", task)\n    Job System->>Contract Reviewer: Start agent\n    Job System-->>Main Agent: job_id: \"job_123\"\n    Main Agent-->>User: \"Started review (job_123)\"\n\nNote over Contract Reviewer: Reviewing 150+ pages...\n\nUser->>Main Agent: \"What's the status?\"\n    Main Agent->>Job System: check_status(job_id)\n    Job System-->>Main Agent: \"running\"\n    Main Agent-->>User: \"Still reviewing contract...\"\n\nNote over Contract Reviewer: Review completes\n\nUser->>Main Agent: \"Is it done yet?\"\n    Main Agent->>Job System: check_status(job_id)\n    Job System-->>Main Agent: \"completed\"\n    Main Agent->>Job System: get_result(job_id)\n    Job System-->>Main Agent: Contract analysis\n    Main Agent-->>User: \"Review complete: [findings]\"\nmermaid  theme={null}\ngraph LR\n    A[User] --> B[Main Agent]\n    B --> C[Subagent A]\n    B --> D[Subagent B]\n    B --> E[Subagent C]\n    C --> B\n    D --> B\n    E --> B\n    B --> F[User response]\npython  theme={null}\nfrom langchain.tools import tool\nfrom langchain.agents import create_agent",
+  "code_samples": [
+    {
+      "code": "<Card title=\"Tutorial: Build a personal assistant with subagents\" icon=\"sitemap\" href=\"/oss/python/langchain/multi-agent/subagents-personal-assistant\" arrow cta=\"Learn more\">\n  Learn how to build a personal assistant using the subagents pattern, where a central main agent (supervisor) coordinates specialized worker agents.\n</Card>\n\n## Design decisions\n\nWhen implementing the subagents pattern, you'll make several key design choices. This table summarizes the options—each is covered in detail in the sections below.\n\n| Decision                                  | Options                                      |\n| ----------------------------------------- | -------------------------------------------- |\n| [**Sync vs. async**](#sync-vs-async)      | Sync (blocking) vs. async (background)       |\n| [**Tool patterns**](#tool-patterns)       | Tool per agent vs. single dispatch tool      |\n| [**Subagent inputs**](#subagent-inputs)   | Query only vs. full context                  |\n| [**Subagent outputs**](#subagent-outputs) | Subagent result vs full conversation history |\n\n## Sync vs. async\n\nSubagent execution can be **synchronous** (blocking) or **asynchronous** (background). Your choice depends on whether the main agent needs the result to continue.\n\n| Mode      | Main agent behavior                         | Best for                               | Tradeoff                            |\n| --------- | ------------------------------------------- | -------------------------------------- | ----------------------------------- |\n| **Sync**  | Waits for subagent to complete              | Main agent needs result to continue    | Simple, but blocks the conversation |\n| **Async** | Continues while subagent runs in background | Independent tasks, user shouldn't wait | Responsive, but more complex        |\n\n<Tip>\n  Not to be confused with Python's `async`/`await`. Here, \"async\" means the main agent kicks off a background job (typically in a separate process or service) and continues without blocking.\n</Tip>\n\n### Synchronous (default)\n\nBy default, subagent calls are **synchronous**—the main agent waits for each subagent to complete before continuing. Use sync when the main agent's next action depends on the subagent's result.",
+      "language": "unknown"
+    },
+    {
+      "code": "**When to use sync:**\n\n* Main agent needs the subagent's result to formulate its response\n* Tasks have order dependencies (e.g., fetch data → analyze → respond)\n* Subagent failures should block the main agent's response\n\n**Tradeoffs:**\n\n* Simple implementation—just call and wait\n* User sees no response until all subagents complete\n* Long-running tasks freeze the conversation\n\n### Asynchronous\n\nUse **asynchronous execution** when the subagent's work is independent—the main agent doesn't need the result to continue conversing with the user. The main agent kicks off a background job and remains responsive.",
+      "language": "unknown"
+    },
+    {
+      "code": "**When to use async:**\n\n* Subagent work is independent of the main conversation flow\n* Users should be able to continue chatting while work happens\n* You want to run multiple independent tasks in parallel\n\n**Three-tool pattern:**\n\n1. **Start job**: Kicks off the background task, returns a job ID\n2. **Check status**: Returns current state (pending, running, completed, failed)\n3. **Get result**: Retrieves the completed result\n\n**Handling job completion:** When a job finishes, your application needs to notify the user. One approach: surface a notification that, when clicked, sends a `HumanMessage` like \"Check job\\_123 and summarize the results.\"\n\n## Tool patterns\n\nThere are two main ways to expose subagents as tools:\n\n| Pattern                                           | Best for                                                      | Trade-off                                         |\n| ------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------- |\n| [**Tool per agent**](#tool-per-agent)             | Fine-grained control over each subagent's input/output        | More setup, but more customization                |\n| [**Single dispatch tool**](#single-dispatch-tool) | Many agents, distributed teams, convention over configuration | Simpler composition, less per-agent customization |\n\n### Tool per agent",
+      "language": "unknown"
+    },
+    {
+      "code": "The key idea is wrapping subagents as tools that the main agent can call:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Design decisions",
+      "id": "design-decisions"
+    },
+    {
+      "level": "h2",
+      "text": "Sync vs. async",
+      "id": "sync-vs.-async"
+    },
+    {
+      "level": "h3",
+      "text": "Synchronous (default)",
+      "id": "synchronous-(default)"
+    },
+    {
+      "level": "h3",
+      "text": "Asynchronous",
+      "id": "asynchronous"
+    },
+    {
+      "level": "h2",
+      "text": "Tool patterns",
+      "id": "tool-patterns"
+    },
+    {
+      "level": "h3",
+      "text": "Tool per agent",
+      "id": "tool-per-agent"
+    }
+  ],
+  "url": "llms-txt#main-agent-with-subagent-as-a-tool",
+  "links": []
+}

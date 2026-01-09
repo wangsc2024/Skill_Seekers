@@ -1,0 +1,8 @@
+{
+  "title": "Configure Semantic Kernel",
+  "content": "kernel = Kernel()\nkernel.add_service(OpenAIChatCompletion())",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#configure-semantic-kernel",
+  "links": []
+}

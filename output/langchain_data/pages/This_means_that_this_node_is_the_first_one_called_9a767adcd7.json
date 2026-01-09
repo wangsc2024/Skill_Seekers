@@ -1,0 +1,8 @@
+{
+  "title": "This means that this node is the first one called",
+  "content": "workflow.add_edge(START, \"agent\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#this-means-that-this-node-is-the-first-one-called",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Get Thread History",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/threads/get-thread-history\n\nlangsmith/agent-server-openapi.json get /threads/{thread_id}/history\nGet all past states for a thread.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-thread-history",
+  "links": []
+}

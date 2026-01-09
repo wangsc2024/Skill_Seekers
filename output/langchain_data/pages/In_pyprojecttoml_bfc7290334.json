@@ -1,0 +1,36 @@
+{
+  "title": "In pyproject.toml",
+  "content": "[project]\ndependencies = [\n    \"langchain>=0.3.8\"\n]\n\nlangchain>=0.3.8\npython  theme={null}\ndef search_memory(state: State, *, store: BaseStore):\n    # Search the store using semantic similarity\n    # The namespace tuple helps organize different types of memories\n    # e.g., (\"user_facts\", \"preferences\") or (\"conversation\", \"summaries\")\n    results = store.search(\n        namespace=(\"memory\", \"facts\"),  # Organize memories by type\n        query=\"your search query\",\n        limit=3  # number of results to return\n    )\n    return results\njson  theme={null}\n{\n    ...\n    \"store\": {\n        \"index\": {\n            \"embed\": \"path/to/embedding_function.py:embed\",\n            \"dims\": 1536,\n            \"fields\": [\"$\"]\n        }\n    }\n}\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "Or if using [requirements.txt](/langsmith/setup-app-requirements-txt):",
+      "language": "unknown"
+    },
+    {
+      "code": "## Usage\n\nOnce configured, you can use semantic search in your [nodes](/oss/python/langgraph/graph-api#nodes). The store requires a namespace tuple to organize memories:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Custom Embeddings\n\nIf you want to use custom embeddings, you can pass a path to a custom embedding function:",
+      "language": "unknown"
+    },
+    {
+      "code": "The deployment will look for the function in the specified path. The function must be async and accept a list of strings:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Custom Embeddings",
+      "id": "custom-embeddings"
+    }
+  ],
+  "url": "llms-txt#in-pyproject.toml",
+  "links": []
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Messages",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/messages\n\nMessages are the fundamental unit of context for models in LangChain. They represent the input and output of models, carrying both the content and metadata needed to represent the state of a conversation when interacting with an LLM.\n\nMessages are objects that contain:\n\n* <Icon icon=\"user\" size={16} /> [**Role**](#message-types) - Identifies the message type (e.g. `system`, `user`)\n* <Icon icon=\"folder-closed\" size={16} /> [**Content**](#message-content) - Represents the actual content of the message (like text, images, audio, documents, etc.)\n* <Icon icon=\"tag\" size={16} /> [**Metadata**](#message-metadata) - Optional fields such as response information, message IDs, and token usage\n\nLangChain provides a standard message type that works across all model providers, ensuring consistent behavior regardless of the model being called.\n\nThe simplest way to use messages is to create message objects and pass them to a model when [invoking](/oss/python/langchain/models#invocation).\n\n```python  theme={null}\nfrom langchain.chat_models import init_chat_model\nfrom langchain.messages import HumanMessage, AIMessage, SystemMessage\n\nmodel = init_chat_model(\"gpt-5-nano\")\n\nsystem_msg = SystemMessage(\"You are a helpful assistant.\")\nhuman_msg = HumanMessage(\"Hello, how are you?\")",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Basic usage",
+      "id": "basic-usage"
+    }
+  ],
+  "url": "llms-txt#messages",
+  "links": []
+}

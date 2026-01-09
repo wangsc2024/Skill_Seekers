@@ -1,0 +1,61 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/experimental.html",
+  "title": "Experimental Features — AutoGen",
+  "content": "AutoGen Studio offers an experimental authentication feature to enable personalized experiences (multiple users). Currently, only GitHub authentication is supported. You can extend the base authentication class to add support for other authentication methods.\n\nBy default authenticatio is disabled and only enabled when you pass in the --auth-config argument when running the application.\n\nTo enable GitHub authentication, create a auth.yaml file in your app directory:\n\nGenerate a strong, unique JWT secret (at least 32 random bytes). You can run openssl rand -hex 32 to generate a secure random key.\n\nNever commit your JWT secret to version control\n\nIn production, store secrets in environment variables or secure secret management services\n\nRegularly rotate your JWT secret to limit the impact of potential breaches\n\nThe callback URL is the URL that GitHub will redirect to after the user has authenticated. It should match the URL you set in your GitHub OAuth application settings.\n\nEnsure that the callback URL is accessible from the internet if you are running AutoGen Studio on a remote server.\n\nPlease see the documentation on GitHub OAuth for more details on obtaining the client_id and client_secret.\n\nTo pass in this configuration you can use the --auth-config argument when running the application:\n\nOr set the environment variable:\n\nAuthentication is currently experimental and may change in future releases\n\nUser data is stored in your configured database\n\nWhen enabled, all API endpoints require authentication except for the authentication endpoints\n\nWebSocket connections require the token to be passed as a query parameter (?token=your-jwt-token)",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Experimental Features#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Authentication#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Enable GitHub Authentication#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "type: github\njwt_secret: \"your-secret-key\" # keep secure!\ntoken_expiry_minutes: 60\ngithub:\n  client_id: \"your-github-client-id\"\n  client_secret: \"your-github-client-secret\"\n  callback_url: \"http://localhost:8081/api/auth/callback\"\n  scopes: [\"user:email\"]",
+      "language": "yaml"
+    },
+    {
+      "code": "type: github\njwt_secret: \"your-secret-key\" # keep secure!\ntoken_expiry_minutes: 60\ngithub:\n  client_id: \"your-github-client-id\"\n  client_secret: \"your-github-client-secret\"\n  callback_url: \"http://localhost:8081/api/auth/callback\"\n  scopes: [\"user:email\"]",
+      "language": "yaml"
+    },
+    {
+      "code": "autogenstudio ui --auth-config /path/to/auth.yaml",
+      "language": "unknown"
+    },
+    {
+      "code": "autogenstudio ui --auth-config /path/to/auth.yaml",
+      "language": "unknown"
+    },
+    {
+      "code": "export AUTOGENSTUDIO_AUTH_CONFIG=\"/path/to/auth.yaml\"",
+      "language": "unknown"
+    },
+    {
+      "code": "export AUTOGENSTUDIO_AUTH_CONFIG=\"/path/to/auth.yaml\"",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/experimental.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/usage.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/faq.html"
+  ]
+}

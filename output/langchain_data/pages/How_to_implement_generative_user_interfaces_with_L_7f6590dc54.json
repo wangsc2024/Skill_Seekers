@@ -1,0 +1,151 @@
+{
+  "title": "How to implement generative user interfaces with LangGraph",
+  "content": "Source: https://docs.langchain.com/langsmith/generative-ui-react\n\n<Info>\n  **Prerequisites**\n\n* [LangSmith](/langsmith/home)\n  * [Agent Server](/langsmith/agent-server)\n  * [`useStream()` React Hook](/langsmith/use-stream-react)\n</Info>\n\nGenerative user interfaces (Generative UI) allows agents to go beyond text and generate rich user interfaces. This enables creating more interactive and context-aware applications where the UI adapts based on the conversation flow and AI responses.\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/JOyLr_spVEW0t2KF/langsmith/images/generative-ui-sample.jpg?fit=max&auto=format&n=JOyLr_spVEW0t2KF&q=85&s=105943c6c28853fad0a9bc3b4af3a999\" alt=\"Agent Chat showing a prompt about booking/lodging and a generated set of hotel listing cards (images, titles, prices, locations) rendered inline as UI components.\" data-og-width=\"1814\" width=\"1814\" data-og-height=\"898\" height=\"898\" data-path=\"langsmith/images/generative-ui-sample.jpg\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/JOyLr_spVEW0t2KF/langsmith/images/generative-ui-sample.jpg?w=280&fit=max&auto=format&n=JOyLr_spVEW0t2KF&q=85&s=0fd526a7132d33ab6f72002d68a66dec 280w, https://mintcdn.com/langchain-5e9cc07a/JOyLr_spVEW0t2KF/langsmith/images/generative-ui-sample.jpg?w=560&fit=max&auto=format&n=JOyLr_spVEW0t2KF&q=85&s=0c9ffe86700a7b8404f1fdf51b906aa1 560w, https://mintcdn.com/langchain-5e9cc07a/JOyLr_spVEW0t2KF/langsmith/images/generative-ui-sample.jpg?w=840&fit=max&auto=format&n=JOyLr_spVEW0t2KF&q=85&s=50652e58566db8171ead4aef57d78fa6 840w, https://mintcdn.com/langchain-5e9cc07a/JOyLr_spVEW0t2KF/langsmith/images/generative-ui-sample.jpg?w=1100&fit=max&auto=format&n=JOyLr_spVEW0t2KF&q=85&s=a764d790719e8233313fabe4cee93958 1100w, https://mintcdn.com/langchain-5e9cc07a/JOyLr_spVEW0t2KF/langsmith/images/generative-ui-sample.jpg?w=1650&fit=max&auto=format&n=JOyLr_spVEW0t2KF&q=85&s=a02d8d6ecace7eee6df55e3a391c09e2 1650w, https://mintcdn.com/langchain-5e9cc07a/JOyLr_spVEW0t2KF/langsmith/images/generative-ui-sample.jpg?w=2500&fit=max&auto=format&n=JOyLr_spVEW0t2KF&q=85&s=b0709ca94bd9533f5ef5a80da1d60bf6 2500w\" />\n\nLangSmith supports colocating your React components with your graph code. This allows you to focus on building specific UI components for your graph while easily plugging into existing chat interfaces such as [Agent Chat](https://agentchat.vercel.app) and loading the code only when actually needed.\n\n### 1. Define and configure UI components\n\nFirst, create your first UI component. For each component you need to provide an unique identifier that will be used to reference the component in your graph code.\n\nNext, define your UI components in your `langgraph.json` configuration:\n\nThe `ui` section points to the UI components that will be used by graphs. By default, we recommend using the same key as the graph name, but you can split out the components however you like, see [Customise the namespace of UI components](#customise-the-namespace-of-ui-components) for more details.\n\nLangSmith will automatically bundle your UI components code and styles and serve them as external assets that can be loaded by the `LoadExternalComponent` component. Some dependencies such as `react` and `react-dom` will be automatically excluded from the bundle.\n\nCSS and Tailwind 4.x is also supported out of the box, so you can freely use Tailwind classes as well as `shadcn/ui` in your UI components.\n\n<Tabs>\n  <Tab title=\"src/agent/ui.tsx\">\n    \n  </Tab>\n\n<Tab title=\"src/agent/styles.css\">\n    \n  </Tab>\n</Tabs>\n\n### 2. Send the UI components in your graph\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JS\">\n    Use the `typedUi` utility to emit UI elements from your agent nodes:\n\n### 3. Handle UI elements in your React application\n\nOn the client side, you can use `useStream()` and `LoadExternalComponent` to display the UI elements.\n\nBehind the scenes, `LoadExternalComponent` will fetch the JS and CSS for the UI components from LangSmith and render them in a shadow DOM, thus ensuring style isolation from the rest of your application.\n\n### Provide custom components on the client side\n\nIf you already have the components loaded in your client application, you can provide a map of such components to be rendered directly without fetching the UI code from LangSmith.\n\n### Show loading UI when components are loading\n\nYou can provide a fallback UI to be rendered when the components are loading.\n\n### Customise the namespace of UI components.\n\nBy default `LoadExternalComponent` will use the `assistantId` from `useStream()` hook to fetch the code for UI components. You can customise this by providing a `namespace` prop to the `LoadExternalComponent` component.\n\n<Tabs>\n  <Tab title=\"src/app/page.tsx\">\n    \n  </Tab>\n\n<Tab title=\"langgraph.json\">\n    \n  </Tab>\n</Tabs>\n\n### Access and interact with the thread state from the UI component\n\nYou can access the thread state inside the UI component by using the `useStreamContext` hook.\n\n### Pass additional context to the client components\n\nYou can pass additional context to the client components by providing a `meta` prop to the `LoadExternalComponent` component.\n\nThen, you can access the `meta` prop in the UI component by using the `useStreamContext` hook.\n\n### Streaming UI messages from the server\n\nYou can stream UI messages before the node execution is finished by using the `onCustomEvent` callback of the `useStream()` hook. This is especially useful when updating the UI component as the LLM is generating the response.\n\nThen you can push updates to the UI component by calling `ui.push()` / `push_ui_message()` with the same ID as the UI message you wish to update.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JS\">\n    \n  </Tab>\n\n<Tab title=\"ui.tsx\">\n    \n  </Tab>\n</Tabs>\n\n### Remove UI messages from state\n\nSimilar to how messages can be removed from the state by appending a RemoveMessage you can remove an UI message from the state by calling `remove_ui_message` / `ui.delete` with the ID of the UI message.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JS\">\n    \n  </Tab>\n</Tabs>\n\n* [JS/TS SDK Reference](https://langchain-ai.github.io/langgraphjs/reference/modules/sdk.html)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/generative-ui-react.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "Next, define your UI components in your `langgraph.json` configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `ui` section points to the UI components that will be used by graphs. By default, we recommend using the same key as the graph name, but you can split out the components however you like, see [Customise the namespace of UI components](#customise-the-namespace-of-ui-components) for more details.\n\nLangSmith will automatically bundle your UI components code and styles and serve them as external assets that can be loaded by the `LoadExternalComponent` component. Some dependencies such as `react` and `react-dom` will be automatically excluded from the bundle.\n\nCSS and Tailwind 4.x is also supported out of the box, so you can freely use Tailwind classes as well as `shadcn/ui` in your UI components.\n\n<Tabs>\n  <Tab title=\"src/agent/ui.tsx\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"src/agent/styles.css\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### 2. Send the UI components in your graph\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JS\">\n    Use the `typedUi` utility to emit UI elements from your agent nodes:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### 3. Handle UI elements in your React application\n\nOn the client side, you can use `useStream()` and `LoadExternalComponent` to display the UI elements.",
+      "language": "unknown"
+    },
+    {
+      "code": "Behind the scenes, `LoadExternalComponent` will fetch the JS and CSS for the UI components from LangSmith and render them in a shadow DOM, thus ensuring style isolation from the rest of your application.\n\n## How-to guides\n\n### Provide custom components on the client side\n\nIf you already have the components loaded in your client application, you can provide a map of such components to be rendered directly without fetching the UI code from LangSmith.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Show loading UI when components are loading\n\nYou can provide a fallback UI to be rendered when the components are loading.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Customise the namespace of UI components.\n\nBy default `LoadExternalComponent` will use the `assistantId` from `useStream()` hook to fetch the code for UI components. You can customise this by providing a `namespace` prop to the `LoadExternalComponent` component.\n\n<Tabs>\n  <Tab title=\"src/app/page.tsx\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"langgraph.json\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Access and interact with the thread state from the UI component\n\nYou can access the thread state inside the UI component by using the `useStreamContext` hook.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Pass additional context to the client components\n\nYou can pass additional context to the client components by providing a `meta` prop to the `LoadExternalComponent` component.",
+      "language": "unknown"
+    },
+    {
+      "code": "Then, you can access the `meta` prop in the UI component by using the `useStreamContext` hook.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Streaming UI messages from the server\n\nYou can stream UI messages before the node execution is finished by using the `onCustomEvent` callback of the `useStream()` hook. This is especially useful when updating the UI component as the LLM is generating the response.",
+      "language": "unknown"
+    },
+    {
+      "code": "Then you can push updates to the UI component by calling `ui.push()` / `push_ui_message()` with the same ID as the UI message you wish to update.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JS\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"ui.tsx\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Remove UI messages from state\n\nSimilar to how messages can be removed from the state by appending a RemoveMessage you can remove an UI message from the state by calling `remove_ui_message` / `ui.delete` with the ID of the UI message.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JS\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Tutorial",
+      "id": "tutorial"
+    },
+    {
+      "level": "h3",
+      "text": "1. Define and configure UI components",
+      "id": "1.-define-and-configure-ui-components"
+    },
+    {
+      "level": "h3",
+      "text": "2. Send the UI components in your graph",
+      "id": "2.-send-the-ui-components-in-your-graph"
+    },
+    {
+      "level": "h3",
+      "text": "3. Handle UI elements in your React application",
+      "id": "3.-handle-ui-elements-in-your-react-application"
+    },
+    {
+      "level": "h2",
+      "text": "How-to guides",
+      "id": "how-to-guides"
+    },
+    {
+      "level": "h3",
+      "text": "Provide custom components on the client side",
+      "id": "provide-custom-components-on-the-client-side"
+    },
+    {
+      "level": "h3",
+      "text": "Show loading UI when components are loading",
+      "id": "show-loading-ui-when-components-are-loading"
+    },
+    {
+      "level": "h3",
+      "text": "Customise the namespace of UI components.",
+      "id": "customise-the-namespace-of-ui-components."
+    },
+    {
+      "level": "h3",
+      "text": "Access and interact with the thread state from the UI component",
+      "id": "access-and-interact-with-the-thread-state-from-the-ui-component"
+    },
+    {
+      "level": "h3",
+      "text": "Pass additional context to the client components",
+      "id": "pass-additional-context-to-the-client-components"
+    },
+    {
+      "level": "h3",
+      "text": "Streaming UI messages from the server",
+      "id": "streaming-ui-messages-from-the-server"
+    },
+    {
+      "level": "h3",
+      "text": "Remove UI messages from state",
+      "id": "remove-ui-messages-from-state"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    }
+  ],
+  "url": "llms-txt#how-to-implement-generative-user-interfaces-with-langgraph",
+  "links": []
+}

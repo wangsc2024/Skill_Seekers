@@ -1,0 +1,75 @@
+{
+  "title": "Or run a specific test function",
+  "content": "pnpm test -t \"the test that should be run\"\nbash  theme={null}\npnpm test:int\ntypescript  theme={null}\n    function processDocuments(\n        docs: Document[],\n        processor: DocumentProcessor,\n        batchSize: number = 100\n    ): ProcessingResult {\n        // ...\n    }\n    typescript  theme={null}\n    /**\n     * Document processing instance.\n     */\n    interface FooDocumentProcessor {\n        /**\n         * Process documents in batches.\n         *\n         * @param docs - List of documents to process.\n         * @returns Processing results with success/failure counts.\n         */\n        process(docs: Document[]): ProcessingResult;\n    }\n\n/**\n     * Process documents in batches.\n     *\n     * @param docs - List of documents to process.\n     * @param processor - Document processing instance.\n     * @param batchSize - Number of documents per batch.\n     * @returns Processing results with success/failure counts.\n     */\n    export function processDocuments(\n        docs: Document[],\n        processor: DocumentProcessor,\n        batchSize: number = 100\n    ): ProcessingResult {\n        // ...\n    }\n    bash  theme={null}\n    pnpm lint    # Check style and types\n    pnpm format  # Apply formatting\n    bash  theme={null}\n        pnpm test\n        bash  theme={null}\n        pnpm test:int\n        bash  theme={null}\n        pnpm format\n        pnpm lint\n        typescript  theme={null}\n    describe(\"DocumentProcessor\", () => {\n        it(\"Should handle empty document list\", () => {\n            const processor = new DocumentProcessor();\n            const result = processor.process([]);\n\nexpect(result.success).toBe(true);\n            expect(result.processedCount).toBe(0);\n            expect(result.errors).toHaveLength(0);\n        });\n    });\n    typescript  theme={null}\n    describe(\"ChatOpenAI\", () => {\n        it(\"Should test with real API\", () => {\n            const chat = new ChatOpenAI();\n            const response = chat.invoke(\"Hello\");\n        });\n    });\n    typescript  theme={null}\n    describe(\"APIService\", () => {\n        it(\"Should call with retry\", () => {\n            const mockClient = new MockClient();\n            const service = new APIService(client: mockClient);\n            const result = service.callWithRetry();\n        });\n    });\n    ```\n  </Tab>\n</Tabs>\n\nOur goal is to have the most accessible developer setup possible. Should you experience any difficulty getting setup, please ask in the [community slack](https://www.langchain.com/join-community) or open a [forum post](https://forum.langchain.com/).\n\n<Check>\n  You're now ready to contribute high-quality code to LangChain!\n</Check>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/contributing/code.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "#### Integration tests\n\n**Location**: `src/tests/FILENAME_BEING_TESTED.int.test.ts`\n\nIntegration tests require access to external services/ provider APIs (which can cost money) and therefore are not run by default.\n\nNot every code change will require an integration test, but keep in mind that we'll require/ run integration tests separately as apart of our review process.\n\n**Requirements**:\n\n* Test real integrations with external services\n* Use environment variables for API keys\n* Skip gracefully if credentials unavailable",
+      "language": "unknown"
+    },
+    {
+      "code": "### Code quality standards\n\nContributions must adhere to the following quality requirements:\n\n<Tabs>\n  <Tab title=\"Type hints\">\n    **Required**: Complete types for all functions",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Documentation\">\n    **Required**: [JSDocs](https://jsdoc.app/about-getting-started) for all exported functions and interfaces",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Code style\">\n    **Automated**: Formatting and linting:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Standards**:\n\n    * Descriptive variable names\n    * Break up complex functions (aim for fewer than 20 lines)\n    * Follow existing patterns in the codebase\n  </Tab>\n</Tabs>\n\n***\n\n## Testing and validation\n\n### Running tests locally\n\nBefore submitting your PR, ensure you have completed the following steps. Note that the requirements differ slightly between LangChain and LangGraph.\n\n<Tabs>\n  <Tab title=\"LangChain\" icon=\"link\">\n    <Steps>\n      <Step title=\"Unit tests\">",
+      "language": "unknown"
+    },
+    {
+      "code": "All unit tests must pass\n      </Step>\n\n      <Step title=\"Integration tests\">",
+      "language": "unknown"
+    },
+    {
+      "code": "(Run if your changes affect integrations)\n      </Step>\n\n      <Step title=\"Formatting\">",
+      "language": "unknown"
+    },
+    {
+      "code": "Code must pass all style checks\n      </Step>\n\n      <Step title=\"PR submission\">\n        Push your branch and open a pull request. Follow the provided form template. Note related issues using a [closing keyword](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword). After submitting, wait, and check to ensure the CI checks pass. If any checks fail, address the issues promptly - maintainers may close PRs that do not pass CI within a reasonable timeframe.\n      </Step>\n    </Steps>\n  </Tab>\n\n  <Tab title=\"LangGraph\" icon=\"circle-nodes\">\n    WIP - coming soon! In the meantime, follow instructions for LangChain.\n  </Tab>\n</Tabs>\n\n### Test writing guidelines\n\nIn order to write effective tests, there's a few good practices to follow:\n\n* Encapsulate the test in a `describe` block that describes the component being tested\n* Use natural language to describe the test name\n* Be exhaustive with assertions\n* Only use snapshots for reasonably sized data objects\n\n<Tabs>\n  <Tab title=\"Unit tests\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Integration tests\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Mock usage\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Code quality standards",
+      "id": "code-quality-standards"
+    },
+    {
+      "level": "h2",
+      "text": "Testing and validation",
+      "id": "testing-and-validation"
+    },
+    {
+      "level": "h3",
+      "text": "Running tests locally",
+      "id": "running-tests-locally"
+    },
+    {
+      "level": "h3",
+      "text": "Test writing guidelines",
+      "id": "test-writing-guidelines"
+    },
+    {
+      "level": "h2",
+      "text": "Getting help",
+      "id": "getting-help"
+    }
+  ],
+  "url": "llms-txt#or-run-a-specific-test-function",
+  "links": []
+}

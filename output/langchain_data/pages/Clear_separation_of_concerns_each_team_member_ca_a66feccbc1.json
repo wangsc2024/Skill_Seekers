@@ -1,0 +1,19 @@
+{
+  "title": "Clear separation of concerns - each team member can work on different nodes",
+  "content": "workflow.add_node(\"data_ingestion\", data_team_function)\nworkflow.add_node(\"ml_processing\", ml_team_function)\nworkflow.add_node(\"business_logic\", product_team_function)\nworkflow.add_node(\"output_formatting\", frontend_team_function)\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "### When to use the Functional API\n\nThe [Functional API](/oss/python/langgraph/functional-api) uses an imperative approach that integrates LangGraph features into standard procedural code.\n\n**1. Existing procedural code**\n\nWhen you have existing code that uses standard control flow and want to add LangGraph features with minimal refactoring.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "When to use the Functional API",
+      "id": "when-to-use-the-functional-api"
+    }
+  ],
+  "url": "llms-txt#clear-separation-of-concerns---each-team-member-can-work-on-different-nodes",
+  "links": []
+}

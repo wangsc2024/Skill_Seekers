@@ -1,0 +1,28 @@
+{
+  "title": "Trace Claude Agent SDK",
+  "content": "Source: https://docs.langchain.com/langsmith/trace-claude-agent-sdk\n\nThe [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview) is an SDK for building agentic applications with Claude. LangSmith provides native integration with the Claude Agent SDK to automatically trace your agent executions, tool calls, and interactions with Claude models.\n\nInstall the LangSmith integration for Claude Agent SDK\n\nTo enable LangSmith tracing for your Claude Agent SDK application, call `configure_claude_agent_sdk()` at the start of your application:\n\n```python  theme={null}\nimport asyncio\nfrom claude_agent_sdk import (\n    ClaudeAgentOptions,\n    ClaudeSDKClient,\n    tool,\n    create_sdk_mcp_server,\n)\nfrom typing import Any\n\nfrom langsmith.integrations.claude_agent_sdk import configure_claude_agent_sdk",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Quickstart\n\nTo enable LangSmith tracing for your Claude Agent SDK application, call `configure_claude_agent_sdk()` at the start of your application:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Quickstart",
+      "id": "quickstart"
+    }
+  ],
+  "url": "llms-txt#trace-claude-agent-sdk",
+  "links": []
+}

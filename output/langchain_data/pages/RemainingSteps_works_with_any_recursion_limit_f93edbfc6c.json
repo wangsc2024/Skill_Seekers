@@ -1,0 +1,13 @@
+{
+  "title": "RemainingSteps works with any recursion_limit",
+  "content": "result = graph.invoke({\"messages\": []}, {\"recursion_limit\": 10})\npython  theme={null}\nfrom typing import Annotated, Literal, TypedDict\nfrom langgraph.graph import StateGraph, START, END\nfrom langgraph.managed import RemainingSteps\nfrom langgraph.errors import GraphRecursionError\n\nclass State(TypedDict):\n    messages: Annotated[list, lambda x, y: x + y]\n    remaining_steps: RemainingSteps",
+  "code_samples": [
+    {
+      "code": "#### Proactive vs reactive approaches\n\nThere are two main approaches to handling recursion limits: proactive (monitoring within the graph) and reactive (catching errors externally).",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#remainingsteps-works-with-any-recursion_limit",
+  "links": []
+}

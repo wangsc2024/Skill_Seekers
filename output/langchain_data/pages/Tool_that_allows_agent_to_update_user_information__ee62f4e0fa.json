@@ -1,0 +1,8 @@
+{
+  "title": "Tool that allows agent to update user information (useful for chat applications)",
+  "content": "@tool\ndef save_user_info(user_info: UserInfo, runtime: ToolRuntime[Context]) -> str:\n    \"\"\"Save user info.\"\"\"\n    # Access the store - same as that provided to `create_agent`\n    store = runtime.store # [!code highlight]\n    user_id = runtime.context.user_id # [!code highlight]\n    # Store data in the store (namespace, key, data)\n    store.put((\"users\",), user_id, user_info) # [!code highlight]\n    return \"Successfully saved user info.\"\n\nagent = create_agent(\n    model=\"claude-sonnet-4-5-20250929\",\n    tools=[save_user_info],\n    store=store, # [!code highlight]\n    context_schema=Context\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#tool-that-allows-agent-to-update-user-information-(useful-for-chat-applications)",
+  "links": []
+}

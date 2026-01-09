@@ -1,0 +1,145 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+  "title": "Using LangGraph-Backed Agent — AutoGen",
+  "content": "This example demonstrates how to create an AI agent using LangGraph. Based on the example in the LangGraph documentation: https://langchain-ai.github.io/langgraph/.\n\nFirst install the dependencies:\n\nLet’s import the modules.\n\nDefine our message type that will be used to communicate with the agent.\n\nDefine the tools the agent will use.\n\nDefine the agent using LangGraph’s API.\n\nNow let’s test the agent. First we need to create an agent runtime and register the agent, by providing the agent’s name and a factory function that will create the agent.\n\nStart the agent runtime.\n\nSend a direct message to the agent, and print the response.\n\nStop the agent runtime.\n\nOpenAI Assistant Agent\n\nUsing LlamaIndex-Backed Agent",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Using LangGraph-Backed Agent#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# pip install langgraph langchain-openai azure-identity",
+      "language": "markdown"
+    },
+    {
+      "code": "# pip install langgraph langchain-openai azure-identity",
+      "language": "markdown"
+    },
+    {
+      "code": "from dataclasses import dataclass\nfrom typing import Any, Callable, List, Literal\n\nfrom autogen_core import AgentId, MessageContext, RoutedAgent, SingleThreadedAgentRuntime, message_handler\nfrom azure.identity import DefaultAzureCredential, get_bearer_token_provider\nfrom langchain_core.messages import HumanMessage, SystemMessage\nfrom langchain_core.tools import tool  # pyright: ignore\nfrom langchain_openai import AzureChatOpenAI, ChatOpenAI\nfrom langgraph.graph import END, MessagesState, StateGraph\nfrom langgraph.prebuilt import ToolNode",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\nfrom typing import Any, Callable, List, Literal\n\nfrom autogen_core import AgentId, MessageContext, RoutedAgent, SingleThreadedAgentRuntime, message_handler\nfrom azure.identity import DefaultAzureCredential, get_bearer_token_provider\nfrom langchain_core.messages import HumanMessage, SystemMessage\nfrom langchain_core.tools import tool  # pyright: ignore\nfrom langchain_openai import AzureChatOpenAI, ChatOpenAI\nfrom langgraph.graph import END, MessagesState, StateGraph\nfrom langgraph.prebuilt import ToolNode",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: str",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: str",
+      "language": "python"
+    },
+    {
+      "code": "@tool  # pyright: ignore\ndef get_weather(location: str) -> str:\n    \"\"\"Call to surf the web.\"\"\"\n    # This is a placeholder, but don't tell the LLM that...\n    if \"sf\" in location.lower() or \"san francisco\" in location.lower():\n        return \"It's 60 degrees and foggy.\"\n    return \"It's 90 degrees and sunny.\"",
+      "language": "python"
+    },
+    {
+      "code": "@tool  # pyright: ignore\ndef get_weather(location: str) -> str:\n    \"\"\"Call to surf the web.\"\"\"\n    # This is a placeholder, but don't tell the LLM that...\n    if \"sf\" in location.lower() or \"san francisco\" in location.lower():\n        return \"It's 60 degrees and foggy.\"\n    return \"It's 90 degrees and sunny.\"",
+      "language": "python"
+    },
+    {
+      "code": "class LangGraphToolUseAgent(RoutedAgent):\n    def __init__(self, description: str, model: ChatOpenAI, tools: List[Callable[..., Any]]) -> None:  # pyright: ignore\n        super().__init__(description)\n        self._model = model.bind_tools(tools)  # pyright: ignore\n\n        # Define the function that determines whether to continue or not\n        def should_continue(state: MessagesState) -> Literal[\"tools\", END]:  # type: ignore\n            messages = state[\"messages\"]\n            last_message = messages[-1]\n            # If the LLM makes a tool call, then we route to the \"tools\" node\n            if last_message.tool_calls:  # type: ignore\n                return \"tools\"\n            # Otherwise, we stop (reply to the user)\n            return END\n\n        # Define the function that calls the model\n        async def call_model(state: MessagesState):  # type: ignore\n            messages = state[\"messages\"]\n            response = await self._model.ainvoke(messages)\n            # We return a list, because this will get added to the existing list\n            return {\"messages\": [response]}\n\n        tool_node = ToolNode(tools)  # pyright: ignore\n\n        # Define a new graph\n        self._workflow = StateGraph(MessagesState)\n\n        # Define the two nodes we will cycle between\n        self._workflow.add_node(\"agent\", call_model)  # pyright: ignore\n        self._workflow.add_node(\"tools\", tool_node)  # pyright: ignore\n\n        # Set the entrypoint as `agent`\n        # This means that this node is the first one called\n        self._workflow.set_entry_point(\"agent\")\n\n        # We now add a conditional edge\n        self._workflow.add_conditional_edges(\n            # First, we define the start node. We use `agent`.\n            # This means these are the edges taken after the `agent` node is called.\n            \"agent\",\n            # Next, we pass in the function that will determine which node is called next.\n            should_continue,  # type: ignore\n        )\n\n        # We now add a normal edge from `tools` to `agent`.\n        # This means that after `tools` is called, `agent` node is called next.\n        self._workflow.add_edge(\"tools\", \"agent\")\n\n        # Finally, we compile it!\n        # This compiles it into a LangChain Runnable,\n        # meaning you can use it as you would any other runnable.\n        # Note that we're (optionally) passing the memory when compiling the graph\n        self._app = self._workflow.compile()\n\n    @message_handler\n    async def handle_user_message(self, message: Message, ctx: MessageContext) -> Message:\n        # Use the Runnable\n        final_state = await self._app.ainvoke(\n            {\n                \"messages\": [\n                    SystemMessage(\n                        content=\"You are a helpful AI assistant. You can use tools to help answer questions.\"\n                    ),\n                    HumanMessage(content=message.content),\n                ]\n            },\n            config={\"configurable\": {\"thread_id\": 42}},\n        )\n        response = Message(content=final_state[\"messages\"][-1].content)\n        return response",
+      "language": "python"
+    },
+    {
+      "code": "class LangGraphToolUseAgent(RoutedAgent):\n    def __init__(self, description: str, model: ChatOpenAI, tools: List[Callable[..., Any]]) -> None:  # pyright: ignore\n        super().__init__(description)\n        self._model = model.bind_tools(tools)  # pyright: ignore\n\n        # Define the function that determines whether to continue or not\n        def should_continue(state: MessagesState) -> Literal[\"tools\", END]:  # type: ignore\n            messages = state[\"messages\"]\n            last_message = messages[-1]\n            # If the LLM makes a tool call, then we route to the \"tools\" node\n            if last_message.tool_calls:  # type: ignore\n                return \"tools\"\n            # Otherwise, we stop (reply to the user)\n            return END\n\n        # Define the function that calls the model\n        async def call_model(state: MessagesState):  # type: ignore\n            messages = state[\"messages\"]\n            response = await self._model.ainvoke(messages)\n            # We return a list, because this will get added to the existing list\n            return {\"messages\": [response]}\n\n        tool_node = ToolNode(tools)  # pyright: ignore\n\n        # Define a new graph\n        self._workflow = StateGraph(MessagesState)\n\n        # Define the two nodes we will cycle between\n        self._workflow.add_node(\"agent\", call_model)  # pyright: ignore\n        self._workflow.add_node(\"tools\", tool_node)  # pyright: ignore\n\n        # Set the entrypoint as `agent`\n        # This means that this node is the first one called\n        self._workflow.set_entry_point(\"agent\")\n\n        # We now add a conditional edge\n        self._workflow.add_conditional_edges(\n            # First, we define the start node. We use `agent`.\n            # This means these are the edges taken after the `agent` node is called.\n            \"agent\",\n            # Next, we pass in the function that will determine which node is called next.\n            should_continue,  # type: ignore\n        )\n\n        # We now add a normal edge from `tools` to `agent`.\n        # This means that after `tools` is called, `agent` node is called next.\n        self._workflow.add_edge(\"tools\", \"agent\")\n\n        # Finally, we compile it!\n        # This compiles it into a LangChain Runnable,\n        # meaning you can use it as you would any other runnable.\n        # Note that we're (optionally) passing the memory when compiling the graph\n        self._app = self._workflow.compile()\n\n    @message_handler\n    async def handle_user_message(self, message: Message, ctx: MessageContext) -> Message:\n        # Use the Runnable\n        final_state = await self._app.ainvoke(\n            {\n                \"messages\": [\n                    SystemMessage(\n                        content=\"You are a helpful AI assistant. You can use tools to help answer questions.\"\n                    ),\n                    HumanMessage(content=message.content),\n                ]\n            },\n            config={\"configurable\": {\"thread_id\": 42}},\n        )\n        response = Message(content=final_state[\"messages\"][-1].content)\n        return response",
+      "language": "python"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\nawait LangGraphToolUseAgent.register(\n    runtime,\n    \"langgraph_tool_use_agent\",\n    lambda: LangGraphToolUseAgent(\n        \"Tool use agent\",\n        ChatOpenAI(\n            model=\"gpt-4o\",\n            # api_key=os.getenv(\"OPENAI_API_KEY\"),\n        ),\n        # AzureChatOpenAI(\n        #     azure_deployment=os.getenv(\"AZURE_OPENAI_DEPLOYMENT\"),\n        #     azure_endpoint=os.getenv(\"AZURE_OPENAI_ENDPOINT\"),\n        #     api_version=os.getenv(\"AZURE_OPENAI_API_VERSION\"),\n        #     # Using Azure Active Directory authentication.\n        #     azure_ad_token_provider=get_bearer_token_provider(DefaultAzureCredential()),\n        #     # Using API key.\n        #     # api_key=os.getenv(\"AZURE_OPENAI_API_KEY\"),\n        # ),\n        [get_weather],\n    ),\n)\nagent = AgentId(\"langgraph_tool_use_agent\", key=\"default\")",
+      "language": "julia"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\nawait LangGraphToolUseAgent.register(\n    runtime,\n    \"langgraph_tool_use_agent\",\n    lambda: LangGraphToolUseAgent(\n        \"Tool use agent\",\n        ChatOpenAI(\n            model=\"gpt-4o\",\n            # api_key=os.getenv(\"OPENAI_API_KEY\"),\n        ),\n        # AzureChatOpenAI(\n        #     azure_deployment=os.getenv(\"AZURE_OPENAI_DEPLOYMENT\"),\n        #     azure_endpoint=os.getenv(\"AZURE_OPENAI_ENDPOINT\"),\n        #     api_version=os.getenv(\"AZURE_OPENAI_API_VERSION\"),\n        #     # Using Azure Active Directory authentication.\n        #     azure_ad_token_provider=get_bearer_token_provider(DefaultAzureCredential()),\n        #     # Using API key.\n        #     # api_key=os.getenv(\"AZURE_OPENAI_API_KEY\"),\n        # ),\n        [get_weather],\n    ),\n)\nagent = AgentId(\"langgraph_tool_use_agent\", key=\"default\")",
+      "language": "julia"
+    },
+    {
+      "code": "runtime.start()",
+      "language": "unknown"
+    },
+    {
+      "code": "runtime.start()",
+      "language": "unknown"
+    },
+    {
+      "code": "response = await runtime.send_message(Message(\"What's the weather in SF?\"), agent)\nprint(response.content)",
+      "language": "python"
+    },
+    {
+      "code": "response = await runtime.send_message(Message(\"What's the weather in SF?\"), agent)\nprint(response.content)",
+      "language": "python"
+    },
+    {
+      "code": "The current weather in San Francisco is 60 degrees and foggy.",
+      "language": "unknown"
+    },
+    {
+      "code": "The current weather in San Francisco is 60 degrees and foggy.",
+      "language": "unknown"
+    },
+    {
+      "code": "await runtime.stop()",
+      "language": "csharp"
+    },
+    {
+      "code": "await runtime.stop()",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

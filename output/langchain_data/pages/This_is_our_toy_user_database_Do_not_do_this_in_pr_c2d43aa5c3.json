@@ -1,0 +1,8 @@
+{
+  "title": "This is our toy user database. Do not do this in production",
+  "content": "VALID_TOKENS = {\n    \"user1-token\": {\"id\": \"user1\", \"name\": \"Alice\"},\n    \"user2-token\": {\"id\": \"user2\", \"name\": \"Bob\"},\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#this-is-our-toy-user-database.-do-not-do-this-in-production",
+  "links": []
+}

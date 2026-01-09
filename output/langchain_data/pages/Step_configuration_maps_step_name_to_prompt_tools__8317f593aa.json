@@ -1,0 +1,28 @@
+{
+  "title": "Step configuration: maps step name to (prompt, tools, required_state)",
+  "content": "STEP_CONFIG = {\n    \"warranty_collector\": {\n        \"prompt\": WARRANTY_COLLECTOR_PROMPT,\n        \"tools\": [record_warranty_status],\n        \"requires\": [],\n    },\n    \"issue_classifier\": {\n        \"prompt\": ISSUE_CLASSIFIER_PROMPT,\n        \"tools\": [record_issue_type],\n        \"requires\": [\"warranty_status\"],\n    },\n    \"resolution_specialist\": {\n        \"prompt\": RESOLUTION_SPECIALIST_PROMPT,\n        \"tools\": [provide_solution, escalate_to_human],\n        \"requires\": [\"warranty_status\", \"issue_type\"],\n    },\n}\npython  theme={null}\nfrom langchain.agents.middleware import wrap_model_call, ModelRequest, ModelResponse\nfrom typing import Callable\n\n@wrap_model_call  # [!code highlight]\ndef apply_step_config(\n    request: ModelRequest,\n    handler: Callable[[ModelRequest], ModelResponse],\n) -> ModelResponse:\n    \"\"\"Configure agent behavior based on the current step.\"\"\"\n    # Get current step (defaults to warranty_collector for first interaction)\n    current_step = request.state.get(\"current_step\", \"warranty_collector\")  # [!code highlight]\n\n# Look up step configuration\n    stage_config = STEP_CONFIG[current_step]  # [!code highlight]\n\n# Validate required state exists\n    for key in stage_config[\"requires\"]:\n        if request.state.get(key) is None:\n            raise ValueError(f\"{key} must be set before reaching {current_step}\")\n\n# Format prompt with state values (supports {warranty_status}, {issue_type}, etc.)\n    system_prompt = stage_config[\"prompt\"].format(**request.state)\n\n# Inject system prompt and step-specific tools\n    request = request.override(  # [!code highlight]\n        system_prompt=system_prompt,  # [!code highlight]\n        tools=stage_config[\"tools\"],  # [!code highlight]\n    )\n\nreturn handler(request)\npython  theme={null}\nfrom langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver",
+  "code_samples": [
+    {
+      "code": "This dictionary-based configuration makes it easy to:\n\n* See all steps at a glance\n* Add new steps (just add another entry)\n* Understand the workflow dependencies (`requires` field)\n* Use prompt templates with state variables (e.g., `{warranty_status}`)\n\n## 4. Create step-based middleware\n\nCreate middleware that reads `current_step` from state and applies the appropriate configuration. We'll use the `@wrap_model_call` decorator for a clean implementation:",
+      "language": "unknown"
+    },
+    {
+      "code": "This middleware:\n\n1. **Reads current step**: Gets `current_step` from state (defaults to \"warranty\\_collector\").\n2. **Looks up configuration**: Finds the matching entry in `STEP_CONFIG`.\n3. **Validates dependencies**: Ensures required state fields exist.\n4. **Formats prompt**: Injects state values into the prompt template.\n5. **Applies configuration**: Overrides the system prompt and available tools.\n\nThe `request.override()` method is key - it allows us to dynamically change the agent's behavior based on state without creating separate agent instances.\n\n## 5. Create the agent\n\nNow create the agent with the step-based middleware and a checkpointer for state persistence:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "4. Create step-based middleware",
+      "id": "4.-create-step-based-middleware"
+    },
+    {
+      "level": "h2",
+      "text": "5. Create the agent",
+      "id": "5.-create-the-agent"
+    }
+  ],
+  "url": "llms-txt#step-configuration:-maps-step-name-to-(prompt,-tools,-required_state)",
+  "links": []
+}

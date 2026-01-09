@@ -1,0 +1,14 @@
+{
+  "title": "minReplicas: 8",
+  "content": "## Note that we are actively working on improving performance of this service to reduce the number of replicas.\nqueue:\n  deployment:\n    replicas: 160 # OR enable autoscaling to this level (example below)",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Note that we are actively working on improving performance of this service to reduce the number of replicas.",
+      "id": "note-that-we-are-actively-working-on-improving-performance-of-this-service-to-reduce-the-number-of-replicas."
+    }
+  ],
+  "url": "llms-txt#minreplicas:-8",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "List GitHub Integrations",
+  "content": "Source: https://docs.langchain.com/api-reference/integrations-v1/list-github-integrations\n\nhttps://api.host.langchain.com/openapi.json get /v1/integrations/github/install\nList available GitHub integrations for LangGraph Platfom Cloud SaaS.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#list-github-integrations",
+  "links": []
+}

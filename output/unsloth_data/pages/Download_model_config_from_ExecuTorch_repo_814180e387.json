@@ -1,0 +1,8 @@
+{
+  "title": "Download model config from ExecuTorch repo",
+  "content": "curl -L -o 0.6B_config.json https://raw.githubusercontent.com/pytorch/executorch/main/examples/models/qwen3/config/0_6b_config.json",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#download-model-config-from-executorch-repo",
+  "links": []
+}

@@ -1,0 +1,81 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+  "title": "Tracking LLM usage with a logger — AutoGen",
+  "content": "The model clients included in AutoGen emit structured events that can be used to track the usage of the model. This notebook demonstrates how to use the logger to track the usage of the model.\n\nThese events are logged to the logger with the name: :py:attr:autogen_core.EVENT_LOGGER_NAME.\n\nThen, this logger can be attached like any other Python logger and the values read after the model is run.\n\nStructured output using GPT-4o models",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Tracking LLM usage with a logger#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "import logging\n\nfrom autogen_core.logging import LLMCallEvent\n\n\nclass LLMUsageTracker(logging.Handler):\n    def __init__(self) -> None:\n        \"\"\"Logging handler that tracks the number of tokens used in the prompt and completion.\"\"\"\n        super().__init__()\n        self._prompt_tokens = 0\n        self._completion_tokens = 0\n\n    @property\n    def tokens(self) -> int:\n        return self._prompt_tokens + self._completion_tokens\n\n    @property\n    def prompt_tokens(self) -> int:\n        return self._prompt_tokens\n\n    @property\n    def completion_tokens(self) -> int:\n        return self._completion_tokens\n\n    def reset(self) -> None:\n        self._prompt_tokens = 0\n        self._completion_tokens = 0\n\n    def emit(self, record: logging.LogRecord) -> None:\n        \"\"\"Emit the log record. To be used by the logging module.\"\"\"\n        try:\n            # Use the StructuredMessage if the message is an instance of it\n            if isinstance(record.msg, LLMCallEvent):\n                event = record.msg\n                self._prompt_tokens += event.prompt_tokens\n                self._completion_tokens += event.completion_tokens\n        except Exception:\n            self.handleError(record)",
+      "language": "python"
+    },
+    {
+      "code": "import logging\n\nfrom autogen_core.logging import LLMCallEvent\n\n\nclass LLMUsageTracker(logging.Handler):\n    def __init__(self) -> None:\n        \"\"\"Logging handler that tracks the number of tokens used in the prompt and completion.\"\"\"\n        super().__init__()\n        self._prompt_tokens = 0\n        self._completion_tokens = 0\n\n    @property\n    def tokens(self) -> int:\n        return self._prompt_tokens + self._completion_tokens\n\n    @property\n    def prompt_tokens(self) -> int:\n        return self._prompt_tokens\n\n    @property\n    def completion_tokens(self) -> int:\n        return self._completion_tokens\n\n    def reset(self) -> None:\n        self._prompt_tokens = 0\n        self._completion_tokens = 0\n\n    def emit(self, record: logging.LogRecord) -> None:\n        \"\"\"Emit the log record. To be used by the logging module.\"\"\"\n        try:\n            # Use the StructuredMessage if the message is an instance of it\n            if isinstance(record.msg, LLMCallEvent):\n                event = record.msg\n                self._prompt_tokens += event.prompt_tokens\n                self._completion_tokens += event.completion_tokens\n        except Exception:\n            self.handleError(record)",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core import EVENT_LOGGER_NAME\n\n# Set up the logging configuration to use the custom handler\nlogger = logging.getLogger(EVENT_LOGGER_NAME)\nlogger.setLevel(logging.INFO)\nllm_usage = LLMUsageTracker()\nlogger.handlers = [llm_usage]\n\n# client.create(...)\n\nprint(llm_usage.prompt_tokens)\nprint(llm_usage.completion_tokens)",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core import EVENT_LOGGER_NAME\n\n# Set up the logging configuration to use the custom handler\nlogger = logging.getLogger(EVENT_LOGGER_NAME)\nlogger.setLevel(logging.INFO)\nllm_usage = LLMUsageTracker()\nlogger.handlers = [llm_usage]\n\n# client.create(...)\n\nprint(llm_usage.prompt_tokens)\nprint(llm_usage.completion_tokens)",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

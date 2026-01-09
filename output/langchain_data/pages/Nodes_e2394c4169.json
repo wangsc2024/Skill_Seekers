@@ -1,0 +1,8 @@
+{
+  "title": "Nodes",
+  "content": "def orchestrator(state: State):\n    \"\"\"Orchestrator that generates a plan for the report\"\"\"\n\n# Generate queries\n    report_sections = planner.invoke(\n        [\n            SystemMessage(content=\"Generate a plan for the report.\"),\n            HumanMessage(content=f\"Here is the report topic: {state['topic']}\"),\n        ]\n    )\n\nreturn {\"sections\": report_sections.sections}\n\ndef llm_call(state: WorkerState):\n    \"\"\"Worker writes a section of the report\"\"\"\n\n# Generate section\n    section = llm.invoke(\n        [\n            SystemMessage(\n                content=\"Write a report section following the provided name and description. Include no preamble for each section. Use markdown formatting.\"\n            ),\n            HumanMessage(\n                content=f\"Here is the section name: {state['section'].name} and description: {state['section'].description}\"\n            ),\n        ]\n    )\n\n# Write the updated section to completed sections\n    return {\"completed_sections\": [section.content]}\n\ndef synthesizer(state: State):\n    \"\"\"Synthesize full report from sections\"\"\"\n\n# List of completed sections\n    completed_sections = state[\"completed_sections\"]\n\n# Format completed section to str to use as context for final sections\n    completed_report_sections = \"\\n\\n---\\n\\n\".join(completed_sections)\n\nreturn {\"final_report\": completed_report_sections}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#nodes",
+  "links": []
+}

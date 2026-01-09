@@ -1,0 +1,8 @@
+{
+  "title": "API Reference: https://api.smith.langchain.com/redoc#tag/datasets/operation/create_comparative_experiment_api_v1_datasets_comparative_post",
+  "content": "resp = requests.post(\n    \"https://api.smith.langchain.com/api/v1/datasets/comparative\",\n    json={\n        \"experiment_ids\": experiment_ids,\n        \"name\": \"Toxicity detection - API Example - Comparative - \" + str(uuid4())[0:8],\n        \"description\": \"An optional description for the comparative experiment\",\n        \"extra\": {\n            \"metadata\": {\"foo\": \"bar\"},  # Optional metadata\n        },\n        \"reference_dataset_id\": str(dataset_id),\n    },\n    headers={\"x-api-key\": os.environ[\"LANGSMITH_API_KEY\"]}\n)\n\ncomparative_experiment = resp.json()\ncomparative_experiment_id = comparative_experiment[\"id\"]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#api-reference:-https://api.smith.langchain.com/redoc#tag/datasets/operation/create_comparative_experiment_api_v1_datasets_comparative_post",
+  "links": []
+}

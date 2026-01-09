@@ -1,0 +1,8 @@
+{
+  "title": "Trace with Instructor",
+  "content": "Source: https://docs.langchain.com/langsmith/trace-with-instructor\n\nLangSmith provides a convenient integration with [Instructor](https://python.useinstructor.com/), a popular open-source library for generating structured output with LLMs.\n\nIn order to use, you first need to set your LangSmith API key.\n\n```shell  theme={null}\nexport LANGSMITH_API_KEY=<your-api-key>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#trace-with-instructor",
+  "links": []
+}

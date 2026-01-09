@@ -1,0 +1,8 @@
+{
+  "title": "Optional. You can swap OpenAI for any other tool-calling chat model.",
+  "content": "os.environ[\"OPENAI_API_KEY\"] = \"YOUR OPENAI API KEY\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#optional.-you-can-swap-openai-for-any-other-tool-calling-chat-model.",
+  "links": []
+}

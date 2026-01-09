@@ -1,0 +1,65 @@
+{
+  "title": "Instal Unsloth via pip and uv",
+  "content": "To install Unsloth locally via Pip, follow the steps below:\n\n## **Recommended installation method**\n\n**Install with pip (recommended) for the latest pip release:**\n\nTo install **vLLM and Unsloth** together, do:\n\nTo install the **latest main branch** of Unsloth, do:\n\n{% code overflow=\"wrap\" %}\n\nFor **venv and virtual environments installs** to isolate your installation to not break system packages, and to reduce irreparable damage to your system, use venv:\n\n{% code overflow=\"wrap\" %}\n\nIf you're installing Unsloth in Jupyter, Colab, or other notebooks, be sure to prefix the command with `!`. This isn't necessary when using a terminal\n\n{% hint style=\"info\" %}\nPython 3.13 is now supported!\n{% endhint %}\n\n## Uninstall or Reinstall\n\nIf you're still encountering dependency issues with Unsloth, many users have resolved them by forcing uninstalling and reinstalling Unsloth:\n\n{% code overflow=\"wrap\" %}\n\n## Advanced Pip Installation\n\n{% hint style=\"warning\" %}\nDo **NOT** use this if you have [Conda](https://docs.unsloth.ai/get-started/install-and-update/conda-install).\n{% endhint %}\n\nPip is a bit more complex since there are dependency issues. The pip command is different for `torch 2.2,2.3,2.4,2.5` and CUDA versions.\n\nFor other torch versions, we support `torch211`, `torch212`, `torch220`, `torch230`, `torch240` and for CUDA versions, we support `cu118` and `cu121` and `cu124`. For Ampere devices (A100, H100, RTX3090) and above, use `cu118-ampere` or `cu121-ampere` or `cu124-ampere`.\n\nFor example, if you have `torch 2.4` and `CUDA 12.1`, use:\n\nAnother example, if you have `torch 2.5` and `CUDA 12.4`, use:\n\nOr, run the below in a terminal to get the **optimal** pip installation command:\n\nOr, run the below manually in a Python REPL:\n\n{% code overflow=\"wrap\" %}",
+  "code_samples": [
+    {
+      "code": "pip install unsloth",
+      "language": "bash"
+    },
+    {
+      "code": "pip install --upgrade pip && pip install uv\nuv pip install unsloth",
+      "language": "bash"
+    },
+    {
+      "code": "uv pip install unsloth vllm",
+      "language": "bash"
+    },
+    {
+      "code": "pip install unsloth\npip uninstall unsloth unsloth_zoo -y && pip install --no-deps git+https://github.com/unslothai/unsloth_zoo.git && pip install --no-deps git+https://github.com/unslothai/unsloth.git",
+      "language": "bash"
+    },
+    {
+      "code": "apt install python3.10-venv python3.11-venv python3.12-venv python3.13-venv -y\npython -m venv unsloth_env\nsource unsloth_env/bin/activate\npip install --upgrade pip && pip install uv\nuv pip install unsloth",
+      "language": "bash"
+    },
+    {
+      "code": "pip install --upgrade --force-reinstall --no-cache-dir --no-deps unsloth\npip install --upgrade --force-reinstall --no-cache-dir --no-deps unsloth_zoo",
+      "language": "bash"
+    },
+    {
+      "code": "pip install --upgrade pip\npip install \"unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.git\"",
+      "language": "bash"
+    },
+    {
+      "code": "pip install --upgrade pip\npip install \"unsloth[cu124-torch250] @ git+https://github.com/unslothai/unsloth.git\"",
+      "language": "bash"
+    },
+    {
+      "code": "pip install \"unsloth[cu121-ampere-torch240] @ git+https://github.com/unslothai/unsloth.git\"\npip install \"unsloth[cu118-ampere-torch240] @ git+https://github.com/unslothai/unsloth.git\"\npip install \"unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.git\"\npip install \"unsloth[cu118-torch240] @ git+https://github.com/unslothai/unsloth.git\"\n\npip install \"unsloth[cu121-torch230] @ git+https://github.com/unslothai/unsloth.git\"\npip install \"unsloth[cu121-ampere-torch230] @ git+https://github.com/unslothai/unsloth.git\"\n\npip install \"unsloth[cu121-torch250] @ git+https://github.com/unslothai/unsloth.git\"\npip install \"unsloth[cu124-ampere-torch250] @ git+https://github.com/unslothai/unsloth.git\"",
+      "language": "bash"
+    },
+    {
+      "code": "wget -qO- https://raw.githubusercontent.com/unslothai/unsloth/main/unsloth/_auto_install.py | python -",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "**Recommended installation method**",
+      "id": "**recommended-installation-method**"
+    },
+    {
+      "level": "h2",
+      "text": "Uninstall or Reinstall",
+      "id": "uninstall-or-reinstall"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Pip Installation",
+      "id": "advanced-pip-installation"
+    }
+  ],
+  "url": "llms-txt#instal-unsloth-via-pip-and-uv",
+  "links": []
+}

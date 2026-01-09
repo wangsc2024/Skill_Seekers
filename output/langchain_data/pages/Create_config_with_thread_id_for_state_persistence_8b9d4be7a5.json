@@ -1,0 +1,8 @@
+{
+  "title": "Create config with thread_id for state persistence",
+  "content": "config = {\"configurable\": {\"thread_id\": str(uuid.uuid4())}}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-config-with-thread_id-for-state-persistence",
+  "links": []
+}

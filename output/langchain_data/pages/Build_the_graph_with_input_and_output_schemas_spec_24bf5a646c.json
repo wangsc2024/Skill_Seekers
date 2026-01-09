@@ -1,0 +1,8 @@
+{
+  "title": "Build the graph with input and output schemas specified",
+  "content": "builder = StateGraph(OverallState, input_schema=InputState, output_schema=OutputState)\nbuilder.add_node(answer_node)  # Add the answer node\nbuilder.add_edge(START, \"answer_node\")  # Define the starting edge\nbuilder.add_edge(\"answer_node\", END)  # Define the ending edge\ngraph = builder.compile()  # Compile the graph",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#build-the-graph-with-input-and-output-schemas-specified",
+  "links": []
+}

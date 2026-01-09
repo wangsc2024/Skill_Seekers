@@ -1,0 +1,8 @@
+{
+  "title": "This takes precedenceover the generic @auth.on handler and the @auth.on.threads handler",
+  "content": "@auth.on.threads.create_run\nasync def on_run_create(\n    ctx: Auth.types.AuthContext,\n    value: Auth.types.threads.create_run.value\n):\n    metadata = value.setdefault(\"metadata\", {})\n    metadata[\"owner\"] = ctx.user.identity\n    # Inherit thread's access control\n    return {\"owner\": ctx.user.identity}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#this-takes-precedenceover-the-generic-@auth.on-handler-and-the-@auth.on.threads-handler",
+  "links": []
+}

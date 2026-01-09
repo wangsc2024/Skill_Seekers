@@ -1,0 +1,148 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.mem0.html",
+  "title": "autogen_ext.memory.mem0 — AutoGen",
+  "content": "Bases: Memory, Component[Mem0MemoryConfig], ComponentBase[Mem0MemoryConfig]\n\nMem0 memory implementation for AutoGen.\n\nThis component integrates with Mem0.ai’s memory system, providing an implementation of AutoGen’s Memory interface. It supports both cloud and local backends through the mem0ai Python package.\n\nTo use this component, you need to have the mem0 (for cloud-only) or mem0-local (for local) extra installed for the autogen-ext package:\n\nThe memory component can store and retrieve information that agents need to remember across conversations. It also provides context updating for language models with relevant memories.\n\nUsing it with an AssistantAgent:\n\nuser_id – Optional user ID for memory operations. If not provided, a UUID will be generated.\n\nlimit – Maximum number of results to return in memory queries.\n\nis_cloud – Whether to use cloud Mem0 client (True) or local client (False).\n\napi_key – API key for cloud Mem0 client. It will read from the environment MEM0_API_KEY if not provided.\n\nconfig – Configuration dictionary for local Mem0 client. Required if is_cloud=False.\n\nThe logical type of the component.\n\nOverride the provider string for the component. This should be used to prevent internal module names being a part of the module name.\n\nalias of Mem0MemoryConfig\n\nGet the user ID for memory operations.\n\nGet the maximum number of results to return in memory queries.\n\nCheck if the Mem0 client is cloud-based.\n\nGet the configuration for the Mem0 client.\n\nAdd content to memory.\n\ncontent – The memory content to add.\n\ncancellation_token – Optional token to cancel operation.\n\nException – If there’s an error adding content to mem0 memory.\n\nQuery memory for relevant content.\n\nquery – The query to search for, either as string or MemoryContent.\n\ncancellation_token – Optional token to cancel operation.\n\n**kwargs – Additional query parameters to pass to mem0.\n\nMemoryQueryResult containing search results.\n\nUpdate the model context with relevant memories.\n\nThis method retrieves the conversation history from the model context, uses the last message as a query to find relevant memories, and then adds those memories to the context as a system message.\n\nmodel_context – The model context to update.\n\nUpdateContextResult containing memories added to the context.\n\nClear all content from memory for the current user.\n\nException – If there’s an error clearing mem0 memory.\n\nClean up resources if needed.\n\nThis is a no-op for Mem0 clients as they don’t require explicit cleanup.\n\nConfiguration for Mem0Memory component.\n\nShow JSON schema{ \"title\": \"Mem0MemoryConfig\", \"description\": \"Configuration for Mem0Memory component.\", \"type\": \"object\", \"properties\": { \"user_id\": { \"anyOf\": [ { \"type\": \"string\" }, { \"type\": \"null\" } ], \"default\": null, \"description\": \"User ID for memory operations. If not provided, a UUID will be generated.\", \"title\": \"User Id\" }, \"limit\": { \"default\": 10, \"description\": \"Maximum number of results to return in memory queries.\", \"title\": \"Limit\", \"type\": \"integer\" }, \"is_cloud\": { \"default\": true, \"description\": \"Whether to use cloud Mem0 client (True) or local client (False).\", \"title\": \"Is Cloud\", \"type\": \"boolean\" }, \"api_key\": { \"anyOf\": [ { \"type\": \"string\" }, { \"type\": \"null\" } ], \"default\": null, \"description\": \"API key for cloud Mem0 client. Required if is_cloud=True.\", \"title\": \"Api Key\" }, \"config\": { \"anyOf\": [ { \"type\": \"object\" }, { \"type\": \"null\" } ], \"default\": null, \"description\": \"Configuration dictionary for local Mem0 client. Required if is_cloud=False.\", \"title\": \"Config\" } } }\n\nconfig (Dict[str, Any] | None)\n\nUser ID for memory operations. If not provided, a UUID will be generated.\n\nMaximum number of results to return in memory queries.\n\nWhether to use cloud Mem0 client (True) or local client (False).\n\nAPI key for cloud Mem0 client. Required if is_cloud=True.\n\nConfiguration dictionary for local Mem0 client. Required if is_cloud=False.\n\nautogen_ext.memory.chromadb\n\nautogen_ext.memory.redis",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "autogen_ext.memory.mem0#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "pip install -U \"autogen-ext[mem0]\" # For cloud-based Mem0\npip install -U \"autogen-ext[mem0-local]\" # For local Mem0",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install -U \"autogen-ext[mem0]\" # For cloud-based Mem0\npip install -U \"autogen-ext[mem0-local]\" # For local Mem0",
+      "language": "unknown"
+    },
+    {
+      "code": "import asyncio\nfrom autogen_ext.memory.mem0 import Mem0Memory\nfrom autogen_core.memory import MemoryContent\n\n\nasync def main() -> None:\n    # Create a local Mem0Memory (no API key required)\n    memory = Mem0Memory(\n        is_cloud=False,\n        config={\"path\": \":memory:\"},  # Use in-memory storage for testing\n    )\n    print(\"Memory initialized successfully!\")\n\n    # Add something to memory\n    test_content = \"User likes the color blue.\"\n    await memory.add(MemoryContent(content=test_content, mime_type=\"text/plain\"))\n    print(f\"Added content: {test_content}\")\n\n    # Retrieve memories with a search query\n    results = await memory.query(\"What color does the user like?\")\n    print(f\"Query results: {len(results.results)} found\")\n\n    for i, result in enumerate(results.results):\n        print(f\"Result {i+1}: {result}\")\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nfrom autogen_ext.memory.mem0 import Mem0Memory\nfrom autogen_core.memory import MemoryContent\n\n\nasync def main() -> None:\n    # Create a local Mem0Memory (no API key required)\n    memory = Mem0Memory(\n        is_cloud=False,\n        config={\"path\": \":memory:\"},  # Use in-memory storage for testing\n    )\n    print(\"Memory initialized successfully!\")\n\n    # Add something to memory\n    test_content = \"User likes the color blue.\"\n    await memory.add(MemoryContent(content=test_content, mime_type=\"text/plain\"))\n    print(f\"Added content: {test_content}\")\n\n    # Retrieve memories with a search query\n    results = await memory.query(\"What color does the user like?\")\n    print(f\"Query results: {len(results.results)} found\")\n\n    for i, result in enumerate(results.results):\n        print(f\"Result {i+1}: {result}\")\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "Memory initialized successfully!\nAdded content: User likes the color blue.\nQuery results: 1 found\nResult 1: content='User likes the color blue' mime_type='text/plain' metadata={'score': 0.6977155806281953, 'created_at': datetime.datetime(2025, 7, 6, 17, 25, 18, 754725, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=61200)))}",
+      "language": "typescript"
+    },
+    {
+      "code": "Memory initialized successfully!\nAdded content: User likes the color blue.\nQuery results: 1 found\nResult 1: content='User likes the color blue' mime_type='text/plain' metadata={'score': 0.6977155806281953, 'created_at': datetime.datetime(2025, 7, 6, 17, 25, 18, 754725, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=61200)))}",
+      "language": "typescript"
+    },
+    {
+      "code": "import asyncio\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_core.memory import MemoryContent\nfrom autogen_ext.memory.mem0 import Mem0Memory\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n\nasync def main() -> None:\n    # Create a model client\n    model_client = OpenAIChatCompletionClient(model=\"gpt-4.1\")\n\n    # Create a Mem0 memory instance\n    memory = Mem0Memory(\n        user_id=\"user123\",\n        is_cloud=False,\n        config={\"path\": \":memory:\"},  # Use in-memory storage for testing\n    )\n\n    # Add something to memory\n    test_content = \"User likes the color blue.\"\n    await memory.add(MemoryContent(content=test_content, mime_type=\"text/plain\"))\n\n    # Create an assistant agent with Mem0 memory\n    agent = AssistantAgent(\n        name=\"assistant\",\n        model_client=model_client,\n        memory=[memory],\n        system_message=\"You are a helpful assistant that remembers user preferences.\",\n    )\n\n    # Run a sample task\n    result = await agent.run(task=\"What color does the user like?\")\n    print(result.messages[-1].content)  # type: ignore\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_core.memory import MemoryContent\nfrom autogen_ext.memory.mem0 import Mem0Memory\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n\nasync def main() -> None:\n    # Create a model client\n    model_client = OpenAIChatCompletionClient(model=\"gpt-4.1\")\n\n    # Create a Mem0 memory instance\n    memory = Mem0Memory(\n        user_id=\"user123\",\n        is_cloud=False,\n        config={\"path\": \":memory:\"},  # Use in-memory storage for testing\n    )\n\n    # Add something to memory\n    test_content = \"User likes the color blue.\"\n    await memory.add(MemoryContent(content=test_content, mime_type=\"text/plain\"))\n\n    # Create an assistant agent with Mem0 memory\n    agent = AssistantAgent(\n        name=\"assistant\",\n        model_client=model_client,\n        memory=[memory],\n        system_message=\"You are a helpful assistant that remembers user preferences.\",\n    )\n\n    # Run a sample task\n    result = await agent.run(task=\"What color does the user like?\")\n    print(result.messages[-1].content)  # type: ignore\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "User likes the color blue.",
+      "language": "unknown"
+    },
+    {
+      "code": "User likes the color blue.",
+      "language": "unknown"
+    },
+    {
+      "code": "{\n   \"title\": \"Mem0MemoryConfig\",\n   \"description\": \"Configuration for Mem0Memory component.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"user_id\": {\n         \"anyOf\": [\n            {\n               \"type\": \"string\"\n            },\n            {\n               \"type\": \"null\"\n            }\n         ],\n         \"default\": null,\n         \"description\": \"User ID for memory operations. If not provided, a UUID will be generated.\",\n         \"title\": \"User Id\"\n      },\n      \"limit\": {\n         \"default\": 10,\n         \"description\": \"Maximum number of results to return in memory queries.\",\n         \"title\": \"Limit\",\n         \"type\": \"integer\"\n      },\n      \"is_cloud\": {\n         \"default\": true,\n         \"description\": \"Whether to use cloud Mem0 client (True) or local client (False).\",\n         \"title\": \"Is Cloud\",\n         \"type\": \"boolean\"\n      },\n      \"api_key\": {\n         \"anyOf\": [\n            {\n               \"type\": \"string\"\n            },\n            {\n               \"type\": \"null\"\n            }\n         ],\n         \"default\": null,\n         \"description\": \"API key for cloud Mem0 client. Required if is_cloud=True.\",\n         \"title\": \"Api Key\"\n      },\n      \"config\": {\n         \"anyOf\": [\n            {\n               \"type\": \"object\"\n            },\n            {\n               \"type\": \"null\"\n            }\n         ],\n         \"default\": null,\n         \"description\": \"Configuration dictionary for local Mem0 client. Required if is_cloud=False.\",\n         \"title\": \"Config\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"Mem0MemoryConfig\",\n   \"description\": \"Configuration for Mem0Memory component.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"user_id\": {\n         \"anyOf\": [\n            {\n               \"type\": \"string\"\n            },\n            {\n               \"type\": \"null\"\n            }\n         ],\n         \"default\": null,\n         \"description\": \"User ID for memory operations. If not provided, a UUID will be generated.\",\n         \"title\": \"User Id\"\n      },\n      \"limit\": {\n         \"default\": 10,\n         \"description\": \"Maximum number of results to return in memory queries.\",\n         \"title\": \"Limit\",\n         \"type\": \"integer\"\n      },\n      \"is_cloud\": {\n         \"default\": true,\n         \"description\": \"Whether to use cloud Mem0 client (True) or local client (False).\",\n         \"title\": \"Is Cloud\",\n         \"type\": \"boolean\"\n      },\n      \"api_key\": {\n         \"anyOf\": [\n            {\n               \"type\": \"string\"\n            },\n            {\n               \"type\": \"null\"\n            }\n         ],\n         \"default\": null,\n         \"description\": \"API key for cloud Mem0 client. Required if is_cloud=True.\",\n         \"title\": \"Api Key\"\n      },\n      \"config\": {\n         \"anyOf\": [\n            {\n               \"type\": \"object\"\n            },\n            {\n               \"type\": \"null\"\n            }\n         ],\n         \"default\": null,\n         \"description\": \"Configuration dictionary for local Mem0 client. Required if is_cloud=False.\",\n         \"title\": \"Config\"\n      }\n   }\n}",
+      "language": "json"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.mem0.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.state.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.code_executor.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.exceptions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.logging.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tool_agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.file_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.auth.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.diskcache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker_jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.local.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.canvas.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.chromadb.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.llama_cpp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.replay.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.code_execution.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.http.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.playwright_controller.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2_grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2_grpc.html"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "title": "Create an Ingress for installations (Kubernetes)",
+  "content": "Source: https://docs.langchain.com/langsmith/self-host-ingress\n\nBy default, LangSmith will provision a LoadBalancer service for the `langsmith-frontend`. Depending on your cloud provider, this may result in a public IP address being assigned to the service. If you would like to use a custom domain or have more control over the routing of traffic to your LangSmith installation, you can configure an Ingress, Gateway API, or Istio Gateway.\n\n* An existing Kubernetes cluster\n* One of the following installed in your Kubernetes cluster:\n  * An Ingress Controller (for standard Ingress)\n  * Gateway API CRDs and a Gateway resource (for Gateway API)\n  * Istio (for Istio Gateway)\n\nYou may need to provide certain parameters to your LangSmith installation to configure the Ingress. Additionally, we will want to convert the `langsmith-frontend` service to a ClusterIP service.\n\n* *Hostname (optional)*: The hostname that you would like to use for your LangSmith installation. E.g `\"langsmith.example.com\"`. If you leave this empty, the ingress will serve all traffic to the LangSmith installation.\n\n* *BasePath (optional)*: If you would like to serve LangSmith under a URL basePath, you can specify it here. For example, adding `\"langsmith\"` will serve the application at `\"example.hostname.com/langsmith\"`. This will apply to UI paths as well as API endpoints.\n\n* *IngressClassName (optional)*: The name of the Ingress class that you would like to use. If not set, the default Ingress class will be used.\n\n* *Annotations (optional)*: Additional annotations to add to the Ingress. Certain providers like AWS may use annotations to control things like TLS termination.\n\nFor example, you can add the following annotations using the AWS ALB Ingress Controller to attach an ACM certificate to the Ingress:\n\n* *Labels (optional)*: Additional labels to add to the Ingress.\n\n* *TLS (optional)*: If you would like to serve LangSmith over HTTPS, you can add TLS configuration here (many Ingress controllers may have other ways of controlling TLS so this is often not needed). This should be an array of TLS configurations. Each TLS configuration should have the following fields:\n\n* hosts: An array of hosts that the certificate should be valid for. E.g \\[\"langsmith.example.com\"]\n\n* secretName: The name of the Kubernetes secret that contains the certificate and private key. This secret should have the following keys:\n\n* tls.crt: The certificate\n    * tls.key: The private key\n\n* You can read more about creating a TLS secret [here](https://kubernetes.io/do/langsmith/observability-concepts/services-networking/ingress/#tls).\n\nYou can configure your LangSmith instance to use one of three routing options: standard Ingress, Gateway API, or Istio Gateway. Choose the option that best fits your infrastructure.\n\n### Option 1: Standard Ingress\n\nWith these parameters in hand, you can configure your LangSmith instance to use an Ingress. You can do this by modifying the `config.yaml` file for your LangSmith Helm Chart installation.\n\nOnce configured, you will need to update your LangSmith installation. If everything is configured correctly, your LangSmith instance should now be accessible via the Ingress. You can run the following to check the status of your Ingress:\n\nYou should see something like this in the output:\n\n<Warning>\n  If you do not have automated DNS setup, you will need to add the IP address to your DNS provider manually.\n</Warning>\n\n### Option 2: Gateway API\n\n<Note>\n  Gateway API support is available as of LangSmith v0.12.0\n</Note>\n\nIf your cluster uses the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/), you can configure LangSmith to provision HTTPRoute resources. This will create an HTTPRoute for LangSmith and an HTTPRoute for each [agent deployment](/langsmith/deployments).\n\n* *name (required)*: The name of the Gateway resource to reference\n* *namespace (required)*: The namespace where the Gateway resource is located\n* *hostname (optional)*: The hostname that you would like to use for your LangSmith installation. E.g `\"langsmith.example.com\"`\n* *basePath (optional)*: If you would like to serve LangSmith under a base path, you can specify it here. E.g \"example.com/langsmith\"\n* *sectionName (optional)*: The name of a specific listener section in the Gateway to use\n* *annotations (optional)*: Additional annotations to add to the HTTPRoute resources\n* *labels (optional)*: Additional labels to add to the HTTPRoute resources\n\nOnce configured, you can check the status of your HTTPRoutes:\n\n### Option 3: Istio Gateway\n\n<Note>\n  Istio Gateway support is available as of LangSmith v0.12.0\n</Note>\n\nIf your cluster uses [Istio](https://istio.io/), you can configure LangSmith to provision VirtualService resources. This will create a VirtualService for LangSmith and a VirtualService for each [agent deployment](/langsmith/deployments).\n\n* *name (optional)*: The name of the Istio Gateway resource to reference. Defaults to `\"istio-gateway\"`\n* *namespace (optional)*: The namespace where the Istio Gateway resource is located. Defaults to `\"istio-system\"`\n* *hostname (optional)*: The hostname that you would like to use for your LangSmith installation. E.g `\"langsmith.example.com\"`\n* *basePath (optional)*: If you would like to serve LangSmith under a base path, you can specify it here. E.g \"example.com/langsmith\"\n* *annotations (optional)*: Additional annotations to add to the VirtualService resources\n* *labels (optional)*: Additional labels to add to the VirtualService resources\n\nOnce configured, you can check the status of your VirtualServices:\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/self-host-ingress.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "* *Labels (optional)*: Additional labels to add to the Ingress.\n\n* *TLS (optional)*: If you would like to serve LangSmith over HTTPS, you can add TLS configuration here (many Ingress controllers may have other ways of controlling TLS so this is often not needed). This should be an array of TLS configurations. Each TLS configuration should have the following fields:\n\n  * hosts: An array of hosts that the certificate should be valid for. E.g \\[\"langsmith.example.com\"]\n\n  * secretName: The name of the Kubernetes secret that contains the certificate and private key. This secret should have the following keys:\n\n    * tls.crt: The certificate\n    * tls.key: The private key\n\n  * You can read more about creating a TLS secret [here](https://kubernetes.io/do/langsmith/observability-concepts/services-networking/ingress/#tls).\n\n## Configuration\n\nYou can configure your LangSmith instance to use one of three routing options: standard Ingress, Gateway API, or Istio Gateway. Choose the option that best fits your infrastructure.\n\n### Option 1: Standard Ingress\n\nWith these parameters in hand, you can configure your LangSmith instance to use an Ingress. You can do this by modifying the `config.yaml` file for your LangSmith Helm Chart installation.",
+      "language": "unknown"
+    },
+    {
+      "code": "Once configured, you will need to update your LangSmith installation. If everything is configured correctly, your LangSmith instance should now be accessible via the Ingress. You can run the following to check the status of your Ingress:",
+      "language": "unknown"
+    },
+    {
+      "code": "You should see something like this in the output:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Warning>\n  If you do not have automated DNS setup, you will need to add the IP address to your DNS provider manually.\n</Warning>\n\n### Option 2: Gateway API\n\n<Note>\n  Gateway API support is available as of LangSmith v0.12.0\n</Note>\n\nIf your cluster uses the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/), you can configure LangSmith to provision HTTPRoute resources. This will create an HTTPRoute for LangSmith and an HTTPRoute for each [agent deployment](/langsmith/deployments).\n\n#### Parameters\n\n* *name (required)*: The name of the Gateway resource to reference\n* *namespace (required)*: The namespace where the Gateway resource is located\n* *hostname (optional)*: The hostname that you would like to use for your LangSmith installation. E.g `\"langsmith.example.com\"`\n* *basePath (optional)*: If you would like to serve LangSmith under a base path, you can specify it here. E.g \"example.com/langsmith\"\n* *sectionName (optional)*: The name of a specific listener section in the Gateway to use\n* *annotations (optional)*: Additional annotations to add to the HTTPRoute resources\n* *labels (optional)*: Additional labels to add to the HTTPRoute resources\n\n#### Configuration",
+      "language": "unknown"
+    },
+    {
+      "code": "Once configured, you can check the status of your HTTPRoutes:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Option 3: Istio Gateway\n\n<Note>\n  Istio Gateway support is available as of LangSmith v0.12.0\n</Note>\n\nIf your cluster uses [Istio](https://istio.io/), you can configure LangSmith to provision VirtualService resources. This will create a VirtualService for LangSmith and a VirtualService for each [agent deployment](/langsmith/deployments).\n\n#### Parameters\n\n* *name (optional)*: The name of the Istio Gateway resource to reference. Defaults to `\"istio-gateway\"`\n* *namespace (optional)*: The namespace where the Istio Gateway resource is located. Defaults to `\"istio-system\"`\n* *hostname (optional)*: The hostname that you would like to use for your LangSmith installation. E.g `\"langsmith.example.com\"`\n* *basePath (optional)*: If you would like to serve LangSmith under a base path, you can specify it here. E.g \"example.com/langsmith\"\n* *annotations (optional)*: Additional annotations to add to the VirtualService resources\n* *labels (optional)*: Additional labels to add to the VirtualService resources\n\n#### Configuration",
+      "language": "unknown"
+    },
+    {
+      "code": "Once configured, you can check the status of your VirtualServices:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Requirements",
+      "id": "requirements"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Option 1: Standard Ingress",
+      "id": "option-1:-standard-ingress"
+    },
+    {
+      "level": "h3",
+      "text": "Option 2: Gateway API",
+      "id": "option-2:-gateway-api"
+    },
+    {
+      "level": "h3",
+      "text": "Option 3: Istio Gateway",
+      "id": "option-3:-istio-gateway"
+    }
+  ],
+  "url": "llms-txt#create-an-ingress-for-installations-(kubernetes)",
+  "links": []
+}

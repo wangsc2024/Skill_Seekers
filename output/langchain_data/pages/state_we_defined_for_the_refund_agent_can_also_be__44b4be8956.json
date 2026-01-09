@@ -1,0 +1,17 @@
+{
+  "title": "state we defined for the refund agent can also be passed to our lookup agent.",
+  "content": "qa_graph = create_agent(qa_llm, tools=[lookup_track, lookup_artist, lookup_album])\n\ndisplay(Image(qa_graph.get_graph(xray=True).draw_mermaid_png()))\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/qa-graph.png?fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=fa838edc78b2b29e8c29807d8c3dd7fd\" alt=\"QA Graph\" data-og-width=\"214\" width=\"214\" data-og-height=\"249\" height=\"249\" data-path=\"langsmith/images/qa-graph.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/qa-graph.png?w=280&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=920e82f376d6bbbcfe02c07ac7a45b80 280w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/qa-graph.png?w=560&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=938d3bd8c19abfe27ea5efd1c996494c 560w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/qa-graph.png?w=840&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=e46ece85318d4c376cd6bb632bf41ab4 840w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/qa-graph.png?w=1100&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=3e3c715ef37db24fd0cbf8eb4ca19190 1100w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/qa-graph.png?w=1650&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=e3270477acbc50eb9e4e9736a5ec6afc 1650w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/qa-graph.png?w=2500&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=667b26bb91f33aaacbeb0a2ea749825a 2500w\" />\n\n#### Parent agent\n\nNow let's define a parent agent that combines our two task-specific agents. The only job of the parent agent is to route to one of the sub-agents by classifying the user's current intent, and to compile the output into a followup message.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#state-we-defined-for-the-refund-agent-can-also-be-passed-to-our-lookup-agent.",
+  "links": []
+}

@@ -1,0 +1,140 @@
+{
+  "url": "https://react.dev/learn/queueing-a-series-of-state-updates",
+  "title": "Queueing a Series of State Updates",
+  "content": "Setting a state variable will queue another render. But sometimes you might want to perform multiple operations on the value before queueing the next render. To do this, it helps to understand how React batches state updates.\n\nYou might expect that clicking the “+3” button will increment the counter three times because it calls setNumber(number + 1) three times:\n\nHowever, as you might recall from the previous section, each render’s state values are fixed, so the value of number inside the first render’s event handler is always 0, no matter how many times you call setNumber(1):\n\nBut there is one other factor at play here. React waits until all code in the event handlers has run before processing your state updates. This is why the re-render only happens after all these setNumber() calls.\n\nThis might remind you of a waiter taking an order at the restaurant. A waiter doesn’t run to the kitchen at the mention of your first dish! Instead, they let you finish your order, let you make changes to it, and even take orders from other people at the table.\n\nIllustrated by Rachel Lee Nabors\n\nThis lets you update multiple state variables—even from multiple components—without triggering too many re-renders. But this also means that the UI won’t be updated until after your event handler, and any code in it, completes. This behavior, also known as batching, makes your React app run much faster. It also avoids dealing with confusing “half-finished” renders where only some of the variables have been updated.\n\nReact does not batch across multiple intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do. This ensures that, for example, if the first button click disables a form, the second click would not submit it again.\n\nIt is an uncommon use case, but if you would like to update the same state variable multiple times before the next render, instead of passing the next state value like setNumber(number + 1), you can pass a function that calculates the next state based on the previous one in the queue, like setNumber(n => n + 1). It is a way to tell React to “do something with the state value” instead of just replacing it.\n\nTry incrementing the counter now:\n\nHere, n => n + 1 is called an updater function. When you pass it to a state setter:\n\nHere’s how React works through these lines of code while executing the event handler:\n\nWhen you call useState during the next render, React goes through the queue. The previous number state was 0, so that’s what React passes to the first updater function as the n argument. Then React takes the return value of your previous updater function and passes it to the next updater as n, and so on:\n\nReact stores 3 as the final result and returns it from useState.\n\nThis is why clicking “+3” in the above example correctly increments the value by 3.\n\nWhat about this event handler? What do you think number will be in the next render?\n\nHere’s what this event handler tells React to do:\n\nDuring the next render, React goes through the state queue:\n\nReact stores 6 as the final result and returns it from useState.\n\nYou may have noticed that setState(5) actually works like setState(n => 5), but n is unused!\n\nLet’s try one more example. What do you think number will be in the next render?\n\nHere’s how React works through these lines of code while executing this event handler:\n\nDuring the next render, React goes through the state queue:\n\nThen React stores 42 as the final result and returns it from useState.\n\nTo summarize, here’s how you can think of what you’re passing to the setNumber state setter:\n\nAfter the event handler completes, React will trigger a re-render. During the re-render, React will process the queue. Updater functions run during rendering, so updater functions must be pure and only return the result. Don’t try to set state from inside of them or run other side effects. In Strict Mode, React will run each updater function twice (but discard the second result) to help you find mistakes.\n\nIt’s common to name the updater function argument by the first letters of the corresponding state variable:\n\nIf you prefer more verbose code, another common convention is to repeat the full state variable name, like setEnabled(enabled => !enabled), or to use a prefix like setEnabled(prevEnabled => !prevEnabled).\n\nYou’re working on an art marketplace app that lets the user submit multiple orders for an art item at the same time. Each time the user presses the “Buy” button, the “Pending” counter should increase by one. After three seconds, the “Pending” counter should decrease, and the “Completed” counter should increase.\n\nHowever, the “Pending” counter does not behave as intended. When you press “Buy”, it decreases to -1 (which should not be possible!). And if you click fast twice, both counters seem to behave unpredictably.\n\nWhy does this happen? Fix both counters.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Queueing a Series of State Updates",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "React batches state updates",
+      "id": "react-batches-state-updates"
+    },
+    {
+      "level": "h2",
+      "text": "Updating the same state multiple times before the next render",
+      "id": "updating-the-same-state-multiple-times-before-the-next-render"
+    },
+    {
+      "level": "h3",
+      "text": "What happens if you update state after replacing it",
+      "id": "what-happens-if-you-update-state-after-replacing-it"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "What happens if you replace state after updating it",
+      "id": "what-happens-if-you-replace-state-after-updating-it"
+    },
+    {
+      "level": "h3",
+      "text": "Naming conventions",
+      "id": "naming-conventions"
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    },
+    {
+      "level": "h2",
+      "text": "Try out some challenges",
+      "id": "challenges"
+    },
+    {
+      "level": "h4",
+      "text": "Challenge 1 of 2: Fix a request counter",
+      "id": "fix-a-request-counter"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "setNumber(0 + 1);setNumber(0 + 1);setNumber(0 + 1);",
+      "language": "unknown"
+    },
+    {
+      "code": "setNumber(n => n + 1);setNumber(n => n + 1);setNumber(n => n + 1);",
+      "language": "javascript"
+    },
+    {
+      "code": "<button onClick={() => {  setNumber(number + 5);  setNumber(n => n + 1);}}>",
+      "language": "jsx"
+    },
+    {
+      "code": "<button onClick={() => {  setNumber(number + 5);  setNumber(n => n + 1);  setNumber(42);}}>",
+      "language": "jsx"
+    },
+    {
+      "code": "setEnabled(e => !e);setLastName(ln => ln.reverse());setFriendCount(fc => fc * 2);",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react-dom"
+  ]
+}

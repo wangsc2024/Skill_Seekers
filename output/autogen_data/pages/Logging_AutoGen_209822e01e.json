@@ -1,0 +1,57 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+  "title": "Logging — AutoGen",
+  "content": "AutoGen uses Python’s built-in logging module.\n\nTo enable logging for AgentChat, you can use the following code:\n\nTo enable additional logs such as model client calls and agent runtime events, please refer to the Core Logging Guide.\n\nSerializing Components",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Logging#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "import logging\n\nfrom autogen_agentchat import EVENT_LOGGER_NAME, TRACE_LOGGER_NAME\n\nlogging.basicConfig(level=logging.WARNING)\n\n# For trace logging.\ntrace_logger = logging.getLogger(TRACE_LOGGER_NAME)\ntrace_logger.addHandler(logging.StreamHandler())\ntrace_logger.setLevel(logging.DEBUG)\n\n# For structured message logging, such as low-level messages between agents.\nevent_logger = logging.getLogger(EVENT_LOGGER_NAME)\nevent_logger.addHandler(logging.StreamHandler())\nevent_logger.setLevel(logging.DEBUG)",
+      "language": "python"
+    },
+    {
+      "code": "import logging\n\nfrom autogen_agentchat import EVENT_LOGGER_NAME, TRACE_LOGGER_NAME\n\nlogging.basicConfig(level=logging.WARNING)\n\n# For trace logging.\ntrace_logger = logging.getLogger(TRACE_LOGGER_NAME)\ntrace_logger.addHandler(logging.StreamHandler())\ntrace_logger.setLevel(logging.DEBUG)\n\n# For structured message logging, such as low-level messages between agents.\nevent_logger = logging.getLogger(EVENT_LOGGER_NAME)\nevent_logger.addHandler(logging.StreamHandler())\nevent_logger.setLevel(logging.DEBUG)",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html"
+  ]
+}

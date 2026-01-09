@@ -1,0 +1,36 @@
+{
+  "title": "Create the example",
+  "content": "ls_client.create_examples(\n  dataset_id=dataset.id,\n  examples=[example],\n  # Uncomment this flag if you'd like to upload attachments from local files:\n  # dangerously_allow_filesystem=True\n)\ntypescript  theme={null}\nimport { Client } from \"langsmith\";\nimport { v4 as uuid4 } from \"uuid\";\n\n// Publicly available test files\nconst pdfUrl = \"https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf\";\nconst wavUrl = \"https://openaiassets.blob.core.windows.net/$web/API/docs/audio/alloy.wav\";\nconst pngUrl = \"https://www.w3.org/Graphics/PNG/nurbcup2si.png\";\n\n// Helper function to fetch file as ArrayBuffer\nasync function fetchArrayBuffer(url: string): Promise<ArrayBuffer> {\n  const response = await fetch(url);\n  if (!response.ok) {\n    throw new Error(`Failed to fetch ${url}: ${response.statusText}`);\n  }\n  return response.arrayBuffer();\n}\n\n// Fetch files as ArrayBuffer\nconst pdfArrayBuffer = await fetchArrayBuffer(pdfUrl);\nconst wavArrayBuffer = await fetchArrayBuffer(wavUrl);\nconst pngArrayBuffer = await fetchArrayBuffer(pngUrl);\n\n// Create the LangSmith client (Ensure LANGSMITH_API_KEY is set in env)\nconst langsmithClient = new Client();\n\n// Create a unique dataset name\nconst datasetName = \"attachment-test-dataset:\" + uuid4().substring(0, 8);\n\n// Create the dataset\nconst dataset = await langsmithClient.createDataset(datasetName, {\n  description: \"Test dataset for evals with publicly available attachments\",\n});\n\n// Define the example with attachments\nconst exampleId = uuid4();\nconst example = {\n  id: exampleId,\n  inputs: {\n      audio_question: \"What is in this audio clip?\",\n      image_question: \"What is in this image?\",\n  },\n  outputs: {\n      audio_answer: \"The sun rises in the east and sets in the west. This simple fact has been observed by humans for thousands of years.\",\n      image_answer: \"A mug with a blanket over it.\",\n  },\n  attachments: {\n    my_pdf: {\n      mimeType: \"application/pdf\",\n      data: pdfArrayBuffer\n    },\n    my_wav: {\n      mimeType: \"audio/wav\",\n      data: wavArrayBuffer\n    },\n    my_img: {\n      mimeType: \"image/png\",\n      data: pngArrayBuffer\n    },\n  },\n};\n\n// Upload the example with attachments to the dataset\nawait langsmithClient.uploadExamplesMultipart(dataset.id, [example]);\npython  theme={null}\n  client.create_examples(..., dangerously_allow_filesystem=True)\n  python  theme={null}\n{\n    \"presigned_url\": str,\n    \"mime_type\": str,\n    \"reader\": BinaryIO\n}\npython  theme={null}\nfrom langsmith.wrappers import wrap_openai\nimport base64\nfrom openai import OpenAI\n\nclient = wrap_openai(OpenAI())",
+  "code_samples": [
+    {
+      "code": "#### TypeScript\n\nRequires version >= 0.2.13\n\nYou can use the `uploadExamplesMultipart` method to upload examples with attachments.\n\nNote that this is a different method from the standard `createExamples` method, which currently does not support attachments. Each attachment requires either a `Uint8Array` or an `ArrayBuffer` as the data type.\n\n* `Uint8Array`: Useful for handling binary data directly.\n* `ArrayBuffer`: Represents fixed-length binary data, which can be converted to `Uint8Array` as needed.\n\nNote that you cannot directly pass in a file path in the TypeScript SDK, as accessing local files is not supported in all runtime environments.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Info>\n  Along with being passed in as bytes, attachments can be specified as paths to local files. To do so pass in a path for the attachment `data` value and specify arg `dangerously_allow_filesystem=True`:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Info>\n\n## 2. Run evaluations\n\n### Define a target function\n\nNow that we have a dataset that includes examples with attachments, we can define a target function to run over these examples. The following example simply uses OpenAI's GPT-4o model to answer questions about an image and an audio clip.\n\n#### Python\n\nThe target function you are evaluating must have two positional arguments in order to consume the attachments associated with the example, the first must be called `inputs` and the second must be called `attachments`.\n\n* The `inputs` argument is a dictionary that contains the input data for the example, excluding the attachments.\n* The `attachments` argument is a dictionary that maps the attachment name to a dictionary containing a presigned url, mime\\_type, and a reader of the bytes content of the file. You can use either the presigned url or the reader to get the file contents. Each value in the attachments dictionary is a dictionary with the following structure:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "2. Run evaluations",
+      "id": "2.-run-evaluations"
+    },
+    {
+      "level": "h3",
+      "text": "Define a target function",
+      "id": "define-a-target-function"
+    }
+  ],
+  "url": "llms-txt#create-the-example",
+  "links": []
+}

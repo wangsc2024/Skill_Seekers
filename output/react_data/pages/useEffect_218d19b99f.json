@@ -1,0 +1,410 @@
+{
+  "url": "https://react.dev/reference/react/useEffect",
+  "title": "useEffect",
+  "content": "useEffect is a React Hook that lets you synchronize a component with an external system.\n\nCall useEffect at the top level of your component to declare an Effect:\n\nSee more examples below.\n\nsetup: The function with your Effect’s logic. Your setup function may also optionally return a cleanup function. When your component commits, React will run your setup function. After every commit with changed dependencies, React will first run the cleanup function (if you provided it) with the old values, and then run your setup function with the new values. After your component is removed from the DOM, React will run your cleanup function.\n\noptional dependencies: The list of all reactive values referenced inside of the setup code. Reactive values include props, state, and all the variables and functions declared directly inside your component body. If your linter is configured for React, it will verify that every reactive value is correctly specified as a dependency. The list of dependencies must have a constant number of items and be written inline like [dep1, dep2, dep3]. React will compare each dependency with its previous value using the Object.is comparison. If you omit this argument, your Effect will re-run after every commit of the component. See the difference between passing an array of dependencies, an empty array, and no dependencies at all.\n\nuseEffect returns undefined.\n\nuseEffect is a Hook, so you can only call it at the top level of your component or your own Hooks. You can’t call it inside loops or conditions. If you need that, extract a new component and move the state into it.\n\nIf you’re not trying to synchronize with some external system, you probably don’t need an Effect.\n\nWhen Strict Mode is on, React will run one extra development-only setup+cleanup cycle before the first real setup. This is a stress-test that ensures that your cleanup logic “mirrors” your setup logic and that it stops or undoes whatever the setup is doing. If this causes a problem, implement the cleanup function.\n\nIf some of your dependencies are objects or functions defined inside the component, there is a risk that they will cause the Effect to re-run more often than needed. To fix this, remove unnecessary object and function dependencies. You can also extract state updates and non-reactive logic outside of your Effect.\n\nIf your Effect wasn’t caused by an interaction (like a click), React will generally let the browser paint the updated screen first before running your Effect. If your Effect is doing something visual (for example, positioning a tooltip), and the delay is noticeable (for example, it flickers), replace useEffect with useLayoutEffect.\n\nIf your Effect is caused by an interaction (like a click), React may run your Effect before the browser paints the updated screen. This ensures that the result of the Effect can be observed by the event system. Usually, this works as expected. However, if you must defer the work until after paint, such as an alert(), you can use setTimeout. See reactwg/react-18/128 for more information.\n\nEven if your Effect was caused by an interaction (like a click), React may allow the browser to repaint the screen before processing the state updates inside your Effect. Usually, this works as expected. However, if you must block the browser from repainting the screen, you need to replace useEffect with useLayoutEffect.\n\nEffects only run on the client. They don’t run during server rendering.\n\nSome components need to stay connected to the network, some browser API, or a third-party library, while they are displayed on the page. These systems aren’t controlled by React, so they are called external.\n\nTo connect your component to some external system, call useEffect at the top level of your component:\n\nYou need to pass two arguments to useEffect:\n\nReact calls your setup and cleanup functions whenever it’s necessary, which may happen multiple times:\n\nLet’s illustrate this sequence for the example above.\n\nWhen the ChatRoom component above gets added to the page, it will connect to the chat room with the initial serverUrl and roomId. If either serverUrl or roomId change as a result of a commit (say, if the user picks a different chat room in a dropdown), your Effect will disconnect from the previous room, and connect to the next one. When the ChatRoom component is removed from the page, your Effect will disconnect one last time.\n\nTo help you find bugs, in development React runs setup and cleanup one extra time before the setup. This is a stress-test that verifies your Effect’s logic is implemented correctly. If this causes visible issues, your cleanup function is missing some logic. The cleanup function should stop or undo whatever the setup function was doing. The rule of thumb is that the user shouldn’t be able to distinguish between the setup being called once (as in production) and a setup → cleanup → setup sequence (as in development). See common solutions.\n\nTry to write every Effect as an independent process and think about a single setup/cleanup cycle at a time. It shouldn’t matter whether your component is mounting, updating, or unmounting. When your cleanup logic correctly “mirrors” the setup logic, your Effect is resilient to running setup and cleanup as often as needed.\n\nAn Effect lets you keep your component synchronized with some external system (like a chat service). Here, external system means any piece of code that’s not controlled by React, such as:\n\nIf you’re not connecting to any external system, you probably don’t need an Effect.\n\nIn this example, the ChatRoom component uses an Effect to stay connected to an external system defined in chat.js. Press “Open chat” to make the ChatRoom component appear. This sandbox runs in development mode, so there is an extra connect-and-disconnect cycle, as explained here. Try changing the roomId and serverUrl using the dropdown and the input, and see how the Effect re-connects to the chat. Press “Close chat” to see the Effect disconnect one last time.\n\nEffects are an “escape hatch”: you use them when you need to “step outside React” and when there is no better built-in solution for your use case. If you find yourself often needing to manually write Effects, it’s usually a sign that you need to extract some custom Hooks for common behaviors your components rely on.\n\nFor example, this useChatRoom custom Hook “hides” the logic of your Effect behind a more declarative API:\n\nThen you can use it from any component like this:\n\nThere are also many excellent custom Hooks for every purpose available in the React ecosystem.\n\nLearn more about wrapping Effects in custom Hooks.\n\nThis example is identical to one of the earlier examples, but the logic is extracted to a custom Hook.\n\nSometimes, you want to keep an external system synchronized to some prop or state of your component.\n\nFor example, if you have a third-party map widget or a video player component written without React, you can use an Effect to call methods on it that make its state match the current state of your React component. This Effect creates an instance of a MapWidget class defined in map-widget.js. When you change the zoomLevel prop of the Map component, the Effect calls the setZoom() on the class instance to keep it synchronized:\n\nIn this example, a cleanup function is not needed because the MapWidget class manages only the DOM node that was passed to it. After the Map React component is removed from the tree, both the DOM node and the MapWidget class instance will be automatically garbage-collected by the browser JavaScript engine.\n\nYou can use an Effect to fetch data for your component. Note that if you use a framework, using your framework’s data fetching mechanism will be a lot more efficient than writing Effects manually.\n\nIf you want to fetch data from an Effect manually, your code might look like this:\n\nNote the ignore variable which is initialized to false, and is set to true during cleanup. This ensures your code doesn’t suffer from “race conditions”: network responses may arrive in a different order than you sent them.\n\nYou can also rewrite using the async / await syntax, but you still need to provide a cleanup function:\n\nWriting data fetching directly in Effects gets repetitive and makes it difficult to add optimizations like caching and server rendering later. It’s easier to use a custom Hook—either your own or maintained by the community.\n\nWriting fetch calls inside Effects is a popular way to fetch data, especially in fully client-side apps. This is, however, a very manual approach and it has significant downsides:\n\nThis list of downsides is not specific to React. It applies to fetching data on mount with any library. Like with routing, data fetching is not trivial to do well, so we recommend the following approaches:\n\nYou can continue fetching data directly in Effects if neither of these approaches suit you.\n\nNotice that you can’t “choose” the dependencies of your Effect. Every reactive value used by your Effect’s code must be declared as a dependency. Your Effect’s dependency list is determined by the surrounding code:\n\nIf either serverUrl or roomId change, your Effect will reconnect to the chat using the new values.\n\nReactive values include props and all variables and functions declared directly inside of your component. Since roomId and serverUrl are reactive values, you can’t remove them from the dependencies. If you try to omit them and your linter is correctly configured for React, the linter will flag this as a mistake you need to fix:\n\nTo remove a dependency, you need to “prove” to the linter that it doesn’t need to be a dependency. For example, you can move serverUrl out of your component to prove that it’s not reactive and won’t change on re-renders:\n\nNow that serverUrl is not a reactive value (and can’t change on a re-render), it doesn’t need to be a dependency. If your Effect’s code doesn’t use any reactive values, its dependency list should be empty ([]):\n\nAn Effect with empty dependencies doesn’t re-run when any of your component’s props or state change.\n\nIf you have an existing codebase, you might have some Effects that suppress the linter like this:\n\nWhen dependencies don’t match the code, there is a high risk of introducing bugs. By suppressing the linter, you “lie” to React about the values your Effect depends on. Instead, prove they’re unnecessary.\n\nIf you specify the dependencies, your Effect runs after the initial commit and after commits with changed dependencies.\n\nIn the below example, serverUrl and roomId are reactive values, so they both must be specified as dependencies. As a result, selecting a different room in the dropdown or editing the server URL input causes the chat to re-connect. However, since message isn’t used in the Effect (and so it isn’t a dependency), editing the message doesn’t re-connect to the chat.\n\nWhen you want to update state based on previous state from an Effect, you might run into a problem:\n\nSince count is a reactive value, it must be specified in the list of dependencies. However, that causes the Effect to cleanup and setup again every time the count changes. This is not ideal.\n\nTo fix this, pass the c => c + 1 state updater to setCount:\n\nNow that you’re passing c => c + 1 instead of count + 1, your Effect no longer needs to depend on count. As a result of this fix, it won’t need to cleanup and setup the interval again every time the count changes.\n\nIf your Effect depends on an object or a function created during rendering, it might run too often. For example, this Effect re-connects after every commit because the options object is different for every render:\n\nAvoid using an object created during rendering as a dependency. Instead, create the object inside the Effect:\n\nNow that you create the options object inside the Effect, the Effect itself only depends on the roomId string.\n\nWith this fix, typing into the input doesn’t reconnect the chat. Unlike an object which gets re-created, a string like roomId doesn’t change unless you set it to another value. Read more about removing dependencies.\n\nIf your Effect depends on an object or a function created during rendering, it might run too often. For example, this Effect re-connects after every commit because the createOptions function is different for every render:\n\nBy itself, creating a function from scratch on every re-render is not a problem. You don’t need to optimize that. However, if you use it as a dependency of your Effect, it will cause your Effect to re-run after every commit.\n\nAvoid using a function created during rendering as a dependency. Instead, declare it inside the Effect:\n\nNow that you define the createOptions function inside the Effect, the Effect itself only depends on the roomId string. With this fix, typing into the input doesn’t reconnect the chat. Unlike a function which gets re-created, a string like roomId doesn’t change unless you set it to another value. Read more about removing dependencies.\n\nBy default, when you read a reactive value from an Effect, you have to add it as a dependency. This ensures that your Effect “reacts” to every change of that value. For most dependencies, that’s the behavior you want.\n\nHowever, sometimes you’ll want to read the latest props and state from an Effect without “reacting” to them. For example, imagine you want to log the number of the items in the shopping cart for every page visit:\n\nWhat if you want to log a new page visit after every url change, but not if only the shoppingCart changes? You can’t exclude shoppingCart from dependencies without breaking the reactivity rules. However, you can express that you don’t want a piece of code to “react” to changes even though it is called from inside an Effect. Declare an Effect Event with the useEffectEvent Hook, and move the code reading shoppingCart inside of it:\n\nEffect Events are not reactive and must always be omitted from dependencies of your Effect. This is what lets you put non-reactive code (where you can read the latest value of some props and state) inside of them. By reading shoppingCart inside of onVisit, you ensure that shoppingCart won’t re-run your Effect.\n\nRead more about how Effect Events let you separate reactive and non-reactive code.\n\nIf your app uses server rendering (either directly or via a framework), your component will render in two different environments. On the server, it will render to produce the initial HTML. On the client, React will run the rendering code again so that it can attach your event handlers to that HTML. This is why, for hydration to work, your initial render output must be identical on the client and the server.\n\nIn rare cases, you might need to display different content on the client. For example, if your app reads some data from localStorage, it can’t possibly do that on the server. Here is how you could implement this:\n\nWhile the app is loading, the user will see the initial render output. Then, when it’s loaded and hydrated, your Effect will run and set didMount to true, triggering a re-render. This will switch to the client-only render output. Effects don’t run on the server, so this is why didMount was false during the initial server render.\n\nUse this pattern sparingly. Keep in mind that users with a slow connection will see the initial content for quite a bit of time—potentially, many seconds—so you don’t want to make jarring changes to your component’s appearance. In many cases, you can avoid the need for this by conditionally showing different things with CSS.\n\nWhen Strict Mode is on, in development, React runs setup and cleanup one extra time before the actual setup.\n\nThis is a stress-test that verifies your Effect’s logic is implemented correctly. If this causes visible issues, your cleanup function is missing some logic. The cleanup function should stop or undo whatever the setup function was doing. The rule of thumb is that the user shouldn’t be able to distinguish between the setup being called once (as in production) and a setup → cleanup → setup sequence (as in development).\n\nRead more about how this helps find bugs and how to fix your logic.\n\nFirst, check that you haven’t forgotten to specify the dependency array:\n\nIf you’ve specified the dependency array but your Effect still re-runs in a loop, it’s because one of your dependencies is different on every re-render.\n\nYou can debug this problem by manually logging your dependencies to the console:\n\nYou can then right-click on the arrays from different re-renders in the console and select “Store as a global variable” for both of them. Assuming the first one got saved as temp1 and the second one got saved as temp2, you can then use the browser console to check whether each dependency in both arrays is the same:\n\nWhen you find the dependency that is different on every re-render, you can usually fix it in one of these ways:\n\nAs a last resort (if these methods didn’t help), wrap its creation with useMemo or useCallback (for functions).\n\nIf your Effect runs in an infinite cycle, these two things must be true:\n\nBefore you start fixing the problem, ask yourself whether your Effect is connecting to some external system (like DOM, network, a third-party widget, and so on). Why does your Effect need to set state? Does it synchronize with that external system? Or are you trying to manage your application’s data flow with it?\n\nIf there is no external system, consider whether removing the Effect altogether would simplify your logic.\n\nIf you’re genuinely synchronizing with some external system, think about why and under what conditions your Effect should update the state. Has something changed that affects your component’s visual output? If you need to keep track of some data that isn’t used by rendering, a ref (which doesn’t trigger re-renders) might be more appropriate. Verify your Effect doesn’t update the state (and trigger re-renders) more than needed.\n\nFinally, if your Effect is updating the state at the right time, but there is still a loop, it’s because that state update leads to one of the Effect’s dependencies changing. Read how to debug dependency changes.\n\nThe cleanup function runs not only during unmount, but before every re-render with changed dependencies. Additionally, in development, React runs setup+cleanup one extra time immediately after component mounts.\n\nIf you have cleanup code without corresponding setup code, it’s usually a code smell:\n\nYour cleanup logic should be “symmetrical” to the setup logic, and should stop or undo whatever setup did:\n\nLearn how the Effect lifecycle is different from the component’s lifecycle.\n\nIf your Effect must block the browser from painting the screen, replace useEffect with useLayoutEffect. Note that this shouldn’t be needed for the vast majority of Effects. You’ll only need this if it’s crucial to run your Effect before the browser paint: for example, to measure and position a tooltip before the user sees it.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "useEffect",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "useEffect(setup, dependencies?)",
+      "id": "useeffect"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Connecting to an external system",
+      "id": "connecting-to-an-external-system"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Examples of connecting to an external system",
+      "id": "examples-connecting"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 5: Connecting to a chat server",
+      "id": "connecting-to-a-chat-server"
+    },
+    {
+      "level": "h3",
+      "text": "Wrapping Effects in custom Hooks",
+      "id": "wrapping-effects-in-custom-hooks"
+    },
+    {
+      "level": "h4",
+      "text": "Examples of wrapping Effects in custom Hooks",
+      "id": "examples-custom-hooks"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 3: Custom useChatRoom Hook",
+      "id": "custom-usechatroom-hook"
+    },
+    {
+      "level": "h3",
+      "text": "Controlling a non-React widget",
+      "id": "controlling-a-non-react-widget"
+    },
+    {
+      "level": "h3",
+      "text": "Fetching data with Effects",
+      "id": "fetching-data-with-effects"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "What are good alternatives to data fetching in Effects?",
+      "id": "what-are-good-alternatives-to-data-fetching-in-effects"
+    },
+    {
+      "level": "h3",
+      "text": "Specifying reactive dependencies",
+      "id": "specifying-reactive-dependencies"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Examples of passing reactive dependencies",
+      "id": "examples-dependencies"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 3: Passing a dependency array",
+      "id": "passing-a-dependency-array"
+    },
+    {
+      "level": "h3",
+      "text": "Updating state based on previous state from an Effect",
+      "id": "updating-state-based-on-previous-state-from-an-effect"
+    },
+    {
+      "level": "h3",
+      "text": "Removing unnecessary object dependencies",
+      "id": "removing-unnecessary-object-dependencies"
+    },
+    {
+      "level": "h3",
+      "text": "Removing unnecessary function dependencies",
+      "id": "removing-unnecessary-function-dependencies"
+    },
+    {
+      "level": "h3",
+      "text": "Reading the latest props and state from an Effect",
+      "id": "reading-the-latest-props-and-state-from-an-effect"
+    },
+    {
+      "level": "h3",
+      "text": "Displaying different content on the server and the client",
+      "id": "displaying-different-content-on-the-server-and-the-client"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "My Effect runs twice when the component mounts",
+      "id": "my-effect-runs-twice-when-the-component-mounts"
+    },
+    {
+      "level": "h3",
+      "text": "My Effect runs after every re-render",
+      "id": "my-effect-runs-after-every-re-render"
+    },
+    {
+      "level": "h3",
+      "text": "My Effect keeps re-running in an infinite cycle",
+      "id": "my-effect-keeps-re-running-in-an-infinite-cycle"
+    },
+    {
+      "level": "h3",
+      "text": "My cleanup logic runs even though my component didn’t unmount",
+      "id": "my-cleanup-logic-runs-even-though-my-component-didnt-unmount"
+    },
+    {
+      "level": "h3",
+      "text": "My Effect does something visual, and I see a flicker before it runs",
+      "id": "my-effect-does-something-visual-and-i-see-a-flicker-before-it-runs"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "useEffect(setup, dependencies?)",
+      "language": "jsx"
+    },
+    {
+      "code": "import { useState, useEffect } from 'react';import { createConnection } from './chat.js';function ChatRoom({ roomId }) {  const [serverUrl, setServerUrl] = useState('https://localhost:1234');  useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.connect();    return () => {      connection.disconnect();    };  }, [serverUrl, roomId]);  // ...}",
+      "language": "jsx"
+    },
+    {
+      "code": "import { useState, useEffect } from 'react';import { createConnection } from './chat.js';function ChatRoom({ roomId }) {  const [serverUrl, setServerUrl] = useState('https://localhost:1234');  useEffect(() => {  \tconst connection = createConnection(serverUrl, roomId);    connection.connect();  \treturn () => {      connection.disconnect();  \t};  }, [serverUrl, roomId]);  // ...}",
+      "language": "jsx"
+    },
+    {
+      "code": "function useChatRoom({ serverUrl, roomId }) {  useEffect(() => {    const options = {      serverUrl: serverUrl,      roomId: roomId    };    const connection = createConnection(options);    connection.connect();    return () => connection.disconnect();  }, [roomId, serverUrl]);}",
+      "language": "javascript"
+    },
+    {
+      "code": "function ChatRoom({ roomId }) {  const [serverUrl, setServerUrl] = useState('https://localhost:1234');  useChatRoom({    roomId: roomId,    serverUrl: serverUrl  });  // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "import { useState, useEffect } from 'react';import { fetchBio } from './api.js';export default function Page() {  const [person, setPerson] = useState('Alice');  const [bio, setBio] = useState(null);  useEffect(() => {    let ignore = false;    setBio(null);    fetchBio(person).then(result => {      if (!ignore) {        setBio(result);      }    });    return () => {      ignore = true;    };  }, [person]);  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function ChatRoom({ roomId }) { // This is a reactive value  const [serverUrl, setServerUrl] = useState('https://localhost:1234'); // This is a reactive value too  useEffect(() => {    const connection = createConnection(serverUrl, roomId); // This Effect reads these reactive values    connection.connect();    return () => connection.disconnect();  }, [serverUrl, roomId]); // ✅ So you must specify them as dependencies of your Effect  // ...}",
+      "language": "jsx"
+    },
+    {
+      "code": "function ChatRoom({ roomId }) {  const [serverUrl, setServerUrl] = useState('https://localhost:1234');    useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.connect();    return () => connection.disconnect();  }, []); // 🔴 React Hook useEffect has missing dependencies: 'roomId' and 'serverUrl'  // ...}",
+      "language": "jsx"
+    },
+    {
+      "code": "const serverUrl = 'https://localhost:1234'; // Not a reactive value anymorefunction ChatRoom({ roomId }) {  useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.connect();    return () => connection.disconnect();  }, [roomId]); // ✅ All dependencies declared  // ...}",
+      "language": "jsx"
+    },
+    {
+      "code": "const serverUrl = 'https://localhost:1234'; // Not a reactive value anymoreconst roomId = 'music'; // Not a reactive value anymorefunction ChatRoom() {  useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.connect();    return () => connection.disconnect();  }, []); // ✅ All dependencies declared  // ...}",
+      "language": "jsx"
+    },
+    {
+      "code": "useEffect(() => {  // ...  // 🔴 Avoid suppressing the linter like this:  // eslint-ignore-next-line react-hooks/exhaustive-deps}, []);",
+      "language": "jsx"
+    },
+    {
+      "code": "useEffect(() => {  // ...}, [a, b]); // Runs again if a or b are different",
+      "language": "jsx"
+    },
+    {
+      "code": "function Counter() {  const [count, setCount] = useState(0);  useEffect(() => {    const intervalId = setInterval(() => {      setCount(count + 1); // You want to increment the counter every second...    }, 1000)    return () => clearInterval(intervalId);  }, [count]); // 🚩 ... but specifying `count` as a dependency always resets the interval.  // ...}",
+      "language": "jsx"
+    },
+    {
+      "code": "const serverUrl = 'https://localhost:1234';function ChatRoom({ roomId }) {  const [message, setMessage] = useState('');  const options = { // 🚩 This object is created from scratch on every re-render    serverUrl: serverUrl,    roomId: roomId  };  useEffect(() => {    const connection = createConnection(options); // It's used inside the Effect    connection.connect();    return () => connection.disconnect();  }, [options]); // 🚩 As a result, these dependencies are always different on a commit  // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "function ChatRoom({ roomId }) {  const [message, setMessage] = useState('');  function createOptions() { // 🚩 This function is created from scratch on every re-render    return {      serverUrl: serverUrl,      roomId: roomId    };  }  useEffect(() => {    const options = createOptions(); // It's used inside the Effect    const connection = createConnection();    connection.connect();    return () => connection.disconnect();  }, [createOptions]); // 🚩 As a result, these dependencies are always different on a commit  // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "function Page({ url, shoppingCart }) {  useEffect(() => {    logVisit(url, shoppingCart.length);  }, [url, shoppingCart]); // ✅ All dependencies declared  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function Page({ url, shoppingCart }) {  const onVisit = useEffectEvent(visitedUrl => {    logVisit(visitedUrl, shoppingCart.length)  });  useEffect(() => {    onVisit(url);  }, [url]); // ✅ All dependencies declared  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function MyComponent() {  const [didMount, setDidMount] = useState(false);  useEffect(() => {    setDidMount(true);  }, []);  if (didMount) {    // ... return client-only JSX ...  }  else {    // ... return initial JSX ...  }}",
+      "language": "jsx"
+    },
+    {
+      "code": "useEffect(() => {  // ...}); // 🚩 No dependency array: re-runs after every commit!",
+      "language": "jsx"
+    },
+    {
+      "code": "useEffect(() => {    // ..  }, [serverUrl, roomId]);  console.log([serverUrl, roomId]);",
+      "language": "jsx"
+    },
+    {
+      "code": "Object.is(temp1[0], temp2[0]); // Is the first dependency the same between the arrays?Object.is(temp1[1], temp2[1]); // Is the second dependency the same between the arrays?Object.is(temp1[2], temp2[2]); // ... and so on for every dependency ...",
+      "language": "unknown"
+    },
+    {
+      "code": "useEffect(() => {  // 🔴 Avoid: Cleanup logic without corresponding setup logic  return () => {    doSomething();  };}, []);",
+      "language": "jsx"
+    },
+    {
+      "code": "useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.connect();    return () => {      connection.disconnect();    };  }, [serverUrl, roomId]);",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state"
+  ]
+}

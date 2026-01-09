@@ -1,0 +1,8 @@
+{
+  "title": "Configuration for this conversation thread",
+  "content": "thread_id = str(uuid.uuid4())\nconfig = {\"configurable\": {\"thread_id\": thread_id}}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#configuration-for-this-conversation-thread",
+  "links": []
+}

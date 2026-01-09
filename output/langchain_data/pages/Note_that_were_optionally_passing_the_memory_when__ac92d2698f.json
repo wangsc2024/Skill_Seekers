@@ -1,0 +1,37 @@
+{
+  "title": "Note that we're (optionally) passing the memory when compiling the graph",
+  "content": "app = workflow.compile()\npython  theme={null}\nfrom langsmith import Client\n\nquestions = [\n    \"what's the weather in sf\",\n    \"whats the weather in san fran\",\n    \"whats the weather in tangier\"\n]\n\nanswers = [\n    \"It's 60 degrees and foggy.\",\n    \"It's 60 degrees and foggy.\",\n    \"It's 90 degrees and sunny.\",\n]\n\nls_client = Client()\ndataset = ls_client.create_dataset(\n    \"weather agent\",\n    inputs=[{\"question\": q} for q in questions],\n    outputs=[{\"answers\": a} for a in answers],\n)\npython  theme={null}\njudge_llm = init_chat_model(\"gpt-4o\")\n\nasync def correct(outputs: dict, reference_outputs: dict) -> bool:\n    instructions = (\n        \"Given an actual answer and an expected answer, determine whether\"\n        \" the actual answer contains all of the information in the\"\n        \" expected answer. Respond with 'CORRECT' if the actual answer\"\n        \" does contain all of the expected information and 'INCORRECT'\"\n        \" otherwise. Do not include anything else in your response.\"\n    )\n    # Our graph outputs a State dictionary, which in this case means\n    # we'll have a 'messages' key and the final message should\n    # be our actual answer.\n    actual_answer = outputs[\"messages\"][-1].content\n    expected_answer = reference_outputs[\"answer\"]\n    user_msg = (\n        f\"ACTUAL ANSWER: {actual_answer}\"\n        f\"\\n\\nEXPECTED ANSWER: {expected_answer}\"\n    )\n    response = await judge_llm.ainvoke(\n        [\n            {\"role\": \"system\", \"content\": instructions},\n            {\"role\": \"user\", \"content\": user_msg}\n        ]\n    )\n    return response.content.upper() == \"CORRECT\"\npython  theme={null}\nfrom langsmith import aevaluate\n\ndef example_to_state(inputs: dict) -> dict:\n  return {\"messages\": [{\"role\": \"user\", \"content\": inputs['question']}]}",
+  "code_samples": [
+    {
+      "code": "### Create a dataset\n\nLet's create a simple dataset of questions and expected responses:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Create an evaluator\n\nAnd a simple evaluator:\n\nRequires `langsmith>=0.2.0`",
+      "language": "unknown"
+    },
+    {
+      "code": "### Run evaluations\n\nNow we can run our evaluations and explore the results. We'll just need to wrap our graph function so that it can take inputs in the format they're stored on our example:\n\n<Note>\n  If all of your graph nodes are defined as sync functions then you can use `evaluate` or `aevaluate`. If any of you nodes are defined as async, you'll need to use `aevaluate`\n</Note>\n\nRequires `langsmith>=0.2.0`",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Create a dataset",
+      "id": "create-a-dataset"
+    },
+    {
+      "level": "h3",
+      "text": "Create an evaluator",
+      "id": "create-an-evaluator"
+    },
+    {
+      "level": "h3",
+      "text": "Run evaluations",
+      "id": "run-evaluations"
+    }
+  ],
+  "url": "llms-txt#note-that-we're-(optionally)-passing-the-memory-when-compiling-the-graph",
+  "links": []
+}

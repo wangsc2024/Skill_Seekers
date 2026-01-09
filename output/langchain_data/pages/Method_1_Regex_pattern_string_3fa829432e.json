@@ -1,0 +1,8 @@
+{
+  "title": "Method 1: Regex pattern string",
+  "content": "agent1 = create_agent(\n    model=\"gpt-4o\",\n    tools=[],\n    middleware=[\n        PIIMiddleware(\n            \"api_key\",\n            detector=r\"sk-[a-zA-Z0-9]{32}\",\n            strategy=\"block\",\n        ),\n    ],\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#method-1:-regex-pattern-string",
+  "links": []
+}

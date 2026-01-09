@@ -1,0 +1,53 @@
+{
+  "title": "Quickstart",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/quickstart\n\nThis quickstart demonstrates how to build a calculator agent using the LangGraph Graph API or the Functional API.\n\n* [Use the Graph API](#use-the-graph-api) if you prefer to define your agent as a graph of nodes and edges.\n* [Use the Functional API](#use-the-functional-api) if you prefer to define your agent as a single function.\n\nFor conceptual information, see [Graph API overview](/oss/python/langgraph/graph-api) and [Functional API overview](/oss/python/langgraph/functional-api).\n\n<Info>\n  For this example, you will need to set up a [Claude (Anthropic)](https://www.anthropic.com/) account and get an API key. Then, set the `ANTHROPIC_API_KEY` environment variable in your terminal.\n</Info>\n\n<Tabs>\n  <Tab title=\"Use the Graph API\">\n    ## 1. Define tools and model\n\nIn this example, we'll use the Claude Sonnet 4.5 model and define tools for addition, multiplication, and division.\n\nThe graph's state is used to store the messages and the number of LLM calls.\n\n<Tip>\n      State in LangGraph persists throughout the agent's execution.\n\nThe `Annotated` type with `operator.add` ensures that new messages are appended to the existing list rather than replacing it.\n    </Tip>\n\n## 3. Define model node\n\nThe model node is used to call the LLM and decide whether to call a tool or not.\n\n## 4. Define tool node\n\nThe tool node is used to call the tools and return the results.\n\n## 5. Define end logic\n\nThe conditional edge function is used to route to the tool node or end based upon whether the LLM made a tool call.\n\n## 6. Build and compile the agent\n\nThe agent is built using the [`StateGraph`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph) class and compiled using the [`compile`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.compile) method.\n\n<Tip>\n      To learn how to trace your agent with LangSmith, see the [LangSmith documentation](/langsmith/trace-with-langgraph).\n    </Tip>\n\nCongratulations! You've built your first agent using the LangGraph Graph API.\n\n<Accordion title=\"Full code example\">\n      \n    </Accordion>\n  </Tab>\n\n<Tab title=\"Use the Functional API\">\n    ## 1. Define tools and model\n\nIn this example, we'll use the Claude Sonnet 4.5 model and define tools for addition, multiplication, and division.\n\n## 2. Define model node\n\nThe model node is used to call the LLM and decide whether to call a tool or not.\n\n<Tip>\n      The [`@task`](https://reference.langchain.com/python/langgraph/func/#langgraph.func.task) decorator marks a function as a task that can be executed as part of the agent. Tasks can be called synchronously or asynchronously within your entrypoint function.\n    </Tip>\n\n## 3. Define tool node\n\nThe tool node is used to call the tools and return the results.\n\nThe agent is built using the [`@entrypoint`](https://reference.langchain.com/python/langgraph/func/#langgraph.func.entrypoint) function.\n\n<Note>\n      In the Functional API, instead of defining nodes and edges explicitly, you write standard control flow logic (loops, conditionals) within a single function.\n    </Note>\n\n<Tip>\n      To learn how to trace your agent with LangSmith, see the [LangSmith documentation](/langsmith/trace-with-langgraph).\n    </Tip>\n\nCongratulations! You've built your first agent using the LangGraph Functional API.\n\n<Accordion title=\"Full code example\" icon=\"code\">\n      \n    </Accordion>\n  </Tab>\n</Tabs>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/quickstart.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## 2. Define state\n\n    The graph's state is used to store the messages and the number of LLM calls.\n\n    <Tip>\n      State in LangGraph persists throughout the agent's execution.\n\n      The `Annotated` type with `operator.add` ensures that new messages are appended to the existing list rather than replacing it.\n    </Tip>",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Define model node\n\n    The model node is used to call the LLM and decide whether to call a tool or not.",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Define tool node\n\n    The tool node is used to call the tools and return the results.",
+      "language": "unknown"
+    },
+    {
+      "code": "## 5. Define end logic\n\n    The conditional edge function is used to route to the tool node or end based upon whether the LLM made a tool call.",
+      "language": "unknown"
+    },
+    {
+      "code": "## 6. Build and compile the agent\n\n    The agent is built using the [`StateGraph`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph) class and compiled using the [`compile`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.compile) method.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n      To learn how to trace your agent with LangSmith, see the [LangSmith documentation](/langsmith/trace-with-langgraph).\n    </Tip>\n\n    Congratulations! You've built your first agent using the LangGraph Graph API.\n\n    <Accordion title=\"Full code example\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n  </Tab>\n\n  <Tab title=\"Use the Functional API\">\n    ## 1. Define tools and model\n\n    In this example, we'll use the Claude Sonnet 4.5 model and define tools for addition, multiplication, and division.",
+      "language": "unknown"
+    },
+    {
+      "code": "## 2. Define model node\n\n    The model node is used to call the LLM and decide whether to call a tool or not.\n\n    <Tip>\n      The [`@task`](https://reference.langchain.com/python/langgraph/func/#langgraph.func.task) decorator marks a function as a task that can be executed as part of the agent. Tasks can be called synchronously or asynchronously within your entrypoint function.\n    </Tip>",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Define tool node\n\n    The tool node is used to call the tools and return the results.",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Define agent\n\n    The agent is built using the [`@entrypoint`](https://reference.langchain.com/python/langgraph/func/#langgraph.func.entrypoint) function.\n\n    <Note>\n      In the Functional API, instead of defining nodes and edges explicitly, you write standard control flow logic (loops, conditionals) within a single function.\n    </Note>",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n      To learn how to trace your agent with LangSmith, see the [LangSmith documentation](/langsmith/trace-with-langgraph).\n    </Tip>\n\n    Congratulations! You've built your first agent using the LangGraph Functional API.\n\n    <Accordion title=\"Full code example\" icon=\"code\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#quickstart",
+  "links": []
+}

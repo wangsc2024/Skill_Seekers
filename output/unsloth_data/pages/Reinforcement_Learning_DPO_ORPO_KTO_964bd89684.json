@@ -1,0 +1,14 @@
+{
+  "title": "Reinforcement Learning - DPO, ORPO & KTO",
+  "content": "To use the reward modelling functions for DPO, GRPO, ORPO or KTO with Unsloth, follow the steps below:\n\nDPO (Direct Preference Optimization), ORPO (Odds Ratio Preference Optimization), PPO, KTO Reward Modelling all work with Unsloth.\n\nWe have Google Colab notebooks for reproducing GRPO, ORPO, DPO Zephyr, KTO and SimPO:\n\n* [GRPO notebooks](https://docs.unsloth.ai/unsloth-notebooks#grpo-reasoning-rl-notebooks)\n* [ORPO notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3_\\(8B\\)-ORPO.ipynb)\n* [DPO Zephyr notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Zephyr_\\(7B\\)-DPO.ipynb)\n* [KTO notebook](https://colab.research.google.com/drive/1MRgGtLWuZX4ypSfGguFgC-IblTvO2ivM?usp=sharing)\n* [SimPO notebook](https://colab.research.google.com/drive/1Hs5oQDovOay4mFA6Y9lQhVJ8TnbFLFh2?usp=sharing)\n\nWe're also in 🤗Hugging Face's official docs! We're on the [SFT docs](https://huggingface.co/docs/trl/main/en/sft_trainer#accelerate-fine-tuning-2x-using-unsloth) and the [DPO docs](https://huggingface.co/docs/trl/main/en/dpo_trainer#accelerate-dpo-fine-tuning-using-unsloth).\n\n```python\npython\nimport os\nos.environ[\"CUDA_VISIBLE_DEVICES\"] = \"0\" # Optional set GPU device ID\n\nfrom unsloth import FastLanguageModel, PatchDPOTrainer\nfrom unsloth import is_bfloat16_supported\nPatchDPOTrainer()\nimport torch\nfrom transformers import TrainingArguments\nfrom trl import DPOTrainer\n\nmodel, tokenizer = FastLanguageModel.from_pretrained(\n    model_name = \"unsloth/zephyr-sft-bnb-4bit\",\n    max_seq_length = max_seq_length,\n    dtype = None,\n    load_in_4bit = True,\n)",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "DPO Code",
+      "id": "dpo-code"
+    }
+  ],
+  "url": "llms-txt#reinforcement-learning---dpo,-orpo-&-kto",
+  "links": []
+}

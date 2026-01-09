@@ -1,0 +1,129 @@
+{
+  "title": "Use the graph API",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/use-graph-api\n\nThis guide demonstrates the basics of LangGraph's Graph API. It walks through [state](#define-and-update-state), as well as composing common graph structures such as [sequences](#create-a-sequence-of-steps), [branches](#create-branches), and [loops](#create-and-control-loops). It also covers LangGraph's control features, including the [Send API](#map-reduce-and-the-send-api) for map-reduce workflows and the [Command API](#combine-control-flow-and-state-updates-with-command) for combining state updates with \"hops\" across nodes.\n\n<Tip>\n  **Set up LangSmith for better debugging**\n\nSign up for [LangSmith](https://smith.langchain.com) to quickly spot issues and improve the performance of your LangGraph projects. LangSmith lets you use trace data to debug, test, and monitor your LLM apps built with LangGraph — read more about how to get started in the [docs](/langsmith/observability).\n</Tip>\n\n## Define and update state\n\nHere we show how to define and update [state](/oss/python/langgraph/graph-api#state) in LangGraph. We will demonstrate:\n\n1. How to use state to define a graph's [schema](/oss/python/langgraph/graph-api#schema)\n2. How to use [reducers](/oss/python/langgraph/graph-api#reducers) to control how state updates are processed.\n\n[State](/oss/python/langgraph/graph-api#state) in LangGraph can be a `TypedDict`, `Pydantic` model, or dataclass. Below we will use `TypedDict`. See [this section](#use-pydantic-models-for-graph-state) for detail on using Pydantic.\n\nBy default, graphs will have the same input and output schema, and the state determines that schema. See [this section](#define-input-and-output-schemas) for how to define distinct input and output schemas.\n\nLet's consider a simple example using [messages](/oss/python/langgraph/graph-api#messagesstate). This represents a versatile formulation of state for many LLM applications. See our [concepts page](/oss/python/langgraph/graph-api#working-with-messages-in-graph-state) for more detail.\n\nThis state tracks a list of [message](https://python.langchain.com/docs/concepts/messages/) objects, as well as an extra integer field.\n\nLet's build an example graph with a single node. Our [node](/oss/python/langgraph/graph-api#nodes) is just a Python function that reads our graph's state and makes updates to it. The first argument to this function will always be the state:\n\nThis node simply appends a message to our message list, and populates an extra field.\n\n<Warning>\n  Nodes should return updates to the state directly, instead of mutating the state.\n</Warning>\n\nLet's next define a simple graph containing this node. We use [`StateGraph`](/oss/python/langgraph/graph-api#stategraph) to define a graph that operates on this state. We then use [`add_node`](/oss/python/langgraph/graph-api#nodes) populate our graph.\n\nLangGraph provides built-in utilities for visualizing your graph. Let's inspect our graph. See [this section](#visualize-your-graph) for detail on visualization.\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=cf3d978b707847e166d5ed15bc7cbbe4\" alt=\"Simple graph with single node\" data-og-width=\"107\" width=\"107\" data-og-height=\"134\" height=\"134\" data-path=\"oss/images/graph_api_image_1.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=280&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=498bbdb0192eb26ab115d51b53fcb64c 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=560&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=94cbad4b92d5b887dff2bfbb6f8e0c6c 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=840&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=d90d58640d49e3fd4e558ab56acf4817 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=1100&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=cad59990b0c551a2aa96b684b102b953 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=1650&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=318736f22c69f66c48f4189db3e39235 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=2500&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=6740141ec001a9a4275cecfac67b9c55 2500w\" />\n\nIn this case, our graph just executes a single node. Let's proceed with a simple invocation:\n\n* We kicked off invocation by updating a single key of the state.\n* We receive the entire state in the invocation result.\n\nFor convenience, we frequently inspect the content of [message objects](https://python.langchain.com/docs/concepts/messages/) via pretty-print:\n\n### Process state updates with reducers\n\nEach key in the state can have its own independent [reducer](/oss/python/langgraph/graph-api#reducers) function, which controls how updates from nodes are applied. If no reducer function is explicitly specified then it is assumed that all updates to the key should override it.\n\nFor `TypedDict` state schemas, we can define reducers by annotating the corresponding field of the state with a reducer function.\n\nIn the earlier example, our node updated the `\"messages\"` key in the state by appending a message to it. Below, we add a reducer to this key, such that updates are automatically appended:\n\nNow our node can be simplified:\n\nIn practice, there are additional considerations for updating lists of messages:\n\n* We may wish to update an existing message in the state.\n* We may want to accept short-hands for [message formats](/oss/python/langgraph/graph-api#using-messages-in-your-graph), such as [OpenAI format](https://python.langchain.com/docs/concepts/messages/#openai-format).\n\nLangGraph includes a built-in reducer [`add_messages`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.message.add_messages) that handles these considerations:\n\nThis is a versatile representation of state for applications involving [chat models](https://python.langchain.com/docs/concepts/chat_models/). LangGraph includes a pre-built `MessagesState` for convenience, so that we can have:\n\n### Bypass reducers with `Overwrite`\n\nIn some cases, you may want to bypass a reducer and directly overwrite a state value. LangGraph provides the [`Overwrite`](https://reference.langchain.com/python/langgraph/types/) type for this purpose. When a node returns a value wrapped with `Overwrite`, the reducer is bypassed and the channel is set directly to that value.\n\nThis is useful when you want to reset or replace accumulated state rather than merge it with existing values.\n\nYou can also use JSON format with the special key `\"__overwrite__\"`:\n\n<Warning>\n  When nodes execute in parallel, only one node can use `Overwrite` on the same state key in a given super-step. If multiple nodes attempt to overwrite the same key in the same super-step, an `InvalidUpdateError` will be raised.\n</Warning>\n\n### Define input and output schemas\n\nBy default, `StateGraph` operates with a single schema, and all nodes are expected to communicate using that schema. However, it's also possible to define distinct input and output schemas for a graph.\n\nWhen distinct schemas are specified, an internal schema will still be used for communication between nodes. The input schema ensures that the provided input matches the expected structure, while the output schema filters the internal data to return only the relevant information according to the defined output schema.\n\nBelow, we'll see how to define distinct input and output schema.\n\n```python  theme={null}\nfrom langgraph.graph import StateGraph, START, END\nfrom typing_extensions import TypedDict",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n<Tip>\n  **Set up LangSmith for better debugging**\n\n  Sign up for [LangSmith](https://smith.langchain.com) to quickly spot issues and improve the performance of your LangGraph projects. LangSmith lets you use trace data to debug, test, and monitor your LLM apps built with LangGraph — read more about how to get started in the [docs](/langsmith/observability).\n</Tip>\n\n## Define and update state\n\nHere we show how to define and update [state](/oss/python/langgraph/graph-api#state) in LangGraph. We will demonstrate:\n\n1. How to use state to define a graph's [schema](/oss/python/langgraph/graph-api#schema)\n2. How to use [reducers](/oss/python/langgraph/graph-api#reducers) to control how state updates are processed.\n\n### Define state\n\n[State](/oss/python/langgraph/graph-api#state) in LangGraph can be a `TypedDict`, `Pydantic` model, or dataclass. Below we will use `TypedDict`. See [this section](#use-pydantic-models-for-graph-state) for detail on using Pydantic.\n\nBy default, graphs will have the same input and output schema, and the state determines that schema. See [this section](#define-input-and-output-schemas) for how to define distinct input and output schemas.\n\nLet's consider a simple example using [messages](/oss/python/langgraph/graph-api#messagesstate). This represents a versatile formulation of state for many LLM applications. See our [concepts page](/oss/python/langgraph/graph-api#working-with-messages-in-graph-state) for more detail.",
+      "language": "unknown"
+    },
+    {
+      "code": "This state tracks a list of [message](https://python.langchain.com/docs/concepts/messages/) objects, as well as an extra integer field.\n\n### Update state\n\nLet's build an example graph with a single node. Our [node](/oss/python/langgraph/graph-api#nodes) is just a Python function that reads our graph's state and makes updates to it. The first argument to this function will always be the state:",
+      "language": "unknown"
+    },
+    {
+      "code": "This node simply appends a message to our message list, and populates an extra field.\n\n<Warning>\n  Nodes should return updates to the state directly, instead of mutating the state.\n</Warning>\n\nLet's next define a simple graph containing this node. We use [`StateGraph`](/oss/python/langgraph/graph-api#stategraph) to define a graph that operates on this state. We then use [`add_node`](/oss/python/langgraph/graph-api#nodes) populate our graph.",
+      "language": "unknown"
+    },
+    {
+      "code": "LangGraph provides built-in utilities for visualizing your graph. Let's inspect our graph. See [this section](#visualize-your-graph) for detail on visualization.",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=cf3d978b707847e166d5ed15bc7cbbe4\" alt=\"Simple graph with single node\" data-og-width=\"107\" width=\"107\" data-og-height=\"134\" height=\"134\" data-path=\"oss/images/graph_api_image_1.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=280&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=498bbdb0192eb26ab115d51b53fcb64c 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=560&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=94cbad4b92d5b887dff2bfbb6f8e0c6c 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=840&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=d90d58640d49e3fd4e558ab56acf4817 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=1100&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=cad59990b0c551a2aa96b684b102b953 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=1650&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=318736f22c69f66c48f4189db3e39235 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_1.png?w=2500&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=6740141ec001a9a4275cecfac67b9c55 2500w\" />\n\nIn this case, our graph just executes a single node. Let's proceed with a simple invocation:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that:\n\n* We kicked off invocation by updating a single key of the state.\n* We receive the entire state in the invocation result.\n\nFor convenience, we frequently inspect the content of [message objects](https://python.langchain.com/docs/concepts/messages/) via pretty-print:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Process state updates with reducers\n\nEach key in the state can have its own independent [reducer](/oss/python/langgraph/graph-api#reducers) function, which controls how updates from nodes are applied. If no reducer function is explicitly specified then it is assumed that all updates to the key should override it.\n\nFor `TypedDict` state schemas, we can define reducers by annotating the corresponding field of the state with a reducer function.\n\nIn the earlier example, our node updated the `\"messages\"` key in the state by appending a message to it. Below, we add a reducer to this key, such that updates are automatically appended:",
+      "language": "unknown"
+    },
+    {
+      "code": "Now our node can be simplified:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "#### MessagesState\n\nIn practice, there are additional considerations for updating lists of messages:\n\n* We may wish to update an existing message in the state.\n* We may want to accept short-hands for [message formats](/oss/python/langgraph/graph-api#using-messages-in-your-graph), such as [OpenAI format](https://python.langchain.com/docs/concepts/messages/#openai-format).\n\nLangGraph includes a built-in reducer [`add_messages`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.message.add_messages) that handles these considerations:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "This is a versatile representation of state for applications involving [chat models](https://python.langchain.com/docs/concepts/chat_models/). LangGraph includes a pre-built `MessagesState` for convenience, so that we can have:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Bypass reducers with `Overwrite`\n\nIn some cases, you may want to bypass a reducer and directly overwrite a state value. LangGraph provides the [`Overwrite`](https://reference.langchain.com/python/langgraph/types/) type for this purpose. When a node returns a value wrapped with `Overwrite`, the reducer is bypassed and the channel is set directly to that value.\n\nThis is useful when you want to reset or replace accumulated state rather than merge it with existing values.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "You can also use JSON format with the special key `\"__overwrite__\"`:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Warning>\n  When nodes execute in parallel, only one node can use `Overwrite` on the same state key in a given super-step. If multiple nodes attempt to overwrite the same key in the same super-step, an `InvalidUpdateError` will be raised.\n</Warning>\n\n### Define input and output schemas\n\nBy default, `StateGraph` operates with a single schema, and all nodes are expected to communicate using that schema. However, it's also possible to define distinct input and output schemas for a graph.\n\nWhen distinct schemas are specified, an internal schema will still be used for communication between nodes. The input schema ensures that the provided input matches the expected structure, while the output schema filters the internal data to return only the relevant information according to the defined output schema.\n\nBelow, we'll see how to define distinct input and output schema.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "Define and update state",
+      "id": "define-and-update-state"
+    },
+    {
+      "level": "h3",
+      "text": "Define state",
+      "id": "define-state"
+    },
+    {
+      "level": "h3",
+      "text": "Update state",
+      "id": "update-state"
+    },
+    {
+      "level": "h3",
+      "text": "Process state updates with reducers",
+      "id": "process-state-updates-with-reducers"
+    },
+    {
+      "level": "h3",
+      "text": "Bypass reducers with `Overwrite`",
+      "id": "bypass-reducers-with-`overwrite`"
+    },
+    {
+      "level": "h3",
+      "text": "Define input and output schemas",
+      "id": "define-input-and-output-schemas"
+    }
+  ],
+  "url": "llms-txt#use-the-graph-api",
+  "links": []
+}

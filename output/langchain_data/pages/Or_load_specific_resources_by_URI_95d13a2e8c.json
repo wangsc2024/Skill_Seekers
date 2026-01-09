@@ -1,0 +1,23 @@
+{
+  "title": "Or load specific resources by URI",
+  "content": "blobs = await client.get_resources(\"server_name\", uris=[\"file:///path/to/file.txt\"])  # [!code highlight]\n\nfor blob in blobs:\n    print(f\"URI: {blob.metadata['uri']}, MIME type: {blob.mimetype}\")\n    print(blob.as_string())  # For text content\npython  theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\nfrom langchain_mcp_adapters.resources import load_mcp_resources\n\nclient = MultiServerMCPClient({...})\n\nasync with client.session(\"server_name\") as session:\n    # Load all resources\n    blobs = await load_mcp_resources(session)\n\n# Or load specific resources by URI\n    blobs = await load_mcp_resources(session, uris=[\"file:///path/to/file.txt\"])\npython  theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\n\nclient = MultiServerMCPClient({...})",
+  "code_samples": [
+    {
+      "code": "You can also use [`load_mcp_resources`](/docs/reference/langchain-mcp-adapters#load_mcp_resources) directly with a session for more control:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Prompts\n\n[Prompts](https://modelcontextprotocol.io/docs/concepts/prompts) allow MCP servers to expose reusable prompt templates that can be retrieved and used by clients. LangChain converts MCP prompts into [messages](/docs/concepts/messages), making them easy to integrate into chat-based workflows.\n\n#### Loading prompts\n\nUse `client.get_prompt()` to load a prompt from an MCP server:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Prompts",
+      "id": "prompts"
+    }
+  ],
+  "url": "llms-txt#or-load-specific-resources-by-uri",
+  "links": []
+}

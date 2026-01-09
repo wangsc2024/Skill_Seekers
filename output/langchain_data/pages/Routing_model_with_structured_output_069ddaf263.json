@@ -1,0 +1,8 @@
+{
+  "title": "Routing model with structured output",
+  "content": "router_llm = init_chat_model(\"gpt-4o-mini\").with_structured_output(\n    UserIntent, method=\"json_schema\", strict=True\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#routing-model-with-structured-output",
+  "links": []
+}

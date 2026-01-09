@@ -1,0 +1,8 @@
+{
+  "title": "Try without a token (should fail)",
+  "content": "client = get_client(url=\"http://localhost:2024\")\ntry:\n    thread = await client.threads.create()\n    print(\"❌ Should have failed without token!\")\nexcept Exception as e:\n    print(\"✅ Correctly blocked access:\", e)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#try-without-a-token-(should-fail)",
+  "links": []
+}

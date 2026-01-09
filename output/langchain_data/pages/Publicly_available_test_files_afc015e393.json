@@ -1,0 +1,8 @@
+{
+  "title": "Publicly available test files",
+  "content": "pdf_url = \"https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf\"\nwav_url = \"https://openaiassets.blob.core.windows.net/$web/API/docs/audio/alloy.wav\"\nimg_url = \"https://www.w3.org/Graphics/PNG/nurbcup2si.png\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#publicly-available-test-files",
+  "links": []
+}

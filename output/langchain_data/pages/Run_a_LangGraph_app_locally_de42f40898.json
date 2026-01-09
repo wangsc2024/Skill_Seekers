@@ -1,0 +1,114 @@
+{
+  "title": "Run a LangGraph app locally",
+  "content": "Source: https://docs.langchain.com/langsmith/local-server\n\nThis quickstart shows you how to set up a LangGraph application locally for testing and development.\n\nBefore you begin, ensure you have an API key for [LangSmith](https://smith.langchain.com/settings) (free to sign up).\n\n## 1. Install the LangGraph CLI\n\n<Tabs>\n  <Tab title=\"Python server\">\n    \n  </Tab>\n\n<Tab title=\"Node server\">\n    \n  </Tab>\n</Tabs>\n\n## 2. Create a LangGraph app\n\nCreate a new app from the [`new-langgraph-project-python` template](https://github.com/langchain-ai/new-langgraph-project) or [`new-langgraph-project-js` template](https://github.com/langchain-ai/new-langgraphjs-project). This template demonstrates a single-node application you can extend with your own logic.\n\n<Tabs>\n  <Tab title=\"Python server\">\n    \n  </Tab>\n\n<Tab title=\"Node server\">\n    \n  </Tab>\n</Tabs>\n\n<Tip>\n  **Additional templates**<br />\n  If you use [`langgraph new`](/langsmith/cli) without specifying a template, you will be presented with an interactive menu that will allow you to choose from a list of available templates.\n</Tip>\n\n## 3. Install dependencies\n\nIn the root of your new LangGraph app, install the dependencies in `edit` mode so your local changes are used by the server:\n\n<Tabs>\n  <Tab title=\"Python server\">\n    \n  </Tab>\n\n<Tab title=\"Node server\">\n    \n  </Tab>\n</Tabs>\n\n## 4. Create a `.env` file\n\nYou will find a [`.env.example`](/langsmith/application-structure#configuration-file) in the root of your new LangGraph app. Create a `.env` file in the root of your new LangGraph app and copy the contents of the `.env.example` file into it, filling in the necessary API keys:\n\n## 5. Launch Agent Server\n\nStart the Agent Server locally:\n\n<Tabs>\n  <Tab title=\"Python server\">\n    \n  </Tab>\n\n<Tab title=\"Node server\">\n    \n  </Tab>\n</Tabs>\n\nThe [`langgraph dev`](/langsmith/cli) command starts [Agent Server](/langsmith/agent-server) in an in-memory mode. This mode is suitable for development and testing purposes.\n\n<Tip>\n  For production use, deploy Agent Server with a persistent storage backend. For more information, refer to the LangSmith [platform options](/langsmith/platform-setup).\n</Tip>\n\n<Tabs>\n  <Tab title=\"Python SDK (async)\">\n    1. Install the LangGraph Python SDK:\n\n2. Send a message to the assistant (threadless run):\n\n<Tab title=\"Python SDK (sync)\">\n    1. Install the LangGraph Python SDK:\n\n2. Send a message to the assistant (threadless run):\n\n<Tab title=\"Javascript SDK\">\n    1. Install the LangGraph JS SDK:\n\n2. Send a message to the assistant (threadless run):\n\n<Tab title=\"Rest API\">\n    \n  </Tab>\n</Tabs>\n\nNow that you have a LangGraph app running locally, you're ready to deploy it:\n\n**Choose a hosting option for LangSmith:**\n\n* [**Cloud**](/langsmith/cloud): Fastest setup, fully managed (recommended).\n* [**Hybrid**](/langsmith/hybrid): <Tooltip tip=\"The runtime environment where your Agent Servers and agents execute.\">Data plane</Tooltip> in your cloud, <Tooltip tip=\"The LangSmith UI and APIs for managing deployments.\">control plane</Tooltip> managed by LangChain.\n* [**Self-hosted**](/langsmith/self-hosted): Full control in your infrastructure.\n\nFor more details, refer to the [Platform setup comparison](/langsmith/platform-setup).\n\n**Then deploy your app:**\n\n* [Deploy to Cloud quickstart](/langsmith/deployment-quickstart): Quick setup guide.\n* [Full Cloud setup guide](/langsmith/deploy-to-cloud): Comprehensive deployment documentation.\n\n**Explore features:**\n\n* **[Studio](/langsmith/studio)**: Visualize, interact with, and debug your application with the Studio UI. Try the [Studio quickstart](/langsmith/quick-start-studio).\n* **API References**: [LangSmith Deployment API](https://langchain-ai.github.io/langgraph/cloud/reference/api/api_ref/), [Python SDK](/langsmith/langgraph-python-sdk), [JS/TS SDK](/langsmith/langgraph-js-ts-sdk)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/local-server.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Node server\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## 2. Create a LangGraph app\n\nCreate a new app from the [`new-langgraph-project-python` template](https://github.com/langchain-ai/new-langgraph-project) or [`new-langgraph-project-js` template](https://github.com/langchain-ai/new-langgraphjs-project). This template demonstrates a single-node application you can extend with your own logic.\n\n<Tabs>\n  <Tab title=\"Python server\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Node server\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n<Tip>\n  **Additional templates**<br />\n  If you use [`langgraph new`](/langsmith/cli) without specifying a template, you will be presented with an interactive menu that will allow you to choose from a list of available templates.\n</Tip>\n\n## 3. Install dependencies\n\nIn the root of your new LangGraph app, install the dependencies in `edit` mode so your local changes are used by the server:\n\n<Tabs>\n  <Tab title=\"Python server\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Node server\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## 4. Create a `.env` file\n\nYou will find a [`.env.example`](/langsmith/application-structure#configuration-file) in the root of your new LangGraph app. Create a `.env` file in the root of your new LangGraph app and copy the contents of the `.env.example` file into it, filling in the necessary API keys:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 5. Launch Agent Server\n\nStart the Agent Server locally:\n\n<Tabs>\n  <Tab title=\"Python server\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Node server\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nSample output:",
+      "language": "unknown"
+    },
+    {
+      "code": "The [`langgraph dev`](/langsmith/cli) command starts [Agent Server](/langsmith/agent-server) in an in-memory mode. This mode is suitable for development and testing purposes.\n\n<Tip>\n  For production use, deploy Agent Server with a persistent storage backend. For more information, refer to the LangSmith [platform options](/langsmith/platform-setup).\n</Tip>\n\n## 6. Test the API\n\n<Tabs>\n  <Tab title=\"Python SDK (async)\">\n    1. Install the LangGraph Python SDK:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Send a message to the assistant (threadless run):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Python SDK (sync)\">\n    1. Install the LangGraph Python SDK:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Send a message to the assistant (threadless run):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript SDK\">\n    1. Install the LangGraph JS SDK:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Send a message to the assistant (threadless run):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Rest API\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Install the LangGraph CLI",
+      "id": "1.-install-the-langgraph-cli"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a LangGraph app",
+      "id": "2.-create-a-langgraph-app"
+    },
+    {
+      "level": "h2",
+      "text": "3. Install dependencies",
+      "id": "3.-install-dependencies"
+    },
+    {
+      "level": "h2",
+      "text": "4. Create a `.env` file",
+      "id": "4.-create-a-`.env`-file"
+    },
+    {
+      "level": "h2",
+      "text": "5. Launch Agent Server",
+      "id": "5.-launch-agent-server"
+    },
+    {
+      "level": "h2",
+      "text": "6. Test the API",
+      "id": "6.-test-the-api"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#run-a-langgraph-app-locally",
+  "links": []
+}

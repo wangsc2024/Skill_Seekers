@@ -1,0 +1,8 @@
+{
+  "title": "Create Run, Wait for Output",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/thread-runs/create-run-wait-for-output\n\nlangsmith/agent-server-openapi.json post /threads/{thread_id}/runs/wait\nCreate a run in existing thread. Wait for the final output and then return it.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-run,-wait-for-output",
+  "links": []
+}

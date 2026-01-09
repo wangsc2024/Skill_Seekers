@@ -1,0 +1,8 @@
+{
+  "title": "Turn 2: User responds about warranty",
+  "content": "print(\"\\n=== Turn 2: Warranty Response ===\")\nresult = agent.invoke(\n    {\"messages\": [HumanMessage(\"Yes, it's still under warranty\")]},\n    config\n)\nfor msg in result['messages']:\n    msg.pretty_print()\nprint(f\"Current step: {result.get('current_step')}\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#turn-2:-user-responds-about-warranty",
+  "links": []
+}

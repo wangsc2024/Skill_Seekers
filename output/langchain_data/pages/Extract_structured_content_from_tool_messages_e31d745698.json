@@ -1,0 +1,17 @@
+{
+  "title": "Extract structured content from tool messages",
+  "content": "for message in result[\"messages\"]:\n    if isinstance(message, ToolMessage) and message.artifact:\n        structured_content = message.artifact[\"structured_content\"]\npython  theme={null}\nimport json\n\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\nfrom langchain_mcp_adapters.interceptors import MCPToolCallRequest\nfrom mcp.types import TextContent\n\nasync def append_structured_content(request: MCPToolCallRequest, handler):\n    \"\"\"Append structured content from artifact to tool message.\"\"\"\n    result = await handler(request)\n    if result.structuredContent:\n        result.content += [\n            TextContent(type=\"text\", text=json.dumps(result.structuredContent)),\n        ]\n    return result\n\nclient = MultiServerMCPClient({...}, tool_interceptors=[append_structured_content])\npython  theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\nfrom langchain.agents import create_agent\n\nclient = MultiServerMCPClient({...})\ntools = await client.get_tools()\nagent = create_agent(\"claude-sonnet-4-5-20250929\", tools)\n\nresult = await agent.ainvoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Take a screenshot of the current page\"}]}\n)",
+  "code_samples": [
+    {
+      "code": "**Appending structured content via interceptor**\n\nIf you want structured content to be visible in the conversation history (visible to the model), you can use an [interceptor](#tool-interceptors) to automatically append structured content to the tool result:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Multimodal tool content\n\nMCP tools can return [multimodal content](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#tool-result) (images, text, etc.) in their responses. When an MCP server returns content with multiple parts (e.g., text and images), the adapter converts them to LangChain's [standard content blocks](/oss/python/langchain/messages#standard-content-blocks). You can access the standardized representation via the `content_blocks` property on the `ToolMessage`:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#extract-structured-content-from-tool-messages",
+  "links": []
+}

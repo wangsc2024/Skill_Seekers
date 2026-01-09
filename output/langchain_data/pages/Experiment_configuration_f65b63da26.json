@@ -1,0 +1,24 @@
+{
+  "title": "Experiment configuration",
+  "content": "Source: https://docs.langchain.com/langsmith/experiment-configuration\n\nLangSmith supports several configuration options for experiments:\n\n* [Repetitions](#repetitions)\n* [Concurrency](#concurrency)\n* [Caching](#caching)\n\n*Repetitions* run an experiment multiple times to account for LLM output variability. Since LLM outputs are non-deterministic, multiple repetitions provide a more accurate performance estimate.\n\nConfigure repetitions by passing the `num_repetitions` argument to `evaluate` / `aevaluate` ([Python](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._runner.evaluate), [TypeScript](https://docs.smith.langchain.com/reference/js/interfaces/evaluation.EvaluateOptions#numrepetitions)). Each repetition re-runs both the target function and all evaluators.\n\nLearn more in the [repetitions how-to guide](/langsmith/repetition).\n\n*Concurrency* controls how many examples run simultaneously during an experiment. Configure it by passing the `max_concurrency` argument to `evaluate` / `aevaluate`. The semantics differ between the two functions:\n\nThe `max_concurrency` argument specifies the maximum number of concurrent threads for running both the target function and evaluators.\n\nThe `max_concurrency` argument uses a semaphore to limit concurrent tasks. `aevaluate` creates a task for each example, where each task runs the target function and all evaluators for that example. The `max_concurrency` argument specifies the maximum number of concurrent examples to process.\n\n*Caching* stores API call results to disk to speed up future experiments. Set the `LANGSMITH_TEST_CACHE` environment variable to a valid folder path with write access. Future experiments that make identical API calls will reuse cached results instead of making new requests.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/experiment-configuration.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Repetitions",
+      "id": "repetitions"
+    },
+    {
+      "level": "h3",
+      "text": "Concurrency",
+      "id": "concurrency"
+    },
+    {
+      "level": "h3",
+      "text": "Caching",
+      "id": "caching"
+    }
+  ],
+  "url": "llms-txt#experiment-configuration",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Get Tavily API key: https://tavily.com",
+  "content": "os.environ[\"TAVILY_API_KEY\"] = \"YOUR TAVILY API KEY\"\npython  theme={null}\nfrom langchain.chat_models import init_chat_model\nfrom langchain.agents import create_agent\nfrom langchain_community.tools import DuckDuckGoSearchRun, TavilySearchResults\nfrom langchain_core.rate_limiters import InMemoryRateLimiter",
+  "code_samples": [
+    {
+      "code": "### Define the application\n\nFor this example lets create a simple Tweet-writing application that has access to some internet search tools:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Define the application",
+      "id": "define-the-application"
+    }
+  ],
+  "url": "llms-txt#get-tavily-api-key:-https://tavily.com",
+  "links": []
+}

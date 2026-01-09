@@ -1,0 +1,14 @@
+{
+  "title": "Google Colab",
+  "content": "To install and run Unsloth on Google Colab, follow the steps below:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-4d1b1778f3c8bde62a40130d7b4395b8bb1ce90f%2FColab%20Options.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nIf you have never used a Colab notebook, a quick primer on the notebook itself:\n\n1. **Play Button at each \"cell\".** Click on this to run that cell's code. You must not skip any cells and you must run every cell in chronological order. If you encounter errors, simply rerun the cell you did not run. Another option is to click CTRL + ENTER if you don't want to click the play button.\n2. **Runtime Button in the top toolbar.** You can also use this button and hit \"Run all\" to run the entire notebook in 1 go. This will skip all the customization steps, but is a good first try.\n3. **Connect / Reconnect T4 button.** T4 is the free GPU Google is providing. It's quite powerful!\n\nThe first installation cell looks like below: Remember to click the PLAY button in the brackets \\[ ]. We grab our open source Github package, and install some other packages.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-135cd796b01420cc4d5ce3ca243e9065154070a5%2Fimage%20(13)%20(1)%20(1).png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\n### Colab Example Code\n\nUnsloth example code to fine-tune gpt-oss-20b:\n\n```python\nfrom unsloth import FastLanguageModel, FastModel\nimport torch\nfrom trl import SFTTrainer, SFTConfig\nfrom datasets import load_dataset\nmax_seq_length = 2048 # Supports RoPE Scaling internally, so choose any!",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Colab Example Code",
+      "id": "colab-example-code"
+    }
+  ],
+  "url": "llms-txt#google-colab",
+  "links": []
+}

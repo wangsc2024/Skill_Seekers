@@ -1,0 +1,8 @@
+{
+  "title": "Example: create a predetermined tool call",
+  "content": "def list_tables(state: MessagesState):\n    tool_call = {\n        \"name\": \"sql_db_list_tables\",\n        \"args\": {},\n        \"id\": \"abc123\",\n        \"type\": \"tool_call\",\n    }\n    tool_call_message = AIMessage(content=\"\", tool_calls=[tool_call])\n\nlist_tables_tool = next(tool for tool in tools if tool.name == \"sql_db_list_tables\")\n    tool_message = list_tables_tool.invoke(tool_call)\n    response = AIMessage(f\"Available tables: {tool_message.content}\")\n\nreturn {\"messages\": [tool_call_message, tool_message, response]}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#example:-create-a-predetermined-tool-call",
+  "links": []
+}

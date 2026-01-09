@@ -1,0 +1,23 @@
+{
+  "title": "Indicate that a chat model supports image inputs",
+  "content": "class TestChatParrotLinkStandard(ChatModelIntegrationTests):\n    # ... other required properties\n\n@property\n    def supports_image_inputs(self) -> bool:\n        return True  # (The default is False)\nbash  theme={null}\nmake test\nmake integration_test\nbash  theme={null}",
+  "code_samples": [
+    {
+      "code": "<Note>\n  You should organize tests in these subdirectories relative to the root of your package:\n\n  * `tests/unit_tests` for unit tests\n  * `tests/integration_tests` for integration tests\n</Note>\n\nTo see the complete list of configurable capabilities and their defaults, visit the [API reference](https://reference.langchain.com/python/langchain_tests) for standard tests.\n\nHere are some example implementations of standard tests from popular integrations:\n\n<Tabs>\n  <Tab title=\"Unit tests\">\n    <Columns cols={3}>\n      <Card title=\"ChatOpenAI\" href=\"https://github.com/langchain-ai/langchain/blob/master/libs/partners/openai/tests/unit_tests/chat_models/test_base_standard.py\" arrow>Unit tests</Card>\n      <Card title=\"ChatAnthropic\" href=\"https://github.com/langchain-ai/langchain/blob/master/libs/partners/anthropic/tests/unit_tests/test_standard.py\" arrow>Unit tests</Card>\n      <Card title=\"ChatGenAI\" href=\"https://github.com/langchain-ai/langchain-google/blob/main/libs/genai/tests/unit_tests/test_standard.py\" arrow>Unit tests</Card>\n    </Columns>\n  </Tab>\n\n  <Tab title=\"Integration tests\">\n    <Columns cols={3}>\n      <Card title=\"ChatOpenAI\" href=\"https://github.com/langchain-ai/langchain/blob/master/libs/partners/openai/tests/integration_tests/chat_models/test_base_standard.py\" arrow>Integration tests</Card>\n      <Card title=\"ChatAnthropic\" href=\"https://github.com/langchain-ai/langchain/blob/master/libs/partners/anthropic/tests/integration_tests/test_standard.py\" arrow>Integration tests</Card>\n      <Card title=\"ChatGenAI\" href=\"https://github.com/langchain-ai/langchain-google/blob/main/libs/genai/tests/integration_tests/test_standard.py\" arrow>Integration tests</Card>\n    </Columns>\n  </Tab>\n</Tabs>\n\n***\n\n## Running tests\n\nIf bootstrapping an integration from a template, a `Makefile` is provided that includes targets for running unit and integration tests:",
+      "language": "unknown"
+    },
+    {
+      "code": "Otherwise, if you follow the recommended directory structure, you can run tests with:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Running tests",
+      "id": "running-tests"
+    }
+  ],
+  "url": "llms-txt#indicate-that-a-chat-model-supports-image-inputs",
+  "links": []
+}

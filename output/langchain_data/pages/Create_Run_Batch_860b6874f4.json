@@ -1,0 +1,8 @@
+{
+  "title": "Create Run Batch",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/stateless-runs/create-run-batch\n\nlangsmith/agent-server-openapi.json post /runs/batch\nCreate a batch of runs and return immediately.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-run-batch",
+  "links": []
+}

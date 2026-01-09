@@ -1,0 +1,42 @@
+{
+  "title": "Create agent with tools and memory",
+  "content": "agent = create_agent(\n    model=\"anthropic:claude-haiku-4-5\",  # Select your model\n    tools=[add_to_order, confirm_order],\n    system_prompt=\"\"\"You are a helpful sandwich shop assistant.\n    Your goal is to take the user's order. Be concise and friendly.\n    Do NOT use emojis, special characters, or markdown.\n    Your responses will be read by a text-to-speech engine.\"\"\",\n    checkpointer=InMemorySaver(),\n)\n\nasync def agent_stream(\n    event_stream: AsyncIterator[VoiceAgentEvent],\n) -> AsyncIterator[VoiceAgentEvent]:\n    \"\"\"\n    Transform stream: Voice Events → Voice Events (with Agent Responses)\n\nPasses through all upstream events and adds agent_chunk events\n    when processing STT transcripts.\n    \"\"\"\n    # Generate unique thread ID for conversation memory\n    thread_id = str(uuid4())\n\nasync for event in event_stream:\n        # Pass through all upstream events\n        yield event\n\n# Process final transcripts through the agent\n        if event.type == \"stt_output\":\n            # Stream agent response with conversation context\n            stream = agent.astream(\n                {\"messages\": [HumanMessage(content=event.transcript)]},\n                {\"configurable\": {\"thread_id\": thread_id}},\n                stream_mode=\"messages\",\n            )\n\n# Yield agent response chunks as they arrive\n            async for message, _ in stream:\n                if message.text:\n                    yield AgentChunkEvent.create(message.text)\npython  theme={null}\nfrom cartesia_tts import CartesiaTTS\nfrom utils import merge_async_iters\n\nasync def tts_stream(\n    event_stream: AsyncIterator[VoiceAgentEvent],\n) -> AsyncIterator[VoiceAgentEvent]:\n    \"\"\"\n    Transform stream: Voice Events → Voice Events (with Audio)\n\nMerges two concurrent streams:\n    1. process_upstream(): passes through events and sends text to Cartesia\n    2. tts.receive_events(): yields audio chunks from Cartesia\n    \"\"\"\n    tts = CartesiaTTS()\n\nasync def process_upstream() -> AsyncIterator[VoiceAgentEvent]:\n        \"\"\"Process upstream events and send agent text to Cartesia.\"\"\"\n        async for event in event_stream:\n            # Pass through all events\n            yield event\n            # Send agent text to Cartesia for synthesis\n            if event.type == \"agent_chunk\":\n                await tts.send_text(event.text)\n\ntry:\n        # Merge upstream events with TTS audio events\n        # Both streams run concurrently\n        async for event in merge_async_iters(\n            process_upstream(),\n            tts.receive_events()\n        ):\n            yield event\n    finally:\n        await tts.close()\npython  theme={null}\n  import base64\n  import json\n  import websockets\n\nclass CartesiaTTS:\n      def __init__(\n          self,\n          api_key: Optional[str] = None,\n          voice_id: str = \"f6ff7c0c-e396-40a9-a70b-f7607edb6937\",\n          model_id: str = \"sonic-3\",\n          sample_rate: int = 24000,\n          encoding: str = \"pcm_s16le\",\n      ):\n          self.api_key = api_key or os.getenv(\"CARTESIA_API_KEY\")\n          self.voice_id = voice_id\n          self.model_id = model_id\n          self.sample_rate = sample_rate\n          self.encoding = encoding\n          self._ws: WebSocketClientProtocol | None = None\n\ndef _generate_context_id(self) -> str:\n          \"\"\"Generate a valid context_id for Cartesia.\"\"\"\n          timestamp = int(time.time() * 1000)\n          counter = self._context_counter\n          self._context_counter += 1\n          return f\"ctx_{timestamp}_{counter}\"\n\nasync def send_text(self, text: str | None) -> None:\n          \"\"\"Send text to Cartesia for synthesis.\"\"\"\n          if not text or not text.strip():\n              return\n\nws = await self._ensure_connection()\n          payload = {\n              \"model_id\": self.model_id,\n              \"transcript\": text,\n              \"voice\": {\n                  \"mode\": \"id\",\n                  \"id\": self.voice_id,\n              },\n              \"output_format\": {\n                  \"container\": \"raw\",\n                  \"encoding\": self.encoding,\n                  \"sample_rate\": self.sample_rate,\n              },\n              \"language\": self.language,\n              \"context_id\": self._generate_context_id(),\n          }\n          await ws.send(json.dumps(payload))\n\nasync def receive_events(self) -> AsyncIterator[TTSChunkEvent]:\n          \"\"\"Yield audio chunks as they arrive from Cartesia.\"\"\"\n          async for raw_message in self._ws:\n              message = json.loads(raw_message)\n\n# Decode and yield audio chunks\n              if \"data\" in message and message[\"data\"]:\n                  audio_chunk = base64.b64decode(message[\"data\"])\n                  if audio_chunk:\n                      yield TTSChunkEvent.create(audio_chunk)\n\nasync def _ensure_connection(self) -> WebSocketClientProtocol:\n          \"\"\"Establish WebSocket connection if not already connected.\"\"\"\n          if self._ws is None:\n              url = (\n                  f\"wss://api.cartesia.ai/tts/websocket\"\n                  f\"?api_key={self.api_key}&cartesia_version={self.cartesia_version}\"\n              )\n              self._ws = await websockets.connect(url)\n\nreturn self._ws\n  python  theme={null}\nfrom langchain_core.runnables import RunnableGenerator\n\npipeline = (\n    RunnableGenerator(stt_stream)      # Audio → STT events\n    | RunnableGenerator(agent_stream)  # STT events → Agent events\n    | RunnableGenerator(tts_stream)    # Agent events → TTS audio\n)",
+  "code_samples": [
+    {
+      "code": "## 3. Text-to-speech\n\nThe TTS stage synthesizes agent response text into audio and streams it back to the client. Like the STT stage, it uses a producer-consumer pattern to handle concurrent text sending and audio reception.\n\n### Key Concepts\n\n**Concurrent Processing**: The implementation merges two async streams:\n\n* **Upstream processing**: Passes through all events and sends agent text chunks to the TTS provider\n* **Audio reception**: Receives synthesized audio chunks from the TTS provider\n\n**Streaming TTS**: Some providers (such as [Cartesia](https://cartesia.ai/)) begin synthesizing audio as soon as it receives text, enabling audio playback to start before the agent finishes generating its complete response.\n\n**Event Passthrough**: All upstream events flow through unchanged, allowing the client or other observers to track the full pipeline state.\n\n### Implementation",
+      "language": "unknown"
+    },
+    {
+      "code": "The application implements an Cartesia client to manage the WebSocket connection and audio streaming. See below for implementations; similar adapters can be constructed for other TTS providers.\n\n<Accordion title=\"Cartesia Client\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Putting It All Together\n\nThe complete pipeline chains the three stages together:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "3. Text-to-speech",
+      "id": "3.-text-to-speech"
+    },
+    {
+      "level": "h3",
+      "text": "Key Concepts",
+      "id": "key-concepts"
+    },
+    {
+      "level": "h3",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h2",
+      "text": "Putting It All Together",
+      "id": "putting-it-all-together"
+    }
+  ],
+  "url": "llms-txt#create-agent-with-tools-and-memory",
+  "links": []
+}

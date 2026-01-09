@@ -1,0 +1,158 @@
+{
+  "url": "https://react.dev/learn/preserving-and-resetting-state",
+  "title": "Preserving and Resetting State",
+  "content": "State is isolated between components. React keeps track of which state belongs to which component based on their place in the UI tree. You can control when to preserve state and when to reset it between re-renders.\n\nReact builds render trees for the component structure in your UI.\n\nWhen you give a component state, you might think the state “lives” inside the component. But the state is actually held inside React. React associates each piece of state it’s holding with the correct component by where that component sits in the render tree.\n\nHere, there is only one <Counter /> JSX tag, but it’s rendered at two different positions:\n\nHere’s how these look as a tree:\n\nThese are two separate counters because each is rendered at its own position in the tree. You don’t usually have to think about these positions to use React, but it can be useful to understand how it works.\n\nIn React, each component on the screen has fully isolated state. For example, if you render two Counter components side by side, each of them will get its own, independent, score and hover states.\n\nTry clicking both counters and notice they don’t affect each other:\n\nAs you can see, when one counter is updated, only the state for that component is updated:\n\nReact will keep the state around for as long as you render the same component at the same position in the tree. To see this, increment both counters, then remove the second component by unchecking “Render the second counter” checkbox, and then add it back by ticking it again:\n\nNotice how the moment you stop rendering the second counter, its state disappears completely. That’s because when React removes a component, it destroys its state.\n\nWhen you tick “Render the second counter”, a second Counter and its state are initialized from scratch (score = 0) and added to the DOM.\n\nReact preserves a component’s state for as long as it’s being rendered at its position in the UI tree. If it gets removed, or a different component gets rendered at the same position, React discards its state.\n\nIn this example, there are two different <Counter /> tags:\n\nWhen you tick or clear the checkbox, the counter state does not get reset. Whether isFancy is true or false, you always have a <Counter /> as the first child of the div returned from the root App component:\n\nUpdating the App state does not reset the Counter because Counter stays in the same position\n\nIt’s the same component at the same position, so from React’s perspective, it’s the same counter.\n\nRemember that it’s the position in the UI tree—not in the JSX markup—that matters to React! This component has two return clauses with different <Counter /> JSX tags inside and outside the if:\n\nYou might expect the state to reset when you tick checkbox, but it doesn’t! This is because both of these <Counter /> tags are rendered at the same position. React doesn’t know where you place the conditions in your function. All it “sees” is the tree you return.\n\nIn both cases, the App component returns a <div> with <Counter /> as a first child. To React, these two counters have the same “address”: the first child of the first child of the root. This is how React matches them up between the previous and next renders, regardless of how you structure your logic.\n\nIn this example, ticking the checkbox will replace <Counter> with a <p>:\n\nHere, you switch between different component types at the same position. Initially, the first child of the <div> contained a Counter. But when you swapped in a p, React removed the Counter from the UI tree and destroyed its state.\n\nWhen Counter changes to p, the Counter is deleted and the p is added\n\nWhen switching back, the p is deleted and the Counter is added\n\nAlso, when you render a different component in the same position, it resets the state of its entire subtree. To see how this works, increment the counter and then tick the checkbox:\n\nThe counter state gets reset when you click the checkbox. Although you render a Counter, the first child of the div changes from a section to a div. When the child section was removed from the DOM, the whole tree below it (including the Counter and its state) was destroyed as well.\n\nWhen section changes to div, the section is deleted and the new div is added\n\nWhen switching back, the div is deleted and the new section is added\n\nAs a rule of thumb, if you want to preserve the state between re-renders, the structure of your tree needs to “match up” from one render to another. If the structure is different, the state gets destroyed because React destroys state when it removes a component from the tree.\n\nThis is why you should not nest component function definitions.\n\nHere, the MyTextField component function is defined inside MyComponent:\n\nEvery time you click the button, the input state disappears! This is because a different MyTextField function is created for every render of MyComponent. You’re rendering a different component in the same position, so React resets all state below. This leads to bugs and performance problems. To avoid this problem, always declare component functions at the top level, and don’t nest their definitions.\n\nBy default, React preserves state of a component while it stays at the same position. Usually, this is exactly what you want, so it makes sense as the default behavior. But sometimes, you may want to reset a component’s state. Consider this app that lets two players keep track of their scores during each turn:\n\nCurrently, when you change the player, the score is preserved. The two Counters appear in the same position, so React sees them as the same Counter whose person prop has changed.\n\nBut conceptually, in this app they should be two separate counters. They might appear in the same place in the UI, but one is a counter for Taylor, and another is a counter for Sarah.\n\nThere are two ways to reset state when switching between them:\n\nIf you want these two Counters to be independent, you can render them in two different positions:\n\nClicking “next” again\n\nEach Counter’s state gets destroyed each time it’s removed from the DOM. This is why they reset every time you click the button.\n\nThis solution is convenient when you only have a few independent components rendered in the same place. In this example, you only have two, so it’s not a hassle to render both separately in the JSX.\n\nThere is also another, more generic, way to reset a component’s state.\n\nYou might have seen keys when rendering lists. Keys aren’t just for lists! You can use keys to make React distinguish between any components. By default, React uses order within the parent (“first counter”, “second counter”) to discern between components. But keys let you tell React that this is not just a first counter, or a second counter, but a specific counter—for example, Taylor’s counter. This way, React will know Taylor’s counter wherever it appears in the tree!\n\nIn this example, the two <Counter />s don’t share state even though they appear in the same place in JSX:\n\nSwitching between Taylor and Sarah does not preserve the state. This is because you gave them different keys:\n\nSpecifying a key tells React to use the key itself as part of the position, instead of their order within the parent. This is why, even though you render them in the same place in JSX, React sees them as two different counters, and so they will never share state. Every time a counter appears on the screen, its state is created. Every time it is removed, its state is destroyed. Toggling between them resets their state over and over.\n\nRemember that keys are not globally unique. They only specify the position within the parent.\n\nResetting state with a key is particularly useful when dealing with forms.\n\nIn this chat app, the <Chat> component contains the text input state:\n\nTry entering something into the input, and then press “Alice” or “Bob” to choose a different recipient. You will notice that the input state is preserved because the <Chat> is rendered at the same position in the tree.\n\nIn many apps, this may be the desired behavior, but not in a chat app! You don’t want to let the user send a message they already typed to a wrong person due to an accidental click. To fix it, add a key:\n\nThis ensures that when you select a different recipient, the Chat component will be recreated from scratch, including any state in the tree below it. React will also re-create the DOM elements instead of reusing them.\n\nNow switching the recipient always clears the text field:\n\nIn a real chat app, you’d probably want to recover the input state when the user selects the previous recipient again. There are a few ways to keep the state “alive” for a component that’s no longer visible:\n\nNo matter which strategy you pick, a chat with Alice is conceptually distinct from a chat with Bob, so it makes sense to give a key to the <Chat> tree based on the current recipient.\n\nThis example shows a message when you press the button. However, pressing the button also accidentally resets the input. Why does this happen? Fix it so that pressing the button does not reset the input text.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Preserving and Resetting State",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "State is tied to a position in the render tree",
+      "id": "state-is-tied-to-a-position-in-the-tree"
+    },
+    {
+      "level": "h2",
+      "text": "Same component at the same position preserves state",
+      "id": "same-component-at-the-same-position-preserves-state"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Different components at the same position reset state",
+      "id": "different-components-at-the-same-position-reset-state"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Resetting state at the same position",
+      "id": "resetting-state-at-the-same-position"
+    },
+    {
+      "level": "h3",
+      "text": "Option 1: Rendering a component in different positions",
+      "id": "option-1-rendering-a-component-in-different-positions"
+    },
+    {
+      "level": "h3",
+      "text": "Option 2: Resetting state with a key",
+      "id": "option-2-resetting-state-with-a-key"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Resetting a form with a key",
+      "id": "resetting-a-form-with-a-key"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Preserving state for removed components",
+      "id": "preserving-state-for-removed-components"
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    },
+    {
+      "level": "h2",
+      "text": "Try out some challenges",
+      "id": "challenges"
+    },
+    {
+      "level": "h4",
+      "text": "Challenge 1 of 5: Fix disappearing input text",
+      "id": "fix-disappearing-input-text"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "{isPlayerA ? (  <Counter key=\"Taylor\" person=\"Taylor\" />) : (  <Counter key=\"Sarah\" person=\"Sarah\" />)}",
+      "language": "jsx"
+    },
+    {
+      "code": "<Chat key={to.id} contact={to} />",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react-dom"
+  ]
+}

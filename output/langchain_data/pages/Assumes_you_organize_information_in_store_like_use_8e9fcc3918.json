@@ -1,0 +1,13 @@
+{
+  "title": "Assumes you organize information in store like (user_id, resource_type, resource_id)",
+  "content": "@auth.on.store()\nasync def authorize_store(ctx: Auth.types.AuthContext, value: dict):\n    # The \"namespace\" field for each store item is a tuple you can think of as the directory of an item.\n    namespace: tuple = value[\"namespace\"]\n    assert namespace[0] == ctx.user.identity, \"Not authorized\"\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "Notice that instead of one global handler, you now have specific handlers for:\n\n1. Creating threads\n2. Reading threads\n3. Accessing assistants\n\nThe first three of these match specific **actions** on each resource (see [resource actions](/langsmith/auth#resource-specific-handlers)), while the last one (`@auth.on.assistants`) matches *any* action on the `assistants` resource. For each request, LangGraph will run the most specific handler that matches the resource and action being accessed. This means that the four handlers above will run rather than the broadly scoped \"`@auth.on`\" handler.\n\nTry adding the following test code to your test file:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#assumes-you-organize-information-in-store-like-(user_id,-resource_type,-resource_id)",
+  "links": []
+}

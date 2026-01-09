@@ -1,0 +1,19 @@
+{
+  "title": "Get the current tracer",
+  "content": "tracer = trace.get_tracer(__name__)\n\nasync def main():\n    with tracer.start_as_current_span(\"semantic_kernel_workflow\") as span:\n        # Add custom metadata\n        span.set_attribute(\"langsmith.metadata.workflow_type\", \"code_analysis\")\n        span.set_attribute(\"langsmith.metadata.user_id\", \"developer_123\")\n        span.set_attribute(\"langsmith.span.tags\", \"semantic-kernel,code-analysis\")\n\n# Your Semantic Kernel code here\n        result = await kernel.invoke(code_analyzer, code=sample_code)\n        return result\npython  theme={null}\nfrom langsmith.integrations.otel import configure\nfrom openinference.instrumentation.openai import OpenAIInstrumentor\nfrom openinference.instrumentation.dspy import DSPyInstrumentor",
+  "code_samples": [
+    {
+      "code": "### Combining with other instrumentors\n\nYou can combine Semantic Kernel instrumentation with other instrumentors (e.g., DSPy, AutoGen) by adding them and initializing them as instrumentors:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Combining with other instrumentors",
+      "id": "combining-with-other-instrumentors"
+    }
+  ],
+  "url": "llms-txt#get-the-current-tracer",
+  "links": []
+}

@@ -1,0 +1,40 @@
+{
+  "title": "This is the state before last (states are listed in chronological order)",
+  "content": "selected_state = states[1]\nprint(selected_state.next)\nprint(selected_state.values)\n\n('write_joke',)\n{'topic': 'How about \"The Secret Life of Socks in the Dryer\"? You know, exploring the mysterious phenomenon of how socks go into the laundry as pairs but come out as singles. Where do they go? Are they starting new lives elsewhere? Is there a sock paradise we don\\\\'t know about? There\\\\'s a lot of comedic potential in the everyday mystery that unites us all!'}\npython  theme={null}\nnew_config = graph.update_state(selected_state.config, values={\"topic\": \"chickens\"})\nprint(new_config)\n\n{'configurable': {'thread_id': 'c62e2e03-c27b-4cb6-8cea-ea9bfedae006', 'checkpoint_ns': '', 'checkpoint_id': '1f02ac4a-ecee-600b-8002-a1d21df32e4c'}}\npython  theme={null}\ngraph.invoke(None, new_config)\npython  theme={null}\n{'topic': 'chickens',\n 'joke': 'Why did the chicken join a band?\\n\\nBecause it had excellent drumsticks!'}\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/use-time-travel.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "**Output:**",
+      "language": "unknown"
+    },
+    {
+      "code": "<a id=\"optional\" />\n\n### 3. Update the state\n\n[`update_state`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.CompiledStateGraph.update_state) will create a new checkpoint. The new checkpoint will be associated with the same thread, but a new checkpoint ID.",
+      "language": "unknown"
+    },
+    {
+      "code": "**Output:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### 4. Resume execution from the checkpoint",
+      "language": "unknown"
+    },
+    {
+      "code": "**Output:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "3. Update the state",
+      "id": "3.-update-the-state"
+    },
+    {
+      "level": "h3",
+      "text": "4. Resume execution from the checkpoint",
+      "id": "4.-resume-execution-from-the-checkpoint"
+    }
+  ],
+  "url": "llms-txt#this-is-the-state-before-last-(states-are-listed-in-chronological-order)",
+  "links": []
+}

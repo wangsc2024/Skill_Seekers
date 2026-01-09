@@ -1,0 +1,8 @@
+{
+  "title": "Helper function to load files as bytes",
+  "content": "def load_file(file_path: str) -> bytes:\n    with open(file_path, \"rb\") as f:\n        return f.read()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#helper-function-to-load-files-as-bytes",
+  "links": []
+}

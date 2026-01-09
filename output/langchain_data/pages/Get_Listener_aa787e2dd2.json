@@ -1,0 +1,8 @@
+{
+  "title": "Get Listener",
+  "content": "Source: https://docs.langchain.com/api-reference/listeners-v2/get-listener\n\nhttps://api.host.langchain.com/openapi.json get /v2/listeners/{listener_id}\nGet a listener by ID.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-listener",
+  "links": []
+}

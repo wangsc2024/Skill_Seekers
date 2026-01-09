@@ -1,0 +1,8 @@
+{
+  "title": "Target function",
+  "content": "async def run_graph(inputs: dict) -> dict:\n    \"\"\"Run graph and track the trajectory it takes along with the final response.\"\"\"\n    result = await graph.ainvoke({\"messages\": [\n        { \"role\": \"user\", \"content\": inputs['question']},\n    ]}, config={\"env\": \"test\"})\n    return {\"response\": result[\"followup\"]}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#target-function",
+  "links": []
+}

@@ -1,0 +1,32 @@
+{
+  "title": "Create a function that will take in a list of examples and format them into a string",
+  "content": "def create_example_string(examples):\n    final_strings = []\n    for e in examples:\n        final_strings.append(f\"Input: {e.inputs['topic']}\\n> {e.outputs['output']}\")\n    return \"\\n\\n\".join(final_strings)\n### NEW CODE ###\n\nclient = openai.Client()\n\navailable_topics = [\n    \"bug\",\n    \"improvement\",\n    \"new_feature\",\n    \"documentation\",\n    \"integration\",\n]\n\nprompt_template = \"\"\"Classify the type of the issue as one of {topics}.\n\nHere are some examples:\n{examples}\n\nBegin!\nIssue: {text}\n>\"\"\"\n\n@traceable(\n    run_type=\"chain\",\n    name=\"Classifier\",\n)\ndef topic_classifier(\n    topic: str):\n    # We can now pull down the examples from the dataset\n    # We do this inside the function so it always get the most up-to-date examples,\n    # But this can be done outside and cached for speed if desired\n    examples = list(ls_client.list_examples(dataset_name=\"classifier-github-issues\"))  # <- New Code\n    example_string = create_example_string(examples)\n    return client.chat.completions.create(\n        model=\"gpt-4o-mini\",\n        temperature=0,\n        messages=[\n            {\n                \"role\": \"user\",\n                \"content\": prompt_template.format(\n                    topics=','.join(available_topics),\n                    text=topic,\n                    examples=example_string,\n                )\n            }\n        ],\n    ).choices[0].message.content\npython  theme={null}\nls_client = Client()\nrun_id = uuid7()\ntopic_classifier(\n    \"address bug in documentation\",\n    langsmith_extra={\"run_id\": run_id})\npython  theme={null}\nimport numpy as np\n\ndef find_similar(examples, topic, k=5):\n    inputs = [e.inputs['topic'] for e in examples] + [topic]\n    vectors = client.embeddings.create(input=inputs, model=\"text-embedding-3-small\")\n    vectors = [e.embedding for e in vectors.data]\n    vectors = np.array(vectors)\n    args = np.argsort(-vectors.dot(vectors[-1])[:-1])[:5]\n    examples = [examples[i] for i in args]\n    return examples\npython  theme={null}\nls_client = Client()\n\ndef create_example_string(examples):\n    final_strings = []\n    for e in examples:\n        final_strings.append(f\"Input: {e.inputs['topic']}\\n> {e.outputs['output']}\")\n    return \"\\n\\n\".join(final_strings)\n\nclient = openai.Client()\n\navailable_topics = [\n    \"bug\",\n    \"improvement\",\n    \"new_feature\",\n    \"documentation\",\n    \"integration\",\n]\n\nprompt_template = \"\"\"Classify the type of the issue as one of {topics}.\n\nHere are some examples:\n{examples}\n\nBegin!\nIssue: {text}\n>\"\"\"\n\n@traceable(\n    run_type=\"chain\",\n    name=\"Classifier\",\n)\ndef topic_classifier(\n    topic: str):\n    examples = list(ls_client.list_examples(dataset_name=\"classifier-github-issues\"))\n    examples = find_similar(examples, topic)\n    example_string = create_example_string(examples)\n    return client.chat.completions.create(\n        model=\"gpt-4o-mini\",\n        temperature=0,\n        messages=[\n            {\n                \"role\": \"user\",\n                \"content\": prompt_template.format(\n                    topics=','.join(available_topics),\n                    text=topic,\n                    examples=example_string,\n                )\n            }\n        ],\n    ).choices[0].message.content\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/optimize-classifier.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "If now run the application with a similar input as before, we can see that it correctly learns that anything related to docs (even if a bug) should be classified as `documentation`",
+      "language": "unknown"
+    },
+    {
+      "code": "## Semantic search over examples\n\nOne additional thing we can do is only use the most semantically similar examples. This is useful when you start to build up a lot of examples.\n\nIn order to do this, we can first define an example to find the `k` most similar examples:",
+      "language": "unknown"
+    },
+    {
+      "code": "We can then use that in the application",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "NEW CODE ###",
+      "id": "new-code-###"
+    },
+    {
+      "level": "h2",
+      "text": "Semantic search over examples",
+      "id": "semantic-search-over-examples"
+    }
+  ],
+  "url": "llms-txt#create-a-function-that-will-take-in-a-list-of-examples-and-format-them-into-a-string",
+  "links": []
+}

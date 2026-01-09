@@ -1,0 +1,40 @@
+{
+  "title": "Resume with approval decision",
+  "content": "agent.invoke(\n    Command( # [!code highlight]\n        resume={\"decisions\": [{\"type\": \"approve\"}]}  # or \"reject\" [!code highlight]\n    ), # [!code highlight]\n    config=config # Same thread ID to resume the paused conversation\n)\npython  theme={null}\n    agent.invoke(\n        Command(\n            # Decisions are provided as a list, one per action under review.\n            # The order of decisions must match the order of actions\n            # listed in the `__interrupt__` request.\n            resume={\n                \"decisions\": [\n                    {\n                        \"type\": \"approve\",\n                    }\n                ]\n            }\n        ),\n        config=config  # Same thread ID to resume the paused conversation\n    )\n    python  theme={null}\n    agent.invoke(\n        Command(\n            # Decisions are provided as a list, one per action under review.\n            # The order of decisions must match the order of actions\n            # listed in the `__interrupt__` request.\n            resume={\n                \"decisions\": [\n                    {\n                        \"type\": \"edit\",\n                        # Edited action with tool name and args\n                        \"edited_action\": {\n                            # Tool name to call.\n                            # Will usually be the same as the original action.\n                            \"name\": \"new_tool_name\",\n                            # Arguments to pass to the tool.\n                            \"args\": {\"key1\": \"new_value\", \"key2\": \"original_value\"},\n                        }\n                    }\n                ]\n            }\n        ),\n        config=config  # Same thread ID to resume the paused conversation\n    )\n    python  theme={null}\n    agent.invoke(\n        Command(\n            # Decisions are provided as a list, one per action under review.\n            # The order of decisions must match the order of actions\n            # listed in the `__interrupt__` request.\n            resume={\n                \"decisions\": [\n                    {\n                        \"type\": \"reject\",\n                        # An explanation about why the action was rejected\n                        \"message\": \"No, this is wrong because ..., instead do this ...\",\n                    }\n                ]\n            }\n        ),\n        config=config  # Same thread ID to resume the paused conversation\n    )\n    python  theme={null}\n    {\n        \"decisions\": [\n            {\"type\": \"approve\"},\n            {\n                \"type\": \"edit\",\n                \"edited_action\": {\n                    \"name\": \"tool_name\",\n                    \"args\": {\"param\": \"new_value\"}\n                }\n            },\n            {\n                \"type\": \"reject\",\n                \"message\": \"This action is not allowed\"\n            }\n        ]\n    }\n    python  theme={null}\nfrom langgraph.types import Command\n\nconfig = {\"configurable\": {\"thread_id\": \"some_id\"}}",
+  "code_samples": [
+    {
+      "code": "### Decision types\n\n<Tabs>\n  <Tab title=\"✅ approve\">\n    Use `approve` to approve the tool call as-is and execute it without changes.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"✏️ edit\">\n    Use `edit` to modify the tool call before execution.\n    Provide the edited action with the new tool name and arguments.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n      When **editing** tool arguments, make changes conservatively. Significant modifications to the original arguments may cause the model to re-evaluate its approach and potentially execute the tool multiple times or take unexpected actions.\n    </Tip>\n  </Tab>\n\n  <Tab title=\"❌ reject\">\n    Use `reject` to reject the tool call and provide feedback instead of execution.",
+      "language": "unknown"
+    },
+    {
+      "code": "The `message` is added to the conversation as feedback to help the agent understand why the action was rejected and what it should do instead.\n\n    ***\n\n    ### Multiple decisions\n\n    When multiple actions are under review, provide a decision for each action in the same order as they appear in the interrupt:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Streaming with human-in-the-loop\n\nYou can use `stream()` instead of `invoke()` to get real-time updates while the agent runs and handles interrupts. Use `stream_mode=['updates', 'messages']` to stream both agent progress and LLM tokens.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Decision types",
+      "id": "decision-types"
+    },
+    {
+      "level": "h2",
+      "text": "Streaming with human-in-the-loop",
+      "id": "streaming-with-human-in-the-loop"
+    }
+  ],
+  "url": "llms-txt#resume-with-approval-decision",
+  "links": []
+}

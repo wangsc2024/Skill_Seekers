@@ -1,0 +1,66 @@
+{
+  "title": "Prevent logging of sensitive data in traces",
+  "content": "Source: https://docs.langchain.com/langsmith/mask-inputs-outputs\n\nIn some situations, you may need to prevent the inputs and outputs of your traces from being logged for privacy or security reasons. LangSmith provides a way to filter the inputs and outputs of your traces before they are sent to the LangSmith backend.\n\nIf you want to completely hide the inputs and outputs of your traces, you can set the following environment variables when running your application:\n\nThis works for both the LangSmith SDK (Python and TypeScript) and LangChain.\n\nYou can also customize and override this behavior for a given `Client` instance. This can be done by setting the `hide_inputs` and `hide_outputs` parameters on the `Client` object (`hideInputs` and `hideOutputs` in TypeScript).\n\nFor the example below, we will simply return an empty object for both `hide_inputs` and `hide_outputs`, but you can customize this to your needs.\n\n## Rule-based masking of inputs and outputs\n\n<Info>\n  This feature is available in the following LangSmith SDK versions:\n\n* Python: 0.1.81 and above\n  * TypeScript: 0.1.33 and above\n</Info>\n\nTo mask specific data in inputs and outputs, you can use the `create_anonymizer` / `createAnonymizer` function and pass the newly created anonymizer when instantiating the client. The anonymizer can be either constructed from a list of regex patterns and the replacement values or from a function that accepts and returns a string value.\n\nThe anonymizer will be skipped for inputs if `LANGSMITH_HIDE_INPUTS = true`. Same applies for outputs if `LANGSMITH_HIDE_OUTPUTS = true`.\n\nHowever, if inputs or outputs are to be sent to client, the `anonymizer` method will take precedence over functions found in `hide_inputs` and `hide_outputs`. By default, the `create_anonymizer` will only look at maximum of 10 nesting levels deep, which can be configured via the `max_depth` parameter.\n\nPlease note, that using the anonymizer might incur a performance hit with complex regular expressions or large payloads, as the anonymizer serializes the payload to JSON before processing.\n\n<Note>\n  Improving the performance of `anonymizer` API is on our roadmap! If you are encountering performance issues, please contact support via [support.langchain.com](https://support.langchain.com).\n</Note>\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=ac9ba9a6729029a7fa38da03e1466a1a\" alt=\"Hide inputs outputs\" data-og-width=\"1708\" width=\"1708\" data-og-height=\"717\" height=\"717\" data-path=\"langsmith/images/hide-inputs-outputs.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=280&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=7ded12c0345f47d55e9802083c5032d0 280w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=560&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=8cbe74d09660d8c65e8a75dd78cdb24e 560w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=840&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=8cb8c0b5c926e46522b9539b0262ee7a 840w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=1100&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=9b8ef244796fad943ec76b0aa5733f80 1100w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=1650&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=87f35d63f42f05c49a220d5b8a87787a 1650w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=2500&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=5173e30032c065646c13e9b9c6a95fb5 2500w\" />\n\nOlder versions of LangSmith SDKs can use the `hide_inputs` and `hide_outputs` parameters to achieve the same effect. You can also use these parameters to process the inputs and outputs more efficiently as well.\n\n## Processing Inputs & Outputs for a Single Function\n\n<Info>\n  The `process_outputs` parameter is available in LangSmith SDK version 0.1.98 and above for Python.\n</Info>\n\nIn addition to client-level input and output processing, LangSmith provides function-level processing through the `process_inputs` and `process_outputs` parameters of the `@traceable` decorator.\n\nThese parameters accept functions that allow you to transform the inputs and outputs of a specific function before they are logged to LangSmith. This is useful for reducing payload size, removing sensitive information, or customizing how an object should be serialized and represented in LangSmith for a particular function.\n\nHere's an example of how to use `process_inputs` and `process_outputs`:\n\nIn this example, `process_inputs` creates a new dictionary with processed input data, and `process_outputs` transforms the output into a specific format before logging to LangSmith.\n\n<Warning>\n  It's recommended to avoid mutating the source objects in the processor functions. Instead, create and return new objects with the processed data.\n</Warning>\n\nFor asynchronous functions, the usage is similar:\n\nThese function-level processors take precedence over client-level processors (`hide_inputs` and `hide_outputs`) when both are defined.\n\nYou can combine rule-based masking with various anonymizers to scrub sensitive information from inputs and outputs. In this how-to-guide, we'll cover working with regex, Microsoft Presidio, and Amazon Comprehend.\n\n<Info>\n  The implementation below is not exhaustive and may miss some formats or edge cases. Test any implementation thoroughly before using it in production.\n</Info>\n\nYou can use regex to mask inputs and outputs before they are sent to LangSmith. The implementation below masks email addresses, phone numbers, full names, credit card numbers, and SSNs.\n\n```python  theme={null}\nimport re\nimport openai\nfrom langsmith import Client\nfrom langsmith.wrappers import wrap_openai",
+  "code_samples": [
+    {
+      "code": "This works for both the LangSmith SDK (Python and TypeScript) and LangChain.\n\nYou can also customize and override this behavior for a given `Client` instance. This can be done by setting the `hide_inputs` and `hide_outputs` parameters on the `Client` object (`hideInputs` and `hideOutputs` in TypeScript).\n\nFor the example below, we will simply return an empty object for both `hide_inputs` and `hide_outputs`, but you can customize this to your needs.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Rule-based masking of inputs and outputs\n\n<Info>\n  This feature is available in the following LangSmith SDK versions:\n\n  * Python: 0.1.81 and above\n  * TypeScript: 0.1.33 and above\n</Info>\n\nTo mask specific data in inputs and outputs, you can use the `create_anonymizer` / `createAnonymizer` function and pass the newly created anonymizer when instantiating the client. The anonymizer can be either constructed from a list of regex patterns and the replacement values or from a function that accepts and returns a string value.\n\nThe anonymizer will be skipped for inputs if `LANGSMITH_HIDE_INPUTS = true`. Same applies for outputs if `LANGSMITH_HIDE_OUTPUTS = true`.\n\nHowever, if inputs or outputs are to be sent to client, the `anonymizer` method will take precedence over functions found in `hide_inputs` and `hide_outputs`. By default, the `create_anonymizer` will only look at maximum of 10 nesting levels deep, which can be configured via the `max_depth` parameter.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nPlease note, that using the anonymizer might incur a performance hit with complex regular expressions or large payloads, as the anonymizer serializes the payload to JSON before processing.\n\n<Note>\n  Improving the performance of `anonymizer` API is on our roadmap! If you are encountering performance issues, please contact support via [support.langchain.com](https://support.langchain.com).\n</Note>\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=ac9ba9a6729029a7fa38da03e1466a1a\" alt=\"Hide inputs outputs\" data-og-width=\"1708\" width=\"1708\" data-og-height=\"717\" height=\"717\" data-path=\"langsmith/images/hide-inputs-outputs.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=280&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=7ded12c0345f47d55e9802083c5032d0 280w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=560&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=8cbe74d09660d8c65e8a75dd78cdb24e 560w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=840&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=8cb8c0b5c926e46522b9539b0262ee7a 840w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=1100&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=9b8ef244796fad943ec76b0aa5733f80 1100w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=1650&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=87f35d63f42f05c49a220d5b8a87787a 1650w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/hide-inputs-outputs.png?w=2500&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=5173e30032c065646c13e9b9c6a95fb5 2500w\" />\n\nOlder versions of LangSmith SDKs can use the `hide_inputs` and `hide_outputs` parameters to achieve the same effect. You can also use these parameters to process the inputs and outputs more efficiently as well.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Processing Inputs & Outputs for a Single Function\n\n<Info>\n  The `process_outputs` parameter is available in LangSmith SDK version 0.1.98 and above for Python.\n</Info>\n\nIn addition to client-level input and output processing, LangSmith provides function-level processing through the `process_inputs` and `process_outputs` parameters of the `@traceable` decorator.\n\nThese parameters accept functions that allow you to transform the inputs and outputs of a specific function before they are logged to LangSmith. This is useful for reducing payload size, removing sensitive information, or customizing how an object should be serialized and represented in LangSmith for a particular function.\n\nHere's an example of how to use `process_inputs` and `process_outputs`:",
+      "language": "unknown"
+    },
+    {
+      "code": "In this example, `process_inputs` creates a new dictionary with processed input data, and `process_outputs` transforms the output into a specific format before logging to LangSmith.\n\n<Warning>\n  It's recommended to avoid mutating the source objects in the processor functions. Instead, create and return new objects with the processed data.\n</Warning>\n\nFor asynchronous functions, the usage is similar:",
+      "language": "unknown"
+    },
+    {
+      "code": "These function-level processors take precedence over client-level processors (`hide_inputs` and `hide_outputs`) when both are defined.\n\n## Quick starts\n\nYou can combine rule-based masking with various anonymizers to scrub sensitive information from inputs and outputs. In this how-to-guide, we'll cover working with regex, Microsoft Presidio, and Amazon Comprehend.\n\n### Regex\n\n<Info>\n  The implementation below is not exhaustive and may miss some formats or edge cases. Test any implementation thoroughly before using it in production.\n</Info>\n\nYou can use regex to mask inputs and outputs before they are sent to LangSmith. The implementation below masks email addresses, phone numbers, full names, credit card numbers, and SSNs.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Rule-based masking of inputs and outputs",
+      "id": "rule-based-masking-of-inputs-and-outputs"
+    },
+    {
+      "level": "h2",
+      "text": "Processing Inputs & Outputs for a Single Function",
+      "id": "processing-inputs-&-outputs-for-a-single-function"
+    },
+    {
+      "level": "h2",
+      "text": "Quick starts",
+      "id": "quick-starts"
+    },
+    {
+      "level": "h3",
+      "text": "Regex",
+      "id": "regex"
+    }
+  ],
+  "url": "llms-txt#prevent-logging-of-sensitive-data-in-traces",
+  "links": []
+}

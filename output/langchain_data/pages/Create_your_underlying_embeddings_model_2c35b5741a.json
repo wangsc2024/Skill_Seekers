@@ -1,0 +1,8 @@
+{
+  "title": "Create your underlying embeddings model",
+  "content": "underlying_embeddings = ... # e.g., OpenAIEmbeddings(), HuggingFaceEmbeddings(), etc.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-your-underlying-embeddings-model",
+  "links": []
+}

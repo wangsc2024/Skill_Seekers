@@ -1,0 +1,27 @@
+{
+  "title": "Use HTTP headers for runtime configuration",
+  "content": "Source: https://docs.langchain.com/langsmith/configurable-headers\n\nLangGraph allows runtime configuration to modify agent behavior and permissions dynamically. When using [LangSmith Deployment](/langsmith/deployment-quickstart), you can pass this configuration in the request body (`config`) or specific request headers. This enables adjustments based on user identity or other requests.\n\nFor privacy, control which headers are passed to the runtime configuration via the `http.configurable_headers` section in your [`langgraph.json`](/langsmith/application-structure#configuration-file) file.\n\nHere's how to customize the included and excluded headers:\n\nThe `includes` and `excludes` lists accept exact header names or patterns using `*` to match any number of characters. For your security, no other regex patterns are supported.\n\n## Using within your graph\n\nYou can access the included headers in your graph using the `config` argument of any node.\n\nOr by fetching from context (useful in tools and or within other nested functions).\n\nYou can even use this to dynamically compile the graph.\n\n```python  theme={null}",
+  "code_samples": [
+    {
+      "code": "The `includes` and `excludes` lists accept exact header names or patterns using `*` to match any number of characters. For your security, no other regex patterns are supported.\n\n## Using within your graph\n\nYou can access the included headers in your graph using the `config` argument of any node.",
+      "language": "unknown"
+    },
+    {
+      "code": "Or by fetching from context (useful in tools and or within other nested functions).",
+      "language": "unknown"
+    },
+    {
+      "code": "You can even use this to dynamically compile the graph.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Using within your graph",
+      "id": "using-within-your-graph"
+    }
+  ],
+  "url": "llms-txt#use-http-headers-for-runtime-configuration",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "InMemoryStore saves data to an in-memory dictionary. Use a DB-backed store in production.",
+  "content": "store = InMemoryStore() # [!code highlight]\n\n@dataclass\nclass Context:\n    user_id: str",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#inmemorystore-saves-data-to-an-in-memory-dictionary.-use-a-db-backed-store-in-production.",
+  "links": []
+}

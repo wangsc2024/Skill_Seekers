@@ -1,0 +1,8 @@
+{
+  "title": "MCP Get",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/mcp/mcp-get\n\nlangsmith/agent-server-openapi.json get /mcp/\nImplemented according to the Streamable HTTP Transport specification.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#mcp-get",
+  "links": []
+}

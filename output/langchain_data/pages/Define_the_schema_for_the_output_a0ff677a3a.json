@@ -1,0 +1,8 @@
+{
+  "title": "Define the schema for the output",
+  "content": "class OutputState(TypedDict):\n    answer: str",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-the-schema-for-the-output",
+  "links": []
+}

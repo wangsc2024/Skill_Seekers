@@ -1,0 +1,108 @@
+{
+  "title": "For Q8_0:",
+  "content": "python llama.cpp/convert_hf_to_gguf.py merged_model \\\n    --outfile model-Q8_0.gguf --outtype q8_0 \\\n    --split-max-size 50G\npython\nnew_dataset = dataset.train_test_split(\n    test_size = 0.01, # 1% for test size can also be an integer for # of rows\n    shuffle = True, # Should always set to True!\n    seed = 3407,\n)\n\ntrain_dataset = new_dataset[\"train\"] # Dataset for training\neval_dataset = new_dataset[\"test\"] # Dataset for evaluation\npython\nfrom trl import SFTTrainer, SFTConfig\ntrainer = SFTTrainer(\n    args = SFTConfig(\n        fp16_full_eval = True,         # Set this to reduce memory usage\n        per_device_eval_batch_size = 2,# Increasing this will use more memory\n        eval_accumulation_steps = 4,   # You can increase this include of batch_size\n        eval_strategy = \"steps\",       # Runs eval every few steps or epochs.\n        eval_steps = 1,                # How many evaluations done per # of training steps\n    ),\n    train_dataset = new_dataset[\"train\"],\n    eval_dataset = new_dataset[\"test\"],\n    ...\n)\ntrainer.train()\npython\nnew_dataset = dataset.train_test_split(test_size = 0.01)\n\nfrom trl import SFTTrainer, SFTConfig\ntrainer = SFTTrainer(\n    args = SFTConfig(\n        fp16_full_eval = True,\n        per_device_eval_batch_size = 2,\n        eval_accumulation_steps = 4,\n        eval_strategy = \"steps\",\n        eval_steps = 1,\n    ),\n    train_dataset = new_dataset[\"train\"],\n    eval_dataset = new_dataset[\"test\"],\n    ...\n)\npython\nfrom trl import SFTConfig, SFTTrainer\ntrainer = SFTTrainer(\n    args = SFTConfig(\n        fp16_full_eval = True,\n        per_device_eval_batch_size = 2,\n        eval_accumulation_steps = 4,\n        output_dir = \"training_checkpoints\", # location of saved checkpoints for early stopping\n        save_strategy = \"steps\",             # save model every N steps\n        save_steps = 10,                     # how many steps until we save the model\n        save_total_limit = 3,                # keep ony 3 saved checkpoints to save disk space\n        eval_strategy = \"steps\",             # evaluate every N steps\n        eval_steps = 10,                     # how many steps until we do evaluation\n        load_best_model_at_end = True,       # MUST USE for early stopping\n        metric_for_best_model = \"eval_loss\", # metric we want to early stop on\n        greater_is_better = False,           # the lower the eval loss, the better\n    ),\n    model = model,\n    tokenizer = tokenizer,\n    train_dataset = new_dataset[\"train\"],\n    eval_dataset = new_dataset[\"test\"],\n)\npython\nfrom transformers import EarlyStoppingCallback\nearly_stopping_callback = EarlyStoppingCallback(\n    early_stopping_patience = 3,     # How many steps we will wait if the eval loss doesn't decrease\n                                     # For example the loss might increase, but decrease after 3 steps\n    early_stopping_threshold = 0.0,  # Can set higher - sets how much loss should decrease by until\n                                     # we consider early stopping. For eg 0.01 means if loss was\n                                     # 0.02 then 0.01, we consider to early stop the run.\n)\ntrainer.add_callback(early_stopping_callback)\npython\nimport os\nos.environ[\"UNSLOTH_STABLE_DOWNLOADS\"] = \"1\"\n\nfrom unsloth import FastLanguageModel\npython\nimport os\nos.environ[\"UNSLOTH_COMPILE_DISABLE\"] = \"1\"\nos.environ[\"UNSLOTH_DISABLE_FAST_GENERATION\"] = \"1\"\npython\nfrom unsloth.chat_templates import train_on_responses_only\ntrainer = train_on_responses_only(\n    trainer,\n    instruction_part = \"<|start_header_id|>user<|end_header_id|>\\n\\n\",\n    response_part = \"<|start_header_id|>assistant<|end_header_id|>\\n\\n\",\n)\npython\nfrom unsloth.chat_templates import train_on_responses_only\ntrainer = train_on_responses_only(\n    trainer,\n    instruction_part = \"<start_of_turn>user\\n\",\n    response_part = \"<start_of_turn>model\\n\",\n)\npython\nimport locale\nlocale.getpreferredencoding = lambda: \"UTF-8\"\n\n@misc{unsloth_2025_qwen3_30b_a3b,\n  author       = {Unsloth AI and Han-Chen, Daniel and Han-Chen, Michael},\n  title        = {Qwen3-30B-A3B-GGUF:Q8\\_K\\_XL},\n  year         = {2025},\n  publisher    = {Hugging Face},\n  howpublished = {\\url{https://huggingface.co/unsloth/Qwen3-30B-A3B-GGUF}}\n}\n\n@misc{unsloth,\n  author       = {Unsloth AI and Han-Chen, Daniel and Han-Chen, Michael},\n  title        = {Unsloth},\n  year         = {2025},\n  publisher    = {Github},\n  howpublished = {\\url{https://github.com/unslothai/unsloth}}\n}\n```",
+  "code_samples": [
+    {
+      "code": "## :question:Why is Q8\\_K\\_XL slower than Q8\\_0 GGUF?\n\nOn Mac devices, it seems like that BF16 might be slower than F16. Q8\\_K\\_XL upcasts some layers to BF16, so hence the slowdown, We are actively changing our conversion process to make F16 the default choice for Q8\\_K\\_XL to reduce performance hits.\n\n## :question:How to do Evaluation\n\nTo set up evaluation in your training run, you first have to split your dataset into a training and test split. You should <mark style=\"background-color:green;\">**always shuffle the selection of the dataset**</mark>, otherwise your evaluation is wrong!",
+      "language": "unknown"
+    },
+    {
+      "code": "Then, we can set the training arguments to enable evaluation. Reminder evaluation can be very very slow especially if you set `eval_steps = 1` which means you are evaluating every single step. If you are, try reducing the eval\\_dataset size to say 100 rows or something.",
+      "language": "unknown"
+    },
+    {
+      "code": "## :question:Evaluation Loop - Out of Memory or crashing.\n\nA common issue when you OOM is because you set your batch size too high. Set it lower than 2 to use less VRAM. Also use `fp16_full_eval=True` to use float16 for evaluation which cuts memory by 1/2.\n\nFirst split your training dataset into a train and test split. Set the trainer settings for evaluation to:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will cause no OOMs and make it somewhat faster. You can also use `bf16_full_eval=True` for bf16 machines. By default Unsloth should have set these flags on by default as of June 2025.\n\n## :question:How do I do Early Stopping?\n\nIf you want to stop the finetuning / training run since the evaluation loss is not decreasing, then you can use early stopping which stops the training process. Use `EarlyStoppingCallback`.\n\nAs usual, set up your trainer and your evaluation dataset. The below is used to stop the training run if the `eval_loss` (the evaluation loss) is not decreasing after 3 steps or so.",
+      "language": "unknown"
+    },
+    {
+      "code": "We then add the callback which can also be customized:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then train the model as usual via `trainer.train() .`\n\n## :question:Downloading gets stuck at 90 to 95%\n\nIf your model gets stuck at 90, 95% for a long time before you can disable some fast downloading processes to force downloads to be synchronous and to print out more error messages.\n\nSimply use `UNSLOTH_STABLE_DOWNLOADS=1` before any Unsloth import.",
+      "language": "unknown"
+    },
+    {
+      "code": "## :question:RuntimeError: CUDA error: device-side assert triggered\n\nRestart and run all, but place this at the start before any Unsloth import. Also please file a bug report asap thank you!",
+      "language": "unknown"
+    },
+    {
+      "code": "## :question:All labels in your dataset are -100. Training losses will be all 0.\n\nThis means that your usage of `train_on_responses_only` is incorrect for that particular model. train\\_on\\_responses\\_only allows you to mask the user question, and train your model to output the assistant response with higher weighting. This is known to increase accuracy by 1% or more. See our [**LoRA Hyperparameters Guide**](https://docs.unsloth.ai/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide) for more details.\n\nFor Llama 3.1, 3.2, 3.3 type models, please use the below:",
+      "language": "unknown"
+    },
+    {
+      "code": "For Gemma 2, 3. 3n models, use the below:",
+      "language": "unknown"
+    },
+    {
+      "code": "## :question:Some weights of Gemma3nForConditionalGeneration were not initialized from the model checkpoint\n\nThis is a critical error, since this means some weights are not parsed correctly, which will cause incorrect outputs. This can normally be fixed by upgrading Unsloth\n\n`pip install --upgrade --force-reinstall --no-cache-dir --no-deps unsloth unsloth_zoo`\n\nThen upgrade transformers and timm:\n\n`pip install --upgrade --force-reinstall --no-cache-dir --no-deps transformers timm`\n\nHowever if the issue still persists, please file a bug report asap!\n\n## :question:NotImplementedError: A UTF-8 locale is required. Got ANSI\n\nSee <https://github.com/googlecolab/colabtools/issues/3409>\n\nIn a new cell, run the below:",
+      "language": "unknown"
+    },
+    {
+      "code": "## :green\\_book:Citing Unsloth\n\nIf you are citing the usage of our model uploads, use the below Bibtex. This is for Qwen3-30B-A3B-GGUF Q8\\_K\\_XL:",
+      "language": "unknown"
+    },
+    {
+      "code": "To cite the usage of our Github package or our work in general:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": ":question:Why is Q8\\_K\\_XL slower than Q8\\_0 GGUF?",
+      "id": ":question:why-is-q8\\_k\\_xl-slower-than-q8\\_0-gguf?"
+    },
+    {
+      "level": "h2",
+      "text": ":question:How to do Evaluation",
+      "id": ":question:how-to-do-evaluation"
+    },
+    {
+      "level": "h2",
+      "text": ":question:Evaluation Loop - Out of Memory or crashing.",
+      "id": ":question:evaluation-loop---out-of-memory-or-crashing."
+    },
+    {
+      "level": "h2",
+      "text": ":question:How do I do Early Stopping?",
+      "id": ":question:how-do-i-do-early-stopping?"
+    },
+    {
+      "level": "h2",
+      "text": ":question:Downloading gets stuck at 90 to 95%",
+      "id": ":question:downloading-gets-stuck-at-90-to-95%"
+    },
+    {
+      "level": "h2",
+      "text": ":question:RuntimeError: CUDA error: device-side assert triggered",
+      "id": ":question:runtimeerror:-cuda-error:-device-side-assert-triggered"
+    },
+    {
+      "level": "h2",
+      "text": ":question:All labels in your dataset are -100. Training losses will be all 0.",
+      "id": ":question:all-labels-in-your-dataset-are--100.-training-losses-will-be-all-0."
+    },
+    {
+      "level": "h2",
+      "text": ":question:Some weights of Gemma3nForConditionalGeneration were not initialized from the model checkpoint",
+      "id": ":question:some-weights-of-gemma3nforconditionalgeneration-were-not-initialized-from-the-model-checkpoint"
+    },
+    {
+      "level": "h2",
+      "text": ":question:NotImplementedError: A UTF-8 locale is required. Got ANSI",
+      "id": ":question:notimplementederror:-a-utf-8-locale-is-required.-got-ansi"
+    },
+    {
+      "level": "h2",
+      "text": ":green\\_book:Citing Unsloth",
+      "id": ":green\\_book:citing-unsloth"
+    }
+  ],
+  "url": "llms-txt#for-q8_0:",
+  "links": []
+}

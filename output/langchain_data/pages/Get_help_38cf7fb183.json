@@ -1,0 +1,34 @@
+{
+  "title": "Get help",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/get-help\n\nConnect with the LangChain community, access learning resources, and get the support you need to build with confidence.\n\n## Learning resources\n\nStart your journey or deepen your knowledge with our comprehensive learning materials.\n\n* **[Chat LangChain](https://chat.langchain.com/)**: Ask the docs anything about LangChain, powered by real-time docs\n* **[API Reference](https://reference.langchain.com/python/)**: Complete documentation for all LangChain packages\n\nGet help from fellow developers and the LangChain team through our active community channels.\n\n* **[Community Forum](https://forum.langchain.com/)**: Ask questions, share solutions, and discuss best practices\n* **[Community Slack](https://www.langchain.com/join-community)**: Connect with other builders and get quick help\n\n## Professional support\n\nFor enterprise needs and critical applications, access dedicated support channels.\n\n* **[Support portal](https://support.langchain.com/)**: Submit tickets and track support requests\n* **[LangSmith status](https://status.smith.langchain.com/)**: Real-time status of LangSmith services and APIs\n\nHelp us improve LangChain for everyone. Whether you're fixing bugs, adding features, or improving documentation, we welcome your contributions.\n\n* **[Contributing Guide](/oss/python/contributing/overview)**: Everything you need to know about contributing to LangChain\n\nFollow us for the latest updates, announcements, and community highlights.\n\n* **[X (Twitter)](https://twitter.com/langchainai)**: Daily updates and community spotlights\n* **[LinkedIn](https://www.linkedin.com/company/langchain/)**: Professional network and company updates\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/get-help.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Learning resources",
+      "id": "learning-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Community support",
+      "id": "community-support"
+    },
+    {
+      "level": "h2",
+      "text": "Professional support",
+      "id": "professional-support"
+    },
+    {
+      "level": "h2",
+      "text": "Contribute",
+      "id": "contribute"
+    },
+    {
+      "level": "h2",
+      "text": "Stay connected",
+      "id": "stay-connected"
+    }
+  ],
+  "url": "llms-txt#get-help",
+  "links": []
+}

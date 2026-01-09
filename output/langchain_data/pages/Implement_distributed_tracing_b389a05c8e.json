@@ -1,0 +1,14 @@
+{
+  "title": "Implement distributed tracing",
+  "content": "Source: https://docs.langchain.com/langsmith/distributed-tracing\n\nSometimes, you need to trace a request across multiple services.\n\nLangSmith supports distributed tracing out of the box, linking runs within a trace across services using context propagation headers (`langsmith-trace` and optional `baggage` for metadata/tags).\n\nExample client-server setup:\n\n* Trace starts on client\n* Continues on server\n\n## Distributed tracing in Python\n\n```python  theme={null}",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Distributed tracing in Python",
+      "id": "distributed-tracing-in-python"
+    }
+  ],
+  "url": "llms-txt#implement-distributed-tracing",
+  "links": []
+}

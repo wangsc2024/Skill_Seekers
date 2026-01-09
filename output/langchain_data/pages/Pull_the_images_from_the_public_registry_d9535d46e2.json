@@ -1,0 +1,23 @@
+{
+  "title": "Pull the images from the public registry",
+  "content": "docker pull langchain/langsmith-backend:latest\ndocker tag langchain/langsmith-backend:latest <your-registry>/langsmith-backend:latest\ndocker push <your-registry>/langsmith-backend:latest\nyaml Helm theme={null}\n  images:\n    imagePullSecrets: [] # Add your image pull secrets here if needed\n    registry: \"\" # Set this to your registry URL if you mirrored all images to the same registry using our script. Then you can remove the repository prefix from the images below.\n    aceBackendImage:\n      repository: \"(your-registry)/langchain/langsmith-ace-backend\"\n      pullPolicy: IfNotPresent\n      tag: \"0.10.66\"\n    backendImage:\n      repository: \"(your-registry)/langchain/langsmith-backend\"\n      pullPolicy: IfNotPresent\n      tag: \"0.10.66\"\n    frontendImage:\n      repository: \"(your-registry)/langchain/langsmith-frontend\"\n      pullPolicy: IfNotPresent\n      tag: \"0.10.66\"\n    hostBackendImage:\n      repository: \"(your-registry)/langchain/hosted-langserve-backend\"\n      pullPolicy: IfNotPresent\n      tag: \"0.10.66\"\n    operatorImage:\n      repository: \"(your-registry)/langchain/langgraph-operator\"\n      pullPolicy: IfNotPresent\n      tag: \"6cc83a8\"\n    platformBackendImage:\n      repository: \"(your-registry)/langchain/langsmith-go-backend\"\n      pullPolicy: IfNotPresent\n      tag: \"0.10.66\"\n    playgroundImage:\n      repository: \"(your-registry)/langchain/langsmith-playground\"\n      pullPolicy: IfNotPresent\n      tag: \"0.10.66\"\n    postgresImage:\n      repository: \"(your-registry)/postgres\"\n      pullPolicy: IfNotPresent\n      tag: \"14.7\"\n    redisImage:\n      repository: \"(your-registry)/redis\"\n      pullPolicy: IfNotPresent\n      tag: \"7\"\n    clickhouseImage:\n      repository: \"(your-registry)/clickhouse/clickhouse-server\"\n      pullPolicy: Always\n      tag: \"24.8\"\n  bash Docker theme={null}\n  # In your .env file\n  _REGISTRY=your-registry # Set this to your registry URL if you mirrored all images to the same registry using our script. Otherwise you will need to manually set the repository for each image in the compose file.\n  ```\n</CodeGroup>\n\nOnce configured, you will need to update your LangSmith installation. You can follow our upgrade guide here: [Upgrading LangSmith](/langsmith/self-host-upgrades).If your upgrade is successful, your LangSmith instance should now be using the mirrored images from your Docker registry.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/self-host-mirroring-images.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "You will need to repeat this for each image that you want to mirror.\n\n## Configuration\n\nOnce the images are mirrored, you will need to configure your LangSmith installation to use the mirrored images. You can do this by modifying the `values.yaml` file for your LangSmith Helm Chart installation or the `.env` file for your Docker installation. Replace tag with the version you want to use, e.g. `0.10.66` for the latest version at the time of writing.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    }
+  ],
+  "url": "llms-txt#pull-the-images-from-the-public-registry",
+  "links": []
+}

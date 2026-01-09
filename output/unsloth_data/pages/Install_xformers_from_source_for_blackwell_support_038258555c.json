@@ -1,0 +1,8 @@
+{
+  "title": "Install xformers from source for blackwell support",
+  "content": "RUN git clone --depth=1 https://github.com/facebookresearch/xformers --recursive && \\\n    cd xformers && \\\n    export TORCH_CUDA_ARCH_LIST=\"12.1\" && \\\n    python setup.py install && \\\n    cd ..",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#install-xformers-from-source-for-blackwell-support",
+  "links": []
+}

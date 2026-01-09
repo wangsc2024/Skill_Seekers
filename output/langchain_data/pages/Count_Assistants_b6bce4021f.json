@@ -1,0 +1,8 @@
+{
+  "title": "Count Assistants",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/assistants/count-assistants\n\nlangsmith/agent-server-openapi.json post /assistants/count\nGet the count of assistants matching the specified criteria.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#count-assistants",
+  "links": []
+}

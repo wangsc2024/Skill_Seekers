@@ -1,0 +1,13 @@
+{
+  "title": "Access custom state fields",
+  "content": "@tool\ndef get_user_preference(\n    pref_name: str,\n    runtime: ToolRuntime  # ToolRuntime parameter is not visible to the model\n) -> str:\n    \"\"\"Get a user preference value.\"\"\"\n    preferences = runtime.state.get(\"user_preferences\", {})\n    return preferences.get(pref_name, \"Not set\")\npython  theme={null}\nfrom langgraph.types import Command\nfrom langchain.messages import RemoveMessage\nfrom langgraph.graph.message import REMOVE_ALL_MESSAGES\nfrom langchain.tools import tool, ToolRuntime",
+  "code_samples": [
+    {
+      "code": "<Warning>\n  The `runtime` parameter is hidden from the model. For the example above, the model only sees `pref_name` in the tool schema - `runtime` is *not* included in the request.\n</Warning>\n\n**Updating state:**\n\nUse [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) to update the agent's state or control the graph's execution flow:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#access-custom-state-fields",
+  "links": []
+}

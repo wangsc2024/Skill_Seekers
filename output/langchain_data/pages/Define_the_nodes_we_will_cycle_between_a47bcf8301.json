@@ -1,0 +1,8 @@
+{
+  "title": "Define the nodes we will cycle between",
+  "content": "workflow.add_node(generate_query_or_respond)\nworkflow.add_node(\"retrieve\", ToolNode([retriever_tool]))\nworkflow.add_node(rewrite_question)\nworkflow.add_node(generate_answer)\n\nworkflow.add_edge(START, \"generate_query_or_respond\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-the-nodes-we-will-cycle-between",
+  "links": []
+}

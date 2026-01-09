@@ -1,0 +1,53 @@
+{
+  "title": "outer: before -> inner: before -> tool execution -> inner: after -> outer: after",
+  "content": "python Retry on error theme={null}\nimport asyncio\n\nasync def retry_interceptor(\n    request: MCPToolCallRequest,\n    handler,\n    max_retries: int = 3,\n    delay: float = 1.0,\n):\n    \"\"\"Retry failed tool calls with exponential backoff.\"\"\"\n    last_error = None\n    for attempt in range(max_retries):\n        try:\n            return await handler(request)\n        except Exception as e:\n            last_error = e\n            if attempt < max_retries - 1:\n                wait_time = delay * (2 ** attempt)  # Exponential backoff\n                print(f\"Tool {request.name} failed (attempt {attempt + 1}), retrying in {wait_time}s...\")\n                await asyncio.sleep(wait_time)\n    raise last_error\n\nclient = MultiServerMCPClient(\n    {...},\n    tool_interceptors=[retry_interceptor],  # [!code highlight]\n)\npython Error handling with fallback theme={null}\nasync def fallback_interceptor(\n    request: MCPToolCallRequest,\n    handler,\n):\n    \"\"\"Return a fallback value if tool execution fails.\"\"\"\n    try:\n        return await handler(request)\n    except TimeoutError:\n        return f\"Tool {request.name} timed out. Please try again later.\"\n    except ConnectionError:\n        return f\"Could not connect to {request.name} service. Using cached data.\"\npython Progress callback theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\nfrom langchain_mcp_adapters.callbacks import Callbacks, CallbackContext\n\nasync def on_progress(\n    progress: float,\n    total: float | None,\n    message: str | None,\n    context: CallbackContext,\n):\n    \"\"\"Handle progress updates from MCP servers.\"\"\"\n    percent = (progress / total * 100) if total else progress\n    tool_info = f\" ({context.tool_name})\" if context.tool_name else \"\"\n    print(f\"[{context.server_name}{tool_info}] Progress: {percent:.1f}% - {message}\")\n\nclient = MultiServerMCPClient(\n    {...},\n    callbacks=Callbacks(on_progress=on_progress),  # [!code highlight]\n)\npython Logging callback theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\nfrom langchain_mcp_adapters.callbacks import Callbacks, CallbackContext\nfrom mcp.types import LoggingMessageNotificationParams\n\nasync def on_logging_message(\n    params: LoggingMessageNotificationParams,\n    context: CallbackContext,\n):\n    \"\"\"Handle log messages from MCP servers.\"\"\"\n    print(f\"[{context.server_name}] {params.level}: {params.data}\")\n\nclient = MultiServerMCPClient(\n    {...},\n    callbacks=Callbacks(on_logging_message=on_logging_message),  # [!code highlight]\n)\npython MCP server with elicitation theme={null}\nfrom pydantic import BaseModel\nfrom mcp.server.fastmcp import Context, FastMCP\n\nserver = FastMCP(\"Profile\")\n\nclass UserDetails(BaseModel):\n    email: str\n    age: int\n\n@server.tool()\nasync def create_profile(name: str, ctx: Context) -> str:\n    \"\"\"Create a user profile, requesting details via elicitation.\"\"\"\n    result = await ctx.elicit(  # [!code highlight]\n        message=f\"Please provide details for {name}'s profile:\",  # [!code highlight]\n        schema=UserDetails,  # [!code highlight]\n    )  # [!code highlight]\n    if result.action == \"accept\" and result.data:\n        return f\"Created profile for {name}: email={result.data.email}, age={result.data.age}\"\n    if result.action == \"decline\":\n        return f\"User declined. Created minimal profile for {name}.\"\n    return \"Profile creation cancelled.\"\n\nif __name__ == \"__main__\":\n    server.run(transport=\"http\")\npython Handling elicitation requests theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\nfrom langchain_mcp_adapters.callbacks import Callbacks, CallbackContext\nfrom mcp.shared.context import RequestContext\nfrom mcp.types import ElicitRequestParams, ElicitResult\n\nasync def on_elicitation(\n    mcp_context: RequestContext,\n    params: ElicitRequestParams,\n    context: CallbackContext,\n) -> ElicitResult:\n    \"\"\"Handle elicitation requests from MCP servers.\"\"\"\n    # In a real application, you would prompt the user for input\n    # based on params.message and params.requestedSchema\n    return ElicitResult(  # [!code highlight]\n        action=\"accept\",  # [!code highlight]\n        content={\"email\": \"user@example.com\", \"age\": 25},  # [!code highlight]\n    )  # [!code highlight]\n\nclient = MultiServerMCPClient(\n    {\n        \"profile\": {\n            \"url\": \"http://localhost:8000/mcp\",\n            \"transport\": \"http\",\n        }\n    },\n    callbacks=Callbacks(on_elicitation=on_elicitation),  # [!code highlight]\n)\npython Response action examples theme={null}",
+  "code_samples": [
+    {
+      "code": "**Error handling**\n\nUse interceptors to catch tool execution errors and implement retry logic:",
+      "language": "unknown"
+    },
+    {
+      "code": "You can also catch specific error types and return fallback values:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Progress notifications\n\nSubscribe to progress updates for long-running tool executions:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `CallbackContext` provides:\n\n* `server_name`: Name of the MCP server\n* `tool_name`: Name of the tool being executed (available during tool calls)\n\n### Logging\n\nThe MCP protocol supports [logging](https://modelcontextprotocol.io/specification/2025-03-26/server/utilities/logging#log-levels) notifications from servers. Use the `Callbacks` class to subscribe to these events.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Elicitation\n\n[Elicitation](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#elicitation) allows MCP servers to request additional input from users during tool execution. Instead of requiring all inputs upfront, servers can interactively ask for information as needed.\n\n#### Server setup\n\nDefine a tool that uses `ctx.elicit()` to request user input with a schema:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Client setup\n\nHandle elicitation requests by providing a callback to `MultiServerMCPClient`:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Response actions\n\nThe elicitation callback can return one of three actions:\n\n| Action    | Description                                                         |\n| --------- | ------------------------------------------------------------------- |\n| `accept`  | User provided valid input. Include the data in the `content` field. |\n| `decline` | User chose not to provide the requested information.                |\n| `cancel`  | User cancelled the operation entirely.                              |",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Progress notifications",
+      "id": "progress-notifications"
+    },
+    {
+      "level": "h3",
+      "text": "Logging",
+      "id": "logging"
+    },
+    {
+      "level": "h3",
+      "text": "Elicitation",
+      "id": "elicitation"
+    }
+  ],
+  "url": "llms-txt#outer:-before-->-inner:-before-->-tool-execution-->-inner:-after-->-outer:-after",
+  "links": []
+}

@@ -1,0 +1,219 @@
+{
+  "title": "Build a SQL agent",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/sql-agent\n\nIn this tutorial, you will learn how to build an agent that can answer questions about a SQL database using LangChain [agents](/oss/python/langchain/agents).\n\nAt a high level, the agent will:\n\n<Steps>\n  <Step title=\"Fetch the available tables and schemas from the database\" />\n\n<Step title=\"Decide which tables are relevant to the question\" />\n\n<Step title=\"Fetch the schemas for the relevant tables\" />\n\n<Step title=\"Generate a query based on the question and information from the schemas\" />\n\n<Step title=\"Double-check the query for common mistakes using an LLM\" />\n\n<Step title=\"Execute the query and return the results\" />\n\n<Step title=\"Correct mistakes surfaced by the database engine until the query is successful\" />\n\n<Step title=\"Formulate a response based on the results\" />\n</Steps>\n\n<Warning>\n  Building Q\\&A systems of SQL databases requires executing model-generated SQL queries. There are inherent risks in doing this. Make sure that your database connection permissions are always scoped as narrowly as possible for your agent's needs. This will mitigate, though not eliminate, the risks of building a model-driven system.\n</Warning>\n\nWe will cover the following concepts:\n\n* [Tools](/oss/python/langchain/tools) for reading from SQL databases\n* LangChain [agents](/oss/python/langchain/agents)\n* [Human-in-the-loop](/oss/python/langchain/human-in-the-loop) processes\n\n<CodeGroup>\n  \n</CodeGroup>\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your chain or agent. Then set the following environment variables:\n\nSelect a model that supports [tool-calling](/oss/python/integrations/providers/overview):\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)\n\n</CodeGroup>\n  </Tab>\n</Tabs>\n\nThe output shown in the examples below used OpenAI.\n\n## 2. Configure the database\n\nYou will be creating a [SQLite database](https://www.sqlitetutorial.net/sqlite-sample-database/) for this tutorial. SQLite is a lightweight database that is easy to set up and use. We will be loading the `chinook` database, which is a sample database that represents a digital media store.\n\nFor convenience, we have hosted the database (`Chinook.db`) on a public GCS bucket.\n\nWe will use a handy SQL database wrapper available in the `langchain_community` package to interact with the database. The wrapper provides a simple interface to execute SQL queries and fetch results:\n\n## 3. Add tools for database interactions\n\nUse the `SQLDatabase` wrapper available in the `langchain_community` package to interact with the database. The wrapper provides a simple interface to execute SQL queries and fetch results:\n\n## 4. Use `create_agent`\n\nUse [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) to build a [ReAct agent](https://arxiv.org/pdf/2210.03629) with minimal code. The agent will interpret the request and generate a SQL command, which the tools will execute. If the command has an error, the error message is returned to the model. The model can then examine the original request and the new error message and generate a new command. This can continue until the LLM generates the command successfully or reaches an end count. This pattern of providing a model with feedback - error messages in this case - is very powerful.\n\nInitialize the agent with a descriptive system prompt to customize its behavior:\n\nNow, create an agent with the model, tools, and prompt:\n\nRun the agent on a sample query and observe its behavior:\n\nThe agent correctly wrote a query, checked the query, and ran it to inform its final response.\n\n<Note>\n  You can inspect all aspects of the above run, including steps taken, tools invoked, what prompts were seen by the LLM, and more in the [LangSmith trace](https://smith.langchain.com/public/cd2ce887-388a-4bb1-a29d-48208ce50d15/r).\n</Note>\n\n### (Optional) Use Studio\n\n[Studio](/langsmith/studio) provides a \"client side\" loop as well as memory so you can run this as a chat interface and query the database. You can ask questions like \"Tell me the scheme of the database\" or \"Show me the invoices for the 5 top customers\". You will see the SQL command that is generated and the resulting output. The details of how to get that started are below.\n\n<Accordion title=\"Run your agent in Studio\">\n  In addition to the previously mentioned packages, you will need to:\n\nIn directory you will run in, you will need a `langgraph.json` file with the following contents:\n\nCreate a file `sql_agent.py` and insert this:\n\n## 6. Implement human-in-the-loop review\n\nIt can be prudent to check the agent's SQL queries before they are executed for any unintended actions or inefficiencies.\n\nLangChain agents feature support for built-in [human-in-the-loop middleware](/oss/python/langchain/human-in-the-loop) to add oversight to agent tool calls. Let's configure the agent to pause for human review on calling the `sql_db_query` tool:\n\n<Note>\n  We've added a [checkpointer](/oss/python/langchain/short-term-memory) to our agent to allow execution to be paused and resumed. See the [human-in-the-loop guide](/oss/python/langchain/human-in-the-loop) for detalis on this as well as available middleware configurations.\n</Note>\n\nOn running the agent, it will now pause for review before executing the `sql_db_query` tool:\n\nWe can resume execution, in this case accepting the query, using [Command](/oss/python/langgraph/use-graph-api#combine-control-flow-and-state-updates-with-command):\n\nRefer to the [human-in-the-loop guide](/oss/python/langchain/human-in-the-loop) for details.\n\nFor deeper customization, check out [this tutorial](/oss/python/langgraph/sql-agent) for implementing a SQL agent directly using LangGraph primitives.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/sql-agent.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</CodeGroup>\n\n### LangSmith\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your chain or agent. Then set the following environment variables:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 1. Select an LLM\n\nSelect a model that supports [tool-calling](/oss/python/integrations/providers/overview):\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n</Tabs>\n\nThe output shown in the examples below used OpenAI.\n\n## 2. Configure the database\n\nYou will be creating a [SQLite database](https://www.sqlitetutorial.net/sqlite-sample-database/) for this tutorial. SQLite is a lightweight database that is easy to set up and use. We will be loading the `chinook` database, which is a sample database that represents a digital media store.\n\nFor convenience, we have hosted the database (`Chinook.db`) on a public GCS bucket.",
+      "language": "unknown"
+    },
+    {
+      "code": "We will use a handy SQL database wrapper available in the `langchain_community` package to interact with the database. The wrapper provides a simple interface to execute SQL queries and fetch results:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Add tools for database interactions\n\nUse the `SQLDatabase` wrapper available in the `langchain_community` package to interact with the database. The wrapper provides a simple interface to execute SQL queries and fetch results:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Use `create_agent`\n\nUse [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) to build a [ReAct agent](https://arxiv.org/pdf/2210.03629) with minimal code. The agent will interpret the request and generate a SQL command, which the tools will execute. If the command has an error, the error message is returned to the model. The model can then examine the original request and the new error message and generate a new command. This can continue until the LLM generates the command successfully or reaches an end count. This pattern of providing a model with feedback - error messages in this case - is very powerful.\n\nInitialize the agent with a descriptive system prompt to customize its behavior:",
+      "language": "unknown"
+    },
+    {
+      "code": "Now, create an agent with the model, tools, and prompt:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 5. Run the agent\n\nRun the agent on a sample query and observe its behavior:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "The agent correctly wrote a query, checked the query, and ran it to inform its final response.\n\n<Note>\n  You can inspect all aspects of the above run, including steps taken, tools invoked, what prompts were seen by the LLM, and more in the [LangSmith trace](https://smith.langchain.com/public/cd2ce887-388a-4bb1-a29d-48208ce50d15/r).\n</Note>\n\n### (Optional) Use Studio\n\n[Studio](/langsmith/studio) provides a \"client side\" loop as well as memory so you can run this as a chat interface and query the database. You can ask questions like \"Tell me the scheme of the database\" or \"Show me the invoices for the 5 top customers\". You will see the SQL command that is generated and the resulting output. The details of how to get that started are below.\n\n<Accordion title=\"Run your agent in Studio\">\n  In addition to the previously mentioned packages, you will need to:",
+      "language": "unknown"
+    },
+    {
+      "code": "In directory you will run in, you will need a `langgraph.json` file with the following contents:",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a file `sql_agent.py` and insert this:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## 6. Implement human-in-the-loop review\n\nIt can be prudent to check the agent's SQL queries before they are executed for any unintended actions or inefficiencies.\n\nLangChain agents feature support for built-in [human-in-the-loop middleware](/oss/python/langchain/human-in-the-loop) to add oversight to agent tool calls. Let's configure the agent to pause for human review on calling the `sql_db_query` tool:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n  We've added a [checkpointer](/oss/python/langchain/short-term-memory) to our agent to allow execution to be paused and resumed. See the [human-in-the-loop guide](/oss/python/langchain/human-in-the-loop) for detalis on this as well as available middleware configurations.\n</Note>\n\nOn running the agent, it will now pause for review before executing the `sql_db_query` tool:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "We can resume execution, in this case accepting the query, using [Command](/oss/python/langgraph/use-graph-api#combine-control-flow-and-state-updates-with-command):",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "Concepts",
+      "id": "concepts"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h3",
+      "text": "LangSmith",
+      "id": "langsmith"
+    },
+    {
+      "level": "h2",
+      "text": "1. Select an LLM",
+      "id": "1.-select-an-llm"
+    },
+    {
+      "level": "h2",
+      "text": "2. Configure the database",
+      "id": "2.-configure-the-database"
+    },
+    {
+      "level": "h2",
+      "text": "3. Add tools for database interactions",
+      "id": "3.-add-tools-for-database-interactions"
+    },
+    {
+      "level": "h2",
+      "text": "4. Use `create_agent`",
+      "id": "4.-use-`create_agent`"
+    },
+    {
+      "level": "h2",
+      "text": "5. Run the agent",
+      "id": "5.-run-the-agent"
+    },
+    {
+      "level": "h3",
+      "text": "(Optional) Use Studio",
+      "id": "(optional)-use-studio"
+    },
+    {
+      "level": "h2",
+      "text": "6. Implement human-in-the-loop review",
+      "id": "6.-implement-human-in-the-loop-review"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#build-a-sql-agent",
+  "links": []
+}

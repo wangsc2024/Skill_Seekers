@@ -1,0 +1,24 @@
+{
+  "title": "Start local development server with Studio",
+  "content": "langgraph dev\nbash  theme={null}",
+  "code_samples": [
+    {
+      "code": "This will:\n\n* Spin up a local server with Studio.\n* Allow you to visualize and interact with your graph.\n* Validate that your agent works correctly before deployment.\n\n<Note>\n  If your agent runs locally without any errors, it means that deployment to LangSmith will likely succeed. This local testing helps catch configuration issues, dependency problems, and agent logic errors before attempting deployment.\n</Note>\n\nSee the [LangGraph CLI documentation](/langsmith/cli#dev) for more details.\n\n### Method 1: LangSmith Deployment UI\n\nDeploy your agent using the LangSmith deployment interface:\n\n1. Go to your [LangSmith dashboard](https://smith.langchain.com).\n2. Navigate to the **Deployments** section.\n3. Click the **+ New Deployment** button in the top right.\n4. Select your GitHub repository containing your LangGraph agent from the dropdown menu.\n\n**Supported deployments:**\n\n* <Icon icon=\"cloud\" /> **Cloud LangSmith**: Direct GitHub integration with dropdown menu\n* <Icon icon=\"server\" /> **Self-Hosted/Hybrid LangSmith**: Specify your image URI in the Image Path field (e.g., `docker.io/username/my-agent:latest`)\n\n<Info>\n  **Benefits:**\n\n  * Simple UI-based deployment\n  * Direct integration with your GitHub repository (cloud)\n  * No manual Docker image management required (cloud)\n</Info>\n\n### Method 2: Control Plane API\n\nDeploy using the Control Plane API with different approaches for each deployment type:\n\n**For Cloud LangSmith:**\n\n* Use the Control Plane API to create deployments by pointing to your GitHub repository\n* No Docker image building required for cloud deployments\n\n**For Self-Hosted/Hybrid LangSmith:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Method 1: LangSmith Deployment UI",
+      "id": "method-1:-langsmith-deployment-ui"
+    },
+    {
+      "level": "h3",
+      "text": "Method 2: Control Plane API",
+      "id": "method-2:-control-plane-api"
+    }
+  ],
+  "url": "llms-txt#start-local-development-server-with-studio",
+  "links": []
+}

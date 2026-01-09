@@ -1,0 +1,8 @@
+{
+  "title": "Try creating an assistant. This should fail",
+  "content": "try:\n    await alice.assistants.create(\"agent\")\n    print(\"❌ Alice shouldn't be able to create assistants!\")\nexcept Exception as e:\n    print(\"✅ Alice correctly denied access:\", e)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#try-creating-an-assistant.-this-should-fail",
+  "links": []
+}

@@ -1,0 +1,173 @@
+{
+  "title": "Build a multi-source knowledge base with routing",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/multi-agent/router-knowledge-base\n\nThe **router pattern** is a [multi-agent](/oss/python/langchain/multi-agent) architecture where a routing step classifies input and directs it to specialized agents, with results synthesized into a combined response. This pattern excels when your organization's knowledge lives across distinct **verticals**—separate knowledge domains that each require their own agent with specialized tools and prompts.\n\nIn this tutorial, you'll build a multi-source knowledge base router that demonstrates these benefits through a realistic enterprise scenario. The system will coordinate three specialists:\n\n* A **GitHub agent** that searches code, issues, and pull requests.\n* A **Notion agent** that searches internal documentation and wikis.\n* A **Slack agent** that searches relevant threads and discussions.\n\nWhen a user asks \"How do I authenticate API requests?\", the router decomposes the query into source-specific sub-questions, routes them to the relevant agents in parallel, and synthesizes results into a coherent answer.\n\n### Why use a router?\n\nThe router pattern provides several advantages:\n\n* **Parallel execution**: Query multiple sources simultaneously, reducing latency compared to sequential approaches.\n* **Specialized agents**: Each vertical has focused tools and prompts optimized for its domain.\n* **Selective routing**: Not every query needs every source—the router intelligently selects relevant verticals.\n* **Targeted sub-questions**: Each agent receives a question tailored to its domain, improving result quality.\n* **Clean synthesis**: Results from multiple sources are combined into a single, coherent response.\n\nWe will cover the following concepts:\n\n* [Multi-agent systems](/oss/python/langchain/multi-agent)\n* [StateGraph](/oss/python/langchain/graphs) for workflow orchestration\n* [Send API](/oss/python/langchain/send) for parallel execution\n\n<Tip>\n  **Router vs. Subagents**: The [subagents pattern](/oss/python/langchain/multi-agent/subagents) can also route to multiple agents. Use the router pattern when you need specialized preprocessing, custom routing logic, or want explicit control over parallel execution. Use the subagents pattern when you want the LLM to decide which agents to call dynamically.\n</Tip>\n\nThis tutorial requires the `langchain` and `langgraph` packages:\n\nFor more details, see our [Installation guide](/oss/python/langchain/install).\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your agent. Then set the following environment variables:\n\nSelect a chat model from LangChain's suite of integrations:\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)\n\n</CodeGroup>\n  </Tab>\n</Tabs>\n\nFirst, define the state schemas. We use three types:\n\n* **`AgentInput`**: Simple state passed to each subagent (just a query)\n* **`AgentOutput`**: Result returned by each subagent (source name + result)\n* **`RouterState`**: Main workflow state tracking the query, classifications, results, and final answer\n\nThe `results` field uses a **reducer** (`operator.add` in Python, a concat function in JS) to collect outputs from parallel agent executions into a single list.\n\n## 2. Define tools for each vertical\n\nCreate tools for each knowledge domain. In a production system, these would call actual APIs. For this tutorial, we use stub implementations that return mock data. We define 7 tools across 3 verticals: GitHub (search code, issues, PRs), Notion (search docs, get page), and Slack (search messages, get thread).\n\n## 3. Create specialized agents\n\nCreate an agent for each vertical. Each agent has domain-specific tools and a prompt optimized for its knowledge source. All three follow the same pattern—only the tools and system prompt differ.\n\n## 4. Build the router workflow\n\nNow build the router workflow using a StateGraph. The workflow has four main steps:\n\n1. **Classify**: Analyze the query and determine which agents to invoke with what sub-questions\n2. **Route**: Fan out to selected agents in parallel using `Send`\n3. **Query agents**: Each agent receives a simple `AgentInput` and returns an `AgentOutput`\n4. **Synthesize**: Combine collected results into a coherent response\n\n```python  theme={null}\nfrom pydantic import BaseModel, Field\nfrom langgraph.graph import StateGraph, START, END\nfrom langgraph.types import Send\n\nrouter_llm = init_chat_model(\"openai:gpt-4o-mini\")",
+  "code_samples": [
+    {
+      "code": "### Why use a router?\n\nThe router pattern provides several advantages:\n\n* **Parallel execution**: Query multiple sources simultaneously, reducing latency compared to sequential approaches.\n* **Specialized agents**: Each vertical has focused tools and prompts optimized for its domain.\n* **Selective routing**: Not every query needs every source—the router intelligently selects relevant verticals.\n* **Targeted sub-questions**: Each agent receives a question tailored to its domain, improving result quality.\n* **Clean synthesis**: Results from multiple sources are combined into a single, coherent response.\n\n### Concepts\n\nWe will cover the following concepts:\n\n* [Multi-agent systems](/oss/python/langchain/multi-agent)\n* [StateGraph](/oss/python/langchain/graphs) for workflow orchestration\n* [Send API](/oss/python/langchain/send) for parallel execution\n\n<Tip>\n  **Router vs. Subagents**: The [subagents pattern](/oss/python/langchain/multi-agent/subagents) can also route to multiple agents. Use the router pattern when you need specialized preprocessing, custom routing logic, or want explicit control over parallel execution. Use the subagents pattern when you want the LLM to decide which agents to call dynamically.\n</Tip>\n\n## Setup\n\n### Installation\n\nThis tutorial requires the `langchain` and `langgraph` packages:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nFor more details, see our [Installation guide](/oss/python/langchain/install).\n\n### LangSmith\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your agent. Then set the following environment variables:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Select an LLM\n\nSelect a chat model from LangChain's suite of integrations:\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n</Tabs>\n\n## 1. Define state\n\nFirst, define the state schemas. We use three types:\n\n* **`AgentInput`**: Simple state passed to each subagent (just a query)\n* **`AgentOutput`**: Result returned by each subagent (source name + result)\n* **`RouterState`**: Main workflow state tracking the query, classifications, results, and final answer",
+      "language": "unknown"
+    },
+    {
+      "code": "The `results` field uses a **reducer** (`operator.add` in Python, a concat function in JS) to collect outputs from parallel agent executions into a single list.\n\n## 2. Define tools for each vertical\n\nCreate tools for each knowledge domain. In a production system, these would call actual APIs. For this tutorial, we use stub implementations that return mock data. We define 7 tools across 3 verticals: GitHub (search code, issues, PRs), Notion (search docs, get page), and Slack (search messages, get thread).",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Create specialized agents\n\nCreate an agent for each vertical. Each agent has domain-specific tools and a prompt optimized for its knowledge source. All three follow the same pattern—only the tools and system prompt differ.",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Build the router workflow\n\nNow build the router workflow using a StateGraph. The workflow has four main steps:\n\n1. **Classify**: Analyze the query and determine which agents to invoke with what sub-questions\n2. **Route**: Fan out to selected agents in parallel using `Send`\n3. **Query agents**: Each agent receives a simple `AgentInput` and returns an `AgentOutput`\n4. **Synthesize**: Combine collected results into a coherent response",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "Why use a router?",
+      "id": "why-use-a-router?"
+    },
+    {
+      "level": "h3",
+      "text": "Concepts",
+      "id": "concepts"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h3",
+      "text": "LangSmith",
+      "id": "langsmith"
+    },
+    {
+      "level": "h3",
+      "text": "Select an LLM",
+      "id": "select-an-llm"
+    },
+    {
+      "level": "h2",
+      "text": "1. Define state",
+      "id": "1.-define-state"
+    },
+    {
+      "level": "h2",
+      "text": "2. Define tools for each vertical",
+      "id": "2.-define-tools-for-each-vertical"
+    },
+    {
+      "level": "h2",
+      "text": "3. Create specialized agents",
+      "id": "3.-create-specialized-agents"
+    },
+    {
+      "level": "h2",
+      "text": "4. Build the router workflow",
+      "id": "4.-build-the-router-workflow"
+    }
+  ],
+  "url": "llms-txt#build-a-multi-source-knowledge-base-with-routing",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Use different sampling rates for different operations",
+  "content": "with tracing_context(client=client_1):\n    # Your code here - will be traced with 50% sampling rate\n    agent_1.invoke(...)\n\nwith tracing_context(client=client_2):\n    # Your code here - will be traced with 25% sampling rate\n    agent_1.invoke(...)\n\nwith tracing_context(client=client_no_trace):\n    # Your code here - will not be traced\n    agent_1.invoke(...)\n```\n\nThis allows you to control sampling rates at the operation level.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/sample-traces.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-different-sampling-rates-for-different-operations",
+  "links": []
+}

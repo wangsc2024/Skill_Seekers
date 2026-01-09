@@ -1,0 +1,19 @@
+{
+  "title": "Log user feedback using the SDK",
+  "content": "Source: https://docs.langchain.com/langsmith/attach-user-feedback\n\n<Tip>\n  **Key concepts**\n\n* [Conceptual guide on tracing and feedback](/langsmith/observability-concepts)\n  * [Reference guide on feedback data format](/langsmith/feedback-data-format)\n</Tip>\n\nLangSmith makes it easy to attach feedback to traces.\nThis feedback can come from users, annotators, automated evaluators, etc., and is crucial for monitoring and evaluating applications.\n\n## Use [create\\_feedback()](https://docs.smith.langchain.com/reference/python/client/langsmith.client.Client#langsmith.client.Client.create_feedback) / [createFeedback()](https://docs.smith.langchain.com/reference/js/classes/client.Client#createfeedback)\n\nHere we'll walk through how to log feedback using the SDK.\n\n<Info>\n  **Child runs**\n  You can attach user feedback to ANY child run of a trace, not just the trace (root run) itself.\n  This is useful for critiquing specific steps of the LLM application, such as the retrieval step or generation step of a RAG pipeline.\n</Info>\n\n<Tip>\n  **Non-blocking creation (Python only)**\n  The Python client will automatically background feedback creation if you pass `trace_id=` to [create\\_feedback()](https://docs.smith.langchain.com/reference/python/client/langsmith.client.Client#langsmith.client.Client.create_feedback).\n  This is essential for low-latency environments, where you want to make sure your application isn't blocked on feedback creation.\n</Tip>\n\nYou can even log feedback for in-progress runs using `create_feedback() / createFeedback()`. See [this guide](/langsmith/access-current-span) for how to get the run ID of an in-progress run.\n\nTo learn more about how to filter traces based on various attributes, including user feedback, see [this guide](/langsmith/filter-traces-in-application).\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/attach-user-feedback.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Use [create\\_feedback()](https://docs.smith.langchain.com/reference/python/client/langsmith.client.Client#langsmith.client.Client.create_feedback) / [createFeedback()](https://docs.smith.langchain.com/reference/js/classes/client.Client#createfeedback)",
+      "id": "use-[create\\_feedback()](https://docs.smith.langchain.com/reference/python/client/langsmith.client.client#langsmith.client.client.create_feedback)-/-[createfeedback()](https://docs.smith.langchain.com/reference/js/classes/client.client#createfeedback)"
+    }
+  ],
+  "url": "llms-txt#log-user-feedback-using-the-sdk",
+  "links": []
+}

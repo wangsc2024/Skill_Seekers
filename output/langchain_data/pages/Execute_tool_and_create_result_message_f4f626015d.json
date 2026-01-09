@@ -1,0 +1,8 @@
+{
+  "title": "Execute tool and create result message",
+  "content": "weather_result = \"Sunny, 72°F\"\ntool_message = ToolMessage(\n    content=weather_result,\n    tool_call_id=\"call_123\"  # Must match the call ID\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#execute-tool-and-create-result-message",
+  "links": []
+}

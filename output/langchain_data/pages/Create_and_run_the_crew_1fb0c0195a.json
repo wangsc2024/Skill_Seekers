@@ -1,0 +1,24 @@
+{
+  "title": "Create and run the crew",
+  "content": "crew = Crew(\n    agents=[market_researcher, data_analyst, content_strategist],\n    tasks=[research_task, analysis_task, content_task],\n    verbose=True,\n    process=\"sequential\"  # Tasks will be executed in order\n)\n\ndef run_market_research_crew():\n    \"\"\"Run the market research crew and return results.\"\"\"\n    result = crew.kickoff()\n    return result\n\nif __name__ == \"__main__\":\n    print(\"Running CrewAI market research process...\")\n    output = run_market_research_crew()\n    print(\"\\n\" + \"=\"*50)\n    print(\"CrewAI Process Output:\")\n    print(\"=\"*50)\n    print(output)\npython  theme={null}\nfrom opentelemetry import trace",
+  "code_samples": [
+    {
+      "code": "## Advanced usage\n\n### Custom metadata and tags\n\nYou can add custom metadata to your traces by setting span attributes in your CrewAI application:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Advanced usage",
+      "id": "advanced-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Custom metadata and tags",
+      "id": "custom-metadata-and-tags"
+    }
+  ],
+  "url": "llms-txt#create-and-run-the-crew",
+  "links": []
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Evaluate a complex agent",
+  "content": "Source: https://docs.langchain.com/langsmith/evaluate-complex-agent\n\n<Info>\n  [Agent evaluation](/langsmith/evaluation-concepts#agents) | [Evaluators](/langsmith/evaluation-concepts#evaluators) | [LLM-as-judge evaluators](/langsmith/evaluation-concepts#llm-as-judge)\n</Info>\n\nIn this tutorial, we'll build a customer support bot that helps users navigate a digital music store. Then, we'll go through the three most effective types of evaluations to run on chat bots:\n\n* [Final response](/langsmith/evaluation-concepts#evaluating-an-agents-final-response): Evaluate the agent's final response.\n* [Trajectory](/langsmith/evaluation-concepts#evaluating-an-agents-trajectory): Evaluate whether the agent took the expected path (e.g., of tool calls) to arrive at the final answer.\n* [Single step](/langsmith/evaluation-concepts#evaluating-a-single-step-of-an-agent): Evaluate any agent step in isolation (e.g., whether it selects the appropriate first tool for a given step).\n\nWe'll build our agent using [LangGraph](https://github.com/langchain-ai/langgraph), but the techniques and LangSmith functionality shown here are framework-agnostic.\n\n### Configure the environment\n\nLet's install the required dependencies:\n\nLet's set up environment variables for OpenAI and [LangSmith](https://smith.langchain.com):\n\n### Download the database\n\nWe will create a SQLite database for this tutorial. SQLite is a lightweight database that is easy to set up and use. We will load the `chinook` database, which is a sample database that represents a digital media store. Find more information about the database [here](https://www.sqlitetutorial.net/sqlite-sample-database/).\n\nFor convenience, we have hosted the database in a public GCS bucket:\n\nHere's a sample of the data in the db:\n\n```python  theme={null}\nimport sqlite3",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nLet's set up environment variables for OpenAI and [LangSmith](https://smith.langchain.com):",
+      "language": "unknown"
+    },
+    {
+      "code": "### Download the database\n\nWe will create a SQLite database for this tutorial. SQLite is a lightweight database that is easy to set up and use. We will load the `chinook` database, which is a sample database that represents a digital media store. Find more information about the database [here](https://www.sqlitetutorial.net/sqlite-sample-database/).\n\nFor convenience, we have hosted the database in a public GCS bucket:",
+      "language": "unknown"
+    },
+    {
+      "code": "Here's a sample of the data in the db:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Configure the environment",
+      "id": "configure-the-environment"
+    },
+    {
+      "level": "h3",
+      "text": "Download the database",
+      "id": "download-the-database"
+    }
+  ],
+  "url": "llms-txt#evaluate-a-complex-agent",
+  "links": []
+}
