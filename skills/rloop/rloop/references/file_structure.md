@@ -1,0 +1,82 @@
+# Repository File Structure
+
+Total items: 76
+
+```
+📁 .claude
+📁 .github
+📄 .gitignore
+📄 CLAUDE.md
+📄 IMPLEMENTATION_PLAN.md
+📄 IMPLEMENTATION_STATUS.md
+📄 LICENSE
+📄 README.md
+📄 SPECIFICATION_WORKSHOP.md
+📄 create_files.sh
+📁 docs
+📁 examples
+📄 install.sh
+📁 lib
+📁 logs
+📄 package-lock.json
+📄 package.json
+📄 ralph_import.sh
+📄 ralph_loop.sh
+📄 ralph_monitor.sh
+📄 sample-prd.md
+📄 setup.sh
+📁 specs
+📁 src
+📁 templates
+📁 tests
+  📄 settings.local.json
+  📁 workflows
+  📁 archive
+  📁 code-review
+  📁 generated
+  📄 .gitkeep
+  📄 circuit_breaker.sh
+  📄 date_utils.sh
+  📄 response_analyzer.sh
+  📄 .gitkeep
+  📁 stdlib
+  📄 .gitkeep
+  📄 AGENT.md
+  📄 PROMPT.md
+  📄 fix_plan.md
+  📁 specs
+  📁 helpers
+  📁 integration
+  📄 test_error_detection.sh
+  📄 test_stuck_loop_detection.sh
+  📁 unit
+    📄 claude-code-review.yml
+    📄 claude.yml
+    📄 test.yml
+    📁 2025-10-milestones
+    📄 2026-01-08-cli-parsing-tests-review.md
+    📄 2026-01-08-phase-1.1-modern-cli-review.md
+    📄 .gitkeep
+    📄 .gitkeep
+    📄 .gitkeep
+    📄 fixtures.bash
+    📄 mocks.bash
+    📄 test_helper.bash
+    📄 test_edge_cases.bats
+    📄 test_installation.bats
+    📄 test_loop_execution.bats
+    📄 test_prd_import.bats
+    📄 test_project_setup.bats
+    📄 test_cli_modern.bats
+    📄 test_cli_parsing.bats
+    📄 test_exit_detection.bats
+    📄 test_json_parsing.bats
+    📄 test_rate_limiting.bats
+      📄 EXPERT_PANEL_REVIEW.md
+      📄 PHASE1_COMPLETION.md
+      📄 PHASE2_COMPLETION.md
+      📄 README.md
+      📄 STATUS.md
+      📄 TEST_IMPLEMENTATION_SUMMARY.md
+      📄 USE_CASES.md
+```
