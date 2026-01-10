@@ -29,6 +29,8 @@ env/
 # output/  # Commented out to allow skill uploads
 # *.zip
 **/*_data/  # Ignore raw scraped data directories
+output/
+*.zip
 
 # IDE
 .vscode/
