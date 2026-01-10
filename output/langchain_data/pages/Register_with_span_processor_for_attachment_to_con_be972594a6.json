@@ -1,0 +1,8 @@
+{
+  "title": "Register with span processor for attachment to conversation span",
+  "content": "span_processor.register_recording(\n    conversation_id,\n    str(recording_path),\n    audio_recorder=audio_recorder\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#register-with-span-processor-for-attachment-to-conversation-span",
+  "links": []
+}

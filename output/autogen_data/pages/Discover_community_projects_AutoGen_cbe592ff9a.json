@@ -1,0 +1,33 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/discover.html",
+  "title": "Discover community projects — AutoGen",
+  "content": "Find samples, services and other things that work with AutoGen\n\nFind AutoGen extensions for 3rd party tools, components and services\n\nFind community samples and examples of how to use AutoGen\n\nautogen-watsonx-client\n\nModel client for IBM watsonx.ai\n\nautogen-openaiext-client\n\nModel client for other LLMs like Gemini, etc. through the OpenAI API\n\nTool adapter for Model Context Protocol server tools\n\nA Email agent for generating email and sending\n\nan OpenAI-style API server built on top of AutoGen\n\nEnhanced model_context implementations, with features such as automatic summarization and truncation of model context.\n\nEnables agents to securely execute code in isolated remote sandboxes using YepCode’s serverless runtime.\n\nCreating your own extension",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Discover community projects#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "List of community projects#",
+      "id": ""
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/discover.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/create-your-own.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-container-code-executor.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-foundry-agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html"
+  ]
+}

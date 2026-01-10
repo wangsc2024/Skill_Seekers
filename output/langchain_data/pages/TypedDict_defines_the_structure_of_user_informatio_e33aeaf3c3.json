@@ -1,0 +1,8 @@
+{
+  "title": "TypedDict defines the structure of user information for the LLM",
+  "content": "class UserInfo(TypedDict):\n    name: str",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#typeddict-defines-the-structure-of-user-information-for-the-llm",
+  "links": []
+}

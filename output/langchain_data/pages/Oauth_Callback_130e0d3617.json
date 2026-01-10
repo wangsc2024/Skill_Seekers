@@ -1,0 +1,8 @@
+{
+  "title": "Oauth Callback",
+  "content": "Source: https://docs.langchain.com/api-reference/auth-service-v2/oauth-callback\n\nhttps://api.host.langchain.com/openapi.json post /v2/auth/callback/{provider_id}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#oauth-callback",
+  "links": []
+}

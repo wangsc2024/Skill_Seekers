@@ -1,0 +1,92 @@
+{
+  "title": "Time travel using the server API",
+  "content": "Source: https://docs.langchain.com/langsmith/human-in-the-loop-time-travel\n\nLangGraph provides the [**time travel**](/oss/python/langgraph/use-time-travel) functionality to resume execution from a prior checkpoint, either replaying the same state or modifying it to explore alternatives. In all cases, resuming past execution produces a new fork in the history.\n\nTo time travel using the LangSmith Deployment API (via the LangGraph SDK):\n\n1. **Run the graph** with initial inputs using [LangGraph SDK](/langsmith/langgraph-python-sdk)'s [client.runs.wait](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.RunsClient.wait) or [client.runs.stream](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.RunsClient.stream) APIs.\n2. **Identify a checkpoint in an existing thread**: Use [client.threads.get\\_history](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.ThreadsClient.get_history) method to retrieve the execution history for a specific `thread_id` and locate the desired `checkpoint_id`.\n   Alternatively, set a [breakpoint](/oss/python/langgraph/interrupts) before the node(s) where you want execution to pause. You can then find the most recent checkpoint recorded up to that breakpoint.\n3. **(Optional) modify the graph state**: Use the [client.threads.update\\_state](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.ThreadsClient.update_state) method to modify the graph’s state at the checkpoint and resume execution from alternative state.\n4. **Resume execution from the checkpoint**: Use the [client.runs.wait](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.RunsClient.wait) or [client.runs.stream](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.RunsClient.stream) APIs with an input of `None` and the appropriate `thread_id` and `checkpoint_id`.\n\n## Use time travel in a workflow\n\n<Accordion title=\"Example graph\">\n  \n</Accordion>\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    Create a thread:\n\n### 2. Identify a checkpoint\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\n### 3. Update the state\n\n[`update_state`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.CompiledStateGraph.update_state) will create a new checkpoint. The new checkpoint will be associated with the same thread, but a new checkpoint ID.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\n### 4. Resume execution from the checkpoint\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\n* [**LangGraph time travel guide**](/oss/python/langgraph/use-time-travel): learn more about using time travel in LangGraph.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/human-in-the-loop-time-travel.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Accordion>\n\n### 1. Run the graph\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">\n    Create a thread:",
+      "language": "unknown"
+    },
+    {
+      "code": "Run the graph:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### 2. Identify a checkpoint\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n<a id=\"optional\" />\n\n### 3. Update the state\n\n[`update_state`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.CompiledStateGraph.update_state) will create a new checkpoint. The new checkpoint will be associated with the same thread, but a new checkpoint ID.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### 4. Resume execution from the checkpoint\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Use time travel in a workflow",
+      "id": "use-time-travel-in-a-workflow"
+    },
+    {
+      "level": "h3",
+      "text": "1. Run the graph",
+      "id": "1.-run-the-graph"
+    },
+    {
+      "level": "h3",
+      "text": "2. Identify a checkpoint",
+      "id": "2.-identify-a-checkpoint"
+    },
+    {
+      "level": "h3",
+      "text": "3. Update the state",
+      "id": "3.-update-the-state"
+    },
+    {
+      "level": "h3",
+      "text": "4. Resume execution from the checkpoint",
+      "id": "4.-resume-execution-from-the-checkpoint"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    }
+  ],
+  "url": "llms-txt#time-travel-using-the-server-api",
+  "links": []
+}

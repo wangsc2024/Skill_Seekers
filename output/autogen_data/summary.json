@@ -1,0 +1,653 @@
+{
+  "name": "autogen",
+  "total_pages": 161,
+  "base_url": "https://microsoft.github.io/autogen/stable/",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "AutoGen — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/"
+    },
+    {
+      "title": "AgentChat — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html"
+    },
+    {
+      "title": "Installation — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html"
+    },
+    {
+      "title": "Quickstart — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html"
+    },
+    {
+      "title": "Models — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html"
+    },
+    {
+      "title": "Messages — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html"
+    },
+    {
+      "title": "Agents — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html"
+    },
+    {
+      "title": "Teams — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html"
+    },
+    {
+      "title": "Human-in-the-Loop — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html"
+    },
+    {
+      "title": "Termination — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html"
+    },
+    {
+      "title": "Managing State — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html"
+    },
+    {
+      "title": "",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/custom-agents.html"
+    },
+    {
+      "title": "",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/selector-group-chat.html"
+    },
+    {
+      "title": "",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/swarm.html"
+    },
+    {
+      "title": "Core — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html"
+    },
+    {
+      "title": "Quick Start — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html"
+    },
+    {
+      "title": "Installation — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html"
+    },
+    {
+      "title": "Extensions — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html"
+    },
+    {
+      "title": "AutoGen Studio — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html"
+    },
+    {
+      "title": "API Reference — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/index.html"
+    },
+    {
+      "title": "Migration Guide for v0.2 to v0.4 — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html"
+    },
+    {
+      "title": "autogen_ext.tools.mcp — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html"
+    },
+    {
+      "title": "autogen_ext.agents.openai — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html"
+    },
+    {
+      "title": "autogen_ext.code_executors.docker — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html"
+    },
+    {
+      "title": "autogen_ext.runtimes.grpc — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html"
+    },
+    {
+      "title": "Discover community projects — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/discover.html"
+    },
+    {
+      "title": "Creating your own extension — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/create-your-own.html"
+    },
+    {
+      "title": "AutoGen — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/index.html"
+    },
+    {
+      "title": "Introduction — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html"
+    },
+    {
+      "title": "Custom Agents — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html"
+    },
+    {
+      "title": "Selector Group Chat — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html"
+    },
+    {
+      "title": "Swarm — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html"
+    },
+    {
+      "title": "Magentic-One — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html"
+    },
+    {
+      "title": "GraphFlow (Workflows) — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html"
+    },
+    {
+      "title": "Memory and RAG — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html"
+    },
+    {
+      "title": "Logging — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html"
+    },
+    {
+      "title": "Serializing Components — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html"
+    },
+    {
+      "title": "Tracing and Observability — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html"
+    },
+    {
+      "title": "Examples — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html"
+    },
+    {
+      "title": "Travel Planning — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html"
+    },
+    {
+      "title": "Company Research — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html"
+    },
+    {
+      "title": "Literature Review — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html"
+    },
+    {
+      "title": "autogen_agentchat — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html"
+    },
+    {
+      "title": "Intro — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html"
+    },
+    {
+      "title": "Model Clients — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html"
+    },
+    {
+      "title": "autogen_ext.models.cache — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html"
+    },
+    {
+      "title": "autogen_core — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+    },
+    {
+      "title": "autogen_ext.models.openai — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html"
+    },
+    {
+      "title": "autogen_ext.models.azure — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html"
+    },
+    {
+      "title": "autogen_ext.models.anthropic — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html"
+    },
+    {
+      "title": "autogen_ext.models.ollama — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html"
+    },
+    {
+      "title": "autogen_ext.models.semantic_kernel — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html"
+    },
+    {
+      "title": "autogen_core.models — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html"
+    },
+    {
+      "title": "autogen_agentchat.messages — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html"
+    },
+    {
+      "title": "autogen_agentchat.base — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html"
+    },
+    {
+      "title": "autogen_agentchat.teams — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html"
+    },
+    {
+      "title": "autogen_agentchat.agents — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html"
+    },
+    {
+      "title": "autogen_agentchat.ui — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html"
+    },
+    {
+      "title": "autogen_core.tools — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html"
+    },
+    {
+      "title": "Tools — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html"
+    },
+    {
+      "title": "Workbench (and MCP) — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html"
+    },
+    {
+      "title": "autogen_ext.tools.graphrag — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html"
+    },
+    {
+      "title": "autogen_ext.tools.http — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.http.html"
+    },
+    {
+      "title": "autogen_ext.tools.langchain — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html"
+    },
+    {
+      "title": "autogen_agentchat.tools — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.tools.html"
+    },
+    {
+      "title": "autogen_core.model_context — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html"
+    },
+    {
+      "title": "autogen_ext.agents.web_surfer — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html"
+    },
+    {
+      "title": "autogen_ext.agents.file_surfer — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.file_surfer.html"
+    },
+    {
+      "title": "autogen_ext.agents.video_surfer — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html"
+    },
+    {
+      "title": "autogen_agentchat.conditions — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html"
+    },
+    {
+      "title": "Reflection — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html"
+    },
+    {
+      "title": "Agent and Multi-Agent Applications — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html"
+    },
+    {
+      "title": "Agent Runtime Environments — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html"
+    },
+    {
+      "title": "Application Stack — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html"
+    },
+    {
+      "title": "Agent Identity and Lifecycle — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html"
+    },
+    {
+      "title": "Topic and Subscription — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html"
+    },
+    {
+      "title": "Agent and Agent Runtime — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html"
+    },
+    {
+      "title": "Message and Communication — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html"
+    },
+    {
+      "title": "Logging — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html"
+    },
+    {
+      "title": "Open Telemetry — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html"
+    },
+    {
+      "title": "Distributed Agent Runtime — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html"
+    },
+    {
+      "title": "Component config — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html"
+    },
+    {
+      "title": "Model Context — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html"
+    },
+    {
+      "title": "Command Line Code Executors — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html"
+    },
+    {
+      "title": "Concurrent Agents — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html"
+    },
+    {
+      "title": "Sequential Workflow — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html"
+    },
+    {
+      "title": "Group Chat — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html"
+    },
+    {
+      "title": "Handoffs — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html"
+    },
+    {
+      "title": "Mixture of Agents — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html"
+    },
+    {
+      "title": "Multi-Agent Debate — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html"
+    },
+    {
+      "title": "Code Execution — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html"
+    },
+    {
+      "title": "Cookbook — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html"
+    },
+    {
+      "title": "Azure OpenAI with AAD Auth — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html"
+    },
+    {
+      "title": "Termination using Intervention Handler — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html"
+    },
+    {
+      "title": "User Approval for Tool Execution using Intervention Handler — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html"
+    },
+    {
+      "title": "Extracting Results with an Agent — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html"
+    },
+    {
+      "title": "OpenAI Assistant Agent — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html"
+    },
+    {
+      "title": "Using LangGraph-Backed Agent — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html"
+    },
+    {
+      "title": "Using LlamaIndex-Backed Agent — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html"
+    },
+    {
+      "title": "Local LLMs with LiteLLM & Ollama — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html"
+    },
+    {
+      "title": "Instrumentating your code locally — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html"
+    },
+    {
+      "title": "Topic and Subscription Example Scenarios — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html"
+    },
+    {
+      "title": "Structured output using GPT-4o models — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html"
+    },
+    {
+      "title": "Tracking LLM usage with a logger — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html"
+    },
+    {
+      "title": "FAQs — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html"
+    },
+    {
+      "title": "Installation — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/installation.html"
+    },
+    {
+      "title": "ACA Dynamic Sessions Code Executor — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-container-code-executor.html"
+    },
+    {
+      "title": "Azure AI Foundry Agent — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-foundry-agent.html"
+    },
+    {
+      "title": "autogen_ext.agents.magentic_one — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html"
+    },
+    {
+      "title": "autogen_ext.code_executors.azure — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html"
+    },
+    {
+      "title": "Installation — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/installation.html"
+    },
+    {
+      "title": "Usage — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/usage.html"
+    },
+    {
+      "title": "Experimental Features — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/experimental.html"
+    },
+    {
+      "title": "FAQ — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/faq.html"
+    },
+    {
+      "title": "autogen_agentchat.state — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.state.html"
+    },
+    {
+      "title": "autogen_agentchat.utils — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.utils.html"
+    },
+    {
+      "title": "autogen_core.code_executor — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.code_executor.html"
+    },
+    {
+      "title": "autogen_core.exceptions — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.exceptions.html"
+    },
+    {
+      "title": "autogen_core.logging — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.logging.html"
+    },
+    {
+      "title": "autogen_core.memory — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.memory.html"
+    },
+    {
+      "title": "autogen_core.tool_agent — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tool_agent.html"
+    },
+    {
+      "title": "autogen_core.utils — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.utils.html"
+    },
+    {
+      "title": "autogen_ext — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.html"
+    },
+    {
+      "title": "autogen_ext.cache_store — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.html"
+    },
+    {
+      "title": "autogen_ext.code_executors — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.html"
+    },
+    {
+      "title": "autogen_ext.experimental — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.html"
+    },
+    {
+      "title": "autogen_ext.memory — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.html"
+    },
+    {
+      "title": "autogen_ext.models — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.html"
+    },
+    {
+      "title": "autogen_ext.runtimes — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.html"
+    },
+    {
+      "title": "autogen_ext.teams — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.html"
+    },
+    {
+      "title": "autogen_ext.ui — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.ui.html"
+    },
+    {
+      "title": "autogen_ext.agents.azure — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.azure.html"
+    },
+    {
+      "title": "autogen_ext.auth.azure — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.auth.azure.html"
+    },
+    {
+      "title": "autogen_ext.cache_store.diskcache — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.diskcache.html"
+    },
+    {
+      "title": "autogen_ext.cache_store.redis — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.redis.html"
+    },
+    {
+      "title": "autogen_ext.code_executors.docker_jupyter — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker_jupyter.html"
+    },
+    {
+      "title": "autogen_ext.code_executors.jupyter — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.jupyter.html"
+    },
+    {
+      "title": "autogen_ext.code_executors.local — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.local.html"
+    },
+    {
+      "title": "autogen_ext.experimental.task_centric_memory — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.html"
+    },
+    {
+      "title": "autogen_ext.memory.canvas — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.canvas.html"
+    },
+    {
+      "title": "autogen_ext.memory.chromadb — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.chromadb.html"
+    },
+    {
+      "title": "autogen_ext.memory.mem0 — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.mem0.html"
+    },
+    {
+      "title": "autogen_ext.memory.redis — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.redis.html"
+    },
+    {
+      "title": "autogen_ext.models.llama_cpp — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.llama_cpp.html"
+    },
+    {
+      "title": "autogen_ext.models.replay — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.replay.html"
+    },
+    {
+      "title": "autogen_ext.teams.magentic_one — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.magentic_one.html"
+    },
+    {
+      "title": "autogen_ext.tools.azure — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.azure.html"
+    },
+    {
+      "title": "autogen_ext.tools.code_execution — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.code_execution.html"
+    },
+    {
+      "title": "autogen_ext.tools.semantic_kernel — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.semantic_kernel.html"
+    },
+    {
+      "title": "autogen_ext.agents.video_surfer.tools — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.tools.html"
+    },
+    {
+      "title": "autogen_ext.agents.web_surfer.playwright_controller — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.playwright_controller.html"
+    },
+    {
+      "title": "autogen_ext.experimental.task_centric_memory.utils — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.utils.html"
+    },
+    {
+      "title": "autogen_ext.models.anthropic.config — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.config.html"
+    },
+    {
+      "title": "autogen_ext.models.azure.config — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.config.html"
+    },
+    {
+      "title": "autogen_ext.models.ollama.config — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.config.html"
+    },
+    {
+      "title": "autogen_ext.models.openai.config — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.config.html"
+    },
+    {
+      "title": "autogen_ext.runtimes.grpc.protos — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.html"
+    },
+    {
+      "title": "autogen_ext.runtimes.grpc.protos.agent_worker_pb2 — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2.html"
+    },
+    {
+      "title": "autogen_ext.runtimes.grpc.protos.agent_worker_pb2_grpc — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2_grpc.html"
+    },
+    {
+      "title": "autogen_ext.runtimes.grpc.protos.cloudevent_pb2 — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2.html"
+    },
+    {
+      "title": "autogen_ext.runtimes.grpc.protos.cloudevent_pb2_grpc — AutoGen",
+      "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2_grpc.html"
+    }
+  ]
+}

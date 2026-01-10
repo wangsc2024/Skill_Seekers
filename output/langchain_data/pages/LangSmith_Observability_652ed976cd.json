@@ -1,0 +1,29 @@
+{
+  "title": "LangSmith Observability",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/observability\n\nTraces are a series of steps that your application takes to go from input to output. Each of these individual steps is represented by a run. You can use [LangSmith](https://smith.langchain.com/) to visualize these execution steps. To use it, [enable tracing for your application](/langsmith/trace-with-langgraph). This enables you to do the following:\n\n* [Debug a locally running application](/langsmith/observability-studio#debug-langsmith-traces).\n* [Evaluate the application performance](/oss/python/langchain/evals).\n* [Monitor the application](/langsmith/dashboards).\n\nBefore you begin, ensure you have the following:\n\n* **A LangSmith account**: Sign up (for free) or log in at [smith.langchain.com](https://smith.langchain.com).\n* **A LangSmith API key**: Follow the [Create an API key](/langsmith/create-account-api-key#create-an-api-key) guide.\n\nTo enable tracing for your application, set the following environment variables:\n\nBy default, the trace will be logged to the project with the name `default`. To configure a custom project name, see [Log to a project](#log-to-a-project).\n\nFor more information, see [Trace with LangGraph](/langsmith/trace-with-langgraph).\n\nYou may opt to trace specific invocations or parts of your application using LangSmith's `tracing_context` context manager:\n\n```python  theme={null}\nimport langsmith as ls",
+  "code_samples": [
+    {
+      "code": "By default, the trace will be logged to the project with the name `default`. To configure a custom project name, see [Log to a project](#log-to-a-project).\n\nFor more information, see [Trace with LangGraph](/langsmith/trace-with-langgraph).\n\n## Trace selectively\n\nYou may opt to trace specific invocations or parts of your application using LangSmith's `tracing_context` context manager:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Enable tracing",
+      "id": "enable-tracing"
+    },
+    {
+      "level": "h2",
+      "text": "Trace selectively",
+      "id": "trace-selectively"
+    }
+  ],
+  "url": "llms-txt#langsmith-observability",
+  "links": []
+}

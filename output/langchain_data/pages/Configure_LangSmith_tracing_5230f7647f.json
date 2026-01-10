@@ -1,0 +1,8 @@
+{
+  "title": "Configure LangSmith tracing",
+  "content": "configure(project_name=\"multi-framework-app\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#configure-langsmith-tracing",
+  "links": []
+}

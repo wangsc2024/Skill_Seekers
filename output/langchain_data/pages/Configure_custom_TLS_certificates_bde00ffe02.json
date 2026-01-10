@@ -1,0 +1,28 @@
+{
+  "title": "Configure custom TLS certificates",
+  "content": "Source: https://docs.langchain.com/langsmith/self-host-custom-tls-certificates\n\nUse this guide to configure TLS in LangSmith. Start by mounting internal certificate authorities (CAs) so your deployment trusts the right roots system‑wide, for database or external service calls. You can then configure [Playground](/langsmith/prompt-engineering-concepts#prompt-playground)-specific mTLS for communicating securely with supported model providers.\n\n* [Mounting internal certificate authorities](#mount-internal-cas-for-tls) (CAs) system-wide to enable TLS for database connections and Playground model calls\n* Using Playground-specific TLS settings to provide client certs/keys for mTLS with supported model providers\n\n## Mount internal CAs for TLS\n\n<Note>\n  You must use Helm chart version 0.11.9 or later to mount internal CAs using the configuration below.\n</Note>\n\nUse this approach to make internal/public CAs trusted system‑wide by LangSmith (Playground model calls and [database/external service connections](/langsmith/self-hosted#storage-services)).\n\n1. Create a file containing all CAs required for TLS with databases and external services. If your deployment is communicating directly to `beacon.langchain.com` without a proxy, make sure to include a public trusted CA. All certs should be concatenated in this file with an empty line in between.\n   \n2. Create a Kubernetes secret with a key containing the contents of this file.\n   \n3. If using custom CA for TLS with your databases and other external services, provide the following values to your LangSmith helm chart:\n   \n4. Make sure to use TLS supported connection strings:\n   * <b>Postgres</b>: Add `?sslmode=verify-full&sslrootcert=system` to the end.\n   * <b>Redis</b>: Use `rediss://` instead of `redis://` as the prefix.\n\n## Use custom TLS certificates for model providers\n\n<Note>\n  This feature is currently only available for the following model providers:\n\n* Azure OpenAI\n  * OpenAI\n  * Custom (our custom model server). Refer to the [custom model server documentation](/langsmith/custom-endpoint) for more information.\n\nThese TLS settings apply to all invocations of the selected model providers (including Online Evaluation). Use them when the provider requires mutual TLS (client cert/key) or when you must override trust with a specific CA for provider calls. They complement the internal CA bundle configured above.\n</Note>\n\nYou can use custom TLS certificates to connect to model providers in the LangSmith Playground. This is useful if you are using a self-signed certificate, a certificate from a custom certificate authority, or mutual TLS authentication.\n\nTo use custom TLS certificates, set the following environment variables. See the [self hosted deployment section](/langsmith/architectural-overview) for more information on how to configure application settings.\n\n* \\[Optional] `LANGSMITH_PLAYGROUND_TLS_KEY`: The private key in PEM format. This must be a file path (for a mounted volume). This is usually only necessary for mutual TLS authentication.\n* \\[Optional] `LANGSMITH_PLAYGROUND_TLS_CERT`: The certificate in PEM format. This must be a file path (for a mounted volume). This is usually only necessary for mutual TLS authentication.\n* \\[Optional] `LANGSMITH_PLAYGROUND_TLS_CA`: The custom certificate authority (CA) certificate in PEM format. This must be a file path (for a mounted volume). Use this to mount CAs only if you're using a helm version below `0.11.9`; otherwise, use the [Mount internal CAs for TLS](./self-host-custom-tls-certificates#mount-internal-cas-for-tls) section above.\n\nOnce you have set these environment variables, enter the LangSmith Playground **Settings** page and select the **Provider** that requires custom TLS certificates. Set your model provider configuration as usual, and the custom TLS certificates will be used when connecting to the model provider.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/self-host-custom-tls-certificates.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "-----BEGIN CERTIFICATE-----\n   <PUBLIC_CA>\n   -----END CERTIFICATE-----\n\n   -----BEGIN CERTIFICATE-----\n   <INTERNAL_CA>\n   -----END CERTIFICATE-----\n\n   ...",
+      "language": "unknown"
+    },
+    {
+      "code": "3. If using custom CA for TLS with your databases and other external services, provide the following values to your LangSmith helm chart:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Mount internal CAs for TLS",
+      "id": "mount-internal-cas-for-tls"
+    },
+    {
+      "level": "h2",
+      "text": "Use custom TLS certificates for model providers",
+      "id": "use-custom-tls-certificates-for-model-providers"
+    }
+  ],
+  "url": "llms-txt#configure-custom-tls-certificates",
+  "links": []
+}

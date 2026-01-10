@@ -1,0 +1,89 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+  "title": "Quick Start — AutoGen",
+  "content": "See here for installation instructions.\n\nBefore diving into the core APIs, let’s start with a simple example of two agents that count down from 10 to 1.\n\nWe first define the agent classes and their respective procedures for handling messages. We create two agent classes: Modifier and Checker. The Modifier agent modifies a number that is given and the Check agent checks the value against a condition. We also create a Message data class, which defines the messages that are passed between the agents.\n\nYou might have already noticed, the agents’ logic, whether it is using model or code executor, is completely decoupled from how messages are delivered. This is the core idea: the framework provides a communication infrastructure, and the agents are responsible for their own logic. We call the communication infrastructure an Agent Runtime.\n\nAgent runtime is a key concept of this framework. Besides delivering messages, it also manages agents’ lifecycle. So the creation of agents are handled by the runtime.\n\nThe following code shows how to register and run the agents using SingleThreadedAgentRuntime, a local embedded agent runtime implementation.\n\nIf you are using VSCode or other Editor remember to import asyncio and wrap the code with async def main() -> None: and run the code with asyncio.run(main()) function.\n\nFrom the agent’s output, we can see the value was successfully decremented from 10 to 1 as the modifier and checker conditions dictate.\n\nAutoGen also supports a distributed agent runtime, which can host agents running on different processes or machines, with different identities, languages and dependencies.\n\nTo learn how to use agent runtime, communication, message handling, and subscription, please continue reading the sections following this quick start.\n\nAgent and Multi-Agent Applications",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Quick Start#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from dataclasses import dataclass\nfrom typing import Callable\n\nfrom autogen_core import DefaultTopicId, MessageContext, RoutedAgent, default_subscription, message_handler\n\n\n@dataclass\nclass Message:\n    content: int\n\n\n@default_subscription\nclass Modifier(RoutedAgent):\n    def __init__(self, modify_val: Callable[[int], int]) -> None:\n        super().__init__(\"A modifier agent.\")\n        self._modify_val = modify_val\n\n    @message_handler\n    async def handle_message(self, message: Message, ctx: MessageContext) -> None:\n        val = self._modify_val(message.content)\n        print(f\"{'-'*80}\\nModifier:\\nModified {message.content} to {val}\")\n        await self.publish_message(Message(content=val), DefaultTopicId())  # type: ignore\n\n\n@default_subscription\nclass Checker(RoutedAgent):\n    def __init__(self, run_until: Callable[[int], bool]) -> None:\n        super().__init__(\"A checker agent.\")\n        self._run_until = run_until\n\n    @message_handler\n    async def handle_message(self, message: Message, ctx: MessageContext) -> None:\n        if not self._run_until(message.content):\n            print(f\"{'-'*80}\\nChecker:\\n{message.content} passed the check, continue.\")\n            await self.publish_message(Message(content=message.content), DefaultTopicId())\n        else:\n            print(f\"{'-'*80}\\nChecker:\\n{message.content} failed the check, stopping.\")",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\nfrom typing import Callable\n\nfrom autogen_core import DefaultTopicId, MessageContext, RoutedAgent, default_subscription, message_handler\n\n\n@dataclass\nclass Message:\n    content: int\n\n\n@default_subscription\nclass Modifier(RoutedAgent):\n    def __init__(self, modify_val: Callable[[int], int]) -> None:\n        super().__init__(\"A modifier agent.\")\n        self._modify_val = modify_val\n\n    @message_handler\n    async def handle_message(self, message: Message, ctx: MessageContext) -> None:\n        val = self._modify_val(message.content)\n        print(f\"{'-'*80}\\nModifier:\\nModified {message.content} to {val}\")\n        await self.publish_message(Message(content=val), DefaultTopicId())  # type: ignore\n\n\n@default_subscription\nclass Checker(RoutedAgent):\n    def __init__(self, run_until: Callable[[int], bool]) -> None:\n        super().__init__(\"A checker agent.\")\n        self._run_until = run_until\n\n    @message_handler\n    async def handle_message(self, message: Message, ctx: MessageContext) -> None:\n        if not self._run_until(message.content):\n            print(f\"{'-'*80}\\nChecker:\\n{message.content} passed the check, continue.\")\n            await self.publish_message(Message(content=message.content), DefaultTopicId())\n        else:\n            print(f\"{'-'*80}\\nChecker:\\n{message.content} failed the check, stopping.\")",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core import AgentId, SingleThreadedAgentRuntime\n\n# Create a local embedded runtime.\nruntime = SingleThreadedAgentRuntime()\n\n# Register the modifier and checker agents by providing\n# their agent types, the factory functions for creating instance and subscriptions.\nawait Modifier.register(\n    runtime,\n    \"modifier\",\n    # Modify the value by subtracting 1\n    lambda: Modifier(modify_val=lambda x: x - 1),\n)\n\nawait Checker.register(\n    runtime,\n    \"checker\",\n    # Run until the value is less than or equal to 1\n    lambda: Checker(run_until=lambda x: x <= 1),\n)\n\n# Start the runtime and send a direct message to the checker.\nruntime.start()\nawait runtime.send_message(Message(10), AgentId(\"checker\", \"default\"))\nawait runtime.stop_when_idle()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core import AgentId, SingleThreadedAgentRuntime\n\n# Create a local embedded runtime.\nruntime = SingleThreadedAgentRuntime()\n\n# Register the modifier and checker agents by providing\n# their agent types, the factory functions for creating instance and subscriptions.\nawait Modifier.register(\n    runtime,\n    \"modifier\",\n    # Modify the value by subtracting 1\n    lambda: Modifier(modify_val=lambda x: x - 1),\n)\n\nawait Checker.register(\n    runtime,\n    \"checker\",\n    # Run until the value is less than or equal to 1\n    lambda: Checker(run_until=lambda x: x <= 1),\n)\n\n# Start the runtime and send a direct message to the checker.\nruntime.start()\nawait runtime.send_message(Message(10), AgentId(\"checker\", \"default\"))\nawait runtime.stop_when_idle()",
+      "language": "python"
+    },
+    {
+      "code": "--------------------------------------------------------------------------------\nChecker:\n10 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 10 to 9\n--------------------------------------------------------------------------------\nChecker:\n9 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 9 to 8\n--------------------------------------------------------------------------------\nChecker:\n8 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 8 to 7\n--------------------------------------------------------------------------------\nChecker:\n7 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 7 to 6\n--------------------------------------------------------------------------------\nChecker:\n6 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 6 to 5\n--------------------------------------------------------------------------------\nChecker:\n5 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 5 to 4\n--------------------------------------------------------------------------------\nChecker:\n4 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 4 to 3\n--------------------------------------------------------------------------------\nChecker:\n3 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 3 to 2\n--------------------------------------------------------------------------------\nChecker:\n2 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 2 to 1\n--------------------------------------------------------------------------------\nChecker:\n1 failed the check, stopping.",
+      "language": "yaml"
+    },
+    {
+      "code": "--------------------------------------------------------------------------------\nChecker:\n10 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 10 to 9\n--------------------------------------------------------------------------------\nChecker:\n9 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 9 to 8\n--------------------------------------------------------------------------------\nChecker:\n8 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 8 to 7\n--------------------------------------------------------------------------------\nChecker:\n7 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 7 to 6\n--------------------------------------------------------------------------------\nChecker:\n6 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 6 to 5\n--------------------------------------------------------------------------------\nChecker:\n5 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 5 to 4\n--------------------------------------------------------------------------------\nChecker:\n4 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 4 to 3\n--------------------------------------------------------------------------------\nChecker:\n3 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 3 to 2\n--------------------------------------------------------------------------------\nChecker:\n2 passed the check, continue.\n--------------------------------------------------------------------------------\nModifier:\nModified 2 to 1\n--------------------------------------------------------------------------------\nChecker:\n1 failed the check, stopping.",
+      "language": "yaml"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

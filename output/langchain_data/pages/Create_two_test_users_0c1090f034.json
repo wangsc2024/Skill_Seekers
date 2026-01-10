@@ -1,0 +1,13 @@
+{
+  "title": "Create two test users",
+  "content": "print(f\"Creating test users: {email1} and {email2}\")\nawait sign_up(email1, password)\nawait sign_up(email2, password)\npython  theme={null}\nasync def login(email: str, password: str):\n    \"\"\"Get an access token for an existing user.\"\"\"\n    async with httpx.AsyncClient() as client:\n        response = await client.post(\n            f\"{SUPABASE_URL}/auth/v1/token?grant_type=password\",\n            json={\n                \"email\": email,\n                \"password\": password\n            },\n            headers={\n                \"apikey\": SUPABASE_ANON_KEY,\n                \"Content-Type\": \"application/json\"\n            },\n        )\n        assert response.status_code == 200\n        return response.json()[\"access_token\"]",
+  "code_samples": [
+    {
+      "code": "⚠️ Before continuing: Check your email and click both confirmation links. Supabase will reject `/login` requests until after you have confirmed your users' email.\n\nNow test that users can only see their own data. Make sure the server is running (run `langgraph dev`) before proceeding. The following snippet requires the \"anon public\" key that you copied from the Supabase dashboard while [setting up the auth provider](#setup-auth-provider) previously.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#create-two-test-users",
+  "links": []
+}

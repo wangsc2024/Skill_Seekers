@@ -1,0 +1,8 @@
+{
+  "title": "Initialize an in-memory checkpointer for persistence",
+  "content": "checkpointer = InMemorySaver()\n\n@task\ndef slow_task():\n    \"\"\"\n    Simulates a slow-running task by introducing a 1-second delay.\n    \"\"\"\n    time.sleep(1)\n    return \"Ran slow task.\"\n\n@entrypoint(checkpointer=checkpointer)\ndef main(inputs, writer: StreamWriter):\n    \"\"\"\n    Main workflow function that runs the slow_task and get_info tasks sequentially.\n\nParameters:\n    - inputs: Dictionary containing workflow input values.\n    - writer: StreamWriter for streaming custom data.\n\nThe workflow first executes `slow_task` and then attempts to execute `get_info`,\n    which will fail on the first invocation.\n    \"\"\"\n    slow_task_result = slow_task().result()  # Blocking call to slow_task\n    get_info().result()  # Exception will be raised here on the first attempt\n    return slow_task_result",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#initialize-an-in-memory-checkpointer-for-persistence",
+  "links": []
+}

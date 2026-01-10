@@ -1,0 +1,44 @@
+{
+  "title": "we can add them as nodes directly.",
+  "content": "graph_builder.add_node(\"refund_agent\", refund_graph)\ngraph_builder.add_node(\"question_answering_agent\", qa_graph)\ngraph_builder.add_node(compile_followup)\n\ngraph_builder.set_entry_point(\"intent_classifier\")\ngraph_builder.add_edge(\"refund_agent\", \"compile_followup\")\ngraph_builder.add_edge(\"question_answering_agent\", \"compile_followup\")\ngraph_builder.add_edge(\"compile_followup\", END)\n\ngraph = graph_builder.compile()\npython  theme={null}\ndisplay(Image(graph.get_graph().draw_mermaid_png()))\npython  theme={null}\nstate = await graph.ainvoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"what james brown songs do you have\"}]}\n)\nprint(state[\"followup\"])\n\nI found 20 James Brown songs in the database, all from the album \"Sex Machine\". Here they are: ...\npython  theme={null}\nstate = await graph.ainvoke({\"messages\": [\n    {\n        \"role\": \"user\",\n        \"content\": \"my name is Aaron Mitchell and my number is +1 (204) 452-6452. I bought some songs by Led Zeppelin that i'd like refunded\",\n    }\n]})\nprint(state[\"followup\"])\n\nWhich of the following purchases would you like to be refunded for? ...\npython  theme={null}\nfrom langsmith import Client",
+  "code_samples": [
+    {
+      "code": "We can visualize our compiled parent graph including all of its subgraphs:",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/agent-tutorial-graph.png?fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=619f9b540ea69b1662b2a599ce78241b\" alt=\"graph\" data-og-width=\"646\" width=\"646\" data-og-height=\"680\" height=\"680\" data-path=\"langsmith/images/agent-tutorial-graph.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/agent-tutorial-graph.png?w=280&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=227790d90780a4c56233650b957130df 280w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/agent-tutorial-graph.png?w=560&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=30ae6a9b1bc367152a57d4a0c3e41af7 560w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/agent-tutorial-graph.png?w=840&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=37f29b6e783cf2a80714c29ab0be3c5f 840w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/agent-tutorial-graph.png?w=1100&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=423ad48e0266ac257b6d76962697b45d 1100w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/agent-tutorial-graph.png?w=1650&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=581821d6b377b98108507712d6b08c51 1650w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/agent-tutorial-graph.png?w=2500&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=126ef194ff5042f691c8f52cf3a1cb75 2500w\" />\n\n#### Try it out\n\nLet's give our custom support agent a whirl!",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Evaluations\n\nNow that we've got a testable version of our agent, let's run some evaluations. Agent evaluation can focus on at least 3 things:\n\n* [Final response](/langsmith/evaluation-concepts#evaluating-an-agents-final-response): The inputs are a prompt and an optional list of tools. The output is the final agent response.\n* [Trajectory](/langsmith/evaluation-concepts#evaluating-an-agents-trajectory): As before, the inputs are a prompt and an optional list of tools. The output is the list of tool calls\n* [Single step](/langsmith/evaluation-concepts#evaluating-a-single-step-of-an-agent): As before, the inputs are a prompt and an optional list of tools. The output is the tool call.\n\nLet's run each type of evaluation:\n\n### Final response evaluator\n\nFirst, let's create a [dataset](/langsmith/evaluation-concepts#datasets) that evaluates end-to-end performance of the agent. For simplicity we'll use the same dataset for final response and trajectory evaluation, so we'll add both ground-truth responses and trajectories for each example question. We'll cover the trajectories in the next section.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Evaluations",
+      "id": "evaluations"
+    },
+    {
+      "level": "h3",
+      "text": "Final response evaluator",
+      "id": "final-response-evaluator"
+    }
+  ],
+  "url": "llms-txt#we-can-add-them-as-nodes-directly.",
+  "links": []
+}

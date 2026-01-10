@@ -1,0 +1,8 @@
+{
+  "title": "Patch Thread",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/threads/patch-thread\n\nlangsmith/agent-server-openapi.json patch /threads/{thread_id}\nUpdate a thread.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#patch-thread",
+  "links": []
+}

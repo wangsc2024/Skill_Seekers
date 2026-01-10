@@ -1,0 +1,8 @@
+{
+  "title": "Wrap it as a tool",
+  "content": "@tool(\"research\", description=\"Research a topic and return findings\")\ndef call_research_agent(query: str):\n    result = subagent.invoke({\"messages\": [{\"role\": \"user\", \"content\": query}]})\n    return result[\"messages\"][-1].content",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#wrap-it-as-a-tool",
+  "links": []
+}

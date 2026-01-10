@@ -1,0 +1,8 @@
+{
+  "title": "Edges taken after the `action` node is called.",
+  "content": "workflow.add_conditional_edges(\n    \"retrieve\",\n    # Assess agent decision\n    grade_documents,\n)\nworkflow.add_edge(\"generate_answer\", END)\nworkflow.add_edge(\"rewrite_question\", \"generate_query_or_respond\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#edges-taken-after-the-`action`-node-is-called.",
+  "links": []
+}

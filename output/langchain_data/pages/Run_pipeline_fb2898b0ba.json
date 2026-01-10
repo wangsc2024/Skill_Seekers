@@ -1,0 +1,44 @@
+{
+  "title": "Run pipeline",
+  "content": "runner = PipelineRunner()\ntry:\n    await runner.run(task)\nfinally:\n    audio_recorder.save_recording()\n```\n\n### Spans not appearing in LangSmith\n\nIf traces aren't showing up in LangSmith:\n\n1. **Verify environment variables**: Ensure `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_EXPORTER_OTLP_HEADERS` are set correctly in your `.env` file.\n2. **Check API key**: Confirm your LangSmith API key has write permissions.\n3. **Verify import**: Make sure you're importing `span_processor` from `langsmith_processor.py`.\n4. **Check .env loading**: Ensure `load_dotenv()` is called before importing Pipecat components.\n\n### Messages not showing correctly\n\nIf conversation messages aren't displaying properly:\n\n1. **Check span processor**: Verify `langsmith_processor.py` is in your project directory and imported correctly.\n2. **Verify conversation ID**: Ensure you're setting a unique `conversation_id` in `PipelineTask`.\n3. **Enable turn tracking**: Make sure `enable_turn_tracking=True` is set in `PipelineTask`.\n\n### Audio not working\n\nIf your microphone or speakers aren't working:\n\n1. **Check permissions**: Ensure your terminal/IDE has microphone access.\n2. **Test audio devices**: Verify your microphone and speakers work in other applications.\n3. **VAD settings**: Try adjusting `SileroVADAnalyzer()` settings if speech isn't being detected.\n4. **Check services**: Ensure OpenAI API key is valid and has access to Whisper and TTS.\n\nIf you're getting import errors:\n\n1. **Install dependencies**: Run `pip install langsmith \"pipecat-ai[whisper,openai,local]\" opentelemetry-exporter-otlp python-dotenv`.\n2. **Check Python version**: Ensure you're using Python 3.9 or higher.\n3. **Verify langsmith\\_processor**: Make sure `langsmith_processor.py` is downloaded and in the same directory as your `agent.py`.\n\n### Performance issues\n\nIf responses are slow:\n\n1. **Use faster models**: Switch to `gpt-4o-mini` for the LLM (already in the tutorial).\n2. **Check network**: Ensure stable internet connection for API calls.\n3. **Local STT**: Consider using local Whisper instead of API-based services.\n\n### Advanced: Audio recording troubleshooting\n\nFor issues with the advanced audio recording features, see the [complete demo documentation](https://github.com/langchain-ai/voice-agents-tracing).\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/trace-with-pipecat.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Spans not appearing in LangSmith",
+      "id": "spans-not-appearing-in-langsmith"
+    },
+    {
+      "level": "h3",
+      "text": "Messages not showing correctly",
+      "id": "messages-not-showing-correctly"
+    },
+    {
+      "level": "h3",
+      "text": "Audio not working",
+      "id": "audio-not-working"
+    },
+    {
+      "level": "h3",
+      "text": "Import errors",
+      "id": "import-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Performance issues",
+      "id": "performance-issues"
+    },
+    {
+      "level": "h3",
+      "text": "Advanced: Audio recording troubleshooting",
+      "id": "advanced:-audio-recording-troubleshooting"
+    }
+  ],
+  "url": "llms-txt#run-pipeline",
+  "links": []
+}

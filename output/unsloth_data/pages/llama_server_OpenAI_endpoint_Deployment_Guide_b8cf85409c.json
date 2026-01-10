@@ -1,0 +1,13 @@
+{
+  "title": "llama-server & OpenAI endpoint Deployment Guide",
+  "content": "Deploying via llama-server with an OpenAI compatible endpoint\n\nWe are doing to deploy Devstral-2 - see [devstral-2](https://docs.unsloth.ai/models/devstral-2 \"mention\") for more details on the model.&#x20;\n\nObtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n{% code overflow=\"wrap\" %}\n\n{% hint style=\"info\" %}\nWhen using `--jinja` llama-server appends the following system message if tools are supported: `Respond in JSON format, either with tool_call (a request to call tools) or with response reply to the user's request` . This sometimes causes issues with fine-tunes! See the [llama.cpp repo](https://github.com/ggml-org/llama.cpp/blob/12ee1763a6f6130ce820a366d220bbadff54b818/common/chat.cpp#L849) for more details.\n{% endhint %}\n\nFirst download Devstral 2:\n\n{% code overflow=\"wrap\" %}",
+  "code_samples": [
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-mtmd-cli llama-server llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#llama-server-&-openai-endpoint-deployment-guide",
+  "links": []
+}

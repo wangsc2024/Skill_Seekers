@@ -1,0 +1,24 @@
+{
+  "title": "Example usage",
+  "content": "if __name__ == \"__main__\":\n    task = \"\"\"\n    Create a Python function that implements a binary search algorithm.\n    The function should:\n    - Take a sorted list and a target value as parameters\n    - Return the index of the target if found, or -1 if not found\n    - Include proper error handling and documentation\n    \"\"\"\n\nresult = run_code_review_session(task)\n    print(f\"Result: {result}\")\npython  theme={null}\nfrom opentelemetry import trace",
+  "code_samples": [
+    {
+      "code": "## Advanced usage\n\n### Custom metadata and tags\n\nYou can add custom metadata to your traces by setting span attributes in your AutoGen application:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Advanced usage",
+      "id": "advanced-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Custom metadata and tags",
+      "id": "custom-metadata-and-tags"
+    }
+  ],
+  "url": "llms-txt#example-usage",
+  "links": []
+}

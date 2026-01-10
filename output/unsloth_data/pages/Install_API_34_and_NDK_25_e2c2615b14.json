@@ -1,0 +1,103 @@
+{
+  "title": "Install API 34 and NDK 25",
+  "content": "sdkmanager \"platforms;android-34\" \"platform-tools\" \"build-tools;34.0.0\" \"ndk;25.0.8775105\"\nbash\nexport ANDROID_NDK=$ANDROID_HOME/ndk/25.0.8775105\nbash\ncd ~\ngit clone https://github.com/meta-pytorch/executorch-examples.git\ncd executorch-examples\nbash\necho \"sdk.dir=$HOME/android-sdk\" > llm/android/LlamaDemo/local.properties\nbash\nsed -i 's/e.getDetailedError()/e.getMessage()/g' llm/android/LlamaDemo/app/src/main/java/com/example/executorchllamademo/MainActivity.java\nbash\n   cd llm/android/LlamaDemo\n   bash\n   export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64\n   ./gradlew :app:assembleDebug\n   \n   app/build/outputs/apk/debug/app-debug.apk\n   bash\nadb install -r app/build/outputs/apk/debug/app-debug.apk\nshellscript\nadb devices \nshellscript\nadb shell mkdir -p /data/local/tmp/llama\nadb shell chmod 777 /data/local/tmp/llama\nshellscript\nadb shell ls -l /data/local/tmp/llama\ntotal 0\nshellscript\nadb push <path_to_tokenizer.json on your computer> /data/local/tmp/llama\nadb push <path_to_model.pte on your computer> /data/local/tmp/llama\n```\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FwqtWYiRBiyAOhi3aecn9%2Fimage.png?alt=media&#x26;token=ab04a1d1-194d-420d-a980-3336f90e7e42\" alt=\"\" width=\"563\"><figcaption></figcaption></figure>\n\n{% columns %}\n{% column %}\n\n1. Open the `executorchllamademo` app you installed in Step 5, then tap the gear icon in the top-right to open Settings.\n2. Tap the arrow next to Model to open the picker and select a model.\\\n   If you see a blank white dialog with no filename, your ADB model push likely failed - redo that step. Also note it may initially show “no model selected.”\n3. After you select a model, the app should display the model filename.\n   {% endcolumn %}\n\n<div><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FmwIP3Fg2xWNfq5h719rE%2Funknown.png?alt=media&#x26;token=3b560fc2-6820-4dd1-a8fa-1a76e5523672\" alt=\"\"><figcaption></figcaption></figure> <figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2F5ft9HycpKPtCYhWgTmMn%2Funknown.png?alt=media&#x26;token=dc35909b-9541-4fb1-9c7a-7a4be242afd4\" alt=\"\"><figcaption></figcaption></figure></div>\n{% endcolumn %}\n{% endcolumns %}\n\n{% columns %}\n{% column %}\n5\\. Now repeat the same for tokenizer. Click on the arrow next to the tokenizer field and select the corresponding file.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fhga4tR05b5D0IqLvB2PM%2Funknown.png?alt=media&#x26;token=fb00738e-9429-4014-836d-3e35821279cd\" alt=\"\" width=\"180\"><figcaption></figcaption></figure>\n{% endcolumn %}\n\n{% column %}\n6\\. You might need to select the model type depending on which model you're uploading. Qwen3 is selected here.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FjAZd67Ruub3gfblDrwUs%2Funknown.png?alt=media&#x26;token=cf0f6938-2e9c-4bf4-b0f2-c7512b5506ad\" alt=\"\" width=\"180\"><figcaption></figcaption></figure>\n{% endcolumn %}\n\n{% column %}\n7\\. Once you have selected both files, click on the \"Load Model\" button.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FGaPBdnweeeRIWgWsK9Fg%2Funknown.png?alt=media&#x26;token=73ec7e74-d9f8-4080-a6b0-ef239fd640d9\" alt=\"\" width=\"180\"><figcaption></figcaption></figure>\n{% endcolumn %}\n{% endcolumns %}\n\n{% columns %}\n{% column %}\n8\\. It will take you back to the original screen with the chat window, and it might show \"model loading\". It might take a few seconds to finish loading depending on your phone's RAM and storage speeds.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2F1XHwMpnWEB2JiwNAR6hy%2Funknown.png?alt=media&#x26;token=18bcff85-b67c-4bbe-a961-28f5c5e58ce3\" alt=\"\" width=\"180\"><figcaption></figcaption></figure>\n{% endcolumn %}\n\n{% column %}\n9\\. Once it says \"successfully loaded model,\" you can start chatting with the model.\\\n\\\nEt Voila, you now have an LLM running natively on your Android phone!\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FRoYe3aDedHoovwfPJVOh%2Funknown.png?alt=media&#x26;token=e9a2cc0a-2407-4c0b-adf1-6e2ba122212c\" alt=\"\" width=\"180\"><figcaption></figcaption></figure>\n{% endcolumn %}\n{% endcolumns %}\n\n### :mobile\\_phone:ExecuTorch powers billions <a href=\"#docs-internal-guid-7d7d5aee-7fff-f138-468c-c35853fee9ca\" id=\"docs-internal-guid-7d7d5aee-7fff-f138-468c-c35853fee9ca\"></a>\n\nExecuTorch [powers on-device ML experiences for billions of people](https://engineering.fb.com/2025/07/28/android/executorch-on-device-ml-meta-family-of-apps/) on Instagram, WhatsApp, Messenger, and Facebook. Instagram Cutouts uses ExecuTorch to extract editable stickers from photos. In encrypted applications like Messenger, ExecuTorch enables on-device privacy aware language identification and translation. ExecuTorch supports over a dozen hardware backends across Apple, Qualcomm, ARM and [Meta’s Quest 3 and Ray Bans](https://ai.meta.com/blog/executorch-reality-labs-on-device-ai/).\n\n## :tada:Other model support\n\n* All Qwen 3 dense models ([Qwen3-0.6B](https://huggingface.co/unsloth/Qwen3-0.6B), [Qwen3-4B](https://huggingface.co/unsloth/Qwen3-4B), [Qwen3-32B](https://huggingface.co/unsloth/Qwen3-32B) etc)\n* All Gemma 3 models ([Gemma3-270M](https://huggingface.co/unsloth/gemma-3-270m-it), [Gemma3-4B](https://huggingface.co/unsloth/gemma-3-4b-it), [Gemma3-27B](https://huggingface.co/unsloth/gemma-3-27b-it) etc)\n* All Llama 3 models ([Llama 3.1 8B](https://huggingface.co/unsloth/Llama-3.1-8B-Instruct), [Llama 3.3 70B Instruct](https://huggingface.co/unsloth/Llama-3.3-70B-Instruct) etc)\n* Qwen 2.5, Phi 4 Mini models, and much more!\n\nYou can customize the [**free Colab notebook**](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_\\(0_6B\\)-Phone_Deployment.ipynb) for Qwen3-0.6B to allow phone deployment for any of the models above!\n\n{% columns %}\n{% column %}\n**Qwen3 0.6B main phone deployment notebook**\n\n{% embed url=\"<https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_(0_6B)-Phone_Deployment.ipynb>\" %}\n{% endcolumn %}\n\n{% column %}\nWorks with Gemma 3\n\n{% embed url=\"<https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Gemma3_(4B).ipynb>\" %}\n{% endcolumn %}\n\n{% column %}\nWorks with Llama 3\n\n{% embed url=\"<https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.2_(1B_and_3B)-Conversational.ipynb>\" %}\n{% endcolumn %}\n{% endcolumns %}\n\nGo to our [unsloth-notebooks](https://docs.unsloth.ai/get-started/unsloth-notebooks \"mention\") page for all other notebooks!",
+  "code_samples": [
+    {
+      "code": "Set the NDK variable:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Step 4: Get the Code\n\nWe use the `executorch-examples` repository, which contains the updated Llama demo.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Step 5: Fix Common Compilation Issues\n\nNote that the current code doesn't have these issues but we have faced them previously and might be helpful to you:\n\n**Fix \"SDK Location not found\":**\n\nCreate a `local.properties` file to explicitly tell Gradle where the SDK is:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Fix `cannot find symbol` error:**\n\nThe current code uses a deprecated method `getDetailedError()`. Patch it with this command:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Step 6: Build the APK\n\nThis step compiles the app and native libraries.\n\n1. Navigate to the Android project:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Build with Gradle (explicitly set `JAVA_HOME` to 17 to avoid toolchain errors):&#x20;\n\n   Note: The first run will take a few minutes.",
+      "language": "unknown"
+    },
+    {
+      "code": "3. The final generated apk can be found at:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Step 7: Install on your Android device\n\nYou have two options to install the app.\n\n#### Option A: Using ADB (Wired/Wireless)\n\nIf you have `adb` access to your phone:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Option B: Direct File Transfer\n\nIf you are on a remote VM or don't have a cable:\n\n1. Upload the app-debug.apk to a place where you can download from on the phone\n2. Download it on your phone\n3. Tap to Install (Enable \"Install from unknown sources\" if prompted).\n\n### Step 8: Transfer Model Files\n\nThe app needs the .pte model and tokenizer files.\n\n1. Transfer Files: Move your model.pte and tokenizer.bin (or tokenizer.model) to your phone's storage (e.g., Downloads folder).\n2. Open LlamaDemo App: Launch the app on your phone.\n3. Select Model\n4. Tap the Settings (gear icon) or the file picker.\n5. Navigate to your Download folder.\n6. Select your .pte file.\n7. Select your tokenizer file.\n\nDone! You can now chat with the LLM directly on your device.\n\n### Troubleshooting\n\n* Build Fails? Check java -version. It MUST be 17.\n* Model not loading? Ensure you selected both the `.pte` AND the `tokenizer`.\n* App crashing? Valid `.pte` files must be exported specifically for ExecuTorch (usually XNNPACK backend for CPU).\n\n### Transferring model to your phone\n\nCurrently, `executorchllama` app that we built only supports loading the model from a specific directory on Android that is unfortunately not accessible via regular file managers. But we can save the model files to the said directory using adb.\n\n#### Make sure that adb is running properly and connected",
+      "language": "unknown"
+    },
+    {
+      "code": "{% columns %}\n{% column %}\n\n1. If you have connected via wireless debugging, you’d see something like this:\n\n   <div align=\"left\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FX1uYoIhXRdboBK36FX9D%2Funknown.png?alt=media&#x26;token=32955e17-56b7-4e2c-a06d-a1558d51427b\" alt=\"\" width=\"375\"><figcaption></figcaption></figure></div>\n\n   Or if you have connected via a wire/cable:\n\n   <div align=\"left\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FBu88g0y9ivw0UQYsUyJJ%2Funknown.png?alt=media&#x26;token=8eda0918-398f-486d-a1f2-6976f895a7c2\" alt=\"\" width=\"269\"><figcaption></figcaption></figure></div>\n\n   If you haven’t given permissions to the computer to access your phone:\n\n   <div align=\"left\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FSFkcwJyvgTcjvsPzCoDc%2Funknown.png?alt=media&#x26;token=cb4bbdb6-4b83-473c-8a96-bbf75d8ba49e\" alt=\"\" width=\"269\"><figcaption></figcaption></figure></div>\n\n{% endcolumn %}\n\n{% column %}\n2\\. Then you need to check your phone for a pop up dialog that looks like (which you might want to allow)\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FfqqtrC2590Wd71uzzbA5%2Funknown.png?alt=media&#x26;token=e9a15b34-d794-47d1-ac63-cc5809f3e650\" alt=\"\" width=\"180\"><figcaption></figcaption></figure>\n{% endcolumn %}\n{% endcolumns %}\n\nOnce done, it's time to create the folder where we need to place the `.pte` and `tokenizer.json` files.\n\nCreate the said directory on the phone’s path.",
+      "language": "unknown"
+    },
+    {
+      "code": "Verify that the directory is created properly.",
+      "language": "unknown"
+    },
+    {
+      "code": "Push the contents to the said directory. This might take a couple of minutes to more depending on your computer, the connection and the phone. Please be patient.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Step 4: Get the Code",
+      "id": "step-4:-get-the-code"
+    },
+    {
+      "level": "h3",
+      "text": "Step 5: Fix Common Compilation Issues",
+      "id": "step-5:-fix-common-compilation-issues"
+    },
+    {
+      "level": "h3",
+      "text": "Step 6: Build the APK",
+      "id": "step-6:-build-the-apk"
+    },
+    {
+      "level": "h3",
+      "text": "Step 7: Install on your Android device",
+      "id": "step-7:-install-on-your-android-device"
+    },
+    {
+      "level": "h3",
+      "text": "Step 8: Transfer Model Files",
+      "id": "step-8:-transfer-model-files"
+    },
+    {
+      "level": "h3",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Transferring model to your phone",
+      "id": "transferring-model-to-your-phone"
+    },
+    {
+      "level": "h3",
+      "text": ":mobile\\_phone:ExecuTorch powers billions <a href=\"#docs-internal-guid-7d7d5aee-7fff-f138-468c-c35853fee9ca\" id=\"docs-internal-guid-7d7d5aee-7fff-f138-468c-c35853fee9ca\"></a>",
+      "id": ":mobile\\_phone:executorch-powers-billions-<a-href=\"#docs-internal-guid-7d7d5aee-7fff-f138-468c-c35853fee9ca\"-id=\"docs-internal-guid-7d7d5aee-7fff-f138-468c-c35853fee9ca\"></a>"
+    },
+    {
+      "level": "h2",
+      "text": ":tada:Other model support",
+      "id": ":tada:other-model-support"
+    }
+  ],
+  "url": "llms-txt#install-api-34-and-ndk-25",
+  "links": []
+}

@@ -1,0 +1,69 @@
+{
+  "title": "Enqueue concurrent",
+  "content": "Source: https://docs.langchain.com/langsmith/enqueue-concurrent\n\nThis guide assumes knowledge of what double-texting is, which you can learn about in the [double-texting conceptual guide](/langsmith/double-texting).\n\nThe guide covers the `enqueue` option for double texting, which adds the interruptions to a queue and executes them in the order they are received by the client. Below is a quick example of using the `enqueue` option.\n\nEnqueue is the default double texting (multi-tasking) strategy when creating runs in the [Agent Server](/langsmith/agent-server).\n\nFirst, we will define a quick helper function for printing out JS and CURL model outputs (you can skip this if using Python):\n\n<Tabs>\n  <Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nThen, let's import our required packages and instantiate our client, assistant, and thread.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nNow let's start two runs, with the second interrupting the first one with a multitask strategy of \"enqueue\":\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nVerify that the thread has data from both runs:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/enqueue-concurrent.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nThen, let's import our required packages and instantiate our client, assistant, and thread.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Create runs\n\nNow let's start two runs, with the second interrupting the first one with a multitask strategy of \"enqueue\":\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## View run results\n\nVerify that the thread has data from both runs:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "Create runs",
+      "id": "create-runs"
+    },
+    {
+      "level": "h2",
+      "text": "View run results",
+      "id": "view-run-results"
+    }
+  ],
+  "url": "llms-txt#enqueue-concurrent",
+  "links": []
+}

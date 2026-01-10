@@ -1,0 +1,8 @@
+{
+  "title": "Constants:",
+  "content": "WIDTH, HEIGHT =456 ,702   #\nBACKGROUND_COLOR_LIGHTS=['lightskyblue']\nGAP_SIZE=189           #\n\nBIRD_RADIUS=3.  \nPIPE_SPEED=- ( )    ? \nclass Game():\ndef __init__(self):\n        self.screen_size=( )\n\ndef reset_game_vars():\n    global current_scor e\n   # set to zero and other initial states.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#constants:",
+  "links": []
+}

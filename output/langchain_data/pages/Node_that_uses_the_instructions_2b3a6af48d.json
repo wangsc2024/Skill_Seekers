@@ -1,0 +1,8 @@
+{
+  "title": "Node that *uses* the instructions",
+  "content": "def call_model(state: State, store: BaseStore):\n    namespace = (\"agent_instructions\", )\n    instructions = store.get(namespace, key=\"agent_a\")[0]\n    # Application logic\n    prompt = prompt_template.format(instructions=instructions.value[\"instructions\"])\n    ...",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#node-that-*uses*-the-instructions",
+  "links": []
+}

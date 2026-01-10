@@ -1,0 +1,24 @@
+{
+  "title": "Create a documentation generator",
+  "content": "doc_prompt = \"\"\"\nGenerate comprehensive documentation for the following function:\n\nInclude:\n- Purpose and functionality\n- Parameters and return values\n- Usage examples\n- Any important notes\n\"\"\"\n\ndoc_template_config = PromptTemplateConfig(\n    template=doc_prompt,\n    name=\"doc_generator\",\n    template_format=\"semantic-kernel\",\n    input_variables=[\n        InputVariable(name=\"function_code\", description=\"The function code to document\", is_required=True),\n    ],\n)\n\ndoc_generator = kernel.add_function(\n    function_name=\"generateDocs\",\n    plugin_name=\"documentationPlugin\",\n    prompt_template_config=doc_template_config,\n)\n\nasync def main():\n    # Example code to analyze\n    sample_code = \"\"\"\ndef fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n    \"\"\"\n\n# Analyze the code\n    analysis_result = await kernel.invoke(code_analyzer, code=sample_code)\n    print(\"Code Analysis:\")\n    print(analysis_result)\n    print(\"\\n\" + \"=\"*50 + \"\\n\")\n\n# Generate documentation\n    doc_result = await kernel.invoke(doc_generator, function_code=sample_code)\n    print(\"Generated Documentation:\")\n    print(doc_result)\n\nreturn {\"analysis\": str(analysis_result), \"documentation\": str(doc_result)}\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\npython  theme={null}\nfrom opentelemetry import trace",
+  "code_samples": [
+    {
+      "code": "## Advanced usage\n\n### Custom metadata and tags\n\nYou can add custom metadata to your traces by setting span attributes:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Advanced usage",
+      "id": "advanced-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Custom metadata and tags",
+      "id": "custom-metadata-and-tags"
+    }
+  ],
+  "url": "llms-txt#create-a-documentation-generator",
+  "links": []
+}

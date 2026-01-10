@@ -1,0 +1,441 @@
+{
+  "url": "https://react.dev/reference/react/useMemo",
+  "title": "useMemo",
+  "content": "useMemo is a React Hook that lets you cache the result of a calculation between re-renders.\n\nReact Compiler automatically memoizes values and functions, reducing the need for manual useMemo calls. You can use the compiler to handle memoization automatically.\n\nCall useMemo at the top level of your component to cache a calculation between re-renders:\n\nSee more examples below.\n\ncalculateValue: The function calculating the value that you want to cache. It should be pure, should take no arguments, and should return a value of any type. React will call your function during the initial render. On next renders, React will return the same value again if the dependencies have not changed since the last render. Otherwise, it will call calculateValue, return its result, and store it so it can be reused later.\n\ndependencies: The list of all reactive values referenced inside of the calculateValue code. Reactive values include props, state, and all the variables and functions declared directly inside your component body. If your linter is configured for React, it will verify that every reactive value is correctly specified as a dependency. The list of dependencies must have a constant number of items and be written inline like [dep1, dep2, dep3]. React will compare each dependency with its previous value using the Object.is comparison.\n\nOn the initial render, useMemo returns the result of calling calculateValue with no arguments.\n\nDuring next renders, it will either return an already stored value from the last render (if the dependencies haven’t changed), or call calculateValue again, and return the result that calculateValue has returned.\n\nCaching return values like this is also known as memoization, which is why this Hook is called useMemo.\n\nTo cache a calculation between re-renders, wrap it in a useMemo call at the top level of your component:\n\nYou need to pass two things to useMemo:\n\nOn the initial render, the value you’ll get from useMemo will be the result of calling your calculation.\n\nOn every subsequent render, React will compare the dependencies with the dependencies you passed during the last render. If none of the dependencies have changed (compared with Object.is), useMemo will return the value you already calculated before. Otherwise, React will re-run your calculation and return the new value.\n\nIn other words, useMemo caches a calculation result between re-renders until its dependencies change.\n\nLet’s walk through an example to see when this is useful.\n\nBy default, React will re-run the entire body of your component every time that it re-renders. For example, if this TodoList updates its state or receives new props from its parent, the filterTodos function will re-run:\n\nUsually, this isn’t a problem because most calculations are very fast. However, if you’re filtering or transforming a large array, or doing some expensive computation, you might want to skip doing it again if data hasn’t changed. If both todos and tab are the same as they were during the last render, wrapping the calculation in useMemo like earlier lets you reuse visibleTodos you’ve already calculated before.\n\nThis type of caching is called memoization.\n\nYou should only rely on useMemo as a performance optimization. If your code doesn’t work without it, find the underlying problem and fix it first. Then you may add useMemo to improve performance.\n\nIn general, unless you’re creating or looping over thousands of objects, it’s probably not expensive. If you want to get more confidence, you can add a console log to measure the time spent in a piece of code:\n\nPerform the interaction you’re measuring (for example, typing into the input). You will then see logs like filter array: 0.15ms in your console. If the overall logged time adds up to a significant amount (say, 1ms or more), it might make sense to memoize that calculation. As an experiment, you can then wrap the calculation in useMemo to verify whether the total logged time has decreased for that interaction or not:\n\nuseMemo won’t make the first render faster. It only helps you skip unnecessary work on updates.\n\nKeep in mind that your machine is probably faster than your users’ so it’s a good idea to test the performance with an artificial slowdown. For example, Chrome offers a CPU Throttling option for this.\n\nAlso note that measuring performance in development will not give you the most accurate results. (For example, when Strict Mode is on, you will see each component render twice rather than once.) To get the most accurate timings, build your app for production and test it on a device like your users have.\n\nIf your app is like this site, and most interactions are coarse (like replacing a page or an entire section), memoization is usually unnecessary. On the other hand, if your app is more like a drawing editor, and most interactions are granular (like moving shapes), then you might find memoization very helpful.\n\nOptimizing with useMemo is only valuable in a few cases:\n\nThere is no benefit to wrapping a calculation in useMemo in other cases. There is no significant harm to doing that either, so some teams choose to not think about individual cases, and memoize as much as possible. The downside of this approach is that code becomes less readable. Also, not all memoization is effective: a single value that’s “always new” is enough to break memoization for an entire component.\n\nIn practice, you can make a lot of memoization unnecessary by following a few principles:\n\nIf a specific interaction still feels laggy, use the React Developer Tools profiler to see which components would benefit the most from memoization, and add memoization where needed. These principles make your components easier to debug and understand, so it’s good to follow them in any case. In the long term, we’re researching doing granular memoization automatically to solve this once and for all.\n\nIn this example, the filterTodos implementation is artificially slowed down so that you can see what happens when some JavaScript function you’re calling during rendering is genuinely slow. Try switching the tabs and toggling the theme.\n\nSwitching the tabs feels slow because it forces the slowed down filterTodos to re-execute. That’s expected because the tab has changed, and so the entire calculation needs to re-run. (If you’re curious why it runs twice, it’s explained here.)\n\nToggle the theme. Thanks to useMemo, it’s fast despite the artificial slowdown! The slow filterTodos call was skipped because both todos and tab (which you pass as dependencies to useMemo) haven’t changed since the last render.\n\nIn some cases, useMemo can also help you optimize performance of re-rendering child components. To illustrate this, let’s say this TodoList component passes the visibleTodos as a prop to the child List component:\n\nYou’ve noticed that toggling the theme prop freezes the app for a moment, but if you remove <List /> from your JSX, it feels fast. This tells you that it’s worth trying to optimize the List component.\n\nBy default, when a component re-renders, React re-renders all of its children recursively. This is why, when TodoList re-renders with a different theme, the List component also re-renders. This is fine for components that don’t require much calculation to re-render. But if you’ve verified that a re-render is slow, you can tell List to skip re-rendering when its props are the same as on last render by wrapping it in memo:\n\nWith this change, List will skip re-rendering if all of its props are the same as on the last render. This is where caching the calculation becomes important! Imagine that you calculated visibleTodos without useMemo:\n\nIn the above example, the filterTodos function always creates a different array, similar to how the {} object literal always creates a new object. Normally, this wouldn’t be a problem, but it means that List props will never be the same, and your memo optimization won’t work. This is where useMemo comes in handy:\n\nBy wrapping the visibleTodos calculation in useMemo, you ensure that it has the same value between the re-renders (until dependencies change). You don’t have to wrap a calculation in useMemo unless you do it for some specific reason. In this example, the reason is that you pass it to a component wrapped in memo, and this lets it skip re-rendering. There are a few other reasons to add useMemo which are described further on this page.\n\nInstead of wrapping List in memo, you could wrap the <List /> JSX node itself in useMemo:\n\nThe behavior would be the same. If the visibleTodos haven’t changed, List won’t be re-rendered.\n\nA JSX node like <List items={visibleTodos} /> is an object like { type: List, props: { items: visibleTodos } }. Creating this object is very cheap, but React doesn’t know whether its contents is the same as last time or not. This is why by default, React will re-render the List component.\n\nHowever, if React sees the same exact JSX as during the previous render, it won’t try to re-render your component. This is because JSX nodes are immutable. A JSX node object could not have changed over time, so React knows it’s safe to skip a re-render. However, for this to work, the node has to actually be the same object, not merely look the same in code. This is what useMemo does in this example.\n\nManually wrapping JSX nodes into useMemo is not convenient. For example, you can’t do this conditionally. This is usually why you would wrap components with memo instead of wrapping JSX nodes.\n\nIn this example, the List component is artificially slowed down so that you can see what happens when a React component you’re rendering is genuinely slow. Try switching the tabs and toggling the theme.\n\nSwitching the tabs feels slow because it forces the slowed down List to re-render. That’s expected because the tab has changed, and so you need to reflect the user’s new choice on the screen.\n\nNext, try toggling the theme. Thanks to useMemo together with memo, it’s fast despite the artificial slowdown! The List skipped re-rendering because the visibleTodos array has not changed since the last render. The visibleTodos array has not changed because both todos and tab (which you pass as dependencies to useMemo) haven’t changed since the last render.\n\nSometimes, you might want to use a value inside an Effect:\n\nThis creates a problem. Every reactive value must be declared as a dependency of your Effect. However, if you declare options as a dependency, it will cause your Effect to constantly reconnect to the chat room:\n\nTo solve this, you can wrap the object you need to call from an Effect in useMemo:\n\nThis ensures that the options object is the same between re-renders if useMemo returns the cached object.\n\nHowever, since useMemo is performance optimization, not a semantic guarantee, React may throw away the cached value if there is a specific reason to do that. This will also cause the effect to re-fire, so it’s even better to remove the need for a function dependency by moving your object inside the Effect:\n\nNow your code is simpler and doesn’t need useMemo. Learn more about removing Effect dependencies.\n\nSuppose you have a calculation that depends on an object created directly in the component body:\n\nDepending on an object like this defeats the point of memoization. When a component re-renders, all of the code directly inside the component body runs again. The lines of code creating the searchOptions object will also run on every re-render. Since searchOptions is a dependency of your useMemo call, and it’s different every time, React knows the dependencies are different, and recalculate searchItems every time.\n\nTo fix this, you could memoize the searchOptions object itself before passing it as a dependency:\n\nIn the example above, if the text did not change, the searchOptions object also won’t change. However, an even better fix is to move the searchOptions object declaration inside of the useMemo calculation function:\n\nNow your calculation depends on text directly (which is a string and can’t “accidentally” become different).\n\nSuppose the Form component is wrapped in memo. You want to pass a function to it as a prop:\n\nJust as {} creates a different object, function declarations like function() {} and expressions like () => {} produce a different function on every re-render. By itself, creating a new function is not a problem. This is not something to avoid! However, if the Form component is memoized, presumably you want to skip re-rendering it when no props have changed. A prop that is always different would defeat the point of memoization.\n\nTo memoize a function with useMemo, your calculation function would have to return another function:\n\nThis looks clunky! Memoizing functions is common enough that React has a built-in Hook specifically for that. Wrap your functions into useCallback instead of useMemo to avoid having to write an extra nested function:\n\nThe two examples above are completely equivalent. The only benefit to useCallback is that it lets you avoid writing an extra nested function inside. It doesn’t do anything else. Read more about useCallback.\n\nIn Strict Mode, React will call some of your functions twice instead of once:\n\nThis is expected and shouldn’t break your code.\n\nThis development-only behavior helps you keep components pure. React uses the result of one of the calls, and ignores the result of the other call. As long as your component and calculation functions are pure, this shouldn’t affect your logic. However, if they are accidentally impure, this helps you notice and fix the mistake.\n\nFor example, this impure calculation function mutates an array you received as a prop:\n\nReact calls your function twice, so you’d notice the todo is added twice. Your calculation shouldn’t change any existing objects, but it’s okay to change any new objects you created during the calculation. For example, if the filterTodos function always returns a different array, you can mutate that array instead:\n\nRead keeping components pure to learn more about purity.\n\nAlso, check out the guides on updating objects and updating arrays without mutation.\n\nThis code doesn’t work:\n\nIn JavaScript, () => { starts the arrow function body, so the { brace is not a part of your object. This is why it doesn’t return an object, and leads to mistakes. You could fix it by adding parentheses like ({ and }):\n\nHowever, this is still confusing and too easy for someone to break by removing the parentheses.\n\nTo avoid this mistake, write a return statement explicitly:\n\nMake sure you’ve specified the dependency array as a second argument!\n\nIf you forget the dependency array, useMemo will re-run the calculation every time:\n\nThis is the corrected version passing the dependency array as a second argument:\n\nIf this doesn’t help, then the problem is that at least one of your dependencies is different from the previous render. You can debug this problem by manually logging your dependencies to the console:\n\nYou can then right-click on the arrays from different re-renders in the console and select “Store as a global variable” for both of them. Assuming the first one got saved as temp1 and the second one got saved as temp2, you can then use the browser console to check whether each dependency in both arrays is the same:\n\nWhen you find which dependency breaks memoization, either find a way to remove it, or memoize it as well.\n\nSuppose the Chart component is wrapped in memo. You want to skip re-rendering every Chart in the list when the ReportList component re-renders. However, you can’t call useMemo in a loop:\n\nInstead, extract a component for each item and memoize data for individual items:\n\nAlternatively, you could remove useMemo and instead wrap Report itself in memo. If the item prop does not change, Report will skip re-rendering, so Chart will skip re-rendering too:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "useMemo",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "useMemo(calculateValue, dependencies)",
+      "id": "usememo"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Skipping expensive recalculations",
+      "id": "skipping-expensive-recalculations"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "How to tell if a calculation is expensive?",
+      "id": "how-to-tell-if-a-calculation-is-expensive"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Should you add useMemo everywhere?",
+      "id": "should-you-add-usememo-everywhere"
+    },
+    {
+      "level": "h4",
+      "text": "The difference between useMemo and calculating a value directly",
+      "id": "examples-recalculation"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 2: Skipping recalculation with useMemo",
+      "id": "skipping-recalculation-with-usememo"
+    },
+    {
+      "level": "h3",
+      "text": "Skipping re-rendering of components",
+      "id": "skipping-re-rendering-of-components"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Memoizing individual JSX nodes",
+      "id": "memoizing-individual-jsx-nodes"
+    },
+    {
+      "level": "h4",
+      "text": "The difference between skipping re-renders and always re-rendering",
+      "id": "examples-rerendering"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 2: Skipping re-rendering with useMemo and memo",
+      "id": "skipping-re-rendering-with-usememo-and-memo"
+    },
+    {
+      "level": "h3",
+      "text": "Preventing an Effect from firing too often",
+      "id": "preventing-an-effect-from-firing-too-often"
+    },
+    {
+      "level": "h3",
+      "text": "Memoizing a dependency of another Hook",
+      "id": "memoizing-a-dependency-of-another-hook"
+    },
+    {
+      "level": "h3",
+      "text": "Memoizing a function",
+      "id": "memoizing-a-function"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "My calculation runs twice on every re-render",
+      "id": "my-calculation-runs-twice-on-every-re-render"
+    },
+    {
+      "level": "h3",
+      "text": "My useMemo call is supposed to return an object, but returns undefined",
+      "id": "my-usememo-call-is-supposed-to-return-an-object-but-returns-undefined"
+    },
+    {
+      "level": "h3",
+      "text": "Every time my component renders, the calculation in useMemo re-runs",
+      "id": "every-time-my-component-renders-the-calculation-in-usememo-re-runs"
+    },
+    {
+      "level": "h3",
+      "text": "I need to call useMemo for each list item in a loop, but it’s not allowed",
+      "id": "i-need-to-call-usememo-for-each-list-item-in-a-loop-but-its-not-allowed"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "const cachedValue = useMemo(calculateValue, dependencies)",
+      "language": "jsx"
+    },
+    {
+      "code": "import { useMemo } from 'react';function TodoList({ todos, tab }) {  const visibleTodos = useMemo(    () => filterTodos(todos, tab),    [todos, tab]  );  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "import { useMemo } from 'react';function TodoList({ todos, tab, theme }) {  const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function TodoList({ todos, tab, theme }) {  const visibleTodos = filterTodos(todos, tab);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "console.time('filter array');const visibleTodos = filterTodos(todos, tab);console.timeEnd('filter array');",
+      "language": "javascript"
+    },
+    {
+      "code": "console.time('filter array');const visibleTodos = useMemo(() => {  return filterTodos(todos, tab); // Skipped if todos and tab haven't changed}, [todos, tab]);console.timeEnd('filter array');",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function TodoList({ todos, tab, theme }) {  // ...  return (    <div className={theme}>      <List items={visibleTodos} />    </div>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "import { memo } from 'react';const List = memo(function List({ items }) {  // ...});",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function TodoList({ todos, tab, theme }) {  // Every time the theme changes, this will be a different array...  const visibleTodos = filterTodos(todos, tab);  return (    <div className={theme}>      {/* ... so List's props will never be the same, and it will re-render every time */}      <List items={visibleTodos} />    </div>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function TodoList({ todos, tab, theme }) {  // Tell React to cache your calculation between re-renders...  const visibleTodos = useMemo(    () => filterTodos(todos, tab),    [todos, tab] // ...so as long as these dependencies don't change...  );  return (    <div className={theme}>      {/* ...List will receive the same props and can skip re-rendering */}      <List items={visibleTodos} />    </div>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function TodoList({ todos, tab, theme }) {  const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);  const children = useMemo(() => <List items={visibleTodos} />, [visibleTodos]);  return (    <div className={theme}>      {children}    </div>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "function ChatRoom({ roomId }) {  const [message, setMessage] = useState('');  const options = {    serverUrl: 'https://localhost:1234',    roomId: roomId  }  useEffect(() => {    const connection = createConnection(options);    connection.connect();    // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "useEffect(() => {    const connection = createConnection(options);    connection.connect();    return () => connection.disconnect();  }, [options]); // 🔴 Problem: This dependency changes on every render  // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "function ChatRoom({ roomId }) {  const [message, setMessage] = useState('');  const options = useMemo(() => {    return {      serverUrl: 'https://localhost:1234',      roomId: roomId    };  }, [roomId]); // ✅ Only changes when roomId changes  useEffect(() => {    const connection = createConnection(options);    connection.connect();    return () => connection.disconnect();  }, [options]); // ✅ Only changes when options changes  // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "function ChatRoom({ roomId }) {  const [message, setMessage] = useState('');  useEffect(() => {    const options = { // ✅ No need for useMemo or object dependencies!      serverUrl: 'https://localhost:1234',      roomId: roomId    }    const connection = createConnection(options);    connection.connect();    return () => connection.disconnect();  }, [roomId]); // ✅ Only changes when roomId changes  // ...",
+      "language": "jsx"
+    },
+    {
+      "code": "function Dropdown({ allItems, text }) {  const searchOptions = { matchMode: 'whole-word', text };  const visibleItems = useMemo(() => {    return searchItems(allItems, searchOptions);  }, [allItems, searchOptions]); // 🚩 Caution: Dependency on an object created in the component body  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function Dropdown({ allItems, text }) {  const searchOptions = useMemo(() => {    return { matchMode: 'whole-word', text };  }, [text]); // ✅ Only changes when text changes  const visibleItems = useMemo(() => {    return searchItems(allItems, searchOptions);  }, [allItems, searchOptions]); // ✅ Only changes when allItems or searchOptions changes  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function Dropdown({ allItems, text }) {  const visibleItems = useMemo(() => {    const searchOptions = { matchMode: 'whole-word', text };    return searchItems(allItems, searchOptions);  }, [allItems, text]); // ✅ Only changes when allItems or text changes  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function ProductPage({ productId, referrer }) {  function handleSubmit(orderDetails) {    post('/product/' + productId + '/buy', {      referrer,      orderDetails    });  }  return <Form onSubmit={handleSubmit} />;}",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function Page({ productId, referrer }) {  const handleSubmit = useMemo(() => {    return (orderDetails) => {      post('/product/' + productId + '/buy', {        referrer,        orderDetails      });    };  }, [productId, referrer]);  return <Form onSubmit={handleSubmit} />;}",
+      "language": "javascript"
+    },
+    {
+      "code": "export default function Page({ productId, referrer }) {  const handleSubmit = useCallback((orderDetails) => {    post('/product/' + productId + '/buy', {      referrer,      orderDetails    });  }, [productId, referrer]);  return <Form onSubmit={handleSubmit} />;}",
+      "language": "javascript"
+    },
+    {
+      "code": "function TodoList({ todos, tab }) {  // This component function will run twice for every render.  const visibleTodos = useMemo(() => {    // This calculation will run twice if any of the dependencies change.    return filterTodos(todos, tab);  }, [todos, tab]);  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "const visibleTodos = useMemo(() => {    // 🚩 Mistake: mutating a prop    todos.push({ id: 'last', text: 'Go for a walk!' });    const filtered = filterTodos(todos, tab);    return filtered;  }, [todos, tab]);",
+      "language": "jsx"
+    },
+    {
+      "code": "const visibleTodos = useMemo(() => {    const filtered = filterTodos(todos, tab);    // ✅ Correct: mutating an object you created during the calculation    filtered.push({ id: 'last', text: 'Go for a walk!' });    return filtered;  }, [todos, tab]);",
+      "language": "jsx"
+    },
+    {
+      "code": "// 🔴 You can't return an object from an arrow function with () => {  const searchOptions = useMemo(() => {    matchMode: 'whole-word',    text: text  }, [text]);",
+      "language": "javascript"
+    },
+    {
+      "code": "// This works, but is easy for someone to break again  const searchOptions = useMemo(() => ({    matchMode: 'whole-word',    text: text  }), [text]);",
+      "language": "jsx"
+    },
+    {
+      "code": "// ✅ This works and is explicit  const searchOptions = useMemo(() => {    return {      matchMode: 'whole-word',      text: text    };  }, [text]);",
+      "language": "jsx"
+    },
+    {
+      "code": "function TodoList({ todos, tab }) {  // 🔴 Recalculates every time: no dependency array  const visibleTodos = useMemo(() => filterTodos(todos, tab));  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function TodoList({ todos, tab }) {  // ✅ Does not recalculate unnecessarily  const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);  console.log([todos, tab]);",
+      "language": "javascript"
+    },
+    {
+      "code": "Object.is(temp1[0], temp2[0]); // Is the first dependency the same between the arrays?Object.is(temp1[1], temp2[1]); // Is the second dependency the same between the arrays?Object.is(temp1[2], temp2[2]); // ... and so on for every dependency ...",
+      "language": "unknown"
+    },
+    {
+      "code": "function ReportList({ items }) {  return (    <article>      {items.map(item => {        // 🔴 You can't call useMemo in a loop like this:        const data = useMemo(() => calculateReport(item), [item]);        return (          <figure key={item.id}>            <Chart data={data} />          </figure>        );      })}    </article>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "function ReportList({ items }) {  return (    <article>      {items.map(item =>        <Report key={item.id} item={item} />      )}    </article>  );}function Report({ item }) {  // ✅ Call useMemo at the top level:  const data = useMemo(() => calculateReport(item), [item]);  return (    <figure>      <Chart data={data} />    </figure>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "function ReportList({ items }) {  // ...}const Report = memo(function Report({ item }) {  const data = calculateReport(item);  return (    <figure>      <Chart data={data} />    </figure>  );});",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

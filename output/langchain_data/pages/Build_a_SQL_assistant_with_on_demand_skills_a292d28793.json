@@ -1,0 +1,167 @@
+{
+  "title": "Build a SQL assistant with on-demand skills",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/multi-agent/skills-sql-assistant\n\nThis tutorial shows how to use **progressive disclosure** - a context management technique where the agent loads information on-demand rather than upfront - to implement **skills** (specialized prompt-based instructions). The agent loads skills via tool calls, rather than dynamically changing the system prompt, discovering and loading only the skills it needs for each task.\n\n**Use case:** Imagine building an agent to help write SQL queries across different business verticals in a large enterprise. Your organization might have separate datastores for each vertical, or a single monolithic database with thousands of tables. Either way, loading all schemas upfront would overwhelm the context window. Progressive disclosure solves this by loading only the relevant schema when needed. This architecture also enables different product owners and stakeholders to independently contribute and maintain skills for their specific business verticals.\n\n**What you'll build:** A SQL query assistant with two skills (sales analytics and inventory management). The agent sees lightweight skill descriptions in its system prompt, then loads full database schemas and business logic through tool calls only when relevant to the user's query.\n\n<Note>\n  For a more complete example of a SQL agent with query execution, error correction, and validation, see our [SQL Agent tutorial](/oss/python/langchain/sql-agent). This tutorial focuses on the progressive disclosure pattern which can be applied to any domain.\n</Note>\n\n<Tip>\n  Progressive disclosure was popularized by Anthropic as a technique for building scalable agent skills systems. This approach uses a three-level architecture (metadata → core content → detailed resources) where agents load information only as needed. For more on this technique, see [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills).\n</Tip>\n\nHere's the flow when a user asks for a SQL query:\n\n**Why progressive disclosure:**\n\n* **Reduces context usage** - load only the 2-3 skills needed for a task, not all available skills\n* **Enables team autonomy** - different teams can develop specialized skills independently (similar to other multi-agent architectures)\n* **Scales efficiently** - add dozens or hundreds of skills without overwhelming context\n* **Simplifies conversation history** - single agent with one conversation thread\n\n**What are skills:** Skills, as popularized by Claude Code, are primarily prompt-based: self-contained units of specialized instructions for specific business tasks. In Claude Code, skills are exposed as directories with files on the file system, discovered through file operations. Skills guide behavior through prompts and can provide information about tool usage or include sample code for a coding agent to execute.\n\n<Tip>\n  Skills with progressive disclosure can be viewed as a form of [RAG (Retrieval-Augmented Generation)](/oss/python/langchain/rag), where each skill is a retrieval unit—though not necessarily backed by embeddings or keyword search, but by tools for browsing content (like file operations or, in this tutorial, direct lookup).\n</Tip>\n\n* **Latency**: Loading skills on-demand requires additional tool calls, which adds latency to the first request that needs each skill\n* **Workflow control**: Basic implementations rely on prompting to guide skill usage - you cannot enforce hard constraints like \"always try skill A before skill B\" without custom logic\n\n<Tip>\n  **Implementing your own skills system**\n\nWhen building your own skills implementation (as we do in this tutorial), the core concept is progressive disclosure - loading information on-demand. Beyond that, you have full flexibility in implementation:\n\n* **Storage**: databases, S3, in-memory data structures, or any backend\n  * **Discovery**: direct lookup (this tutorial), RAG for large skill collections, file system scanning, or API calls\n  * **Loading logic**: customize latency characteristics and add logic to search through skill content or rank relevance\n  * **Side effects**: define what happens when a skill loads, such as exposing tools associated with that skill (covered in section 8)\n\nThis flexibility lets you optimize for your specific requirements around performance, storage, and workflow control.\n</Tip>\n\nThis tutorial requires the `langchain` package:\n\nFor more details, see our [Installation guide](/oss/python/langchain/install).\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your agent. Then set the following environment variables:\n\nSelect a chat model from LangChain's suite of integrations:\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)\n\n</CodeGroup>\n  </Tab>\n</Tabs>\n\nFirst, define the structure for skills. Each skill has a name, a brief description (shown in the system prompt), and full content (loaded on-demand):\n\nNow define example skills for a SQL query assistant. The skills are designed to be **lightweight in description** (shown to the agent upfront) but **detailed in content** (loaded only when needed):\n\n<Accordion title=\"View complete skill definitions\">\n  \n</Accordion>\n\n## 2. Create skill loading tool\n\nCreate a tool to load full skill content on-demand:\n\nThe `load_skill` tool returns the full skill content as a string, which becomes part of the conversation as a ToolMessage. For more details on creating and using tools, see the [Tools guide](/oss/python/langchain/tools).\n\n## 3. Build skill middleware\n\nCreate custom middleware that injects skill descriptions into the system prompt. This middleware makes skills discoverable without loading their full content upfront.\n\n<Note>\n  This guide demonstrates creating custom middleware. For a comprehensive guide on middleware concepts and patterns, see the [custom middleware documentation](/oss/python/langchain/middleware/custom).\n</Note>\n\nThe middleware appends skill descriptions to the system prompt, making the agent aware of available skills without loading their full content. The `load_skill` tool is registered as a class variable, making it available to the agent.\n\n<Note>\n  **Production consideration**: This tutorial loads the skill list in `__init__` for simplicity. In a production system, you may want to load skills in the `before_agent` hook instead, allowing them to be refreshed periodically to reflect up-to-date changes (e.g., when new skills are added or existing ones are modified). See the [before\\_agent hook documentation](/oss/python/langchain/middleware/custom#before_agent) for details.\n</Note>\n\n## 4. Create the agent with skill support\n\nNow create the agent with the skill middleware and a checkpointer for state persistence:\n\n```python  theme={null}\nfrom langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver",
+  "code_samples": [
+    {
+      "code": "**Why progressive disclosure:**\n\n* **Reduces context usage** - load only the 2-3 skills needed for a task, not all available skills\n* **Enables team autonomy** - different teams can develop specialized skills independently (similar to other multi-agent architectures)\n* **Scales efficiently** - add dozens or hundreds of skills without overwhelming context\n* **Simplifies conversation history** - single agent with one conversation thread\n\n**What are skills:** Skills, as popularized by Claude Code, are primarily prompt-based: self-contained units of specialized instructions for specific business tasks. In Claude Code, skills are exposed as directories with files on the file system, discovered through file operations. Skills guide behavior through prompts and can provide information about tool usage or include sample code for a coding agent to execute.\n\n<Tip>\n  Skills with progressive disclosure can be viewed as a form of [RAG (Retrieval-Augmented Generation)](/oss/python/langchain/rag), where each skill is a retrieval unit—though not necessarily backed by embeddings or keyword search, but by tools for browsing content (like file operations or, in this tutorial, direct lookup).\n</Tip>\n\n**Trade-offs:**\n\n* **Latency**: Loading skills on-demand requires additional tool calls, which adds latency to the first request that needs each skill\n* **Workflow control**: Basic implementations rely on prompting to guide skill usage - you cannot enforce hard constraints like \"always try skill A before skill B\" without custom logic\n\n<Tip>\n  **Implementing your own skills system**\n\n  When building your own skills implementation (as we do in this tutorial), the core concept is progressive disclosure - loading information on-demand. Beyond that, you have full flexibility in implementation:\n\n  * **Storage**: databases, S3, in-memory data structures, or any backend\n  * **Discovery**: direct lookup (this tutorial), RAG for large skill collections, file system scanning, or API calls\n  * **Loading logic**: customize latency characteristics and add logic to search through skill content or rank relevance\n  * **Side effects**: define what happens when a skill loads, such as exposing tools associated with that skill (covered in section 8)\n\n  This flexibility lets you optimize for your specific requirements around performance, storage, and workflow control.\n</Tip>\n\n## Setup\n\n### Installation\n\nThis tutorial requires the `langchain` package:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nFor more details, see our [Installation guide](/oss/python/langchain/install).\n\n### LangSmith\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your agent. Then set the following environment variables:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Select an LLM\n\nSelect a chat model from LangChain's suite of integrations:\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n</Tabs>\n\n## 1. Define skills\n\nFirst, define the structure for skills. Each skill has a name, a brief description (shown in the system prompt), and full content (loaded on-demand):",
+      "language": "unknown"
+    },
+    {
+      "code": "Now define example skills for a SQL query assistant. The skills are designed to be **lightweight in description** (shown to the agent upfront) but **detailed in content** (loaded only when needed):\n\n<Accordion title=\"View complete skill definitions\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## 2. Create skill loading tool\n\nCreate a tool to load full skill content on-demand:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `load_skill` tool returns the full skill content as a string, which becomes part of the conversation as a ToolMessage. For more details on creating and using tools, see the [Tools guide](/oss/python/langchain/tools).\n\n## 3. Build skill middleware\n\nCreate custom middleware that injects skill descriptions into the system prompt. This middleware makes skills discoverable without loading their full content upfront.\n\n<Note>\n  This guide demonstrates creating custom middleware. For a comprehensive guide on middleware concepts and patterns, see the [custom middleware documentation](/oss/python/langchain/middleware/custom).\n</Note>",
+      "language": "unknown"
+    },
+    {
+      "code": "The middleware appends skill descriptions to the system prompt, making the agent aware of available skills without loading their full content. The `load_skill` tool is registered as a class variable, making it available to the agent.\n\n<Note>\n  **Production consideration**: This tutorial loads the skill list in `__init__` for simplicity. In a production system, you may want to load skills in the `before_agent` hook instead, allowing them to be refreshed periodically to reflect up-to-date changes (e.g., when new skills are added or existing ones are modified). See the [before\\_agent hook documentation](/oss/python/langchain/middleware/custom#before_agent) for details.\n</Note>\n\n## 4. Create the agent with skill support\n\nNow create the agent with the skill middleware and a checkpointer for state persistence:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "How it works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h3",
+      "text": "LangSmith",
+      "id": "langsmith"
+    },
+    {
+      "level": "h3",
+      "text": "Select an LLM",
+      "id": "select-an-llm"
+    },
+    {
+      "level": "h2",
+      "text": "1. Define skills",
+      "id": "1.-define-skills"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create skill loading tool",
+      "id": "2.-create-skill-loading-tool"
+    },
+    {
+      "level": "h2",
+      "text": "3. Build skill middleware",
+      "id": "3.-build-skill-middleware"
+    },
+    {
+      "level": "h2",
+      "text": "4. Create the agent with skill support",
+      "id": "4.-create-the-agent-with-skill-support"
+    }
+  ],
+  "url": "llms-txt#build-a-sql-assistant-with-on-demand-skills",
+  "links": []
+}

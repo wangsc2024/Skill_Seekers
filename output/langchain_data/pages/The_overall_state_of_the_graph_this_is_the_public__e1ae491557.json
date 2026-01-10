@@ -1,0 +1,8 @@
+{
+  "title": "The overall state of the graph (this is the public state shared across nodes)",
+  "content": "class OverallState(BaseModel):\n    a: str\n\ndef node(state: OverallState):\n    return {\"a\": \"goodbye\"}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-overall-state-of-the-graph-(this-is-the-public-state-shared-across-nodes)",
+  "links": []
+}

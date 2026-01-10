@@ -1,0 +1,8 @@
+{
+  "title": "Get customer information from the API",
+  "content": "export LANGSMITH_URL=\"<your_langsmith_url>\"\nexport response=$(curl -s $LANGSMITH_URL/api/v1/info)\nexport CUSTOMER_ID=$(echo \"$response\" | jq -r '.customer_info.customer_id') && echo \"Customer ID: $CUSTOMER_ID\"\nexport CUSTOMER_NAME=$(echo \"$response\" | jq -r '.customer_info.customer_name') && echo \"Customer name: $CUSTOMER_NAME\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-customer-information-from-the-api",
+  "links": []
+}

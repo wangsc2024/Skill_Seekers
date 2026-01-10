@@ -1,0 +1,8 @@
+{
+  "title": "Messages and content",
+  "content": "from langchain.messages import AIMessage, HumanMessage",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#messages-and-content",
+  "links": []
+}

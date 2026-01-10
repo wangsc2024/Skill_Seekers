@@ -1,0 +1,40 @@
+{
+  "title": "Parent graph",
+  "content": "builder = StateGraph(State)\nbuilder.add_node(\"node_1\", subgraph)\nbuilder.add_edge(START, \"node_1\")\n\ncheckpointer = MemorySaver()\ngraph = builder.compile(checkpointer=checkpointer)\npython  theme={null}\nsubgraph_builder = StateGraph(...)\nsubgraph = subgraph_builder.compile(checkpointer=True)\npython  theme={null}\n  from langgraph.graph import START, StateGraph\n  from langgraph.checkpoint.memory import MemorySaver\n  from langgraph.types import interrupt, Command\n  from typing_extensions import TypedDict\n\nclass State(TypedDict):\n      foo: str\n\ndef subgraph_node_1(state: State):\n      value = interrupt(\"Provide value:\")\n      return {\"foo\": state[\"foo\"] + value}\n\nsubgraph_builder = StateGraph(State)\n  subgraph_builder.add_node(subgraph_node_1)\n  subgraph_builder.add_edge(START, \"subgraph_node_1\")\n\nsubgraph = subgraph_builder.compile()\n\nbuilder = StateGraph(State)\n  builder.add_node(\"node_1\", subgraph)\n  builder.add_edge(START, \"node_1\")\n\ncheckpointer = MemorySaver()\n  graph = builder.compile(checkpointer=checkpointer)\n\nconfig = {\"configurable\": {\"thread_id\": \"1\"}}\n\ngraph.invoke({\"foo\": \"\"}, config)\n  parent_state = graph.get_state(config)\n\n# This will be available only when the subgraph is interrupted.\n  # Once you resume the graph, you won't be able to access the subgraph state.\n  subgraph_state = graph.get_state(config, subgraphs=True).tasks[0].state\n\n# resume the subgraph\n  graph.invoke(Command(resume=\"bar\"), config)\n  python  theme={null}\nfor chunk in graph.stream(\n    {\"foo\": \"foo\"},\n    subgraphs=True, # [!code highlight]\n    stream_mode=\"updates\",\n):\n    print(chunk)\npython  theme={null}\n  from typing_extensions import TypedDict\n  from langgraph.graph.state import StateGraph, START\n\n# Define subgraph\n  class SubgraphState(TypedDict):\n      foo: str\n      bar: str\n\ndef subgraph_node_1(state: SubgraphState):\n      return {\"bar\": \"bar\"}\n\ndef subgraph_node_2(state: SubgraphState):\n      # note that this node is using a state key ('bar') that is only available in the subgraph\n      # and is sending update on the shared state key ('foo')\n      return {\"foo\": state[\"foo\"] + state[\"bar\"]}\n\nsubgraph_builder = StateGraph(SubgraphState)\n  subgraph_builder.add_node(subgraph_node_1)\n  subgraph_builder.add_node(subgraph_node_2)\n  subgraph_builder.add_edge(START, \"subgraph_node_1\")\n  subgraph_builder.add_edge(\"subgraph_node_1\", \"subgraph_node_2\")\n  subgraph = subgraph_builder.compile()\n\n# Define parent graph\n  class ParentState(TypedDict):\n      foo: str\n\ndef node_1(state: ParentState):\n      return {\"foo\": \"hi! \" + state[\"foo\"]}\n\nbuilder = StateGraph(ParentState)\n  builder.add_node(\"node_1\", node_1)\n  builder.add_node(\"node_2\", subgraph)\n  builder.add_edge(START, \"node_1\")\n  builder.add_edge(\"node_1\", \"node_2\")\n  graph = builder.compile()\n\nfor chunk in graph.stream(\n      {\"foo\": \"foo\"},\n      stream_mode=\"updates\",\n      subgraphs=True, # [!code highlight]\n  ):\n      print(chunk)\n  \n  ((), {'node_1': {'foo': 'hi! foo'}})\n  (('node_2:e58e5673-a661-ebb0-70d4-e298a7fc28b7',), {'subgraph_node_1': {'bar': 'bar'}})\n  (('node_2:e58e5673-a661-ebb0-70d4-e298a7fc28b7',), {'subgraph_node_2': {'foo': 'hi! foobar'}})\n  ((), {'node_2': {'foo': 'hi! foobar'}})\n  ```\n</Accordion>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/use-subgraphs.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "If you want the subgraph to **have its own memory**, you can compile it with the appropriate checkpointer option. This is useful in [multi-agent](/oss/python/langchain/multi-agent) systems, if you want agents to keep track of their internal message histories:",
+      "language": "unknown"
+    },
+    {
+      "code": "## View subgraph state\n\nWhen you enable [persistence](/oss/python/langgraph/persistence), you can [inspect the graph state](/oss/python/langgraph/persistence#checkpoints) (checkpoint) via the appropriate method. To view the subgraph state, you can use the subgraphs option.\n\nYou can inspect the graph state via `graph.get_state(config)`. To view the subgraph state, you can use `graph.get_state(config, subgraphs=True)`.\n\n<Warning>\n  **Available **only** when interrupted**\n  Subgraph state can only be viewed **when the subgraph is interrupted**. Once you resume the graph, you won't be able to access the subgraph state.\n</Warning>\n\n<Accordion title=\"View interrupted subgraph state\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. This will be available only when the subgraph is interrupted. Once you resume the graph, you won't be able to access the subgraph state.\n</Accordion>\n\n## Stream subgraph outputs\n\nTo include outputs from subgraphs in the streamed outputs, you can set the subgraphs option in the stream method of the parent graph. This will stream outputs from both the parent graph and any subgraphs.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Stream from subgraphs\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "View subgraph state",
+      "id": "view-subgraph-state"
+    },
+    {
+      "level": "h2",
+      "text": "Stream subgraph outputs",
+      "id": "stream-subgraph-outputs"
+    }
+  ],
+  "url": "llms-txt#parent-graph",
+  "links": []
+}

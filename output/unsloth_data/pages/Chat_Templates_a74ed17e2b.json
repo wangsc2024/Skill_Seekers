@@ -1,0 +1,71 @@
+{
+  "title": "Chat Templates",
+  "content": "Learn the fundamentals and customization options of chat templates, including Conversational, ChatML, ShareGPT, Alpaca formats, and more!\n\nIn our GitHub, we have a list of every chat template Unsloth uses including for Llama, Mistral, Phi-4 etc. So if you need any pointers on the formatting or use case, you can view them here: [github.com/unslothai/unsloth/blob/main/unsloth/chat\\_templates.py](https://github.com/unslothai/unsloth/blob/main/unsloth/chat_templates.py)\n\n### List of Colab chat template notebooks:\n\n* [Conversational](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.2_\\(1B_and_3B\\)-Conversational.ipynb)\n* [ChatML](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3_\\(8B\\)-Ollama.ipynb)\n* [Ollama](https://colab.research.google.com/drive/1WZDi7APtQ9VsvOrQSSC5DDtxq159j8iZ?usp=sharing)\n* [Text Classification](https://github.com/timothelaborie/text_classification_scripts/blob/main/unsloth_classification.ipynb) by Timotheeee\n* [Multiple Datasets](https://colab.research.google.com/drive/1njCCbE1YVal9xC83hjdo2hiGItpY_D6t?usp=sharing) by Flail\n\n## Multi turn conversations\n\nA bit issue if you didn't notice is the Alpaca dataset is single turn, whilst remember using ChatGPT was interactive and you can talk to it in multiple turns. For example, the left is what we want, but the right which is the Alpaca dataset only provides singular conversations. We want the finetuned language model to somehow learn how to do multi turn conversations just like ChatGPT.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-2a65cd74ddd03a6bcbbc9827d9d034e4879a8e6a%2Fdiff.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nSo we introduced the `conversation_extension` parameter, which essentially selects some random rows in your single turn dataset, and merges them into 1 conversation! For example, if you set it to 3, we randomly select 3 rows and merge them into 1! Setting them too long can make training slower, but could make your chatbot and final finetune much better!\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-2b1b3494b260f1102942d86143a885225c6a06f2%2Fcombine.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nThen set `output_column_name` to the prediction / output column. For the Alpaca dataset dataset, it would be the output column.\n\nWe then use the `standardize_sharegpt` function to just make the dataset in a correct format for finetuning! Always call this!\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-7bf83bf802191bda9e417bbe45afa181e7f24f38%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\n## Customizable Chat Templates\n\nWe can now specify the chat template for finetuning itself. The very famous Alpaca format is below:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-59737e6dcb09fed15487d5a57c69f07cb40bb8e7%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nBut remember we said this was a bad idea because ChatGPT style finetunes require only 1 prompt? Since we successfully merged all dataset columns into 1 using Unsloth, we essentially can create the below style chat template with 1 input column (instruction) and 1 output:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-d54582ae98c396d51bfb85628b46c54f2517d030%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nWe just require you must put a `{INPUT}` field for the instruction and an `{OUTPUT}` field for the model's output field. We in fact allow an optional `{SYSTEM}` field as well which is useful to customize a system prompt just like in ChatGPT. For example, below are some cool examples which you can customize the chat template to be:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-cc455dc380d3d44ef136e485754964159dc773d8%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nFor the ChatML format used in OpenAI models:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-15bfca9cfadf10d54b4d3f66e3050044317d62c5%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nOr you can use the Llama-3 template itself (which only functions by using the instruct version of Llama-3): We in fact allow an optional `{SYSTEM}` field as well which is useful to customize a system prompt just like in ChatGPT.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-80a2ed4de2ca323ac192c513cac65e9e8bf475db%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nOr in the Titanic prediction task where you had to predict if a passenger died or survived in this Colab notebook which includes CSV and Excel uploading: <https://colab.research.google.com/drive/1VYkncZMfGFkeCEgN2IzbZIKEDkyQuJAS?usp=sharing>\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-20911ab305c1a10e85859c703157b80175141eb1%2Fimage.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\n## Applying Chat Templates with Unsloth\n\nFor datasets that usually follow the common chatml format, the process of preparing the dataset for training or finetuning, consists of four simple steps:\n\n* Check the chat templates that Unsloth currently supports:\\\\\n\n\\\n  This will print out the list of templates currently supported by Unsloth. Here is an example output:\\\\\n\n\\\\\n* Use `get_chat_template` to apply the right chat template to your tokenizer:\\\\\n\n\\\\\n* Define your formatting function. Here's an example:\\\\\n\n\\\n  \\\n  This function loops through your dataset applying the chat template you defined to each sample.\\\\\n* Finally, let's load the dataset and apply the required modifications to our dataset: \\\\\n\n\\\n  If your dataset uses the ShareGPT format with \"from\"/\"value\" keys instead of the ChatML \"role\"/\"content\" format, you can use the `standardize_sharegpt` function to convert it first. The revised code will now look as follows:\\\n  \\\\\n\nAssuming your dataset is a list of list of dictionaries like the below:\n\nYou can use our `get_chat_template` to format it. Select `chat_template` to be any of `zephyr, chatml, mistral, llama, alpaca, vicuna, vicuna_old, unsloth`, and use `mapping` to map the dictionary values `from`, `value` etc. `map_eos_token` allows you to map `<|im_end|>` to EOS without any training.\n\nYou can also make your own custom chat templates! For example our internal chat template we use is below. You must pass in a `tuple` of `(custom_template, eos_token)` where the `eos_token` must be used inside the template.",
+  "code_samples": [
+    {
+      "code": "from unsloth.chat_templates import CHAT_TEMPLATES\n  print(list(CHAT_TEMPLATES.keys()))",
+      "language": "unknown"
+    },
+    {
+      "code": "['unsloth', 'zephyr', 'chatml', 'mistral', 'llama', 'vicuna', 'vicuna_old', 'vicuna old', 'alpaca', 'gemma', 'gemma_chatml', 'gemma2', 'gemma2_chatml', 'llama-3', 'llama3', 'phi-3', 'phi-35', 'phi-3.5', 'llama-3.1', 'llama-31', 'llama-3.2', 'llama-3.3', 'llama-32', 'llama-33', 'qwen-2.5', 'qwen-25', 'qwen25', 'qwen2.5', 'phi-4', 'gemma-3', 'gemma3']",
+      "language": "unknown"
+    },
+    {
+      "code": "from unsloth.chat_templates import get_chat_template\n\n  tokenizer = get_chat_template(\n      tokenizer,\n      chat_template = \"gemma-3\", # change this to the right chat_template name\n  )",
+      "language": "unknown"
+    },
+    {
+      "code": "def formatting_prompts_func(examples):\n     convos = examples[\"conversations\"]\n     texts = [tokenizer.apply_chat_template(convo, tokenize = False, add_generation_prompt = False) for convo in convos]\n     return { \"text\" : texts, }",
+      "language": "unknown"
+    },
+    {
+      "code": "# Import and load dataset\n  from datasets import load_dataset\n  dataset = load_dataset(\"repo_name/dataset_name\", split = \"train\")\n\n  # Apply the formatting function to your dataset using the map method\n  dataset = dataset.map(formatting_prompts_func, batched = True,)",
+      "language": "unknown"
+    },
+    {
+      "code": "# Import dataset\n  from datasets import load_dataset\n  dataset = load_dataset(\"mlabonne/FineTome-100k\", split = \"train\")\n\n  # Convert your dataset to the \"role\"/\"content\" format if necessary\n  from unsloth.chat_templates import standardize_sharegpt\n  dataset = standardize_sharegpt(dataset)\n\n  # Apply the formatting function to your dataset using the map method\n  dataset = dataset.map(formatting_prompts_func, batched = True,)",
+      "language": "unknown"
+    },
+    {
+      "code": "[\n    [{'from': 'human', 'value': 'Hi there!'},\n     {'from': 'gpt', 'value': 'Hi how can I help?'},\n     {'from': 'human', 'value': 'What is 2+2?'}],\n    [{'from': 'human', 'value': 'What's your name?'},\n     {'from': 'gpt', 'value': 'I'm Daniel!'},\n     {'from': 'human', 'value': 'Ok! Nice!'},\n     {'from': 'gpt', 'value': 'What can I do for you?'},\n     {'from': 'human', 'value': 'Oh nothing :)'},],\n]",
+      "language": "python"
+    },
+    {
+      "code": "from unsloth.chat_templates import get_chat_template\n\ntokenizer = get_chat_template(\n    tokenizer,\n    chat_template = \"chatml\", # Supports zephyr, chatml, mistral, llama, alpaca, vicuna, vicuna_old, unsloth\n    mapping = {\"role\" : \"from\", \"content\" : \"value\", \"user\" : \"human\", \"assistant\" : \"gpt\"}, # ShareGPT style\n    map_eos_token = True, # Maps <|im_end|> to </s> instead\n)\n\ndef formatting_prompts_func(examples):\n    convos = examples[\"conversations\"]\n    texts = [tokenizer.apply_chat_template(convo, tokenize = False, add_generation_prompt = False) for convo in convos]\n    return { \"text\" : texts, }\npass\n\nfrom datasets import load_dataset\ndataset = load_dataset(\"philschmid/guanaco-sharegpt-style\", split = \"train\")\ndataset = dataset.map(formatting_prompts_func, batched = True,)",
+      "language": "python"
+    },
+    {
+      "code": "unsloth_template = \\\n    \"{{ bos_token }}\"\\\n    \"{{ 'You are a helpful assistant to the user\\n' }}\"\\\n    \"</div>\"\\\n    \"<div data-gb-custom-block data-tag=\"for\">\"\\\n        \"<div data-gb-custom-block data-tag=\"if\" data-0='role' data-1='role' data-2='] == ' data-3='user'>\"\\\n            \"{{ '>>> User: ' + message['content'] + '\\n' }}\"\\\n        \"<div data-gb-custom-block data-tag=\"elif\" data-0='role' data-1='role' data-2='] == ' data-3='assistant'></div>\"\\\n            \"{{ '>>> Assistant: ' + message['content'] + eos_token + '\\n' }}\"\\\n        \"</div>\"\\\n    \"</div>\"\\\n    \"<div data-gb-custom-block data-tag=\"if\">\"\\\n        \"{{ '>>> Assistant: ' }}\"\\\n    \"</div>\"\nunsloth_eos_token = \"eos_token\"\n\ntokenizer = get_chat_template(\n    tokenizer,\n    chat_template = (unsloth_template, unsloth_eos_token,), # You must provide a template and EOS token\n    mapping = {\"role\" : \"from\", \"content\" : \"value\", \"user\" : \"human\", \"assistant\" : \"gpt\"}, # ShareGPT style\n    map_eos_token = True, # Maps <|im_end|> to </s> instead\n)",
+      "language": "python"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "List of Colab chat template notebooks:",
+      "id": "list-of-colab-chat-template-notebooks:"
+    },
+    {
+      "level": "h2",
+      "text": "Multi turn conversations",
+      "id": "multi-turn-conversations"
+    },
+    {
+      "level": "h2",
+      "text": "Customizable Chat Templates",
+      "id": "customizable-chat-templates"
+    },
+    {
+      "level": "h2",
+      "text": "Applying Chat Templates with Unsloth",
+      "id": "applying-chat-templates-with-unsloth"
+    },
+    {
+      "level": "h2",
+      "text": "More Information",
+      "id": "more-information"
+    }
+  ],
+  "url": "llms-txt#chat-templates",
+  "links": []
+}

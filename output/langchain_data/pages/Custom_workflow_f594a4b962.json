@@ -1,0 +1,29 @@
+{
+  "title": "Custom workflow",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/multi-agent/custom-workflow\n\nIn the **custom workflow** architecture, you define your own bespoke execution flow using [LangGraph](/oss/python/langgraph/overview). You have complete control over the graph structure—including sequential steps, conditional branches, loops, and parallel execution.\n\n## Key characteristics\n\n* Complete control over graph structure\n* Mix deterministic logic with agentic behavior\n* Support for sequential steps, conditional branches, loops, and parallel execution\n* Embed other patterns as nodes in your workflow\n\nUse custom workflows when standard patterns (subagents, skills, etc.) don't fit your requirements, you need to mix deterministic logic with agentic behavior, or your use case requires complex routing or multi-stage processing.\n\nEach node in your workflow can be a simple function, an LLM call, or an entire [agent](/oss/python/langchain/agents) with [tools](/oss/python/langchain/tools). You can also compose other architectures within a custom workflow—for example, embedding a multi-agent system as a single node.\n\nFor a complete example of a custom workflow, see the tutorial below.\n\n<Card title=\"Tutorial: Build a multi-source knowledge base with routing\" icon=\"book\" href=\"/oss/python/langchain/multi-agent/router-knowledge-base\" arrow cta=\"Learn more\">\n  The [router pattern](/oss/python/langchain/multi-agent/router) is an example of a custom workflow. This tutorial walks through building a router that queries GitHub, Notion, and Slack in parallel, then synthesizes results.\n\n## Basic implementation\n\nThe core insight is that you can call a LangChain agent directly inside any LangGraph node, combining the flexibility of custom workflows with the convenience of pre-built agents:\n\n```python  theme={null}\nfrom langchain.agents import create_agent\nfrom langgraph.graph import StateGraph, START, END\n\nagent = create_agent(model=\"openai:gpt-4o\", tools=[...])\n\ndef agent_node(state: State) -> dict:\n    \"\"\"A LangGraph node that invokes a LangChain agent.\"\"\"\n    result = agent.invoke({\n        \"messages\": [{\"role\": \"user\", \"content\": state[\"query\"]}]\n    })\n    return {\"answer\": result[\"messages\"][-1].content}",
+  "code_samples": [
+    {
+      "code": "## Key characteristics\n\n* Complete control over graph structure\n* Mix deterministic logic with agentic behavior\n* Support for sequential steps, conditional branches, loops, and parallel execution\n* Embed other patterns as nodes in your workflow\n\n## When to use\n\nUse custom workflows when standard patterns (subagents, skills, etc.) don't fit your requirements, you need to mix deterministic logic with agentic behavior, or your use case requires complex routing or multi-stage processing.\n\nEach node in your workflow can be a simple function, an LLM call, or an entire [agent](/oss/python/langchain/agents) with [tools](/oss/python/langchain/tools). You can also compose other architectures within a custom workflow—for example, embedding a multi-agent system as a single node.\n\nFor a complete example of a custom workflow, see the tutorial below.\n\n<Card title=\"Tutorial: Build a multi-source knowledge base with routing\" icon=\"book\" href=\"/oss/python/langchain/multi-agent/router-knowledge-base\" arrow cta=\"Learn more\">\n  The [router pattern](/oss/python/langchain/multi-agent/router) is an example of a custom workflow. This tutorial walks through building a router that queries GitHub, Notion, and Slack in parallel, then synthesizes results.\n\n  >\n</Card>\n\n## Basic implementation\n\nThe core insight is that you can call a LangChain agent directly inside any LangGraph node, combining the flexibility of custom workflows with the convenience of pre-built agents:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Key characteristics",
+      "id": "key-characteristics"
+    },
+    {
+      "level": "h2",
+      "text": "When to use",
+      "id": "when-to-use"
+    },
+    {
+      "level": "h2",
+      "text": "Basic implementation",
+      "id": "basic-implementation"
+    }
+  ],
+  "url": "llms-txt#custom-workflow",
+  "links": []
+}

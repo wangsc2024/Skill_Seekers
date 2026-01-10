@@ -1,0 +1,8 @@
+{
+  "title": "Create a custom agent graph",
+  "content": "custom_graph = create_agent(\n    model=your_model,\n    tools=specialized_tools,\n    prompt=\"You are a specialized agent for data analysis...\"\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-custom-agent-graph",
+  "links": []
+}

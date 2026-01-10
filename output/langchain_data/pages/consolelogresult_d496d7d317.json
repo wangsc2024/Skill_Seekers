@@ -1,0 +1,39 @@
+{
+  "title": "console.log(result);",
+  "content": "/**\n * {\n *   messages: [\n *     ...\n *     { role: \"tool\", content: \"Returning structured response: {'task': 'update the project timeline', 'assignee': 'Sarah', 'priority': 'high'}\", tool_call_id: \"call_456\", name: \"MeetingAction\" }\n *   ],\n *   structuredResponse: { task: \"update the project timeline\", assignee: \"Sarah\", priority: \"high\" }\n * }\n */\nts  theme={null}\nimport * as z from \"zod\";\nimport { createAgent, toolStrategy } from \"langchain\";\n\nconst ContactInfo = z.object({\n    name: z.string().describe(\"Person's name\"),\n    email: z.string().describe(\"Email address\"),\n});\n\nconst EventDetails = z.object({\n    event_name: z.string().describe(\"Name of the event\"),\n    date: z.string().describe(\"Event date\"),\n});\n\nconst agent = createAgent({\n    model: \"gpt-5\",\n    tools: [],\n    responseFormat: toolStrategy([ContactInfo, EventDetails]),\n});\n\nconst result = await agent.invoke({\n    messages: [\n        {\n        role: \"user\",\n        content:\n            \"Extract info: John Doe (john@email.com) is organizing Tech Conference on March 15th\",\n        },\n    ],\n});\n\n/**\n * {\n *   messages: [\n *     { role: \"user\", content: \"Extract info: John Doe (john@email.com) is organizing Tech Conference on March 15th\" },\n *     { role: \"assistant\", content: \"\", tool_calls: [ { name: \"ContactInfo\", args: { name: \"John Doe\", email: \"john@email.com\" }, id: \"call_1\" }, { name: \"EventDetails\", args: { event_name: \"Tech Conference\", date: \"March 15th\" }, id: \"call_2\" } ] },\n *     { role: \"tool\", content: \"Error: Model incorrectly returned multiple structured responses (ContactInfo, EventDetails) when only one is expected.\\n Please fix your mistakes.\", tool_call_id: \"call_1\", name: \"ContactInfo\" },\n *     { role: \"tool\", content: \"Error: Model incorrectly returned multiple structured responses (ContactInfo, EventDetails) when only one is expected.\\n Please fix your mistakes.\", tool_call_id: \"call_2\", name: \"EventDetails\" },\n *     { role: \"assistant\", content: \"\", tool_calls: [ { name: \"ContactInfo\", args: { name: \"John Doe\", email: \"john@email.com\" }, id: \"call_3\" } ] },\n *     { role: \"tool\", content: \"Returning structured response: {'name': 'John Doe', 'email': 'john@email.com'}\", tool_call_id: \"call_3\", name: \"ContactInfo\" }\n *   ],\n *   structuredResponse: { name: \"John Doe\", email: \"john@email.com\" }\n * }\n */\nts  theme={null}\nimport * as z from \"zod\";\nimport { createAgent, toolStrategy } from \"langchain\";\n\nconst ProductRating = z.object({\n    rating: z.number().min(1).max(5).describe(\"Rating from 1-5\"),\n    comment: z.string().describe(\"Review comment\"),\n});\n\nconst agent = createAgent({\n    model: \"gpt-5\",\n    tools: [],\n    responseFormat: toolStrategy(ProductRating),\n});\n\nconst result = await agent.invoke({\n    messages: [\n        {\n        role: \"user\",\n        content: \"Parse this: Amazing product, 10/10!\",\n        },\n    ],\n});\n\n/**\n * {\n *   messages: [\n *     { role: \"user\", content: \"Parse this: Amazing product, 10/10!\" },\n *     { role: \"assistant\", content: \"\", tool_calls: [ { name: \"ProductRating\", args: { rating: 10, comment: \"Amazing product\" }, id: \"call_1\" } ] },\n *     { role: \"tool\", content: \"Error: Failed to parse structured output for tool 'ProductRating': 1 validation error for ProductRating\\nrating\\n  Input should be less than or equal to 5 [type=less_than_equal, input_value=10, input_type=int].\\n Please fix your mistakes.\", tool_call_id: \"call_1\", name: \"ProductRating\" },\n *     { role: \"assistant\", content: \"\", tool_calls: [ { name: \"ProductRating\", args: { rating: 5, comment: \"Amazing product\" }, id: \"call_2\" } ] },\n *     { role: \"tool\", content: \"Returning structured response: {'rating': 5, 'comment': 'Amazing product'}\", tool_call_id: \"call_2\", name: \"ProductRating\" }\n *   ],\n *   structuredResponse: { rating: 5, comment: \"Amazing product\" }\n * }\n */\nts  theme={null}\nconst responseFormat = toolStrategy(ProductRating, {\n    handleError: \"Please provide a valid rating between 1-5 and include a comment.\"\n)\n\n// Error message becomes:\n// { role: \"tool\", content: \"Please provide a valid rating between 1-5 and include a comment.\" }\nts  theme={null}\nimport { ToolInputParsingException } from \"@langchain/core/tools\";\n\nconst responseFormat = toolStrategy(ProductRating, {\n    handleError: (error: ToolStrategyError) => {\n        if (error instanceof ToolInputParsingException) {\n        return \"Please provide a valid rating between 1-5 and include a comment.\";\n        }\n        return error.message;\n    }\n)\n\n// Only validation errors get retried with default message:\n// { role: \"tool\", content: \"Error: Failed to parse structured output for tool 'ProductRating': ...\\n Please fix your mistakes.\" }\nts  theme={null}\nconst responseFormat = toolStrategy(ProductRating, {\n    handleError: (error: ToolStrategyError) => {\n        if (error instanceof ToolInputParsingException) {\n        return \"Please provide a valid rating between 1-5 and include a comment.\";\n        }\n        if (error instanceof CustomUserError) {\n        return \"This is a custom user error.\";\n        }\n        return error.message;\n    }\n)\nts  theme={null}\nconst responseFormat = toolStrategy(ProductRating, {\n    handleError: false  // All errors raised\n)\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/structured-output.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "### Error handling\n\nModels can make mistakes when generating structured output via tool calling. LangChain provides intelligent retry mechanisms to handle these errors automatically.\n\n#### Multiple structured outputs error\n\nWhen a model incorrectly calls multiple structured output tools, the agent provides error feedback in a [`ToolMessage`](https://reference.langchain.com/javascript/classes/_langchain_core.messages.ToolMessage.html) and prompts the model to retry:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Schema validation error\n\nWhen structured output doesn't match the expected schema, the agent provides specific error feedback:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Error handling strategies\n\nYou can customize how errors are handled using the `handleErrors` parameter:\n\n**Custom error message:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Handle specific exceptions only:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Handle multiple exception types:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**No error handling:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Error handling",
+      "id": "error-handling"
+    }
+  ],
+  "url": "llms-txt#console.log(result);",
+  "links": []
+}

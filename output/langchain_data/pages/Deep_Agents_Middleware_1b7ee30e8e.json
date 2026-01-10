@@ -1,0 +1,19 @@
+{
+  "title": "Deep Agents Middleware",
+  "content": "Source: https://docs.langchain.com/oss/python/deepagents/middleware\n\nUnderstand the middleware that powers deep agents\n\nDeep agents are built with a modular middleware architecture. Deep agents have access to:\n\n1. A planning tool\n2. A filesystem for storing context and long-term memories\n3. The ability to spawn subagents\n\nEach feature is implemented as separate middleware. When you create a deep agent with `create_deep_agent`, we automatically attach `TodoListMiddleware`, `FilesystemMiddleware`, and `SubAgentMiddleware` to your agent.\n\nMiddleware is composable—you can add as many or as few middleware to an agent as needed. You can use any middleware independently.\n\nThe following sections explain what each middleware provides.\n\n## To-do list middleware\n\nPlanning is integral to solving complex problems. If you've used Claude Code recently, you'll notice how it writes out a to-do list before tackling complex, multi-part tasks. You'll also notice how it can adapt and update this to-do list on the fly as more information comes in.\n\n`TodoListMiddleware` provides your agent with a tool specifically for updating this to-do list. Before and while it executes a multi-part task, the agent is prompted to use the `write_todos` tool to keep track of what it's doing and what still needs to be done.\n\n```python  theme={null}\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import TodoListMiddleware",
+  "code_samples": [
+    {
+      "code": "Middleware is composable—you can add as many or as few middleware to an agent as needed. You can use any middleware independently.\n\nThe following sections explain what each middleware provides.\n\n## To-do list middleware\n\nPlanning is integral to solving complex problems. If you've used Claude Code recently, you'll notice how it writes out a to-do list before tackling complex, multi-part tasks. You'll also notice how it can adapt and update this to-do list on the fly as more information comes in.\n\n`TodoListMiddleware` provides your agent with a tool specifically for updating this to-do list. Before and while it executes a multi-part task, the agent is prompted to use the `write_todos` tool to keep track of what it's doing and what still needs to be done.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "To-do list middleware",
+      "id": "to-do-list-middleware"
+    }
+  ],
+  "url": "llms-txt#deep-agents-middleware",
+  "links": []
+}

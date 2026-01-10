@@ -1,0 +1,917 @@
+{
+  "name": "unsloth",
+  "total_pages": 227,
+  "base_url": "https://docs.unsloth.ai/",
+  "llms_txt_detected": true,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "Unsloth Docs",
+      "url": "llms-txt#unsloth-docs"
+    },
+    {
+      "title": "Fine-tuning for Beginners",
+      "url": "llms-txt#fine-tuning-for-beginners"
+    },
+    {
+      "title": "Unsloth Requirements",
+      "url": "llms-txt#unsloth-requirements"
+    },
+    {
+      "title": "FAQ + Is Fine-tuning Right For Me?",
+      "url": "llms-txt#faq-+-is-fine-tuning-right-for-me?"
+    },
+    {
+      "title": "Unsloth Notebooks",
+      "url": "llms-txt#unsloth-notebooks"
+    },
+    {
+      "title": "Unsloth Model Catalog",
+      "url": "llms-txt#unsloth-model-catalog"
+    },
+    {
+      "title": "Unsloth Installation",
+      "url": "llms-txt#unsloth-installation"
+    },
+    {
+      "title": "Docker",
+      "url": "llms-txt#docker"
+    },
+    {
+      "title": "Generate new key pair",
+      "url": "llms-txt#generate-new-key-pair"
+    },
+    {
+      "title": "Use the public key in docker run",
+      "url": "llms-txt#use-the-public-key-in-docker-run"
+    },
+    {
+      "title": "Connect via SSH",
+      "url": "llms-txt#connect-via-ssh"
+    },
+    {
+      "title": "Generate SSH key pair",
+      "url": "llms-txt#generate-ssh-key-pair"
+    },
+    {
+      "title": "Connect to container",
+      "url": "llms-txt#connect-to-container"
+    },
+    {
+      "title": "Updating",
+      "url": "llms-txt#updating"
+    },
+    {
+      "title": "Instal Unsloth via pip and uv",
+      "url": "llms-txt#instal-unsloth-via-pip-and-uv"
+    },
+    {
+      "title": "Licensed under the Apache License, Version 2.0 (the \"License\")",
+      "url": "llms-txt#licensed-under-the-apache-license,-version-2.0-(the-\"license\")"
+    },
+    {
+      "title": "Windows Installation",
+      "url": "llms-txt#windows-installation"
+    },
+    {
+      "title": "AMD",
+      "url": "llms-txt#amd"
+    },
+    {
+      "title": "Conda Install",
+      "url": "llms-txt#conda-install"
+    },
+    {
+      "title": "Google Colab",
+      "url": "llms-txt#google-colab"
+    },
+    {
+      "title": "Get LAION dataset",
+      "url": "llms-txt#get-laion-dataset"
+    },
+    {
+      "title": "4bit pre quantized models we support for 4x faster downloading + no OOMs.",
+      "url": "llms-txt#4bit-pre-quantized-models-we-support-for-4x-faster-downloading-+-no-ooms."
+    },
+    {
+      "title": "Do model patching and add fast LoRA weights",
+      "url": "llms-txt#do-model-patching-and-add-fast-lora-weights"
+    },
+    {
+      "title": "Go to https://docs.unsloth.ai for advanced tips like",
+      "url": "llms-txt#go-to-https://docs.unsloth.ai-for-advanced-tips-like"
+    },
+    {
+      "title": "(1) Saving to GGUF / merging to 16bit for vLLM",
+      "url": "llms-txt#(1)-saving-to-gguf-/-merging-to-16bit-for-vllm"
+    },
+    {
+      "title": "(2) Continued training from a saved LoRA adapter",
+      "url": "llms-txt#(2)-continued-training-from-a-saved-lora-adapter"
+    },
+    {
+      "title": "(3) Adding an evaluation loop / OOMs",
+      "url": "llms-txt#(3)-adding-an-evaluation-loop-/-ooms"
+    },
+    {
+      "title": "(4) Customized chat templates",
+      "url": "llms-txt#(4)-customized-chat-templates"
+    },
+    {
+      "title": "Fine-tuning LLMs Guide",
+      "url": "llms-txt#fine-tuning-llms-guide"
+    },
+    {
+      "title": "Datasets Guide",
+      "url": "llms-txt#datasets-guide"
+    },
+    {
+      "title": "LoRA fine-tuning Hyperparameters Guide",
+      "url": "llms-txt#lora-fine-tuning-hyperparameters-guide"
+    },
+    {
+      "title": "What Model Should I Use for Fine-tuning?",
+      "url": "llms-txt#what-model-should-i-use-for-fine-tuning?"
+    },
+    {
+      "title": "Tutorial: How to Finetune Llama-3 and Use In Ollama",
+      "url": "llms-txt#tutorial:-how-to-finetune-llama-3-and-use-in-ollama"
+    },
+    {
+      "title": "Reinforcement Learning (RL) Guide",
+      "url": "llms-txt#reinforcement-learning-(rl)-guide"
+    },
+    {
+      "title": "or:",
+      "url": "llms-txt#or:"
+    },
+    {
+      "title": "or:",
+      "url": "llms-txt#or:"
+    },
+    {
+      "title": "Vision Reinforcement Learning (VLM RL)",
+      "url": "llms-txt#vision-reinforcement-learning-(vlm-rl)"
+    },
+    {
+      "title": "Add LoRA adapter to the model for parameter efficient fine tuning",
+      "url": "llms-txt#add-lora-adapter-to-the-model-for-parameter-efficient-fine-tuning"
+    },
+    {
+      "title": "Tutorial: Train your own Reasoning model with GRPO",
+      "url": "llms-txt#tutorial:-train-your-own-reasoning-model-with-grpo"
+    },
+    {
+      "title": "Define the system prompt that instructs the model to use a specific format",
+      "url": "llms-txt#define-the-system-prompt-that-instructs-the-model-to-use-a-specific-format"
+    },
+    {
+      "title": "Helper functions to extract answers from different formats",
+      "url": "llms-txt#helper-functions-to-extract-answers-from-different-formats"
+    },
+    {
+      "title": "Function to prepare the GSM8K dataset",
+      "url": "llms-txt#function-to-prepare-the-gsm8k-dataset"
+    },
+    {
+      "title": "or:",
+      "url": "llms-txt#or:"
+    },
+    {
+      "title": "or:",
+      "url": "llms-txt#or:"
+    },
+    {
+      "title": "or:",
+      "url": "llms-txt#or:"
+    },
+    {
+      "title": "Save to 16-bit precision",
+      "url": "llms-txt#save-to-16-bit-precision"
+    },
+    {
+      "title": "Push to Hugging Face Hub (requires a token)",
+      "url": "llms-txt#push-to-hugging-face-hub-(requires-a-token)"
+    },
+    {
+      "title": "Advanced RL Documentation",
+      "url": "llms-txt#advanced-rl-documentation"
+    },
+    {
+      "title": "FP16 vs BF16 for RL",
+      "url": "llms-txt#fp16-vs-bf16-for-rl"
+    },
+    {
+      "title": "Memory Efficient RL",
+      "url": "llms-txt#memory-efficient-rl"
+    },
+    {
+      "title": "RL Reward Hacking",
+      "url": "llms-txt#rl-reward-hacking"
+    },
+    {
+      "title": "GSPO Reinforcement Learning",
+      "url": "llms-txt#gspo-reinforcement-learning"
+    },
+    {
+      "title": "Reinforcement Learning - DPO, ORPO & KTO",
+      "url": "llms-txt#reinforcement-learning---dpo,-orpo-&-kto"
+    },
+    {
+      "title": "Do model patching and add fast LoRA weights",
+      "url": "llms-txt#do-model-patching-and-add-fast-lora-weights"
+    },
+    {
+      "title": "How to Run and Deploy LLMs on your iOS or Android Phone",
+      "url": "llms-txt#how-to-run-and-deploy-llms-on-your-ios-or-android-phone"
+    },
+    {
+      "title": "Convert the weight checkpoint state dict keys to one that ExecuTorch expects",
+      "url": "llms-txt#convert-the-weight-checkpoint-state-dict-keys-to-one-that-executorch-expects"
+    },
+    {
+      "title": "Download model config from ExecuTorch repo",
+      "url": "llms-txt#download-model-config-from-executorch-repo"
+    },
+    {
+      "title": "Export to ExecuTorch pte file",
+      "url": "llms-txt#export-to-executorch-pte-file"
+    },
+    {
+      "title": "Download the LLM example app directly",
+      "url": "llms-txt#download-the-llm-example-app-directly"
+    },
+    {
+      "title": "Find the simulator's hidden folder",
+      "url": "llms-txt#find-the-simulator's-hidden-folder"
+    },
+    {
+      "title": "Output should look like: openjdk version \"17.0.x\"",
+      "url": "llms-txt#output-should-look-like:-openjdk-version-\"17.0.x\""
+    },
+    {
+      "title": "Important: Reorganize to satisfy SDK structure",
+      "url": "llms-txt#important:-reorganize-to-satisfy-sdk-structure"
+    },
+    {
+      "title": "Accept licenses",
+      "url": "llms-txt#accept-licenses"
+    },
+    {
+      "title": "Install API 34 and NDK 25",
+      "url": "llms-txt#install-api-34-and-ndk-25"
+    },
+    {
+      "title": "3x Faster LLM Training with Unsloth Kernels + Packing",
+      "url": "llms-txt#3x-faster-llm-training-with-unsloth-kernels-+-packing"
+    },
+    {
+      "title": "500K Context Length Fine-tuning",
+      "url": "llms-txt#500k-context-length-fine-tuning"
+    },
+    {
+      "title": "Original Unsloth version released April 2024 - LGPLv3 Licensed",
+      "url": "llms-txt#original-unsloth-version-released-april-2024---lgplv3-licensed"
+    },
+    {
+      "title": "FP8 Reinforcement Learning",
+      "url": "llms-txt#fp8-reinforcement-learning"
+    },
+    {
+      "title": "How to Fine-tune LLMs with Unsloth & Docker",
+      "url": "llms-txt#how-to-fine-tune-llms-with-unsloth-&-docker"
+    },
+    {
+      "title": "Generate new key pair",
+      "url": "llms-txt#generate-new-key-pair"
+    },
+    {
+      "title": "Use the public key in docker run",
+      "url": "llms-txt#use-the-public-key-in-docker-run"
+    },
+    {
+      "title": "Connect via SSH",
+      "url": "llms-txt#connect-via-ssh"
+    },
+    {
+      "title": "FunctionGemma: How to Run & Fine-tune",
+      "url": "llms-txt#functiongemma:-how-to-run-&-fine-tune"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "NVIDIA Nemotron 3 Nano - How To Run Guide",
+      "url": "llms-txt#nvidia-nemotron-3-nano---how-to-run-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "GLM-4.7: How to Run Locally Guide",
+      "url": "llms-txt#glm-4.7:-how-to-run-locally-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Devstral 2 - How to Run Guide",
+      "url": "llms-txt#devstral-2---how-to-run-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Qwen3-VL: How to Run Guide",
+      "url": "llms-txt#qwen3-vl:-how-to-run-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Ministral 3 - How to Run Guide",
+      "url": "llms-txt#ministral-3---how-to-run-guide"
+    },
+    {
+      "title": "WEB BROWSING INSTRUCTIONS",
+      "url": "llms-txt#web-browsing-instructions"
+    },
+    {
+      "title": "MULTI-MODAL INSTRUCTIONS",
+      "url": "llms-txt#multi-modal-instructions"
+    },
+    {
+      "title": "TOOL CALLING INSTRUCTIONS",
+      "url": "llms-txt#tool-calling-instructions"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "GLM-4.6: Run Locally Guide",
+      "url": "llms-txt#glm-4.6:-run-locally-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Qwen3-Next: Run Locally Guide",
+      "url": "llms-txt#qwen3-next:-run-locally-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "DeepSeek-OCR: How to Run & Fine-tune",
+      "url": "llms-txt#deepseek-ocr:-how-to-run-&-fine-tune"
+    },
+    {
+      "title": "Until v0.11.1 release, you need to install vLLM from nightly build",
+      "url": "llms-txt#until-v0.11.1-release,-you-need-to-install-vllm-from-nightly-build"
+    },
+    {
+      "title": "Create model instance",
+      "url": "llms-txt#create-model-instance"
+    },
+    {
+      "title": "Prepare batched input with your image file",
+      "url": "llms-txt#prepare-batched-input-with-your-image-file"
+    },
+    {
+      "title": "Generate output",
+      "url": "llms-txt#generate-output"
+    },
+    {
+      "title": "Print output",
+      "url": "llms-txt#print-output"
+    },
+    {
+      "title": "gpt-oss: How to Run Guide",
+      "url": "llms-txt#gpt-oss:-how-to-run-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "gpt-oss Reinforcement Learning",
+      "url": "llms-txt#gpt-oss-reinforcement-learning"
+    },
+    {
+      "title": "Tutorial: How to Train gpt-oss with RL",
+      "url": "llms-txt#tutorial:-how-to-train-gpt-oss-with-rl"
+    },
+    {
+      "title": "Tutorial: How to Fine-tune gpt-oss",
+      "url": "llms-txt#tutorial:-how-to-fine-tune-gpt-oss"
+    },
+    {
+      "title": "We're installing the latest Torch, Triton, OpenAI's Triton kernels, Transformers and Unsloth!",
+      "url": "llms-txt#we're-installing-the-latest-torch,-triton,-openai's-triton-kernels,-transformers-and-unsloth!"
+    },
+    {
+      "title": "4bit pre quantized models we support for 4x faster downloading + no OOMs.",
+      "url": "llms-txt#4bit-pre-quantized-models-we-support-for-4x-faster-downloading-+-no-ooms."
+    },
+    {
+      "title": "Long Context gpt-oss Training",
+      "url": "llms-txt#long-context-gpt-oss-training"
+    },
+    {
+      "title": "DeepSeek-V3.1: How to Run Locally",
+      "url": "llms-txt#deepseek-v3.1:-how-to-run-locally"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Kimi K2 Thinking: Run Locally Guide",
+      "url": "llms-txt#kimi-k2-thinking:-run-locally-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Qwen3-Coder: How to Run Locally",
+      "url": "llms-txt#qwen3-coder:-how-to-run-locally"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Gemma 3 - How to Run Guide",
+      "url": "llms-txt#gemma-3---how-to-run-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Gemma 3n: How to Run & Fine-tune",
+      "url": "llms-txt#gemma-3n:-how-to-run-&-fine-tune"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Qwen3 - How to Run & Fine-tune",
+      "url": "llms-txt#qwen3---how-to-run-&-fine-tune"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Qwen3-2507: Run Locally Guide",
+      "url": "llms-txt#qwen3-2507:-run-locally-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "How to Run Local LLMs with Docker: Step-by-Step Guide",
+      "url": "llms-txt#how-to-run-local-llms-with-docker:-step-by-step-guide"
+    },
+    {
+      "title": "Tutorials: How To Fine-tune & Run LLMs",
+      "url": "llms-txt#tutorials:-how-to-fine-tune-&-run-llms"
+    },
+    {
+      "title": "DeepSeek-R1-0528: How to Run Locally",
+      "url": "llms-txt#deepseek-r1-0528:-how-to-run-locally"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Magistral: How to Run & Fine-tune",
+      "url": "llms-txt#magistral:-how-to-run-&-fine-tune"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "IBM Granite 4.0",
+      "url": "llms-txt#ibm-granite-4.0"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Llama 4: How to Run & Fine-tune",
+      "url": "llms-txt#llama-4:-how-to-run-&-fine-tune"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Grok 2",
+      "url": "llms-txt#grok-2"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Devstral: How to Run & Fine-tune",
+      "url": "llms-txt#devstral:-how-to-run-&-fine-tune"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "DeepSeek-V3-0324: How to Run Locally",
+      "url": "llms-txt#deepseek-v3-0324:-how-to-run-locally"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Constants",
+      "url": "llms-txt#constants"
+    },
+    {
+      "title": "Constants",
+      "url": "llms-txt#constants"
+    },
+    {
+      "title": "Colors for the balls",
+      "url": "llms-txt#colors-for-the-balls"
+    },
+    {
+      "title": "Constants",
+      "url": "llms-txt#constants"
+    },
+    {
+      "title": "Colors for the balls",
+      "url": "llms-txt#colors-for-the-balls"
+    },
+    {
+      "title": "DeepSeek-R1: How to Run Locally",
+      "url": "llms-txt#deepseek-r1:-how-to-run-locally"
+    },
+    {
+      "title": "pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "import os # Optional for faster downloading",
+      "url": "llms-txt#import-os-#-optional-for-faster-downloading"
+    },
+    {
+      "title": "os.environ[\"HF_HUB_ENABLE_HF_TRANSFER\"] = \"1\"",
+      "url": "llms-txt#os.environ[\"hf_hub_enable_hf_transfer\"]-=-\"1\""
+    },
+    {
+      "title": "DeepSeek-R1 Dynamic 1.58-bit",
+      "url": "llms-txt#deepseek-r1-dynamic-1.58-bit"
+    },
+    {
+      "title": "Phi-4 Reasoning: How to Run & Fine-tune",
+      "url": "llms-txt#phi-4-reasoning:-how-to-run-&-fine-tune"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "QwQ-32B: How to Run effectively",
+      "url": "llms-txt#qwq-32b:-how-to-run-effectively"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Colors",
+      "url": "llms-txt#colors"
+    },
+    {
+      "title": "Game constants",
+      "url": "llms-txt#game-constants"
+    },
+    {
+      "title": "Constants",
+      "url": "llms-txt#constants"
+    },
+    {
+      "title": "Constants:",
+      "url": "llms-txt#constants:"
+    },
+    {
+      "title": "Main game loop:",
+      "url": "llms-txt#main-game-loop:"
+    },
+    {
+      "title": "Cogito v2.1: How to Run Locally",
+      "url": "llms-txt#cogito-v2.1:-how-to-run-locally"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Inference & Deployment",
+      "url": "llms-txt#inference-&-deployment"
+    },
+    {
+      "title": "Saving to GGUF",
+      "url": "llms-txt#saving-to-gguf"
+    },
+    {
+      "title": "https://github.com/ggerganov/llama.cpp/blob/master/examples/quantize/quantize.cpp#L19",
+      "url": "llms-txt#https://github.com/ggerganov/llama.cpp/blob/master/examples/quantize/quantize.cpp#l19"
+    },
+    {
+      "title": "From https://mlabonne.github.io/blog/posts/Quantize_Llama_2_models_using_ggml.html",
+      "url": "llms-txt#from-https://mlabonne.github.io/blog/posts/quantize_llama_2_models_using_ggml.html"
+    },
+    {
+      "title": "For BF16:",
+      "url": "llms-txt#for-bf16:"
+    },
+    {
+      "title": "For Q8_0:",
+      "url": "llms-txt#for-q8_0:"
+    },
+    {
+      "title": "Saving to Ollama",
+      "url": "llms-txt#saving-to-ollama"
+    },
+    {
+      "title": "vLLM Deployment & Inference Guide",
+      "url": "llms-txt#vllm-deployment-&-inference-guide"
+    },
+    {
+      "title": "vLLM Engine Arguments",
+      "url": "llms-txt#vllm-engine-arguments"
+    },
+    {
+      "title": "LoRA Hot Swapping Guide",
+      "url": "llms-txt#lora-hot-swapping-guide"
+    },
+    {
+      "title": "SGLang Deployment & Inference Guide",
+      "url": "llms-txt#sglang-deployment-&-inference-guide"
+    },
+    {
+      "title": "OPTIONAL use a virtual environment",
+      "url": "llms-txt#optional-use-a-virtual-environment"
+    },
+    {
+      "title": "Install Rust, outlines-core then SGLang",
+      "url": "llms-txt#install-rust,-outlines-core-then-sglang"
+    },
+    {
+      "title": "Install openai via pip install openai",
+      "url": "llms-txt#install-openai-via-pip-install-openai"
+    },
+    {
+      "title": "<|channel|>analysis<|message|>The user asks a simple math question. We should answer 4. Also we should comply with policy. No issues.<|end|><|start|>assistant<|channel|>final<|message|>2 + 2 equals 4.",
+      "url": "llms-txt#<|channel|>analysis<|message|>the-user-asks-a-simple-math-question.-we-should-answer-4.-also-we-should-comply-with-policy.-no-issues.<|end|><|start|>assistant<|channel|>final<|message|>2-+-2-equals-4."
+    },
+    {
+      "title": "Batch Size=8, Input=1024, Output=1024",
+      "url": "llms-txt#batch-size=8,-input=1024,-output=1024"
+    },
+    {
+      "title": "Unsloth Inference",
+      "url": "llms-txt#unsloth-inference"
+    },
+    {
+      "title": "Troubleshooting Inference",
+      "url": "llms-txt#troubleshooting-inference"
+    },
+    {
+      "title": "llama-server & OpenAI endpoint Deployment Guide",
+      "url": "llms-txt#llama-server-&-openai-endpoint-deployment-guide"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Text-to-Speech (TTS) Fine-tuning",
+      "url": "llms-txt#text-to-speech-(tts)-fine-tuning"
+    },
+    {
+      "title": "Load the Elise dataset (e.g., the version with emotion tags)",
+      "url": "llms-txt#load-the-elise-dataset-(e.g.,-the-version-with-emotion-tags)"
+    },
+    {
+      "title": "Ensure all audio is at 24 kHz sampling rate (Orpheus’s expected rate)",
+      "url": "llms-txt#ensure-all-audio-is-at-24-khz-sampling-rate-(orpheus’s-expected-rate)"
+    },
+    {
+      "title": "Tokenize the text transcripts",
+      "url": "llms-txt#tokenize-the-text-transcripts"
+    },
+    {
+      "title": "model.push_to_hub(\"your_name/lora_model\", token = \"...\") # Online saving",
+      "url": "llms-txt#model.push_to_hub(\"your_name/lora_model\",-token-=-\"...\")-#-online-saving"
+    },
+    {
+      "title": "tokenizer.push_to_hub(\"your_name/lora_model\", token = \"...\") # Online saving",
+      "url": "llms-txt#tokenizer.push_to_hub(\"your_name/lora_model\",-token-=-\"...\")-#-online-saving"
+    },
+    {
+      "title": "Multi-GPU Fine-tuning with Unsloth",
+      "url": "llms-txt#multi-gpu-fine-tuning-with-unsloth"
+    },
+    {
+      "title": "Multi-GPU Fine-tuning with Distributed Data Parallel (DDP)",
+      "url": "llms-txt#multi-gpu-fine-tuning-with-distributed-data-parallel-(ddp)"
+    },
+    {
+      "title": "required:",
+      "url": "llms-txt#required:"
+    },
+    {
+      "title": "--model_name",
+      "url": "llms-txt#--model_name"
+    },
+    {
+      "title": "--dataset",
+      "url": "llms-txt#--dataset"
+    },
+    {
+      "title": "optional; experiment with these:",
+      "url": "llms-txt#optional;-experiment-with-these:"
+    },
+    {
+      "title": "--learning_rate, --max_seq_length, --per_device_train_batch_size, --gradient_accumulation_steps, --max_steps",
+      "url": "llms-txt#--learning_rate,---max_seq_length,---per_device_train_batch_size,---gradient_accumulation_steps,---max_steps"
+    },
+    {
+      "title": "to save the model at the end of training:",
+      "url": "llms-txt#to-save-the-model-at-the-end-of-training:"
+    },
+    {
+      "title": "--save_model",
+      "url": "llms-txt#--save_model"
+    },
+    {
+      "title": "Unsloth Dynamic 2.0 GGUFs",
+      "url": "llms-txt#unsloth-dynamic-2.0-ggufs"
+    },
+    {
+      "title": "!pip install huggingface_hub hf_transfer",
+      "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer"
+    },
+    {
+      "title": "Unsloth Dynamic GGUFs on Aider Polyglot",
+      "url": "llms-txt#unsloth-dynamic-ggufs-on-aider-polyglot"
+    },
+    {
+      "title": "Vision Fine-tuning",
+      "url": "llms-txt#vision-fine-tuning"
+    },
+    {
+      "title": "Fine-tuning LLMs with NVIDIA DGX Spark and Unsloth",
+      "url": "llms-txt#fine-tuning-llms-with-nvidia-dgx-spark-and-unsloth"
+    },
+    {
+      "title": "Set CUDA environment variables",
+      "url": "llms-txt#set-cuda-environment-variables"
+    },
+    {
+      "title": "Install triton from source for latest blackwell support",
+      "url": "llms-txt#install-triton-from-source-for-latest-blackwell-support"
+    },
+    {
+      "title": "Install xformers from source for blackwell support",
+      "url": "llms-txt#install-xformers-from-source-for-blackwell-support"
+    },
+    {
+      "title": "Install unsloth and other dependencies",
+      "url": "llms-txt#install-unsloth-and-other-dependencies"
+    },
+    {
+      "title": "Launch the shell",
+      "url": "llms-txt#launch-the-shell"
+    },
+    {
+      "title": "Fine-tuning LLMs with Blackwell, RTX 50 series & Unsloth",
+      "url": "llms-txt#fine-tuning-llms-with-blackwell,-rtx-50-series-&-unsloth"
+    },
+    {
+      "title": "First uninstall xformers installed by previous libraries",
+      "url": "llms-txt#first-uninstall-xformers-installed-by-previous-libraries"
+    },
+    {
+      "title": "Clone and build",
+      "url": "llms-txt#clone-and-build"
+    },
+    {
+      "title": "Troubleshooting & FAQs",
+      "url": "llms-txt#troubleshooting-&-faqs"
+    },
+    {
+      "title": "For BF16:",
+      "url": "llms-txt#for-bf16:"
+    },
+    {
+      "title": "For Q8_0:",
+      "url": "llms-txt#for-q8_0:"
+    },
+    {
+      "title": "Chat Templates",
+      "url": "llms-txt#chat-templates"
+    },
+    {
+      "title": "Quantization-Aware Training (QAT)",
+      "url": "llms-txt#quantization-aware-training-(qat)"
+    },
+    {
+      "title": "Use the exact same config as QAT (convenient function)",
+      "url": "llms-txt#use-the-exact-same-config-as-qat-(convenient-function)"
+    },
+    {
+      "title": "Int4 QAT",
+      "url": "llms-txt#int4-qat"
+    },
+    {
+      "title": "Int8 QAT",
+      "url": "llms-txt#int8-qat"
+    },
+    {
+      "title": "Float8",
+      "url": "llms-txt#float8"
+    },
+    {
+      "title": "Unsloth Environment Flags",
+      "url": "llms-txt#unsloth-environment-flags"
+    },
+    {
+      "title": "Continued Pretraining",
+      "url": "llms-txt#continued-pretraining"
+    },
+    {
+      "title": "Finetuning from Last Checkpoint",
+      "url": "llms-txt#finetuning-from-last-checkpoint"
+    },
+    {
+      "title": "Install library",
+      "url": "llms-txt#install-library"
+    },
+    {
+      "title": "Setting up Wandb",
+      "url": "llms-txt#setting-up-wandb"
+    },
+    {
+      "title": "Unsloth Benchmarks",
+      "url": "llms-txt#unsloth-benchmarks"
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html",
+  "title": "autogen_ext.tools.graphrag — AutoGen",
+  "content": "Bases: BaseTool[GlobalSearchToolArgs, GlobalSearchToolReturn]\n\nEnables running GraphRAG global search queries as an AutoGen tool.\n\nThis tool allows you to perform semantic search over a corpus of documents using the GraphRAG framework. The search combines graph-based document relationships with semantic embeddings to find relevant information.\n\nThis tool requires the graphrag extra for the autogen-ext package.\n\nBefore using this tool, you must complete the GraphRAG setup and indexing process:\n\nFollow the GraphRAG documentation to initialize your project and settings\n\nConfigure and tune your prompts for the specific use case\n\nRun the indexing process to generate the required data files\n\nEnsure you have the settings.yaml file from the setup process\n\nPlease refer to the [GraphRAG documentation](https://microsoft.github.io/graphrag/) for detailed instructions on completing these prerequisite steps.\n\nExample usage with AssistantAgent:\n\nCreate a GlobalSearchTool instance from GraphRAG settings file.\n\nroot_dir – Path to the GraphRAG root directory\n\nconfig_filepath – Path to the GraphRAG settings file (optional)\n\nAn initialized GlobalSearchTool instance\n\nBases: BaseTool[LocalSearchToolArgs, LocalSearchToolReturn]\n\nEnables running GraphRAG local search queries as an AutoGen tool.\n\nThis tool allows you to perform semantic search over a corpus of documents using the GraphRAG framework. The search combines local document context with semantic embeddings to find relevant information.\n\nThis tool requires the graphrag extra for the autogen-ext package. To install:\n\nBefore using this tool, you must complete the GraphRAG setup and indexing process:\n\nFollow the GraphRAG documentation to initialize your project and settings\n\nConfigure and tune your prompts for the specific use case\n\nRun the indexing process to generate the required data files\n\nEnsure you have the settings.yaml file from the setup process\n\nPlease refer to the [GraphRAG documentation](https://microsoft.github.io/graphrag/) for detailed instructions on completing these prerequisite steps.\n\nExample usage with AssistantAgent:\n\ntoken_encoder (tiktoken.Encoding) – The tokenizer used for text encoding\n\nmodel – The chat model to use for search (GraphRAG ChatModel)\n\nembedder – The text embedding model to use (GraphRAG EmbeddingModel)\n\ndata_config (DataConfig) – Configuration for data source locations and settings\n\ncontext_config (LocalContextConfig, optional) – Configuration for context building. Defaults to default config.\n\nsearch_config (SearchConfig, optional) – Configuration for search operations. Defaults to default config.\n\nCreate a LocalSearchTool instance from GraphRAG settings file.\n\nroot_dir – Path to the GraphRAG root directory\n\nconfig_filepath – Path to the GraphRAG settings file (optional)\n\nAn initialized LocalSearchTool instance\n\nShow JSON schema{ \"title\": \"GlobalDataConfig\", \"type\": \"object\", \"properties\": { \"input_dir\": { \"title\": \"Input Dir\", \"type\": \"string\" }, \"entity_table\": { \"default\": \"entities\", \"title\": \"Entity Table\", \"type\": \"string\" }, \"entity_embedding_table\": { \"default\": \"entities\", \"title\": \"Entity Embedding Table\", \"type\": \"string\" }, \"community_table\": { \"default\": \"communities\", \"title\": \"Community Table\", \"type\": \"string\" }, \"community_level\": { \"default\": 2, \"title\": \"Community Level\", \"type\": \"integer\" }, \"community_report_table\": { \"default\": \"community_reports\", \"title\": \"Community Report Table\", \"type\": \"string\" } }, \"required\": [ \"input_dir\" ] }\n\ncommunity_report_table (str)\n\nShow JSON schema{ \"title\": \"LocalDataConfig\", \"type\": \"object\", \"properties\": { \"input_dir\": { \"title\": \"Input Dir\", \"type\": \"string\" }, \"entity_table\": { \"default\": \"entities\", \"title\": \"Entity Table\", \"type\": \"string\" }, \"entity_embedding_table\": { \"default\": \"entities\", \"title\": \"Entity Embedding Table\", \"type\": \"string\" }, \"community_table\": { \"default\": \"communities\", \"title\": \"Community Table\", \"type\": \"string\" }, \"community_level\": { \"default\": 2, \"title\": \"Community Level\", \"type\": \"integer\" }, \"relationship_table\": { \"default\": \"relationships\", \"title\": \"Relationship Table\", \"type\": \"string\" }, \"text_unit_table\": { \"default\": \"text_units\", \"title\": \"Text Unit Table\", \"type\": \"string\" } }, \"required\": [ \"input_dir\" ] }\n\nrelationship_table (str)\n\ntext_unit_table (str)\n\nShow JSON schema{ \"title\": \"GlobalContextConfig\", \"type\": \"object\", \"properties\": { \"max_data_tokens\": { \"default\": 12000, \"title\": \"Max Data Tokens\", \"type\": \"integer\" }, \"use_community_summary\": { \"default\": false, \"title\": \"Use Community Summary\", \"type\": \"boolean\" }, \"shuffle_data\": { \"default\": true, \"title\": \"Shuffle Data\", \"type\": \"boolean\" }, \"include_community_rank\": { \"default\": true, \"title\": \"Include Community Rank\", \"type\": \"boolean\" }, \"min_community_rank\": { \"default\": 0, \"title\": \"Min Community Rank\", \"type\": \"integer\" }, \"community_rank_name\": { \"default\": \"rank\", \"title\": \"Community Rank Name\", \"type\": \"string\" }, \"include_community_weight\": { \"default\": true, \"title\": \"Include Community Weight\", \"type\": \"boolean\" }, \"community_weight_name\": { \"default\": \"occurrence weight\", \"title\": \"Community Weight Name\", \"type\": \"string\" }, \"normalize_community_weight\": { \"default\": true, \"title\": \"Normalize Community Weight\", \"type\": \"boolean\" } } }\n\ncommunity_rank_name (str)\n\ncommunity_weight_name (str)\n\ninclude_community_rank (bool)\n\ninclude_community_weight (bool)\n\nmax_data_tokens (int)\n\nmin_community_rank (int)\n\nnormalize_community_weight (bool)\n\nuse_community_summary (bool)\n\nShow JSON schema{ \"title\": \"GlobalSearchToolArgs\", \"type\": \"object\", \"properties\": { \"query\": { \"description\": \"The user query to perform global search on.\", \"title\": \"Query\", \"type\": \"string\" } }, \"required\": [ \"query\" ] }\n\nThe user query to perform global search on.\n\nShow JSON schema{ \"title\": \"GlobalSearchToolReturn\", \"type\": \"object\", \"properties\": { \"answer\": { \"title\": \"Answer\", \"type\": \"string\" } }, \"required\": [ \"answer\" ] }\n\nShow JSON schema{ \"title\": \"LocalContextConfig\", \"type\": \"object\", \"properties\": { \"max_data_tokens\": { \"default\": 8000, \"title\": \"Max Data Tokens\", \"type\": \"integer\" }, \"text_unit_prop\": { \"default\": 0.5, \"title\": \"Text Unit Prop\", \"type\": \"number\" }, \"community_prop\": { \"default\": 0.25, \"title\": \"Community Prop\", \"type\": \"number\" }, \"include_entity_rank\": { \"default\": true, \"title\": \"Include Entity Rank\", \"type\": \"boolean\" }, \"rank_description\": { \"default\": \"number of relationships\", \"title\": \"Rank Description\", \"type\": \"string\" }, \"include_relationship_weight\": { \"default\": true, \"title\": \"Include Relationship Weight\", \"type\": \"boolean\" }, \"relationship_ranking_attribute\": { \"default\": \"rank\", \"title\": \"Relationship Ranking Attribute\", \"type\": \"string\" } } }\n\ncommunity_prop (float)\n\ninclude_entity_rank (bool)\n\ninclude_relationship_weight (bool)\n\nrank_description (str)\n\nrelationship_ranking_attribute (str)\n\ntext_unit_prop (float)\n\nShow JSON schema{ \"title\": \"LocalSearchToolArgs\", \"type\": \"object\", \"properties\": { \"query\": { \"description\": \"The user query to perform local search on.\", \"title\": \"Query\", \"type\": \"string\" } }, \"required\": [ \"query\" ] }\n\nThe user query to perform local search on.\n\nShow JSON schema{ \"title\": \"LocalSearchToolReturn\", \"type\": \"object\", \"properties\": { \"answer\": { \"description\": \"The answer to the user query.\", \"title\": \"Answer\", \"type\": \"string\" } }, \"required\": [ \"answer\" ] }\n\nThe answer to the user query.\n\nShow JSON schema{ \"title\": \"MapReduceConfig\", \"type\": \"object\", \"properties\": { \"map_max_tokens\": { \"default\": 1000, \"title\": \"Map Max Tokens\", \"type\": \"integer\" }, \"map_temperature\": { \"default\": 0.0, \"title\": \"Map Temperature\", \"type\": \"number\" }, \"reduce_max_tokens\": { \"default\": 2000, \"title\": \"Reduce Max Tokens\", \"type\": \"integer\" }, \"reduce_temperature\": { \"default\": 0.0, \"title\": \"Reduce Temperature\", \"type\": \"number\" }, \"allow_general_knowledge\": { \"default\": false, \"title\": \"Allow General Knowledge\", \"type\": \"boolean\" }, \"json_mode\": { \"default\": false, \"title\": \"Json Mode\", \"type\": \"boolean\" }, \"response_type\": { \"default\": \"multiple paragraphs\", \"title\": \"Response Type\", \"type\": \"string\" } } }\n\nallow_general_knowledge (bool)\n\nmap_temperature (float)\n\nreduce_max_tokens (int)\n\nreduce_temperature (float)\n\nShow JSON schema{ \"title\": \"SearchConfig\", \"type\": \"object\", \"properties\": { \"max_tokens\": { \"default\": 1500, \"title\": \"Max Tokens\", \"type\": \"integer\" }, \"temperature\": { \"default\": 0.0, \"title\": \"Temperature\", \"type\": \"number\" }, \"response_type\": { \"default\": \"multiple paragraphs\", \"title\": \"Response Type\", \"type\": \"string\" } } }\n\nautogen_ext.tools.code_execution\n\nautogen_ext.tools.http",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "autogen_ext.tools.graphrag#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "pip install -U \"autogen-agentchat\" \"autogen-ext[graphrag]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install -U \"autogen-agentchat\" \"autogen-ext[graphrag]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "import asyncio\nfrom pathlib import Path\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.tools.graphrag import GlobalSearchTool\nfrom autogen_agentchat.agents import AssistantAgent\n\n\nasync def main():\n    # Initialize the OpenAI client\n    openai_client = OpenAIChatCompletionClient(\n        model=\"gpt-4o-mini\",\n        api_key=\"<api-key>\",\n    )\n\n    # Set up global search tool\n    global_tool = GlobalSearchTool.from_settings(root_dir=Path(\"./\"), config_filepath=Path(\"./settings.yaml\"))\n\n    # Create assistant agent with the global search tool\n    assistant_agent = AssistantAgent(\n        name=\"search_assistant\",\n        tools=[global_tool],\n        model_client=openai_client,\n        system_message=(\n            \"You are a tool selector AI assistant using the GraphRAG framework. \"\n            \"Your primary task is to determine the appropriate search tool to call based on the user's query. \"\n            \"For broader, abstract questions requiring a comprehensive understanding of the dataset, call the 'global_search' function.\"\n        ),\n    )\n\n    # Run a sample query\n    query = \"What is the overall sentiment of the community reports?\"\n    await Console(assistant_agent.run_stream(task=query))\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nfrom pathlib import Path\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.tools.graphrag import GlobalSearchTool\nfrom autogen_agentchat.agents import AssistantAgent\n\n\nasync def main():\n    # Initialize the OpenAI client\n    openai_client = OpenAIChatCompletionClient(\n        model=\"gpt-4o-mini\",\n        api_key=\"<api-key>\",\n    )\n\n    # Set up global search tool\n    global_tool = GlobalSearchTool.from_settings(root_dir=Path(\"./\"), config_filepath=Path(\"./settings.yaml\"))\n\n    # Create assistant agent with the global search tool\n    assistant_agent = AssistantAgent(\n        name=\"search_assistant\",\n        tools=[global_tool],\n        model_client=openai_client,\n        system_message=(\n            \"You are a tool selector AI assistant using the GraphRAG framework. \"\n            \"Your primary task is to determine the appropriate search tool to call based on the user's query. \"\n            \"For broader, abstract questions requiring a comprehensive understanding of the dataset, call the 'global_search' function.\"\n        ),\n    )\n\n    # Run a sample query\n    query = \"What is the overall sentiment of the community reports?\"\n    await Console(assistant_agent.run_stream(task=query))\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "pip install -U \"autogen-agentchat\" \"autogen-ext[graphrag]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install -U \"autogen-agentchat\" \"autogen-ext[graphrag]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "import asyncio\nfrom pathlib import Path\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.tools.graphrag import LocalSearchTool\nfrom autogen_agentchat.agents import AssistantAgent\n\n\nasync def main():\n    # Initialize the OpenAI client\n    openai_client = OpenAIChatCompletionClient(\n        model=\"gpt-4o-mini\",\n        api_key=\"<api-key>\",\n    )\n\n    # Set up local search tool\n    local_tool = LocalSearchTool.from_settings(root_dir=Path(\"./\"), config_filepath=Path(\"./settings.yaml\"))\n\n    # Create assistant agent with the local search tool\n    assistant_agent = AssistantAgent(\n        name=\"search_assistant\",\n        tools=[local_tool],\n        model_client=openai_client,\n        system_message=(\n            \"You are a tool selector AI assistant using the GraphRAG framework. \"\n            \"Your primary task is to determine the appropriate search tool to call based on the user's query. \"\n            \"For specific, detailed information about particular entities or relationships, call the 'local_search' function.\"\n        ),\n    )\n\n    # Run a sample query\n    query = \"What does the station-master say about Dr. Becher?\"\n    await Console(assistant_agent.run_stream(task=query))\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nfrom pathlib import Path\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.tools.graphrag import LocalSearchTool\nfrom autogen_agentchat.agents import AssistantAgent\n\n\nasync def main():\n    # Initialize the OpenAI client\n    openai_client = OpenAIChatCompletionClient(\n        model=\"gpt-4o-mini\",\n        api_key=\"<api-key>\",\n    )\n\n    # Set up local search tool\n    local_tool = LocalSearchTool.from_settings(root_dir=Path(\"./\"), config_filepath=Path(\"./settings.yaml\"))\n\n    # Create assistant agent with the local search tool\n    assistant_agent = AssistantAgent(\n        name=\"search_assistant\",\n        tools=[local_tool],\n        model_client=openai_client,\n        system_message=(\n            \"You are a tool selector AI assistant using the GraphRAG framework. \"\n            \"Your primary task is to determine the appropriate search tool to call based on the user's query. \"\n            \"For specific, detailed information about particular entities or relationships, call the 'local_search' function.\"\n        ),\n    )\n\n    # Run a sample query\n    query = \"What does the station-master say about Dr. Becher?\"\n    await Console(assistant_agent.run_stream(task=query))\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "{\n   \"title\": \"GlobalDataConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"input_dir\": {\n         \"title\": \"Input Dir\",\n         \"type\": \"string\"\n      },\n      \"entity_table\": {\n         \"default\": \"entities\",\n         \"title\": \"Entity Table\",\n         \"type\": \"string\"\n      },\n      \"entity_embedding_table\": {\n         \"default\": \"entities\",\n         \"title\": \"Entity Embedding Table\",\n         \"type\": \"string\"\n      },\n      \"community_table\": {\n         \"default\": \"communities\",\n         \"title\": \"Community Table\",\n         \"type\": \"string\"\n      },\n      \"community_level\": {\n         \"default\": 2,\n         \"title\": \"Community Level\",\n         \"type\": \"integer\"\n      },\n      \"community_report_table\": {\n         \"default\": \"community_reports\",\n         \"title\": \"Community Report Table\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"input_dir\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"GlobalDataConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"input_dir\": {\n         \"title\": \"Input Dir\",\n         \"type\": \"string\"\n      },\n      \"entity_table\": {\n         \"default\": \"entities\",\n         \"title\": \"Entity Table\",\n         \"type\": \"string\"\n      },\n      \"entity_embedding_table\": {\n         \"default\": \"entities\",\n         \"title\": \"Entity Embedding Table\",\n         \"type\": \"string\"\n      },\n      \"community_table\": {\n         \"default\": \"communities\",\n         \"title\": \"Community Table\",\n         \"type\": \"string\"\n      },\n      \"community_level\": {\n         \"default\": 2,\n         \"title\": \"Community Level\",\n         \"type\": \"integer\"\n      },\n      \"community_report_table\": {\n         \"default\": \"community_reports\",\n         \"title\": \"Community Report Table\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"input_dir\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"LocalDataConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"input_dir\": {\n         \"title\": \"Input Dir\",\n         \"type\": \"string\"\n      },\n      \"entity_table\": {\n         \"default\": \"entities\",\n         \"title\": \"Entity Table\",\n         \"type\": \"string\"\n      },\n      \"entity_embedding_table\": {\n         \"default\": \"entities\",\n         \"title\": \"Entity Embedding Table\",\n         \"type\": \"string\"\n      },\n      \"community_table\": {\n         \"default\": \"communities\",\n         \"title\": \"Community Table\",\n         \"type\": \"string\"\n      },\n      \"community_level\": {\n         \"default\": 2,\n         \"title\": \"Community Level\",\n         \"type\": \"integer\"\n      },\n      \"relationship_table\": {\n         \"default\": \"relationships\",\n         \"title\": \"Relationship Table\",\n         \"type\": \"string\"\n      },\n      \"text_unit_table\": {\n         \"default\": \"text_units\",\n         \"title\": \"Text Unit Table\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"input_dir\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"LocalDataConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"input_dir\": {\n         \"title\": \"Input Dir\",\n         \"type\": \"string\"\n      },\n      \"entity_table\": {\n         \"default\": \"entities\",\n         \"title\": \"Entity Table\",\n         \"type\": \"string\"\n      },\n      \"entity_embedding_table\": {\n         \"default\": \"entities\",\n         \"title\": \"Entity Embedding Table\",\n         \"type\": \"string\"\n      },\n      \"community_table\": {\n         \"default\": \"communities\",\n         \"title\": \"Community Table\",\n         \"type\": \"string\"\n      },\n      \"community_level\": {\n         \"default\": 2,\n         \"title\": \"Community Level\",\n         \"type\": \"integer\"\n      },\n      \"relationship_table\": {\n         \"default\": \"relationships\",\n         \"title\": \"Relationship Table\",\n         \"type\": \"string\"\n      },\n      \"text_unit_table\": {\n         \"default\": \"text_units\",\n         \"title\": \"Text Unit Table\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"input_dir\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"GlobalContextConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"max_data_tokens\": {\n         \"default\": 12000,\n         \"title\": \"Max Data Tokens\",\n         \"type\": \"integer\"\n      },\n      \"use_community_summary\": {\n         \"default\": false,\n         \"title\": \"Use Community Summary\",\n         \"type\": \"boolean\"\n      },\n      \"shuffle_data\": {\n         \"default\": true,\n         \"title\": \"Shuffle Data\",\n         \"type\": \"boolean\"\n      },\n      \"include_community_rank\": {\n         \"default\": true,\n         \"title\": \"Include Community Rank\",\n         \"type\": \"boolean\"\n      },\n      \"min_community_rank\": {\n         \"default\": 0,\n         \"title\": \"Min Community Rank\",\n         \"type\": \"integer\"\n      },\n      \"community_rank_name\": {\n         \"default\": \"rank\",\n         \"title\": \"Community Rank Name\",\n         \"type\": \"string\"\n      },\n      \"include_community_weight\": {\n         \"default\": true,\n         \"title\": \"Include Community Weight\",\n         \"type\": \"boolean\"\n      },\n      \"community_weight_name\": {\n         \"default\": \"occurrence weight\",\n         \"title\": \"Community Weight Name\",\n         \"type\": \"string\"\n      },\n      \"normalize_community_weight\": {\n         \"default\": true,\n         \"title\": \"Normalize Community Weight\",\n         \"type\": \"boolean\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"GlobalContextConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"max_data_tokens\": {\n         \"default\": 12000,\n         \"title\": \"Max Data Tokens\",\n         \"type\": \"integer\"\n      },\n      \"use_community_summary\": {\n         \"default\": false,\n         \"title\": \"Use Community Summary\",\n         \"type\": \"boolean\"\n      },\n      \"shuffle_data\": {\n         \"default\": true,\n         \"title\": \"Shuffle Data\",\n         \"type\": \"boolean\"\n      },\n      \"include_community_rank\": {\n         \"default\": true,\n         \"title\": \"Include Community Rank\",\n         \"type\": \"boolean\"\n      },\n      \"min_community_rank\": {\n         \"default\": 0,\n         \"title\": \"Min Community Rank\",\n         \"type\": \"integer\"\n      },\n      \"community_rank_name\": {\n         \"default\": \"rank\",\n         \"title\": \"Community Rank Name\",\n         \"type\": \"string\"\n      },\n      \"include_community_weight\": {\n         \"default\": true,\n         \"title\": \"Include Community Weight\",\n         \"type\": \"boolean\"\n      },\n      \"community_weight_name\": {\n         \"default\": \"occurrence weight\",\n         \"title\": \"Community Weight Name\",\n         \"type\": \"string\"\n      },\n      \"normalize_community_weight\": {\n         \"default\": true,\n         \"title\": \"Normalize Community Weight\",\n         \"type\": \"boolean\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"GlobalSearchToolArgs\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"query\": {\n         \"description\": \"The user query to perform global search on.\",\n         \"title\": \"Query\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"query\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"GlobalSearchToolArgs\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"query\": {\n         \"description\": \"The user query to perform global search on.\",\n         \"title\": \"Query\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"query\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"GlobalSearchToolReturn\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"answer\": {\n         \"title\": \"Answer\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"answer\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"GlobalSearchToolReturn\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"answer\": {\n         \"title\": \"Answer\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"answer\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"LocalContextConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"max_data_tokens\": {\n         \"default\": 8000,\n         \"title\": \"Max Data Tokens\",\n         \"type\": \"integer\"\n      },\n      \"text_unit_prop\": {\n         \"default\": 0.5,\n         \"title\": \"Text Unit Prop\",\n         \"type\": \"number\"\n      },\n      \"community_prop\": {\n         \"default\": 0.25,\n         \"title\": \"Community Prop\",\n         \"type\": \"number\"\n      },\n      \"include_entity_rank\": {\n         \"default\": true,\n         \"title\": \"Include Entity Rank\",\n         \"type\": \"boolean\"\n      },\n      \"rank_description\": {\n         \"default\": \"number of relationships\",\n         \"title\": \"Rank Description\",\n         \"type\": \"string\"\n      },\n      \"include_relationship_weight\": {\n         \"default\": true,\n         \"title\": \"Include Relationship Weight\",\n         \"type\": \"boolean\"\n      },\n      \"relationship_ranking_attribute\": {\n         \"default\": \"rank\",\n         \"title\": \"Relationship Ranking Attribute\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"LocalContextConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"max_data_tokens\": {\n         \"default\": 8000,\n         \"title\": \"Max Data Tokens\",\n         \"type\": \"integer\"\n      },\n      \"text_unit_prop\": {\n         \"default\": 0.5,\n         \"title\": \"Text Unit Prop\",\n         \"type\": \"number\"\n      },\n      \"community_prop\": {\n         \"default\": 0.25,\n         \"title\": \"Community Prop\",\n         \"type\": \"number\"\n      },\n      \"include_entity_rank\": {\n         \"default\": true,\n         \"title\": \"Include Entity Rank\",\n         \"type\": \"boolean\"\n      },\n      \"rank_description\": {\n         \"default\": \"number of relationships\",\n         \"title\": \"Rank Description\",\n         \"type\": \"string\"\n      },\n      \"include_relationship_weight\": {\n         \"default\": true,\n         \"title\": \"Include Relationship Weight\",\n         \"type\": \"boolean\"\n      },\n      \"relationship_ranking_attribute\": {\n         \"default\": \"rank\",\n         \"title\": \"Relationship Ranking Attribute\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"LocalSearchToolArgs\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"query\": {\n         \"description\": \"The user query to perform local search on.\",\n         \"title\": \"Query\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"query\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"LocalSearchToolArgs\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"query\": {\n         \"description\": \"The user query to perform local search on.\",\n         \"title\": \"Query\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"query\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"LocalSearchToolReturn\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"answer\": {\n         \"description\": \"The answer to the user query.\",\n         \"title\": \"Answer\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"answer\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"LocalSearchToolReturn\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"answer\": {\n         \"description\": \"The answer to the user query.\",\n         \"title\": \"Answer\",\n         \"type\": \"string\"\n      }\n   },\n   \"required\": [\n      \"answer\"\n   ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"MapReduceConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"map_max_tokens\": {\n         \"default\": 1000,\n         \"title\": \"Map Max Tokens\",\n         \"type\": \"integer\"\n      },\n      \"map_temperature\": {\n         \"default\": 0.0,\n         \"title\": \"Map Temperature\",\n         \"type\": \"number\"\n      },\n      \"reduce_max_tokens\": {\n         \"default\": 2000,\n         \"title\": \"Reduce Max Tokens\",\n         \"type\": \"integer\"\n      },\n      \"reduce_temperature\": {\n         \"default\": 0.0,\n         \"title\": \"Reduce Temperature\",\n         \"type\": \"number\"\n      },\n      \"allow_general_knowledge\": {\n         \"default\": false,\n         \"title\": \"Allow General Knowledge\",\n         \"type\": \"boolean\"\n      },\n      \"json_mode\": {\n         \"default\": false,\n         \"title\": \"Json Mode\",\n         \"type\": \"boolean\"\n      },\n      \"response_type\": {\n         \"default\": \"multiple paragraphs\",\n         \"title\": \"Response Type\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"MapReduceConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"map_max_tokens\": {\n         \"default\": 1000,\n         \"title\": \"Map Max Tokens\",\n         \"type\": \"integer\"\n      },\n      \"map_temperature\": {\n         \"default\": 0.0,\n         \"title\": \"Map Temperature\",\n         \"type\": \"number\"\n      },\n      \"reduce_max_tokens\": {\n         \"default\": 2000,\n         \"title\": \"Reduce Max Tokens\",\n         \"type\": \"integer\"\n      },\n      \"reduce_temperature\": {\n         \"default\": 0.0,\n         \"title\": \"Reduce Temperature\",\n         \"type\": \"number\"\n      },\n      \"allow_general_knowledge\": {\n         \"default\": false,\n         \"title\": \"Allow General Knowledge\",\n         \"type\": \"boolean\"\n      },\n      \"json_mode\": {\n         \"default\": false,\n         \"title\": \"Json Mode\",\n         \"type\": \"boolean\"\n      },\n      \"response_type\": {\n         \"default\": \"multiple paragraphs\",\n         \"title\": \"Response Type\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"SearchConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"max_tokens\": {\n         \"default\": 1500,\n         \"title\": \"Max Tokens\",\n         \"type\": \"integer\"\n      },\n      \"temperature\": {\n         \"default\": 0.0,\n         \"title\": \"Temperature\",\n         \"type\": \"number\"\n      },\n      \"response_type\": {\n         \"default\": \"multiple paragraphs\",\n         \"title\": \"Response Type\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"SearchConfig\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"max_tokens\": {\n         \"default\": 1500,\n         \"title\": \"Max Tokens\",\n         \"type\": \"integer\"\n      },\n      \"temperature\": {\n         \"default\": 0.0,\n         \"title\": \"Temperature\",\n         \"type\": \"number\"\n      },\n      \"response_type\": {\n         \"default\": \"multiple paragraphs\",\n         \"title\": \"Response Type\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.state.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.code_executor.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.exceptions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.logging.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tool_agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.file_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.auth.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.diskcache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker_jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.local.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.canvas.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.chromadb.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.mem0.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.llama_cpp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.replay.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.code_execution.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.http.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.playwright_controller.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2_grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2_grpc.html"
+  ]
+}

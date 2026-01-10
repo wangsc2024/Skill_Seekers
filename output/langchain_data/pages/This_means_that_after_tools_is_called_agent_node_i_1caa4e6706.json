@@ -1,0 +1,8 @@
+{
+  "title": "This means that after 'tools' is called, 'agent' node is called next.",
+  "content": "workflow.add_edge(\"tools\", 'agent')",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#this-means-that-after-'tools'-is-called,-'agent'-node-is-called-next.",
+  "links": []
+}

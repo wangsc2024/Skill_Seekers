@@ -1,0 +1,76 @@
+{
+  "title": "Advanced RL Documentation",
+  "content": "Advanced documentation settings when using Unsloth with GRPO.\n\nDetailed guides on doing GRPO with Unsloth for Batching, Generation & Training Parameters:\n\n## Training Parameters\n\n* **`beta`** *(float, default 0.0)*: KL coefficient.\n  * `0.0` ⇒ no reference model loaded (lower memory, faster).\n  * Higher `beta` constrains the policy to stay closer to the ref policy.\n* **`num_iterations`** *(int, default 1)*: PPO epochs per batch (μ in the algorithm).\\\n  Replays data within each gradient accumulation step; e.g., `2` = two forward passes per accumulation step.\n* **`epsilon`** *(float, default 0.2)*: Clipping value for token-level log-prob ratios (typical ratio range ≈ \\[-1.2, 1.2] with default ε).\n* **`delta`** *(float, optional)*: Enables **upper** clipping bound for **two-sided GRPO** when set. If `None`, standard GRPO clipping is used. Recommended `> 1 + ε` when enabled (per INTELLECT-2 report).\n* **`epsilon_high`** *(float, optional)*: Upper-bound epsilon; defaults to `epsilon` if unset. DAPO recommends **0.28**.\n* **`importance_sampling_level`** *(“token” | “sequence”, default \"token\")*:\n  * `\"token\"`: raw per-token ratios (one weight per token).\n  * `\"sequence\"`: average per-token ratios to a single sequence-level ratio.\\\n    GSPO shows sequence-level sampling often gives more stable training for sequence-level rewards.\n* **`reward_weights`** *(list\\[float], optional)*: One weight per reward. If `None`, all weights = 1.0.\n* **`scale_rewards`** *(str|bool, default \"group\")*:\n  * `True` or `\"group\"`: scale by **std within each group** (unit variance in group).\n  * `\"batch\"`: scale by **std across the entire batch** (per PPO-Lite).\n  * `False` or `\"none\"`: **no scaling**. Dr. GRPO recommends not scaling to avoid difficulty bias from std scaling.\n* **`loss_type`** *(str, default \"dapo\")*:\n  * `\"grpo\"`: normalizes over sequence length (length bias; not recommended).\n  * `\"dr_grpo\"`: normalizes by a **global constant** (introduced in Dr. GRPO; removes length bias). Constant ≈ `max_completion_length`.\n  * `\"dapo\"` **(default)**: normalizes by **active tokens in the global accumulated batch** (introduced in DAPO; removes length bias).\n  * `\"bnpo\"`: normalizes by **active tokens in the local batch** only (results can vary with local batch size; equals GRPO when `per_device_train_batch_size == 1`).\n* **`mask_truncated_completions`** *(bool, default False)*:\\\n  When `True`, truncated completions are excluded from loss (recommended by DAPO for stability).\\\n  **Note**: There are some KL issues with this flag, so we recommend to disable it.\n\nThis can zero out all `completion_mask` entries when many completions are truncated, making `n_mask_per_reward = 0` and causing KL to become NaN. [See](https://github.com/unslothai/unsloth-zoo/blob/e705f7cb50aa3470a0b6e36052c61b7486a39133/unsloth_zoo/rl_replacements.py#L184)\n* **`vllm_importance_sampling_correction`** *(bool, default True)*:\\\n  Applies **Truncated Importance Sampling (TIS)** to correct off-policy effects when generation (e.g., vLLM / fast\\_inference) differs from training backend.\\\n  In Unsloth, this is **auto-set to True** if you’re using vLLM/fast\\_inference; otherwise **False**.\n* **`vllm_importance_sampling_cap`** *(float, default 2.0)*:\\\n  Truncation parameter **C** for TIS; sets an upper bound on the importance sampling ratio to improve stability.\n* **`dtype`** when choosing float16 or bfloat16, see [fp16-vs-bf16-for-rl](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide/fp16-vs-bf16-for-rl \"mention\")\n\n## Generation Parameters\n\n* `temperature (float, defaults to 1.0):`\\\n  Temperature for sampling. The higher the temperature, the more random the completions. Make sure you use a relatively high (1.0) temperature to have diversity in generations which helps learning.\n* `top_p (float, optional, defaults to 1.0):`\\\n  Float that controls the cumulative probability of the top tokens to consider. Must be in (0, 1]. Set to 1.0 to consider all tokens.\n* `top_k (int, optional):`\\\n  Number of highest probability vocabulary tokens to keep for top-k-filtering. If None, top-k-filtering is disabled and all tokens are considered.\n* `min_p (float, optional):`\\\n  Minimum token probability, which will be scaled by the probability of the most likely token. It must be a value between 0.0 and 1.0. Typical values are in the 0.01-0.2 range.\n* `repetition_penalty (float, optional, defaults to 1.0):`\\\n  Float that penalizes new tokens based on whether they appear in the prompt and the generated text so far. Values > 1.0 encourage the model to use new tokens, while values < 1.0 encourage the model to repeat tokens.\n* `steps_per_generation: (int, optional):`\\\n  Number of steps per generation. If None, it defaults to `gradient_accumulation_steps`. Mutually exclusive with `generation_batch_size`.\n\n{% hint style=\"info\" %}\nIt is a bit confusing to mess with this parameter, it is recommended to edit `per_device_train_batch_size` and gradient accumulation for the batch sizes\n{% endhint %}\n\n## Batch & Throughput Parameters\n\n### Parameters that control batches\n\n* **`train_batch_size`**: Number of samples **per process** per step.\\\n  If this integer is **less than `num_generations`**, it will default to `num_generations`.\n* **`steps_per_generation`**: Number of **microbatches** that contribute to **one generation’s** loss calculation (forward passes only).\\\n  A new batch of data is generated every `steps_per_generation` steps; backpropagation timing depends on `gradient_accumulation_steps`.\n* **`num_processes`**: Number of distributed training processes (e.g., GPUs / workers).\n* **`gradient_accumulation_steps`** (aka `gradient_accumulation`): Number of microbatches to accumulate **before** applying backpropagation and optimizer update.\n* **Effective batch size**:\n\nTotal samples contributing to gradients before an update (across all processes and steps).\n* **Optimizer steps per generation**:\n\nExample: `4 / 2 = 2`.\n* **`num_generations`**: Number of generations produced **per prompt** (applied **after** computing `effective_batch_size`).\\\n  The number of **unique prompts** in a generation cycle is:\n\n**Must be > 2** for GRPO to work.\n\n### GRPO Batch Examples\n\nThe tables below illustrate how batches flow through steps, when optimizer updates occur, and how new batches are generated.\n\n**Generation cycle A**\n\n| Step | Batch    | Notes                                  |\n| ---: | -------- | -------------------------------------- |\n|    0 | \\[0,0,0] |                                        |\n|    1 | \\[1,1,1] | → optimizer update (accum = 2 reached) |\n|    2 | \\[2,2,2] |                                        |\n|    3 | \\[3,3,3] | optimizer update                       |\n\n**Generation cycle B**\n\n| Step | Batch    | Notes                                  |\n| ---: | -------- | -------------------------------------- |\n|    0 | \\[4,4,4] |                                        |\n|    1 | \\[5,5,5] | → optimizer update (accum = 2 reached) |\n|    2 | \\[6,6,6] |                                        |\n|    3 | \\[7,7,7] | optimizer update                       |\n\n**Generation cycle A**\n\n| Step | Batch    | Notes                                |\n| ---: | -------- | ------------------------------------ |\n|    0 | \\[0,0,0] |                                      |\n|    1 | \\[1,1,1] |                                      |\n|    2 | \\[2,2,2] |                                      |\n|    3 | \\[3,3,3] | optimizer update (accum = 4 reached) |\n\n**Generation cycle B**\n\n| Step | Batch    | Notes                                |\n| ---: | -------- | ------------------------------------ |\n|    0 | \\[4,4,4] |                                      |\n|    1 | \\[5,5,5] |                                      |\n|    2 | \\[6,6,6] |                                      |\n|    3 | \\[7,7,7] | optimizer update (accum = 4 reached) |\n\n**Generation cycle A**\n\n| Step | Batch    | Notes                                |\n| ---: | -------- | ------------------------------------ |\n|    0 | \\[0,0,0] |                                      |\n|    1 | \\[0,1,1] |                                      |\n|    2 | \\[1,1,3] |                                      |\n|    3 | \\[3,3,3] | optimizer update (accum = 4 reached) |\n\n**Generation cycle B**\n\n| Step | Batch    | Notes                                |\n| ---: | -------- | ------------------------------------ |\n|    0 | \\[4,4,4] |                                      |\n|    1 | \\[4,5,5] |                                      |\n|    2 | \\[5,5,6] |                                      |\n|    3 | \\[6,6,6] | optimizer update (accum = 4 reached) |\n\n**Generation cycle A**\n\n| Step | Batch           | Notes                                |\n| ---: | --------------- | ------------------------------------ |\n|    0 | \\[0,0,0, 1,1,1] |                                      |\n|    1 | \\[2,2,2, 3,3,3] | optimizer update (accum = 2 reached) |\n\n**Generation cycle B**\n\n| Step | Batch           | Notes                                |\n| ---: | --------------- | ------------------------------------ |\n|    0 | \\[4,4,4, 5,5,5] |                                      |\n|    1 | \\[6,6,6, 7,7,7] | optimizer update (accum = 2 reached) |\n\n### Quick Formula Reference",
+  "code_samples": [
+    {
+      "code": "# If mask_truncated_completions is enabled, zero out truncated completions in completion_mask\n  if self.mask_truncated_completions:\n      truncated_completions = ~is_eos.any(dim=1)\n      completion_mask = completion_mask * (~truncated_completions).unsqueeze(1).int()",
+      "language": "python"
+    },
+    {
+      "code": "effective_batch_size = steps_per_generation * num_processes * train_batch_size",
+      "language": "unknown"
+    },
+    {
+      "code": "optimizer_steps_per_generation = steps_per_generation / gradient_accumulation_steps",
+      "language": "unknown"
+    },
+    {
+      "code": "unique_prompts = effective_batch_size / num_generations",
+      "language": "unknown"
+    },
+    {
+      "code": "num_gpus = 1\nper_device_train_batch_size = 3\ngradient_accumulation_steps = 2\nsteps_per_generation = 4\n\neffective_batch_size = 4 * 3 * 1 = 12\nnum_generations = 3",
+      "language": "unknown"
+    },
+    {
+      "code": "num_gpus = 1\nper_device_train_batch_size = 3\nsteps_per_generation = gradient_accumulation_steps = 4\n\neffective_batch_size = 4 * 3 * 1 = 12\nnum_generations = 3",
+      "language": "unknown"
+    },
+    {
+      "code": "num_gpus = 1\nper_device_train_batch_size = 3\nsteps_per_generation = gradient_accumulation_steps = 4\n\neffective_batch_size = 4 * 3 * 1 = 12\nnum_generations = 4\nunique_prompts = effective_batch_size / num_generations = 3",
+      "language": "unknown"
+    },
+    {
+      "code": "num_gpus = 1\nper_device_train_batch_size = 6\nsteps_per_generation = gradient_accumulation_steps = 2\n\neffective_batch_size = 2 * 6 * 1 = 12\nnum_generations = 3\nunique_prompts = 4",
+      "language": "unknown"
+    },
+    {
+      "code": "effective_batch_size = steps_per_generation * num_processes * train_batch_size\noptimizer_steps_per_generation = steps_per_generation / gradient_accumulation_steps\nunique_prompts = effective_batch_size / num_generations   # must be > 2",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Training Parameters",
+      "id": "training-parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Generation Parameters",
+      "id": "generation-parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Batch & Throughput Parameters",
+      "id": "batch-&-throughput-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Parameters that control batches",
+      "id": "parameters-that-control-batches"
+    },
+    {
+      "level": "h3",
+      "text": "GRPO Batch Examples",
+      "id": "grpo-batch-examples"
+    },
+    {
+      "level": "h3",
+      "text": "Quick Formula Reference",
+      "id": "quick-formula-reference"
+    }
+  ],
+  "url": "llms-txt#advanced-rl-documentation",
+  "links": []
+}

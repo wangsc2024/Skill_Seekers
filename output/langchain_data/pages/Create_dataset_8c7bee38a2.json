@@ -1,0 +1,8 @@
+{
+  "title": "Create dataset",
+  "content": "examples = [\n    {\n        \"inputs\": {\"messages\": [{\"role\": \"user\", \"content\": \"i bought some tracks recently and i dont like them\"}]},\n        \"outputs\": {\"route\": \"refund_agent\"},\n    },\n    {\n        \"inputs\": {\"messages\": [{\"role\": \"user\", \"content\": \"I was thinking of purchasing some Rolling Stones tunes, any recommendations?\"}]},\n        \"outputs\": {\"route\": \"question_answering_agent\"},\n    },\n    {\n        \"inputs\": {\"messages\": [{\"role\": \"user\", \"content\": \"i want a refund on purchase 237\"}, {\"role\": \"assistant\", \"content\": \"I've refunded you a total of $1.98. How else can I help you today?\"}, {\"role\": \"user\", \"content\": \"did prince release any albums in 2000?\"}]},\n        \"outputs\": {\"route\": \"question_answering_agent\"},\n    },\n    {\n        \"inputs\": {\"messages\": [{\"role\": \"user\", \"content\": \"i purchased a cover of Yesterday recently but can't remember who it was by, which versions of it do you have?\"}]},\n        \"outputs\": {\"route\": \"question_answering_agent\"},\n    },\n]\n\ndataset_name = \"Chinook Customer Service Bot: Intent Classifier\"\nif not client.has_dataset(dataset_name=dataset_name):\n    dataset = client.create_dataset(dataset_name=dataset_name)\n    client.create_examples(\n        dataset_id=dataset.id,\n        examples=examples\n    )",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-dataset",
+  "links": []
+}

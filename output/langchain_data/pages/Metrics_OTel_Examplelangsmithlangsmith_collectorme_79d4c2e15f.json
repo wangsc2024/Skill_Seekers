@@ -1,0 +1,29 @@
+{
+  "title": "Metrics: [OTel Example](/langsmith/langsmith-collector#metrics)",
+  "content": "## LangSmith Services\n\nThe following LangSmith services expose metrics at an endpoint, in the Prometheus metrics format. The frontend does not currently expose metrics.\n\n* **Backend**: `http://<langsmith_release_name>-backend.<namespace>.svc.cluster.local:1984/metrics`\n* **Platform Backend**: `http://<langsmith_release_name>-platform-backend.<namespace>.svc.cluster.local:1986/metrics`\n* **Playground**: `http://<langsmith_release_name>-playground.<namespace>.svc.cluster.local:1988/metrics`\n* **(LangSmith Control Plane only) Host Backend**: `http://<langsmith_release_name>-host-backend.<namespace>.svc.cluster.local:1985/metrics`\n\nYou can use a [Prometheus](https://prometheus.io/docs/prometheus/latest/getting_started/#configure-prometheus-to-monitor-the-sample-targets) or [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver) collector to scrape the endpoints, and export metrics to the backend of your choice.\n\nThe frontend service exposes its Nginx metrics at the following endpoint: `langsmith-frontend.langsmith.svc.cluster.local:80/nginx_status`. You can either scrape them yourself, or bring up a Prometheus Nginx exporter using the [LangSmith Observability Helm Chart](/langsmith/observability-stack)\n\n<Warning>\n  **The following sections apply for in-cluster databases only. If you are using external databases, you will need to configure exposing and fetching metrics.**\n</Warning>\n\nIf you are using in-cluster Postgres/Redis instances, you can use a Prometheus exporter to expose metrics from your instance. You can deploy your own, or if you would like, you can use the [LangSmith Observability Helm Chart](/langsmith/observability-stack) to deploy an exporter for you.\n\nThe in-cluster Clickhouse is configured to expose metrics without the need for an exporter. You can use your collector to scrape metrics at `http://<langsmith_release_name>-clickhouse.<namespace>.svc.cluster.local:9363/metrics`",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "LangSmith Services",
+      "id": "langsmith-services"
+    },
+    {
+      "level": "h2",
+      "text": "Frontend Nginx",
+      "id": "frontend-nginx"
+    },
+    {
+      "level": "h2",
+      "text": "Postgres + Redis",
+      "id": "postgres-+-redis"
+    },
+    {
+      "level": "h2",
+      "text": "Clickhouse",
+      "id": "clickhouse"
+    }
+  ],
+  "url": "llms-txt#metrics:-[otel-example](/langsmith/langsmith-collector#metrics)",
+  "links": []
+}

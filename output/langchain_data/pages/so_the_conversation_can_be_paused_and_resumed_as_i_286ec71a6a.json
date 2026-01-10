@@ -1,0 +1,8 @@
+{
+  "title": "so the conversation can be paused and resumed (as is needed for human review).",
+  "content": "config = {\"configurable\": {\"thread_id\": \"some_id\"}} # [!code highlight]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#so-the-conversation-can-be-paused-and-resumed-(as-is-needed-for-human-review).",
+  "links": []
+}

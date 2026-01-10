@@ -1,0 +1,8 @@
+{
+  "title": "Update the conversation history by removing all messages",
+  "content": "@tool\ndef clear_conversation() -> Command:\n    \"\"\"Clear the conversation history.\"\"\"\n\nreturn Command(\n        update={\n            \"messages\": [RemoveMessage(id=REMOVE_ALL_MESSAGES)],\n        }\n    )",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#update-the-conversation-history-by-removing-all-messages",
+  "links": []
+}

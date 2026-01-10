@@ -1,0 +1,17 @@
+{
+  "title": "Conda Install",
+  "content": "To install Unsloth locally on Conda, follow the steps below:\n\n{% hint style=\"warning\" %}\nOnly use Conda if you have it. If not, use [Pip](https://docs.unsloth.ai/get-started/install-and-update/pip-install).\n{% endhint %}\n\nSelect either `pytorch-cuda=11.8,12.1` for CUDA 11.8 or CUDA 12.1. We support `python=3.10,3.11,3.12`.\n\nIf you're looking to install Conda in a Linux environment, [read here](https://docs.anaconda.com/miniconda/), or run the below:",
+  "code_samples": [
+    {
+      "code": "conda create --name unsloth_env \\\n    python=3.11 \\\n    pytorch-cuda=12.1 \\\n    pytorch cudatoolkit xformers -c pytorch -c nvidia -c xformers \\\n    -y\nconda activate unsloth_env\n\npip install unsloth",
+      "language": "bash"
+    },
+    {
+      "code": "mkdir -p ~/miniconda3\nwget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh\nbash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3\nrm -rf ~/miniconda3/miniconda.sh\n~/miniconda3/bin/conda init bash\n~/miniconda3/bin/conda init zsh",
+      "language": "bash"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#conda-install",
+  "links": []
+}

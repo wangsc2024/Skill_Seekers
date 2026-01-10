@@ -1,0 +1,50 @@
+{
+  "title": "Devstral: How to Run & Fine-tune",
+  "content": "Run and fine-tune Mistral Devstral 1.1, including Small-2507 and 2505.\n\n**Devstral-Small-2507** (Devstral 1.1) is Mistral's new agentic LLM for software engineering. It excels at tool-calling, exploring codebases, and powering coding agents. Mistral AI released the original 2505 version in May, 2025.\n\nFinetuned from [**Mistral-Small-3.1**](https://huggingface.co/unsloth/Mistral-Small-3.1-24B-Instruct-2503-GGUF), Devstral supports a 128k context window. Devstral Small 1.1 has improved performance, achieving a score of 53.6% performance on [SWE-bench verified](https://openai.com/index/introducing-swe-bench-verified/), making it (July 10, 2025) the #1 open model on the benchmark.\n\nUnsloth Devstral 1.1 GGUFs contain additional <mark style=\"background-color:green;\">**tool-calling support**</mark> and <mark style=\"background-color:green;\">**chat template fixes**</mark>. Devstral 1.1 still works well with OpenHands but now also generalizes better to other prompts and coding environments.\n\nAs text-only, Devstral’s vision encoder was removed prior to fine-tuning. We've added [*<mark style=\"background-color:green;\">**optional Vision support**</mark>*](#possible-vision-support) for the model.\n\n{% hint style=\"success\" %}\nWe also worked with Mistral behind the scenes to help debug, test and correct any possible bugs and issues! Make sure to **download Mistral's official downloads or Unsloth's GGUFs** / dynamic quants to get the **correct implementation** (ie correct system prompt, correct chat template etc)\n\nPlease use `--jinja` in llama.cpp to enable the system prompt!\n{% endhint %}\n\nAll Devstral uploads use our Unsloth [Dynamic 2.0](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs) methodology, delivering the best performance on 5-shot MMLU and KL Divergence benchmarks. This means, you can run and fine-tune quantized Mistral LLMs with minimal accuracy loss!\n\n#### **Devstral - Unsloth Dynamic** quants:\n\n| Devstral 2507 (new)                                                                                                    | Devstral 2505                                                                                               |\n| ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |\n| GGUF: [Devstral-Small-2507-GGUF](https://huggingface.co/unsloth/Devstral-Small-2507-GGUF)                              | [Devstral-Small-2505-GGUF](https://huggingface.co/unsloth/Devstral-Small-2505-GGUF)                         |\n| 4-bit BnB: [Devstral-Small-2507-unsloth-bnb-4bit](https://huggingface.co/unsloth/Devstral-Small-2507-unsloth-bnb-4bit) | [Devstral-Small-2505-unsloth-bnb-4bit](https://huggingface.co/unsloth/Devstral-Small-2505-unsloth-bnb-4bit) |\n\n## 🖥️ **Running Devstral**\n\n### :gear: Official Recommended Settings\n\nAccording to Mistral AI, these are the recommended settings for inference:\n\n* <mark style=\"background-color:blue;\">**Temperature from 0.0 to 0.15**</mark>\n* Min\\_P of 0.01 (optional, but 0.01 works well, llama.cpp default is 0.1)\n* <mark style=\"background-color:orange;\">**Use**</mark><mark style=\"background-color:orange;\">**&#x20;**</mark><mark style=\"background-color:orange;\">**`--jinja`**</mark><mark style=\"background-color:orange;\">**&#x20;**</mark><mark style=\"background-color:orange;\">**to enable the system prompt.**</mark>\n\n**A system prompt is recommended**, and is a derivative of Open Hand's system prompt. The full system prompt is provided [here](https://huggingface.co/unsloth/Devstral-Small-2505/blob/main/SYSTEM_PROMPT.txt).\n\n{% hint style=\"success\" %}\nOur dynamic uploads have the '`UD`' prefix in them. Those without are not dynamic however still utilize our calibration dataset.\n{% endhint %}\n\n## :llama: Tutorial: How to Run Devstral in Ollama\n\n1. Install `ollama` if you haven't already!\n\n2. Run the model with our dynamic quant. Note you can call `ollama serve &`in another terminal if it fails! We include all suggested parameters (temperature etc) in `params` in our Hugging Face upload!\n3. Also Devstral supports 128K context lengths, so best to enable [**KV cache quantization**](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-can-i-set-the-quantization-type-for-the-kv-cache). We use 8bit quantization which saves 50% memory usage. You can also try `\"q4_0\"`\n\n## 📖 Tutorial: How to Run Devstral in llama.cpp <a href=\"#tutorial-how-to-run-llama-4-scout-in-llama.cpp\" id=\"tutorial-how-to-run-llama-4-scout-in-llama.cpp\"></a>\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. If you want to use `llama.cpp` directly to load models, you can do the below: (:Q4\\_K\\_XL) is the quantization type. You can also download via Hugging Face (point 3). This is similar to `ollama run`\n\n3. **OR** download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose Q4\\_K\\_M, or other quantized versions (like BF16 full precision).",
+  "code_samples": [
+    {
+      "code": "You are Devstral, a helpful agentic model trained by Mistral AI and using the OpenHands scaffold. You can interact with a computer to solve tasks.\n\n<ROLE>\nYour primary role is to assist users by executing commands, modifying code, and solving technical problems effectively. You should be thorough, methodical, and prioritize quality over speed.\n* If the user asks a question, like \"why is X happening\", don't try to fix the problem. Just give an answer to the question.\n</ROLE>\n\n.... SYSTEM PROMPT CONTINUES ....",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils -y\ncurl -fsSL https://ollama.com/install.sh | sh",
+      "language": "bash"
+    },
+    {
+      "code": "export OLLAMA_KV_CACHE_TYPE=\"q8_0\"\nollama run hf.co/unsloth/Devstral-Small-2507-GGUF:UD-Q4_K_XL",
+      "language": "bash"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggerganov/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-quantize llama-cli llama-gguf-split llama-mtmd-cli\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli -hf unsloth/Devstral-Small-2507-GGUF:UD-Q4_K_XL --jinja",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "🖥️ **Running Devstral**",
+      "id": "🖥️-**running-devstral**"
+    },
+    {
+      "level": "h3",
+      "text": ":gear: Official Recommended Settings",
+      "id": ":gear:-official-recommended-settings"
+    },
+    {
+      "level": "h2",
+      "text": ":llama: Tutorial: How to Run Devstral in Ollama",
+      "id": ":llama:-tutorial:-how-to-run-devstral-in-ollama"
+    },
+    {
+      "level": "h2",
+      "text": "📖 Tutorial: How to Run Devstral in llama.cpp <a href=\"#tutorial-how-to-run-llama-4-scout-in-llama.cpp\" id=\"tutorial-how-to-run-llama-4-scout-in-llama.cpp\"></a>",
+      "id": "📖-tutorial:-how-to-run-devstral-in-llama.cpp-<a-href=\"#tutorial-how-to-run-llama-4-scout-in-llama.cpp\"-id=\"tutorial-how-to-run-llama-4-scout-in-llama.cpp\"></a>"
+    }
+  ],
+  "url": "llms-txt#devstral:-how-to-run-&-fine-tune",
+  "links": []
+}

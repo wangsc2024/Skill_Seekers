@@ -1,0 +1,8 @@
+{
+  "title": "Terminate Session",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/mcp/terminate-session\n\nlangsmith/agent-server-openapi.json delete /mcp/\nImplemented according to the Streamable HTTP Transport specification.\nTerminate an MCP session. The server implementation is stateless, so this is a no-op.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#terminate-session",
+  "links": []
+}

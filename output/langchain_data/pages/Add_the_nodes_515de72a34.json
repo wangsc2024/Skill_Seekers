@@ -1,0 +1,8 @@
+{
+  "title": "Add the nodes",
+  "content": "orchestrator_worker_builder.add_node(\"orchestrator\", orchestrator)\norchestrator_worker_builder.add_node(\"llm_call\", llm_call)\norchestrator_worker_builder.add_node(\"synthesizer\", synthesizer)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-the-nodes",
+  "links": []
+}

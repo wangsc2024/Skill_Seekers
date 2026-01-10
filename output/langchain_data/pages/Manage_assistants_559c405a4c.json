@@ -1,0 +1,79 @@
+{
+  "title": "Manage assistants",
+  "content": "Source: https://docs.langchain.com/langsmith/configuration-cloud\n\nThis page describes how to create, configure, and manage [assistants](/langsmith/assistants). Assistants allow you to customize your [deployed](/langsmith/deployments) graph's behavior through configuration—such as model selection, prompts, and tool availability—without changing the underlying graph code.\n\nYou can work with the [SDK](https://reference.langchain.com/python/langsmith/deployment/sdk/) or in the [LangSmith UI](https://smith.langchain.com).\n\n## Understand assistant configuration\n\nAssistants store *context* values that customize graph behavior at runtime. You define a context schema in your graph code, then provide specific context values when creating an assistant via the [`context` parameter](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.AssistantsClient.create).\n\nConsider this example of a `call_model` node that reads the `model_name` from the context:\n\nWhen you create an assistant, you provide specific values for these configuration fields. The assistant stores this configuration and applies it whenever the graph runs.\n\nFor more information on configuration in [LangGraph](/oss/python/langgraph/overview), refer to the [runtime context documentation](/oss/python/langgraph/graph-api#runtime-context).\n\n**Select SDK or UI for your workflow:**\n\n<Tabs>\n  <Tab title=\"SDK\">\n    ## Create an assistant\n\nUse the [AssistantsClient.create](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.AssistantsClient.create) method to create a new assistant. This method requires:\n\n* **Graph ID**: The name of the deployed graph this assistant will use (e.g., `\"agent\"`).\n    * **Context**: Configuration values matching your graph's context schema.\n    * **Name**: A descriptive name for the assistant.\n\nThe following example creates an assistant with `model_name` set to `openai`:\n\nThe API returns an assistant object containing:\n\n* `assistant_id`: A UUID that uniquely identifies this assistant\n    * `graph_id`: The graph this assistant is configured for\n    * `context`: The configuration values you provided\n    * `name`, `metadata`, timestamps, and other fields\n\nThe `assistant_id` (a UUID like `\"62e209ca-9154-432a-b9e9-2d75c7a9219b\"`) uniquely identifies this assistant configuration. You'll use this ID when running your graph to specify which configuration to apply.\n\n<Note>\n      **Graph ID vs Assistant ID**\n\nWhen creating an assistant, you specify a **graph ID** (graph name like `\"agent\"`). This returns an **assistant ID** (UUID like `\"62e209ca...\"`). You can use either when running your graph:\n\n* **Graph ID** (e.g., `\"agent\"`): Uses the default assistant for that graph\n      * **Assistant ID** (UUID): Uses the specific assistant configuration\n\nSee [Use an assistant](#use-an-assistant) for examples.\n    </Note>\n\nTo use an assistant, pass its `assistant_id` when creating a run. The example below uses the assistant we created above:\n\nThe stream returns events as the graph executes with your assistant's configuration:\n\n<Note>\n      **Using graph ID vs assistant ID**\n\nYou can pass either a **graph ID** or **assistant ID** when running your graph:\n\n## Create a new version for your assistant\n\nUse the [AssistantsClient.update](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.AssistantsClient.update) method to create a new version of an assistant.\n\n<Warning>\n      **Updates require full configuration**\n\nYou must provide the **entire** configuration when updating. The update endpoint creates new versions from scratch and does not merge with previous versions. Include all configuration fields you want to retain.\n    </Warning>\n\nFor example, to add a system prompt to the assistant:\n\nThe update creates a new version and automatically sets it as active. All future runs using this assistant ID will use the new configuration.\n\n## Use a previous assistant version\n\nUse the `setLatest` method to change which version is active:\n\nAfter changing the active version, all runs using this assistant ID will use the specified version's configuration.\n  </Tab>\n\n<Tab title=\"UI\">\n    ## Create an assistant\n\nYou can create assistants from the [LangSmith UI](https://smith.langchain.com):\n\n1. Navigate to your deployment and select the **Assistants** tab.\n    2. Click **+ New assistant**.\n    3. In the form that opens:\n       * Select the graph this assistant is for.\n       * Provide a name and description.\n       * Configure the assistant using the configuration schema for that graph.\n    4. Click **Create assistant**.\n\nThis will take you to [Studio](/langsmith/studio) where you can test the assistant. Return to the **Assistants** tab to see your newly created assistant in the table.\n\nTo use an assistant in the LangSmith UI:\n\n1. Navigate to your deployment and select the **Assistants** tab.\n    2. Find the assistant you want to use.\n    3. Click **Studio** for that assistant.\n\nThis opens [Studio](/langsmith/studio) with the selected assistant. When you submit an input (in **Graph** or **Chat** mode), the assistant's configuration will be applied to the run.\n\n## Create a new version for your assistant\n\nTo update an assistant and create a new version from the UI, you can use either the Assistants tab or Studio. Either method creates a new version and sets it as the active version:\n\n<Tabs>\n      <Tab title=\"Assistants tab\">\n        1. Navigate to your deployment and select the **Assistants** tab.\n        2. Find the assistant you want to edit.\n        3. Click **Edit**.\n        4. Modify the assistant's name, description, or configuration.\n        5. Save your changes.\n      </Tab>\n\n<Tab title=\"Studio\">\n        1. Open Studio for the assistant.\n        2. Click **Manage Assistants**.\n        3. Edit the assistant's configuration.\n        4. Save your changes.\n      </Tab>\n    </Tabs>\n\n## Use a previous assistant version\n\nTo set a previous version as active from Studio:\n\n1. Open Studio for the assistant.\n    2. Click **Manage Assistants**.\n    3. Locate the assistant and select the version you want to use.\n    4. Toggle the **Active** switch for that version.\n\nThis updates the assistant to use the selected version for all future runs.\n\n<Warning>\n      Deleting an assistant will delete **all** of its versions. There is currently no way to delete a single version. To skip a version, simply set a different version as active.\n    </Warning>\n  </Tab>\n</Tabs>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/configuration-cloud.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nWhen you create an assistant, you provide specific values for these configuration fields. The assistant stores this configuration and applies it whenever the graph runs.\n\nFor more information on configuration in [LangGraph](/oss/python/langgraph/overview), refer to the [runtime context documentation](/oss/python/langgraph/graph-api#runtime-context).\n\n**Select SDK or UI for your workflow:**\n\n<Tabs>\n  <Tab title=\"SDK\">\n    ## Create an assistant\n\n    Use the [AssistantsClient.create](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.AssistantsClient.create) method to create a new assistant. This method requires:\n\n    * **Graph ID**: The name of the deployed graph this assistant will use (e.g., `\"agent\"`).\n    * **Context**: Configuration values matching your graph's context schema.\n    * **Name**: A descriptive name for the assistant.\n\n    The following example creates an assistant with `model_name` set to `openai`:\n\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n    **Response:**\n\n    The API returns an assistant object containing:\n\n    * `assistant_id`: A UUID that uniquely identifies this assistant\n    * `graph_id`: The graph this assistant is configured for\n    * `context`: The configuration values you provided\n    * `name`, `metadata`, timestamps, and other fields",
+      "language": "unknown"
+    },
+    {
+      "code": "The `assistant_id` (a UUID like `\"62e209ca-9154-432a-b9e9-2d75c7a9219b\"`) uniquely identifies this assistant configuration. You'll use this ID when running your graph to specify which configuration to apply.\n\n    <Note>\n      **Graph ID vs Assistant ID**\n\n      When creating an assistant, you specify a **graph ID** (graph name like `\"agent\"`). This returns an **assistant ID** (UUID like `\"62e209ca...\"`). You can use either when running your graph:\n\n      * **Graph ID** (e.g., `\"agent\"`): Uses the default assistant for that graph\n      * **Assistant ID** (UUID): Uses the specific assistant configuration\n\n      See [Use an assistant](#use-an-assistant) for examples.\n    </Note>\n\n    ## Use an assistant\n\n    To use an assistant, pass its `assistant_id` when creating a run. The example below uses the assistant we created above:\n\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n    **Response:**\n\n    The stream returns events as the graph executes with your assistant's configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n      **Using graph ID vs assistant ID**\n\n      You can pass either a **graph ID** or **assistant ID** when running your graph:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Note>\n\n    ## Create a new version for your assistant\n\n    Use the [AssistantsClient.update](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.client.AssistantsClient.update) method to create a new version of an assistant.\n\n    <Warning>\n      **Updates require full configuration**\n\n      You must provide the **entire** configuration when updating. The update endpoint creates new versions from scratch and does not merge with previous versions. Include all configuration fields you want to retain.\n    </Warning>\n\n    For example, to add a system prompt to the assistant:\n\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n    The update creates a new version and automatically sets it as active. All future runs using this assistant ID will use the new configuration.\n\n    ## Use a previous assistant version\n\n    Use the `setLatest` method to change which version is active:\n\n    <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Understand assistant configuration",
+      "id": "understand-assistant-configuration"
+    }
+  ],
+  "url": "llms-txt#manage-assistants",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Combine waits for all parallel operations to complete",
+  "content": "workflow.add_edge(\"fetch_news\", \"combine_data\")\nworkflow.add_edge(\"fetch_weather\", \"combine_data\")\nworkflow.add_edge(\"fetch_stocks\", \"combine_data\")\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "**4. Team development and documentation**\n\nThe visual nature of the Graph API makes it easier for teams to understand, document, and maintain complex workflows.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#combine-waits-for-all-parallel-operations-to-complete",
+  "links": []
+}

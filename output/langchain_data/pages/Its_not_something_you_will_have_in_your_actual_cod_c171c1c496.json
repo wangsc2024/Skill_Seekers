@@ -1,0 +1,8 @@
+{
+  "title": "It's not something you will have in your actual code.",
+  "content": "@task()\ndef get_info():\n    \"\"\"\n    Simulates a task that fails once before succeeding.\n    Raises an exception on the first attempt, then returns \"OK\" on subsequent tries.\n    \"\"\"\n    global attempts\n    attempts += 1\n\nif attempts < 2:\n        raise ValueError(\"Failure\")  # Simulate a failure on the first attempt\n    return \"OK\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#it's-not-something-you-will-have-in-your-actual-code.",
+  "links": []
+}

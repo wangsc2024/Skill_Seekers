@@ -1,0 +1,40 @@
+{
+  "title": "NVIDIA Nemotron 3 Nano - How To Run Guide",
+  "content": "Run & fine-tune NVIDIA Nemotron 3 Nano locally on your device!\n\nNVIDIA releases Nemotron 3 Nano, a 30B parameter hybrid reasoning MoE model with \\~3.6B active parameters - built for fast, accurate coding, math and agentic tasks. It has a **1M context window** and is best amongst its size class on SWE-Bench, GPQA Diamond, reasoning, chat and throughput.\n\nNemotron 3 Nano runs on **24GB RAM**/VRAM (or unified memory) and you can now **fine-tune** it locally. Thanks NVIDIA for providing Unsloth with day-zero support.\n\n<a href=\"#run-nemotron-3-nano-30b-a3b\" class=\"button primary\">Running Tutorial</a><a href=\"https://docs.unsloth.ai/models/nemotron-3#fine-tuning-nemotron-3-nano-and-rl\" class=\"button secondary\">Fine-tuning Nano 3</a>\n\nNVIDIA Nemotron 3 Nano GGUF to run: [unsloth/Nemotron-3-Nano-30B-A3B-GGUF](https://huggingface.co/unsloth/Nemotron-3-Nano-30B-A3B-GGUF)\\\nWe also uploaded [BF16](https://huggingface.co/unsloth/Nemotron-3-Nano-30B-A3B) and [FP8](https://huggingface.co/unsloth/NVIDIA-Nemotron-3-Nano-30B-A3B-FP8) variants.\n\nNVIDIA recommends these settings for inference:\n\n**General chat/instruction (default):**\n\n* `temperature = 1.0`\n* `top_p = 1.0`\n\n**Tool calling use-cases:**\n\n* `temperature = 0.6`\n* `top_p = 0.95`\n\n**For most local use, set:**\n\n* `max_new_tokens` = `32,768` to `262,144` for standard prompts with a max of 1M tokens\n* Increase for deep reasoning or long-form generation as your RAM/VRAM allows.\n\nThe chat template format is found when we use the below:\n\n{% code overflow=\"wrap\" %}\n\n#### Nemotron 3 chat template format:\n\n{% hint style=\"info\" %}\nNemotron 3 uses `<think>` with token ID 12 and `</think>` with token ID 13 for reasoning. Use `--special` to see the tokens for llama.cpp. You might also need `--verbose-prompt` to see `<think>` since it's prepended.\n{% endhint %}\n\n{% code overflow=\"wrap\" lineNumbers=\"true\" %}\n\n### 🖥️ Run Nemotron-3-Nano-30B-A3B\n\nDepending on your use-case you will need to use different settings. Some GGUFs end up similar in size because the model architecture (like [gpt-oss](https://docs.unsloth.ai/models/gpt-oss-how-to-run-and-fine-tune)) has dimensions not divisible by 128, so parts can’t be quantized to lower bits.\n\n#### Llama.cpp Tutorial (GGUF):\n\nInstructions to run in llama.cpp (note we will be using 4-bit to fit most devices):\n\n{% stepper %}\n{% step %}\nObtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n{% code overflow=\"wrap\" %}\n\n{% endcode %}\n{% endstep %}\n\n{% step %}\nYou can directly pull from Hugging Face. You can increase the context to 1M as your RAM/VRAM allows.\n\nFollow this for **general instruction** use-cases:\n\nFollow this for **tool-calling** use-cases:\n\n{% step %}\nDownload the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose `UD-Q4_K_XL` or other quantized versions.",
+  "code_samples": [
+    {
+      "code": "tokenizer.apply_chat_template([\n    {\"role\" : \"user\", \"content\" : \"What is 1+1?\"},\n    {\"role\" : \"assistant\", \"content\" : \"2\"},\n    {\"role\" : \"user\", \"content\" : \"What is 2+2?\"}\n    ], add_generation_prompt = True, tokenize = False,\n)",
+      "language": "python"
+    },
+    {
+      "code": "<|im_start|>system\\n<|im_end|>\\n<|im_start|>user\\nWhat is 1+1?<|im_end|>\\n<|im_start|>assistant\\n<think></think>2<|im_end|>\\n<|im_start|>user\\nWhat is 2+2?<|im_end|>\\n<|im_start|>assistant\\n<think>\\n",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-mtmd-cli llama-server llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli \\\n    -hf unsloth/Nemotron-3-Nano-30B-A3B-GGUF:UD-Q4_K_XL \\\n    --jinja -ngl 99 --threads -1 --ctx-size 32768 \\\n    --temp 1.0 --top-p 1.0",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli \\\n    -hf unsloth/Nemotron-3-Nano-30B-A3B-GGUF:UD-Q4_K_XL \\\n    --jinja -ngl 99 --threads -1 --ctx-size 32768 \\\n    --temp 0.6 --top-p 0.95",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "⚙️ Usage Guide",
+      "id": "⚙️-usage-guide"
+    },
+    {
+      "level": "h3",
+      "text": "🖥️ Run Nemotron-3-Nano-30B-A3B",
+      "id": "🖥️-run-nemotron-3-nano-30b-a3b"
+    }
+  ],
+  "url": "llms-txt#nvidia-nemotron-3-nano---how-to-run-guide",
+  "links": []
+}

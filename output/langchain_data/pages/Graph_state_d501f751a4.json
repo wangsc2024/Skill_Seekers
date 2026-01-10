@@ -1,0 +1,8 @@
+{
+  "title": "Graph state",
+  "content": "class State(TypedDict):\n    topic: str  # Report topic\n    sections: list[Section]  # List of report sections\n    completed_sections: Annotated[\n        list, operator.add\n    ]  # All workers write to this key in parallel\n    final_report: str  # Final report",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#graph-state",
+  "links": []
+}

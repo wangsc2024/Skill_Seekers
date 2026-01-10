@@ -1,0 +1,19 @@
+{
+  "title": "Long-term memory",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/long-term-memory\n\nLangChain agents use [LangGraph persistence](/oss/python/langgraph/persistence#memory-store) to enable long-term memory. This is a more advanced topic and requires knowledge of LangGraph to use.\n\nLangGraph stores long-term memories as JSON documents in a [store](/oss/python/langgraph/persistence#memory-store).\n\nEach memory is organized under a custom `namespace` (similar to a folder) and a distinct `key` (like a file name). Namespaces often include user or org IDs or other labels that makes it easier to organize information.\n\nThis structure enables hierarchical organization of memories. Cross-namespace searching is then supported through content filters.\n\n```python  theme={null}\nfrom langgraph.store.memory import InMemoryStore\n\ndef embed(texts: list[str]) -> list[list[float]]:\n    # Replace with an actual embedding function or LangChain embeddings object\n    return [[1.0, 2.0] * len(texts)]",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Memory storage",
+      "id": "memory-storage"
+    }
+  ],
+  "url": "llms-txt#long-term-memory",
+  "links": []
+}

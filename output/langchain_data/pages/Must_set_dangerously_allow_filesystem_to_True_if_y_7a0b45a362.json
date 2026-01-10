@@ -1,0 +1,8 @@
+{
+  "title": "Must set dangerously_allow_filesystem to True if you want to use file paths",
+  "content": "@traceable(dangerously_allow_filesystem=True)\ndef trace_with_attachments(\n    val: int,\n    text: str,\n    image: Attachment,\n    audio: Attachment,\n    video: Attachment,\n    pdf: Attachment,\n    csv: Attachment,\n):\n    return f\"Processed: {val}, {text}, {len(image.data)}, {len(audio.data)}, {len(video.data)}, {len(pdf.data), {len(csv.data)}}\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#must-set-dangerously_allow_filesystem-to-true-if-you-want-to-use-file-paths",
+  "links": []
+}

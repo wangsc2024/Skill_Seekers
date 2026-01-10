@@ -1,0 +1,8 @@
+{
+  "title": "Conversation 1: Learn about a project",
+  "content": "agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"We're building a web app with React. Save project notes.\"}]\n})",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#conversation-1:-learn-about-a-project",
+  "links": []
+}

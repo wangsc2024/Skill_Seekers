@@ -1,0 +1,193 @@
+{
+  "title": "Context engineering in agents",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/context-engineering\n\nThe hard part of building agents (or any LLM application) is making them reliable enough. While they may work for a prototype, they often fail in real-world use cases.\n\n### Why do agents fail?\n\nWhen agents fail, it's usually because the LLM call inside the agent took the wrong action / didn't do what we expected. LLMs fail for one of two reasons:\n\n1. The underlying LLM is not capable enough\n2. The \"right\" context was not passed to the LLM\n\nMore often than not - it's actually the second reason that causes agents to not be reliable.\n\n**Context engineering** is providing the right information and tools in the right format so the LLM can accomplish a task. This is the number one job of AI Engineers. This lack of \"right\" context is the number one blocker for more reliable agents, and LangChain's agent abstractions are uniquely designed to facilitate context engineering.\n\n<Tip>\n  New to context engineering? Start with the [conceptual overview](/oss/python/concepts/context) to understand the different types of context and when to use them.\n</Tip>\n\nA typical agent loop consists of two main steps:\n\n1. **Model call** - calls the LLM with a prompt and available tools, returns either a response or a request to execute tools\n2. **Tool execution** - executes the tools that the LLM requested, returns tool results\n\n<div style={{ display: \"flex\", justifyContent: \"center\" }}>\n  <img src=\"https://mintcdn.com/langchain-5e9cc07a/Tazq8zGc0yYUYrDl/oss/images/core_agent_loop.png?fit=max&auto=format&n=Tazq8zGc0yYUYrDl&q=85&s=ac72e48317a9ced68fd1be64e89ec063\" alt=\"Core agent loop diagram\" className=\"rounded-lg\" data-og-width=\"300\" width=\"300\" data-og-height=\"268\" height=\"268\" data-path=\"oss/images/core_agent_loop.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/Tazq8zGc0yYUYrDl/oss/images/core_agent_loop.png?w=280&fit=max&auto=format&n=Tazq8zGc0yYUYrDl&q=85&s=a4c4b766b6678ef52a6ed556b1a0b032 280w, https://mintcdn.com/langchain-5e9cc07a/Tazq8zGc0yYUYrDl/oss/images/core_agent_loop.png?w=560&fit=max&auto=format&n=Tazq8zGc0yYUYrDl&q=85&s=111869e6e99a52c0eff60a1ef7ddc49c 560w, https://mintcdn.com/langchain-5e9cc07a/Tazq8zGc0yYUYrDl/oss/images/core_agent_loop.png?w=840&fit=max&auto=format&n=Tazq8zGc0yYUYrDl&q=85&s=6c1e21de7b53bd0a29683aca09c6f86e 840w, https://mintcdn.com/langchain-5e9cc07a/Tazq8zGc0yYUYrDl/oss/images/core_agent_loop.png?w=1100&fit=max&auto=format&n=Tazq8zGc0yYUYrDl&q=85&s=88bef556edba9869b759551c610c60f4 1100w, https://mintcdn.com/langchain-5e9cc07a/Tazq8zGc0yYUYrDl/oss/images/core_agent_loop.png?w=1650&fit=max&auto=format&n=Tazq8zGc0yYUYrDl&q=85&s=9b0bdd138e9548eeb5056dc0ed2d4a4b 1650w, https://mintcdn.com/langchain-5e9cc07a/Tazq8zGc0yYUYrDl/oss/images/core_agent_loop.png?w=2500&fit=max&auto=format&n=Tazq8zGc0yYUYrDl&q=85&s=41eb4f053ed5e6b0ba5bad2badf6d755 2500w\" />\n</div>\n\nThis loop continues until the LLM decides to finish.\n\n### What you can control\n\nTo build reliable agents, you need to control what happens at each step of the agent loop, as well as what happens between steps.\n\n| Context Type                                  | What You Control                                                                     | Transient or Persistent |\n| --------------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------- |\n| **[Model Context](#model-context)**           | What goes into model calls (instructions, message history, tools, response format)   | Transient               |\n| **[Tool Context](#tool-context)**             | What tools can access and produce (reads/writes to state, store, runtime context)    | Persistent              |\n| **[Life-cycle Context](#life-cycle-context)** | What happens between model and tool calls (summarization, guardrails, logging, etc.) | Persistent              |\n\n<CardGroup>\n  <Card title=\"Transient context\" icon=\"bolt\" iconType=\"duotone\">\n    What the LLM sees for a single call. You can modify messages, tools, or prompts without changing what's saved in state.\n  </Card>\n\n<Card title=\"Persistent context\" icon=\"database\" iconType=\"duotone\">\n    What gets saved in state across turns. Life-cycle hooks and tool writes modify this permanently.\n  </Card>\n</CardGroup>\n\nThroughout this process, your agent accesses (reads / writes) different sources of data:\n\n| Data Source         | Also Known As        | Scope               | Examples                                                                   |\n| ------------------- | -------------------- | ------------------- | -------------------------------------------------------------------------- |\n| **Runtime Context** | Static configuration | Conversation-scoped | User ID, API keys, database connections, permissions, environment settings |\n| **State**           | Short-term memory    | Conversation-scoped | Current messages, uploaded files, authentication status, tool results      |\n| **Store**           | Long-term memory     | Cross-conversation  | User preferences, extracted insights, memories, historical data            |\n\nLangChain [middleware](/oss/python/langchain/middleware) is the mechanism under the hood that makes context engineering practical for developers using LangChain.\n\nMiddleware allows you to hook into any step in the agent lifecycle and:\n\n* Update context\n* Jump to a different step in the agent lifecycle\n\nThroughout this guide, you'll see frequent use of the middleware API as a means to the context engineering end.\n\nControl what goes into each model call - instructions, available tools, which model to use, and output format. These decisions directly impact reliability and cost.\n\n<CardGroup cols={2}>\n  <Card title=\"System Prompt\" icon=\"message-lines\" href=\"#system-prompt\">\n    Base instructions from the developer to the LLM.\n  </Card>\n\n<Card title=\"Messages\" icon=\"comments\" href=\"#messages\">\n    The full list of messages (conversation history) sent to the LLM.\n  </Card>\n\n<Card title=\"Tools\" icon=\"wrench\" href=\"#tools\">\n    Utilities the agent has access to to take actions.\n  </Card>\n\n<Card title=\"Model\" icon=\"brain-circuit\" href=\"#model\">\n    The actual model (including configuration) to be called.\n  </Card>\n\n<Card title=\"Response Format\" icon=\"brackets-curly\" href=\"#response-format\">\n    Schema specification for the model's final response.\n  </Card>\n</CardGroup>\n\nAll of these types of model context can draw from **state** (short-term memory), **store** (long-term memory), or **runtime context** (static configuration).\n\nThe system prompt sets the LLM's behavior and capabilities. Different users, contexts, or conversation stages need different instructions. Successful agents draw on memories, preferences, and configuration to provide the right instructions for the current state of the conversation.\n\n<Tabs>\n  <Tab title=\"State\">\n    Access message count or conversation context from state:\n\n<Tab title=\"Store\">\n    Access user preferences from long-term memory:\n\n<Tab title=\"Runtime Context\">\n    Access user ID or configuration from Runtime Context:\n\nMessages make up the prompt that is sent to the LLM.\nIt's critical to manage the content of messages to ensure that the LLM has the right information to respond well.\n\n<Tabs>\n  <Tab title=\"State\">\n    Inject uploaded file context from State when relevant to current query:\n\n<Tab title=\"Store\">\n    Inject user's email writing style from Store to guide drafting:\n\n<Tab title=\"Runtime Context\">\n    Inject compliance rules from Runtime Context based on user's jurisdiction:\n\n<Note>\n  **Transient vs Persistent Message Updates:**\n\nThe examples above use `wrap_model_call` to make **transient** updates - modifying what messages are sent to the model for a single call without changing what's saved in state.\n\nFor **persistent** updates that modify state (like the summarization example in [Life-cycle Context](#summarization)), use life-cycle hooks like `before_model` or `after_model` to permanently update the conversation history. See the [middleware documentation](/oss/python/langchain/middleware) for more details.\n</Note>\n\nTools let the model interact with databases, APIs, and external systems. How you define and select tools directly impacts whether the model can complete tasks effectively.\n\nEach tool needs a clear name, description, argument names, and argument descriptions. These aren't just metadata—they guide the model's reasoning about when and how to use the tool.\n\nNot every tool is appropriate for every situation. Too many tools may overwhelm the model (overload context) and increase errors; too few limit capabilities. Dynamic tool selection adapts the available toolset based on authentication state, user permissions, feature flags, or conversation stage.\n\n<Tabs>\n  <Tab title=\"State\">\n    Enable advanced tools only after certain conversation milestones:\n\n<Tab title=\"Store\">\n    Filter tools based on user preferences or feature flags in Store:\n\n<Tab title=\"Runtime Context\">\n    Filter tools based on user permissions from Runtime Context:\n\nSee [Dynamically selecting tools](/oss/python/langchain/middleware#dynamically-selecting-tools) for more examples.\n\nDifferent models have different strengths, costs, and context windows. Select the right model for the task at hand, which\nmight change during an agent run.\n\n<Tabs>\n  <Tab title=\"State\">\n    Use different models based on conversation length from State:\n\n<Tab title=\"Store\">\n    Use user's preferred model from Store:\n\n<Tab title=\"Runtime Context\">\n    Select model based on cost limits or environment from Runtime Context:\n\nSee [Dynamic model](/oss/python/langchain/agents#dynamic-model) for more examples.\n\nStructured output transforms unstructured text into validated, structured data. When extracting specific fields or returning data for downstream systems, free-form text isn't sufficient.\n\n**How it works:** When you provide a schema as the response format, the model's final response is guaranteed to conform to that schema. The agent runs the model / tool calling loop until the model is done calling tools, then the final response is coerced into the provided format.\n\n#### Defining formats\n\nSchema definitions guide the model. Field names, types, and descriptions specify exactly what format the output should adhere to.\n\n#### Selecting formats\n\nDynamic response format selection adapts schemas based on user preferences, conversation stage, or role—returning simple formats early and detailed formats as complexity increases.\n\n<Tabs>\n  <Tab title=\"State\">\n    Configure structured output based on conversation state:\n\n<Tab title=\"Store\">\n    Configure output format based on user preferences in Store:\n\n<Tab title=\"Runtime Context\">\n    Configure output format based on Runtime Context like user role or environment:\n\nTools are special in that they both read and write context.\n\nIn the most basic case, when a tool executes, it receives the LLM's request parameters and returns a tool message back. The tool does its work and produces a result.\n\nTools can also fetch important information for the model that allows it to perform and complete tasks.\n\nMost real-world tools need more than just the LLM's parameters. They need user IDs for database queries, API keys for external services, or current session state to make decisions. Tools read from state, store, and runtime context to access this information.\n\n<Tabs>\n  <Tab title=\"State\">\n    Read from State to check current session information:\n\n<Tab title=\"Store\">\n    Read from Store to access persisted user preferences:\n\n<Tab title=\"Runtime Context\">\n    Read from Runtime Context for configuration like API keys and user IDs:\n\nTool results can be used to help an agent complete a given task. Tools can both return results directly to the model\nand update the memory of the agent to make important context available to future steps.\n\n<Tabs>\n  <Tab title=\"State\">\n    Write to State to track session-specific information using Command:\n\n<Tab title=\"Store\">\n    Write to Store to persist data across sessions:\n\nSee [Tools](/oss/python/langchain/tools) for comprehensive examples of accessing state, store, and runtime context in tools.\n\n## Life-cycle Context\n\nControl what happens **between** the core agent steps - intercepting data flow to implement cross-cutting concerns like summarization, guardrails, and logging.\n\nAs you've seen in [Model Context](#model-context) and [Tool Context](#tool-context), [middleware](/oss/python/langchain/middleware) is the mechanism that makes context engineering practical. Middleware allows you to hook into any step in the agent lifecycle and either:\n\n1. **Update context** - Modify state and store to persist changes, update conversation history, or save insights\n2. **Jump in the lifecycle** - Move to different steps in the agent cycle based on context (e.g., skip tool execution if a condition is met, repeat model call with modified context)\n\n<div style={{ display: \"flex\", justifyContent: \"center\" }}>\n  <img src=\"https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=eb4404b137edec6f6f0c8ccb8323eaf1\" alt=\"Middleware hooks in the agent loop\" className=\"rounded-lg\" data-og-width=\"500\" width=\"500\" data-og-height=\"560\" height=\"560\" data-path=\"oss/images/middleware_final.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=280&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=483413aa87cf93323b0f47c0dd5528e8 280w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=560&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=41b7dd647447978ff776edafe5f42499 560w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=840&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=e9b14e264f68345de08ae76f032c52d4 840w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=1100&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=ec45e1932d1279b1beee4a4b016b473f 1100w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=1650&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=3bca5ebf8aa56632b8a9826f7f112e57 1650w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=2500&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=437f141d1266f08a95f030c2804691d9 2500w\" />\n</div>\n\n### Example: Summarization\n\nOne of the most common life-cycle patterns is automatically condensing conversation history when it gets too long. Unlike the transient message trimming shown in [Model Context](#messages), summarization **persistently updates state** - permanently replacing old messages with a summary that's saved for all future turns.\n\nLangChain offers built-in middleware for this:\n\nWhen the conversation exceeds the token limit, `SummarizationMiddleware` automatically:\n\n1. Summarizes older messages using a separate LLM call\n2. Replaces them with a summary message in State (permanently)\n3. Keeps recent messages intact for context\n\nThe summarized conversation history is permanently updated - future turns will see the summary instead of the original messages.\n\n<Note>\n  For a complete list of built-in middleware, available hooks, and how to create custom middleware, see the [Middleware documentation](/oss/python/langchain/middleware).\n</Note>\n\n1. **Start simple** - Begin with static prompts and tools, add dynamics only when needed\n2. **Test incrementally** - Add one context engineering feature at a time\n3. **Monitor performance** - Track model calls, token usage, and latency\n4. **Use built-in middleware** - Leverage [`SummarizationMiddleware`](/oss/python/langchain/middleware#summarization), [`LLMToolSelectorMiddleware`](/oss/python/langchain/middleware#llm-tool-selector), etc.\n5. **Document your context strategy** - Make it clear what context is being passed and why\n6. **Understand transient vs persistent**: Model context changes are transient (per-call), while life-cycle context changes persist to state\n\n* [Context conceptual overview](/oss/python/concepts/context) - Understand context types and when to use them\n* [Middleware](/oss/python/langchain/middleware) - Complete middleware guide\n* [Tools](/oss/python/langchain/tools) - Tool creation and context access\n* [Memory](/oss/python/concepts/memory) - Short-term and long-term memory patterns\n* [Agents](/oss/python/langchain/agents) - Core agent concepts\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/context-engineering.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Store\">\n    Access user preferences from long-term memory:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Runtime Context\">\n    Access user ID or configuration from Runtime Context:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Messages\n\nMessages make up the prompt that is sent to the LLM.\nIt's critical to manage the content of messages to ensure that the LLM has the right information to respond well.\n\n<Tabs>\n  <Tab title=\"State\">\n    Inject uploaded file context from State when relevant to current query:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Store\">\n    Inject user's email writing style from Store to guide drafting:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Runtime Context\">\n    Inject compliance rules from Runtime Context based on user's jurisdiction:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n<Note>\n  **Transient vs Persistent Message Updates:**\n\n  The examples above use `wrap_model_call` to make **transient** updates - modifying what messages are sent to the model for a single call without changing what's saved in state.\n\n  For **persistent** updates that modify state (like the summarization example in [Life-cycle Context](#summarization)), use life-cycle hooks like `before_model` or `after_model` to permanently update the conversation history. See the [middleware documentation](/oss/python/langchain/middleware) for more details.\n</Note>\n\n### Tools\n\nTools let the model interact with databases, APIs, and external systems. How you define and select tools directly impacts whether the model can complete tasks effectively.\n\n#### Defining tools\n\nEach tool needs a clear name, description, argument names, and argument descriptions. These aren't just metadata—they guide the model's reasoning about when and how to use the tool.",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Selecting tools\n\nNot every tool is appropriate for every situation. Too many tools may overwhelm the model (overload context) and increase errors; too few limit capabilities. Dynamic tool selection adapts the available toolset based on authentication state, user permissions, feature flags, or conversation stage.\n\n<Tabs>\n  <Tab title=\"State\">\n    Enable advanced tools only after certain conversation milestones:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Store\">\n    Filter tools based on user preferences or feature flags in Store:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Runtime Context\">\n    Filter tools based on user permissions from Runtime Context:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nSee [Dynamically selecting tools](/oss/python/langchain/middleware#dynamically-selecting-tools) for more examples.\n\n### Model\n\nDifferent models have different strengths, costs, and context windows. Select the right model for the task at hand, which\nmight change during an agent run.\n\n<Tabs>\n  <Tab title=\"State\">\n    Use different models based on conversation length from State:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Store\">\n    Use user's preferred model from Store:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Runtime Context\">\n    Select model based on cost limits or environment from Runtime Context:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nSee [Dynamic model](/oss/python/langchain/agents#dynamic-model) for more examples.\n\n### Response Format\n\nStructured output transforms unstructured text into validated, structured data. When extracting specific fields or returning data for downstream systems, free-form text isn't sufficient.\n\n**How it works:** When you provide a schema as the response format, the model's final response is guaranteed to conform to that schema. The agent runs the model / tool calling loop until the model is done calling tools, then the final response is coerced into the provided format.\n\n#### Defining formats\n\nSchema definitions guide the model. Field names, types, and descriptions specify exactly what format the output should adhere to.",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Selecting formats\n\nDynamic response format selection adapts schemas based on user preferences, conversation stage, or role—returning simple formats early and detailed formats as complexity increases.\n\n<Tabs>\n  <Tab title=\"State\">\n    Configure structured output based on conversation state:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Store\">\n    Configure output format based on user preferences in Store:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Runtime Context\">\n    Configure output format based on Runtime Context like user role or environment:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Tool Context\n\nTools are special in that they both read and write context.\n\nIn the most basic case, when a tool executes, it receives the LLM's request parameters and returns a tool message back. The tool does its work and produces a result.\n\nTools can also fetch important information for the model that allows it to perform and complete tasks.\n\n### Reads\n\nMost real-world tools need more than just the LLM's parameters. They need user IDs for database queries, API keys for external services, or current session state to make decisions. Tools read from state, store, and runtime context to access this information.\n\n<Tabs>\n  <Tab title=\"State\">\n    Read from State to check current session information:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Store\">\n    Read from Store to access persisted user preferences:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Runtime Context\">\n    Read from Runtime Context for configuration like API keys and user IDs:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Writes\n\nTool results can be used to help an agent complete a given task. Tools can both return results directly to the model\nand update the memory of the agent to make important context available to future steps.\n\n<Tabs>\n  <Tab title=\"State\">\n    Write to State to track session-specific information using Command:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Store\">\n    Write to Store to persist data across sessions:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nSee [Tools](/oss/python/langchain/tools) for comprehensive examples of accessing state, store, and runtime context in tools.\n\n## Life-cycle Context\n\nControl what happens **between** the core agent steps - intercepting data flow to implement cross-cutting concerns like summarization, guardrails, and logging.\n\nAs you've seen in [Model Context](#model-context) and [Tool Context](#tool-context), [middleware](/oss/python/langchain/middleware) is the mechanism that makes context engineering practical. Middleware allows you to hook into any step in the agent lifecycle and either:\n\n1. **Update context** - Modify state and store to persist changes, update conversation history, or save insights\n2. **Jump in the lifecycle** - Move to different steps in the agent cycle based on context (e.g., skip tool execution if a condition is met, repeat model call with modified context)\n\n<div style={{ display: \"flex\", justifyContent: \"center\" }}>\n  <img src=\"https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=eb4404b137edec6f6f0c8ccb8323eaf1\" alt=\"Middleware hooks in the agent loop\" className=\"rounded-lg\" data-og-width=\"500\" width=\"500\" data-og-height=\"560\" height=\"560\" data-path=\"oss/images/middleware_final.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=280&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=483413aa87cf93323b0f47c0dd5528e8 280w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=560&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=41b7dd647447978ff776edafe5f42499 560w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=840&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=e9b14e264f68345de08ae76f032c52d4 840w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=1100&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=ec45e1932d1279b1beee4a4b016b473f 1100w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=1650&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=3bca5ebf8aa56632b8a9826f7f112e57 1650w, https://mintcdn.com/langchain-5e9cc07a/RAP6mjwE5G00xYsA/oss/images/middleware_final.png?w=2500&fit=max&auto=format&n=RAP6mjwE5G00xYsA&q=85&s=437f141d1266f08a95f030c2804691d9 2500w\" />\n</div>\n\n### Example: Summarization\n\nOne of the most common life-cycle patterns is automatically condensing conversation history when it gets too long. Unlike the transient message trimming shown in [Model Context](#messages), summarization **persistently updates state** - permanently replacing old messages with a summary that's saved for all future turns.\n\nLangChain offers built-in middleware for this:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "Why do agents fail?",
+      "id": "why-do-agents-fail?"
+    },
+    {
+      "level": "h3",
+      "text": "The agent loop",
+      "id": "the-agent-loop"
+    },
+    {
+      "level": "h3",
+      "text": "What you can control",
+      "id": "what-you-can-control"
+    },
+    {
+      "level": "h3",
+      "text": "Data sources",
+      "id": "data-sources"
+    },
+    {
+      "level": "h3",
+      "text": "How it works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Model Context",
+      "id": "model-context"
+    },
+    {
+      "level": "h3",
+      "text": "System Prompt",
+      "id": "system-prompt"
+    },
+    {
+      "level": "h3",
+      "text": "Messages",
+      "id": "messages"
+    },
+    {
+      "level": "h3",
+      "text": "Tools",
+      "id": "tools"
+    },
+    {
+      "level": "h3",
+      "text": "Model",
+      "id": "model"
+    },
+    {
+      "level": "h3",
+      "text": "Response Format",
+      "id": "response-format"
+    },
+    {
+      "level": "h2",
+      "text": "Tool Context",
+      "id": "tool-context"
+    },
+    {
+      "level": "h3",
+      "text": "Reads",
+      "id": "reads"
+    },
+    {
+      "level": "h3",
+      "text": "Writes",
+      "id": "writes"
+    },
+    {
+      "level": "h2",
+      "text": "Life-cycle Context",
+      "id": "life-cycle-context"
+    },
+    {
+      "level": "h3",
+      "text": "Example: Summarization",
+      "id": "example:-summarization"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    }
+  ],
+  "url": "llms-txt#context-engineering-in-agents",
+  "links": []
+}

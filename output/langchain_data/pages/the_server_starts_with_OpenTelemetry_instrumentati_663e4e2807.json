@@ -1,0 +1,8 @@
+{
+  "title": "the server starts with OpenTelemetry instrumentation enabled.",
+  "content": "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=<target trace ingestion endpoint>\nOTEL_EXPORTER_OTLP_ENDPOINT=https://otlp.nr-data.net\nOTEL_SERVICE_NAME=MY_LANGSMITH_DEPLOYMENT\nOTEL_EXPORTER_OTLP_HEADERS=api-key=<YOUR_INGEST_LICENSE_KEY>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-server-starts-with-opentelemetry-instrumentation-enabled.",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Store without embedding (still retrievable, but not searchable)",
+  "content": "store.put(\n    namespace_for_memory,\n    str(uuid.uuid4()),\n    {\"system_info\": \"Last updated: 2024-01-01\"},\n    index=False\n)\npython  theme={null}\nfrom langgraph.checkpoint.memory import InMemorySaver",
+  "code_samples": [
+    {
+      "code": "### Using in LangGraph\n\nWith this all in place, we use the `in_memory_store` in LangGraph. The `in_memory_store` works hand-in-hand with the checkpointer: the checkpointer saves state to threads, as discussed above, and the `in_memory_store` allows us to store arbitrary information for access *across* threads. We compile the graph with both the checkpointer and the `in_memory_store` as follows.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Using in LangGraph",
+      "id": "using-in-langgraph"
+    }
+  ],
+  "url": "llms-txt#store-without-embedding-(still-retrievable,-but-not-searchable)",
+  "links": []
+}

@@ -1,0 +1,115 @@
+{
+  "title": "Run a local server",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/local-server\n\nThis guide shows you how to run a LangGraph application locally.\n\nBefore you begin, ensure you have the following:\n\n* An API key for [LangSmith](https://smith.langchain.com/settings) - free to sign up\n\n## 1. Install the LangGraph CLI\n\n## 2. Create a LangGraph app\n\nCreate a new app from the [`new-langgraph-project-python` template](https://github.com/langchain-ai/new-langgraph-project). This template demonstrates a single-node application you can extend with your own logic.\n\n<Tip>\n  **Additional templates**\n  If you use `langgraph new` without specifying a template, you will be presented with an interactive menu that will allow you to choose from a list of available templates.\n</Tip>\n\n## 3. Install dependencies\n\nIn the root of your new LangGraph app, install the dependencies in `edit` mode so your local changes are used by the server:\n\n## 4. Create a `.env` file\n\nYou will find a `.env.example` in the root of your new LangGraph app. Create a `.env` file in the root of your new LangGraph app and copy the contents of the `.env.example` file into it, filling in the necessary API keys:\n\n## 5. Launch Agent server\n\nStart the LangGraph API server locally:\n\nThe `langgraph dev` command starts Agent Server in an in-memory mode. This mode is suitable for development and testing purposes. For production use, deploy Agent Server with access to a persistent storage backend. For more information, see the [Platform setup overview](/langsmith/platform-setup).\n\n## 6. Test your application in Studio\n\n[Studio](/langsmith/studio) is a specialized UI that you can connect to LangGraph API server to visualize, interact with, and debug your application locally. Test your graph in Studio by visiting the URL provided in the output of the `langgraph dev` command:\n\nFor an Agent Server running on a custom host/port, update the `baseUrl` query parameter in the URL. For example, if your server is running on `http://myhost:3000`:\n\n<Accordion title=\"Safari compatibility\">\n  Use the `--tunnel` flag with your command to create a secure tunnel, as Safari has limitations when connecting to localhost servers:\n\n<Tabs>\n  <Tab title=\"Python SDK (async)\">\n    1. Install the LangGraph Python SDK:\n       \n    2. Send a message to the assistant (threadless run):\n       \n  </Tab>\n\n<Tab title=\"Python SDK (sync)\">\n    1. Install the LangGraph Python SDK:\n       \n    2. Send a message to the assistant (threadless run):\n       \n  </Tab>\n\n<Tab title=\"Rest API\">\n    \n  </Tab>\n</Tabs>\n\nNow that you have a LangGraph app running locally, take your journey further by exploring deployment and advanced features:\n\n* [Deployment quickstart](/langsmith/deployment-quickstart): Deploy your LangGraph app using LangSmith.\n\n* [LangSmith](/langsmith/home): Learn about foundational LangSmith concepts.\n\n* [SDK Reference](https://reference.langchain.com/python/langsmith/deployment/sdk/): Explore the SDK API Reference.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/local-server.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## 2. Create a LangGraph app\n\nCreate a new app from the [`new-langgraph-project-python` template](https://github.com/langchain-ai/new-langgraph-project). This template demonstrates a single-node application you can extend with your own logic.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n  **Additional templates**\n  If you use `langgraph new` without specifying a template, you will be presented with an interactive menu that will allow you to choose from a list of available templates.\n</Tip>\n\n## 3. Install dependencies\n\nIn the root of your new LangGraph app, install the dependencies in `edit` mode so your local changes are used by the server:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## 4. Create a `.env` file\n\nYou will find a `.env.example` in the root of your new LangGraph app. Create a `.env` file in the root of your new LangGraph app and copy the contents of the `.env.example` file into it, filling in the necessary API keys:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 5. Launch Agent server\n\nStart the LangGraph API server locally:",
+      "language": "unknown"
+    },
+    {
+      "code": "Sample output:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `langgraph dev` command starts Agent Server in an in-memory mode. This mode is suitable for development and testing purposes. For production use, deploy Agent Server with access to a persistent storage backend. For more information, see the [Platform setup overview](/langsmith/platform-setup).\n\n## 6. Test your application in Studio\n\n[Studio](/langsmith/studio) is a specialized UI that you can connect to LangGraph API server to visualize, interact with, and debug your application locally. Test your graph in Studio by visiting the URL provided in the output of the `langgraph dev` command:",
+      "language": "unknown"
+    },
+    {
+      "code": "For an Agent Server running on a custom host/port, update the `baseUrl` query parameter in the URL. For example, if your server is running on `http://myhost:3000`:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Safari compatibility\">\n  Use the `--tunnel` flag with your command to create a secure tunnel, as Safari has limitations when connecting to localhost servers:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## 7. Test the API\n\n<Tabs>\n  <Tab title=\"Python SDK (async)\">\n    1. Install the LangGraph Python SDK:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Send a message to the assistant (threadless run):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Python SDK (sync)\">\n    1. Install the LangGraph Python SDK:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Send a message to the assistant (threadless run):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Rest API\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Install the LangGraph CLI",
+      "id": "1.-install-the-langgraph-cli"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a LangGraph app",
+      "id": "2.-create-a-langgraph-app"
+    },
+    {
+      "level": "h2",
+      "text": "3. Install dependencies",
+      "id": "3.-install-dependencies"
+    },
+    {
+      "level": "h2",
+      "text": "4. Create a `.env` file",
+      "id": "4.-create-a-`.env`-file"
+    },
+    {
+      "level": "h2",
+      "text": "5. Launch Agent server",
+      "id": "5.-launch-agent-server"
+    },
+    {
+      "level": "h2",
+      "text": "6. Test your application in Studio",
+      "id": "6.-test-your-application-in-studio"
+    },
+    {
+      "level": "h2",
+      "text": "7. Test the API",
+      "id": "7.-test-the-api"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#run-a-local-server",
+  "links": []
+}

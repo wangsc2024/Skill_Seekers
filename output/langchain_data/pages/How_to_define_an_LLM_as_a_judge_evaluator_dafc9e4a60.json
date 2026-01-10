@@ -1,0 +1,24 @@
+{
+  "title": "How to define an LLM-as-a-judge evaluator",
+  "content": "Source: https://docs.langchain.com/langsmith/llm-as-judge\n\n<Info>\n  * [LLM-as-a-judge evaluator](/langsmith/evaluation-concepts#llm-as-judge)\n</Info>\n\nLLM applications can be challenging to evaluate since they often generate conversational text with no single correct answer.\n\nThis guide shows you how to define an LLM-as-a-judge evaluator for [offline evaluation](/langsmith/evaluation-concepts#offline-evaluation) using either the LangSmith SDK or the UI. Note: To run evaluations in real-time on your production traces, refer to [setting up online evaluations](/langsmith/online-evaluations#configure-llm-as-judge-evaluators).\n\n### Pre-built evaluators\n\nPre-built evaluators are a useful starting point for setting up evaluations. Refer to [pre-built evaluators](/langsmith/prebuilt-evaluators) for how to use pre-built evaluators with LangSmith.\n\n### Create your own LLM-as-a-judge evaluator\n\nFor complete control of evaluator logic, create your own LLM-as-a-judge evaluator and run it using the LangSmith SDK ([Python](https://docs.smith.langchain.com/reference/python/reference) / [TypeScript](https://docs.smith.langchain.com/reference/js)).\n\nRequires `langsmith>=0.2.0`\n\n```python  theme={null}\nfrom langsmith import evaluate, traceable, wrappers, Client\nfrom openai import OpenAI",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "SDK",
+      "id": "sdk"
+    },
+    {
+      "level": "h3",
+      "text": "Pre-built evaluators",
+      "id": "pre-built-evaluators"
+    },
+    {
+      "level": "h3",
+      "text": "Create your own LLM-as-a-judge evaluator",
+      "id": "create-your-own-llm-as-a-judge-evaluator"
+    }
+  ],
+  "url": "llms-txt#how-to-define-an-llm-as-a-judge-evaluator",
+  "links": []
+}

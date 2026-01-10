@@ -1,0 +1,8 @@
+{
+  "title": "thread_id is the persistent pointer (stores a stable ID in production)",
+  "content": "config = {\"configurable\": {\"thread_id\": \"thread-1\"}}\nresult = graph.invoke({\"input\": \"data\"}, config=config)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#thread_id-is-the-persistent-pointer-(stores-a-stable-id-in-production)",
+  "links": []
+}

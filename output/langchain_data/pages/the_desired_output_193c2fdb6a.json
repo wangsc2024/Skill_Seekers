@@ -1,0 +1,8 @@
+{
+  "title": "the desired output.",
+  "content": "class UserIntent(TypedDict):\n    \"\"\"The user's current intent in the conversation\"\"\"\n\nintent: Literal[\"refund\", \"question_answering\"]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-desired-output.",
+  "links": []
+}

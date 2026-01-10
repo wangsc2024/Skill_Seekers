@@ -1,0 +1,143 @@
+{
+  "title": "Add edges",
+  "content": "builder.add_edge(START, \"step_1\")\nbuilder.add_edge(\"step_1\", \"step_2\")\nbuilder.add_edge(\"step_2\", \"step_3\")\npython  theme={null}\nbuilder = StateGraph(State).add_sequence([step_1, step_2, step_3])\nbuilder.add_edge(START, \"step_1\")\npython  theme={null}\n  from typing_extensions import TypedDict\n\nclass State(TypedDict):\n      value_1: str\n      value_2: int\n  python  theme={null}\n  def step_1(state: State):\n      return {\"value_1\": \"a\"}\n\ndef step_2(state: State):\n      current_value_1 = state[\"value_1\"]\n      return {\"value_1\": f\"{current_value_1} b\"}\n\ndef step_3(state: State):\n      return {\"value_2\": 10}\n  python  theme={null}\n  from langgraph.graph import START, StateGraph\n\nbuilder = StateGraph(State)\n\n# Add nodes\n  builder.add_node(step_1)\n  builder.add_node(step_2)\n  builder.add_node(step_3)\n\n# Add edges\n  builder.add_edge(START, \"step_1\")\n  builder.add_edge(\"step_1\", \"step_2\")\n  builder.add_edge(\"step_2\", \"step_3\")\n  python  theme={null}\n    builder.add_node(\"my_node\", step_1)\n    python  theme={null}\n  graph = builder.compile()\n  python  theme={null}\n  from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))\n  python  theme={null}\n  graph.invoke({\"value_1\": \"c\"})\n  \n  {'value_1': 'a b', 'value_2': 10}\n  python  theme={null}\n    builder = StateGraph(State).add_sequence([step_1, step_2, step_3])  # [!code highlight]\n    builder.add_edge(START, \"step_1\")\n\ngraph = builder.compile()\n\ngraph.invoke({\"value_1\": \"c\"})\n    python  theme={null}\nimport operator\nfrom typing import Annotated, Any\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n    # The operator.add reducer fn makes this append-only\n    aggregate: Annotated[list, operator.add]\n\ndef a(state: State):\n    print(f'Adding \"A\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n    print(f'Adding \"B\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}\n\ndef c(state: State):\n    print(f'Adding \"C\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"C\"]}\n\ndef d(state: State):\n    print(f'Adding \"D\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"D\"]}\n\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\nbuilder.add_node(c)\nbuilder.add_node(d)\nbuilder.add_edge(START, \"a\")\nbuilder.add_edge(\"a\", \"b\")\nbuilder.add_edge(\"a\", \"c\")\nbuilder.add_edge(\"b\", \"d\")\nbuilder.add_edge(\"c\", \"d\")\nbuilder.add_edge(\"d\", END)\ngraph = builder.compile()\npython  theme={null}\nfrom IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))\npython  theme={null}\ngraph.invoke({\"aggregate\": []}, {\"configurable\": {\"thread_id\": \"foo\"}})\n\nAdding \"A\" to []\nAdding \"B\" to ['A']\nAdding \"C\" to ['A']\nAdding \"D\" to ['A', 'B', 'C']\npython  theme={null}\n  graph.invoke({\"value_1\": \"c\"}, {\"configurable\": {\"max_concurrency\": 10}})\n  python  theme={null}\nimport operator\nfrom typing import Annotated, Any\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n    # The operator.add reducer fn makes this append-only\n    aggregate: Annotated[list, operator.add]\n\ndef a(state: State):\n    print(f'Adding \"A\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n    print(f'Adding \"B\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}\n\ndef b_2(state: State):\n    print(f'Adding \"B_2\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B_2\"]}\n\ndef c(state: State):\n    print(f'Adding \"C\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"C\"]}\n\ndef d(state: State):\n    print(f'Adding \"D\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"D\"]}\n\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\nbuilder.add_node(b_2)\nbuilder.add_node(c)\nbuilder.add_node(d, defer=True)  # [!code highlight]\nbuilder.add_edge(START, \"a\")\nbuilder.add_edge(\"a\", \"b\")\nbuilder.add_edge(\"a\", \"c\")\nbuilder.add_edge(\"b\", \"b_2\")\nbuilder.add_edge(\"b_2\", \"d\")\nbuilder.add_edge(\"c\", \"d\")\nbuilder.add_edge(\"d\", END)\ngraph = builder.compile()\npython  theme={null}\nfrom IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))\npython  theme={null}\ngraph.invoke({\"aggregate\": []})\n\nAdding \"A\" to []\nAdding \"B\" to ['A']\nAdding \"C\" to ['A']\nAdding \"B_2\" to ['A', 'B', 'C']\nAdding \"D\" to ['A', 'B', 'C', 'B_2']\npython  theme={null}\nimport operator\nfrom typing import Annotated, Literal, Sequence\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n    aggregate: Annotated[list, operator.add]\n    # Add a key to the state. We will set this key to determine\n    # how we branch.\n    which: str\n\ndef a(state: State):\n    print(f'Adding \"A\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"], \"which\": \"c\"}  # [!code highlight]\n\ndef b(state: State):\n    print(f'Adding \"B\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}\n\ndef c(state: State):\n    print(f'Adding \"C\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"C\"]}\n\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\nbuilder.add_node(c)\nbuilder.add_edge(START, \"a\")\nbuilder.add_edge(\"b\", END)\nbuilder.add_edge(\"c\", END)\n\ndef conditional_edge(state: State) -> Literal[\"b\", \"c\"]:\n    # Fill in arbitrary logic here that uses the state\n    # to determine the next node\n    return state[\"which\"]\n\nbuilder.add_conditional_edges(\"a\", conditional_edge)  # [!code highlight]\n\ngraph = builder.compile()\npython  theme={null}\nfrom IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))\npython  theme={null}\nresult = graph.invoke({\"aggregate\": []})\nprint(result)\n\nAdding \"A\" to []\nAdding \"C\" to ['A']\n{'aggregate': ['A', 'C'], 'which': 'c'}\npython  theme={null}\n  def route_bc_or_cd(state: State) -> Sequence[str]:\n      if state[\"which\"] == \"cd\":\n          return [\"c\", \"d\"]\n      return [\"b\", \"c\"]\n  python  theme={null}\nfrom langgraph.graph import StateGraph, START, END\nfrom langgraph.types import Send\nfrom typing_extensions import TypedDict, Annotated\nimport operator\n\nclass OverallState(TypedDict):\n    topic: str\n    subjects: list[str]\n    jokes: Annotated[list[str], operator.add]\n    best_selected_joke: str\n\ndef generate_topics(state: OverallState):\n    return {\"subjects\": [\"lions\", \"elephants\", \"penguins\"]}\n\ndef generate_joke(state: OverallState):\n    joke_map = {\n        \"lions\": \"Why don't lions like fast food? Because they can't catch it!\",\n        \"elephants\": \"Why don't elephants use computers? They're afraid of the mouse!\",\n        \"penguins\": \"Why don't penguins like talking to strangers at parties? Because they find it hard to break the ice.\"\n    }\n    return {\"jokes\": [joke_map[state[\"subject\"]]]}\n\ndef continue_to_jokes(state: OverallState):\n    return [Send(\"generate_joke\", {\"subject\": s}) for s in state[\"subjects\"]]\n\ndef best_joke(state: OverallState):\n    return {\"best_selected_joke\": \"penguins\"}\n\nbuilder = StateGraph(OverallState)\nbuilder.add_node(\"generate_topics\", generate_topics)\nbuilder.add_node(\"generate_joke\", generate_joke)\nbuilder.add_node(\"best_joke\", best_joke)\nbuilder.add_edge(START, \"generate_topics\")\nbuilder.add_conditional_edges(\"generate_topics\", continue_to_jokes, [\"generate_joke\"])\nbuilder.add_edge(\"generate_joke\", \"best_joke\")\nbuilder.add_edge(\"best_joke\", END)\ngraph = builder.compile()\npython  theme={null}\nfrom IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "We can also use the built-in shorthand `.add_sequence`:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Why split application steps into a sequence with LangGraph?\">\n  LangGraph makes it easy to add an underlying persistence layer to your application.\n  This allows state to be checkpointed in between the execution of nodes, so your LangGraph nodes govern:\n\n  * How state updates are [checkpointed](/oss/python/langgraph/persistence)\n  * How interruptions are resumed in [human-in-the-loop](/oss/python/langgraph/interrupts) workflows\n  * How we can \"rewind\" and branch-off executions using LangGraph's [time travel](/oss/python/langgraph/use-time-travel) features\n\n  They also determine how execution steps are [streamed](/oss/python/langgraph/streaming), and how your application is visualized and debugged using [Studio](/langsmith/studio).\n\n  Let's demonstrate an end-to-end example. We will create a sequence of three steps:\n\n  1. Populate a value in a key of the state\n  2. Update the same value\n  3. Populate a different value\n\n  Let's first define our [state](/oss/python/langgraph/graph-api#state). This governs the [schema of the graph](/oss/python/langgraph/graph-api#schema), and can also specify how to apply updates. See [this section](#process-state-updates-with-reducers) for more detail.\n\n  In our case, we will just keep track of two values:",
+      "language": "unknown"
+    },
+    {
+      "code": "Our [nodes](/oss/python/langgraph/graph-api#nodes) are just Python functions that read our graph's state and make updates to it. The first argument to this function will always be the state:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n    Note that when issuing updates to the state, each node can just specify the value of the key it wishes to update.\n\n    By default, this will **overwrite** the value of the corresponding key. You can also use [reducers](/oss/python/langgraph/graph-api#reducers) to control how updates are processed— for example, you can append successive updates to a key instead. See [this section](#process-state-updates-with-reducers) for more detail.\n  </Note>\n\n  Finally, we define the graph. We use [StateGraph](/oss/python/langgraph/graph-api#stategraph) to define a graph that operates on this state.\n\n  We will then use [`add_node`](/oss/python/langgraph/graph-api#messagesstate) and [`add_edge`](/oss/python/langgraph/graph-api#edges) to populate our graph and define its control flow.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n    **Specifying custom names**\n    You can specify custom names for nodes using [`add_node`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_node):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tip>\n\n  Note that:\n\n  * [`add_edge`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_edge) takes the names of nodes, which for functions defaults to `node.__name__`.\n  * We must specify the entry point of the graph. For this we add an edge with the [START node](/oss/python/langgraph/graph-api#start-node).\n  * The graph halts when there are no more nodes to execute.\n\n  We next [compile](/oss/python/langgraph/graph-api#compiling-your-graph) our graph. This provides a few basic checks on the structure of the graph (e.g., identifying orphaned nodes). If we were adding persistence to our application via a [checkpointer](/oss/python/langgraph/persistence), it would also be passed in here.",
+      "language": "unknown"
+    },
+    {
+      "code": "LangGraph provides built-in utilities for visualizing your graph. Let's inspect our sequence. See [this guide](#visualize-your-graph) for detail on visualization.",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_2.png?fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=fa0376786cc89d704a5435abba178804\" alt=\"Sequence of steps graph\" data-og-width=\"107\" width=\"107\" data-og-height=\"333\" height=\"333\" data-path=\"oss/images/graph_api_image_2.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_2.png?w=280&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=e2d4ec28fa1b03fab44cbcfccd19aa16 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_2.png?w=560&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=5ab128ae8f12f766384f48e03fa2c35c 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_2.png?w=840&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=db4260bece32ab8f5045ea7b9b151c45 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_2.png?w=1100&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=8a93a6970742a83f06fb1a5288668eef 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_2.png?w=1650&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=269956fccda17f64def8a69db847d4aa 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_2.png?w=2500&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=40f495cb5fbca4aa2c960083a50af52e 2500w\" />\n\n  Let's proceed with a simple invocation:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that:\n\n  * We kicked off invocation by providing a value for a single state key. We must always provide a value for at least one key.\n  * The value we passed in was overwritten by the first node.\n  * The second node updated the value.\n  * The third node populated a different value.\n\n  <Tip>\n    **Built-in shorthand**\n    `langgraph>=0.2.46` includes a built-in short-hand `add_sequence` for adding node sequences. You can compile the same graph as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tip>\n</Accordion>\n\n## Create branches\n\nParallel execution of nodes is essential to speed up overall graph operation. LangGraph offers native support for parallel execution of nodes, which can significantly enhance the performance of graph-based workflows. This parallelization is achieved through fan-out and fan-in mechanisms, utilizing both standard edges and [conditional\\_edges](https://langchain-ai.github.io/langgraph/reference/graphs.md#langgraph.graph.MessageGraph.add_conditional_edges). Below are some examples showing how to add create branching dataflows that work for you.\n\n### Run graph nodes in parallel\n\nIn this example, we fan out from `Node A` to `B and C` and then fan in to `D`. With our state, [we specify the reducer add operation](/oss/python/langgraph/graph-api#reducers). This will combine or accumulate values for the specific key in the State, rather than simply overwriting the existing value. For lists, this means concatenating the new list with the existing list. See the above section on [state reducers](#process-state-updates-with-reducers) for more detail on updating state with reducers.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_3.png?fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=8359f2e8d9dde03d7cc25f9d755a428d\" alt=\"Parallel execution graph\" data-og-width=\"143\" width=\"143\" data-og-height=\"432\" height=\"432\" data-path=\"oss/images/graph_api_image_3.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_3.png?w=280&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=75695e23f3e5e7eddb985785376108c4 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_3.png?w=560&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=cf45dc47fcfcf30ef39922a44119d815 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_3.png?w=840&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=92b3e0a7d06b07becf4deab660ff3717 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_3.png?w=1100&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=8c0e296783bde688d32b36e7e8fb669c 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_3.png?w=1650&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=a4ff2db4eea2ab57343b329f6e21949c 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_3.png?w=2500&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=99b0250accefffa610c67662ca4be2a2 2500w\" />\n\nWith the reducer, you can see that the values added in each node are accumulated.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n  In the above example, nodes `\"b\"` and `\"c\"` are executed concurrently in the same [superstep](/oss/python/langgraph/graph-api#graphs). Because they are in the same step, node `\"d\"` executes after both `\"b\"` and `\"c\"` are finished.\n\n  Importantly, updates from a parallel superstep may not be ordered consistently. If you need a consistent, predetermined ordering of updates from a parallel superstep, you should write the outputs to a separate field in the state together with a value with which to order them.\n</Note>\n\n<Accordion title=\"Exception handling?\">\n  LangGraph executes nodes within [supersteps](/oss/python/langgraph/graph-api#graphs), meaning that while parallel branches are executed in parallel, the entire superstep is **transactional**. If any of these branches raises an exception, **none** of the updates are applied to the state (the entire superstep errors).\n\n  Importantly, when using a [checkpointer](/oss/python/langgraph/persistence), results from successful nodes within a superstep are saved, and don't repeat when resumed.\n\n  If you have error-prone (perhaps want to handle flakey API calls), LangGraph provides two ways to address this:\n\n  1. You can write regular python code within your node to catch and handle exceptions.\n  2. You can set a **[retry\\_policy](https://langchain-ai.github.io/langgraph/reference/types/#langgraph.types.RetryPolicy)** to direct the graph to retry nodes that raise certain types of exceptions. Only failing branches are retried, so you needn't worry about performing redundant work.\n\n  Together, these let you perform parallel execution and fully control exception handling.\n</Accordion>\n\n<Tip>\n  **Set max concurrency**\n  You can control the maximum number of concurrent tasks by setting `max_concurrency` in the [configuration](https://python.langchain.com/api_reference/core/runnables/langchain_core.runnables.config.RunnableConfig.html) when invoking the graph.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tip>\n\n### Defer node execution\n\nDeferring node execution is useful when you want to delay the execution of a node until all other pending tasks are completed. This is particularly relevant when branches have different lengths, which is common in workflows like map-reduce flows.\n\nThe above example showed how to fan-out and fan-in when each path was only one step. But what if one branch had more than one step? Let's add a node `\"b_2\"` in the `\"b\"` branch:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_4.png?fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=44cd97f020dfefeaffbe2b012514f343\" alt=\"Deferred execution graph\" data-og-width=\"161\" width=\"161\" data-og-height=\"531\" height=\"531\" data-path=\"oss/images/graph_api_image_4.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_4.png?w=280&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=645690182cd1ed41151da17c7d103d47 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_4.png?w=560&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=51cdd5ba95c2285baa2b7dc5236c8b63 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_4.png?w=840&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=e99de6c886526afdb2e7a538e3d23705 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_4.png?w=1100&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=92aba13b5bbc8428e42f2ad50ba7b607 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_4.png?w=1650&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=14fda3686ef277c3f72a3ed8618c5e58 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_4.png?w=2500&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=65c543b4b79c53b9224c74631b959e0b 2500w\" />",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "In the above example, nodes `\"b\"` and `\"c\"` are executed concurrently in the same superstep. We set `defer=True` on node `d` so it will not execute until all pending tasks are finished. In this case, this means that `\"d\"` waits to execute until the entire `\"b\"` branch is finished.\n\n### Conditional branching\n\nIf your fan-out should vary at runtime based on the state, you can use [`add_conditional_edges`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_conditional_edges) to select one or more paths using the graph state. See example below, where node `a` generates a state update that determines the following node.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_5.png?fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=3373a383d5acc3e4d6a4d1575e849146\" alt=\"Conditional branching graph\" data-og-width=\"143\" width=\"143\" data-og-height=\"333\" height=\"333\" data-path=\"oss/images/graph_api_image_5.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_5.png?w=280&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=addc707d8e23e088279d93e61cd4429c 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_5.png?w=560&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=9b0779c2c5444a984a67617640449b26 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_5.png?w=840&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=77a82cd36bc56637b4c3bdd0bccc656a 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_5.png?w=1100&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=fd83ca7056bb93a4a72187b4aeed3873 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_5.png?w=1650&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=5c57aebb9c69aa7bce3f77adcaee11a4 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_5.png?w=2500&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=0e256ff324997275e003ee62809e030d 2500w\" />",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n  Your conditional edges can route to multiple destination nodes. For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tip>\n\n## Map-Reduce and the Send API\n\nLangGraph supports map-reduce and other advanced branching patterns using the Send API. Here is an example of how to use it:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_6.png?fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=48249d2085e8bfc63a142ccfba5082f5\" alt=\"Map-reduce graph with fanout\" data-og-width=\"160\" width=\"160\" data-og-height=\"432\" height=\"432\" data-path=\"oss/images/graph_api_image_6.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_6.png?w=280&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=f37fee0612923f1363e110025a9b9727 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_6.png?w=560&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=83f39ecd3959718bbe11e2a3eaa6d8ef 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_6.png?w=840&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=9edacf5d4a433e39922b4bc003906b9d 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_6.png?w=1100&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=3627608cc06068c975bff51e98247889 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_6.png?w=1650&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=70d18d5cb2ed9e706aea7792723d6891 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_6.png?w=2500&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=03f4b27152e455d84d589c0c46c2324d 2500w\" />",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create branches",
+      "id": "create-branches"
+    },
+    {
+      "level": "h3",
+      "text": "Run graph nodes in parallel",
+      "id": "run-graph-nodes-in-parallel"
+    },
+    {
+      "level": "h3",
+      "text": "Defer node execution",
+      "id": "defer-node-execution"
+    },
+    {
+      "level": "h3",
+      "text": "Conditional branching",
+      "id": "conditional-branching"
+    },
+    {
+      "level": "h2",
+      "text": "Map-Reduce and the Send API",
+      "id": "map-reduce-and-the-send-api"
+    }
+  ],
+  "url": "llms-txt#add-edges",
+  "links": []
+}

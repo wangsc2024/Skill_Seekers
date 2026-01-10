@@ -1,0 +1,32 @@
+{
+  "title": "Connect via SSH",
+  "content": "ssh -i ~/.ssh/container_key -p 2222 unsloth@localhost\nbash\n-p <host_port>:<container_port>\nbash\n-v <local_folder>:<container_folder>\nbash\ndocker run -d -e JUPYTER_PORT=8000 \\\n  -e JUPYTER_PASSWORD=\"mypassword\" \\\n  -e \"SSH_KEY=$(cat ~/.ssh/container_key.pub)\" \\\n  -e USER_PASSWORD=\"unsloth2024\" \\\n  -p 8000:8000 -p 2222:22 \\\n  -v $(pwd)/work:/workspace/work \\\n  --gpus all \\\n  unsloth/unsloth\n```\n\n### **🔒 Security Notes**\n\n* Container runs as non-root `unsloth` user by default\n* Use `USER_PASSWORD` for sudo operations inside container\n* SSH access requires public key authentication",
+  "code_samples": [
+    {
+      "code": "### ⚙️ Advanced Settings\n\n| Variable           | Description                        | Default   |\n| ------------------ | ---------------------------------- | --------- |\n| `JUPYTER_PASSWORD` | Jupyter Lab password               | `unsloth` |\n| `JUPYTER_PORT`     | Jupyter Lab port inside container  | `8888`    |\n| `SSH_KEY`          | SSH public key for authentication  | `None`    |\n| `USER_PASSWORD`    | Password for `unsloth` user (sudo) | `unsloth` |",
+      "language": "unknown"
+    },
+    {
+      "code": "* Jupyter Lab: `-p 8000:8888`\n* SSH access: `-p 2222:22`\n\n{% hint style=\"warning\" %}\n**Important**: Use volume mounts to preserve your work between container runs.\n{% endhint %}",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "⚙️ Advanced Settings",
+      "id": "⚙️-advanced-settings"
+    },
+    {
+      "level": "h3",
+      "text": "**🔒 Security Notes**",
+      "id": "**🔒-security-notes**"
+    }
+  ],
+  "url": "llms-txt#connect-via-ssh",
+  "links": []
+}

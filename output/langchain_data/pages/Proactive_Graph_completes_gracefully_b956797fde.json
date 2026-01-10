@@ -1,0 +1,8 @@
+{
+  "title": "Proactive: Graph completes gracefully",
+  "content": "result = graph.invoke({\"messages\": []}, {\"recursion_limit\": 10})",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#proactive:-graph-completes-gracefully",
+  "links": []
+}

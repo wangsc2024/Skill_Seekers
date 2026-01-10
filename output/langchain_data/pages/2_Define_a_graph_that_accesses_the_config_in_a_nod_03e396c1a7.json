@@ -1,0 +1,8 @@
+{
+  "title": "2. Define a graph that accesses the config in a node",
+  "content": "class State(TypedDict):\n    my_state_value: str\n\ndef node(state: State, runtime: Runtime[ContextSchema]):  # [!code highlight]\n    if runtime.context[\"my_runtime_value\"] == \"a\":  # [!code highlight]\n        return {\"my_state_value\": 1}\n    elif runtime.context[\"my_runtime_value\"] == \"b\":  # [!code highlight]\n        return {\"my_state_value\": 2}\n    else:\n        raise ValueError(\"Unknown values.\")\n\nbuilder = StateGraph(State, context_schema=ContextSchema)  # [!code highlight]\nbuilder.add_node(node)\nbuilder.add_edge(START, \"node\")\nbuilder.add_edge(\"node\", END)\n\ngraph = builder.compile()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#2.-define-a-graph-that-accesses-the-config-in-a-node",
+  "links": []
+}

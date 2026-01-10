@@ -1,0 +1,67 @@
+{
+  "title": "Trace with OpenTelemetry",
+  "content": "Source: https://docs.langchain.com/langsmith/trace-with-opentelemetry\n\nLangSmith supports OpenTelemetry-based tracing, allowing you to send traces from any OpenTelemetry-compatible application. This guide covers both automatic instrumentation for LangChain applications and manual instrumentation for other frameworks.\n\nLearn how to trace your LLM applications using OpenTelemetry with LangSmith.\n\n<Note>\n  Update the LangSmith URL appropriately for self-hosted installations or organizations in the EU region in the requests below. For the EU region, use `eu.api.smith.langchain.com`.\n</Note>\n\n## Trace a LangChain application\n\nIf you're using LangChain or LangGraph, use the built-in integration to trace your application:\n\n1. Install the LangSmith package with OpenTelemetry support:\n\n<CodeGroup>\n     \n   </CodeGroup>\n\n<Info>\n     Requires Python SDK version `langsmith>=0.3.18`. We recommend `langsmith>=0.4.25` to benefit from important OpenTelemetry fixes.\n   </Info>\n\n2. In your LangChain/LangGraph App, enable the OpenTelemetry integration by setting the `LANGSMITH_OTEL_ENABLED` environment variable:\n\n<CodeGroup>\n     \n   </CodeGroup>\n\n3. Create a LangChain application with tracing. For example:\n\n4. View the traces in your LangSmith dashboard ([example](https://smith.langchain.com/public/a762af6c-b67d-4f22-90a0-728df16baeba/r)) once your application runs.\n\n## Trace a non-LangChain application\n\nFor non-LangChain applications or custom instrumentation, you can trace your application in LangSmith with a standard OpenTelemetry client. (We recommend **langsmith ≥ 0.4.25**.)\n\n1. Install the OpenTelemetry SDK, OpenTelemetry exporter packages, as well as the OpenAI package:\n\n<CodeGroup>\n     \n   </CodeGroup>\n\n2. Setup environment variables for the endpoint, substitute your specific values:\n\n<CodeGroup>\n     \n   </CodeGroup>\n\n<Note>\n     Depending on how your otel exporter is configured, you may need to append `/v1/traces` to the endpoint if you are only sending traces.\n   </Note>\n\n<Note>\n     If you're self-hosting LangSmith, replace the base endpoint with your LangSmith api endpoint and append `/api/v1`. For example: `OTEL_EXPORTER_OTLP_ENDPOINT=https://ai-company.com/api/v1/otel`\n   </Note>\n\nOptional: Specify a custom project name other than \"default\":\n\n<CodeGroup>\n     \n   </CodeGroup>\n\nThis code sets up an OTEL tracer and exporter that will send traces to LangSmith. It then calls OpenAI and sends the required OpenTelemetry attributes.\n\n4. View the trace in your LangSmith dashboard ([example](https://smith.langchain.com/public/4f2890b1-f105-44aa-a6cf-c777dcc27a37/r)).\n\n## Send traces to an alternate provider\n\nWhile LangSmith is the default destination for OpenTelemetry traces, you can also configure OpenTelemetry to send traces to other observability platforms.\n\n<Info>\n  Available in LangSmith Python SDK **≥ 0.4.1**. We recommend **≥ 0.4.25** for fixes that improve OTEL export and hybrid fan-out stability.\n</Info>\n\n### Use environment variables for global configuration\n\nBy default, the LangSmith OpenTelemetry exporter will send data to the LangSmith API OTEL endpoint, but this can be customized by setting standard OTEL environment variables:\n\nLangSmith uses the HTTP trace exporter by default. If you'd like to use your own tracing provider, you can either:\n\n1. Set the OTEL environment variables as shown above, or\n2. Set a global trace provider before initializing LangChain components, which LangSmith will detect and use instead of creating its own.\n\n### Configure alternate OTLP endpoints\n\nTo send traces to a different provider, configure the OTLP exporter with your provider's endpoint:\n\n```python  theme={null}\nimport os\nfrom opentelemetry import trace\nfrom opentelemetry.sdk.trace import TracerProvider\nfrom opentelemetry.sdk.trace.export import BatchSpanProcessor\nfrom opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.prompts import ChatPromptTemplate",
+  "code_samples": [
+    {
+      "code": "</CodeGroup>\n\n   <Info>\n     Requires Python SDK version `langsmith>=0.3.18`. We recommend `langsmith>=0.4.25` to benefit from important OpenTelemetry fixes.\n   </Info>\n\n2. In your LangChain/LangGraph App, enable the OpenTelemetry integration by setting the `LANGSMITH_OTEL_ENABLED` environment variable:\n\n   <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n3. Create a LangChain application with tracing. For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "4. View the traces in your LangSmith dashboard ([example](https://smith.langchain.com/public/a762af6c-b67d-4f22-90a0-728df16baeba/r)) once your application runs.\n\n## Trace a non-LangChain application\n\nFor non-LangChain applications or custom instrumentation, you can trace your application in LangSmith with a standard OpenTelemetry client. (We recommend **langsmith ≥ 0.4.25**.)\n\n1. Install the OpenTelemetry SDK, OpenTelemetry exporter packages, as well as the OpenAI package:\n\n   <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n2. Setup environment variables for the endpoint, substitute your specific values:\n\n   <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n   <Note>\n     Depending on how your otel exporter is configured, you may need to append `/v1/traces` to the endpoint if you are only sending traces.\n   </Note>\n\n   <Note>\n     If you're self-hosting LangSmith, replace the base endpoint with your LangSmith api endpoint and append `/api/v1`. For example: `OTEL_EXPORTER_OTLP_ENDPOINT=https://ai-company.com/api/v1/otel`\n   </Note>\n\n   Optional: Specify a custom project name other than \"default\":\n\n   <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n3. Log a trace.\n\n   This code sets up an OTEL tracer and exporter that will send traces to LangSmith. It then calls OpenAI and sends the required OpenTelemetry attributes.",
+      "language": "unknown"
+    },
+    {
+      "code": "4. View the trace in your LangSmith dashboard ([example](https://smith.langchain.com/public/4f2890b1-f105-44aa-a6cf-c777dcc27a37/r)).\n\n## Send traces to an alternate provider\n\nWhile LangSmith is the default destination for OpenTelemetry traces, you can also configure OpenTelemetry to send traces to other observability platforms.\n\n<Info>\n  Available in LangSmith Python SDK **≥ 0.4.1**. We recommend **≥ 0.4.25** for fixes that improve OTEL export and hybrid fan-out stability.\n</Info>\n\n### Use environment variables for global configuration\n\nBy default, the LangSmith OpenTelemetry exporter will send data to the LangSmith API OTEL endpoint, but this can be customized by setting standard OTEL environment variables:",
+      "language": "unknown"
+    },
+    {
+      "code": "LangSmith uses the HTTP trace exporter by default. If you'd like to use your own tracing provider, you can either:\n\n1. Set the OTEL environment variables as shown above, or\n2. Set a global trace provider before initializing LangChain components, which LangSmith will detect and use instead of creating its own.\n\n### Configure alternate OTLP endpoints\n\nTo send traces to a different provider, configure the OTLP exporter with your provider's endpoint:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Trace a LangChain application",
+      "id": "trace-a-langchain-application"
+    },
+    {
+      "level": "h2",
+      "text": "Trace a non-LangChain application",
+      "id": "trace-a-non-langchain-application"
+    },
+    {
+      "level": "h2",
+      "text": "Send traces to an alternate provider",
+      "id": "send-traces-to-an-alternate-provider"
+    },
+    {
+      "level": "h3",
+      "text": "Use environment variables for global configuration",
+      "id": "use-environment-variables-for-global-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Configure alternate OTLP endpoints",
+      "id": "configure-alternate-otlp-endpoints"
+    }
+  ],
+  "url": "llms-txt#trace-with-opentelemetry",
+  "links": []
+}

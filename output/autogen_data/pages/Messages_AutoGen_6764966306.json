@@ -1,0 +1,88 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+  "title": "Messages — AutoGen",
+  "content": "In AutoGen AgentChat, messages facilitate communication and information exchange with other agents, orchestrators, and applications. AgentChat supports various message types, each designed for specific purposes.\n\nAt a high level, messages in AgentChat can be categorized into two types: agent-agent messages and an agent’s internal events and messages.\n\nAgentChat supports many message types for agent-to-agent communication. They belong to subclasses of the base class BaseChatMessage. Concrete subclasses covers basic text and multimodal communication, such as TextMessage and MultiModalMessage.\n\nFor example, the following code snippet demonstrates how to create a text message, which accepts a string content and a string source:\n\nSimilarly, the following code snippet demonstrates how to create a multimodal message, which accepts a list of strings or Image objects:\n\nThe TextMessage and MultiModalMessage we have created can be passed to agents directly via the on_messages method, or as tasks given to a team run() method. Messages are also used in the responses of an agent. We will explain these in more detail in Agents and Teams.\n\nAgentChat also supports the concept of events - messages that are internal to an agent. These messages are used to communicate events and information on actions within the agent itself, and belong to subclasses of the base class BaseAgentEvent.\n\nExamples of these include ToolCallRequestEvent, which indicates that a request was made to call a tool, and ToolCallExecutionEvent, which contains the results of tool calls.\n\nTypically, events are created by the agent itself and are contained in the inner_messages field of the Response returned from on_messages. If you are building a custom agent and have events that you want to communicate to other entities (e.g., a UI), you can include these in the inner_messages field of the Response. We will show examples of this in Custom Agents.\n\nYou can read about the full set of messages supported in AgentChat in the messages module.\n\nYou can create custom message types by subclassing the base class BaseChatMessage or BaseAgentEvent. This allows you to define your own message formats and behaviors, tailored to your application. Custom message types are useful when you write custom agents.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Messages#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Types of Messages#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Agent-Agent Messages#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Internal Events#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Custom Message Types#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from autogen_agentchat.messages import TextMessage\n\ntext_message = TextMessage(content=\"Hello, world!\", source=\"User\")",
+      "language": "sql"
+    },
+    {
+      "code": "from autogen_agentchat.messages import TextMessage\n\ntext_message = TextMessage(content=\"Hello, world!\", source=\"User\")",
+      "language": "sql"
+    },
+    {
+      "code": "from io import BytesIO\n\nimport requests\nfrom autogen_agentchat.messages import MultiModalMessage\nfrom autogen_core import Image as AGImage\nfrom PIL import Image\n\npil_image = Image.open(BytesIO(requests.get(\"https://picsum.photos/300/200\").content))\nimg = AGImage(pil_image)\nmulti_modal_message = MultiModalMessage(content=[\"Can you describe the content of this image?\", img], source=\"User\")\nimg",
+      "language": "python"
+    },
+    {
+      "code": "from io import BytesIO\n\nimport requests\nfrom autogen_agentchat.messages import MultiModalMessage\nfrom autogen_core import Image as AGImage\nfrom PIL import Image\n\npil_image = Image.open(BytesIO(requests.get(\"https://picsum.photos/300/200\").content))\nimg = AGImage(pil_image)\nmulti_modal_message = MultiModalMessage(content=[\"Can you describe the content of this image?\", img], source=\"User\")\nimg",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html"
+  ]
+}

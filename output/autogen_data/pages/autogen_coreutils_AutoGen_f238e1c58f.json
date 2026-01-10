@@ -1,0 +1,140 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.utils.html",
+  "title": "autogen_core.utils — AutoGen",
+  "content": "Convert a JSON Schema dictionary to a fully-typed Pydantic model.\n\nThis function handles schema translation and validation logic to produce a Pydantic model.\n\nSupported JSON Schema Features\n\nPrimitive types: string, integer, number, boolean, object, array, null\n\nemail, uri, uuid, uuid1, uuid3, uuid4, uuid5\n\nhostname, ipv4, ipv6, ipv4-network, ipv6-network\n\ndate, time, date-time, duration\n\nbyte, binary, password, path\n\nminLength, maxLength, pattern\n\nminimum, maximum, exclusiveMinimum, exclusiveMaximum\n\nminItems, maxItems, items\n\nproperties, required, title, description, default\n\nConverted to Python Literal type\n\nanyOf, oneOf supported with optional discriminator\n\nallOf merges multiple schemas into one model\n\nSupports references to sibling definitions and self-referencing schemas\n\nschema (Dict[str, Any]) – A valid JSON Schema dictionary.\n\nmodel_name (str, optional) – The name of the root model. Defaults to “GeneratedModel”.\n\nType[BaseModel] – A dynamically generated Pydantic model class.\n\nReferenceNotFoundError – If a $ref key references a missing entry.\n\nFormatNotSupportedError – If a format keyword is unknown or unsupported.\n\nUnsupportedKeywordError – If the schema contains an unsupported type.\n\npydantic.create_model()\n\nhttps://json-schema.org/\n\nExtract JSON objects from a string. Supports backtick enclosed JSON objects",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "autogen_core.utils#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from autogen_core.utils import schema_to_pydantic_model\n\n# Example 1: Simple user model\nschema = {\n    \"title\": \"User\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"name\": {\"type\": \"string\"},\n        \"email\": {\"type\": \"string\", \"format\": \"email\"},\n        \"age\": {\"type\": \"integer\", \"minimum\": 0},\n    },\n    \"required\": [\"name\", \"email\"],\n}\n\nUserModel = schema_to_pydantic_model(schema)\nuser = UserModel(name=\"Alice\", email=\"alice@example.com\", age=30)",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_core.utils import schema_to_pydantic_model\n\n# Example 1: Simple user model\nschema = {\n    \"title\": \"User\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"name\": {\"type\": \"string\"},\n        \"email\": {\"type\": \"string\", \"format\": \"email\"},\n        \"age\": {\"type\": \"integer\", \"minimum\": 0},\n    },\n    \"required\": [\"name\", \"email\"],\n}\n\nUserModel = schema_to_pydantic_model(schema)\nuser = UserModel(name=\"Alice\", email=\"alice@example.com\", age=30)",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_core.utils import schema_to_pydantic_model\n\n# Example 2: Nested model\nschema = {\n    \"title\": \"BlogPost\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"title\": {\"type\": \"string\"},\n        \"tags\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}},\n        \"author\": {\n            \"type\": \"object\",\n            \"properties\": {\"name\": {\"type\": \"string\"}, \"email\": {\"type\": \"string\", \"format\": \"email\"}},\n            \"required\": [\"name\"],\n        },\n    },\n    \"required\": [\"title\", \"author\"],\n}\n\nBlogPost = schema_to_pydantic_model(schema)",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_core.utils import schema_to_pydantic_model\n\n# Example 2: Nested model\nschema = {\n    \"title\": \"BlogPost\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"title\": {\"type\": \"string\"},\n        \"tags\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}},\n        \"author\": {\n            \"type\": \"object\",\n            \"properties\": {\"name\": {\"type\": \"string\"}, \"email\": {\"type\": \"string\", \"format\": \"email\"}},\n            \"required\": [\"name\"],\n        },\n    },\n    \"required\": [\"title\", \"author\"],\n}\n\nBlogPost = schema_to_pydantic_model(schema)",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_core.utils import schema_to_pydantic_model\n\n# Example 3: allOf merging with $refs\nschema = {\n    \"title\": \"EmployeeWithDepartment\",\n    \"allOf\": [{\"$ref\": \"#/$defs/Employee\"}, {\"$ref\": \"#/$defs/Department\"}],\n    \"$defs\": {\n        \"Employee\": {\n            \"type\": \"object\",\n            \"properties\": {\"id\": {\"type\": \"string\"}, \"name\": {\"type\": \"string\"}},\n            \"required\": [\"id\", \"name\"],\n        },\n        \"Department\": {\n            \"type\": \"object\",\n            \"properties\": {\"department\": {\"type\": \"string\"}},\n            \"required\": [\"department\"],\n        },\n    },\n}\n\nModel = schema_to_pydantic_model(schema)",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_core.utils import schema_to_pydantic_model\n\n# Example 3: allOf merging with $refs\nschema = {\n    \"title\": \"EmployeeWithDepartment\",\n    \"allOf\": [{\"$ref\": \"#/$defs/Employee\"}, {\"$ref\": \"#/$defs/Department\"}],\n    \"$defs\": {\n        \"Employee\": {\n            \"type\": \"object\",\n            \"properties\": {\"id\": {\"type\": \"string\"}, \"name\": {\"type\": \"string\"}},\n            \"required\": [\"id\", \"name\"],\n        },\n        \"Department\": {\n            \"type\": \"object\",\n            \"properties\": {\"department\": {\"type\": \"string\"}},\n            \"required\": [\"department\"],\n        },\n    },\n}\n\nModel = schema_to_pydantic_model(schema)",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_core.utils import schema_to_pydantic_model\n\n# Example 4: Self-referencing (recursive) model\nschema = {\n    \"title\": \"Category\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"name\": {\"type\": \"string\"},\n        \"subcategories\": {\"type\": \"array\", \"items\": {\"$ref\": \"#/$defs/Category\"}},\n    },\n    \"required\": [\"name\"],\n    \"$defs\": {\n        \"Category\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"name\": {\"type\": \"string\"},\n                \"subcategories\": {\"type\": \"array\", \"items\": {\"$ref\": \"#/$defs/Category\"}},\n            },\n            \"required\": [\"name\"],\n        }\n    },\n}\n\nCategory = schema_to_pydantic_model(schema)",
+      "language": "json"
+    },
+    {
+      "code": "from autogen_core.utils import schema_to_pydantic_model\n\n# Example 4: Self-referencing (recursive) model\nschema = {\n    \"title\": \"Category\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"name\": {\"type\": \"string\"},\n        \"subcategories\": {\"type\": \"array\", \"items\": {\"$ref\": \"#/$defs/Category\"}},\n    },\n    \"required\": [\"name\"],\n    \"$defs\": {\n        \"Category\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"name\": {\"type\": \"string\"},\n                \"subcategories\": {\"type\": \"array\", \"items\": {\"$ref\": \"#/$defs/Category\"}},\n            },\n            \"required\": [\"name\"],\n        }\n    },\n}\n\nCategory = schema_to_pydantic_model(schema)",
+      "language": "json"
+    },
+    {
+      "code": "# Example 5: Serializing and deserializing with Pydantic\n\nfrom uuid import uuid4\nfrom pydantic import BaseModel, EmailStr, Field\nfrom typing import Optional, List, Dict, Any\nfrom autogen_core.utils import schema_to_pydantic_model\n\n\nclass Address(BaseModel):\n    street: str\n    city: str\n    zipcode: str\n\n\nclass User(BaseModel):\n    id: str\n    name: str\n    email: EmailStr\n    age: int = Field(..., ge=18)\n    address: Address\n\n\nclass Employee(BaseModel):\n    id: str\n    name: str\n    manager: Optional[\"Employee\"] = None\n\n\nclass Department(BaseModel):\n    name: str\n    employees: List[Employee]\n\n\nclass ComplexModel(BaseModel):\n    user: User\n    extra_info: Optional[Dict[str, Any]] = None\n    sub_items: List[Employee]\n\n\n# Convert ComplexModel to JSON schema\ncomplex_schema = ComplexModel.model_json_schema()\n\n# Rebuild a new Pydantic model from JSON schema\nReconstructedModel = schema_to_pydantic_model(complex_schema, \"ComplexModel\")\n\n# Instantiate reconstructed model\nreconstructed = ReconstructedModel(\n    user={\n        \"id\": str(uuid4()),\n        \"name\": \"Alice\",\n        \"email\": \"alice@example.com\",\n        \"age\": 30,\n        \"address\": {\"street\": \"123 Main St\", \"city\": \"Wonderland\", \"zipcode\": \"12345\"},\n    },\n    sub_items=[{\"id\": str(uuid4()), \"name\": \"Bob\", \"manager\": {\"id\": str(uuid4()), \"name\": \"Eve\"}}],\n)\n\nprint(reconstructed.model_dump())",
+      "language": "python"
+    },
+    {
+      "code": "# Example 5: Serializing and deserializing with Pydantic\n\nfrom uuid import uuid4\nfrom pydantic import BaseModel, EmailStr, Field\nfrom typing import Optional, List, Dict, Any\nfrom autogen_core.utils import schema_to_pydantic_model\n\n\nclass Address(BaseModel):\n    street: str\n    city: str\n    zipcode: str\n\n\nclass User(BaseModel):\n    id: str\n    name: str\n    email: EmailStr\n    age: int = Field(..., ge=18)\n    address: Address\n\n\nclass Employee(BaseModel):\n    id: str\n    name: str\n    manager: Optional[\"Employee\"] = None\n\n\nclass Department(BaseModel):\n    name: str\n    employees: List[Employee]\n\n\nclass ComplexModel(BaseModel):\n    user: User\n    extra_info: Optional[Dict[str, Any]] = None\n    sub_items: List[Employee]\n\n\n# Convert ComplexModel to JSON schema\ncomplex_schema = ComplexModel.model_json_schema()\n\n# Rebuild a new Pydantic model from JSON schema\nReconstructedModel = schema_to_pydantic_model(complex_schema, \"ComplexModel\")\n\n# Instantiate reconstructed model\nreconstructed = ReconstructedModel(\n    user={\n        \"id\": str(uuid4()),\n        \"name\": \"Alice\",\n        \"email\": \"alice@example.com\",\n        \"age\": 30,\n        \"address\": {\"street\": \"123 Main St\", \"city\": \"Wonderland\", \"zipcode\": \"12345\"},\n    },\n    sub_items=[{\"id\": str(uuid4()), \"name\": \"Bob\", \"manager\": {\"id\": str(uuid4()), \"name\": \"Eve\"}}],\n)\n\nprint(reconstructed.model_dump())",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.utils.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.state.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.code_executor.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.exceptions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.logging.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tool_agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.file_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.auth.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.diskcache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker_jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.local.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.canvas.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.chromadb.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.mem0.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.llama_cpp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.replay.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.code_execution.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.http.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.playwright_controller.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2_grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2_grpc.html"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "dspy",
+  "total_pages": 1,
+  "base_url": "https://dspy.ai/",
+  "llms_txt_detected": true,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "DSPy",
+      "url": "llms-txt#dspy"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Use the functional API result in the graph",
+  "content": "def orchestrator_node(state):\n    processed_data = data_processor.invoke(state[\"raw_data\"])\n    return {\"processed_data\": processed_data}\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "## Migration between APIs\n\n### From Functional to Graph API\n\nWhen your functional workflow grows complex, you can migrate to the Graph API:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Migration between APIs",
+      "id": "migration-between-apis"
+    },
+    {
+      "level": "h3",
+      "text": "From Functional to Graph API",
+      "id": "from-functional-to-graph-api"
+    }
+  ],
+  "url": "llms-txt#use-the-functional-api-result-in-the-graph",
+  "links": []
+}

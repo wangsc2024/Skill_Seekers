@@ -1,0 +1,148 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+  "title": "autogen_ext.models.semantic_kernel — AutoGen",
+  "content": "Bases: ChatCompletionClient\n\nSKChatCompletionAdapter is an adapter that allows using Semantic Kernel model clients as Autogen ChatCompletion clients. This makes it possible to seamlessly integrate Semantic Kernel connectors (e.g., Azure OpenAI, Google Gemini, Ollama, etc.) into Autogen agents that rely on a ChatCompletionClient interface.\n\nBy leveraging this adapter, you can:\n\nPass in a Kernel and any supported Semantic Kernel ChatCompletionClientBase connector.\n\nProvide tools (via Autogen Tool or ToolSchema) for function calls during chat completion.\n\nStream responses or retrieve them in a single request.\n\nor on a per-request basis through the extra_create_args dictionary.\n\nThe list of extras that can be installed:\n\nsemantic-kernel-anthropic: Install this extra to use Anthropic models.\n\nsemantic-kernel-google: Install this extra to use Google Gemini models.\n\nsemantic-kernel-ollama: Install this extra to use Ollama models.\n\nsemantic-kernel-mistralai: Install this extra to use MistralAI models.\n\nsemantic-kernel-aws: Install this extra to use AWS models.\n\nsemantic-kernel-hugging-face: Install this extra to use Hugging Face models.\n\nsk_client (ChatCompletionClientBase) – The Semantic Kernel client to wrap (e.g., AzureChatCompletion, GoogleAIChatCompletion, OllamaChatCompletion).\n\nkernel (Optional[Kernel]) – The Semantic Kernel instance to use for executing requests. If not provided, one must be passed in the extra_create_args for each request.\n\nprompt_settings (Optional[PromptExecutionSettings]) – Default prompt execution settings to use. Can be overridden per request.\n\nmodel_info (Optional[ModelInfo]) – Information about the model’s capabilities.\n\nservice_id (Optional[str]) – Optional service identifier.\n\nAnthropic models with function calling:\n\nGoogle Gemini models with function calling:\n\nCreate a chat completion using the Semantic Kernel client.\n\nThe extra_create_args dictionary can include two special keys:\n\nAn instance of semantic_kernel.Kernel used to execute the request. If not provided either in constructor or extra_create_args, a ValueError is raised.\n\nAn instance of a PromptExecutionSettings subclass corresponding to the underlying Semantic Kernel client (e.g., AzureChatPromptExecutionSettings, GoogleAIChatPromptExecutionSettings). If not provided, the adapter’s default prompt settings will be used.\n\nmessages – The list of LLM messages to send.\n\ntools – The tools that may be invoked during the chat.\n\njson_output – Whether the model is expected to return JSON.\n\nextra_create_args – Additional arguments to control the chat completion behavior.\n\ncancellation_token – Token allowing cancellation of the request.\n\nCreateResult – The result of the chat completion.\n\nCreate a streaming chat completion using the Semantic Kernel client.\n\nThe extra_create_args dictionary can include two special keys:\n\nAn instance of semantic_kernel.Kernel used to execute the request. If not provided either in constructor or extra_create_args, a ValueError is raised.\n\nAn instance of a PromptExecutionSettings subclass corresponding to the underlying Semantic Kernel client (e.g., AzureChatPromptExecutionSettings, GoogleAIChatPromptExecutionSettings). If not provided, the adapter’s default prompt settings will be used.\n\nmessages – The list of LLM messages to send.\n\ntools – The tools that may be invoked during the chat.\n\njson_output – Whether the model is expected to return JSON.\n\nextra_create_args – Additional arguments to control the chat completion behavior.\n\ncancellation_token – Token allowing cancellation of the request.\n\nUnion[str, CreateResult] – Either a string chunk of the response or a CreateResult containing function calls.\n\nautogen_ext.models.replay\n\nautogen_ext.runtimes.grpc",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "autogen_ext.models.semantic_kernel#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "pip install \"autogen-ext[semantic-kernel-anthropic]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[semantic-kernel-anthropic]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "import asyncio\nimport os\n\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.ui import Console\nfrom autogen_core.models import ModelFamily, UserMessage\nfrom autogen_ext.models.semantic_kernel import SKChatCompletionAdapter\nfrom semantic_kernel import Kernel\nfrom semantic_kernel.connectors.ai.anthropic import AnthropicChatCompletion, AnthropicChatPromptExecutionSettings\nfrom semantic_kernel.memory.null_memory import NullMemory\n\n\nasync def get_weather(city: str) -> str:\n    \"\"\"Get the weather for a city.\"\"\"\n    return f\"The weather in {city} is 75 degrees.\"\n\n\nasync def main() -> None:\n    sk_client = AnthropicChatCompletion(\n        ai_model_id=\"claude-3-5-sonnet-20241022\",\n        api_key=os.environ[\"ANTHROPIC_API_KEY\"],\n        service_id=\"my-service-id\",  # Optional; for targeting specific services within Semantic Kernel\n    )\n    settings = AnthropicChatPromptExecutionSettings(\n        temperature=0.2,\n    )\n\n    model_client = SKChatCompletionAdapter(\n        sk_client,\n        kernel=Kernel(memory=NullMemory()),\n        prompt_settings=settings,\n        model_info={\n            \"function_calling\": True,\n            \"json_output\": True,\n            \"vision\": True,\n            \"family\": ModelFamily.CLAUDE_3_5_SONNET,\n            \"structured_output\": True,\n        },\n    )\n\n    # Call the model directly.\n    response = await model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"test\")])\n    print(response)\n\n    # Create an assistant agent with the model client.\n    assistant = AssistantAgent(\n        \"assistant\", model_client=model_client, system_message=\"You are a helpful assistant.\", tools=[get_weather]\n    )\n    # Call the assistant with a task.\n    await Console(assistant.run_stream(task=\"What is the weather in Paris and London?\"))\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nimport os\n\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.ui import Console\nfrom autogen_core.models import ModelFamily, UserMessage\nfrom autogen_ext.models.semantic_kernel import SKChatCompletionAdapter\nfrom semantic_kernel import Kernel\nfrom semantic_kernel.connectors.ai.anthropic import AnthropicChatCompletion, AnthropicChatPromptExecutionSettings\nfrom semantic_kernel.memory.null_memory import NullMemory\n\n\nasync def get_weather(city: str) -> str:\n    \"\"\"Get the weather for a city.\"\"\"\n    return f\"The weather in {city} is 75 degrees.\"\n\n\nasync def main() -> None:\n    sk_client = AnthropicChatCompletion(\n        ai_model_id=\"claude-3-5-sonnet-20241022\",\n        api_key=os.environ[\"ANTHROPIC_API_KEY\"],\n        service_id=\"my-service-id\",  # Optional; for targeting specific services within Semantic Kernel\n    )\n    settings = AnthropicChatPromptExecutionSettings(\n        temperature=0.2,\n    )\n\n    model_client = SKChatCompletionAdapter(\n        sk_client,\n        kernel=Kernel(memory=NullMemory()),\n        prompt_settings=settings,\n        model_info={\n            \"function_calling\": True,\n            \"json_output\": True,\n            \"vision\": True,\n            \"family\": ModelFamily.CLAUDE_3_5_SONNET,\n            \"structured_output\": True,\n        },\n    )\n\n    # Call the model directly.\n    response = await model_client.create([UserMessage(content=\"What is the capital of France?\", source=\"test\")])\n    print(response)\n\n    # Create an assistant agent with the model client.\n    assistant = AssistantAgent(\n        \"assistant\", model_client=model_client, system_message=\"You are a helpful assistant.\", tools=[get_weather]\n    )\n    # Call the assistant with a task.\n    await Console(assistant.run_stream(task=\"What is the weather in Paris and London?\"))\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "pip install \"autogen-ext[semantic-kernel-google]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[semantic-kernel-google]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "import asyncio\nimport os\n\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.ui import Console\nfrom autogen_core.models import UserMessage, ModelFamily\nfrom autogen_ext.models.semantic_kernel import SKChatCompletionAdapter\nfrom semantic_kernel import Kernel\nfrom semantic_kernel.connectors.ai.google.google_ai import (\n    GoogleAIChatCompletion,\n    GoogleAIChatPromptExecutionSettings,\n)\nfrom semantic_kernel.memory.null_memory import NullMemory\n\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get the weather for a city.\"\"\"\n    return f\"The weather in {city} is 75 degrees.\"\n\n\nasync def main() -> None:\n    sk_client = GoogleAIChatCompletion(\n        gemini_model_id=\"gemini-2.0-flash\",\n        api_key=os.environ[\"GEMINI_API_KEY\"],\n    )\n    settings = GoogleAIChatPromptExecutionSettings(\n        temperature=0.2,\n    )\n\n    kernel = Kernel(memory=NullMemory())\n\n    model_client = SKChatCompletionAdapter(\n        sk_client,\n        kernel=kernel,\n        prompt_settings=settings,\n        model_info={\n            \"family\": ModelFamily.GEMINI_2_0_FLASH,\n            \"function_calling\": True,\n            \"json_output\": True,\n            \"vision\": True,\n            \"structured_output\": True,\n        },\n    )\n\n    # Call the model directly.\n    model_result = await model_client.create(\n        messages=[UserMessage(content=\"What is the capital of France?\", source=\"User\")]\n    )\n    print(model_result)\n\n    # Create an assistant agent with the model client.\n    assistant = AssistantAgent(\n        \"assistant\", model_client=model_client, tools=[get_weather], system_message=\"You are a helpful assistant.\"\n    )\n    # Call the assistant with a task.\n    stream = assistant.run_stream(task=\"What is the weather in Paris and London?\")\n    await Console(stream)\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nimport os\n\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.ui import Console\nfrom autogen_core.models import UserMessage, ModelFamily\nfrom autogen_ext.models.semantic_kernel import SKChatCompletionAdapter\nfrom semantic_kernel import Kernel\nfrom semantic_kernel.connectors.ai.google.google_ai import (\n    GoogleAIChatCompletion,\n    GoogleAIChatPromptExecutionSettings,\n)\nfrom semantic_kernel.memory.null_memory import NullMemory\n\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get the weather for a city.\"\"\"\n    return f\"The weather in {city} is 75 degrees.\"\n\n\nasync def main() -> None:\n    sk_client = GoogleAIChatCompletion(\n        gemini_model_id=\"gemini-2.0-flash\",\n        api_key=os.environ[\"GEMINI_API_KEY\"],\n    )\n    settings = GoogleAIChatPromptExecutionSettings(\n        temperature=0.2,\n    )\n\n    kernel = Kernel(memory=NullMemory())\n\n    model_client = SKChatCompletionAdapter(\n        sk_client,\n        kernel=kernel,\n        prompt_settings=settings,\n        model_info={\n            \"family\": ModelFamily.GEMINI_2_0_FLASH,\n            \"function_calling\": True,\n            \"json_output\": True,\n            \"vision\": True,\n            \"structured_output\": True,\n        },\n    )\n\n    # Call the model directly.\n    model_result = await model_client.create(\n        messages=[UserMessage(content=\"What is the capital of France?\", source=\"User\")]\n    )\n    print(model_result)\n\n    # Create an assistant agent with the model client.\n    assistant = AssistantAgent(\n        \"assistant\", model_client=model_client, tools=[get_weather], system_message=\"You are a helpful assistant.\"\n    )\n    # Call the assistant with a task.\n    stream = assistant.run_stream(task=\"What is the weather in Paris and London?\")\n    await Console(stream)\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "pip install \"autogen-ext[semantic-kernel-ollama]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[semantic-kernel-ollama]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.semantic_kernel import SKChatCompletionAdapter\nfrom semantic_kernel import Kernel\nfrom semantic_kernel.connectors.ai.ollama import OllamaChatCompletion, OllamaChatPromptExecutionSettings\nfrom semantic_kernel.memory.null_memory import NullMemory\n\n\nasync def main() -> None:\n    sk_client = OllamaChatCompletion(\n        host=\"http://localhost:11434\",\n        ai_model_id=\"llama3.2:latest\",\n    )\n    ollama_settings = OllamaChatPromptExecutionSettings(\n        options={\"temperature\": 0.5},\n    )\n\n    model_client = SKChatCompletionAdapter(\n        sk_client, kernel=Kernel(memory=NullMemory()), prompt_settings=ollama_settings\n    )\n\n    # Call the model directly.\n    model_result = await model_client.create(\n        messages=[UserMessage(content=\"What is the capital of France?\", source=\"User\")]\n    )\n    print(model_result)\n\n    # Create an assistant agent with the model client.\n    assistant = AssistantAgent(\"assistant\", model_client=model_client)\n    # Call the assistant with a task.\n    result = await assistant.run(task=\"What is the capital of France?\")\n    print(result)\n\n\nasyncio.run(main())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_agentchat.agents import AssistantAgent\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.semantic_kernel import SKChatCompletionAdapter\nfrom semantic_kernel import Kernel\nfrom semantic_kernel.connectors.ai.ollama import OllamaChatCompletion, OllamaChatPromptExecutionSettings\nfrom semantic_kernel.memory.null_memory import NullMemory\n\n\nasync def main() -> None:\n    sk_client = OllamaChatCompletion(\n        host=\"http://localhost:11434\",\n        ai_model_id=\"llama3.2:latest\",\n    )\n    ollama_settings = OllamaChatPromptExecutionSettings(\n        options={\"temperature\": 0.5},\n    )\n\n    model_client = SKChatCompletionAdapter(\n        sk_client, kernel=Kernel(memory=NullMemory()), prompt_settings=ollama_settings\n    )\n\n    # Call the model directly.\n    model_result = await model_client.create(\n        messages=[UserMessage(content=\"What is the capital of France?\", source=\"User\")]\n    )\n    print(model_result)\n\n    # Create an assistant agent with the model client.\n    assistant = AssistantAgent(\"assistant\", model_client=model_client)\n    # Call the assistant with a task.\n    result = await assistant.run(task=\"What is the capital of France?\")\n    print(result)\n\n\nasyncio.run(main())",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.state.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.code_executor.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.exceptions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.logging.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tool_agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.file_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.auth.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.diskcache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker_jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.local.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.canvas.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.chromadb.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.mem0.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.llama_cpp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.replay.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.code_execution.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.http.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.playwright_controller.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2_grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2_grpc.html"
+  ]
+}

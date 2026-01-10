@@ -1,0 +1,8 @@
+{
+  "title": "After: Graph API",
+  "content": "class WorkflowState(TypedDict):\n    input_data: dict\n    step1_result: dict\n    analysis: dict\n    final_result: dict\n\ndef should_analyze(state):\n    return \"analyze\" if state[\"step1_result\"][\"needs_analysis\"] else \"simple_path\"\n\ndef confidence_check(state):\n    return \"high_confidence\" if state[\"analysis\"][\"confidence\"] > 0.8 else \"low_confidence\"\n\nworkflow = StateGraph(WorkflowState)\nworkflow.add_node(\"step1\", process_step1_node)\nworkflow.add_conditional_edges(\"step1\", should_analyze)\nworkflow.add_node(\"analyze\", analyze_data_node)\nworkflow.add_conditional_edges(\"analyze\", confidence_check)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#after:-graph-api",
+  "links": []
+}

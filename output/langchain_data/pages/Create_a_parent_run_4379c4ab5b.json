@@ -1,0 +1,8 @@
+{
+  "title": "Create a parent run",
+  "content": "parent_run = construct_run(\n    name=\"Parent Run\",\n    run_type=\"chain\",\n    inputs={\"main_question\": \"Tell me about France\"},\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-parent-run",
+  "links": []
+}

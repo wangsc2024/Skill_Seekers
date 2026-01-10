@@ -1,0 +1,74 @@
+{
+  "title": "Deep Agents CLI",
+  "content": "Source: https://docs.langchain.com/oss/python/deepagents/cli\n\nInteractive command-line interface for building with Deep Agents\n\nA terminal interface for building agents with persistent memory. Agents maintain context across sessions, learn project conventions, and execute code with approval controls.\n\nThe Deep Agents CLI has the following built-in capabilities:\n\n* <Icon icon=\"file\" size={16} /> **File operations** - read, write, and edit files in your project with tools that enable agents to manage and modify code and documentation.\n* <Icon icon=\"terminal\" size={16} /> **Shell command execution** - execute shell commands to run tests, build projects, manage dependencies, and interact with version control systems.\n* <Icon icon=\"magnifying-glass\" size={16} /> **Web search** - search the web for up-to-date information and documentation (requires Tavily API key).\n* <Icon icon=\"globe\" size={16} /> **HTTP requests** - make HTTP requests to APIs and external services for data fetching and integration tasks.\n* <Icon icon=\"list-check\" size={16} /> **Task planning and tracking** - break down complex tasks into discrete steps and track progress through the built-in todo system.\n* <Icon icon=\"brain\" size={16} /> **Memory storage and retrieval** - store and retrieve information across sessions, enabling agents to remember project conventions and learned patterns.\n* <Icon icon=\"head-side\" size={16} /> **Human-in-the-loop** - require human approval for sensitive tool operations.\n\n<Tip>\n  [Watch the demo video](https://youtu.be/IrnacLa9PJc?si=3yUnPbxnm2yaqVQb) to see how the Deep Agents CLI works.\n</Tip>\n\n<Steps>\n  <Step title=\"Set your API key\" icon=\"key\">\n    Export as an environment variable:\n\nOr create a `.env` file in your project root:\n\n<Step title=\"Run the CLI\" icon=\"terminal\">\n    \n  </Step>\n\n<Step title=\"Give the agent a task\" icon=\"message\">\n\nThe agent proposes changes with diffs for your approval before modifying files.\n  </Step>\n</Steps>\n\n<Accordion title=\"Additional installation and configuration options\">\n  Install locally if needed:\n\nThe CLI uses Anthropic Claude Sonnet 4 by default. To use OpenAI:\n\nEnable web search (optional):\n\nAPI keys can be set as environment variables or in a `.env` file.\n</Accordion>\n\n<AccordionGroup>\n  <Accordion title=\"Command-line options\" icon=\"flag\">\n    | Option                 | Description                                                 |\n    | ---------------------- | ----------------------------------------------------------- |\n    | `--agent NAME`         | Use named agent with separate memory                        |\n    | `--auto-approve`       | Skip tool confirmation prompts (toggle with `Ctrl+T`)       |\n    | `--sandbox TYPE`       | Execute in remote sandbox: `modal`, `daytona`, or `runloop` |\n    | `--sandbox-id ID`      | Reuse existing sandbox                                      |\n    | `--sandbox-setup PATH` | Run setup script in sandbox                                 |\n  </Accordion>\n\n<Accordion title=\"CLI commands\" icon=\"terminal\">\n    | Command                                         | Description                             |\n    | ----------------------------------------------- | --------------------------------------- |\n    | `deepagents list`                               | List all agents                         |\n    | `deepagents help`                               | Show help                               |\n    | `deepagents reset --agent NAME`                 | Clear agent memory and reset to default |\n    | `deepagents reset --agent NAME --target SOURCE` | Copy memory from another agent          |\n  </Accordion>\n</AccordionGroup>\n\n<AccordionGroup>\n  <Accordion title=\"Slash commands\" icon=\"slash\">\n    Use these commands within the CLI session:\n\n* `/tokens` - Display token usage\n    * `/clear` - Clear conversation history\n    * `/exit` - Exit the CLI\n  </Accordion>\n\n<Accordion title=\"Bash commands\" icon=\"terminal\">\n    Execute shell commands directly by prefixing with `!`:\n\n<Accordion title=\"Keyboard shortcuts\" icon=\"keyboard\">\n    | Shortcut    | Action              |\n    | ----------- | ------------------- |\n    | `Enter`     | Submit              |\n    | `Alt+Enter` | Newline             |\n    | `Ctrl+E`    | External editor     |\n    | `Ctrl+T`    | Toggle auto-approve |\n    | `Ctrl+C`    | Interrupt           |\n    | `Ctrl+D`    | Exit                |\n  </Accordion>\n</AccordionGroup>\n\n## Set project conventions with memories\n\nAgents store information in `~/.deepagents/AGENT_NAME/memories/` as markdown files using a memory-first protocol:\n\n1. **Research**: Searches memory for relevant context before starting tasks\n2. **Response**: Checks memory when uncertain during execution\n3. **Learning**: Automatically saves new information for future sessions\n\nOrganize memories by topic with descriptive filenames:\n\nTeach the agent conventions once:\n\nIt remembers for future sessions:\n\n```bash  theme={null}\n> Create a /users endpoint",
+  "code_samples": [
+    {
+      "code": "Or create a `.env` file in your project root:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Step>\n\n  <Step title=\"Run the CLI\" icon=\"terminal\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Step>\n\n  <Step title=\"Give the agent a task\" icon=\"message\">",
+      "language": "unknown"
+    },
+    {
+      "code": "The agent proposes changes with diffs for your approval before modifying files.\n  </Step>\n</Steps>\n\n<Accordion title=\"Additional installation and configuration options\">\n  Install locally if needed:\n\n  <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n  The CLI uses Anthropic Claude Sonnet 4 by default. To use OpenAI:",
+      "language": "unknown"
+    },
+    {
+      "code": "Enable web search (optional):",
+      "language": "unknown"
+    },
+    {
+      "code": "API keys can be set as environment variables or in a `.env` file.\n</Accordion>\n\n## Configuration\n\n<AccordionGroup>\n  <Accordion title=\"Command-line options\" icon=\"flag\">\n    | Option                 | Description                                                 |\n    | ---------------------- | ----------------------------------------------------------- |\n    | `--agent NAME`         | Use named agent with separate memory                        |\n    | `--auto-approve`       | Skip tool confirmation prompts (toggle with `Ctrl+T`)       |\n    | `--sandbox TYPE`       | Execute in remote sandbox: `modal`, `daytona`, or `runloop` |\n    | `--sandbox-id ID`      | Reuse existing sandbox                                      |\n    | `--sandbox-setup PATH` | Run setup script in sandbox                                 |\n  </Accordion>\n\n  <Accordion title=\"CLI commands\" icon=\"terminal\">\n    | Command                                         | Description                             |\n    | ----------------------------------------------- | --------------------------------------- |\n    | `deepagents list`                               | List all agents                         |\n    | `deepagents help`                               | Show help                               |\n    | `deepagents reset --agent NAME`                 | Clear agent memory and reset to default |\n    | `deepagents reset --agent NAME --target SOURCE` | Copy memory from another agent          |\n  </Accordion>\n</AccordionGroup>\n\n## Interactive mode\n\n<AccordionGroup>\n  <Accordion title=\"Slash commands\" icon=\"slash\">\n    Use these commands within the CLI session:\n\n    * `/tokens` - Display token usage\n    * `/clear` - Clear conversation history\n    * `/exit` - Exit the CLI\n  </Accordion>\n\n  <Accordion title=\"Bash commands\" icon=\"terminal\">\n    Execute shell commands directly by prefixing with `!`:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n  <Accordion title=\"Keyboard shortcuts\" icon=\"keyboard\">\n    | Shortcut    | Action              |\n    | ----------- | ------------------- |\n    | `Enter`     | Submit              |\n    | `Alt+Enter` | Newline             |\n    | `Ctrl+E`    | External editor     |\n    | `Ctrl+T`    | Toggle auto-approve |\n    | `Ctrl+C`    | Interrupt           |\n    | `Ctrl+D`    | Exit                |\n  </Accordion>\n</AccordionGroup>\n\n## Set project conventions with memories\n\nAgents store information in `~/.deepagents/AGENT_NAME/memories/` as markdown files using a memory-first protocol:\n\n1. **Research**: Searches memory for relevant context before starting tasks\n2. **Response**: Checks memory when uncertain during execution\n3. **Learning**: Automatically saves new information for future sessions\n\nOrganize memories by topic with descriptive filenames:",
+      "language": "unknown"
+    },
+    {
+      "code": "Teach the agent conventions once:",
+      "language": "unknown"
+    },
+    {
+      "code": "It remembers for future sessions:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Quick start",
+      "id": "quick-start"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Interactive mode",
+      "id": "interactive-mode"
+    },
+    {
+      "level": "h2",
+      "text": "Set project conventions with memories",
+      "id": "set-project-conventions-with-memories"
+    }
+  ],
+  "url": "llms-txt#deep-agents-cli",
+  "links": []
+}

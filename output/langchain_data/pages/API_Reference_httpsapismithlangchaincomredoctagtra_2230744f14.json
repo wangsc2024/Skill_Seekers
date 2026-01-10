@@ -1,0 +1,19 @@
+{
+  "title": "API Reference: https://api.smith.langchain.com/redoc#tag/tracer-sessions/operation/create_tracer_session_api_v1_sessions_post",
+  "content": "model_names = (\"gpt-3.5-turbo\", \"gpt-4o-mini\")\nexperiment_ids = []\nfor model_name in model_names:\n    resp = requests.post(\n        \"https://api.smith.langchain.com/api/v1/sessions\",\n        json={\n            \"start_time\": datetime.utcnow().isoformat(),\n            \"reference_dataset_id\": str(dataset_id),\n            \"description\": \"An optional description for the experiment\",\n            \"name\": f\"Toxicity detection - API Example - {model_name} - {str(uuid4())[0:8]}\",  # A name for the experiment\n            \"extra\": {\n                \"metadata\": {\"foo\": \"bar\"},  # Optional metadata\n            },\n        },\n        headers={\"x-api-key\": os.environ[\"LANGSMITH_API_KEY\"]}\n    )\n\nexperiment = resp.json()\n    experiment_ids.append(experiment[\"id\"])\n\n# Run completions on all examples\n    for example in examples:\n        run_completion_on_example(example, model_name, experiment[\"id\"])\n\n# Issue a patch request to \"end\" the experiment by updating the end_time\n    requests.patch(\n        f\"https://api.smith.langchain.com/api/v1/sessions/{experiment['id']}\",\n        json={\"end_time\": datetime.utcnow().isoformat()},\n        headers={\"x-api-key\": os.environ[\"LANGSMITH_API_KEY\"]}\n    )\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "### Add evaluation feedback\n\nAfter running your [experiments](/langsmith/evaluation-concepts#experiment), you'll typically want to evaluate the results by adding feedback scores. This allows you to track metrics like correctness, accuracy, or any custom evaluation criteria.\n\nIn this example, the evaluation checks if each model's output matches the expected label in the dataset. The code posts a \"correctness\" score (1.0 for correct, 0.0 for incorrect) to track how accurately each model classifies toxic vs. non-toxic text.\n\nThe following code adds feedback to the runs from the [single experiment example](#run-a-single-experiment):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Add evaluation feedback",
+      "id": "add-evaluation-feedback"
+    }
+  ],
+  "url": "llms-txt#api-reference:-https://api.smith.langchain.com/redoc#tag/tracer-sessions/operation/create_tracer_session_api_v1_sessions_post",
+  "links": []
+}

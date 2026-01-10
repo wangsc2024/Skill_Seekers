@@ -1,0 +1,8 @@
+{
+  "title": "Set up OpenTelemetry trace provider",
+  "content": "provider = TracerProvider()\notlp_exporter = OTLPSpanExporter(\n    endpoint=\"https://api.smith.langchain.com/otel/v1/traces\",\n    headers={\"x-api-key\": os.getenv(\"LANGSMITH_API_KEY\"), \"Langsmith-Project\": \"my_project\"}\n)\nprocessor = BatchSpanProcessor(otlp_exporter)\nprovider.add_span_processor(processor)\ntrace.set_tracer_provider(provider)\ntracer = trace.get_tracer(__name__)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#set-up-opentelemetry-trace-provider",
+  "links": []
+}

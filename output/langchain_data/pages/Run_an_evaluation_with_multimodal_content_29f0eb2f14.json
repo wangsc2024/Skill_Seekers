@@ -1,0 +1,19 @@
+{
+  "title": "Run an evaluation with multimodal content",
+  "content": "Source: https://docs.langchain.com/langsmith/evaluate-with-attachments\n\nLangSmith lets you create dataset examples with file attachments—like images, audio files, or documents—so you can reference them when evaluating an application that uses multimodal inputs or outputs.\n\nWhile you can include multimodal data in your examples by base64 encoding it, this approach is inefficient - the encoded data takes up more space than the original binary files, resulting in slower transfers to and from LangSmith. Using attachments instead provides two key benefits:\n\n1. Faster upload and download speeds due to more efficient binary file transfers\n2. Enhanced visualization of different file types in the LangSmith UI\n\n### 1. Create examples with attachments\n\nTo upload examples with attachments using the SDK, use the [create\\_examples](https://docs.smith.langchain.com/reference/python/client/langsmith.client.Client#langsmith.client.Client.create_examples) / [update\\_examples](https://docs.smith.langchain.com/reference/python/client/langsmith.client.Client#langsmith.client.Client.update_examples) Python methods or the [uploadExamplesMultipart](https://docs.smith.langchain.com/reference/js/classes/client.Client#uploadexamplesmultipart) / [updateExamplesMultipart](https://docs.smith.langchain.com/reference/js/classes/client.Client#updateexamplesmultipart) TypeScript methods.\n\nRequires `langsmith>=0.3.13`\n\n```python  theme={null}\nimport requests\nimport uuid\nfrom pathlib import Path\nfrom langsmith import Client",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "SDK",
+      "id": "sdk"
+    },
+    {
+      "level": "h3",
+      "text": "1. Create examples with attachments",
+      "id": "1.-create-examples-with-attachments"
+    }
+  ],
+  "url": "llms-txt#run-an-evaluation-with-multimodal-content",
+  "links": []
+}

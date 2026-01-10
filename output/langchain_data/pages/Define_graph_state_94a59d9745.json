@@ -1,0 +1,8 @@
+{
+  "title": "Define graph state",
+  "content": "class State(TypedDict):\n    foo: str",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-graph-state",
+  "links": []
+}

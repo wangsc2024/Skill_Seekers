@@ -1,0 +1,32 @@
+{
+  "title": "You can customize it if building a custom agent",
+  "content": "agent = create_agent(\n    model=\"claude-sonnet-4-5-20250929\",\n    middleware=[\n        FilesystemMiddleware(\n            backend=None,  # Optional: custom backend (defaults to StateBackend)\n            system_prompt=\"Write to the filesystem when...\",  # Optional custom addition to the system prompt\n            custom_tool_descriptions={\n                \"ls\": \"Use the ls tool when...\",\n                \"read_file\": \"Use the read_file tool to...\"\n            }  # Optional: Custom descriptions for filesystem tools\n        ),\n    ],\n)\npython  theme={null}\nfrom langchain.agents import create_agent\nfrom deepagents.middleware import FilesystemMiddleware\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\nstore = InMemoryStore()\n\nagent = create_agent(\n    model=\"claude-sonnet-4-5-20250929\",\n    store=store,\n    middleware=[\n        FilesystemMiddleware(\n            backend=lambda rt: CompositeBackend(\n                default=StateBackend(rt),\n                routes={\"/memories/\": StoreBackend(rt)}\n            ),\n            custom_tool_descriptions={\n                \"ls\": \"Use the ls tool when...\",\n                \"read_file\": \"Use the read_file tool to...\"\n            }  # Optional: Custom descriptions for filesystem tools\n        ),\n    ],\n)\npython  theme={null}\nfrom langchain.tools import tool\nfrom langchain.agents import create_agent\nfrom deepagents.middleware.subagents import SubAgentMiddleware\n\n@tool\ndef get_weather(city: str) -> str:\n    \"\"\"Get the weather in a city.\"\"\"\n    return f\"The weather in {city} is sunny.\"\n\nagent = create_agent(\n    model=\"claude-sonnet-4-5-20250929\",\n    middleware=[\n        SubAgentMiddleware(\n            default_model=\"claude-sonnet-4-5-20250929\",\n            default_tools=[],\n            subagents=[\n                {\n                    \"name\": \"weather\",\n                    \"description\": \"This subagent can get weather in cities.\",\n                    \"system_prompt\": \"Use the get_weather tool to get the weather in a city.\",\n                    \"tools\": [get_weather],\n                    \"model\": \"gpt-4o\",\n                    \"middleware\": [],\n                }\n            ],\n        )\n    ],\n)\npython  theme={null}\nfrom langchain.agents import create_agent\nfrom deepagents.middleware.subagents import SubAgentMiddleware\nfrom deepagents import CompiledSubAgent\nfrom langgraph.graph import StateGraph",
+  "code_samples": [
+    {
+      "code": "### Short-term vs. long-term filesystem\n\nBy default, these tools write to a local \"filesystem\" in your graph state. To enable persistent storage across threads, configure a `CompositeBackend` that routes specific paths (like `/memories/`) to a `StoreBackend`.",
+      "language": "unknown"
+    },
+    {
+      "code": "When you configure a `CompositeBackend` with a `StoreBackend` for `/memories/`, any files prefixed with **/memories/** are saved to persistent storage and survive across different threads. Files without this prefix remain in ephemeral state storage.\n\n## Subagent middleware\n\nHanding off tasks to subagents isolates context, keeping the main (supervisor) agent's context window clean while still going deep on a task.\n\nThe subagents middleware allows you to supply subagents through a `task` tool.",
+      "language": "unknown"
+    },
+    {
+      "code": "A subagent is defined with a **name**, **description**, **system prompt**, and **tools**. You can also provide a subagent with a custom **model**, or with additional **middleware**. This can be particularly useful when you want to give the subagent an additional state key to share with the main agent.\n\nFor more complex use cases, you can also provide your own pre-built LangGraph graph as a subagent.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Short-term vs. long-term filesystem",
+      "id": "short-term-vs.-long-term-filesystem"
+    },
+    {
+      "level": "h2",
+      "text": "Subagent middleware",
+      "id": "subagent-middleware"
+    }
+  ],
+  "url": "llms-txt#you-can-customize-it-if-building-a-custom-agent",
+  "links": []
+}

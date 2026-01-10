@@ -1,0 +1,176 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+  "title": "Human-in-the-Loop — AutoGen",
+  "content": "In the previous section Teams, we have seen how to create, observe, and control a team of agents. This section will focus on how to interact with the team from your application, and provide human feedback to the team.\n\nThere are two main ways to interact with the team from your application:\n\nDuring a team’s run – execution of run() or run_stream(), provide feedback through a UserProxyAgent.\n\nOnce the run terminates, provide feedback through input to the next call to run() or run_stream().\n\nWe will cover both methods in this section.\n\nTo jump straight to code samples on integration with web and UI frameworks, see the following links:\n\nAgentChat + Streamlit\n\nThe UserProxyAgent is a special built-in agent that acts as a proxy for a user to provide feedback to the team.\n\nTo use the UserProxyAgent, you can create an instance of it and include it in the team before running the team. The team will decide when to call the UserProxyAgent to ask for feedback from the user.\n\nFor example in a RoundRobinGroupChat team, the UserProxyAgent is called in the order in which it is passed to the team, while in a SelectorGroupChat team, the selector prompt or selector function determines when the UserProxyAgent is called.\n\nThe following diagram illustrates how you can use UserProxyAgent to get feedback from the user during a team’s run:\n\nThe bold arrows indicates the flow of control during a team’s run: when the team calls the UserProxyAgent, it transfers the control to the application/user, and waits for the feedback; once the feedback is provided, the control is transferred back to the team and the team continues its execution.\n\nWhen UserProxyAgent is called during a run, it blocks the execution of the team until the user provides feedback or errors out. This will hold up the team’s progress and put the team in an unstable state that cannot be saved or resumed.\n\nDue to the blocking nature of this approach, it is recommended to use it only for short interactions that require immediate feedback from the user, such as asking for approval or disapproval with a button click, or an alert requiring immediate attention otherwise failing the task.\n\nHere is an example of how to use the UserProxyAgent in a RoundRobinGroupChat for a poetry generation task:\n\nFrom the console output, you can see the team solicited feedback from the user through user_proxy to approve the generated poem.\n\nYou can provide your own input function to the UserProxyAgent to customize the feedback process. For example, when the team is running as a web service, you can use a custom input function to wait for message from a web socket connection. The following code snippet shows an example of custom input function when using the FastAPI web framework:\n\nSee the AgentChat FastAPI sample for a complete example.\n\nFor ChainLit integration with UserProxyAgent, see the AgentChat ChainLit sample.\n\nOften times, an application or a user interacts with the team of agents in an interactive loop: the team runs until termination, the application or user provides feedback, and the team runs again with the feedback.\n\nThis approach is useful in a persisted session with asynchronous communication between the team and the application/user: Once a team finishes a run, the application saves the state of the team, puts it in a persistent storage, and resumes the team when the feedback arrives.\n\nFor how to save and load the state of a team, please refer to Managing State. This section will focus on the feedback mechanisms.\n\nThe following diagram illustrates the flow of control in this approach:\n\nThere are two ways to implement this approach:\n\nSet the maximum number of turns so that the team always stops after the specified number of turns.\n\nUse termination conditions such as TextMentionTermination and HandoffTermination to allow the team to decide when to stop and give control back, given the team’s internal state.\n\nYou can use both methods together to achieve your desired behavior.\n\nThis method allows you to pause the team for user input by setting a maximum number of turns. For instance, you can configure the team to stop after the first agent responds by setting max_turns to 1. This is particularly useful in scenarios where continuous user engagement is required, such as in a chatbot.\n\nTo implement this, set the max_turns parameter in the RoundRobinGroupChat() constructor.\n\nOnce the team stops, the turn count will be reset. When you resume the team, it will start from 0 again. However, the team’s internal state will be preserved, for example, the RoundRobinGroupChat will resume from the next agent in the list with the same conversation history.\n\nmax_turn is specific to the team class and is currently only supported by RoundRobinGroupChat, SelectorGroupChat, and Swarm. When used with termination conditions, the team will stop when either condition is met.\n\nHere is an example of how to use max_turns in a RoundRobinGroupChat for a poetry generation task with a maximum of 1 turn:\n\nYou can see that the team stopped immediately after one agent responded.\n\nWe have already seen several examples of termination conditions in the previous sections. In this section, we focus on HandoffTermination which stops the team when an agent sends a HandoffMessage message.\n\nLet’s create a team with a single AssistantAgent agent with a handoff setting, and run the team with a task that requires additional input from the user because the agent doesn’t have relevant tools to continue processing the task.\n\nThe model used with AssistantAgent must support tool call to use the handoff feature.\n\nYou can see the team stopped due to the handoff message was detected. Let’s continue the team by providing the information the agent needs.\n\nYou can see the team continued after the user provided the information.\n\nIf you are using Swarm team with HandoffTermination targeting user, to resume the team, you need to set the task to a HandoffMessage with the target set to the next agent you want to run. See Swarm for more details.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Human-in-the-Loop#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Providing Feedback During a Run#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Providing Feedback to the Next Run#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Using Max Turns#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Using Termination Conditions#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent, UserProxyAgent\nfrom autogen_agentchat.conditions import TextMentionTermination\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create the agents.\nmodel_client = OpenAIChatCompletionClient(model=\"gpt-4o-mini\")\nassistant = AssistantAgent(\"assistant\", model_client=model_client)\nuser_proxy = UserProxyAgent(\"user_proxy\", input_func=input)  # Use input() to get user input from console.\n\n# Create the termination condition which will end the conversation when the user says \"APPROVE\".\ntermination = TextMentionTermination(\"APPROVE\")\n\n# Create the team.\nteam = RoundRobinGroupChat([assistant, user_proxy], termination_condition=termination)\n\n# Run the conversation and stream to the console.\nstream = team.run_stream(task=\"Write a 4-line poem about the ocean.\")\n# Use asyncio.run(...) when running in a script.\nawait Console(stream)\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent, UserProxyAgent\nfrom autogen_agentchat.conditions import TextMentionTermination\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create the agents.\nmodel_client = OpenAIChatCompletionClient(model=\"gpt-4o-mini\")\nassistant = AssistantAgent(\"assistant\", model_client=model_client)\nuser_proxy = UserProxyAgent(\"user_proxy\", input_func=input)  # Use input() to get user input from console.\n\n# Create the termination condition which will end the conversation when the user says \"APPROVE\".\ntermination = TextMentionTermination(\"APPROVE\")\n\n# Create the team.\nteam = RoundRobinGroupChat([assistant, user_proxy], termination_condition=termination)\n\n# Run the conversation and stream to the console.\nstream = team.run_stream(task=\"Write a 4-line poem about the ocean.\")\n# Use asyncio.run(...) when running in a script.\nawait Console(stream)\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "---------- user ----------\nWrite a 4-line poem about the ocean.\n---------- assistant ----------\nIn endless blue where whispers play,  \nThe ocean's waves dance night and day.  \nA world of depths, both calm and wild,  \nNature's heart, forever beguiled.  \nTERMINATE\n---------- user_proxy ----------\nAPPROVE",
+      "language": "sql"
+    },
+    {
+      "code": "---------- user ----------\nWrite a 4-line poem about the ocean.\n---------- assistant ----------\nIn endless blue where whispers play,  \nThe ocean's waves dance night and day.  \nA world of depths, both calm and wild,  \nNature's heart, forever beguiled.  \nTERMINATE\n---------- user_proxy ----------\nAPPROVE",
+      "language": "sql"
+    },
+    {
+      "code": "TaskResult(messages=[TextMessage(source='user', models_usage=None, metadata={}, content='Write a 4-line poem about the ocean.', type='TextMessage'), TextMessage(source='assistant', models_usage=RequestUsage(prompt_tokens=46, completion_tokens=43), metadata={}, content=\"In endless blue where whispers play,  \\nThe ocean's waves dance night and day.  \\nA world of depths, both calm and wild,  \\nNature's heart, forever beguiled.  \\nTERMINATE\", type='TextMessage'), UserInputRequestedEvent(source='user_proxy', models_usage=None, metadata={}, request_id='2622a0aa-b776-4e54-9e8f-4ecbdf14b78d', content='', type='UserInputRequestedEvent'), TextMessage(source='user_proxy', models_usage=None, metadata={}, content='APPROVE', type='TextMessage')], stop_reason=\"Text 'APPROVE' mentioned\")",
+      "language": "rust"
+    },
+    {
+      "code": "TaskResult(messages=[TextMessage(source='user', models_usage=None, metadata={}, content='Write a 4-line poem about the ocean.', type='TextMessage'), TextMessage(source='assistant', models_usage=RequestUsage(prompt_tokens=46, completion_tokens=43), metadata={}, content=\"In endless blue where whispers play,  \\nThe ocean's waves dance night and day.  \\nA world of depths, both calm and wild,  \\nNature's heart, forever beguiled.  \\nTERMINATE\", type='TextMessage'), UserInputRequestedEvent(source='user_proxy', models_usage=None, metadata={}, request_id='2622a0aa-b776-4e54-9e8f-4ecbdf14b78d', content='', type='UserInputRequestedEvent'), TextMessage(source='user_proxy', models_usage=None, metadata={}, content='APPROVE', type='TextMessage')], stop_reason=\"Text 'APPROVE' mentioned\")",
+      "language": "rust"
+    },
+    {
+      "code": "@app.websocket(\"/ws/chat\")\nasync def chat(websocket: WebSocket):\n    await websocket.accept()\n\n    async def _user_input(prompt: str, cancellation_token: CancellationToken | None) -> str:\n        data = await websocket.receive_json() # Wait for user message from websocket.\n        message = TextMessage.model_validate(data) # Assume user message is a TextMessage.\n        return message.content\n    \n    # Create user proxy with custom input function\n    # Run the team with the user proxy\n    # ...",
+      "language": "python"
+    },
+    {
+      "code": "@app.websocket(\"/ws/chat\")\nasync def chat(websocket: WebSocket):\n    await websocket.accept()\n\n    async def _user_input(prompt: str, cancellation_token: CancellationToken | None) -> str:\n        data = await websocket.receive_json() # Wait for user message from websocket.\n        message = TextMessage.model_validate(data) # Assume user message is a TextMessage.\n        return message.content\n    \n    # Create user proxy with custom input function\n    # Run the team with the user proxy\n    # ...",
+      "language": "python"
+    },
+    {
+      "code": "team = RoundRobinGroupChat([...], max_turns=1)",
+      "language": "unknown"
+    },
+    {
+      "code": "team = RoundRobinGroupChat([...], max_turns=1)",
+      "language": "unknown"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create the agents.\nmodel_client = OpenAIChatCompletionClient(model=\"gpt-4o-mini\")\nassistant = AssistantAgent(\"assistant\", model_client=model_client)\n\n# Create the team setting a maximum number of turns to 1.\nteam = RoundRobinGroupChat([assistant], max_turns=1)\n\ntask = \"Write a 4-line poem about the ocean.\"\nwhile True:\n    # Run the conversation and stream to the console.\n    stream = team.run_stream(task=task)\n    # Use asyncio.run(...) when running in a script.\n    await Console(stream)\n    # Get the user response.\n    task = input(\"Enter your feedback (type 'exit' to leave): \")\n    if task.lower().strip() == \"exit\":\n        break\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create the agents.\nmodel_client = OpenAIChatCompletionClient(model=\"gpt-4o-mini\")\nassistant = AssistantAgent(\"assistant\", model_client=model_client)\n\n# Create the team setting a maximum number of turns to 1.\nteam = RoundRobinGroupChat([assistant], max_turns=1)\n\ntask = \"Write a 4-line poem about the ocean.\"\nwhile True:\n    # Run the conversation and stream to the console.\n    stream = team.run_stream(task=task)\n    # Use asyncio.run(...) when running in a script.\n    await Console(stream)\n    # Get the user response.\n    task = input(\"Enter your feedback (type 'exit' to leave): \")\n    if task.lower().strip() == \"exit\":\n        break\nawait model_client.close()",
+      "language": "python"
+    },
+    {
+      "code": "---------- user ----------\nWrite a 4-line poem about the ocean.\n---------- assistant ----------\nEndless waves in a dance with the shore,  \nWhispers of secrets in tales from the roar,  \nBeneath the vast sky, where horizons blend,  \nThe ocean’s embrace is a timeless friend.  \nTERMINATE\n[Prompt tokens: 46, Completion tokens: 48]\n---------- Summary ----------\nNumber of messages: 2\nFinish reason: Maximum number of turns 1 reached.\nTotal prompt tokens: 46\nTotal completion tokens: 48\nDuration: 1.63 seconds\n---------- user ----------\nCan you make it about a person and its relationship with the ocean\n---------- assistant ----------\nShe walks along the tide, where dreams intertwine,  \nWith every crashing wave, her heart feels aligned,  \nIn the ocean's embrace, her worries dissolve,  \nA symphony of solace, where her spirit evolves.  \nTERMINATE\n[Prompt tokens: 117, Completion tokens: 49]\n---------- Summary ----------\nNumber of messages: 2\nFinish reason: Maximum number of turns 1 reached.\nTotal prompt tokens: 117\nTotal completion tokens: 49\nDuration: 1.21 seconds",
+      "language": "sql"
+    },
+    {
+      "code": "---------- user ----------\nWrite a 4-line poem about the ocean.\n---------- assistant ----------\nEndless waves in a dance with the shore,  \nWhispers of secrets in tales from the roar,  \nBeneath the vast sky, where horizons blend,  \nThe ocean’s embrace is a timeless friend.  \nTERMINATE\n[Prompt tokens: 46, Completion tokens: 48]\n---------- Summary ----------\nNumber of messages: 2\nFinish reason: Maximum number of turns 1 reached.\nTotal prompt tokens: 46\nTotal completion tokens: 48\nDuration: 1.63 seconds\n---------- user ----------\nCan you make it about a person and its relationship with the ocean\n---------- assistant ----------\nShe walks along the tide, where dreams intertwine,  \nWith every crashing wave, her heart feels aligned,  \nIn the ocean's embrace, her worries dissolve,  \nA symphony of solace, where her spirit evolves.  \nTERMINATE\n[Prompt tokens: 117, Completion tokens: 49]\n---------- Summary ----------\nNumber of messages: 2\nFinish reason: Maximum number of turns 1 reached.\nTotal prompt tokens: 117\nTotal completion tokens: 49\nDuration: 1.21 seconds",
+      "language": "sql"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.base import Handoff\nfrom autogen_agentchat.conditions import HandoffTermination, TextMentionTermination\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create an OpenAI model client.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    # api_key=\"sk-...\", # Optional if you have an OPENAI_API_KEY env variable set.\n)\n\n# Create a lazy assistant agent that always hands off to the user.\nlazy_agent = AssistantAgent(\n    \"lazy_assistant\",\n    model_client=model_client,\n    handoffs=[Handoff(target=\"user\", message=\"Transfer to user.\")],\n    system_message=\"If you cannot complete the task, transfer to user. Otherwise, when finished, respond with 'TERMINATE'.\",\n)\n\n# Define a termination condition that checks for handoff messages.\nhandoff_termination = HandoffTermination(target=\"user\")\n# Define a termination condition that checks for a specific text mention.\ntext_termination = TextMentionTermination(\"TERMINATE\")\n\n# Create a single-agent team with the lazy assistant and both termination conditions.\nlazy_agent_team = RoundRobinGroupChat([lazy_agent], termination_condition=handoff_termination | text_termination)\n\n# Run the team and stream to the console.\ntask = \"What is the weather in New York?\"\nawait Console(lazy_agent_team.run_stream(task=task), output_stats=True)",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.base import Handoff\nfrom autogen_agentchat.conditions import HandoffTermination, TextMentionTermination\nfrom autogen_agentchat.teams import RoundRobinGroupChat\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Create an OpenAI model client.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    # api_key=\"sk-...\", # Optional if you have an OPENAI_API_KEY env variable set.\n)\n\n# Create a lazy assistant agent that always hands off to the user.\nlazy_agent = AssistantAgent(\n    \"lazy_assistant\",\n    model_client=model_client,\n    handoffs=[Handoff(target=\"user\", message=\"Transfer to user.\")],\n    system_message=\"If you cannot complete the task, transfer to user. Otherwise, when finished, respond with 'TERMINATE'.\",\n)\n\n# Define a termination condition that checks for handoff messages.\nhandoff_termination = HandoffTermination(target=\"user\")\n# Define a termination condition that checks for a specific text mention.\ntext_termination = TextMentionTermination(\"TERMINATE\")\n\n# Create a single-agent team with the lazy assistant and both termination conditions.\nlazy_agent_team = RoundRobinGroupChat([lazy_agent], termination_condition=handoff_termination | text_termination)\n\n# Run the team and stream to the console.\ntask = \"What is the weather in New York?\"\nawait Console(lazy_agent_team.run_stream(task=task), output_stats=True)",
+      "language": "python"
+    },
+    {
+      "code": "---------- user ----------\nWhat is the weather in New York?\n---------- lazy_assistant ----------\n[FunctionCall(id='call_EAcMgrLGHdLw0e7iJGoMgxuu', arguments='{}', name='transfer_to_user')]\n[Prompt tokens: 69, Completion tokens: 12]\n---------- lazy_assistant ----------\n[FunctionExecutionResult(content='Transfer to user.', call_id='call_EAcMgrLGHdLw0e7iJGoMgxuu')]\n---------- lazy_assistant ----------\nTransfer to user.\n---------- Summary ----------\nNumber of messages: 4\nFinish reason: Handoff to user from lazy_assistant detected.\nTotal prompt tokens: 69\nTotal completion tokens: 12\nDuration: 0.69 seconds",
+      "language": "json"
+    },
+    {
+      "code": "---------- user ----------\nWhat is the weather in New York?\n---------- lazy_assistant ----------\n[FunctionCall(id='call_EAcMgrLGHdLw0e7iJGoMgxuu', arguments='{}', name='transfer_to_user')]\n[Prompt tokens: 69, Completion tokens: 12]\n---------- lazy_assistant ----------\n[FunctionExecutionResult(content='Transfer to user.', call_id='call_EAcMgrLGHdLw0e7iJGoMgxuu')]\n---------- lazy_assistant ----------\nTransfer to user.\n---------- Summary ----------\nNumber of messages: 4\nFinish reason: Handoff to user from lazy_assistant detected.\nTotal prompt tokens: 69\nTotal completion tokens: 12\nDuration: 0.69 seconds",
+      "language": "json"
+    },
+    {
+      "code": "TaskResult(messages=[TextMessage(source='user', models_usage=None, content='What is the weather in New York?', type='TextMessage'), ToolCallRequestEvent(source='lazy_assistant', models_usage=RequestUsage(prompt_tokens=69, completion_tokens=12), content=[FunctionCall(id='call_EAcMgrLGHdLw0e7iJGoMgxuu', arguments='{}', name='transfer_to_user')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='lazy_assistant', models_usage=None, content=[FunctionExecutionResult(content='Transfer to user.', call_id='call_EAcMgrLGHdLw0e7iJGoMgxuu')], type='ToolCallExecutionEvent'), HandoffMessage(source='lazy_assistant', models_usage=None, target='user', content='Transfer to user.', context=[], type='HandoffMessage')], stop_reason='Handoff to user from lazy_assistant detected.')",
+      "language": "sql"
+    },
+    {
+      "code": "TaskResult(messages=[TextMessage(source='user', models_usage=None, content='What is the weather in New York?', type='TextMessage'), ToolCallRequestEvent(source='lazy_assistant', models_usage=RequestUsage(prompt_tokens=69, completion_tokens=12), content=[FunctionCall(id='call_EAcMgrLGHdLw0e7iJGoMgxuu', arguments='{}', name='transfer_to_user')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='lazy_assistant', models_usage=None, content=[FunctionExecutionResult(content='Transfer to user.', call_id='call_EAcMgrLGHdLw0e7iJGoMgxuu')], type='ToolCallExecutionEvent'), HandoffMessage(source='lazy_assistant', models_usage=None, target='user', content='Transfer to user.', context=[], type='HandoffMessage')], stop_reason='Handoff to user from lazy_assistant detected.')",
+      "language": "sql"
+    },
+    {
+      "code": "await Console(lazy_agent_team.run_stream(task=\"The weather in New York is sunny.\"))",
+      "language": "csharp"
+    },
+    {
+      "code": "await Console(lazy_agent_team.run_stream(task=\"The weather in New York is sunny.\"))",
+      "language": "csharp"
+    },
+    {
+      "code": "---------- user ----------\nThe weather in New York is sunny.\n---------- lazy_assistant ----------\nGreat! Enjoy the sunny weather in New York! Is there anything else you'd like to know?\n---------- lazy_assistant ----------\nTERMINATE",
+      "language": "yaml"
+    },
+    {
+      "code": "---------- user ----------\nThe weather in New York is sunny.\n---------- lazy_assistant ----------\nGreat! Enjoy the sunny weather in New York! Is there anything else you'd like to know?\n---------- lazy_assistant ----------\nTERMINATE",
+      "language": "yaml"
+    },
+    {
+      "code": "TaskResult(messages=[TextMessage(source='user', models_usage=None, content='The weather in New York is sunny.', type='TextMessage'), TextMessage(source='lazy_assistant', models_usage=RequestUsage(prompt_tokens=110, completion_tokens=21), content=\"Great! Enjoy the sunny weather in New York! Is there anything else you'd like to know?\", type='TextMessage'), TextMessage(source='lazy_assistant', models_usage=RequestUsage(prompt_tokens=137, completion_tokens=5), content='TERMINATE', type='TextMessage')], stop_reason=\"Text 'TERMINATE' mentioned\")",
+      "language": "rust"
+    },
+    {
+      "code": "TaskResult(messages=[TextMessage(source='user', models_usage=None, content='The weather in New York is sunny.', type='TextMessage'), TextMessage(source='lazy_assistant', models_usage=RequestUsage(prompt_tokens=110, completion_tokens=21), content=\"Great! Enjoy the sunny weather in New York! Is there anything else you'd like to know?\", type='TextMessage'), TextMessage(source='lazy_assistant', models_usage=RequestUsage(prompt_tokens=137, completion_tokens=5), content='TERMINATE', type='TextMessage')], stop_reason=\"Text 'TERMINATE' mentioned\")",
+      "language": "rust"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Set environment variables for external services",
+  "content": "export POSTGRES_URI_CUSTOM=\"postgresql://user:pass@host:5432/db\"\nexport REDIS_URI_CUSTOM=\"redis://host:6379/0\"\n```\n\nSee the [environment variables documentation](/langsmith/env-var#postgres-uri-custom) for more details.\n\n### Wrong API endpoints\n\nIf you're experiencing connection issues, verify you're using the correct endpoint format for your LangSmith instance. There are two different APIs with different endpoints:\n\n#### LangSmith API (Traces, Ingestion, etc.)\n\nFor LangSmith API operations (traces, evaluations, datasets):\n\n| Region | Endpoint                             |\n| ------ | ------------------------------------ |\n| US     | `https://api.smith.langchain.com`    |\n| EU     | `https://eu.api.smith.langchain.com` |\n\nFor self-hosted LangSmith instances, use `http(s)://<langsmith-url>/api` where `<langsmith-url>` is your self-hosted instance URL.\n\n<Note>\n  If you're setting the endpoint in the `LANGSMITH_ENDPOINT` environment variable, you need to add `/v1` at the end (e.g., `https://api.smith.langchain.com/v1` or `http(s)://<langsmith-url>/api/v1` if self-hosted).\n</Note>\n\n#### LangSmith Deployment API (Deployments)\n\nFor LangSmith Deployment operations (deployments, revisions):\n\n| Region | Endpoint                            |\n| ------ | ----------------------------------- |\n| US     | `https://api.host.langchain.com`    |\n| EU     | `https://eu.api.host.langchain.com` |\n\nFor self-hosted LangSmith instances, use `http(s)://<langsmith-url>/api-host` where `<langsmith-url>` is your self-hosted instance URL.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/cicd-pipeline-example.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Wrong API endpoints",
+      "id": "wrong-api-endpoints"
+    }
+  ],
+  "url": "llms-txt#set-environment-variables-for-external-services",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Load a prompt by name",
+  "content": "messages = await client.get_prompt(\"server_name\", \"summarize\")  # [!code highlight]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#load-a-prompt-by-name",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Install triton from source for latest blackwell support",
+  "content": "RUN git clone https://github.com/triton-lang/triton.git && \\\n    cd triton && \\\n    git checkout c5d671f91d90f40900027382f98b17a3e04045f6 && \\\n    pip install -r python/requirements.txt && \\\n    pip install . && \\\n    cd ..",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#install-triton-from-source-for-latest-blackwell-support",
+  "links": []
+}

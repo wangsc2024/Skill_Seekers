@@ -1,0 +1,41 @@
+{
+  "title": "Trace with LangChain (Python and JS/TS)",
+  "content": "Source: https://docs.langchain.com/langsmith/trace-with-langchain\n\nLangSmith integrates seamlessly with LangChain (Python and JavaScript), the popular open-source framework for building LLM applications.\n\nInstall the core library and the OpenAI integration for Python and JS (we use the OpenAI integration for the code snippets below).\n\nFor a full list of packages available, see the [LangChain docs](/oss/python/integrations/providers/overview).\n\n### 1. Configure your environment\n\n```bash wrap theme={null}\nexport LANGSMITH_TRACING=true\nexport LANGSMITH_API_KEY=<your-api-key>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Quick start\n\n### 1. Configure your environment",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Quick start",
+      "id": "quick-start"
+    },
+    {
+      "level": "h3",
+      "text": "1. Configure your environment",
+      "id": "1.-configure-your-environment"
+    }
+  ],
+  "url": "llms-txt#trace-with-langchain-(python-and-js/ts)",
+  "links": []
+}

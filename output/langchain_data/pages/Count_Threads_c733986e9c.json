@@ -1,0 +1,8 @@
+{
+  "title": "Count Threads",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/threads/count-threads\n\nlangsmith/agent-server-openapi.json post /threads/count\nGet the count of threads matching the specified criteria.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#count-threads",
+  "links": []
+}

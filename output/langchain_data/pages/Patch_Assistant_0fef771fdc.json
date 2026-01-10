@@ -1,0 +1,8 @@
+{
+  "title": "Patch Assistant",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/assistants/patch-assistant\n\nlangsmith/agent-server-openapi.json patch /assistants/{assistant_id}\nUpdate an assistant.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#patch-assistant",
+  "links": []
+}

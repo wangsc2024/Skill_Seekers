@@ -1,0 +1,8 @@
+{
+  "title": "initialize the langsmith client with the anonymization functions",
+  "content": "langsmith_client = Client(\n  hide_inputs=comprehend_anonymize, hide_outputs=comprehend_anonymize\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#initialize-the-langsmith-client-with-the-anonymization-functions",
+  "links": []
+}

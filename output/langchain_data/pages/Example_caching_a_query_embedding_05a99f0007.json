@@ -1,0 +1,8 @@
+{
+  "title": "Example: caching a query embedding",
+  "content": "tic = time.time()\nprint(cached_embedder.embed_query(\"Hello, world!\"))\nprint(f\"First call took: {time.time() - tic:.2f} seconds\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#example:-caching-a-query-embedding",
+  "links": []
+}

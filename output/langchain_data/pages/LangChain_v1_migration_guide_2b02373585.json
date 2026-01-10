@@ -1,0 +1,148 @@
+{
+  "title": "LangChain v1 migration guide",
+  "content": "Source: https://docs.langchain.com/oss/python/migrate/langchain-v1\n\nThis guide outlines the major changes between [LangChain v1](/oss/python/releases/langchain-v1) and previous versions.\n\n## Simplified package\n\nThe `langchain` package namespace has been significantly reduced in v1 to focus on essential building blocks for agents. The streamlined package makes it easier to discover and use the core functionality.\n\n| Module                                                                                | What's available                                                                                                                                                                                                                                                          | Notes                             |\n| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |\n| [`langchain.agents`](https://reference.langchain.com/python/langchain/agents)         | [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent), [`AgentState`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.AgentState)                                                            | Core agent creation functionality |\n| [`langchain.messages`](https://reference.langchain.com/python/langchain/messages)     | Message types, [content blocks](https://reference.langchain.com/python/langchain/messages/#langchain.messages.ContentBlock), [`trim_messages`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.trim_messages)                               | Re-exported from `langchain-core` |\n| [`langchain.tools`](https://reference.langchain.com/python/langchain/tools)           | [`@tool`](https://reference.langchain.com/python/langchain/tools/#langchain.tools.tool), [`BaseTool`](https://reference.langchain.com/python/langchain/tools/#langchain.tools.BaseTool), injection helpers                                                                | Re-exported from `langchain-core` |\n| [`langchain.chat_models`](https://reference.langchain.com/python/langchain/models)    | [`init_chat_model`](https://reference.langchain.com/python/langchain/models/#langchain.chat_models.init_chat_model), [`BaseChatModel`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.chat_models.BaseChatModel)   | Unified model initialization      |\n| [`langchain.embeddings`](https://reference.langchain.com/python/langchain/embeddings) | [`init_embeddings`](https://reference.langchain.com/python/langchain_core/embeddings/#langchain_core.embeddings.embeddings.Embeddings), [`Embeddings`](https://reference.langchain.com/python/langchain_core/embeddings/#langchain_core.embeddings.embeddings.Embeddings) | Embedding models                  |\n\n### `langchain-classic`\n\nIf you were using any of the following from the `langchain` package, you'll need to install [`langchain-classic`](https://pypi.org/project/langchain-classic/) and update your imports:\n\n* Legacy chains (`LLMChain`, `ConversationChain`, etc.)\n* Retrievers (e.g. `MultiQueryRetriever` or anything from the previous `langchain.retrievers` module)\n* The indexing API\n* The hub module (for managing prompts programmatically)\n* Embeddings modules (e.g. `CacheBackedEmbeddings` and community embeddings)\n* [`langchain-community`](https://pypi.org/project/langchain-community) re-exports\n* Other deprecated functionality\n\n## Migrate to `create_agent`\n\nPrior to v1.0, we recommended using [`langgraph.prebuilt.create_react_agent`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.chat_agent_executor.create_react_agent) to build agents. Now, we recommend you use [`langchain.agents.create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) to build agents.\n\nThe table below outlines what functionality has changed from [`create_react_agent`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.chat_agent_executor.create_react_agent) to [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent):\n\n| Section                                            | TL;DR - What's changed                                                                                                                                                                     |\n| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| [Import path](#import-path)                        | Package moved from `langgraph.prebuilt` to `langchain.agents`                                                                                                                              |\n| [Prompts](#prompts)                                | Parameter renamed to [`system_prompt`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent\\(system_prompt\\)), dynamic prompts use middleware            |\n| [Pre-model hook](#pre-model-hook)                  | Replaced by middleware with `before_model` method                                                                                                                                          |\n| [Post-model hook](#post-model-hook)                | Replaced by middleware with `after_model` method                                                                                                                                           |\n| [Custom state](#custom-state)                      | `TypedDict` only, can be defined via [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) or middleware |\n| [Model](#model)                                    | Dynamic selection via middleware, pre-bound models not supported                                                                                                                           |\n| [Tools](#tools)                                    | Tool error handling moved to middleware with `wrap_tool_call`                                                                                                                              |\n| [Structured output](#structured-output)            | prompted output removed, use `ToolStrategy`/`ProviderStrategy`                                                                                                                             |\n| [Streaming node name](#streaming-node-name-rename) | Node name changed from `\"agent\"` to `\"model\"`                                                                                                                                              |\n| [Runtime context](#runtime-context)                | Dependency injection via `context` argument instead of `config[\"configurable\"]`                                                                                                            |\n| [Namespace](#simplified-package)                   | Streamlined to focus on agent building blocks, legacy code moved to `langchain-classic`                                                                                                    |\n\nThe import path for the agent prebuilt has changed from `langgraph.prebuilt` to `langchain.agents`.\nThe name of the function has changed from [`create_react_agent`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.chat_agent_executor.create_react_agent) to [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent):\n\nFor more information, see [Agents](/oss/python/langchain/agents).\n\n#### Static prompt rename\n\nThe `prompt` parameter has been renamed to [`system_prompt`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent\\(system_prompt\\)):\n\n#### `SystemMessage` to string\n\nIf using [`SystemMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.SystemMessage) objects in the system prompt, extract the string content:\n\nDynamic prompts are a core context engineering pattern— they adapt what you tell the model based on the current conversation state. To do this, use the [`@dynamic_prompt`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.dynamic_prompt) decorator:\n\nPre-model hooks are now implemented as middleware with the `before_model` method.\nThis new pattern is more extensible--you can define multiple middlewares to run before the model is called,\nreusing common patterns across different agents.\n\nCommon use cases include:\n\n* Summarizing conversation history\n* Trimming messages\n* Input guardrails, like PII redaction\n\nv1 now has summarization middleware as a built in option:\n\nPost-model hooks are now implemented as middleware with the `after_model` method.\nThis new pattern is more extensible--you can define multiple middlewares to run after the model is called,\nreusing common patterns across different agents.\n\nCommon use cases include:\n\n* [Human in the loop](/oss/python/langchain/human-in-the-loop)\n* Output guardrails\n\nv1 has a built in middleware for human in the loop approval for tool calls:\n\nCustom state extends the default agent state with additional fields. You can define custom state in two ways:\n\n1. **Via [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) on [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent)** - Best for state used in tools\n2. **Via middleware** - Best for state managed by specific middleware hooks and tools attached to said middleware\n\n<Note>\n  Defining custom state via middleware is preferred over defining it via [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) on [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) because it allows you to keep state extensions conceptually scoped to the relevant middleware and tools.\n\n`state_schema` is still supported for backwards compatibility on `create_agent`.\n</Note>\n\n#### Defining state via `state_schema`\n\nUse the [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) parameter when your custom state needs to be accessed by tools:\n\n#### Defining state via middleware\n\nMiddleware can also define custom state by setting the [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) attribute.\nThis helps to keep state extensions conceptually scoped to the relevant middleware and tools.\n\nSee the [middleware documentation](/oss/python/langchain/middleware#custom-state-schema) for more details on defining custom state via middleware.\n\n#### State type restrictions\n\n[`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) only supports `TypedDict` for state schemas. Pydantic models and dataclasses are no longer supported.\n\nSimply inherit from `langchain.agents.AgentState` instead of `BaseModel` or decorating with `dataclass`.\nIf you need to perform validation, handle it in middleware hooks instead.\n\nDynamic model selection allows you to choose different models based on runtime context (e.g., task complexity, cost constraints, or user preferences). [`create_react_agent`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.chat_agent_executor.create_react_agent) released in v0.6 of [`langgraph-prebuilt`](https://pypi.org/project/langgraph-prebuilt) supported dynamic model and tool selection via a callable passed to the `model` parameter.\n\nThis functionality has been ported to the middleware interface in v1.\n\n#### Dynamic model selection\n\n#### Pre-bound models\n\nTo better support structured output, [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) no longer accepts pre-bound models with tools or configuration:\n\n```python  theme={null}",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nInstall with:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n***\n\n## Migrate to `create_agent`\n\nPrior to v1.0, we recommended using [`langgraph.prebuilt.create_react_agent`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.chat_agent_executor.create_react_agent) to build agents. Now, we recommend you use [`langchain.agents.create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) to build agents.\n\nThe table below outlines what functionality has changed from [`create_react_agent`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.chat_agent_executor.create_react_agent) to [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent):\n\n| Section                                            | TL;DR - What's changed                                                                                                                                                                     |\n| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| [Import path](#import-path)                        | Package moved from `langgraph.prebuilt` to `langchain.agents`                                                                                                                              |\n| [Prompts](#prompts)                                | Parameter renamed to [`system_prompt`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent\\(system_prompt\\)), dynamic prompts use middleware            |\n| [Pre-model hook](#pre-model-hook)                  | Replaced by middleware with `before_model` method                                                                                                                                          |\n| [Post-model hook](#post-model-hook)                | Replaced by middleware with `after_model` method                                                                                                                                           |\n| [Custom state](#custom-state)                      | `TypedDict` only, can be defined via [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) or middleware |\n| [Model](#model)                                    | Dynamic selection via middleware, pre-bound models not supported                                                                                                                           |\n| [Tools](#tools)                                    | Tool error handling moved to middleware with `wrap_tool_call`                                                                                                                              |\n| [Structured output](#structured-output)            | prompted output removed, use `ToolStrategy`/`ProviderStrategy`                                                                                                                             |\n| [Streaming node name](#streaming-node-name-rename) | Node name changed from `\"agent\"` to `\"model\"`                                                                                                                                              |\n| [Runtime context](#runtime-context)                | Dependency injection via `context` argument instead of `config[\"configurable\"]`                                                                                                            |\n| [Namespace](#simplified-package)                   | Streamlined to focus on agent building blocks, legacy code moved to `langchain-classic`                                                                                                    |\n\n### Import path\n\nThe import path for the agent prebuilt has changed from `langgraph.prebuilt` to `langchain.agents`.\nThe name of the function has changed from [`create_react_agent`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.chat_agent_executor.create_react_agent) to [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent):",
+      "language": "unknown"
+    },
+    {
+      "code": "For more information, see [Agents](/oss/python/langchain/agents).\n\n### Prompts\n\n#### Static prompt rename\n\nThe `prompt` parameter has been renamed to [`system_prompt`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent\\(system_prompt\\)):\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n#### `SystemMessage` to string\n\nIf using [`SystemMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.SystemMessage) objects in the system prompt, extract the string content:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n#### Dynamic prompts\n\nDynamic prompts are a core context engineering pattern— they adapt what you tell the model based on the current conversation state. To do this, use the [`@dynamic_prompt`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.dynamic_prompt) decorator:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Pre-model hook\n\nPre-model hooks are now implemented as middleware with the `before_model` method.\nThis new pattern is more extensible--you can define multiple middlewares to run before the model is called,\nreusing common patterns across different agents.\n\nCommon use cases include:\n\n* Summarizing conversation history\n* Trimming messages\n* Input guardrails, like PII redaction\n\nv1 now has summarization middleware as a built in option:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Post-model hook\n\nPost-model hooks are now implemented as middleware with the `after_model` method.\nThis new pattern is more extensible--you can define multiple middlewares to run after the model is called,\nreusing common patterns across different agents.\n\nCommon use cases include:\n\n* [Human in the loop](/oss/python/langchain/human-in-the-loop)\n* Output guardrails\n\nv1 has a built in middleware for human in the loop approval for tool calls:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Custom state\n\nCustom state extends the default agent state with additional fields. You can define custom state in two ways:\n\n1. **Via [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) on [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent)** - Best for state used in tools\n2. **Via middleware** - Best for state managed by specific middleware hooks and tools attached to said middleware\n\n<Note>\n  Defining custom state via middleware is preferred over defining it via [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) on [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) because it allows you to keep state extensions conceptually scoped to the relevant middleware and tools.\n\n  `state_schema` is still supported for backwards compatibility on `create_agent`.\n</Note>\n\n#### Defining state via `state_schema`\n\nUse the [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) parameter when your custom state needs to be accessed by tools:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n#### Defining state via middleware\n\nMiddleware can also define custom state by setting the [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) attribute.\nThis helps to keep state extensions conceptually scoped to the relevant middleware and tools.",
+      "language": "unknown"
+    },
+    {
+      "code": "See the [middleware documentation](/oss/python/langchain/middleware#custom-state-schema) for more details on defining custom state via middleware.\n\n#### State type restrictions\n\n[`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) only supports `TypedDict` for state schemas. Pydantic models and dataclasses are no longer supported.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSimply inherit from `langchain.agents.AgentState` instead of `BaseModel` or decorating with `dataclass`.\nIf you need to perform validation, handle it in middleware hooks instead.\n\n### Model\n\nDynamic model selection allows you to choose different models based on runtime context (e.g., task complexity, cost constraints, or user preferences). [`create_react_agent`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.chat_agent_executor.create_react_agent) released in v0.6 of [`langgraph-prebuilt`](https://pypi.org/project/langgraph-prebuilt) supported dynamic model and tool selection via a callable passed to the `model` parameter.\n\nThis functionality has been ported to the middleware interface in v1.\n\n#### Dynamic model selection\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n#### Pre-bound models\n\nTo better support structured output, [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) no longer accepts pre-bound models with tools or configuration:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Simplified package",
+      "id": "simplified-package"
+    },
+    {
+      "level": "h3",
+      "text": "Namespace",
+      "id": "namespace"
+    },
+    {
+      "level": "h3",
+      "text": "`langchain-classic`",
+      "id": "`langchain-classic`"
+    },
+    {
+      "level": "h2",
+      "text": "Migrate to `create_agent`",
+      "id": "migrate-to-`create_agent`"
+    },
+    {
+      "level": "h3",
+      "text": "Import path",
+      "id": "import-path"
+    },
+    {
+      "level": "h3",
+      "text": "Prompts",
+      "id": "prompts"
+    },
+    {
+      "level": "h3",
+      "text": "Pre-model hook",
+      "id": "pre-model-hook"
+    },
+    {
+      "level": "h3",
+      "text": "Post-model hook",
+      "id": "post-model-hook"
+    },
+    {
+      "level": "h3",
+      "text": "Custom state",
+      "id": "custom-state"
+    },
+    {
+      "level": "h3",
+      "text": "Model",
+      "id": "model"
+    }
+  ],
+  "url": "llms-txt#langchain-v1-migration-guide",
+  "links": []
+}

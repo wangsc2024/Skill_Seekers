@@ -1,0 +1,8 @@
+{
+  "title": "For BF16:",
+  "content": "python llama.cpp/convert_hf_to_gguf.py merged_model \\\n    --outfile model-BF16.gguf --outtype bf16 \\\n    --split-max-size 50G",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#for-bf16:",
+  "links": []
+}

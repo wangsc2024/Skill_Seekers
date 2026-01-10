@@ -1,0 +1,41 @@
+{
+  "title": "How to handle model rate limits",
+  "content": "Source: https://docs.langchain.com/langsmith/rate-limiting\n\nA common issue when running large evaluation jobs is running into third-party API rate limits, usually from model providers. There are a few ways to deal with rate limits.\n\n## Using `langchain` RateLimiters (Python only)\n\nIf you're using `langchain` Python chat models in your application or evaluators, you can add rate limiters to your model(s) that will add client-side control of the frequency with which requests are sent to the model provider API to avoid rate limit errors.\n\nSee the [`langchain`](/oss/python/langchain/models#rate-limiting) documentation for more on how to configure rate limiters.\n\n## Retrying with exponential backoff\n\nA very common way to deal with rate limit errors is retrying with exponential backoff. Retrying with exponential backoff means repeatedly retrying failed requests with an (exponentially) increasing wait time between each retry. This continues until either the request succeeds or a maximum number of requests is made.\n\n#### With `langchain`\n\nIf you're using `langchain` components you can add retries to all model calls with the `.with_retry(...)` / `.withRetry()` method:\n\nSee the `langchain` [Python](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.BaseChatModel.with_retry) and [JS](https://v03.api.js.langchain.com/classes/_langchain_core.language_models_chat_models.BaseChatModel.html#withRetry) API references for more.\n\n#### Without `langchain`\n\nIf you're not using `langchain` you can use other libraries like `tenacity` (Python) or `backoff` (Python) to implement retries with exponential backoff, or you can implement it from scratch. See some examples of how to do this in the [OpenAI docs](https://platform.openai.com/docs/guides/rate-limits#retrying-with-exponential-backoff).\n\n## Limiting `max_concurrency`\n\nLimiting the number of concurrent calls you're making to your application and evaluators is another way to decrease the frequency of model calls you're making, and in that way avoid rate limit errors. `max_concurrency` can be set directly on the [evaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._runner.evaluate) / [aevaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._arunner.aevaluate) functions. This parallelizes evaluation by effectively splitting the dataset across threads.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/rate-limiting.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "See the [`langchain`](/oss/python/langchain/models#rate-limiting) documentation for more on how to configure rate limiters.\n\n## Retrying with exponential backoff\n\nA very common way to deal with rate limit errors is retrying with exponential backoff. Retrying with exponential backoff means repeatedly retrying failed requests with an (exponentially) increasing wait time between each retry. This continues until either the request succeeds or a maximum number of requests is made.\n\n#### With `langchain`\n\nIf you're using `langchain` components you can add retries to all model calls with the `.with_retry(...)` / `.withRetry()` method:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee the `langchain` [Python](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.BaseChatModel.with_retry) and [JS](https://v03.api.js.langchain.com/classes/_langchain_core.language_models_chat_models.BaseChatModel.html#withRetry) API references for more.\n\n#### Without `langchain`\n\nIf you're not using `langchain` you can use other libraries like `tenacity` (Python) or `backoff` (Python) to implement retries with exponential backoff, or you can implement it from scratch. See some examples of how to do this in the [OpenAI docs](https://platform.openai.com/docs/guides/rate-limits#retrying-with-exponential-backoff).\n\n## Limiting `max_concurrency`\n\nLimiting the number of concurrent calls you're making to your application and evaluators is another way to decrease the frequency of model calls you're making, and in that way avoid rate limit errors. `max_concurrency` can be set directly on the [evaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._runner.evaluate) / [aevaluate()](https://docs.smith.langchain.com/reference/python/evaluation/langsmith.evaluation._arunner.aevaluate) functions. This parallelizes evaluation by effectively splitting the dataset across threads.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Using `langchain` RateLimiters (Python only)",
+      "id": "using-`langchain`-ratelimiters-(python-only)"
+    },
+    {
+      "level": "h2",
+      "text": "Retrying with exponential backoff",
+      "id": "retrying-with-exponential-backoff"
+    },
+    {
+      "level": "h2",
+      "text": "Limiting `max_concurrency`",
+      "id": "limiting-`max_concurrency`"
+    }
+  ],
+  "url": "llms-txt#how-to-handle-model-rate-limits",
+  "links": []
+}

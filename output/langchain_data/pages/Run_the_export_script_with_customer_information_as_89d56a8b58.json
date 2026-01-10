@@ -1,0 +1,27 @@
+{
+  "title": "Run the export script with customer information as variables",
+  "content": "sh run_support_query_pg.sh <postgres_url> \\\n  --input support_queries/postgres/pg_usage_traces_backfill_export.sql \\\n  --output ls_export.csv \\\n  -v customer_id=$CUSTOMER_ID \\\n  -v customer_name=$CUSTOMER_NAME\nbash  theme={null}\nsh run_support_query_pg.sh <postgres_url> \\\n  --input support_queries/postgres/pg_usage_nodes_backfill_export.sql \\\n  --output lgp_export.csv \\\n  -v customer_id=$CUSTOMER_ID \\\n  -v customer_name=$CUSTOMER_NAME\nbash  theme={null}\nsh run_support_query_pg.sh <postgres_url> --input support_queries/postgres/pg_usage_traces_backfill_update.sql --output export.csv -v backfill_id=<backfill_id>\nbash  theme={null}\nsh run_support_query_pg.sh <postgres_url> --input support_queries/postgres/pg_usage_nodes_backfill_update.sql --output export.csv -v backfill_id=<backfill_id>\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/script-running-pg-support-queries.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "To export LangSmith usage:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Status update\n\nThese scripts update the status of usage events in your installation to reflect that the events have been successfully processed by LangChain.\n\nThe scripts require passing in the corresponding `backfill_id`, which will be confirmed by your LangChain rep.\n\nTo update LangSmith trace usage:",
+      "language": "unknown"
+    },
+    {
+      "code": "To update LangSmith usage:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Status update",
+      "id": "status-update"
+    }
+  ],
+  "url": "llms-txt#run-the-export-script-with-customer-information-as-variables",
+  "links": []
+}

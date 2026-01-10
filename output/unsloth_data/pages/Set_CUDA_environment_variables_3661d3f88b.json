@@ -1,0 +1,8 @@
+{
+  "title": "Set CUDA environment variables",
+  "content": "ENV CUDA_HOME=/usr/local/cuda-13.0/\nENV CUDA_PATH=$CUDA_HOME\nENV PATH=$CUDA_HOME/bin:$PATH\nENV LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH\nENV C_INCLUDE_PATH=$CUDA_HOME/include:$C_INCLUDE_PATH\nENV CPLUS_INCLUDE_PATH=$CUDA_HOME/include:$CPLUS_INCLUDE_PATH",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#set-cuda-environment-variables",
+  "links": []
+}

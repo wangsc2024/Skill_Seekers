@@ -1,0 +1,210 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+  "title": "Concurrent Agents — AutoGen",
+  "content": "In this section, we explore the use of multiple agents working concurrently. We cover three main patterns:\n\nSingle Message & Multiple Processors Demonstrates how a single message can be processed by multiple agents subscribed to the same topic simultaneously.\n\nMultiple Messages & Multiple Processors Illustrates how specific message types can be routed to dedicated agents based on topics.\n\nDirect Messaging Focuses on sending messages between agents and from the runtime to agents.\n\nThe first pattern shows how a single message can be processed by multiple agents simultaneously:\n\nEach Processor agent subscribes to the default topic using the default_subscription() decorator.\n\nWhen publishing a message to the default topic, all registered agents will process the message independently.\n\nBelow, we are subscribing Processor using the default_subscription() decorator, there’s an alternative way to subscribe an agent without using decorators altogether as shown in Subscribe and Publish to Topics, this way the same agent class can be subscribed to different topics.\n\nSecond, this pattern demonstrates routing different types of messages to specific processors:\n\nUrgentProcessor subscribes to the “urgent” topic\n\nNormalProcessor subscribes to the “normal” topic\n\nWe make an agent subscribe to a specific topic type using the type_subscription() decorator.\n\nAfter registering the agents, we can publish messages to the “urgent” and “normal” topics:\n\nIn the previous example, we relied on console printing to verify task completion. However, in real applications, we typically want to collect and process the results programmatically.\n\nTo collect these messages, we’ll use a ClosureAgent. We’ve defined a dedicated topic TASK_RESULTS_TOPIC_TYPE where both UrgentProcessor and NormalProcessor publish their results. The ClosureAgent will then process messages from this topic.\n\nIn contrast to the previous patterns, this pattern focuses on direct messages. Here we demonstrate two ways to send them:\n\nDirect messaging between agents\n\nSending messages from the runtime to specific agents\n\nThings to consider in the example below:\n\nMessages are addressed using the AgentId.\n\nThe sender can expect to receive a response from the target agent.\n\nWe register the WorkerAgent class only once; however, we send tasks to two different workers.\n\nHow? As stated in Agent lifecycle, when delivering a message using an AgentId, the runtime will either fetch the instance or create one if it doesn’t exist. In this case, the runtime creates two instances of workers when sending those two messages.\n\nIf you’re interested in more about concurrent processing, check out the Mixture of Agents pattern, which relies heavily on concurrent agents.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Concurrent Agents#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Single Message & Multiple Processors#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Multiple messages & Multiple Processors#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Collecting Results#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Direct Messages#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Additional Resources#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "import asyncio\nfrom dataclasses import dataclass\n\nfrom autogen_core import (\n    AgentId,\n    ClosureAgent,\n    ClosureContext,\n    DefaultTopicId,\n    MessageContext,\n    RoutedAgent,\n    SingleThreadedAgentRuntime,\n    TopicId,\n    TypeSubscription,\n    default_subscription,\n    message_handler,\n    type_subscription,\n)",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nfrom dataclasses import dataclass\n\nfrom autogen_core import (\n    AgentId,\n    ClosureAgent,\n    ClosureContext,\n    DefaultTopicId,\n    MessageContext,\n    RoutedAgent,\n    SingleThreadedAgentRuntime,\n    TopicId,\n    TypeSubscription,\n    default_subscription,\n    message_handler,\n    type_subscription,\n)",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Task:\n    task_id: str\n\n\n@dataclass\nclass TaskResponse:\n    task_id: str\n    result: str",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Task:\n    task_id: str\n\n\n@dataclass\nclass TaskResponse:\n    task_id: str\n    result: str",
+      "language": "python"
+    },
+    {
+      "code": "@default_subscription\nclass Processor(RoutedAgent):\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> None:\n        print(f\"{self._description} starting task {message.task_id}\")\n        await asyncio.sleep(2)  # Simulate work\n        print(f\"{self._description} finished task {message.task_id}\")",
+      "language": "python"
+    },
+    {
+      "code": "@default_subscription\nclass Processor(RoutedAgent):\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> None:\n        print(f\"{self._description} starting task {message.task_id}\")\n        await asyncio.sleep(2)  # Simulate work\n        print(f\"{self._description} finished task {message.task_id}\")",
+      "language": "python"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\n\nawait Processor.register(runtime, \"agent_1\", lambda: Processor(\"Agent 1\"))\nawait Processor.register(runtime, \"agent_2\", lambda: Processor(\"Agent 2\"))\n\nruntime.start()\n\nawait runtime.publish_message(Task(task_id=\"task-1\"), topic_id=DefaultTopicId())\n\nawait runtime.stop_when_idle()",
+      "language": "csharp"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\n\nawait Processor.register(runtime, \"agent_1\", lambda: Processor(\"Agent 1\"))\nawait Processor.register(runtime, \"agent_2\", lambda: Processor(\"Agent 2\"))\n\nruntime.start()\n\nawait runtime.publish_message(Task(task_id=\"task-1\"), topic_id=DefaultTopicId())\n\nawait runtime.stop_when_idle()",
+      "language": "csharp"
+    },
+    {
+      "code": "Agent 1 starting task task-1\nAgent 2 starting task task-1\nAgent 1 finished task task-1\nAgent 2 finished task task-1",
+      "language": "unknown"
+    },
+    {
+      "code": "Agent 1 starting task task-1\nAgent 2 starting task task-1\nAgent 1 finished task task-1\nAgent 2 finished task task-1",
+      "language": "unknown"
+    },
+    {
+      "code": "TASK_RESULTS_TOPIC_TYPE = \"task-results\"\ntask_results_topic_id = TopicId(type=TASK_RESULTS_TOPIC_TYPE, source=\"default\")\n\n\n@type_subscription(topic_type=\"urgent\")\nclass UrgentProcessor(RoutedAgent):\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> None:\n        print(f\"Urgent processor starting task {message.task_id}\")\n        await asyncio.sleep(1)  # Simulate work\n        print(f\"Urgent processor finished task {message.task_id}\")\n\n        task_response = TaskResponse(task_id=message.task_id, result=\"Results by Urgent Processor\")\n        await self.publish_message(task_response, topic_id=task_results_topic_id)\n\n\n@type_subscription(topic_type=\"normal\")\nclass NormalProcessor(RoutedAgent):\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> None:\n        print(f\"Normal processor starting task {message.task_id}\")\n        await asyncio.sleep(3)  # Simulate work\n        print(f\"Normal processor finished task {message.task_id}\")\n\n        task_response = TaskResponse(task_id=message.task_id, result=\"Results by Normal Processor\")\n        await self.publish_message(task_response, topic_id=task_results_topic_id)",
+      "language": "python"
+    },
+    {
+      "code": "TASK_RESULTS_TOPIC_TYPE = \"task-results\"\ntask_results_topic_id = TopicId(type=TASK_RESULTS_TOPIC_TYPE, source=\"default\")\n\n\n@type_subscription(topic_type=\"urgent\")\nclass UrgentProcessor(RoutedAgent):\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> None:\n        print(f\"Urgent processor starting task {message.task_id}\")\n        await asyncio.sleep(1)  # Simulate work\n        print(f\"Urgent processor finished task {message.task_id}\")\n\n        task_response = TaskResponse(task_id=message.task_id, result=\"Results by Urgent Processor\")\n        await self.publish_message(task_response, topic_id=task_results_topic_id)\n\n\n@type_subscription(topic_type=\"normal\")\nclass NormalProcessor(RoutedAgent):\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> None:\n        print(f\"Normal processor starting task {message.task_id}\")\n        await asyncio.sleep(3)  # Simulate work\n        print(f\"Normal processor finished task {message.task_id}\")\n\n        task_response = TaskResponse(task_id=message.task_id, result=\"Results by Normal Processor\")\n        await self.publish_message(task_response, topic_id=task_results_topic_id)",
+      "language": "python"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\n\nawait UrgentProcessor.register(runtime, \"urgent_processor\", lambda: UrgentProcessor(\"Urgent Processor\"))\nawait NormalProcessor.register(runtime, \"normal_processor\", lambda: NormalProcessor(\"Normal Processor\"))\n\nruntime.start()\n\nawait runtime.publish_message(Task(task_id=\"normal-1\"), topic_id=TopicId(type=\"normal\", source=\"default\"))\nawait runtime.publish_message(Task(task_id=\"urgent-1\"), topic_id=TopicId(type=\"urgent\", source=\"default\"))\n\nawait runtime.stop_when_idle()",
+      "language": "csharp"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\n\nawait UrgentProcessor.register(runtime, \"urgent_processor\", lambda: UrgentProcessor(\"Urgent Processor\"))\nawait NormalProcessor.register(runtime, \"normal_processor\", lambda: NormalProcessor(\"Normal Processor\"))\n\nruntime.start()\n\nawait runtime.publish_message(Task(task_id=\"normal-1\"), topic_id=TopicId(type=\"normal\", source=\"default\"))\nawait runtime.publish_message(Task(task_id=\"urgent-1\"), topic_id=TopicId(type=\"urgent\", source=\"default\"))\n\nawait runtime.stop_when_idle()",
+      "language": "csharp"
+    },
+    {
+      "code": "Normal processor starting task normal-1\nUrgent processor starting task urgent-1\nUrgent processor finished task urgent-1\nNormal processor finished task normal-1",
+      "language": "unknown"
+    },
+    {
+      "code": "Normal processor starting task normal-1\nUrgent processor starting task urgent-1\nUrgent processor finished task urgent-1\nNormal processor finished task normal-1",
+      "language": "unknown"
+    },
+    {
+      "code": "queue = asyncio.Queue[TaskResponse]()\n\n\nasync def collect_result(_agent: ClosureContext, message: TaskResponse, ctx: MessageContext) -> None:\n    await queue.put(message)\n\n\nruntime.start()\n\nCLOSURE_AGENT_TYPE = \"collect_result_agent\"\nawait ClosureAgent.register_closure(\n    runtime,\n    CLOSURE_AGENT_TYPE,\n    collect_result,\n    subscriptions=lambda: [TypeSubscription(topic_type=TASK_RESULTS_TOPIC_TYPE, agent_type=CLOSURE_AGENT_TYPE)],\n)\n\nawait runtime.publish_message(Task(task_id=\"normal-1\"), topic_id=TopicId(type=\"normal\", source=\"default\"))\nawait runtime.publish_message(Task(task_id=\"urgent-1\"), topic_id=TopicId(type=\"urgent\", source=\"default\"))\n\nawait runtime.stop_when_idle()",
+      "language": "python"
+    },
+    {
+      "code": "queue = asyncio.Queue[TaskResponse]()\n\n\nasync def collect_result(_agent: ClosureContext, message: TaskResponse, ctx: MessageContext) -> None:\n    await queue.put(message)\n\n\nruntime.start()\n\nCLOSURE_AGENT_TYPE = \"collect_result_agent\"\nawait ClosureAgent.register_closure(\n    runtime,\n    CLOSURE_AGENT_TYPE,\n    collect_result,\n    subscriptions=lambda: [TypeSubscription(topic_type=TASK_RESULTS_TOPIC_TYPE, agent_type=CLOSURE_AGENT_TYPE)],\n)\n\nawait runtime.publish_message(Task(task_id=\"normal-1\"), topic_id=TopicId(type=\"normal\", source=\"default\"))\nawait runtime.publish_message(Task(task_id=\"urgent-1\"), topic_id=TopicId(type=\"urgent\", source=\"default\"))\n\nawait runtime.stop_when_idle()",
+      "language": "python"
+    },
+    {
+      "code": "Normal processor starting task normal-1\nUrgent processor starting task urgent-1\nUrgent processor finished task urgent-1\nNormal processor finished task normal-1",
+      "language": "unknown"
+    },
+    {
+      "code": "Normal processor starting task normal-1\nUrgent processor starting task urgent-1\nUrgent processor finished task urgent-1\nNormal processor finished task normal-1",
+      "language": "unknown"
+    },
+    {
+      "code": "while not queue.empty():\n    print(await queue.get())",
+      "language": "python"
+    },
+    {
+      "code": "while not queue.empty():\n    print(await queue.get())",
+      "language": "python"
+    },
+    {
+      "code": "TaskResponse(task_id='urgent-1', result='Results by Urgent Processor')\nTaskResponse(task_id='normal-1', result='Results by Normal Processor')",
+      "language": "unknown"
+    },
+    {
+      "code": "TaskResponse(task_id='urgent-1', result='Results by Urgent Processor')\nTaskResponse(task_id='normal-1', result='Results by Normal Processor')",
+      "language": "unknown"
+    },
+    {
+      "code": "class WorkerAgent(RoutedAgent):\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> TaskResponse:\n        print(f\"{self.id} starting task {message.task_id}\")\n        await asyncio.sleep(2)  # Simulate work\n        print(f\"{self.id} finished task {message.task_id}\")\n        return TaskResponse(task_id=message.task_id, result=f\"Results by {self.id}\")\n\n\nclass DelegatorAgent(RoutedAgent):\n    def __init__(self, description: str, worker_type: str):\n        super().__init__(description)\n        self.worker_instances = [AgentId(worker_type, f\"{worker_type}-1\"), AgentId(worker_type, f\"{worker_type}-2\")]\n\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> TaskResponse:\n        print(f\"Delegator received task {message.task_id}.\")\n\n        subtask1 = Task(task_id=\"task-part-1\")\n        subtask2 = Task(task_id=\"task-part-2\")\n\n        worker1_result, worker2_result = await asyncio.gather(\n            self.send_message(subtask1, self.worker_instances[0]), self.send_message(subtask2, self.worker_instances[1])\n        )\n\n        combined_result = f\"Part 1: {worker1_result.result}, \" f\"Part 2: {worker2_result.result}\"\n        task_response = TaskResponse(task_id=message.task_id, result=combined_result)\n        return task_response",
+      "language": "python"
+    },
+    {
+      "code": "class WorkerAgent(RoutedAgent):\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> TaskResponse:\n        print(f\"{self.id} starting task {message.task_id}\")\n        await asyncio.sleep(2)  # Simulate work\n        print(f\"{self.id} finished task {message.task_id}\")\n        return TaskResponse(task_id=message.task_id, result=f\"Results by {self.id}\")\n\n\nclass DelegatorAgent(RoutedAgent):\n    def __init__(self, description: str, worker_type: str):\n        super().__init__(description)\n        self.worker_instances = [AgentId(worker_type, f\"{worker_type}-1\"), AgentId(worker_type, f\"{worker_type}-2\")]\n\n    @message_handler\n    async def on_task(self, message: Task, ctx: MessageContext) -> TaskResponse:\n        print(f\"Delegator received task {message.task_id}.\")\n\n        subtask1 = Task(task_id=\"task-part-1\")\n        subtask2 = Task(task_id=\"task-part-2\")\n\n        worker1_result, worker2_result = await asyncio.gather(\n            self.send_message(subtask1, self.worker_instances[0]), self.send_message(subtask2, self.worker_instances[1])\n        )\n\n        combined_result = f\"Part 1: {worker1_result.result}, \" f\"Part 2: {worker2_result.result}\"\n        task_response = TaskResponse(task_id=message.task_id, result=combined_result)\n        return task_response",
+      "language": "python"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\n\nawait WorkerAgent.register(runtime, \"worker\", lambda: WorkerAgent(\"Worker Agent\"))\nawait DelegatorAgent.register(runtime, \"delegator\", lambda: DelegatorAgent(\"Delegator Agent\", \"worker\"))\n\nruntime.start()\n\ndelegator = AgentId(\"delegator\", \"default\")\nresponse = await runtime.send_message(Task(task_id=\"main-task\"), recipient=delegator)\n\nprint(f\"Final result: {response.result}\")\nawait runtime.stop_when_idle()",
+      "language": "python"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\n\nawait WorkerAgent.register(runtime, \"worker\", lambda: WorkerAgent(\"Worker Agent\"))\nawait DelegatorAgent.register(runtime, \"delegator\", lambda: DelegatorAgent(\"Delegator Agent\", \"worker\"))\n\nruntime.start()\n\ndelegator = AgentId(\"delegator\", \"default\")\nresponse = await runtime.send_message(Task(task_id=\"main-task\"), recipient=delegator)\n\nprint(f\"Final result: {response.result}\")\nawait runtime.stop_when_idle()",
+      "language": "python"
+    },
+    {
+      "code": "Delegator received task main-task.\nworker/worker-1 starting task task-part-1\nworker/worker-2 starting task task-part-2\nworker/worker-1 finished task task-part-1\nworker/worker-2 finished task task-part-2\nFinal result: Part 1: Results by worker/worker-1, Part 2: Results by worker/worker-2",
+      "language": "unknown"
+    },
+    {
+      "code": "Delegator received task main-task.\nworker/worker-1 starting task task-part-1\nworker/worker-2 starting task task-part-2\nworker/worker-1 finished task task-part-1\nworker/worker-2 finished task task-part-2\nFinal result: Part 1: Results by worker/worker-1, Part 2: Results by worker/worker-2",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

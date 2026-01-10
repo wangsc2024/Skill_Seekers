@@ -1,0 +1,8 @@
+{
+  "title": "Create Oauth Provider",
+  "content": "Source: https://docs.langchain.com/api-reference/auth-service-v2/create-oauth-provider\n\nhttps://api.host.langchain.com/openapi.json post /v2/auth/providers\nCreate a new OAuth provider.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-oauth-provider",
+  "links": []
+}

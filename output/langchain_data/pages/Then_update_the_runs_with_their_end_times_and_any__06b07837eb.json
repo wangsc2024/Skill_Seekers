@@ -1,0 +1,8 @@
+{
+  "title": "Then, update the runs with their end times and any outputs",
+  "content": "child_run_update = {\n    **child_run,\n    \"end_time\": datetime.now(timezone.utc).isoformat(),\n    \"outputs\": {\"answer\": \"Paris is the capital of France.\"},\n}\n\nparent_run_update = {\n    **parent_run,\n    \"end_time\": datetime.now(timezone.utc).isoformat(),\n    \"outputs\": {\"summary\": \"Discussion about France, including its capital.\"},\n}\n\npatches = [parent_run_update, child_run_update]\nbatch_ingest_runs(api_url, api_key, patches=patches)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#then,-update-the-runs-with-their-end-times-and-any-outputs",
+  "links": []
+}

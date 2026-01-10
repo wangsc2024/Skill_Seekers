@@ -1,0 +1,33 @@
+{
+  "title": "tools = [DuckDuckGoSearchRun(rate_limiter=rate_limiter)]",
+  "content": "tools = [TavilySearchResults(max_results=5, rate_limiter=rate_limiter)]\n\nagent = create_agent(gpt_3_5_turbo, tools=tools, system_prompt=instructions)\npython  theme={null}\nfake_production_inputs = [\n    \"Alan turing's early childhood\",\n    \"Economic impacts of the European Union\",\n    \"Underrated philosophers\",\n    \"History of the Roxie theater in San Francisco\",\n    \"ELI5: gravitational waves\",\n    \"The arguments for and against a parliamentary system\",\n    \"Pivotal moments in music history\",\n    \"Big ideas in programming languages\",\n    \"Big questions in biology\",\n    \"The relationship between math and reality\",\n    \"What makes someone funny\",\n]\n\nagent.batch(\n    [{\"messages\": [{\"role\": \"user\", \"content\": content}]} for content in fake_production_inputs],\n)\npython  theme={null}\nfrom datetime import datetime, timedelta, timezone\nfrom uuid import uuid4\nfrom langsmith import Client\nfrom langsmith.beta import convert_runs_to_test",
+  "code_samples": [
+    {
+      "code": "### Simulate production data\n\nNow lets simulate some production data:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Convert Production Traces to Experiment\n\nThe first step is to generate a dataset based on the production *inputs*. Then copy over all the traces to serve as a baseline experiment.\n\n### Select runs to backtest on\n\nYou can select the runs to backtest on using the `filter` argument of `list_runs`. The `filter` argument uses the LangSmith [trace query syntax](/langsmith/trace-query-syntax) to select runs.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Simulate production data",
+      "id": "simulate-production-data"
+    },
+    {
+      "level": "h2",
+      "text": "Convert Production Traces to Experiment",
+      "id": "convert-production-traces-to-experiment"
+    },
+    {
+      "level": "h3",
+      "text": "Select runs to backtest on",
+      "id": "select-runs-to-backtest-on"
+    }
+  ],
+  "url": "llms-txt#tools-=-[duckduckgosearchrun(rate_limiter=rate_limiter)]",
+  "links": []
+}

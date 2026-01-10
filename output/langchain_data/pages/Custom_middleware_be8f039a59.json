@@ -1,0 +1,170 @@
+{
+  "title": "Custom middleware",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/middleware/custom\n\nBuild custom middleware by implementing hooks that run at specific points in the agent execution flow.\n\nMiddleware provides two styles of hooks to intercept agent execution:\n\n<CardGroup cols={2}>\n  <Card title=\"Node-style hooks\" icon=\"share-nodes\" href=\"#node-style-hooks\">\n    Run sequentially at specific execution points.\n  </Card>\n\n<Card title=\"Wrap-style hooks\" icon=\"container-storage\" href=\"#wrap-style-hooks\">\n    Run around each model or tool call.\n  </Card>\n</CardGroup>\n\nRun sequentially at specific execution points. Use for logging, validation, and state updates.\n\n* `before_agent` - Before agent starts (once per invocation)\n* `before_model` - Before each model call\n* `after_model` - After each model response\n* `after_agent` - After agent completes (once per invocation)\n\n<Tabs>\n  <Tab title=\"Decorator\">\n    \n  </Tab>\n\n<Tab title=\"Class\">\n    \n  </Tab>\n</Tabs>\n\nIntercept execution and control when the handler is called. Use for retries, caching, and transformation.\n\nYou decide if the handler is called zero times (short-circuit), once (normal flow), or multiple times (retry logic).\n\n* `wrap_model_call` - Around each model call\n* `wrap_tool_call` - Around each tool call\n\n<Tabs>\n  <Tab title=\"Decorator\">\n    \n  </Tab>\n\n<Tab title=\"Class\">\n    \n  </Tab>\n</Tabs>\n\nYou can create middleware in two ways:\n\n<CardGroup cols={2}>\n  <Card title=\"Decorator-based middleware\" icon=\"at\" href=\"#decorator-based-middleware\">\n    Quick and simple for single-hook middleware. Use decorators to wrap individual functions.\n  </Card>\n\n<Card title=\"Class-based middleware\" icon=\"brackets-curly\" href=\"#class-based-middleware\">\n    More powerful for complex middleware with multiple hooks or configuration.\n  </Card>\n</CardGroup>\n\n### Decorator-based middleware\n\nQuick and simple for single-hook middleware. Use decorators to wrap individual functions.\n\n**Available decorators:**\n\n* [`@before_agent`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.before_agent) - Runs before agent starts (once per invocation)\n* [`@before_model`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.before_model) - Runs before each model call\n* [`@after_model`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.after_model) - Runs after each model response\n* [`@after_agent`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.after_agent) - Runs after agent completes (once per invocation)\n\n* [`@wrap_model_call`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.wrap_model_call) - Wraps each model call with custom logic\n* [`@wrap_tool_call`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.wrap_tool_call) - Wraps each tool call with custom logic\n\n* [`@dynamic_prompt`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.dynamic_prompt) - Generates dynamic system prompts\n\n**When to use decorators:**\n\n* Single hook needed\n* No complex configuration\n* Quick prototyping\n\n### Class-based middleware\n\nMore powerful for complex middleware with multiple hooks or configuration. Use classes when you need to define both sync and async implementations for the same hook, or when you want to combine multiple hooks in a single middleware.\n\n**When to use classes:**\n\n* Defining both sync and async implementations for the same hook\n* Multiple hooks needed in a single middleware\n* Complex configuration required (e.g., configurable thresholds, custom models)\n* Reuse across projects with init-time configuration\n\n## Custom state schema\n\nMiddleware can extend the agent's state with custom properties. This enables middleware to:\n\n* **Track state across execution**: Maintain counters, flags, or other values that persist throughout the agent's execution lifecycle\n\n* **Share data between hooks**: Pass information from `before_model` to `after_model` or between different middleware instances\n\n* **Implement cross-cutting concerns**: Add functionality like rate limiting, usage tracking, user context, or audit logging without modifying the core agent logic\n\n* **Make conditional decisions**: Use accumulated state to determine whether to continue execution, jump to different nodes, or modify behavior dynamically\n\n<Tabs>\n  <Tab title=\"Decorator\">\n    \n  </Tab>\n\n<Tab title=\"Class\">\n    \n  </Tab>\n</Tabs>\n\nWhen using multiple middleware, understand how they execute:\n\n<Accordion title=\"Execution flow\">\n  **Before hooks run in order:**\n\n1. `middleware1.before_agent()`\n  2. `middleware2.before_agent()`\n  3. `middleware3.before_agent()`\n\n**Agent loop starts**\n\n4. `middleware1.before_model()`\n  5. `middleware2.before_model()`\n  6. `middleware3.before_model()`\n\n**Wrap hooks nest like function calls:**\n\n7. `middleware1.wrap_model_call()` → `middleware2.wrap_model_call()` → `middleware3.wrap_model_call()` → model\n\n**After hooks run in reverse order:**\n\n8. `middleware3.after_model()`\n  9. `middleware2.after_model()`\n  10. `middleware1.after_model()`\n\n11. `middleware3.after_agent()`\n  12. `middleware2.after_agent()`\n  13. `middleware1.after_agent()`\n</Accordion>\n\n* `before_*` hooks: First to last\n* `after_*` hooks: Last to first (reverse)\n* `wrap_*` hooks: Nested (first middleware wraps all others)\n\nTo exit early from middleware, return a dictionary with `jump_to`:\n\n**Available jump targets:**\n\n* `'end'`: Jump to the end of the agent execution (or the first `after_agent` hook)\n* `'tools'`: Jump to the tools node\n* `'model'`: Jump to the model node (or the first `before_model` hook)\n\n<Tabs>\n  <Tab title=\"Decorator\">\n    \n  </Tab>\n\n<Tab title=\"Class\">\n    \n  </Tab>\n</Tabs>\n\n1. Keep middleware focused - each should do one thing well\n2. Handle errors gracefully - don't let middleware errors crash the agent\n3. **Use appropriate hook types**:\n   * Node-style for sequential logic (logging, validation)\n   * Wrap-style for control flow (retry, fallback, caching)\n4. Clearly document any custom state properties\n5. Unit test middleware independently before integrating\n6. Consider execution order - place critical middleware first in the list\n7. Use built-in middleware when possible\n\n### Dynamic model selection\n\n<Tabs>\n  <Tab title=\"Decorator\">\n    \n  </Tab>\n\n<Tab title=\"Class\">\n    \n  </Tab>\n</Tabs>\n\n### Tool call monitoring\n\n<Tabs>\n  <Tab title=\"Decorator\">\n    \n  </Tab>\n\n<Tab title=\"Class\">\n    \n  </Tab>\n</Tabs>\n\n### Dynamically selecting tools\n\nSelect relevant tools at runtime to improve performance and accuracy.\n\n* **Shorter prompts** - Reduce complexity by exposing only relevant tools\n* **Better accuracy** - Models choose correctly from fewer options\n* **Permission control** - Dynamically filter tools based on user access\n\n<Tabs>\n  <Tab title=\"Decorator\">\n    \n  </Tab>\n\n<Tab title=\"Class\">\n    \n  </Tab>\n</Tabs>\n\n### Working with system messages\n\nModify system messages in middleware using the `system_message` field on `ModelRequest`. The `system_message` field contains a [`SystemMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.SystemMessage) object (even if the agent was created with a string `system_prompt`).\n\n**Example: Adding context to system message**\n\n<Tabs>\n  <Tab title=\"Decorator\">\n    \n  </Tab>\n\n<Tab title=\"Class\">\n    \n  </Tab>\n</Tabs>\n\n**Example: Working with cache control (Anthropic)**\n\nWhen working with Anthropic models, you can use structured content blocks with cache control directives to cache large system prompts:\n\n<Tabs>\n  <Tab title=\"Decorator\">\n    \n  </Tab>\n\n<Tab title=\"Class\">\n    \n  </Tab>\n</Tabs>\n\n* `ModelRequest.system_message` is always a [`SystemMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.SystemMessage) object, even if the agent was created with `system_prompt=\"string\"`\n* Use `SystemMessage.content_blocks` to access content as a list of blocks, regardless of whether the original content was a string or list\n* When modifying system messages, use `content_blocks` and append new blocks to preserve existing structure\n* You can pass [`SystemMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.SystemMessage) objects directly to `create_agent`'s `system_prompt` parameter for advanced use cases like cache control\n\n## Additional resources\n\n* [Middleware API reference](https://reference.langchain.com/python/langchain/middleware/)\n* [Built-in middleware](/oss/python/langchain/middleware/built-in)\n* [Testing agents](/oss/python/langchain/test)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/middleware/custom.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Class\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Wrap-style hooks\n\nIntercept execution and control when the handler is called. Use for retries, caching, and transformation.\n\nYou decide if the handler is called zero times (short-circuit), once (normal flow), or multiple times (retry logic).\n\n**Available hooks:**\n\n* `wrap_model_call` - Around each model call\n* `wrap_tool_call` - Around each tool call\n\n**Example:**\n\n<Tabs>\n  <Tab title=\"Decorator\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Class\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Create middleware\n\nYou can create middleware in two ways:\n\n<CardGroup cols={2}>\n  <Card title=\"Decorator-based middleware\" icon=\"at\" href=\"#decorator-based-middleware\">\n    Quick and simple for single-hook middleware. Use decorators to wrap individual functions.\n  </Card>\n\n  <Card title=\"Class-based middleware\" icon=\"brackets-curly\" href=\"#class-based-middleware\">\n    More powerful for complex middleware with multiple hooks or configuration.\n  </Card>\n</CardGroup>\n\n### Decorator-based middleware\n\nQuick and simple for single-hook middleware. Use decorators to wrap individual functions.\n\n**Available decorators:**\n\n**Node-style:**\n\n* [`@before_agent`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.before_agent) - Runs before agent starts (once per invocation)\n* [`@before_model`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.before_model) - Runs before each model call\n* [`@after_model`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.after_model) - Runs after each model response\n* [`@after_agent`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.after_agent) - Runs after agent completes (once per invocation)\n\n**Wrap-style:**\n\n* [`@wrap_model_call`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.wrap_model_call) - Wraps each model call with custom logic\n* [`@wrap_tool_call`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.wrap_tool_call) - Wraps each tool call with custom logic\n\n**Convenience:**\n\n* [`@dynamic_prompt`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.dynamic_prompt) - Generates dynamic system prompts\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**When to use decorators:**\n\n* Single hook needed\n* No complex configuration\n* Quick prototyping\n\n### Class-based middleware\n\nMore powerful for complex middleware with multiple hooks or configuration. Use classes when you need to define both sync and async implementations for the same hook, or when you want to combine multiple hooks in a single middleware.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**When to use classes:**\n\n* Defining both sync and async implementations for the same hook\n* Multiple hooks needed in a single middleware\n* Complex configuration required (e.g., configurable thresholds, custom models)\n* Reuse across projects with init-time configuration\n\n## Custom state schema\n\nMiddleware can extend the agent's state with custom properties. This enables middleware to:\n\n* **Track state across execution**: Maintain counters, flags, or other values that persist throughout the agent's execution lifecycle\n\n* **Share data between hooks**: Pass information from `before_model` to `after_model` or between different middleware instances\n\n* **Implement cross-cutting concerns**: Add functionality like rate limiting, usage tracking, user context, or audit logging without modifying the core agent logic\n\n* **Make conditional decisions**: Use accumulated state to determine whether to continue execution, jump to different nodes, or modify behavior dynamically\n\n<Tabs>\n  <Tab title=\"Decorator\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Class\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Execution order\n\nWhen using multiple middleware, understand how they execute:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Execution flow\">\n  **Before hooks run in order:**\n\n  1. `middleware1.before_agent()`\n  2. `middleware2.before_agent()`\n  3. `middleware3.before_agent()`\n\n  **Agent loop starts**\n\n  4. `middleware1.before_model()`\n  5. `middleware2.before_model()`\n  6. `middleware3.before_model()`\n\n  **Wrap hooks nest like function calls:**\n\n  7. `middleware1.wrap_model_call()` → `middleware2.wrap_model_call()` → `middleware3.wrap_model_call()` → model\n\n  **After hooks run in reverse order:**\n\n  8. `middleware3.after_model()`\n  9. `middleware2.after_model()`\n  10. `middleware1.after_model()`\n\n  **Agent loop ends**\n\n  11. `middleware3.after_agent()`\n  12. `middleware2.after_agent()`\n  13. `middleware1.after_agent()`\n</Accordion>\n\n**Key rules:**\n\n* `before_*` hooks: First to last\n* `after_*` hooks: Last to first (reverse)\n* `wrap_*` hooks: Nested (first middleware wraps all others)\n\n## Agent jumps\n\nTo exit early from middleware, return a dictionary with `jump_to`:\n\n**Available jump targets:**\n\n* `'end'`: Jump to the end of the agent execution (or the first `after_agent` hook)\n* `'tools'`: Jump to the tools node\n* `'model'`: Jump to the model node (or the first `before_model` hook)\n\n<Tabs>\n  <Tab title=\"Decorator\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Class\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Best practices\n\n1. Keep middleware focused - each should do one thing well\n2. Handle errors gracefully - don't let middleware errors crash the agent\n3. **Use appropriate hook types**:\n   * Node-style for sequential logic (logging, validation)\n   * Wrap-style for control flow (retry, fallback, caching)\n4. Clearly document any custom state properties\n5. Unit test middleware independently before integrating\n6. Consider execution order - place critical middleware first in the list\n7. Use built-in middleware when possible\n\n## Examples\n\n### Dynamic model selection\n\n<Tabs>\n  <Tab title=\"Decorator\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Class\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Tool call monitoring\n\n<Tabs>\n  <Tab title=\"Decorator\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Class\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Dynamically selecting tools\n\nSelect relevant tools at runtime to improve performance and accuracy.\n\n**Benefits:**\n\n* **Shorter prompts** - Reduce complexity by exposing only relevant tools\n* **Better accuracy** - Models choose correctly from fewer options\n* **Permission control** - Dynamically filter tools based on user access\n\n<Tabs>\n  <Tab title=\"Decorator\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Class\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Working with system messages\n\nModify system messages in middleware using the `system_message` field on `ModelRequest`. The `system_message` field contains a [`SystemMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.SystemMessage) object (even if the agent was created with a string `system_prompt`).\n\n**Example: Adding context to system message**\n\n<Tabs>\n  <Tab title=\"Decorator\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Class\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n**Example: Working with cache control (Anthropic)**\n\nWhen working with Anthropic models, you can use structured content blocks with cache control directives to cache large system prompts:\n\n<Tabs>\n  <Tab title=\"Decorator\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Class\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Hooks",
+      "id": "hooks"
+    },
+    {
+      "level": "h3",
+      "text": "Node-style hooks",
+      "id": "node-style-hooks"
+    },
+    {
+      "level": "h3",
+      "text": "Wrap-style hooks",
+      "id": "wrap-style-hooks"
+    },
+    {
+      "level": "h2",
+      "text": "Create middleware",
+      "id": "create-middleware"
+    },
+    {
+      "level": "h3",
+      "text": "Decorator-based middleware",
+      "id": "decorator-based-middleware"
+    },
+    {
+      "level": "h3",
+      "text": "Class-based middleware",
+      "id": "class-based-middleware"
+    },
+    {
+      "level": "h2",
+      "text": "Custom state schema",
+      "id": "custom-state-schema"
+    },
+    {
+      "level": "h2",
+      "text": "Execution order",
+      "id": "execution-order"
+    },
+    {
+      "level": "h2",
+      "text": "Agent jumps",
+      "id": "agent-jumps"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Dynamic model selection",
+      "id": "dynamic-model-selection"
+    },
+    {
+      "level": "h3",
+      "text": "Tool call monitoring",
+      "id": "tool-call-monitoring"
+    },
+    {
+      "level": "h3",
+      "text": "Dynamically selecting tools",
+      "id": "dynamically-selecting-tools"
+    },
+    {
+      "level": "h3",
+      "text": "Working with system messages",
+      "id": "working-with-system-messages"
+    },
+    {
+      "level": "h2",
+      "text": "Additional resources",
+      "id": "additional-resources"
+    }
+  ],
+  "url": "llms-txt#custom-middleware",
+  "links": []
+}

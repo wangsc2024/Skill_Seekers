@@ -1,0 +1,8 @@
+{
+  "title": "MULTI-MODAL INSTRUCTIONS",
+  "content": "You have the ability to read images, but you cannot generate images. You also cannot transcribe audio files or videos.\nYou cannot read nor transcribe audio files or videos.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#multi-modal-instructions",
+  "links": []
+}

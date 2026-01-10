@@ -1,0 +1,92 @@
+{
+  "title": "Run tests to ensure your changes don't break existing functionality",
+  "content": "make test\npython`, ` yaml  theme={null}\n---\ntitle: \"Clear, specific title\"\nsidebarTitle: \"Short title for the sidebar (optional)\"\n---\nmdx  theme={null}\n:::python\nPython-specific content. In real docs, the preceding backslash (before `python`) is omitted.\n:::\n\n:::js\nJavaScript/TypeScript-specific content. In real docs, the preceding backslash (before `js`) is omitted.\n:::\n\nContent for both languages (not wrapped)\nmdx  theme={null}\nSee @[`ChatAnthropic`] for all configuration options.\n\nThe @[`bind_tools`][ChatAnthropic.bind_tools] method accepts...\n```\n\nThe build pipeline transforms these into proper markdown links based on the current language scope (Python or JavaScript). For example, `@[ChatAnthropic]` becomes a link to the Python or JS API reference page depending on which version of the docs is being built, **but only if an entry exists in the `link_map.py` file!** See below for details.\n\n<Accordion title=\"How autolinks work\">\n  The `@[]` syntax is processed by [`handle_auto_links.py`](https://github.com/langchain-ai/docs/blob/main/pipeline/preprocessors/handle_auto_links.py). It looks up link keys in [`link_map.py`](https://github.com/langchain-ai/docs/blob/main/pipeline/preprocessors/link_map.py), which contains dictionary mappings for both Python and JavaScript scopes.\n\n**Supported formats:**\n\n| Syntax                   | Result                                                                                     |\n  | ------------------------ | ------------------------------------------------------------------------------------------ |\n  | `@[ChatAnthropic]`       | Link with \"ChatAnthropic\" as the displayed text                                            |\n  | ``@[`ChatAnthropic`]``   | Link with `` `ChatAnthropic` `` (code formatted) as text                                   |\n  | `@[text][ChatAnthropic]` | Link with \"text\" as text and `ChatAnthropic` as the key in the link map                    |\n  | `\\@[ChatAnthropic]`      | Escaped: renders as literal `@[ChatAnthropic]` (no link – what's being used on this page!) |\n\n**Adding new links:**\n\nIf a link isn't found in the map, it will be left unchanged in the output. To add a new autolink:\n\n1. Open `pipeline/preprocessors/link_map.py`\n  2. Add an entry to the appropriate scope (`python` or `js`) in `LINK_MAPS`\n  3. The key is the link name used in `@[key]` or `@[text][key]`, the value is the path relative to the reference host\n</Accordion>\n\n**From API reference stubs to OSS docs:**\n\nSee the [`README`](https://github.com/langchain-ai/docs/blob/main/reference/python/README.md) for more information on linking from API reference stubs to Python OSS docs. Specifically see the `mkdocstrings` cross-reference [linking syntax](https://github.com/langchain-ai/docs/blob/main/reference/python/README.md#mkdocsmkdocstrings-python-cross-reference-linking-syntax).\n\nOur goal is to have the simplest developer setup possible. Should you experience any difficulty getting setup, please ask in the [community slack](https://www.langchain.com/join-community) or open a [forum post](https://forum.langchain.com/). Internal team members can reach out in the [#documentation](https://langchain.slack.com/archives/C04GWPE38LV) Slack channel.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/contributing/documentation.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "For more details, see the [available commands](https://github.com/langchain-ai/docs?tab=readme-ov-file#available-commands) section in the `README`.\n\n<Important>\n  All pull requests are automatically checked by CI/CD. The same linting and formatting standards will be enforced, and PRs cannot be merged if these checks fail.\n</Important>\n\n#### Publish to prod\n\n<Note>\n  Only internal team members can publish to production.\n</Note>\n\n<Accordion title=\"Instructions\">\n  Once your branch has been merged into `main`, you need to push the changes to `prod` for them to render on the live docs site. Use the [Publish documentation GH action](https://github.com/langchain-ai/docs/actions/workflows/publish.yml):\n\n  1. Go to [Publish documentation](https://github.com/langchain-ai/docs/actions/workflows/publish.yml).\n  2. Click the **Run workflow** button.\n  3. Select the **main** branch to deploy.\n  4. Click **Run workflow**.\n</Accordion>\n\n## Documentation types\n\nAll documentation falls under one of four categories:\n\n<CardGroup cols={2}>\n  <Card title=\"How-to guides\" icon=\"wrench\" href=\"#how-to-guides\">\n    Task-oriented instructions for users who know what they want to accomplish.\n  </Card>\n\n  <Card title=\"Conceptual guides\" icon=\"lightbulb\" href=\"#conceptual-guides\">\n    Explanations that provide deeper understanding and insights.\n  </Card>\n\n  <Card title=\"Reference\" icon=\"book\" href=\"#reference\">\n    Technical descriptions of APIs and implementation details.\n  </Card>\n\n  <Card title=\"Tutorials\" icon=\"graduation-cap\" href=\"#tutorials\">\n    Lessons that guide users through practical activities to build understanding.\n  </Card>\n</CardGroup>\n\n<Note>\n  Where applicable, all documentation must have both Python and JavaScript/TypeScript content. For more details, see the [co-locate Python and JavaScript/TypeScript content](#co-locate-python-and-javascripttypescript-content) section.\n</Note>\n\n### How-to guides\n\nHow-to guides are task-oriented instructions for users who know what they want to accomplish. Examples of how-to guides are on the [LangChain](/oss/python/langchain/overview) and [LangGraph](/oss/python/langgraph/overview) tabs.\n\n<AccordionGroup>\n  <Accordion title=\"Characteristics\">\n    * **Task-focused**: Focus on a specific task or problem\n    * **Step-by-step**: Break down the task into smaller steps\n    * **Hands-on**: Provide concrete examples and code snippets\n  </Accordion>\n\n  <Accordion title=\"Tips\">\n    * Focus on the **how** rather than the **why**\n    * Use concrete examples and code snippets\n    * Break down the task into smaller steps\n    * Link to related conceptual guides and references\n  </Accordion>\n\n  <Accordion title=\"Examples\">\n    * [Messages](/oss/python/langchain/messages)\n    * [Tools](/oss/python/langchain/tools)\n    * [Streaming](/oss/python/langgraph/streaming)\n  </Accordion>\n</AccordionGroup>\n\n### Conceptual guides\n\nConceptual guide cover core concepts abstractly, providing deep understanding.\n\n<AccordionGroup>\n  <Accordion title=\"Characteristics\">\n    * **Understanding-focused**: Explain why things work as they do\n    * **Broad perspective**: Higher and wider view than other types\n    * **Design-oriented**: Explain decisions and trade-offs\n    * **Context-rich**: Use analogies and comparisons\n  </Accordion>\n\n  <Accordion title=\"Tips\">\n    * Focus on the **\"why\"** rather than the \"how\"\n    * Provides supplementary information not necessarily required for feature usage\n    * Can use analogies and reference alternatives\n    * Avoid blending in too much reference content\n    * Link to related tutorials and how-to guides\n  </Accordion>\n\n  <Accordion title=\"Examples\">\n    * [Memory](/oss/python/concepts/memory)\n    * [Context](/oss/python/concepts/context)\n    * [Graph API](/oss/python/langgraph/graph-api)\n    * [Functional API](/oss/python/langgraph/functional-api)\n  </Accordion>\n</AccordionGroup>\n\n### Reference\n\nReference documentation contains detailed, low-level information describing exactly what functionality exists and how to use it.\n\n<CardGroup cols={2}>\n  <Card title=\"Python reference\" href=\"https://reference.langchain.com/python/\" icon=\"python\" arrow />\n\n  <Card title=\"JavaScript/TypeScript reference\" href=\"https://reference.langchain.com/javascript/\" icon=\"js\" arrow />\n</CardGroup>\n\nA good reference should:\n\n* Describe what exists (all parameters, options, return values)\n* Be comprehensive and structured for easy lookup\n* Serve as the authoritative source for technical details\n\n<AccordionGroup>\n  <Accordion title=\"Contributing to references\">\n    See the contributing guide for [Python reference docs](https://github.com/langchain-ai/docs/blob/main/reference/python/README.md).\n  </Accordion>\n\n  <Accordion title=\"LangChain reference best practices\">\n    * **Be consistent**; follow existing patterns for provider-specific documentation\n    * Include both basic usage (code snippets) and common edge cases/failure modes\n    * Note when features require specific versions\n  </Accordion>\n\n  <Accordion title=\"When to create new reference documentation\">\n    * New integrations or providers need dedicated reference pages\n    * Complex configuration options require detailed explanation\n    * API changes introduce new parameters or behavior\n    * Community frequently asks questions about specific functionality\n  </Accordion>\n</AccordionGroup>\n\n### Tutorials\n\nTutorials are longer form step-by-step guides that builds upon itself and takes users through a specific practical activity to build understanding. Tutorials are typically found on the [Learn](/oss/python/learn) tab.\n\n<Note>\n  We generally do not merge new tutorials from outside contributors without an acute need. If you feel that a certain topic is missing from docs or is not sufficiently covered, please [open a new issue](https://github.com/langchain-ai/docs/issues).\n</Note>\n\n<AccordionGroup>\n  <Accordion title=\"Characteristics\">\n    * **Practical**: Focus on practical activities to build understanding.\n    * **Step-by-step**: Break down the activity into smaller steps.\n    * **Hands-on**: Provide sequential, working code snippets.\n    * **Supplementary**: Provide additional context and information not necessarily required for feature usage.\n  </Accordion>\n\n  <Accordion title=\"Tips\">\n    * Code snippets should be sequential and working if the user follows the steps in order.\n    * Provide some context for the activity, but link to related conceptual guides and references for more detailed information.\n  </Accordion>\n\n  <Accordion title=\"Examples\">\n    * [Semantic search](/oss/python/langchain/knowledge-base)\n    * [RAG agent](/oss/python/langchain/rag)\n  </Accordion>\n</AccordionGroup>\n\n## Writing standards\n\n<Note>\n  Reference documentation has different standards - see the [reference docs contributing guide](https://github.com/langchain-ai/docs/blob/main/reference/python/README.md) for details.\n</Note>\n\n### Mintlify components\n\nUse [Mintlify components](https://mintlify.com/docs/text) to enhance readability:\n\n<Tabs>\n  <Tab title=\"Callouts\">\n    * `<Note>` for helpful supplementary information\n    * `<Warning>` for important cautions and breaking changes\n    * `<Tip>` for best practices and advice\n    * `<Info>` for neutral contextual information\n    * `<Check>` for success confirmations\n  </Tab>\n\n  <Tab title=\"Structure\">\n    * `<Steps>` for an overview of sequential procedures. **Not** for long lists of steps or tutorials.\n    * `<Tabs>` for platform-specific content.\n    * `<AccordionGroup>` and `<Accordion>` for nice-to-have information that can be collapsed by default (e.g., full code examples).\n    * `<CardGroup>` and `<Card>` for highlighting content.\n  </Tab>\n\n  <Tab title=\"Code\">\n    * `<CodeGroup>` for multiple language examples.\n    * Always specify language tags on code blocks (e.g., `",
+      "language": "unknown"
+    },
+    {
+      "code": "### Co-locate Python and JavaScript/TypeScript content\n\nAll documentation must be written in both Python and JavaScript/TypeScript when possible. To do so, we use a custom in-line syntax to differentiate between sections that should appear in one or both languages:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will generate two outputs (one for each language) at `/oss/python/concepts/foo.mdx` and `/oss/javascript/concepts/foo.mdx`. Each outputted page will need to be added to the `/src/docs.json` file to be included in the navigation.\n\n<Note>\n  We don't want a lack of parity to block contributions. If a feature is only available in one language, it's okay to have documentation only in that language until the other language catches up. In such cases, please include a note indicating that the feature is not yet available in the other language.\n\n  If you need help translating content between Python and JavaScript/TypeScript, please ask in the [community slack](https://www.langchain.com/join-community) or tag a maintainer in your PR.\n</Note>\n\n## Quality standards\n\n### General guidelines\n\n<AccordionGroup>\n  <Accordion title=\"Avoid duplication\">\n    Multiple pages covering the same material are difficult to maintain and cause confusion. There should be only one canonical page for each concept or feature. Link to other guides instead of re-explaining.\n  </Accordion>\n\n  <Accordion title=\"Link frequently\">\n    Documentation sections don't exist in a vacuum. Link to other sections frequently to allow users to learn about unfamiliar topics. This includes linking to API references and conceptual sections.\n  </Accordion>\n\n  <Accordion title=\"Be concise\">\n    Take a less-is-more approach. If another section with a good explanation exists, link to it rather than re-explain, unless your content presents a new angle.\n  </Accordion>\n</AccordionGroup>\n\n### Accessibility requirements\n\nEnsure documentation is accessible to all users:\n\n* Structure content for easy scanning with headers and lists\n* Use specific, actionable link text instead of \"click here\"\n* Include descriptive alt text for all images and diagrams\n\n### Cross-referencing\n\nUse consistent cross-references to connect docs with API reference documentation.\n\n**From docs to API reference:**\n\nUse the `@[]` syntax to link to API reference pages:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Documentation types",
+      "id": "documentation-types"
+    },
+    {
+      "level": "h3",
+      "text": "How-to guides",
+      "id": "how-to-guides"
+    },
+    {
+      "level": "h3",
+      "text": "Conceptual guides",
+      "id": "conceptual-guides"
+    },
+    {
+      "level": "h3",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "Tutorials",
+      "id": "tutorials"
+    },
+    {
+      "level": "h2",
+      "text": "Writing standards",
+      "id": "writing-standards"
+    },
+    {
+      "level": "h3",
+      "text": "Mintlify components",
+      "id": "mintlify-components"
+    },
+    {
+      "level": "h3",
+      "text": "Page structure",
+      "id": "page-structure"
+    },
+    {
+      "level": "h3",
+      "text": "Co-locate Python and JavaScript/TypeScript content",
+      "id": "co-locate-python-and-javascript/typescript-content"
+    },
+    {
+      "level": "h2",
+      "text": "Quality standards",
+      "id": "quality-standards"
+    },
+    {
+      "level": "h3",
+      "text": "General guidelines",
+      "id": "general-guidelines"
+    },
+    {
+      "level": "h3",
+      "text": "Accessibility requirements",
+      "id": "accessibility-requirements"
+    },
+    {
+      "level": "h3",
+      "text": "Cross-referencing",
+      "id": "cross-referencing"
+    },
+    {
+      "level": "h2",
+      "text": "Get help",
+      "id": "get-help"
+    }
+  ],
+  "url": "llms-txt#run-tests-to-ensure-your-changes-don't-break-existing-functionality",
+  "links": []
+}

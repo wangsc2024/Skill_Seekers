@@ -1,0 +1,71 @@
+{
+  "title": "Qwen3 - How to Run & Fine-tune",
+  "content": "Learn to run & fine-tune Qwen3 locally with Unsloth + our Dynamic 2.0 quants\n\nQwen's new Qwen3 models deliver state-of-the-art advancements in reasoning, instruction-following, agent capabilities, and multilingual support.\n\n{% hint style=\"success\" %}\n**NEW!** Qwen3 got an update in July 2025. Run & fine-tune the latest model: [**Qwen-2507**](https://docs.unsloth.ai/models/qwen3-next)\n{% endhint %}\n\nAll uploads use Unsloth [Dynamic 2.0](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs) for SOTA 5-shot MMLU and KL Divergence performance, meaning you can run & fine-tune quantized Qwen LLMs with minimal accuracy loss.\n\nWe also uploaded Qwen3 with native 128K context length. Qwen achieves this by using YaRN to extend its original 40K window to 128K.\n\n[Unsloth](https://github.com/unslothai/unsloth) also now supports fine-tuning and [Reinforcement Learning (RL)](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide) of Qwen3 and Qwen3 MOE models — 2x faster, with 70% less VRAM, and 8x longer context lengths. Fine-tune Qwen3 (14B) for free using our [Colab notebook.](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_\\(14B\\)-Reasoning-Conversational.ipynb)\n\n<a href=\"#running-qwen3\" class=\"button primary\">Running Qwen3 Tutorial</a> <a href=\"#fine-tuning-qwen3-with-unsloth\" class=\"button secondary\">Fine-tuning Qwen3</a>\n\n#### **Qwen3 - Unsloth Dynamic 2.0** with optimal configs:\n\n| Dynamic 2.0 GGUF (to run)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | 128K Context GGUF                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Dynamic 4-bit Safetensor (to finetune/deploy)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |\n| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| <ul><li><a href=\"https://huggingface.co/unsloth/Qwen3-0.6B-GGUF\">0.6B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-1.7B-GGUF\">1.7B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-4B-GGUF\">4B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-8B-GGUF\">8B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-14B-GGUF\">14B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-30B-A3B-GGUF\">30B-A3B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-32B-GGUF\">32B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-235B-A22B-GGUF\">235B-A22B</a></li></ul> | <ul><li><a href=\"https://huggingface.co/unsloth/Qwen3-4B-128K-GGUF\">4B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-8B-128K-GGUF\">8B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-14B-128K-GGUF\">14B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-30B-A3B-128K-GGUF\">30B-A3B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-32B-128K-GGUF\">32B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-235B-A22B-128K-GGUF\">235B-A22B</a></li></ul> | <ul><li><a href=\"https://huggingface.co/unsloth/Qwen3-0.6B-unsloth-bnb-4bit\">0.6B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-1.7B-unsloth-bnb-4bit\">1.7B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-4B-unsloth-bnb-4bit\">4B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-8B-unsloth-bnb-4bit\">8B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-14B-unsloth-bnb-4bit\">14B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-30B-A3B-bnb-4bit\">30B-A3B</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-32B-unsloth-bnb-4bit\">32B</a></li></ul> |\n\n## 🖥️ **Running Qwen3**\n\nTo achieve inference speeds of 6+ tokens per second, we recommend your available memory should match or exceed the size of the model you’re using. For example, a 30GB 1-bit quantized model requires at least 150GB of memory. The Q2\\_K\\_XL quant, which is 180GB, will require at least **180GB of unified memory** (VRAM + RAM) or **180GB of RAM** for optimal performance.\n\n**NOTE:** It’s possible to run the model with **less total memory** than its size (i.e., less VRAM, less RAM, or a lower combined total). However, this will result in slower inference speeds. Sufficient memory is only required if you want to maximize throughput and achieve the fastest inference times.\n\n### :gear: Official Recommended Settings\n\nAccording to Qwen, these are the recommended settings for inference:\n\n| Non-Thinking Mode Settings:                                            | Thinking Mode Settings:                                           |\n| ---------------------------------------------------------------------- | ----------------------------------------------------------------- |\n| <mark style=\"background-color:blue;\">**Temperature = 0.7**</mark>      | <mark style=\"background-color:blue;\">**Temperature = 0.6**</mark> |\n| Min\\_P = 0.0 (optional, but 0.01 works well, llama.cpp default is 0.1) | Min\\_P = 0.0                                                      |\n| Top\\_P = 0.8                                                           | Top\\_P = 0.95                                                     |\n| TopK = 20                                                              | TopK = 20                                                         |\n\n**Chat template/prompt format:**\n\n{% code overflow=\"wrap\" %}\n\n{% hint style=\"success\" %}\nFor NON thinking mode, we purposely enclose \\<think> and \\</think> with nothing:\n{% endhint %}\n\n{% code overflow=\"wrap\" %}\n\n{% hint style=\"warning\" %}\n**For Thinking-mode, DO NOT use greedy decoding**, as it can lead to performance degradation and endless repetitions.\n{% endhint %}\n\n### Switching Between Thinking and Non-Thinking Mode\n\nQwen3 models come with built-in \"thinking mode\" to boost reasoning and improve response quality - similar to how [QwQ-32B](https://docs.unsloth.ai/models/tutorials-how-to-fine-tune-and-run-llms/qwq-32b-how-to-run-effectively) worked. Instructions for switching will differ depending on the inference engine you're using so ensure you use the correct instructions.\n\n#### Instructions for llama.cpp and Ollama:\n\nYou can add `/think` and `/no_think` to user prompts or system messages to switch the model's thinking mode from turn to turn. The model will follow the most recent instruction in multi-turn conversations.\n\nHere is an example of multi-turn conversation:\n\n#### Instructions for transformers and vLLM:\n\n`enable_thinking=True`\n\nBy default, Qwen3 has thinking enabled. When you call `tokenizer.apply_chat_template`, you **don’t need to set anything manually.**\n\nIn thinking mode, the model will generate an extra `<think>...</think>` block before the final answer — this lets it \"plan\" and sharpen its responses.\n\n**Non-thinking mode:**\n\n`enable_thinking=False`\n\nEnabling non-thinking will make Qwen3 will skip all the thinking steps and behave like a normal LLM.\n\nThis mode will provide final responses directly — no `<think>` blocks, no chain-of-thought.\n\n### 🦙 Ollama: Run Qwen3 Tutorial\n\n1. Install `ollama` if you haven't already! You can only run models up to 32B in size. To run the full 235B-A22B model, [see here](#running-qwen3-235b-a22b).\n\n2. Run the model! Note you can call `ollama serve`in another terminal if it fails! We include all our fixes and suggested parameters (temperature etc) in `params` in our Hugging Face upload!\n\n3. To disable thinking, use (or you can set it in the system prompt):\n\n{% hint style=\"warning\" %}\nIf you're experiencing any looping, Ollama might have set your context length window to 2,048 or so. If this is the case, bump it up to 32,000 and see if the issue still persists.\n{% endhint %}\n\n### 📖 Llama.cpp: Run Qwen3 Tutorial\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. Download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose Q4\\_K\\_M, or other quantized versions.",
+  "code_samples": [
+    {
+      "code": "<|im_start|>user\\nWhat is 2+2?<|im_end|>\\n<|im_start|>assistant\\n",
+      "language": "unknown"
+    },
+    {
+      "code": "<|im_start|>user\\nWhat is 2+2?<|im_end|>\\n<|im_start|>assistant\\n<think>\\n\\n</think>\\n\\n",
+      "language": "unknown"
+    },
+    {
+      "code": "> Who are you /no_think\n\n<think>\n\n</think>\n\nI am Qwen, a large-scale language model developed by Alibaba Cloud. [...]\n\n> How many 'r's are in 'strawberries'? /think\n\n<think>\nOkay, let's see. The user is asking how many times the letter 'r' appears in the word \"strawberries\". [...]\n</think>\n\nThe word strawberries contains 3 instances of the letter r. [...]",
+      "language": "unknown"
+    },
+    {
+      "code": "text = tokenizer.apply_chat_template(\n    messages,\n    tokenize=False,\n    add_generation_prompt=True,\n    enable_thinking=True  # Default is True\n)",
+      "language": "python"
+    },
+    {
+      "code": "text = tokenizer.apply_chat_template(\n    messages,\n    tokenize=False,\n    add_generation_prompt=True,\n    enable_thinking=False  # Disables thinking mode\n)",
+      "language": "python"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils -y\ncurl -fsSL https://ollama.com/install.sh | sh",
+      "language": "bash"
+    },
+    {
+      "code": "ollama run hf.co/unsloth/Qwen3-8B-GGUF:UD-Q4_K_XL",
+      "language": "bash"
+    },
+    {
+      "code": ">>> Write your prompt here /nothink",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "🖥️ **Running Qwen3**",
+      "id": "🖥️-**running-qwen3**"
+    },
+    {
+      "level": "h3",
+      "text": ":gear: Official Recommended Settings",
+      "id": ":gear:-official-recommended-settings"
+    },
+    {
+      "level": "h3",
+      "text": "Switching Between Thinking and Non-Thinking Mode",
+      "id": "switching-between-thinking-and-non-thinking-mode"
+    },
+    {
+      "level": "h3",
+      "text": "🦙 Ollama: Run Qwen3 Tutorial",
+      "id": "🦙-ollama:-run-qwen3-tutorial"
+    },
+    {
+      "level": "h3",
+      "text": "📖 Llama.cpp: Run Qwen3 Tutorial",
+      "id": "📖-llama.cpp:-run-qwen3-tutorial"
+    }
+  ],
+  "url": "llms-txt#qwen3---how-to-run-&-fine-tune",
+  "links": []
+}

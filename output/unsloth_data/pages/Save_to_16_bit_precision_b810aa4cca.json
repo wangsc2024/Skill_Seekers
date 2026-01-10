@@ -1,0 +1,13 @@
+{
+  "title": "Save to 16-bit precision",
+  "content": "model.save_pretrained_merged(\"model\", tokenizer, save_method=\"merged_16bit\")\npython",
+  "code_samples": [
+    {
+      "code": "**Pushing to Hugging Face Hub**\n\nTo share your model, we’ll push it to the Hugging Face Hub using the `push_to_hub_merged` method. This allows saving the model in multiple quantization formats.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#save-to-16-bit-precision",
+  "links": []
+}

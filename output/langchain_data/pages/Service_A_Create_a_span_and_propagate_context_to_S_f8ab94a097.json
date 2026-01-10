@@ -1,0 +1,8 @@
+{
+  "title": "Service A: Create a span and propagate context to Service B",
+  "content": "def service_a():\n    with tracer.start_as_current_span(\"service_a_operation\") as span:\n        # Create a chain\n        prompt = ChatPromptTemplate.from_template(\"Summarize: {text}\")\n        model = ChatOpenAI()\n        chain = prompt | model\n\n# Run the chain\n        result = chain.invoke({\"text\": \"OpenTelemetry is an observability framework\"})\n\n# Propagate context to Service B\n        headers = {}\n        inject(headers)  # Inject trace context into headers\n\n# Call Service B with the trace context\n        response = requests.post(\n            \"http://service-b.example.com/process\",\n            headers=headers,\n            json={\"summary\": result.content}\n        )\n        return response.json()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#service-a:-create-a-span-and-propagate-context-to-service-b",
+  "links": []
+}

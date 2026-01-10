@@ -1,0 +1,65 @@
+{
+  "title": "3. Pass in configuration at runtime:",
+  "content": "print(graph.invoke({}, context={\"my_runtime_value\": \"a\"}))  # [!code highlight]\nprint(graph.invoke({}, context={\"my_runtime_value\": \"b\"}))  # [!code highlight]\n\n{'my_state_value': 1}\n{'my_state_value': 2}\npython  theme={null}\n  from dataclasses import dataclass\n\nfrom langchain.chat_models import init_chat_model\n  from langgraph.graph import MessagesState, END, StateGraph, START\n  from langgraph.runtime import Runtime\n  from typing_extensions import TypedDict\n\n@dataclass\n  class ContextSchema:\n      model_provider: str = \"anthropic\"\n\nMODELS = {\n      \"anthropic\": init_chat_model(\"claude-haiku-4-5-20251001\"),\n      \"openai\": init_chat_model(\"gpt-4.1-mini\"),\n  }\n\ndef call_model(state: MessagesState, runtime: Runtime[ContextSchema]):\n      model = MODELS[runtime.context.model_provider]\n      response = model.invoke(state[\"messages\"])\n      return {\"messages\": [response]}\n\nbuilder = StateGraph(MessagesState, context_schema=ContextSchema)\n  builder.add_node(\"model\", call_model)\n  builder.add_edge(START, \"model\")\n  builder.add_edge(\"model\", END)\n\ngraph = builder.compile()\n\n# Usage\n  input_message = {\"role\": \"user\", \"content\": \"hi\"}\n  # With no configuration, uses default (Anthropic)\n  response_1 = graph.invoke({\"messages\": [input_message]}, context=ContextSchema())[\"messages\"][-1]\n  # Or, can set OpenAI\n  response_2 = graph.invoke({\"messages\": [input_message]}, context={\"model_provider\": \"openai\"})[\"messages\"][-1]\n\nprint(response_1.response_metadata[\"model_name\"])\n  print(response_2.response_metadata[\"model_name\"])\n  \n  claude-haiku-4-5-20251001\n  gpt-4.1-mini-2025-04-14\n  python  theme={null}\n  from dataclasses import dataclass\n  from langchain.chat_models import init_chat_model\n  from langchain.messages import SystemMessage\n  from langgraph.graph import END, MessagesState, StateGraph, START\n  from langgraph.runtime import Runtime\n  from typing_extensions import TypedDict\n\n@dataclass\n  class ContextSchema:\n      model_provider: str = \"anthropic\"\n      system_message: str | None = None\n\nMODELS = {\n      \"anthropic\": init_chat_model(\"claude-haiku-4-5-20251001\"),\n      \"openai\": init_chat_model(\"gpt-4.1-mini\"),\n  }\n\ndef call_model(state: MessagesState, runtime: Runtime[ContextSchema]):\n      model = MODELS[runtime.context.model_provider]\n      messages = state[\"messages\"]\n      if (system_message := runtime.context.system_message):\n          messages = [SystemMessage(system_message)] + messages\n      response = model.invoke(messages)\n      return {\"messages\": [response]}\n\nbuilder = StateGraph(MessagesState, context_schema=ContextSchema)\n  builder.add_node(\"model\", call_model)\n  builder.add_edge(START, \"model\")\n  builder.add_edge(\"model\", END)\n\ngraph = builder.compile()\n\n# Usage\n  input_message = {\"role\": \"user\", \"content\": \"hi\"}\n  response = graph.invoke({\"messages\": [input_message]}, context={\"model_provider\": \"openai\", \"system_message\": \"Respond in Italian.\"})\n  for message in response[\"messages\"]:\n      message.pretty_print()\n  \n  ================================ Human Message ================================\n\nhi\n  ================================== Ai Message ==================================\n\nCiao! Come posso aiutarti oggi?\n  python  theme={null}\nfrom langgraph.types import RetryPolicy\n\nbuilder.add_node(\n    \"node_name\",\n    node_function,\n    retry_policy=RetryPolicy(),\n)\npython  theme={null}\n  import sqlite3\n  from typing_extensions import TypedDict\n  from langchain.chat_models import init_chat_model\n  from langgraph.graph import END, MessagesState, StateGraph, START\n  from langgraph.types import RetryPolicy\n  from langchain_community.utilities import SQLDatabase\n  from langchain.messages import AIMessage\n\ndb = SQLDatabase.from_uri(\"sqlite:///:memory:\")\n  model = init_chat_model(\"claude-haiku-4-5-20251001\")\n\ndef query_database(state: MessagesState):\n      query_result = db.run(\"SELECT * FROM Artist LIMIT 10;\")\n      return {\"messages\": [AIMessage(content=query_result)]}\n\ndef call_model(state: MessagesState):\n      response = model.invoke(state[\"messages\"])\n      return {\"messages\": [response]}\n\n# Define a new graph\n  builder = StateGraph(MessagesState)\n  builder.add_node(\n      \"query_database\",\n      query_database,\n      retry_policy=RetryPolicy(retry_on=sqlite3.OperationalError),\n  )\n  builder.add_node(\"model\", call_model, retry_policy=RetryPolicy(max_attempts=5))\n  builder.add_edge(START, \"model\")\n  builder.add_edge(\"model\", \"query_database\")\n  builder.add_edge(\"query_database\", END)\n  graph = builder.compile()\n  python  theme={null}\nfrom langgraph.types import CachePolicy\n\nbuilder.add_node(\n    \"node_name\",\n    node_function,\n    cache_policy=CachePolicy(ttl=120),\n)\npython  theme={null}\nfrom langgraph.cache.memory import InMemoryCache\n\ngraph = builder.compile(cache=InMemoryCache())\npython  theme={null}\nfrom langgraph.graph import START, StateGraph\n\nbuilder = StateGraph(State)",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Extended example: specifying LLM at runtime\">\n  Below we demonstrate a practical example in which we configure what LLM to use at runtime. We will use both OpenAI and Anthropic models.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n<Accordion title=\"Extended example: specifying model and system message at runtime\">\n  Below we demonstrate a practical example in which we configure two parameters: the LLM and system message to use at runtime.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Add retry policies\n\nThere are many use cases where you may wish for your node to have a custom retry policy, for example if you are calling an API, querying a database, or calling an LLM, etc. LangGraph lets you add retry policies to nodes.\n\nTo configure a retry policy, pass the `retry_policy` parameter to the [`add_node`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_node). The `retry_policy` parameter takes in a `RetryPolicy` named tuple object. Below we instantiate a `RetryPolicy` object with the default parameters and associate it with a node:",
+      "language": "unknown"
+    },
+    {
+      "code": "By default, the `retry_on` parameter uses the `default_retry_on` function, which retries on any exception except for the following:\n\n* `ValueError`\n* `TypeError`\n* `ArithmeticError`\n* `ImportError`\n* `LookupError`\n* `NameError`\n* `SyntaxError`\n* `RuntimeError`\n* `ReferenceError`\n* `StopIteration`\n* `StopAsyncIteration`\n* `OSError`\n\nIn addition, for exceptions from popular http request libraries such as `requests` and `httpx` it only retries on 5xx status codes.\n\n<Accordion title=\"Extended example: customizing retry policies\">\n  Consider an example in which we are reading from a SQL database. Below we pass two different retry policies to nodes:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Add node caching\n\nNode caching is useful in cases where you want to avoid repeating operations, like when doing something expensive (either in terms of time or cost). LangGraph lets you add individualized caching policies to nodes in a graph.\n\nTo configure a cache policy, pass the `cache_policy` parameter to the [`add_node`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_node) function. In the following example, a [`CachePolicy`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.CachePolicy) object is instantiated with a time to live of 120 seconds and the default `key_func` generator. Then it is associated with a node:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then, to enable node-level caching for a graph, set the `cache` argument when compiling the graph. The example below uses `InMemoryCache` to set up a graph with in-memory cache, but `SqliteCache` is also available.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Create a sequence of steps\n\n<Info>\n  **Prerequisites**\n  This guide assumes familiarity with the above section on [state](#define-and-update-state).\n</Info>\n\nHere we demonstrate how to construct a simple sequence of steps. We will show:\n\n1. How to build a sequential graph\n2. Built-in short-hand for constructing similar graphs.\n\nTo add a sequence of nodes, we use the [`add_node`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_node) and [`add_edge`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_edge) methods of our [graph](/oss/python/langgraph/graph-api#stategraph):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Add retry policies",
+      "id": "add-retry-policies"
+    },
+    {
+      "level": "h2",
+      "text": "Add node caching",
+      "id": "add-node-caching"
+    },
+    {
+      "level": "h2",
+      "text": "Create a sequence of steps",
+      "id": "create-a-sequence-of-steps"
+    }
+  ],
+  "url": "llms-txt#3.-pass-in-configuration-at-runtime:",
+  "links": []
+}

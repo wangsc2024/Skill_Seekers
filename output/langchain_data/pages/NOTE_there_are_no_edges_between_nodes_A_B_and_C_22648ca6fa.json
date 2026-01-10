@@ -1,0 +1,91 @@
+{
+  "title": "NOTE: there are no edges between nodes A, B and C!",
+  "content": "graph = builder.compile()\npython  theme={null}\nfrom IPython.display import display, Image\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))\npython  theme={null}\ngraph.invoke({\"foo\": \"\"})\n\nCalled A\nCalled C\npython  theme={null}\ndef my_node(state: State) -> Command[Literal[\"my_other_node\"]]:\n    return Command(\n        update={\"foo\": \"bar\"},\n        goto=\"other_subgraph\",  # where `other_subgraph` is a node in the parent graph\n        graph=Command.PARENT\n    )\npython  theme={null}\nimport operator\nfrom typing_extensions import Annotated\n\nclass State(TypedDict):\n    # NOTE: we define a reducer here\n    foo: Annotated[str, operator.add]  # [!code highlight]\n\ndef node_a(state: State):\n    print(\"Called A\")\n    value = random.choice([\"a\", \"b\"])\n    # this is a replacement for a conditional edge function\n    if value == \"a\":\n        goto = \"node_b\"\n    else:\n        goto = \"node_c\"\n\n# note how Command allows you to BOTH update the graph state AND route to the next node\n    return Command(\n        update={\"foo\": value},\n        goto=goto,\n        # this tells LangGraph to navigate to node_b or node_c in the parent graph\n        # NOTE: this will navigate to the closest parent graph relative to the subgraph\n        graph=Command.PARENT,  # [!code highlight]\n    )\n\nsubgraph = StateGraph(State).add_node(node_a).add_edge(START, \"node_a\").compile()\n\ndef node_b(state: State):\n    print(\"Called B\")\n    # NOTE: since we've defined a reducer, we don't need to manually append\n    # new characters to existing 'foo' value. instead, reducer will append these\n    # automatically (via operator.add)\n    return {\"foo\": \"b\"}  # [!code highlight]\n\ndef node_c(state: State):\n    print(\"Called C\")\n    return {\"foo\": \"c\"}  # [!code highlight]\n\nbuilder = StateGraph(State)\nbuilder.add_edge(START, \"subgraph\")\nbuilder.add_node(\"subgraph\", subgraph)\nbuilder.add_node(node_b)\nbuilder.add_node(node_c)\n\ngraph = builder.compile()\npython  theme={null}\ngraph.invoke({\"foo\": \"\"})\n\nCalled A\nCalled C\npython  theme={null}\n@tool\ndef lookup_user_info(tool_call_id: Annotated[str, InjectedToolCallId], config: RunnableConfig):\n    \"\"\"Use this to look up user information to better assist them with their questions.\"\"\"\n    user_info = get_user_info(config.get(\"configurable\", {}).get(\"user_id\"))\n    return Command(\n        update={\n            # update the state keys\n            \"user_info\": user_info,\n            # update the message history\n            \"messages\": [ToolMessage(\"Successfully looked up user information\", tool_call_id=tool_call_id)]\n        }\n    )\npython  theme={null}\nimport random\nfrom typing import Annotated, Literal\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\nfrom langgraph.graph.message import add_messages\n\nclass State(TypedDict):\n    messages: Annotated[list, add_messages]\n\nclass MyNode:\n    def __init__(self, name: str):\n        self.name = name\n    def __call__(self, state: State):\n        return {\"messages\": [(\"assistant\", f\"Called node {self.name}\")]}\n\ndef route(state) -> Literal[\"entry_node\", END]:\n    if len(state[\"messages\"]) > 10:\n        return END\n    return \"entry_node\"\n\ndef add_fractal_nodes(builder, current_node, level, max_level):\n    if level > max_level:\n        return\n    # Number of nodes to create at this level\n    num_nodes = random.randint(1, 3)  # Adjust randomness as needed\n    for i in range(num_nodes):\n        nm = [\"A\", \"B\", \"C\"][i]\n        node_name = f\"node_{current_node}_{nm}\"\n        builder.add_node(node_name, MyNode(node_name))\n        builder.add_edge(current_node, node_name)\n        # Recursively add more nodes\n        r = random.random()\n        if r > 0.2 and level + 1 < max_level:\n            add_fractal_nodes(builder, node_name, level + 1, max_level)\n        elif r > 0.05:\n            builder.add_conditional_edges(node_name, route, node_name)\n        else:\n            # End\n            builder.add_edge(node_name, END)\n\ndef build_fractal_graph(max_level: int):\n    builder = StateGraph(State)\n    entry_point = \"entry_node\"\n    builder.add_node(entry_point, MyNode(entry_point))\n    builder.add_edge(START, entry_point)\n    add_fractal_nodes(builder, entry_point, 1, max_level)\n    # Optional: set a finish point if required\n    builder.add_edge(entry_point, END)  # or any specific node\n    return builder.compile()\n\napp = build_fractal_graph(3)\npython  theme={null}\nprint(app.get_graph().draw_mermaid())\n\n%%{init: {'flowchart': {'curve': 'linear'}}}%%\ngraph TD;\n    tart__([<p>__start__</p>]):::first\n    ry_node(entry_node)\n    e_entry_node_A(node_entry_node_A)\n    e_entry_node_B(node_entry_node_B)\n    e_node_entry_node_B_A(node_node_entry_node_B_A)\n    e_node_entry_node_B_B(node_node_entry_node_B_B)\n    e_node_entry_node_B_C(node_node_entry_node_B_C)\n    nd__([<p>__end__</p>]):::last\n    tart__ --> entry_node;\n    ry_node --> __end__;\n    ry_node --> node_entry_node_A;\n    ry_node --> node_entry_node_B;\n    e_entry_node_B --> node_node_entry_node_B_A;\n    e_entry_node_B --> node_node_entry_node_B_B;\n    e_entry_node_B --> node_node_entry_node_B_C;\n    e_entry_node_A -.-> entry_node;\n    e_entry_node_A -.-> __end__;\n    e_node_entry_node_B_A -.-> entry_node;\n    e_node_entry_node_B_A -.-> __end__;\n    e_node_entry_node_B_B -.-> entry_node;\n    e_node_entry_node_B_B -.-> __end__;\n    e_node_entry_node_B_C -.-> entry_node;\n    e_node_entry_node_B_C -.-> __end__;\n    ssDef default fill:#f2f0ff,line-height:1.2\n    ssDef first fill-opacity:0\n    ssDef last fill:#bfb6fc\npython  theme={null}\nfrom IPython.display import Image, display\nfrom langchain_core.runnables.graph import CurveStyle, MermaidDrawMethod, NodeStyles\n\ndisplay(Image(app.get_graph().draw_mermaid_png()))\npython  theme={null}\nimport nest_asyncio\n\nnest_asyncio.apply()  # Required for Jupyter Notebook to run async functions\n\ndisplay(\n    Image(\n        app.get_graph().draw_mermaid_png(\n            curve_style=CurveStyle.LINEAR,\n            node_colors=NodeStyles(first=\"#ffdfba\", last=\"#baffc9\", default=\"#fad7de\"),\n            wrap_label_n_words=9,\n            output_file_path=None,\n            draw_method=MermaidDrawMethod.PYPPETEER,\n            background_color=\"white\",\n            padding=10,\n        )\n    )\n)\npython  theme={null}\ntry:\n    display(Image(app.get_graph().draw_png()))\nexcept ImportError:\n    print(\n        \"You likely need to install dependencies for pygraphviz, see more here https://github.com/pygraphviz/pygraphviz/blob/main/INSTALL.txt\"\n    )\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/use-graph-api.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "<Warning>\n  You might have noticed that we used [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) as a return type annotation, e.g. `Command[Literal[\"node_b\", \"node_c\"]]`. This is necessary for the graph rendering and tells LangGraph that `node_a` can navigate to `node_b` and `node_c`.\n</Warning>",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_11.png?fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=f11e5cddedbf2760d40533f294c44aea\" alt=\"Command-based graph navigation\" data-og-width=\"232\" width=\"232\" data-og-height=\"333\" height=\"333\" data-path=\"oss/images/graph_api_image_11.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_11.png?w=280&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=c1b27d92b257a6c4ac57f34f007d0ee1 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_11.png?w=560&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=695d0062e5fb8ebea5525379edbba476 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_11.png?w=840&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=7bd3f779df628beba60a397674f85b59 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_11.png?w=1100&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=85a9194e8b4d9df2d01d10784dcf75d0 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_11.png?w=1650&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=efd9118d4bcd6d1eb92760c573645fbd 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_11.png?w=2500&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=1eb2a132386a64d18582af6978e4ac24 2500w\" />\n\nIf we run the graph multiple times, we'd see it take different paths (A -> B or A -> C) based on the random choice in node A.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Navigate to a node in a parent graph\n\nIf you are using [subgraphs](/oss/python/langgraph/use-subgraphs), you might want to navigate from a node within a subgraph to a different subgraph (i.e. a different node in the parent graph). To do so, you can specify `graph=Command.PARENT` in `Command`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Let's demonstrate this using the above example. We'll do so by changing `nodeA` in the above example into a single-node graph that we'll add as a subgraph to our parent graph.\n\n<Warning>\n  **State updates with `Command.PARENT`**\n  When you send updates from a subgraph node to a parent graph node for a key that's shared by both parent and subgraph [state schemas](/oss/python/langgraph/graph-api#schema), you **must** define a [reducer](/oss/python/langgraph/graph-api#reducers) for the key you're updating in the parent graph state. See the example below.\n</Warning>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Use inside tools\n\nA common use case is updating graph state from inside a tool. For example, in a customer support application you might want to look up customer information based on their account number or ID in the beginning of the conversation. To update the graph state from the tool, you can return `Command(update={\"my_custom_key\": \"foo\", \"messages\": [...]})` from the tool:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Warning>\n  You MUST include `messages` (or any state key used for the message history) in `Command.update` when returning [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) from a tool and the list of messages in `messages` MUST contain a `ToolMessage`. This is necessary for the resulting message history to be valid (LLM providers require AI messages with tool calls to be followed by the tool result messages).\n</Warning>\n\nIf you are using tools that update state via [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command), we recommend using prebuilt [`ToolNode`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.tool_node.ToolNode) which automatically handles tools returning [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) objects and propagates them to the graph state. If you're writing a custom node that calls tools, you would need to manually propagate [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) objects returned by the tools as the update from the node.\n\n## Visualize your graph\n\nHere we demonstrate how to visualize the graphs you create.\n\nYou can visualize any arbitrary [Graph](https://langchain-ai.github.io/langgraph/reference/graphs/), including [StateGraph](https://langchain-ai.github.io/langgraph/reference/graphs/#langgraph.graph.state.StateGraph).\n\nLet's have some fun by drawing fractals :).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Mermaid\n\nWe can also convert a graph class into Mermaid syntax.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### PNG\n\nIf preferred, we could render the Graph into a `.png`. Here we could use three options:\n\n* Using Mermaid.ink API (does not require additional packages)\n* Using Mermaid + Pyppeteer (requires `pip install pyppeteer`)\n* Using graphviz (which requires `pip install graphviz`)\n\n**Using Mermaid.Ink**\n\nBy default, `draw_mermaid_png()` uses Mermaid.Ink's API to generate the diagram.",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_10.png?fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=6cb916b7c627e81c2816cc74ebf3f913\" alt=\"Fractal graph visualization\" data-og-width=\"2382\" width=\"2382\" data-og-height=\"1131\" height=\"1131\" data-path=\"oss/images/graph_api_image_10.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_10.png?w=280&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=01b02e6994b97c652851bf1a5be524b5 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_10.png?w=560&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=9ac63a57750ff509e5bcf0662a141092 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_10.png?w=840&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=5458c09f31e42d0fd8f58ba85626d89c 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_10.png?w=1100&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=feb0a463b249cd838ad31105ef695214 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_10.png?w=1650&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=1a83b92a2d3b428d9b788720a7e54184 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/graph_api_image_10.png?w=2500&fit=max&auto=format&n=-_xGPoyjhyiDWTPJ&q=85&s=8bf42c6ee15584253dc036ff9b60191a 2500w\" />\n\n**Using Mermaid + Pyppeteer**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Using Graphviz**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Navigate to a node in a parent graph",
+      "id": "navigate-to-a-node-in-a-parent-graph"
+    },
+    {
+      "level": "h3",
+      "text": "Use inside tools",
+      "id": "use-inside-tools"
+    },
+    {
+      "level": "h2",
+      "text": "Visualize your graph",
+      "id": "visualize-your-graph"
+    },
+    {
+      "level": "h3",
+      "text": "Mermaid",
+      "id": "mermaid"
+    },
+    {
+      "level": "h3",
+      "text": "PNG",
+      "id": "png"
+    }
+  ],
+  "url": "llms-txt#note:-there-are-no-edges-between-nodes-a,-b-and-c!",
+  "links": []
+}

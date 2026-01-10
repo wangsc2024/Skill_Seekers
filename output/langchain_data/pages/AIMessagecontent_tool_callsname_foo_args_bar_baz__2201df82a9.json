@@ -1,0 +1,13 @@
+{
+  "title": "AIMessage(content='', ..., tool_calls=[{'name': 'foo', 'args': {'bar': 'baz'}, 'id': 'call_1', 'type': 'tool_call'}])",
+  "content": "python  theme={null}\nmodel.invoke(\"hello, again!\")",
+  "code_samples": [
+    {
+      "code": "If we invoke the model again, it will return the next item in the iterator:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#aimessage(content='',-...,-tool_calls=[{'name':-'foo',-'args':-{'bar':-'baz'},-'id':-'call_1',-'type':-'tool_call'}])",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Wrap it as a tool  # [!code highlight]",
+  "content": "@tool(\"subagent_name\", description=\"subagent_description\")  # [!code highlight]\ndef call_subagent(query: str):  # [!code highlight]\n    result = subagent.invoke({\"messages\": [{\"role\": \"user\", \"content\": query}]})\n    return result[\"messages\"][-1].content",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#wrap-it-as-a-tool--#-[!code-highlight]",
+  "links": []
+}

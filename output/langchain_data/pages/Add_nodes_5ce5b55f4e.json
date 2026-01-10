@@ -1,0 +1,8 @@
+{
+  "title": "Add nodes",
+  "content": "workflow.add_node(\"generate_topic\", generate_topic)\nworkflow.add_node(\"write_joke\", write_joke)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-nodes",
+  "links": []
+}

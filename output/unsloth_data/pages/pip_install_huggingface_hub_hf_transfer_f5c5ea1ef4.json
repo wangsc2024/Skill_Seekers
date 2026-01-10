@@ -1,0 +1,13 @@
+{
+  "title": "!pip install huggingface_hub hf_transfer",
+  "content": "import os\nos.environ[\"HF_HUB_ENABLE_HF_TRANSFER\"] = \"1\"\nfrom huggingface_hub import snapshot_download\nsnapshot_download(\n    repo_id = \"unsloth/Llama-4-Scout-17B-16E-Instruct-GGUF\",\n    local_dir = \"unsloth/Llama-4-Scout-17B-16E-Instruct-GGUF\",\n    allow_patterns = [\"*IQ2_XXS*\"],\n)\nbash\n./llama.cpp/llama-cli \\\n    --model unsloth/Llama-4-Scout-17B-16E-Instruct-GGUF/Llama-4-Scout-17B-16E-Instruct-UD-IQ2_XXS.gguf \\\n    --threads 32 \\\n    --ctx-size 16384 \\\n    --n-gpu-layers 99 \\\n    -ot \".ffn_.*_exps.=CPU\" \\\n    --seed 3407 \\\n    --prio 3 \\\n    --temp 0.6 \\\n    --min-p 0.01 \\\n    --top-p 0.9 \\\n    -no-cnv \\\n    --prompt \"<|header_start|>user<|header_end|>\\n\\nCreate a Flappy Bird game.<|eot|><|header_start|>assistant<|header_end|>\\n\\n\"\n```\n\n{% hint style=\"success\" %}\nRead more on running Llama 4 here: <https://docs.unsloth.ai/basics/tutorial-how-to-run-and-fine-tune-llama-4>\n{% endhint %}",
+  "code_samples": [
+    {
+      "code": "And and let's do inference!\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#!pip-install-huggingface_hub-hf_transfer",
+  "links": []
+}

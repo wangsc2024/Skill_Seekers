@@ -1,0 +1,23 @@
+{
+  "title": "How to Run and Deploy LLMs on your iOS or Android Phone",
+  "content": "Tutorial for fine-tuning your own LLM and deploying it on your Android or iPhone with ExecuTorch.\n\nWe’re excited to show how you can train LLMs then **deploy them locally** to **Android phones** and **iPhones**. We collabed with [ExecuTorch](https://github.com/pytorch/executorch/) from PyTorch & Meta to create a streamlined workflow using quantization-aware training ([QAT](https://docs.unsloth.ai/basics/quantization-aware-training-qat)) then deploy them directly to edge devices. With [Unsloth](https://github.com/unslothai/unsloth), TorchAO and ExecuTorch, we show how you can:\n\n* Use the same tech (ExecuTorch) Meta has to power billions on Instagram, WhatsApp\n* Deploy Qwen3-0.6B locally to **Pixel 8** and **iPhone 15 Pro at \\~40 tokens/s**\n* Apply QAT via TorchAO to recover 70% of accuracy\n* Get privacy first, instant responses and offline capabilities\n* Use our [free Colab notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_\\(0_6B\\)-Phone_Deployment.ipynb) to fine-tune Qwen3 0.6B and export it for phone deployment\n\n<a href=\"#ios-deployment\" class=\"button secondary\" data-icon=\"apple\">iOS Tutorial</a><a href=\"#android-deployment\" class=\"button secondary\" data-icon=\"android\">Android Tutorial</a>\n\n{% columns %}\n{% column %}\n**Qwen3-4B** deployed on a iPhone 15 Pro\n\n<div align=\"left\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2F7tFjmj9c3p6o4eN3oHQq%2Funknown.png?alt=media&#x26;token=009699b3-e48f-4a94-bcd0-26cf6dedb8eb\" alt=\"\" width=\"188\"><figcaption></figcaption></figure></div>\n{% endcolumn %}\n\n{% column %}\n**Qwen3-0.6B** running at \\~40 tokens/s\n\n<div align=\"left\"><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FWI9nU1RQVrPbVXrIihfA%2Fimage.png?alt=media&#x26;token=5d58eb94-aeb3-42c3-a891-561ceb4e22db\" alt=\"\" width=\"188\"><figcaption></figcaption></figure></div>\n{% endcolumn %}\n{% endcolumns %}\n\n### 🦥 Training Your Model\n\nWe support Qwen3, Gemma3, Llama3, Qwen2.5, Phi4 and many other models for phone deployment! Follow the [**free Colab notebook**](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_\\(0_6B\\)-Phone_Deployment.ipynb) **for Qwen3-0.6B deployment:**\n\n{% embed url=\"<https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_(0_6B)-Phone_Deployment.ipynb>\" %}\n\nFirst update Unsloth and install TorchAO and Executorch.\n\nThen simply use `qat_scheme = \"phone-deployment\"` to signify we want to deploy it to a phone. Note we also set `full_finetuning = True` for full finetuning!\n\nWe’re using `qat_scheme = \"phone-deployment\"` we actually use `qat_scheme = \"int8-int4\"` under the hood to enable Unsloth/TorchAO QAT that *simulates* INT8 dynamic activation quantization with INT4 weight quantization for Linear layers during training (via fake quantization operations) while keeping computations in 16bits. After training, the model is converted to a real quantized version so the on-device model is smaller and typically **retains accuracy better than naïve PTQ**.\n\nAfter finetuning as described in the [Colab notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_\\(0_6B\\)-Phone_Deployment.ipynb), we then save it to a `.pte` file via Executorch:\n\n{% code expandable=\"true\" %}",
+  "code_samples": [
+    {
+      "code": "pip install --upgrade unsloth unsloth_zoo\npip install torchao==0.14.0 executorch pytorch_tokenizers",
+      "language": "bash"
+    },
+    {
+      "code": "from unsloth import FastLanguageModel\nimport torch\nmodel, tokenizer = FastLanguageModel.from_pretrained(\n    model_name = \"unsloth/Qwen3-0.6B\",\n    max_seq_length = 1024,\n    full_finetuning = True,\n    qat_scheme = \"phone-deployment\", # Flag for phone deployment\n)",
+      "language": "python"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "🦥 Training Your Model",
+      "id": "🦥-training-your-model"
+    }
+  ],
+  "url": "llms-txt#how-to-run-and-deploy-llms-on-your-ios-or-android-phone",
+  "links": []
+}

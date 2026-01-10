@@ -1,0 +1,14 @@
+{
+  "title": "Process all results after evaluation completes",
+  "content": "for result in results:\n    print(\"Input:\", result[\"run\"].inputs)\n    print(\"Output:\", result[\"run\"].outputs)\n\n# Access individual evaluation results\n    for eval_result in result[\"evaluation_results\"][\"results\"]:\n        print(f\"  {eval_result.key}: {eval_result.score}\")\n```\n\nWith `blocking=True`, your processing code runs only after all evaluations are complete, avoiding mixed output with evaluation logs.\n\nFor more information on running evaluations without uploading results, refer to [Run an evaluation locally](/langsmith/local).\n\n* [Evaluate your LLM application](/langsmith/evaluate-llm-application)\n* [Run an evaluation locally](/langsmith/local)\n* [Fetch performance metrics from an experiment](/langsmith/fetch-perf-metrics-experiment)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/read-local-experiment-results.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Related",
+      "id": "related"
+    }
+  ],
+  "url": "llms-txt#process-all-results-after-evaluation-completes",
+  "links": []
+}

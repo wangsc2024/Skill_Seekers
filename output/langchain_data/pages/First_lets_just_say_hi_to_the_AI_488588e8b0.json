@@ -1,0 +1,25 @@
+{
+  "title": "First let's just say hi to the AI",
+  "content": "for update in graph.stream(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"hi\"}]}, config, stream_mode=\"updates\"\n):\n    print(update)\npython  theme={null}\ndef update_memory(state: MessagesState, config: RunnableConfig, *, store: BaseStore):\n\n# Get the user id from the config\n    user_id = config[\"configurable\"][\"user_id\"]\n\n# Namespace the memory\n    namespace = (user_id, \"memories\")\n\n# ... Analyze conversation and create a new memory\n\n# Create a new memory ID\n    memory_id = str(uuid.uuid4())\n\n# We create a new memory\n    store.put(namespace, memory_id, {\"memory\": memory})\n\npython  theme={null}\nmemories[-1].dict()\n{'value': {'food_preference': 'I like pizza'},\n 'key': '07e0caf4-1631-47b7-b15f-65515d4c1843',\n 'namespace': ['1', 'memories'],\n 'created_at': '2024-10-02T17:22:31.590602+00:00',\n 'updated_at': '2024-10-02T17:22:31.590605+00:00'}\npython  theme={null}\ndef call_model(state: MessagesState, config: RunnableConfig, *, store: BaseStore):\n    # Get the user id from the config\n    user_id = config[\"configurable\"][\"user_id\"]\n\n# Namespace the memory\n    namespace = (user_id, \"memories\")\n\n# Search based on the most recent message\n    memories = store.search(\n        namespace,\n        query=state[\"messages\"][-1].content,\n        limit=3\n    )\n    info = \"\\n\".join([d.value[\"memory\"] for d in memories])\n\n# ... Use memories in the model call\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "We can access the `in_memory_store` and the `user_id` in *any node* by passing `store: BaseStore` and `config: RunnableConfig` as node arguments. Here's how we might use semantic search in a node to find relevant memories:",
+      "language": "unknown"
+    },
+    {
+      "code": "As we showed above, we can also access the store in any node and use the `store.search` method to get memories. Recall the memories are returned as a list of objects that can be converted to a dictionary.",
+      "language": "unknown"
+    },
+    {
+      "code": "We can access the memories and use them in our model call.",
+      "language": "unknown"
+    },
+    {
+      "code": "If we create a new thread, we can still access the same memories so long as the `user_id` is the same.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#first-let's-just-say-hi-to-the-ai",
+  "links": []
+}

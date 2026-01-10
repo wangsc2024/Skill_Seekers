@@ -1,0 +1,14 @@
+{
+  "title": "How to use the REST API",
+  "content": "Source: https://docs.langchain.com/langsmith/run-evals-api-only\n\nThe [Python](https://reference.langchain.com/python/langsmith/) and [TypeScript](https://reference.langchain.com/javascript/modules/langsmith.html) SDKs are the recommended way to run [evaluations](/langsmith/evaluation-concepts) in LangSmith. They include optimizations and features that enhance performance and reliability.\n\nIf you cannot use the SDKs—for example, if you are working in a different language or a restricted environment—you can use the REST API directly. This guide demonstrates how to run evaluations using the [REST API](https://api.smith.langchain.com/redoc) with Python's [`requests`](https://requests.readthedocs.io/) library, but the same principles apply to any language.\n\nBefore diving into this content, it might be helpful to read the following:\n\n* [Evaluate LLM applications](/langsmith/evaluate-llm-application).\n* [LangSmith API Reference](https://api.smith.langchain.com/redoc): Complete API documentation for all endpoints used in this guide.\n\nFor this example, we use the Python SDK to create a [dataset](/langsmith/evaluation-concepts#datasets) quickly. To create datasets via the API or UI instead, refer to [Managing datasets](/langsmith/manage-datasets-in-application).\n\n```python  theme={null}\nimport os\nimport requests\n\nfrom datetime import datetime\nfrom langsmith import Client\nfrom openai import OpenAI\nfrom uuid import uuid4\n\nclient = Client()\noa_client = OpenAI()",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create a dataset",
+      "id": "create-a-dataset"
+    }
+  ],
+  "url": "llms-txt#how-to-use-the-rest-api",
+  "links": []
+}

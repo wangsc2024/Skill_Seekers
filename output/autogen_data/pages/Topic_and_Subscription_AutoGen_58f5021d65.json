@@ -1,0 +1,132 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+  "title": "Topic and Subscription — AutoGen",
+  "content": "There are two ways for runtime to deliver messages, direct messaging or broadcast. Direct messaging is one to one: the sender must provide the recipient’s agent ID. On the other hand, broadcast is one to many and the sender does not provide recipients’ agent IDs.\n\nMany scenarios are suitable for broadcast. For example, in event-driven workflows, agents do not always know who will handle their messages, and a workflow can be composed of agents with no inter-dependencies. This section focuses on the core concepts in broadcast: topic and subscription.\n\nA topic defines the scope of a broadcast message. In essence, agent runtime implements a publish-subscribe model through its broadcast API: when publishing a message, the topic must be specified. It is an indirection over agent IDs.\n\nA topic consists of two components: topic type and topic source.\n\nTopic = (Topic Type, Topic Source)\n\nSimilar to agent ID, which also has two components, topic type is usually defined by application code to mark the type of messages the topic is for. For example, a GitHub agent may use \"GitHub_Issues\" as the topic type when publishing messages about new issues.\n\nTopic source is the unique identifier for a topic within a topic type. It is typically defined by application data. For example, the GitHub agent may use \"github.com/{repo_name}/issues/{issue_number}\" as the topic source to uniquely identifies the topic. Topic source allows the publisher to limit the scope of messages and create silos.\n\nTopic IDs can be converted to and from strings. the format of this string is:\n\nTopic_Type/Topic_Source\n\nTypes are considered valid if they are in UTF8 and only contain alphanumeric letters (a-z) and (0-9), or underscores (_). A valid identifier cannot start with a number, or contain any spaces. Sources are considered valid if they are in UTF8 and only contain characters between (inclusive) ascii 32 (space) and 126 (~).\n\nA subscription maps topic to agent IDs.\n\nThe diagram above shows the relationship between topic and subscription. An agent runtime keeps track of the subscriptions and uses them to deliver messages to agents.\n\nIf a topic has no subscription, messages published to this topic will not be delivered to any agent. If a topic has many subscriptions, messages will be delivered following all the subscriptions to every recipient agent only once. Applications can add or remove subscriptions using agent runtime’s API.\n\nA type-based subscription maps a topic type to an agent type (see agent ID). It declares an unbounded mapping from topics to agent IDs without knowing the exact topic sources and agent keys. The mechanism is simple: any topic matching the type-based subscription’s topic type will be mapped to an agent ID with the subscription’s agent type and the agent key assigned to the value of the topic source. For Python API, use TypeSubscription.\n\nType-Based Subscription = Topic Type –> Agent Type\n\nGenerally speaking, type-based subscription is the preferred way to declare subscriptions. It is portable and data-independent: developers do not need to write application code that depends on specific agent IDs.\n\nType-based subscriptions can be applied to many scenarios when the exact topic or agent IDs are data-dependent. The scenarios can be broken down by two considerations: (1) whether it is single-tenant or multi-tenant, and (2) whether it is a single topic or multiple topics per tenant. A tenant typically refers to a set of agents that handle a specific user session or a specific request.\n\nIn this scenario, there is only one tenant and one topic for the entire application. It is the simplest scenario and can be used in many cases like a command line tool or a single-user application.\n\nTo apply type-based subscription for this scenario, create one type-based subscription for each agent type, and use the same topic type for all the type-based subscriptions. When you publish, always use the same topic, i.e., the same topic type and topic source.\n\nFor example, assuming there are three agent types: \"triage_agent\", \"coder_agent\" and \"reviewer_agent\", and the topic type is \"default\", create the following type-based subscriptions:\n\nWith the above type-based subscriptions, use the same topic source \"default\" for all messages. So the topic is always (\"default\", \"default\"). A message published to this topic will be delivered to all the agents of all above types. Specifically, the message will be sent to the following agent IDs:\n\nThe following figure shows how type-based subscription works in this example.\n\nIf the agent with the ID does not exist, the runtime will create it.\n\nIn this scenario, there is only one tenant but you want to control which agent handles which topic. This is useful when you want to create silos and have different agents specialized in handling different topics.\n\nTo apply type-based subscription for this scenario, create one type-based subscription for each agent type but with different topic types. You can map the same topic type to multiple agent types if you want these agent types to share a same topic. For topic source, still use the same value for all messages when you publish.\n\nContinuing the example above with same agent types, create the following type-based subscriptions:\n\nWith the above type-based subscriptions, any message published to the topic (\"triage\", \"default\") will be delivered to the agent with type \"triage_agent\", and any message published to the topic (\"coding\", \"default\") will be delivered to the agents with types \"coder_agent\" and \"reviewer_agent\".\n\nThe following figure shows how type-based subscription works in this example.\n\nIn single-tenant scenarios, the topic source is always the same (e.g., \"default\") – it is hard-coded in the application code. When moving to multi-tenant scenarios, the topic source becomes data-dependent.\n\nA good indication that you are in a multi-tenant scenario is that you need multiple instances of the same agent type. For example, you may want to have different agent instances to handle different user sessions to keep private data isolated, or, you may want to distribute a heavy workload across multiple instances of the same agent type and have them work on it concurrently.\n\nContinuing the example above, if you want to have dedicated instances of agents to handle a specific GitHub issue, you need to set the topic source to be a unique identifier for the issue.\n\nFor example, let’s say there is one type-based subscription for the agent type \"triage_agent\":\n\nWhen a message is published to the topic (\"github_issues\", \"github.com/microsoft/autogen/issues/1\"), the runtime will deliver the message to the agent with ID (\"triage_agent\", \"github.com/microsoft/autogen/issues/1\"). When a message is published to the topic (\"github_issues\", \"github.com/microsoft/autogen/issues/9\"), the runtime will deliver the message to the agent with ID (\"triage_agent\", \"github.com/microsoft/autogen/issues/9\").\n\nThe following figure shows how type-based subscription works in this example.\n\nNote the agent ID is data-dependent, and the runtime will create a new instance of the agent if it does not exist.\n\nTo support multiple topics per tenant, you can use different topic types, just like the single-tenant, multiple topics scenario.\n\nAgent Identity and Lifecycle\n\nAgent and Agent Runtime",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Topic and Subscription#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Topic#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Subscription#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Type-based Subscription#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Scenarios of Type-Based Subscription#",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Single-Tenant, Single Topic#",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Single-Tenant, Multiple Topics#",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Multi-Tenant Scenarios#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# Type-based Subscriptions for single-tenant, single topic scenario\nTypeSubscription(topic_type=\"default\", agent_type=\"triage_agent\")\nTypeSubscription(topic_type=\"default\", agent_type=\"coder_agent\")\nTypeSubscription(topic_type=\"default\", agent_type=\"reviewer_agent\")",
+      "language": "markdown"
+    },
+    {
+      "code": "# Type-based Subscriptions for single-tenant, single topic scenario\nTypeSubscription(topic_type=\"default\", agent_type=\"triage_agent\")\nTypeSubscription(topic_type=\"default\", agent_type=\"coder_agent\")\nTypeSubscription(topic_type=\"default\", agent_type=\"reviewer_agent\")",
+      "language": "markdown"
+    },
+    {
+      "code": "# The agent IDs created based on the topic source\nAgentID(\"triage_agent\", \"default\")\nAgentID(\"coder_agent\", \"default\")\nAgentID(\"reviewer_agent\", \"default\")",
+      "language": "markdown"
+    },
+    {
+      "code": "# The agent IDs created based on the topic source\nAgentID(\"triage_agent\", \"default\")\nAgentID(\"coder_agent\", \"default\")\nAgentID(\"reviewer_agent\", \"default\")",
+      "language": "markdown"
+    },
+    {
+      "code": "# Type-based Subscriptions for single-tenant, multiple topics scenario\nTypeSubscription(topic_type=\"triage\", agent_type=\"triage_agent\")\nTypeSubscription(topic_type=\"coding\", agent_type=\"coder_agent\")\nTypeSubscription(topic_type=\"coding\", agent_type=\"reviewer_agent\")",
+      "language": "markdown"
+    },
+    {
+      "code": "# Type-based Subscriptions for single-tenant, multiple topics scenario\nTypeSubscription(topic_type=\"triage\", agent_type=\"triage_agent\")\nTypeSubscription(topic_type=\"coding\", agent_type=\"coder_agent\")\nTypeSubscription(topic_type=\"coding\", agent_type=\"reviewer_agent\")",
+      "language": "markdown"
+    },
+    {
+      "code": "TypeSubscription(topic_type=\"github_issues\", agent_type=\"triage_agent\")",
+      "language": "unknown"
+    },
+    {
+      "code": "TypeSubscription(topic_type=\"github_issues\", agent_type=\"triage_agent\")",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

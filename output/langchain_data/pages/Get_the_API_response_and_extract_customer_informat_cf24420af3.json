@@ -1,0 +1,8 @@
+{
+  "title": "Get the API response and extract customer information",
+  "content": "export LANGSMITH_URL=\"<your_langsmith_url>\"\nresponse=$(curl -s $LANGSMITH_URL/api/v1/info)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-the-api-response-and-extract-customer-information",
+  "links": []
+}

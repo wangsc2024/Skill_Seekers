@@ -1,0 +1,19 @@
+{
+  "title": "AIMessage(content='bar', ...)",
+  "content": "python  theme={null}\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(\n    model,\n    tools=[],\n    checkpointer=InMemorySaver()\n)",
+  "code_samples": [
+    {
+      "code": "### InMemorySaver Checkpointer\n\nTo enable persistence during testing, you can use the [`InMemorySaver`](https://reference.langchain.com/python/langgraph/checkpoints/#langgraph.checkpoint.memory.InMemorySaver) checkpointer. This allows you to simulate multiple turns to test state-dependent behavior:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "InMemorySaver Checkpointer",
+      "id": "inmemorysaver-checkpointer"
+    }
+  ],
+  "url": "llms-txt#aimessage(content='bar',-...)",
+  "links": []
+}

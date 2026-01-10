@@ -1,0 +1,23 @@
+{
+  "title": "Invoke the graph with an input and print the result",
+  "content": "print(graph.invoke({\"question\": \"hi\"}))\n\n{'answer': 'bye'}\npython  theme={null}\nfrom langgraph.graph import StateGraph, START, END\nfrom typing_extensions import TypedDict",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "Notice that the output of invoke only includes the output schema.\n\n### Pass private state between nodes\n\nIn some cases, you may want nodes to exchange information that is crucial for intermediate logic but doesn't need to be part of the main schema of the graph. This private data is not relevant to the overall input/output of the graph and should only be shared between certain nodes.\n\nBelow, we'll create an example sequential graph consisting of three nodes (node\\_1, node\\_2 and node\\_3), where private data is passed between the first two steps (node\\_1 and node\\_2), while the third step (node\\_3) only has access to the public overall state.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Pass private state between nodes",
+      "id": "pass-private-state-between-nodes"
+    }
+  ],
+  "url": "llms-txt#invoke-the-graph-with-an-input-and-print-the-result",
+  "links": []
+}

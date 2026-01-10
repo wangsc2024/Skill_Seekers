@@ -1,0 +1,149 @@
+{
+  "title": "[{'expensive_node': {'result': 10}, '__metadata__': {'cached': True}}]",
+  "content": "python  theme={null}\ngraph.add_edge(\"node_a\", \"node_b\")\npython  theme={null}\ngraph.add_conditional_edges(\"node_a\", routing_function)\npython  theme={null}\ngraph.add_conditional_edges(\"node_a\", routing_function, {True: \"node_b\", False: \"node_c\"})\npython  theme={null}\nfrom langgraph.graph import START\n\ngraph.add_edge(START, \"node_a\")\npython  theme={null}\nfrom langgraph.graph import START\n\ngraph.add_conditional_edges(START, routing_function)\npython  theme={null}\ngraph.add_conditional_edges(START, routing_function, {True: \"node_b\", False: \"node_c\"})\npython  theme={null}\ndef continue_to_jokes(state: OverallState):\n    return [Send(\"generate_joke\", {\"subject\": s}) for s in state['subjects']]\n\ngraph.add_conditional_edges(\"node_a\", continue_to_jokes)\npython  theme={null}\ndef my_node(state: State) -> Command[Literal[\"my_other_node\"]]:\n    return Command(\n        # state update\n        update={\"foo\": \"bar\"},\n        # control flow\n        goto=\"my_other_node\"\n    )\npython  theme={null}\ndef my_node(state: State) -> Command[Literal[\"my_other_node\"]]:\n    if state[\"foo\"] == \"bar\":\n        return Command(update={\"foo\": \"baz\"}, goto=\"my_other_node\")\npython  theme={null}\ndef my_node(state: State) -> Command[Literal[\"other_subgraph\"]]:\n    return Command(\n        update={\"foo\": \"bar\"},\n        goto=\"other_subgraph\",  # where `other_subgraph` is a node in the parent graph\n        graph=Command.PARENT\n    )\npython  theme={null}\n@dataclass\nclass ContextSchema:\n    llm_provider: str = \"openai\"\n\ngraph = StateGraph(State, context_schema=ContextSchema)\npython  theme={null}\ngraph.invoke(inputs, context={\"llm_provider\": \"anthropic\"})\npython  theme={null}\nfrom langgraph.runtime import Runtime\n\ndef node_a(state: State, runtime: Runtime[ContextSchema]):\n    llm = get_llm(runtime.context.llm_provider)\n    # ...\npython  theme={null}\ngraph.invoke(inputs, config={\"recursion_limit\": 5}, context={\"llm\": \"anthropic\"})\npython  theme={null}\nfrom langchain_core.runnables import RunnableConfig\nfrom langgraph.graph import StateGraph\n\ndef my_node(state: dict, config: RunnableConfig) -> dict:\n    current_step = config[\"metadata\"][\"langgraph_step\"]\n    print(f\"Currently on step: {current_step}\")\n    return state\npython  theme={null}\nfrom typing import Annotated, Literal\nfrom langgraph.graph import StateGraph, START, END\nfrom langgraph.managed import RemainingSteps\n\nclass State(TypedDict):\n    messages: Annotated[list, lambda x, y: x + y]\n    remaining_steps: RemainingSteps  # Managed value - tracks steps until limit\n\ndef reasoning_node(state: State) -> dict:\n    # RemainingSteps is automatically populated by LangGraph\n    remaining = state[\"remaining_steps\"]\n\n# Check if we're running low on steps\n    if remaining <= 2:\n        return {\"messages\": [\"Approaching limit, wrapping up...\"]}\n\n# Normal processing\n    return {\"messages\": [\"thinking...\"]}\n\ndef route_decision(state: State) -> Literal[\"reasoning_node\", \"fallback_node\"]:\n    \"\"\"Route based on remaining steps\"\"\"\n    if state[\"remaining_steps\"] <= 2:\n        return \"fallback_node\"\n    return \"reasoning_node\"\n\ndef fallback_node(state: State) -> dict:\n    \"\"\"Handle cases where recursion limit is approaching\"\"\"\n    return {\"messages\": [\"Reached complexity limit, providing best effort answer\"]}",
+  "code_samples": [
+    {
+      "code": "1. First run takes two seconds to run (due to mocked expensive computation).\n2. Second run utilizes cache and returns quickly.\n\n## Edges\n\nEdges define how the logic is routed and how the graph decides to stop. This is a big part of how your agents work and how different nodes communicate with each other. There are a few key types of edges:\n\n* Normal Edges: Go directly from one node to the next.\n* Conditional Edges: Call a function to determine which node(s) to go to next.\n* Entry Point: Which node to call first when user input arrives.\n* Conditional Entry Point: Call a function to determine which node(s) to call first when user input arrives.\n\nA node can have multiple outgoing edges. If a node has multiple outgoing edges, **all** of those destination nodes will be executed in parallel as a part of the next superstep.\n\n### Normal Edges\n\nIf you **always** want to go from node A to node B, you can use the [`add_edge`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_edge) method directly.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Conditional Edges\n\nIf you want to **optionally** route to one or more edges (or optionally terminate), you can use the [`add_conditional_edges`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_conditional_edges) method. This method accepts the name of a node and a \"routing function\" to call after that node is executed:",
+      "language": "unknown"
+    },
+    {
+      "code": "Similar to nodes, the `routing_function` accepts the current `state` of the graph and returns a value.\n\nBy default, the return value `routing_function` is used as the name of the node (or list of nodes) to send the state to next. All those nodes will be run in parallel as a part of the next superstep.\n\nYou can optionally provide a dictionary that maps the `routing_function`'s output to the name of the next node.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n  Use [`Command`](#command) instead of conditional edges if you want to combine state updates and routing in a single function.\n</Tip>\n\n### Entry point\n\nThe entry point is the first node(s) that are run when the graph starts. You can use the [`add_edge`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_edge) method from the virtual [`START`](https://reference.langchain.com/python/langgraph/constants/#langgraph.constants.START) node to the first node to execute to specify where to enter the graph.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Conditional entry point\n\nA conditional entry point lets you start at different nodes depending on custom logic. You can use [`add_conditional_edges`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.StateGraph.add_conditional_edges) from the virtual [`START`](https://reference.langchain.com/python/langgraph/constants/#langgraph.constants.START) node to accomplish this.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can optionally provide a dictionary that maps the `routing_function`'s output to the name of the next node.",
+      "language": "unknown"
+    },
+    {
+      "code": "## `Send`\n\nBy default, `Nodes` and `Edges` are defined ahead of time and operate on the same shared state. However, there can be cases where the exact edges are not known ahead of time and/or you may want different versions of `State` to exist at the same time. A common example of this is with [map-reduce](/oss/python/langgraph/graph-api#map-reduce-and-the-send-api) design patterns. In this design pattern, a first node may generate a list of objects, and you may want to apply some other node to all those objects. The number of objects may be unknown ahead of time (meaning the number of edges may not be known) and the input `State` to the downstream `Node` should be different (one for each generated object).\n\nTo support this design pattern, LangGraph supports returning [`Send`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Send) objects from conditional edges. `Send` takes two arguments: first is the name of the node, and second is the state to pass to that node.",
+      "language": "unknown"
+    },
+    {
+      "code": "## `Command`\n\nIt can be useful to combine control flow (edges) and state updates (nodes). For example, you might want to BOTH perform state updates AND decide which node to go to next in the SAME node. LangGraph provides a way to do so by returning a [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) object from node functions:",
+      "language": "unknown"
+    },
+    {
+      "code": "With [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) you can also achieve dynamic control flow behavior (identical to [conditional edges](#conditional-edges)):",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n  When returning [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) in your node functions, you must add return type annotations with the list of node names the node is routing to, e.g. `Command[Literal[\"my_other_node\"]]`. This is necessary for the graph rendering and tells LangGraph that `my_node` can navigate to `my_other_node`.\n</Note>\n\nCheck out this [how-to guide](/oss/python/langgraph/use-graph-api#combine-control-flow-and-state-updates-with-command) for an end-to-end example of how to use [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command).\n\n### When should I use Command instead of conditional edges?\n\n* Use [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) when you need to **both** update the graph state **and** route to a different node. For example, when implementing [multi-agent handoffs](/oss/python/langchain/multi-agent/handoffs) where it's important to route to a different agent and pass some information to that agent.\n* Use [conditional edges](#conditional-edges) to route between nodes conditionally without updating the state.\n\n### Navigating to a node in a parent graph\n\nIf you are using [subgraphs](/oss/python/langgraph/use-subgraphs), you might want to navigate from a node within a subgraph to a different subgraph (i.e. a different node in the parent graph). To do so, you can specify `graph=Command.PARENT` in [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command):",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n  Setting `graph` to `Command.PARENT` will navigate to the closest parent graph.\n\n  When you send updates from a subgraph node to a parent graph node for a key that's shared by both parent and subgraph [state schemas](#schema), you **must** define a [reducer](#reducers) for the key you're updating in the parent graph state. See this [example](/oss/python/langgraph/use-graph-api#navigate-to-a-node-in-a-parent-graph).\n</Note>\n\nThis is particularly useful when implementing [multi-agent handoffs](/oss/python/langchain/multi-agent/handoffs).\n\nCheck out [this guide](/oss/python/langgraph/use-graph-api#navigate-to-a-node-in-a-parent-graph) for detail.\n\n### Using inside tools\n\nA common use case is updating graph state from inside a tool. For example, in a customer support application you might want to look up customer information based on their account number or ID in the beginning of the conversation.\n\nRefer to [this guide](/oss/python/langgraph/use-graph-api#use-inside-tools) for detail.\n\n### Human-in-the-loop\n\n[`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) is an important part of human-in-the-loop workflows: when using `interrupt()` to collect user input, [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command) is then used to supply the input and resume execution via `Command(resume=\"User input\")`. Check out [this conceptual guide](/oss/python/langgraph/interrupts) for more information.\n\n## Graph migrations\n\nLangGraph can easily handle migrations of graph definitions (nodes, edges, and state) even when using a checkpointer to track state.\n\n* For threads at the end of the graph (i.e. not interrupted) you can change the entire topology of the graph (i.e. all nodes and edges, remove, add, rename, etc)\n* For threads currently interrupted, we support all topology changes other than renaming / removing nodes (as that thread could now be about to enter a node that no longer exists) -- if this is a blocker please reach out and we can prioritize a solution.\n* For modifying state, we have full backwards and forwards compatibility for adding and removing keys\n* State keys that are renamed lose their saved state in existing threads\n* State keys whose types change in incompatible ways could currently cause issues in threads with state from before the change -- if this is a blocker please reach out and we can prioritize a solution.\n\n## Runtime context\n\nWhen creating a graph, you can specify a `context_schema` for runtime context passed to nodes. This is useful for passing\ninformation to nodes that is not part of the graph state. For example, you might want to pass dependencies such as model name or a database connection.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then pass this context into the graph using the `context` parameter of the `invoke` method.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then access and use this context inside a node or conditional edge:",
+      "language": "unknown"
+    },
+    {
+      "code": "See [this guide](/oss/python/langgraph/use-graph-api#add-runtime-configuration) for a full breakdown on configuration.\n\n### Recursion limit\n\nThe recursion limit sets the maximum number of [super-steps](#graphs) the graph can execute during a single execution. Once the limit is reached, LangGraph will raise `GraphRecursionError`. By default this value is set to 25 steps. The recursion limit can be set on any graph at runtime, and is passed to `invoke`/`stream` via the config dictionary. Importantly, `recursion_limit` is a standalone `config` key and should not be passed inside the `configurable` key as all other user-defined configuration. See the example below:",
+      "language": "unknown"
+    },
+    {
+      "code": "Read [this how-to](/oss/python/langgraph/graph-api#impose-a-recursion-limit) to learn more about how the recursion limit works.\n\n### Accessing and handling the recursion counter\n\nThe current step counter is accessible in `config[\"metadata\"][\"langgraph_step\"]` within any node, allowing for proactive recursion handling before hitting the recursion limit. This enables you to implement graceful degradation strategies within your graph logic.\n\n#### How it works\n\nThe step counter is stored in `config[\"metadata\"][\"langgraph_step\"]`. The recursion limit check follows the logic: `step > stop` where `stop = step + recursion_limit + 1`. When the limit is exceeded, LangGraph raises a `GraphRecursionError`.\n\n#### Accessing the current step counter\n\nYou can access the current step counter within any node to monitor execution progress.",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Proactive recursion handling\n\nLangGraph provides a `RemainingSteps` managed value that tracks how many steps remain before hitting the recursion limit. This allows for graceful degradation within your graph.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Edges",
+      "id": "edges"
+    },
+    {
+      "level": "h3",
+      "text": "Normal Edges",
+      "id": "normal-edges"
+    },
+    {
+      "level": "h3",
+      "text": "Conditional Edges",
+      "id": "conditional-edges"
+    },
+    {
+      "level": "h3",
+      "text": "Entry point",
+      "id": "entry-point"
+    },
+    {
+      "level": "h3",
+      "text": "Conditional entry point",
+      "id": "conditional-entry-point"
+    },
+    {
+      "level": "h2",
+      "text": "`Send`",
+      "id": "`send`"
+    },
+    {
+      "level": "h2",
+      "text": "`Command`",
+      "id": "`command`"
+    },
+    {
+      "level": "h3",
+      "text": "When should I use Command instead of conditional edges?",
+      "id": "when-should-i-use-command-instead-of-conditional-edges?"
+    },
+    {
+      "level": "h3",
+      "text": "Navigating to a node in a parent graph",
+      "id": "navigating-to-a-node-in-a-parent-graph"
+    },
+    {
+      "level": "h3",
+      "text": "Using inside tools",
+      "id": "using-inside-tools"
+    },
+    {
+      "level": "h3",
+      "text": "Human-in-the-loop",
+      "id": "human-in-the-loop"
+    },
+    {
+      "level": "h2",
+      "text": "Graph migrations",
+      "id": "graph-migrations"
+    },
+    {
+      "level": "h2",
+      "text": "Runtime context",
+      "id": "runtime-context"
+    },
+    {
+      "level": "h3",
+      "text": "Recursion limit",
+      "id": "recursion-limit"
+    },
+    {
+      "level": "h3",
+      "text": "Accessing and handling the recursion counter",
+      "id": "accessing-and-handling-the-recursion-counter"
+    }
+  ],
+  "url": "llms-txt#[{'expensive_node':-{'result':-10},-'__metadata__':-{'cached':-true}}]",
+  "links": []
+}

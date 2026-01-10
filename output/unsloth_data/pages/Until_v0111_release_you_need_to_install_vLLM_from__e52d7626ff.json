@@ -1,0 +1,13 @@
+{
+  "title": "Until v0.11.1 release, you need to install vLLM from nightly build",
+  "content": "uv pip install -U vllm --pre --extra-index-url https://wheels.vllm.ai/nightly\npython\nfrom vllm import LLM, SamplingParams\nfrom vllm.model_executor.models.deepseek_ocr import NGramPerReqLogitsProcessor\nfrom PIL import Image",
+  "code_samples": [
+    {
+      "code": "2. Then run the following code:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#until-v0.11.1-release,-you-need-to-install-vllm-from-nightly-build",
+  "links": []
+}

@@ -1,0 +1,81 @@
+{
+  "title": "Rollback Concurrent",
+  "content": "Source: https://docs.langchain.com/langsmith/rollback-concurrent\n\nThis guide assumes knowledge of what double-texting is, which you can learn about in the [double-texting conceptual guide](/langsmith/double-texting).\n\nThe guide covers the `rollback` option for double texting, which interrupts the prior run of the graph and starts a new one with the double-text. This option is very similar to the `interrupt` option, but in this case the first run is completely deleted from the database and cannot be restarted. Below is a quick example of using the `rollback` option.\n\nFirst, we will define a quick helper function for printing out JS and CURL model outputs (you can skip this if using Python):\n\n<Tabs>\n  <Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nNow, let's import our required packages and instantiate our client, assistant, and thread.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nNow let's run a thread with the multitask parameter set to \"rollback\":\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nWe can see that the thread has data only from the second run\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\nVerify that the original, rolled back run was deleted\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n</Tabs>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/rollback-concurrent.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nNow, let's import our required packages and instantiate our client, assistant, and thread.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Create runs\n\nNow let's run a thread with the multitask parameter set to \"rollback\":\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## View run results\n\nWe can see that the thread has data only from the second run\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    },
+    {
+      "code": "Verify that the original, rolled back run was deleted\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "Create runs",
+      "id": "create-runs"
+    },
+    {
+      "level": "h2",
+      "text": "View run results",
+      "id": "view-run-results"
+    }
+  ],
+  "url": "llms-txt#rollback-concurrent",
+  "links": []
+}

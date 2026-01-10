@@ -1,0 +1,8 @@
+{
+  "title": "Name of the dataset we want to create",
+  "content": "dataset_name = f'{project_name}-backtesting {start_time.strftime(\"%Y-%m-%d\")}-{end_time.strftime(\"%Y-%m-%d\")}'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#name-of-the-dataset-we-want-to-create",
+  "links": []
+}

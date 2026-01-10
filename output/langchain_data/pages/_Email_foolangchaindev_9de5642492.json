@@ -1,0 +1,13 @@
+{
+  "title": "- Email: foo@langchain.dev",
+  "content": "python  theme={null}\nfrom langchain.tools import tool, ToolRuntime\n\n@tool\ndef get_weather(city: str, runtime: ToolRuntime) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    writer = runtime.stream_writer\n\n# Stream custom updates as the tool executes\n    writer(f\"Looking up data for city: {city}\")\n    writer(f\"Acquired data for city: {city}\")\n\nreturn f\"It's always sunny in {city}!\"\n```\n\n<Note>\n  If you use `runtime.stream_writer` inside your tool, the tool must be invoked within a LangGraph execution context. See [Streaming](/oss/python/langchain/streaming) for more details.\n</Note>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/tools.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "#### Stream Writer\n\nStream custom updates from tools as they execute using `runtime.stream_writer`. This is useful for providing real-time feedback to users about what a tool is doing.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#--email:-foo@langchain.dev",
+  "links": []
+}

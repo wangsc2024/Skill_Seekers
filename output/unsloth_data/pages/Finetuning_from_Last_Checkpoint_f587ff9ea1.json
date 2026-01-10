@@ -1,0 +1,23 @@
+{
+  "title": "Finetuning from Last Checkpoint",
+  "content": "Checkpointing allows you to save your finetuning progress so you can pause it and then continue.\n\nYou must edit the `Trainer` first to add `save_strategy` and `save_steps`. Below saves a checkpoint every 50 steps to the folder `outputs`.\n\nThen in the trainer do:\n\nWhich will start from the latest checkpoint and continue training.\n\n### Wandb Integration",
+  "code_samples": [
+    {
+      "code": "trainer = SFTTrainer(\n    ....\n    args = TrainingArguments(\n        ....\n        output_dir = \"outputs\",\n        save_strategy = \"steps\",\n        save_steps = 50,\n    ),\n)",
+      "language": "python"
+    },
+    {
+      "code": "trainer_stats = trainer.train(resume_from_checkpoint = True)",
+      "language": "python"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Wandb Integration",
+      "id": "wandb-integration"
+    }
+  ],
+  "url": "llms-txt#finetuning-from-last-checkpoint",
+  "links": []
+}

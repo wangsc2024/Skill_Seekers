@@ -1,0 +1,163 @@
+{
+  "title": "How to integrate LangGraph into your React application",
+  "content": "Source: https://docs.langchain.com/langsmith/use-stream-react\n\n<Info>\n  **Prerequisites**\n\n* [LangSmith](/langsmith/home)\n  * [Agent Server](/langsmith/agent-server)\n</Info>\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) React hook provides a seamless way to integrate LangGraph into your React applications. It handles all the complexities of streaming, state management, and branching logic, letting you focus on building great chat experiences.\n\n* Messages streaming: Handle a stream of message chunks to form a complete message\n* Automatic state management for messages, interrupts, loading states, and errors\n* Conversation branching: Create alternate conversation paths from any point in the chat history\n* UI-agnostic design: bring your own components and styling\n\nLet's explore how to use [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) in your React application.\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) provides a solid foundation for creating bespoke chat experiences. For pre-built chat components and interfaces, we also recommend checking out [CopilotKit](https://docs.copilotkit.ai/coagents/quickstart/langgraph) and [assistant-ui](https://www.assistant-ui.com/docs/runtimes/langgraph).\n\n## Customizing your UI\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook takes care of all the complex state management behind the scenes, providing you with simple interfaces to build your UI. Here's what you get out of the box:\n\n* Thread state management\n* Loading and error states\n* Interrupts\n* Message handling and updates\n* Branching support\n\nHere are some examples on how to use these features effectively:\n\nThe `isLoading` property tells you when a stream is active, enabling you to:\n\n* Show a loading indicator\n* Disable input fields during processing\n* Display a cancel button\n\n### Resume a stream after page refresh\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook can automatically resume an ongoing run upon mounting by setting `reconnectOnMount: true`. This is useful for continuing a stream after a page refresh, ensuring no messages and events generated during the downtime are lost.\n\nBy default the ID of the created run is stored in `window.sessionStorage`, which can be swapped by passing a custom storage in `reconnectOnMount` instead. The storage is used to persist the in-flight run ID for a thread (under `lg:stream:${threadId}` key).\n\nYou can also manually manage the resuming process by using the run callbacks to persist the run metadata and the `joinStream` function to resume the stream. Make sure to pass `streamResumable: true` when creating the run; otherwise some events might be lost.\n\n### Thread management\n\nKeep track of conversations with built-in thread management. You can access the current thread ID and get notified when new threads are created:\n\nWe recommend storing the `threadId` in your URL's query parameters to let users resume conversations after page refreshes.\n\n### Messages handling\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook will keep track of the message chunks received from the server and concatenate them together to form a complete message. The completed message chunks can be retrieved via the `messages` property.\n\nBy default, the `messagesKey` is set to `messages`, where it will append the new messages chunks to `values[\"messages\"]`. If you store messages in a different key, you can change the value of `messagesKey`.\n\nUnder the hood, [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) automatically subscribes to multiple [stream modes](/langsmith/streaming#supported-stream-modes) to provide a complete picture of your graph's execution. The `messages` property specifically uses `messages-tuple` mode to receive individual LLM tokens from chat model invocations. Learn more about messages streaming in the [streaming](/langsmith/streaming#messages) guide.\n\n### Accessing full graph state\n\nBeyond messages, you can access the complete graph state via the `values` property. This includes any state your graph maintains, not just the conversation history:\n\nThis is powered by the `values` stream mode under the hood, which streams the full state after each graph step.\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook exposes the `interrupt` property, which will be filled with the last interrupt from the thread. You can use interrupts to:\n\n* Render a confirmation UI before executing a node\n* Wait for human input, allowing agent to ask the user with clarifying questions\n\nLearn more about interrupts in the [How to handle interrupts](/oss/python/langgraph/interrupts#pause-using-interrupt) guide.\n\nFor each message, you can use `getMessagesMetadata()` to get the first checkpoint from which the message has been first seen. You can then create a new run from the checkpoint preceding the first seen checkpoint to create a new branch in a thread.\n\nA branch can be created in following ways:\n\n1. Edit a previous user message.\n2. Request a regeneration of a previous assistant message.\n\nFor advanced use cases you can use the `experimental_branchTree` property to get the tree representation of the thread, which can be used to render branching controls for non-message based graphs.\n\n### Optimistic Updates\n\nYou can optimistically update the client state before performing a network request to the agent, allowing you to provide immediate feedback to the user, such as showing the user message immediately before the agent has seen the request.\n\n### Cached Thread Display\n\nUse the `initialValues` option to display cached thread data immediately while the history is being loaded from the server. This improves user experience by showing cached data instantly when navigating to existing threads.\n\n### Optimistic thread creation\n\nUse the `threadId` option in `submit` function to enable optimistic UI patterns where you need to know the thread ID before the thread is actually created.\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook is friendly for apps written in TypeScript and you can specify types for the state to get better type safety and IDE support.\n\nYou can also optionally specify types for different scenarios, such as:\n\n* `ConfigurableType`: Type for the `config.configurable` property (default: `Record<string, unknown>`)\n* `InterruptType`: Type for the interrupt value - i.e. contents of `interrupt(...)` function (default: `unknown`)\n* `CustomEventType`: Type for the custom events (default: `unknown`)\n* `UpdateType`: Type for the submit function (default: `Partial<State>`)\n\nIf you're using LangGraph.js, you can also reuse your graph's annotation types. However, make sure to only import the types of the annotation schema in order to avoid importing the entire LangGraph.js runtime (i.e. via `import type { ... }` directive).\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook provides callback options that give you access to different types of streaming events beyond just messages. You don't need to explicitly configure stream modes— just pass callbacks for the event types you want to handle:\n\n### Available callbacks\n\n| Callback          | Description                                                                                                                            | Stream mode |\n| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- |\n| `onUpdateEvent`   | Called when a state update is received after each graph step                                                                           | `updates`   |\n| `onCustomEvent`   | Called when a custom event is received from your graph. See the [streaming](/oss/python/langgraph/streaming#stream-custom-data) guide. | `custom`    |\n| `onMetadataEvent` | Called with run and thread metadata                                                                                                    | `metadata`  |\n| `onError`         | Called when an error occurs                                                                                                            | -           |\n| `onFinish`        | Called when the stream completes                                                                                                       | -           |\n\nThis design means you can access rich streaming data (state updates, custom events, metadata) without manually configuring stream modes—`useStream` handles the subscription for you.\n\n* [useStream API Reference](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/use-stream-react.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## Example",
+      "language": "unknown"
+    },
+    {
+      "code": "## Customizing your UI\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook takes care of all the complex state management behind the scenes, providing you with simple interfaces to build your UI. Here's what you get out of the box:\n\n* Thread state management\n* Loading and error states\n* Interrupts\n* Message handling and updates\n* Branching support\n\nHere are some examples on how to use these features effectively:\n\n### Loading states\n\nThe `isLoading` property tells you when a stream is active, enabling you to:\n\n* Show a loading indicator\n* Disable input fields during processing\n* Display a cancel button",
+      "language": "unknown"
+    },
+    {
+      "code": "### Resume a stream after page refresh\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook can automatically resume an ongoing run upon mounting by setting `reconnectOnMount: true`. This is useful for continuing a stream after a page refresh, ensuring no messages and events generated during the downtime are lost.",
+      "language": "unknown"
+    },
+    {
+      "code": "By default the ID of the created run is stored in `window.sessionStorage`, which can be swapped by passing a custom storage in `reconnectOnMount` instead. The storage is used to persist the in-flight run ID for a thread (under `lg:stream:${threadId}` key).",
+      "language": "unknown"
+    },
+    {
+      "code": "You can also manually manage the resuming process by using the run callbacks to persist the run metadata and the `joinStream` function to resume the stream. Make sure to pass `streamResumable: true` when creating the run; otherwise some events might be lost.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Thread management\n\nKeep track of conversations with built-in thread management. You can access the current thread ID and get notified when new threads are created:",
+      "language": "unknown"
+    },
+    {
+      "code": "We recommend storing the `threadId` in your URL's query parameters to let users resume conversations after page refreshes.\n\n### Messages handling\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook will keep track of the message chunks received from the server and concatenate them together to form a complete message. The completed message chunks can be retrieved via the `messages` property.\n\nBy default, the `messagesKey` is set to `messages`, where it will append the new messages chunks to `values[\"messages\"]`. If you store messages in a different key, you can change the value of `messagesKey`.",
+      "language": "unknown"
+    },
+    {
+      "code": "Under the hood, [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) automatically subscribes to multiple [stream modes](/langsmith/streaming#supported-stream-modes) to provide a complete picture of your graph's execution. The `messages` property specifically uses `messages-tuple` mode to receive individual LLM tokens from chat model invocations. Learn more about messages streaming in the [streaming](/langsmith/streaming#messages) guide.\n\n### Accessing full graph state\n\nBeyond messages, you can access the complete graph state via the `values` property. This includes any state your graph maintains, not just the conversation history:",
+      "language": "unknown"
+    },
+    {
+      "code": "This is powered by the `values` stream mode under the hood, which streams the full state after each graph step.\n\n### Interrupts\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook exposes the `interrupt` property, which will be filled with the last interrupt from the thread. You can use interrupts to:\n\n* Render a confirmation UI before executing a node\n* Wait for human input, allowing agent to ask the user with clarifying questions\n\nLearn more about interrupts in the [How to handle interrupts](/oss/python/langgraph/interrupts#pause-using-interrupt) guide.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Branching\n\nFor each message, you can use `getMessagesMetadata()` to get the first checkpoint from which the message has been first seen. You can then create a new run from the checkpoint preceding the first seen checkpoint to create a new branch in a thread.\n\nA branch can be created in following ways:\n\n1. Edit a previous user message.\n2. Request a regeneration of a previous assistant message.",
+      "language": "unknown"
+    },
+    {
+      "code": "For advanced use cases you can use the `experimental_branchTree` property to get the tree representation of the thread, which can be used to render branching controls for non-message based graphs.\n\n### Optimistic Updates\n\nYou can optimistically update the client state before performing a network request to the agent, allowing you to provide immediate feedback to the user, such as showing the user message immediately before the agent has seen the request.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Cached Thread Display\n\nUse the `initialValues` option to display cached thread data immediately while the history is being loaded from the server. This improves user experience by showing cached data instantly when navigating to existing threads.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Optimistic thread creation\n\nUse the `threadId` option in `submit` function to enable optimistic UI patterns where you need to know the thread ID before the thread is actually created.",
+      "language": "unknown"
+    },
+    {
+      "code": "### TypeScript\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook is friendly for apps written in TypeScript and you can specify types for the state to get better type safety and IDE support.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can also optionally specify types for different scenarios, such as:\n\n* `ConfigurableType`: Type for the `config.configurable` property (default: `Record<string, unknown>`)\n* `InterruptType`: Type for the interrupt value - i.e. contents of `interrupt(...)` function (default: `unknown`)\n* `CustomEventType`: Type for the custom events (default: `unknown`)\n* `UpdateType`: Type for the submit function (default: `Partial<State>`)",
+      "language": "unknown"
+    },
+    {
+      "code": "If you're using LangGraph.js, you can also reuse your graph's annotation types. However, make sure to only import the types of the annotation schema in order to avoid importing the entire LangGraph.js runtime (i.e. via `import type { ... }` directive).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Event Handling\n\nThe [`useStream()`](https://reference.langchain.com/javascript/functions/_langchain_langgraph-sdk.react.useStream.html) hook provides callback options that give you access to different types of streaming events beyond just messages. You don't need to explicitly configure stream modes— just pass callbacks for the event types you want to handle:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Install the SDK",
+      "id": "install-the-sdk"
+    },
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Customizing your UI",
+      "id": "customizing-your-ui"
+    },
+    {
+      "level": "h3",
+      "text": "Loading states",
+      "id": "loading-states"
+    },
+    {
+      "level": "h3",
+      "text": "Resume a stream after page refresh",
+      "id": "resume-a-stream-after-page-refresh"
+    },
+    {
+      "level": "h3",
+      "text": "Thread management",
+      "id": "thread-management"
+    },
+    {
+      "level": "h3",
+      "text": "Messages handling",
+      "id": "messages-handling"
+    },
+    {
+      "level": "h3",
+      "text": "Accessing full graph state",
+      "id": "accessing-full-graph-state"
+    },
+    {
+      "level": "h3",
+      "text": "Interrupts",
+      "id": "interrupts"
+    },
+    {
+      "level": "h3",
+      "text": "Branching",
+      "id": "branching"
+    },
+    {
+      "level": "h3",
+      "text": "Optimistic Updates",
+      "id": "optimistic-updates"
+    },
+    {
+      "level": "h3",
+      "text": "Cached Thread Display",
+      "id": "cached-thread-display"
+    },
+    {
+      "level": "h3",
+      "text": "Optimistic thread creation",
+      "id": "optimistic-thread-creation"
+    },
+    {
+      "level": "h3",
+      "text": "TypeScript",
+      "id": "typescript"
+    },
+    {
+      "level": "h2",
+      "text": "Event Handling",
+      "id": "event-handling"
+    },
+    {
+      "level": "h3",
+      "text": "Available callbacks",
+      "id": "available-callbacks"
+    },
+    {
+      "level": "h2",
+      "text": "Learn More",
+      "id": "learn-more"
+    }
+  ],
+  "url": "llms-txt#how-to-integrate-langgraph-into-your-react-application",
+  "links": []
+}

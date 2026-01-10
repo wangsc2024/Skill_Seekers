@@ -1,0 +1,33 @@
+{
+  "title": "Create and run an agent",
+  "content": "agent = Agent('openai:gpt-4o')\nresult = agent.run_sync('What is the capital of France?')\nprint(result.output)\n#> Paris\npython  theme={null}\nfrom opentelemetry import trace\nfrom pydantic_ai import Agent\nfrom langsmith.integrations.otel import configure\n\nconfigure(project_name=\"pydantic-ai-metadata\")\nAgent.instrument_all()\n\ntracer = trace.get_tracer(__name__)\n\nagent = Agent('openai:gpt-4o')\n\nwith tracer.start_as_current_span(\"pydantic_ai_workflow\") as span:\n    span.set_attribute(\"langsmith.metadata.user_id\", \"user_123\")\n    span.set_attribute(\"langsmith.metadata.workflow_type\", \"question_answering\")\n    span.set_attribute(\"langsmith.span.tags\", \"pydantic-ai,production\")\n\nresult = agent.run_sync('Explain quantum computing in simple terms')\n    print(result.output)\npython  theme={null}\nfrom langsmith.integrations.otel import configure\nfrom pydantic_ai import Agent\nfrom openinference.instrumentation.openai import OpenAIInstrumentor",
+  "code_samples": [
+    {
+      "code": "## Advanced usage\n\n### Custom metadata and tags\n\nYou can add custom metadata to your traces using OpenTelemetry span attributes:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Combine with other instrumentors\n\nYou can combine PydanticAI instrumentation with other OpenTelemetry instrumentors:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Advanced usage",
+      "id": "advanced-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Custom metadata and tags",
+      "id": "custom-metadata-and-tags"
+    },
+    {
+      "level": "h3",
+      "text": "Combine with other instrumentors",
+      "id": "combine-with-other-instrumentors"
+    }
+  ],
+  "url": "llms-txt#create-and-run-an-agent",
+  "links": []
+}

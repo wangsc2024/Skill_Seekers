@@ -1,0 +1,8 @@
+{
+  "title": "Agent model",
+  "content": "qa_llm = init_chat_model(\"claude-sonnet-4-5-20250929\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#agent-model",
+  "links": []
+}

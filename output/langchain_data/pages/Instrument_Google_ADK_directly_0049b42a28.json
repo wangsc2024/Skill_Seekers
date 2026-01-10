@@ -1,0 +1,19 @@
+{
+  "title": "Instrument Google ADK directly",
+  "content": "GoogleADKInstrumentor().instrument()\npython  theme={null}\nimport asyncio\nfrom langsmith.integrations.otel import configure\nfrom google.adk import Runner\nfrom google.adk.agents import LlmAgent\nfrom google.adk.sessions import InMemorySessionService\nfrom google.genai import types",
+  "code_samples": [
+    {
+      "code": "<Note>\n  You do not need to set any OpenTelemetry environment variables or configure exporters manually—`configure()` handles everything automatically.\n</Note>\n\n### 3. Create and run your ADK agent\n\nOnce configured, your Google ADK application will automatically send traces to LangSmith:\n\nThis example includes a minimal app that sets up an agent, session, and runner, then sends a message and streams events.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "3. Create and run your ADK agent",
+      "id": "3.-create-and-run-your-adk-agent"
+    }
+  ],
+  "url": "llms-txt#instrument-google-adk-directly",
+  "links": []
+}

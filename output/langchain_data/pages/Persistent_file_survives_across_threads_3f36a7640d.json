@@ -1,0 +1,19 @@
+{
+  "title": "Persistent file (survives across threads)",
+  "content": "agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Save final report to /memories/report.txt\"}]\n})\npython  theme={null}\nimport uuid",
+  "code_samples": [
+    {
+      "code": "## Cross-thread persistence\n\nFiles in `/memories/` can be accessed from any thread:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Cross-thread persistence",
+      "id": "cross-thread-persistence"
+    }
+  ],
+  "url": "llms-txt#persistent-file-(survives-across-threads)",
+  "links": []
+}

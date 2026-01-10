@@ -1,0 +1,88 @@
+{
+  "title": "Use the functional API",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/use-functional-api\n\nThe [**Functional API**](/oss/python/langgraph/functional-api) allows you to add LangGraph's key features — [persistence](/oss/python/langgraph/persistence), [memory](/oss/python/langgraph/add-memory), [human-in-the-loop](/oss/python/langgraph/interrupts), and [streaming](/oss/python/langgraph/streaming) — to your applications with minimal changes to your existing code.\n\n<Tip>\n  For conceptual information on the functional API, see [Functional API](/oss/python/langgraph/functional-api).\n</Tip>\n\n## Creating a simple workflow\n\nWhen defining an `entrypoint`, input is restricted to the first argument of the function. To pass multiple inputs, you can use a dictionary.\n\n<Accordion title=\"Extended example: simple workflow\">\n  \n</Accordion>\n\n<Accordion title=\"Extended example: Compose an essay with an LLM\">\n  This example demonstrates how to use the `@task` and `@entrypoint` decorators\n  syntactically. Given that a checkpointer is provided, the workflow results will\n  be persisted in the checkpointer.\n\n## Parallel execution\n\nTasks can be executed in parallel by invoking them concurrently and waiting for the results. This is useful for improving performance in IO bound tasks (e.g., calling APIs for LLMs).\n\n<Accordion title=\"Extended example: parallel LLM calls\">\n  This example demonstrates how to run multiple LLM calls in parallel using `@task`. Each call generates a paragraph on a different topic, and results are joined into a single text output.\n\nThis example uses LangGraph's concurrency model to improve execution time, especially when tasks involve I/O like LLM completions.\n</Accordion>\n\nThe **Functional API** and the [**Graph API**](/oss/python/langgraph/graph-api) can be used together in the same application as they share the same underlying runtime.\n\n<Accordion title=\"Extended example: calling a simple graph from the functional API\">\n  \n</Accordion>\n\n## Call other entrypoints\n\nYou can call other **entrypoints** from within an **entrypoint** or a **task**.\n\n<Accordion title=\"Extended example: calling another entrypoint\">\n  \n</Accordion>\n\nThe **Functional API** uses the same streaming mechanism as the **Graph API**. Please\nread the [**streaming guide**](/oss/python/langgraph/streaming) section for more details.\n\nExample of using the streaming API to stream both updates and custom data.\n\n1. Import [`get_stream_writer`](https://reference.langchain.com/python/langgraph/config/#langgraph.config.get_stream_writer) from `langgraph.config`.\n2. Obtain a stream writer instance within the entrypoint.\n3. Emit custom data before computation begins.\n4. Emit another custom message after computing the result.\n5. Use `.stream()` to process streamed output.\n6. Specify which streaming modes to use.\n\n<Warning>\n  **Async with Python \\< 3.11**\n  If using Python \\< 3.11 and writing async code, using [`get_stream_writer`](https://reference.langchain.com/python/langgraph/config/#langgraph.config.get_stream_writer) will not work. Instead please\n  use the `StreamWriter` class directly. See [Async with Python \\< 3.11](/oss/python/langgraph/streaming#async) for more details.\n\n```python  theme={null}\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langgraph.func import entrypoint, task\nfrom langgraph.types import RetryPolicy",
+  "code_samples": [
+    {
+      "code": "<Accordion title=\"Extended example: simple workflow\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n<Accordion title=\"Extended example: Compose an essay with an LLM\">\n  This example demonstrates how to use the `@task` and `@entrypoint` decorators\n  syntactically. Given that a checkpointer is provided, the workflow results will\n  be persisted in the checkpointer.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Parallel execution\n\nTasks can be executed in parallel by invoking them concurrently and waiting for the results. This is useful for improving performance in IO bound tasks (e.g., calling APIs for LLMs).",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Extended example: parallel LLM calls\">\n  This example demonstrates how to run multiple LLM calls in parallel using `@task`. Each call generates a paragraph on a different topic, and results are joined into a single text output.",
+      "language": "unknown"
+    },
+    {
+      "code": "This example uses LangGraph's concurrency model to improve execution time, especially when tasks involve I/O like LLM completions.\n</Accordion>\n\n## Calling graphs\n\nThe **Functional API** and the [**Graph API**](/oss/python/langgraph/graph-api) can be used together in the same application as they share the same underlying runtime.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Extended example: calling a simple graph from the functional API\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Call other entrypoints\n\nYou can call other **entrypoints** from within an **entrypoint** or a **task**.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Extended example: calling another entrypoint\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Streaming\n\nThe **Functional API** uses the same streaming mechanism as the **Graph API**. Please\nread the [**streaming guide**](/oss/python/langgraph/streaming) section for more details.\n\nExample of using the streaming API to stream both updates and custom data.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Import [`get_stream_writer`](https://reference.langchain.com/python/langgraph/config/#langgraph.config.get_stream_writer) from `langgraph.config`.\n2. Obtain a stream writer instance within the entrypoint.\n3. Emit custom data before computation begins.\n4. Emit another custom message after computing the result.\n5. Use `.stream()` to process streamed output.\n6. Specify which streaming modes to use.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Warning>\n  **Async with Python \\< 3.11**\n  If using Python \\< 3.11 and writing async code, using [`get_stream_writer`](https://reference.langchain.com/python/langgraph/config/#langgraph.config.get_stream_writer) will not work. Instead please\n  use the `StreamWriter` class directly. See [Async with Python \\< 3.11](/oss/python/langgraph/streaming#async) for more details.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Warning>\n\n## Retry policy",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Creating a simple workflow",
+      "id": "creating-a-simple-workflow"
+    },
+    {
+      "level": "h2",
+      "text": "Parallel execution",
+      "id": "parallel-execution"
+    },
+    {
+      "level": "h2",
+      "text": "Calling graphs",
+      "id": "calling-graphs"
+    },
+    {
+      "level": "h2",
+      "text": "Call other entrypoints",
+      "id": "call-other-entrypoints"
+    },
+    {
+      "level": "h2",
+      "text": "Streaming",
+      "id": "streaming"
+    },
+    {
+      "level": "h2",
+      "text": "Retry policy",
+      "id": "retry-policy"
+    }
+  ],
+  "url": "llms-txt#use-the-functional-api",
+  "links": []
+}

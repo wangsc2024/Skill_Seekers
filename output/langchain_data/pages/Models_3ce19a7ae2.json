@@ -1,0 +1,145 @@
+{
+  "title": "Models",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/models\n\n[LLMs](https://en.wikipedia.org/wiki/Large_language_model) are powerful AI tools that can interpret and generate text like humans. They're versatile enough to write content, translate languages, summarize, and answer questions without needing specialized training for each task.\n\nIn addition to text generation, many models support:\n\n* <Icon icon=\"hammer\" size={16} /> [Tool calling](#tool-calling) - calling external tools (like databases queries or API calls) and use results in their responses.\n* <Icon icon=\"shapes\" size={16} /> [Structured output](#structured-output) - where the model's response is constrained to follow a defined format.\n* <Icon icon=\"image\" size={16} /> [Multimodality](#multimodal) - process and return data other than text, such as images, audio, and video.\n* <Icon icon=\"brain\" size={16} /> [Reasoning](#reasoning) - models perform multi-step reasoning to arrive at a conclusion.\n\nModels are the reasoning engine of [agents](/oss/python/langchain/agents). They drive the agent's decision-making process, determining which tools to call, how to interpret results, and when to provide a final answer.\n\nThe quality and capabilities of the model you choose directly impact your agent's baseline reliability and performance. Different models excel at different tasks - some are better at following complex instructions, others at structured reasoning, and some support larger context windows for handling more information.\n\nLangChain's standard model interfaces give you access to many different provider integrations, which makes it easy to experiment with and switch between models to find the best fit for your use case.\n\n<Info>\n  For provider-specific integration information and capabilities, see the provider's [chat model page](/oss/python/integrations/chat).\n</Info>\n\nModels can be utilized in two ways:\n\n1. **With agents** - Models can be dynamically specified when creating an [agent](/oss/python/langchain/agents#model).\n2. **Standalone** - Models can be called directly (outside of the agent loop) for tasks like text generation, classification, or extraction without the need for an agent framework.\n\nThe same model interface works in both contexts, which gives you the flexibility to start simple and scale up to more complex agent-based workflows as needed.\n\n### Initialize a model\n\nThe easiest way to get started with a standalone model in LangChain is to use [`init_chat_model`](https://reference.langchain.com/python/langchain/models/#langchain.chat_models.init_chat_model) to initialize one from a [chat model provider](/oss/python/integrations/chat) of your choice (examples below):\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)\n\n</CodeGroup>\n  </Tab>\n</Tabs>\n\nSee [`init_chat_model`](https://reference.langchain.com/python/langchain/models/#langchain.chat_models.init_chat_model) for more detail, including information on how to pass model [parameters](#parameters).\n\n<Card title=\"Invoke\" href=\"#invoke\" icon=\"paper-plane\" arrow=\"true\" horizontal>\n  The model takes messages as input and outputs messages after generating a complete response.\n</Card>\n\n<Card title=\"Stream\" href=\"#stream\" icon=\"tower-broadcast\" arrow=\"true\" horizontal>\n  Invoke the model, but stream the output as it is generated in real-time.\n</Card>\n\n<Card title=\"Batch\" href=\"#batch\" icon=\"grip\" arrow=\"true\" horizontal>\n  Send multiple requests to a model in a batch for more efficient processing.\n</Card>\n\n<Info>\n  In addition to chat models, LangChain provides support for other adjacent technologies, such as embedding models and vector stores. See the [integrations page](/oss/python/integrations/providers/overview) for details.\n</Info>\n\nA chat model takes parameters that can be used to configure its behavior. The full set of supported parameters varies by model and provider, but standard ones include:\n\n<ParamField body=\"model\" type=\"string\" required>\n  The name or identifier of the specific model you want to use with a provider. You can also specify both the model and its provider in a single argument using the '{model_provider}:{model}' format, for example, 'openai:o1'.\n</ParamField>\n\n<ParamField body=\"api_key\" type=\"string\">\n  The key required for authenticating with the model's provider. This is usually issued when you sign up for access to the model. Often accessed by setting an <Tooltip tip=\"A variable whose value is set outside the program, typically through functionality built into the operating system or microservice.\">environment variable</Tooltip>.\n</ParamField>\n\n<ParamField body=\"temperature\" type=\"number\">\n  Controls the randomness of the model's output. A higher number makes responses more creative; lower ones make them more deterministic.\n</ParamField>\n\n<ParamField body=\"max_tokens\" type=\"number\">\n  Limits the total number of <Tooltip tip=\"The basic unit that a model reads and generates. Providers may define them differently, but in general, they can represent a whole or part of word.\">tokens</Tooltip> in the response, effectively controlling how long the output can be.\n</ParamField>\n\n<ParamField body=\"timeout\" type=\"number\">\n  The maximum time (in seconds) to wait for a response from the model before canceling the request.\n</ParamField>\n\n<ParamField body=\"max_retries\" type=\"number\">\n  The maximum number of attempts the system will make to resend a request if it fails due to issues like network timeouts or rate limits.\n</ParamField>\n\nUsing [`init_chat_model`](https://reference.langchain.com/python/langchain/models/#langchain.chat_models.init_chat_model), pass these parameters as inline <Tooltip tip=\"Arbitrary keyword arguments\" cta=\"Learn more\" href=\"https://www.w3schools.com/python/python_args_kwargs.asp\">`**kwargs`</Tooltip>:\n\n<Info>\n  Each chat model integration may have additional params used to control provider-specific functionality.\n\nFor example, [`ChatOpenAI`](https://reference.langchain.com/python/integrations/langchain_openai/ChatOpenAI) has `use_responses_api` to dictate whether to use the OpenAI Responses or Completions API.\n\nTo find all the parameters supported by a given chat model, head to the [chat model integrations](/oss/python/integrations/chat) page.\n</Info>\n\nA chat model must be invoked to generate an output. There are three primary invocation methods, each suited to different use cases.\n\nThe most straightforward way to call a model is to use [`invoke()`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.chat_models.BaseChatModel.invoke) with a single message or a list of messages.\n\nA list of messages can be provided to a chat model to represent conversation history. Each message has a role that models use to indicate who sent the message in the conversation.\n\nSee the [messages](/oss/python/langchain/messages) guide for more detail on roles, types, and content.\n\n<Info>\n  If the return type of your invocation is a string, ensure that you are using a chat model as opposed to a LLM. Legacy, text-completion LLMs return strings directly. LangChain chat models are prefixed with \"Chat\", e.g., [`ChatOpenAI`](https://reference.langchain.com/python/integrations/langchain_openai/ChatOpenAI)(/oss/integrations/chat/openai).\n</Info>\n\nMost models can stream their output content while it is being generated. By displaying output progressively, streaming significantly improves user experience, particularly for longer responses.\n\nCalling [`stream()`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.chat_models.BaseChatModel.stream) returns an <Tooltip tip=\"An object that progressively provides access to each item of a collection, in order.\">iterator</Tooltip> that yields output chunks as they are produced. You can use a loop to process each chunk in real-time:\n\nAs opposed to [`invoke()`](#invoke), which returns a single [`AIMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.AIMessage) after the model has finished generating its full response, `stream()` returns multiple [`AIMessageChunk`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.AIMessageChunk) objects, each containing a portion of the output text. Importantly, each chunk in a stream is designed to be gathered into a full message via summation:\n\n```python Construct an AIMessage theme={null}\nfull = None  # None | AIMessageChunk\nfor chunk in model.stream(\"What color is the sky?\"):\n    full = chunk if full is None else full + chunk\n    print(full.text)",
+  "code_samples": [
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n</Tabs>",
+      "language": "unknown"
+    },
+    {
+      "code": "See [`init_chat_model`](https://reference.langchain.com/python/langchain/models/#langchain.chat_models.init_chat_model) for more detail, including information on how to pass model [parameters](#parameters).\n\n### Key methods\n\n<Card title=\"Invoke\" href=\"#invoke\" icon=\"paper-plane\" arrow=\"true\" horizontal>\n  The model takes messages as input and outputs messages after generating a complete response.\n</Card>\n\n<Card title=\"Stream\" href=\"#stream\" icon=\"tower-broadcast\" arrow=\"true\" horizontal>\n  Invoke the model, but stream the output as it is generated in real-time.\n</Card>\n\n<Card title=\"Batch\" href=\"#batch\" icon=\"grip\" arrow=\"true\" horizontal>\n  Send multiple requests to a model in a batch for more efficient processing.\n</Card>\n\n<Info>\n  In addition to chat models, LangChain provides support for other adjacent technologies, such as embedding models and vector stores. See the [integrations page](/oss/python/integrations/providers/overview) for details.\n</Info>\n\n## Parameters\n\nA chat model takes parameters that can be used to configure its behavior. The full set of supported parameters varies by model and provider, but standard ones include:\n\n<ParamField body=\"model\" type=\"string\" required>\n  The name or identifier of the specific model you want to use with a provider. You can also specify both the model and its provider in a single argument using the '{model_provider}:{model}' format, for example, 'openai:o1'.\n</ParamField>\n\n<ParamField body=\"api_key\" type=\"string\">\n  The key required for authenticating with the model's provider. This is usually issued when you sign up for access to the model. Often accessed by setting an <Tooltip tip=\"A variable whose value is set outside the program, typically through functionality built into the operating system or microservice.\">environment variable</Tooltip>.\n</ParamField>\n\n<ParamField body=\"temperature\" type=\"number\">\n  Controls the randomness of the model's output. A higher number makes responses more creative; lower ones make them more deterministic.\n</ParamField>\n\n<ParamField body=\"max_tokens\" type=\"number\">\n  Limits the total number of <Tooltip tip=\"The basic unit that a model reads and generates. Providers may define them differently, but in general, they can represent a whole or part of word.\">tokens</Tooltip> in the response, effectively controlling how long the output can be.\n</ParamField>\n\n<ParamField body=\"timeout\" type=\"number\">\n  The maximum time (in seconds) to wait for a response from the model before canceling the request.\n</ParamField>\n\n<ParamField body=\"max_retries\" type=\"number\">\n  The maximum number of attempts the system will make to resend a request if it fails due to issues like network timeouts or rate limits.\n</ParamField>\n\nUsing [`init_chat_model`](https://reference.langchain.com/python/langchain/models/#langchain.chat_models.init_chat_model), pass these parameters as inline <Tooltip tip=\"Arbitrary keyword arguments\" cta=\"Learn more\" href=\"https://www.w3schools.com/python/python_args_kwargs.asp\">`**kwargs`</Tooltip>:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Info>\n  Each chat model integration may have additional params used to control provider-specific functionality.\n\n  For example, [`ChatOpenAI`](https://reference.langchain.com/python/integrations/langchain_openai/ChatOpenAI) has `use_responses_api` to dictate whether to use the OpenAI Responses or Completions API.\n\n  To find all the parameters supported by a given chat model, head to the [chat model integrations](/oss/python/integrations/chat) page.\n</Info>\n\n***\n\n## Invocation\n\nA chat model must be invoked to generate an output. There are three primary invocation methods, each suited to different use cases.\n\n### Invoke\n\nThe most straightforward way to call a model is to use [`invoke()`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.chat_models.BaseChatModel.invoke) with a single message or a list of messages.",
+      "language": "unknown"
+    },
+    {
+      "code": "A list of messages can be provided to a chat model to represent conversation history. Each message has a role that models use to indicate who sent the message in the conversation.\n\nSee the [messages](/oss/python/langchain/messages) guide for more detail on roles, types, and content.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "<Info>\n  If the return type of your invocation is a string, ensure that you are using a chat model as opposed to a LLM. Legacy, text-completion LLMs return strings directly. LangChain chat models are prefixed with \"Chat\", e.g., [`ChatOpenAI`](https://reference.langchain.com/python/integrations/langchain_openai/ChatOpenAI)(/oss/integrations/chat/openai).\n</Info>\n\n### Stream\n\nMost models can stream their output content while it is being generated. By displaying output progressively, streaming significantly improves user experience, particularly for longer responses.\n\nCalling [`stream()`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.chat_models.BaseChatModel.stream) returns an <Tooltip tip=\"An object that progressively provides access to each item of a collection, in order.\">iterator</Tooltip> that yields output chunks as they are produced. You can use a loop to process each chunk in real-time:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nAs opposed to [`invoke()`](#invoke), which returns a single [`AIMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.AIMessage) after the model has finished generating its full response, `stream()` returns multiple [`AIMessageChunk`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.AIMessageChunk) objects, each containing a portion of the output text. Importantly, each chunk in a stream is designed to be gathered into a full message via summation:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Basic usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Initialize a model",
+      "id": "initialize-a-model"
+    },
+    {
+      "level": "h3",
+      "text": "Key methods",
+      "id": "key-methods"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Invocation",
+      "id": "invocation"
+    },
+    {
+      "level": "h3",
+      "text": "Invoke",
+      "id": "invoke"
+    },
+    {
+      "level": "h3",
+      "text": "Stream",
+      "id": "stream"
+    }
+  ],
+  "url": "llms-txt#models",
+  "links": []
+}

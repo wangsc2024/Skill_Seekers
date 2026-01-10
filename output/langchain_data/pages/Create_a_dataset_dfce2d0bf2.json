@@ -1,0 +1,19 @@
+{
+  "title": "Create a dataset",
+  "content": "examples = [\n    {\n        \"inputs\": {\"text\": \"Shut up, idiot\"},\n        \"outputs\": {\"label\": \"Toxic\"},\n    },\n    {\n        \"inputs\": {\"text\": \"You're a wonderful person\"},\n        \"outputs\": {\"label\": \"Not toxic\"},\n    },\n    {\n        \"inputs\": {\"text\": \"This is the worst thing ever\"},\n        \"outputs\": {\"label\": \"Toxic\"},\n    },\n    {\n        \"inputs\": {\"text\": \"I had a great day today\"},\n        \"outputs\": {\"label\": \"Not toxic\"},\n    },\n    {\n        \"inputs\": {\"text\": \"Nobody likes you\"},\n        \"outputs\": {\"label\": \"Toxic\"},\n    },\n    {\n        \"inputs\": {\"text\": \"This is unacceptable. I want to speak to the manager.\"},\n        \"outputs\": {\"label\": \"Not toxic\"},\n    },\n]\n\ndataset_name = \"Toxic Queries - API Example\"\ndataset = client.create_dataset(dataset_name=dataset_name)\nclient.create_examples(dataset_id=dataset.id, examples=examples)\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "## Run a single experiment\n\nTo run an experiment via the API, you'll need to:\n\n1. Fetch the examples from your dataset.\n2. Create an experiment (also called a \"session\" in the API).\n3. For each example, create runs that reference both the example and the experiment.\n4. Close the experiment by setting its `end_time`.\n\nFirst, pull all of the examples you'd want to use in your experiment using the `/examples` endpoint:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Run a single experiment",
+      "id": "run-a-single-experiment"
+    }
+  ],
+  "url": "llms-txt#create-a-dataset",
+  "links": []
+}

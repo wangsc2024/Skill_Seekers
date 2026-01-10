@@ -1,0 +1,8 @@
+{
+  "title": "Configure OpenTelemetry",
+  "content": "tracer_provider = trace.get_tracer_provider()\nif not isinstance(tracer_provider, TracerProvider):\n    tracer_provider = TracerProvider()\n    trace.set_tracer_provider(tracer_provider)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#configure-opentelemetry",
+  "links": []
+}

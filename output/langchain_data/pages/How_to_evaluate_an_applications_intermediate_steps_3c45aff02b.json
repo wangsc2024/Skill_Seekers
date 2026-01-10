@@ -1,0 +1,71 @@
+{
+  "title": "How to evaluate an application's intermediate steps",
+  "content": "Source: https://docs.langchain.com/langsmith/evaluate-on-intermediate-steps\n\nWhile, in many scenarios, it is sufficient to evaluate the final output of your task, in some cases you might want to evaluate the intermediate steps of your pipeline.\n\nFor example, for retrieval-augmented generation (RAG), you might want to\n\n1. Evaluate the retrieval step to ensure that the correct documents are retrieved w\\.r.t the input query.\n2. Evaluate the generation step to ensure that the correct answer is generated w\\.r.t the retrieved documents.\n\nIn this guide, we will use a simple, fully-custom evaluator for evaluating criteria 1 and an LLM-based evaluator for evaluating criteria 2 to highlight both scenarios.\n\nIn order to evaluate the intermediate steps of your pipeline, your evaluator function should traverse and process the `run`/`rootRun` argument, which is a `Run` object that contains the intermediate steps of your pipeline.\n\n## 1. Define your LLM pipeline\n\nThe below RAG pipeline consists of 1) generating a Wikipedia query given the input question, 2) retrieving relevant documents from Wikipedia, and 3) generating an answer given the retrieved documents.\n\nRequires `langsmith>=0.3.13`\n\nThis pipeline will produce a trace that looks something like: <img src=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=3b691ca56f9d60035dcba2c248692fa1\" alt=\"evaluation_intermediate_trace.png\" data-og-width=\"2586\" width=\"2586\" data-og-height=\"1676\" height=\"1676\" data-path=\"langsmith/images/evaluation-intermediate-trace.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=280&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=23a9b9abdb3e43e0f6326f0d4293ab7d 280w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=560&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=4b771691bd1afffe9f371a105f7eaebe 560w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=840&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=beb01776de9a5fa663c82d4380bc78cd 840w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=1100&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=ec84bd3345df3d2cef38878b902c355b 1100w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=1650&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=043a7f22da6b158e070c853d67bacd69 1650w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=2500&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=42a9ea799157fee30a6b243c02615a02 2500w\" />\n\n## 2. Create a dataset and examples to evaluate the pipeline\n\nWe are building a very simple dataset with a couple of examples to evaluate the pipeline.\n\nRequires `langsmith>=0.3.13`\n\n## 3. Define your custom evaluators\n\nAs mentioned above, we will define two evaluators: one that evaluates the relevance of the retrieved documents w\\.r.t the input query and another that evaluates the hallucination of the generated answer w\\.r.t the retrieved documents. We will be using LangChain LLM wrappers, along with [`with_structured_output`](https://python.langchain.com/v0.1/docs/modules/model_io/chat/structured_output/) to define the evaluator for hallucination.\n\nThe key here is that the evaluator function should traverse the `run` / `rootRun` argument to access the intermediate steps of the pipeline. The evaluator can then process the inputs and outputs of the intermediate steps to evaluate according to the desired criteria.\n\nExample uses `langchain` for convenience, this is not required.\n\n## 4. Evaluate the pipeline\n\nFinally, we'll run `evaluate` with the custom evaluators defined above.\n\nThe experiment will contain the results of the evaluation, including the scores and comments from the evaluators: <img src=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-experiment.png?fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=e926744573c6b9757ba22ff245a3da2c\" alt=\"evaluation_intermediate_experiment.png\" data-og-width=\"2446\" width=\"2446\" data-og-height=\"1244\" height=\"1244\" data-path=\"langsmith/images/evaluation-intermediate-experiment.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-experiment.png?w=280&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=7b6e321b15a06b2adc7f1cacb8e07a35 280w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-experiment.png?w=560&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=c677007bcc1e2af4b3767d6b44fcb327 560w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-experiment.png?w=840&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=a39153399b6721b7c51693f5a59cf2b0 840w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-experiment.png?w=1100&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=1132228eba6761a724ae98d85fcf536c 1100w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-experiment.png?w=1650&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=5d74785384737df0cf67145b397b1934 1650w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-experiment.png?w=2500&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=bef00e4bdc12289d9f1e4b77ed8489cf 2500w\" />\n\n* [Evaluate a `langgraph` graph](/langsmith/evaluate-on-intermediate-steps)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/evaluate-on-intermediate-steps.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nRequires `langsmith>=0.3.13`\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nThis pipeline will produce a trace that looks something like: <img src=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=3b691ca56f9d60035dcba2c248692fa1\" alt=\"evaluation_intermediate_trace.png\" data-og-width=\"2586\" width=\"2586\" data-og-height=\"1676\" height=\"1676\" data-path=\"langsmith/images/evaluation-intermediate-trace.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=280&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=23a9b9abdb3e43e0f6326f0d4293ab7d 280w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=560&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=4b771691bd1afffe9f371a105f7eaebe 560w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=840&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=beb01776de9a5fa663c82d4380bc78cd 840w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=1100&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=ec84bd3345df3d2cef38878b902c355b 1100w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=1650&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=043a7f22da6b158e070c853d67bacd69 1650w, https://mintcdn.com/langchain-5e9cc07a/0B2PFrFBMRWNccee/langsmith/images/evaluation-intermediate-trace.png?w=2500&fit=max&auto=format&n=0B2PFrFBMRWNccee&q=85&s=42a9ea799157fee30a6b243c02615a02 2500w\" />\n\n## 2. Create a dataset and examples to evaluate the pipeline\n\nWe are building a very simple dataset with a couple of examples to evaluate the pipeline.\n\nRequires `langsmith>=0.3.13`\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## 3. Define your custom evaluators\n\nAs mentioned above, we will define two evaluators: one that evaluates the relevance of the retrieved documents w\\.r.t the input query and another that evaluates the hallucination of the generated answer w\\.r.t the retrieved documents. We will be using LangChain LLM wrappers, along with [`with_structured_output`](https://python.langchain.com/v0.1/docs/modules/model_io/chat/structured_output/) to define the evaluator for hallucination.\n\nThe key here is that the evaluator function should traverse the `run` / `rootRun` argument to access the intermediate steps of the pipeline. The evaluator can then process the inputs and outputs of the intermediate steps to evaluate according to the desired criteria.\n\nExample uses `langchain` for convenience, this is not required.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## 4. Evaluate the pipeline\n\nFinally, we'll run `evaluate` with the custom evaluators defined above.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "1. Define your LLM pipeline",
+      "id": "1.-define-your-llm-pipeline"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a dataset and examples to evaluate the pipeline",
+      "id": "2.-create-a-dataset-and-examples-to-evaluate-the-pipeline"
+    },
+    {
+      "level": "h2",
+      "text": "3. Define your custom evaluators",
+      "id": "3.-define-your-custom-evaluators"
+    },
+    {
+      "level": "h2",
+      "text": "4. Evaluate the pipeline",
+      "id": "4.-evaluate-the-pipeline"
+    },
+    {
+      "level": "h2",
+      "text": "Related",
+      "id": "related"
+    }
+  ],
+  "url": "llms-txt#how-to-evaluate-an-application's-intermediate-steps",
+  "links": []
+}

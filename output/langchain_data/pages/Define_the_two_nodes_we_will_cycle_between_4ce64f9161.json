@@ -1,0 +1,8 @@
+{
+  "title": "Define the two nodes we will cycle between",
+  "content": "workflow.add_node(\"agent\", call_model)\nworkflow.add_node(\"tools\", tool_node)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-the-two-nodes-we-will-cycle-between",
+  "links": []
+}

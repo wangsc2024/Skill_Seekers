@@ -1,0 +1,8 @@
+{
+  "title": "Update memory",
+  "content": "@tool\ndef save_user_info(user_id: str, user_info: dict[str, Any], runtime: ToolRuntime) -> str:\n    \"\"\"Save user info.\"\"\"\n    store = runtime.store\n    store.put((\"users\",), user_id, user_info)\n    return \"Successfully saved user info.\"\n\nstore = InMemoryStore()\nagent = create_agent(\n    model,\n    tools=[get_user_info, save_user_info],\n    store=store\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#update-memory",
+  "links": []
+}

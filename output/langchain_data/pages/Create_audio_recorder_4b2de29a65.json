@@ -1,0 +1,8 @@
+{
+  "title": "Create audio recorder",
+  "content": "audio_recorder = AudioRecorder(str(recording_path))",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-audio-recorder",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Access memory",
+  "content": "@tool\ndef get_user_info(user_id: str, runtime: ToolRuntime) -> str:\n    \"\"\"Look up user info.\"\"\"\n    store = runtime.store\n    user_info = store.get((\"users\",), user_id)\n    return str(user_info.value) if user_info else \"Unknown user\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#access-memory",
+  "links": []
+}

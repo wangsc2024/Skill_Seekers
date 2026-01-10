@@ -1,0 +1,39 @@
+{
+  "title": "ChatAnthropic",
+  "content": "Source: https://docs.langchain.com/oss/javascript/integrations/chat/anthropic\n\n[Anthropic](https://www.anthropic.com/) is an AI safety and research company. They are the creator of Claude.\n\nThis will help you getting started with Anthropic [chat models](/oss/javascript/langchain/models). For detailed documentation of all `ChatAnthropic` features and configurations head to the [API reference](https://api.js.langchain.com/classes/langchain_anthropic.ChatAnthropic.html).\n\n### Integration details\n\n| Class                                                                                        | Package                                                                      | Local | Serializable | [PY support](https://python.langchain.com/docs/integrations/chat/anthropic/) |                                               Downloads                                              |                                              Version                                              |\n| :------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------- | :---: | :----------: | :--------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------: |\n| [ChatAnthropic](https://api.js.langchain.com/classes/langchain_anthropic.ChatAnthropic.html) | [`@langchain/anthropic`](https://www.npmjs.com/package/@langchain/anthropic) |   ❌   |       ✅      |                                       ✅                                      | ![NPM - Downloads](https://img.shields.io/npm/dm/@langchain/anthropic?style=flat-square\\&label=%20&) | ![NPM - Version](https://img.shields.io/npm/v/@langchain/anthropic?style=flat-square\\&label=%20&) |\n\nSee the links in the table headers below for guides on how to use specific features.\n\n| [Tool calling](/oss/javascript/langchain/tools) | [Structured output](/oss/javascript/langchain/structured-output) | JSON mode | [Image input](/oss/javascript/langchain/messages#multimodal) | Audio input | Video input | [Token-level streaming](/oss/javascript/langchain/streaming/) | [Token usage](/oss/javascript/langchain/models#token-usage) | [Logprobs](/oss/javascript/langchain/models#log-probabilities) |\n| :---------------------------------------------: | :--------------------------------------------------------------: | :-------: | :----------------------------------------------------------: | :---------: | :---------: | :-----------------------------------------------------------: | :---------------------------------------------------------: | :------------------------------------------------------------: |\n|                        ✅                        |                                 ✅                                |     ✅     |                               ✅                              |      ❌      |      ❌      |                               ✅                               |                              ✅                              |                                ❌                               |\n\nYou'll need to sign up and obtain an [Anthropic API key](https://www.anthropic.com/), and install the `@langchain/anthropic` integration package.\n\nHead to [Anthropic's website](https://www.anthropic.com/) to sign up to Anthropic and generate an API key. Once you've done this set the `ANTHROPIC_API_KEY` environment variable:\n\nIf you want to get automated tracing of your model calls you can also set your [LangSmith](https://docs.langchain.com/langsmith/home) API key by uncommenting below:\n\n```bash  theme={null}",
+  "code_samples": [
+    {
+      "code": "If you want to get automated tracing of your model calls you can also set your [LangSmith](https://docs.langchain.com/langsmith/home) API key by uncommenting below:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "Integration details",
+      "id": "integration-details"
+    },
+    {
+      "level": "h3",
+      "text": "Model features",
+      "id": "model-features"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Credentials",
+      "id": "credentials"
+    }
+  ],
+  "url": "llms-txt#chatanthropic",
+  "links": []
+}

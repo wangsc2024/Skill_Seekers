@@ -1,0 +1,8 @@
+{
+  "title": "We want this to be a `POST` endpoint since we will post data here",
+  "content": "@web_endpoint(method=\"POST\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#we-want-this-to-be-a-`post`-endpoint-since-we-will-post-data-here",
+  "links": []
+}

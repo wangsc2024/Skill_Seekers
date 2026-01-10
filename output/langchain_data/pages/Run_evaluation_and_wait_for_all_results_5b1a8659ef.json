@@ -1,0 +1,8 @@
+{
+  "title": "Run evaluation and wait for all results",
+  "content": "results = client.evaluate(\n    target,\n    data=dataset,\n    evaluators=[evaluator],\n    blocking=True  # Wait for all evaluations to complete\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#run-evaluation-and-wait-for-all-results",
+  "links": []
+}

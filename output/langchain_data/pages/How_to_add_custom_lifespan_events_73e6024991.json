@@ -1,0 +1,19 @@
+{
+  "title": "How to add custom lifespan events",
+  "content": "Source: https://docs.langchain.com/langsmith/custom-lifespan\n\nWhen deploying agents to LangSmith, you often need to initialize resources like database connections when your server starts up, and ensure they're properly closed when it shuts down. Lifespan events let you hook into your server's startup and shutdown sequence to handle these critical setup and teardown tasks.\n\nThis works the same way as [adding custom routes](/langsmith/custom-routes). You just need to provide your own [`Starlette`](https://www.starlette.io/applications/) app (including [`FastAPI`](https://fastapi.tiangolo.com/), [`FastHTML`](https://fastht.ml/) and other compatible apps).\n\nBelow is an example using FastAPI.\n\n<Note>\n  \"Python only\"\n  We currently only support custom lifespan events in Python deployments with `langgraph-api>=0.0.26`.\n</Note>\n\nStarting from an **existing** LangSmith application, add the following lifespan code to your `webapp.py` file. If you are starting from scratch, you can create a new app from a template using the CLI.\n\nOnce you have a LangGraph project, add the following app code:\n\n```python {highlight={19}} theme={null}",
+  "code_samples": [
+    {
+      "code": "Once you have a LangGraph project, add the following app code:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create app",
+      "id": "create-app"
+    }
+  ],
+  "url": "llms-txt#how-to-add-custom-lifespan-events",
+  "links": []
+}

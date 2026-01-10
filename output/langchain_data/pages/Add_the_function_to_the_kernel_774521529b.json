@@ -1,0 +1,8 @@
+{
+  "title": "Add the function to the kernel",
+  "content": "code_analyzer = kernel.add_function(\n    function_name=\"analyzeCode\",\n    plugin_name=\"codeAnalysisPlugin\",\n    prompt_template_config=prompt_template_config,\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-the-function-to-the-kernel",
+  "links": []
+}

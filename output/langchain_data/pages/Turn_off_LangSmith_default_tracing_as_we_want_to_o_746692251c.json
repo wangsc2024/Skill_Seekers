@@ -1,0 +1,23 @@
+{
+  "title": "Turn off LangSmith default tracing, as we want to only trace with OpenTelemetry",
+  "content": "LANGSMITH_TRACING=false\n\nOTEL_EXPORTER_OTLP_ENDPOINT = \"https://api.smith.langchain.com/otel/\"\n\nOTEL_EXPORTER_OTLP_HEADERS = \"x-api-key=your-langsmith-api-key,Langsmith-Project=your-tracing-project-name\"\npython  theme={null}\nfrom strands.telemetry import StrandsTelemetry\n\nstrands_telemetry = StrandsTelemetry()\nstrands_telemetry.setup_otlp_exporter()\nstrands_telemetry.setup_meter()\n\nmy-strands-agent/\n├── agent.py          # Your main agent code\n├── requirements.txt  # Python dependencies\n└── langgraph.json   # LangGraph configuration\n```\n\nTo deploy your agent, follow the [Deploy to cloud](/langsmith/deploy-to-cloud) guide.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/deploy-other-frameworks.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "<Note>\n  If you're [self-hosting LangSmith](/langsmith/self-hosted), replace the  `OTEL_EXPORTER_OTLP_ENDPOINT` endpoint with your LangSmith API endpoint and append `/api/v1/otel`. For example: `OTEL_EXPORTER_OTLP_ENDPOINT = \"https://ai-company.com/api/v1/otel\"`\n</Note>\n\n<Note>\n  Strand's OTel tracing contains synchronous code. In this case, you may need to set `BG_JOB_ISOLATED_LOOPS=true` to execute background runs in an isolated event loop separate from the serving API event loop.\n</Note>\n\nIn your main agent, set up the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Prepare for deployment\n\nFrom here, to deploy to LangSmith, create a file structure like the following:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "4. Prepare for deployment",
+      "id": "4.-prepare-for-deployment"
+    }
+  ],
+  "url": "llms-txt#turn-off-langsmith-default-tracing,-as-we-want-to-only-trace-with-opentelemetry",
+  "links": []
+}

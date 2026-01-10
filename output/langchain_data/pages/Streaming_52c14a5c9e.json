@@ -1,0 +1,89 @@
+{
+  "title": "Streaming",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/streaming\n\nLangGraph implements a streaming system to surface real-time updates. Streaming is crucial for enhancing the responsiveness of applications built on LLMs. By displaying output progressively, even before a complete response is ready, streaming significantly improves user experience (UX), particularly when dealing with the latency of LLMs.\n\nWhat's possible with LangGraph streaming:\n\n* <Icon icon=\"share-nodes\" size={16} /> [**Stream graph state**](#stream-graph-state) — get state updates / values with `updates` and `values` modes.\n* <Icon icon=\"square-poll-horizontal\" size={16} /> [**Stream subgraph outputs**](#stream-subgraph-outputs) — include outputs from both the parent graph and any nested subgraphs.\n* <Icon icon=\"square-binary\" size={16} /> [**Stream LLM tokens**](#messages) — capture token streams from anywhere: inside nodes, subgraphs, or tools.\n* <Icon icon=\"table\" size={16} /> [**Stream custom data**](#stream-custom-data) — send custom updates or progress signals directly from tool functions.\n* <Icon icon=\"layer-plus\" size={16} /> [**Use multiple streaming modes**](#stream-multiple-modes) — choose from `values` (full state), `updates` (state deltas), `messages` (LLM tokens + metadata), `custom` (arbitrary user data), or `debug` (detailed traces).\n\n## Supported stream modes\n\nPass one or more of the following stream modes as a list to the [`stream`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.CompiledStateGraph.stream) or [`astream`](https://reference.langchain.com/python/langgraph/graphs/#langgraph.graph.state.CompiledStateGraph.astream) methods:\n\n| Mode       | Description                                                                                                                                                                         |\n| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `values`   | Streams the full value of the state after each step of the graph.                                                                                                                   |\n| `updates`  | Streams the updates to the state after each step of the graph. If multiple updates are made in the same step (e.g., multiple nodes are run), those updates are streamed separately. |\n| `custom`   | Streams custom data from inside your graph nodes.                                                                                                                                   |\n| `messages` | Streams 2-tuples (LLM token, metadata) from any graph nodes where an LLM is invoked.                                                                                                |\n| `debug`    | Streams as much information as possible throughout the execution of the graph.                                                                                                      |\n\n## Basic usage example\n\nLangGraph graphs expose the [`stream`](https://reference.langchain.com/python/langgraph/pregel/#langgraph.pregel.Pregel.stream) (sync) and [`astream`](https://reference.langchain.com/python/langgraph/pregel/#langgraph.pregel.Pregel.astream) (async) methods to yield streamed outputs as iterators.\n\n<Accordion title=\"Extended example: streaming updates\">\n\n## Stream multiple modes\n\nYou can pass a list as the `stream_mode` parameter to stream multiple modes at once.\n\nThe streamed outputs will be tuples of `(mode, chunk)` where `mode` is the name of the stream mode and `chunk` is the data streamed by that mode.\n\n## Stream graph state\n\nUse the stream modes `updates` and `values` to stream the state of the graph as it executes.\n\n* `updates` streams the **updates** to the state after each step of the graph.\n* `values` streams the **full value** of the state after each step of the graph.\n\n<Tabs>\n  <Tab title=\"updates\">\n    Use this to stream only the **state updates** returned by the nodes after each step. The streamed outputs include the name of the node as well as the update.\n\n<Tab title=\"values\">\n    Use this to stream the **full state** of the graph after each step.\n\n## Stream subgraph outputs\n\nTo include outputs from [subgraphs](/oss/python/langgraph/use-subgraphs) in the streamed outputs, you can set `subgraphs=True` in the `.stream()` method of the parent graph. This will stream outputs from both the parent graph and any subgraphs.\n\nThe outputs will be streamed as tuples `(namespace, data)`, where `namespace` is a tuple with the path to the node where a subgraph is invoked, e.g. `(\"parent_node:<task_id>\", \"child_node:<task_id>\")`.\n\n<Accordion title=\"Extended example: streaming from subgraphs\">\n\n**Note** that we are receiving not just the node updates, but we also the namespaces which tell us what graph (or subgraph) we are streaming from.\n</Accordion>\n\nUse the `debug` streaming mode to stream as much information as possible throughout the execution of the graph. The streamed outputs include the name of the node as well as the full state.\n\nUse the `messages` streaming mode to stream Large Language Model (LLM) outputs **token by token** from any part of your graph, including nodes, tools, subgraphs, or tasks.\n\nThe streamed output from [`messages` mode](#supported-stream-modes) is a tuple `(message_chunk, metadata)` where:\n\n* `message_chunk`: the token or message segment from the LLM.\n* `metadata`: a dictionary containing details about the graph node and LLM invocation.\n\n> If your LLM is not available as a LangChain integration, you can stream its outputs using `custom` mode instead. See [use with any LLM](#use-with-any-llm) for details.\n\n<Warning>\n  **Manual config required for async in Python \\< 3.11**\n  When using Python \\< 3.11 with async code, you must explicitly pass [`RunnableConfig`](https://reference.langchain.com/python/langchain_core/runnables/#langchain_core.runnables.RunnableConfig) to `ainvoke()` to enable proper streaming. See [Async with Python \\< 3.11](#async) for details or upgrade to Python 3.11+.\n</Warning>\n\n```python  theme={null}\nfrom dataclasses import dataclass\n\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, START\n\n@dataclass\nclass MyState:\n    topic: str\n    joke: str = \"\"\n\nmodel = init_chat_model(model=\"gpt-4o-mini\")\n\ndef call_model(state: MyState):\n    \"\"\"Call the LLM to generate a joke about a topic\"\"\"\n    # Note that message events are emitted even when the LLM is run using .invoke rather than .stream\n    model_response = model.invoke(  # [!code highlight]\n        [\n            {\"role\": \"user\", \"content\": f\"Generate a joke about {state.topic}\"}\n        ]\n    )\n    return {\"joke\": model_response.content}\n\ngraph = (\n    StateGraph(MyState)\n    .add_node(call_model)\n    .add_edge(START, \"call_model\")\n    .compile()\n)",
+  "code_samples": [
+    {
+      "code": "<Accordion title=\"Extended example: streaming updates\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Stream multiple modes\n\nYou can pass a list as the `stream_mode` parameter to stream multiple modes at once.\n\nThe streamed outputs will be tuples of `(mode, chunk)` where `mode` is the name of the stream mode and `chunk` is the data streamed by that mode.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Stream graph state\n\nUse the stream modes `updates` and `values` to stream the state of the graph as it executes.\n\n* `updates` streams the **updates** to the state after each step of the graph.\n* `values` streams the **full value** of the state after each step of the graph.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tabs>\n  <Tab title=\"updates\">\n    Use this to stream only the **state updates** returned by the nodes after each step. The streamed outputs include the name of the node as well as the update.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"values\">\n    Use this to stream the **full state** of the graph after each step.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Stream subgraph outputs\n\nTo include outputs from [subgraphs](/oss/python/langgraph/use-subgraphs) in the streamed outputs, you can set `subgraphs=True` in the `.stream()` method of the parent graph. This will stream outputs from both the parent graph and any subgraphs.\n\nThe outputs will be streamed as tuples `(namespace, data)`, where `namespace` is a tuple with the path to the node where a subgraph is invoked, e.g. `(\"parent_node:<task_id>\", \"child_node:<task_id>\")`.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Extended example: streaming from subgraphs\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "**Note** that we are receiving not just the node updates, but we also the namespaces which tell us what graph (or subgraph) we are streaming from.\n</Accordion>\n\n<a id=\"debug\" />\n\n### Debugging\n\nUse the `debug` streaming mode to stream as much information as possible throughout the execution of the graph. The streamed outputs include the name of the node as well as the full state.",
+      "language": "unknown"
+    },
+    {
+      "code": "<a id=\"messages\" />\n\n## LLM tokens\n\nUse the `messages` streaming mode to stream Large Language Model (LLM) outputs **token by token** from any part of your graph, including nodes, tools, subgraphs, or tasks.\n\nThe streamed output from [`messages` mode](#supported-stream-modes) is a tuple `(message_chunk, metadata)` where:\n\n* `message_chunk`: the token or message segment from the LLM.\n* `metadata`: a dictionary containing details about the graph node and LLM invocation.\n\n> If your LLM is not available as a LangChain integration, you can stream its outputs using `custom` mode instead. See [use with any LLM](#use-with-any-llm) for details.\n\n<Warning>\n  **Manual config required for async in Python \\< 3.11**\n  When using Python \\< 3.11 with async code, you must explicitly pass [`RunnableConfig`](https://reference.langchain.com/python/langchain_core/runnables/#langchain_core.runnables.RunnableConfig) to `ainvoke()` to enable proper streaming. See [Async with Python \\< 3.11](#async) for details or upgrade to Python 3.11+.\n</Warning>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Supported stream modes",
+      "id": "supported-stream-modes"
+    },
+    {
+      "level": "h2",
+      "text": "Basic usage example",
+      "id": "basic-usage-example"
+    },
+    {
+      "level": "h2",
+      "text": "Stream multiple modes",
+      "id": "stream-multiple-modes"
+    },
+    {
+      "level": "h2",
+      "text": "Stream graph state",
+      "id": "stream-graph-state"
+    },
+    {
+      "level": "h2",
+      "text": "Stream subgraph outputs",
+      "id": "stream-subgraph-outputs"
+    },
+    {
+      "level": "h3",
+      "text": "Debugging",
+      "id": "debugging"
+    },
+    {
+      "level": "h2",
+      "text": "LLM tokens",
+      "id": "llm-tokens"
+    }
+  ],
+  "url": "llms-txt#streaming",
+  "links": []
+}

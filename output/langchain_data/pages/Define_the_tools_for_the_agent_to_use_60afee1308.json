@@ -1,0 +1,8 @@
+{
+  "title": "Define the tools for the agent to use",
+  "content": "@tool\ndef search(query: str) -> str:\n    \"\"\"Call to surf the web.\"\"\"\n    # This is a placeholder, but don't tell the LLM that...\n    if \"sf\" in query.lower() or \"san francisco\" in query.lower():\n        return \"It's 60 degrees and foggy.\"\n    return \"It's 90 degrees and sunny.\"\n\ntools = [search]\ntool_node = ToolNode(tools)\nmodel = init_chat_model(\"claude-sonnet-4-5-20250929\").bind_tools(tools)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-the-tools-for-the-agent-to-use",
+  "links": []
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Process final result",
+  "content": "print(result[\"messages\"][-1].content)\npython  theme={null}\nconfig = {\"configurable\": {\"thread_id\": str(uuid.uuid4())}}\n\nresult = agent.invoke({\n    \"messages\": [{\n        \"role\": \"user\",\n        \"content\": \"Delete temp.txt and send an email to admin@example.com\"\n    }]\n}, config=config)\n\nif result.get(\"__interrupt__\"):\n    interrupts = result[\"__interrupt__\"][0].value\n    action_requests = interrupts[\"action_requests\"]\n\n# Two tools need approval\n    assert len(action_requests) == 2\n\n# Provide decisions in the same order as action_requests\n    decisions = [\n        {\"type\": \"approve\"},  # First tool: delete_file\n        {\"type\": \"reject\"}    # Second tool: send_email\n    ]\n\nresult = agent.invoke(\n        Command(resume={\"decisions\": decisions}),\n        config=config\n    )\npython  theme={null}\nif result.get(\"__interrupt__\"):\n    interrupts = result[\"__interrupt__\"][0].value\n    action_request = interrupts[\"action_requests\"][0]\n\n# Original args from the agent\n    print(action_request[\"args\"])  # {\"to\": \"everyone@company.com\", ...}\n\n# User decides to edit the recipient\n    decisions = [{\n        \"type\": \"edit\",\n        \"edited_action\": {\n            \"name\": action_request[\"name\"],  # Must include the tool name\n            \"args\": {\"to\": \"team@company.com\", \"subject\": \"...\", \"body\": \"...\"}\n        }\n    }]\n\nresult = agent.invoke(\n        Command(resume={\"decisions\": decisions}),\n        config=config\n    )\npython  theme={null}\nagent = create_deep_agent(\n    tools=[delete_file, read_file],\n    interrupt_on={\n        \"delete_file\": True,\n        \"read_file\": False,\n    },\n    subagents=[{\n        \"name\": \"file-manager\",\n        \"description\": \"Manages file operations\",\n        \"system_prompt\": \"You are a file management assistant.\",\n        \"tools\": [delete_file, read_file],\n        \"interrupt_on\": {\n            # Override: require approval for reads in this subagent\n            \"delete_file\": True,\n            \"read_file\": True,  # Different from main agent!\n        }\n    }],\n    checkpointer=checkpointer\n)\npython  theme={null}\nfrom langgraph.checkpoint.memory import MemorySaver\n\ncheckpointer = MemorySaver()\nagent = create_deep_agent(\n    tools=[...],\n    interrupt_on={...},\n    checkpointer=checkpointer  # Required for HITL\n)\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "## Multiple tool calls\n\nWhen the agent calls multiple tools that require approval, all interrupts are batched together in a single interrupt. You must provide decisions for each one in order.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Edit tool arguments\n\nWhen `\"edit\"` is in the allowed decisions, you can modify the tool arguments before execution:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Subagent interrupts\n\nEach subagent can have its own `interrupt_on` configuration that overrides the main agent's settings:",
+      "language": "unknown"
+    },
+    {
+      "code": "When a subagent triggers an interrupt, the handling is the same – check for `__interrupt__` and resume with `Command`.\n\n## Best practices\n\n### Always use a checkpointer\n\nHuman-in-the-loop requires a checkpointer to persist agent state between the interrupt and resume:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Use the same thread ID\n\nWhen resuming, you must use the same config with the same `thread_id`:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Multiple tool calls",
+      "id": "multiple-tool-calls"
+    },
+    {
+      "level": "h2",
+      "text": "Edit tool arguments",
+      "id": "edit-tool-arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Subagent interrupts",
+      "id": "subagent-interrupts"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Always use a checkpointer",
+      "id": "always-use-a-checkpointer"
+    },
+    {
+      "level": "h3",
+      "text": "Use the same thread ID",
+      "id": "use-the-same-thread-id"
+    }
+  ],
+  "url": "llms-txt#process-final-result",
+  "links": []
+}

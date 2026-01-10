@@ -1,0 +1,8 @@
+{
+  "title": "Name of the experiment we want to create from the historical runs",
+  "content": "baseline_experiment_name = f\"prod-baseline-gpt-3.5-turbo-{str(uuid4())[:4]}\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#name-of-the-experiment-we-want-to-create-from-the-historical-runs",
+  "links": []
+}

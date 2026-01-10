@@ -1,0 +1,8 @@
+{
+  "title": "[{'expensive_node': {'result': 10}}]",
+  "content": "print(graph.invoke({\"x\": 5}, stream_mode='updates'))    # [!code highlight]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#[{'expensive_node':-{'result':-10}}]",
+  "links": []
+}

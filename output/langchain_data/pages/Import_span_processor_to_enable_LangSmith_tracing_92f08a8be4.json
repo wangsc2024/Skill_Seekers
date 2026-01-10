@@ -1,0 +1,50 @@
+{
+  "title": "Import span processor to enable LangSmith tracing",
+  "content": "from langsmith_processor import span_processor\npython  theme={null}\nasync def main():\n    # Generate unique conversation ID for LangSmith\n    conversation_id = str(uuid.uuid4())\n    print(f\"Starting conversation: {conversation_id}\")\n\n# Configure audio input/output with voice activity detection\n    transport = LocalAudioTransport(\n        LocalAudioTransportParams(\n            audio_in_enabled=True,\n            audio_out_enabled=True,\n            vad_analyzer=SileroVADAnalyzer(),\n        )\n    )\n\n# Initialize AI services\n    stt = WhisperSTTService()\n    llm = OpenAILLMService(model=\"gpt-4o-mini\")\n    tts = OpenAITTSService(voice=\"alloy\")\n\n# Set up conversation context with system prompt\n    context = OpenAILLMContext(\n        messages=[\n            {\n                \"role\": \"system\",\n                \"content\": \"You are a helpful voice assistant. Keep responses concise and conversational.\"\n            }\n        ]\n    )\n    context_aggregator = llm.create_context_aggregator(context)\n\n# Build the processing pipeline\n    pipeline = Pipeline([\n        transport.input(),           # Capture microphone input\n        stt,                         # Convert speech to text\n        context_aggregator.user(),   # Add user message to context\n        llm,                         # Generate AI response\n        tts,                         # Convert response to speech\n        transport.output(),          # Play through speakers\n        context_aggregator.assistant(),  # Add assistant response to context\n    ])\n\n# Create task with tracing enabled\n    task = PipelineTask(\n        pipeline,\n        params=PipelineParams(enable_metrics=True),\n        enable_tracing=True,\n        enable_turn_tracking=True,\n        conversation_id=conversation_id,\n    )\n\n# Run the agent\n    runner = PipelineRunner()\n    await runner.run(task)\npython  theme={null}\nif __name__ == \"__main__\":\n    asyncio.run(main())\nbash  theme={null}\npython agent.py\npython  theme={null}\nfrom opentelemetry import trace\n\ntracer = trace.get_tracer(__name__)\n\nasync def run_voice_session():\n    with tracer.start_as_current_span(\"voice_conversation\") as span:\n        # Add custom metadata\n        span.set_attribute(\"langsmith.metadata.session_type\", \"voice_assistant\")\n        span.set_attribute(\"langsmith.metadata.user_id\", \"user_123\")\n        span.set_attribute(\"langsmith.span.tags\", \"pipecat,voice-ai,stt-llm-tts\")\n\n# Your Pipecat pipeline code here\n        task = PipelineTask(pipeline, enable_tracing=True)\n        await task.queue_frames([TextFrame(\"Hello\")])\npython  theme={null}\nfrom pathlib import Path\nfrom datetime import datetime\nfrom audio_recorder import AudioRecorder",
+  "code_samples": [
+    {
+      "code": "#### Part 2: Define the main function",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Part 3: Add the entry point",
+      "language": "unknown"
+    },
+    {
+      "code": "### Step 4: Run your agent\n\nRun your voice agent:",
+      "language": "unknown"
+    },
+    {
+      "code": "Speak to the agent through your microphone. All traces will automatically appear in LangSmith. Here is an example of a trace in LangSmith: [LangSmith trace with Pipecat](https://smith.langchain.com/public/07721f41-cd27-413e-bc79-90bd23b6807d/r).\n\nView the complete [agent.py code](https://github.com/langchain-ai/voice-agents-tracing/blob/main/pipecat/agent.py).\n\n## Advanced usage\n\n### Custom metadata and tags\n\nYou can add custom metadata to your traces using span attributes:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Recording and attaching audio to traces\n\nYou can capture audio from your voice conversations and attach it to traces in LangSmith. This allows you to listen to the actual audio alongside the transcriptions and AI responses.\n\n#### Full conversation recording\n\nSee the [AudioRecorder implementation](https://github.com/langchain-ai/voice-agents-tracing/blob/main/pipecat/audio_recorder.py) which handles sample rate mismatches between input (microphone) and output (TTS) audio.\n\nCapture all audio from start to finish and attach it to the conversation span:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Step 4: Run your agent",
+      "id": "step-4:-run-your-agent"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced usage",
+      "id": "advanced-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Custom metadata and tags",
+      "id": "custom-metadata-and-tags"
+    },
+    {
+      "level": "h3",
+      "text": "Recording and attaching audio to traces",
+      "id": "recording-and-attaching-audio-to-traces"
+    }
+  ],
+  "url": "llms-txt#import-span-processor-to-enable-langsmith-tracing",
+  "links": []
+}

@@ -1,0 +1,78 @@
+{
+  "title": "Under the hood, it looks like",
+  "content": "from deepagents.backends import StateBackend\n\nagent = create_deep_agent(\n    backend=(lambda rt: StateBackend(rt))   # Note that the tools access State through the runtime.state\n)\npython  theme={null}\nfrom deepagents.backends import FilesystemBackend\n\nagent = create_deep_agent(\n    backend=FilesystemBackend(root_dir=\".\", virtual_mode=True)\n)\npython  theme={null}\nfrom langgraph.store.memory import InMemoryStore\nfrom deepagents.backends import StoreBackend\n\nagent = create_deep_agent(\n    backend=(lambda rt: StoreBackend(rt)),   # Note that the tools access Store through the runtime.store\n    store=InMemoryStore()\n)\npython  theme={null}\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import CompositeBackend, StateBackend, StoreBackend\nfrom langgraph.store.memory import InMemoryStore\n\ncomposite_backend = lambda rt: CompositeBackend(\n    default=StateBackend(rt),\n    routes={\n        \"/memories/\": StoreBackend(rt),\n    }\n)\n\nagent = create_deep_agent(\n    backend=composite_backend,\n    store=InMemoryStore()  # Store passed to create_deep_agent, not backend\n)\npython  theme={null}\nfrom deepagents import create_deep_agent\nfrom deepagents.backends import CompositeBackend, StateBackend, FilesystemBackend\n\ncomposite_backend = lambda rt: CompositeBackend(\n    default=StateBackend(rt),\n    routes={\n        \"/memories/\": FilesystemBackend(root_dir=\"/deepagents/myagent\", virtual_mode=True),\n    },\n)\n\nagent = create_deep_agent(backend=composite_backend)\npython  theme={null}\nfrom deepagents.backends.protocol import BackendProtocol, WriteResult, EditResult\nfrom deepagents.backends.utils import FileInfo, GrepMatch\n\nclass S3Backend(BackendProtocol):\n    def __init__(self, bucket: str, prefix: str = \"\"):\n        self.bucket = bucket\n        self.prefix = prefix.rstrip(\"/\")\n\ndef _key(self, path: str) -> str:\n        return f\"{self.prefix}{path}\"\n\ndef ls_info(self, path: str) -> list[FileInfo]:\n        # List objects under _key(path); build FileInfo entries (path, size, modified_at)\n        ...\n\ndef read(self, file_path: str, offset: int = 0, limit: int = 2000) -> str:\n        # Fetch object; return numbered content or an error string\n        ...\n\ndef grep_raw(self, pattern: str, path: str | None = None, glob: str | None = None) -> list[GrepMatch] | str:\n        # Optionally filter server‑side; else list and scan content\n        ...\n\ndef glob_info(self, pattern: str, path: str = \"/\") -> list[FileInfo]:\n        # Apply glob relative to path across keys\n        ...\n\ndef write(self, file_path: str, content: str) -> WriteResult:\n        # Enforce create‑only semantics; return WriteResult(path=file_path, files_update=None)\n        ...\n\ndef edit(self, file_path: str, old_string: str, new_string: str, replace_all: bool = False) -> EditResult:\n        # Read → replace (respect uniqueness vs replace_all) → write → return occurrences\n        ...\npython  theme={null}\nfrom deepagents.backends.filesystem import FilesystemBackend\nfrom deepagents.backends.protocol import WriteResult, EditResult\n\nclass GuardedBackend(FilesystemBackend):\n    def __init__(self, *, deny_prefixes: list[str], **kwargs):\n        super().__init__(**kwargs)\n        self.deny_prefixes = [p if p.endswith(\"/\") else p + \"/\" for p in deny_prefixes]\n\ndef write(self, file_path: str, content: str) -> WriteResult:\n        if any(file_path.startswith(p) for p in self.deny_prefixes):\n            return WriteResult(error=f\"Writes are not allowed under {file_path}\")\n        return super().write(file_path, content)\n\ndef edit(self, file_path: str, old_string: str, new_string: str, replace_all: bool = False) -> EditResult:\n        if any(file_path.startswith(p) for p in self.deny_prefixes):\n            return EditResult(error=f\"Edits are not allowed under {file_path}\")\n        return super().edit(file_path, old_string, new_string, replace_all)\npython  theme={null}\nfrom deepagents.backends.protocol import BackendProtocol, WriteResult, EditResult\nfrom deepagents.backends.utils import FileInfo, GrepMatch\n\nclass PolicyWrapper(BackendProtocol):\n    def __init__(self, inner: BackendProtocol, deny_prefixes: list[str] | None = None):\n        self.inner = inner\n        self.deny_prefixes = [p if p.endswith(\"/\") else p + \"/\" for p in (deny_prefixes or [])]\n\ndef _deny(self, path: str) -> bool:\n        return any(path.startswith(p) for p in self.deny_prefixes)\n\ndef ls_info(self, path: str) -> list[FileInfo]:\n        return self.inner.ls_info(path)\n    def read(self, file_path: str, offset: int = 0, limit: int = 2000) -> str:\n        return self.inner.read(file_path, offset=offset, limit=limit)\n    def grep_raw(self, pattern: str, path: str | None = None, glob: str | None = None) -> list[GrepMatch] | str:\n        return self.inner.grep_raw(pattern, path, glob)\n    def glob_info(self, pattern: str, path: str = \"/\") -> list[FileInfo]:\n        return self.inner.glob_info(pattern, path)\n    def write(self, file_path: str, content: str) -> WriteResult:\n        if self._deny(file_path):\n            return WriteResult(error=f\"Writes are not allowed under {file_path}\")\n        return self.inner.write(file_path, content)\n    def edit(self, file_path: str, old_string: str, new_string: str, replace_all: bool = False) -> EditResult:\n        if self._deny(file_path):\n            return EditResult(error=f\"Edits are not allowed under {file_path}\")\n        return self.inner.edit(file_path, old_string, new_string, replace_all)\n```\n\n## Protocol reference\n\nBackends must implement the `BackendProtocol`.\n\n* `ls_info(path: str) -> list[FileInfo]`\n  * Return entries with at least `path`. Include `is_dir`, `size`, `modified_at` when available. Sort by `path` for deterministic output.\n* `read(file_path: str, offset: int = 0, limit: int = 2000) -> str`\n  * Return numbered content. On missing file, return `\"Error: File '/x' not found\"`.\n* `grep_raw(pattern: str, path: Optional[str] = None, glob: Optional[str] = None) -> list[GrepMatch] | str`\n  * Return structured matches. For an invalid regex, return a string like `\"Invalid regex pattern: ...\"` (do not raise).\n* `glob_info(pattern: str, path: str = \"/\") -> list[FileInfo]`\n  * Return matched files as `FileInfo` entries (empty list if none).\n* `write(file_path: str, content: str) -> WriteResult`\n  * Create-only. On conflict, return `WriteResult(error=...)`. On success, set `path` and for state backends set `files_update={...}`; external backends should use `files_update=None`.\n* `edit(file_path: str, old_string: str, new_string: str, replace_all: bool = False) -> EditResult`\n  * Enforce uniqueness of `old_string` unless `replace_all=True`. If not found, return error. Include `occurrences` on success.\n\n* `WriteResult(error, path, files_update)`\n* `EditResult(error, path, files_update, occurrences)`\n* `FileInfo` with fields: `path` (required), optionally `is_dir`, `size`, `modified_at`.\n* `GrepMatch` with fields: `path`, `line`, `text`.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/deepagents/backends.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "**How it works:**\n\n* Stores files in LangGraph agent state for the current thread.\n* Persists across multiple agent turns on the same thread via checkpoints.\n\n**Best for:**\n\n* A scratch pad for the agent to write intermediate results.\n* Automatic eviction of large tool outputs which the agent can then read back in piece by piece.\n\n### FilesystemBackend (local disk)",
+      "language": "unknown"
+    },
+    {
+      "code": "**How it works:**\n\n* Reads/writes real files under a configurable `root_dir`.\n* You can optionally set `virtual_mode=True` to sandbox and normalize paths under `root_dir`.\n* Uses secure path resolution, prevents unsafe symlink traversal when possible, can use ripgrep for fast `grep`.\n\n**Best for:**\n\n* Local projects on your machine\n* CI sandboxes\n* Mounted persistent volumes\n\n### StoreBackend (LangGraph Store)",
+      "language": "unknown"
+    },
+    {
+      "code": "**How it works:**\n\n* Stores files in a LangGraph `BaseStore` provided by the runtime, enabling cross‑thread durable storage.\n\n**Best for:**\n\n* When you already run with a configured LangGraph store (for example, Redis, Postgres, or cloud implementations behind `BaseStore`).\n* When you're deploying your agent through LangSmith Deployment (a store is automatically provisioned for your agent).\n\n### CompositeBackend (router)",
+      "language": "unknown"
+    },
+    {
+      "code": "**How it works:**\n\n* Routes file operations to different backends based on path prefix.\n* Preserves the original path prefixes in listings and search results.\n\n**Best for:**\n\n* When you want to give your agent both ephemeral and cross-thread storage, a CompositeBackend allows you provide both a StateBackend and StoreBackend\n* When you have multiple sources of information that you want to provide to your agent as part of a single filesystem.\n  * e.g. You have long-term memories stored under /memories/ in one Store and you also have a custom backend that has documentation accessible at /docs/.\n\n## Specify a backend\n\n* Pass a backend to `create_deep_agent(backend=...)`. The filesystem middleware uses it for all tooling.\n* You can pass either:\n  * An instance implementing `BackendProtocol` (for example, `FilesystemBackend(root_dir=\".\")`), or\n  * A factory `BackendFactory = Callable[[ToolRuntime], BackendProtocol]` (for backends that need runtime like `StateBackend` or `StoreBackend`).\n* If omitted, the default is `lambda rt: StateBackend(rt)`.\n\n## Route to different backends\n\nRoute parts of the namespace to different backends. Commonly used to persist `/memories/*` and keep everything else ephemeral.",
+      "language": "unknown"
+    },
+    {
+      "code": "Behavior:\n\n* `/workspace/plan.md` → StateBackend (ephemeral)\n* `/memories/agent.md` → FilesystemBackend under `/deepagents/myagent`\n* `ls`, `glob`, `grep` aggregate results and show original path prefixes.\n\nNotes:\n\n* Longer prefixes win (for example, route `\"/memories/projects/\"` can override `\"/memories/\"`).\n* For StoreBackend routing, ensure the agent runtime provides a store (`runtime.store`).\n\n## Use a virtual filesystem\n\nBuild a custom backend to project a remote or database filesystem (e.g., S3 or Postgres) into the tools namespace.\n\nDesign guidelines:\n\n* Paths are absolute (`/x/y.txt`). Decide how to map them to your storage keys/rows.\n* Implement `ls_info` and `glob_info` efficiently (server-side listing where available, otherwise local filter).\n* Return user-readable error strings for missing files or invalid regex patterns.\n* For external persistence, set `files_update=None` in results; only in-state backends should return a `files_update` dict.\n\nS3-style outline:",
+      "language": "unknown"
+    },
+    {
+      "code": "Postgres-style outline:\n\n* Table `files(path text primary key, content text, created_at timestamptz, modified_at timestamptz)`\n* Map tool operations onto SQL:\n  * `ls_info` uses `WHERE path LIKE $1 || '%'`\n  * `glob_info` filter in SQL or fetch then apply glob in Python\n  * `grep_raw` can fetch candidate rows by extension or last modified time, then scan lines\n\n## Add policy hooks\n\nEnforce enterprise rules by subclassing or wrapping a backend.\n\nBlock writes/edits under selected prefixes (subclass):",
+      "language": "unknown"
+    },
+    {
+      "code": "Generic wrapper (works with any backend):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "FilesystemBackend (local disk)",
+      "id": "filesystembackend-(local-disk)"
+    },
+    {
+      "level": "h3",
+      "text": "StoreBackend (LangGraph Store)",
+      "id": "storebackend-(langgraph-store)"
+    },
+    {
+      "level": "h3",
+      "text": "CompositeBackend (router)",
+      "id": "compositebackend-(router)"
+    },
+    {
+      "level": "h2",
+      "text": "Specify a backend",
+      "id": "specify-a-backend"
+    },
+    {
+      "level": "h2",
+      "text": "Route to different backends",
+      "id": "route-to-different-backends"
+    },
+    {
+      "level": "h2",
+      "text": "Use a virtual filesystem",
+      "id": "use-a-virtual-filesystem"
+    },
+    {
+      "level": "h2",
+      "text": "Add policy hooks",
+      "id": "add-policy-hooks"
+    },
+    {
+      "level": "h2",
+      "text": "Protocol reference",
+      "id": "protocol-reference"
+    }
+  ],
+  "url": "llms-txt#under-the-hood,-it-looks-like",
+  "links": []
+}

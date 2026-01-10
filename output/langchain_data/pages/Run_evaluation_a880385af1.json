@@ -1,0 +1,8 @@
+{
+  "title": "Run evaluation",
+  "content": "results = client.evaluate(\n    my_application,\n    data=\"my_test_dataset\",\n    evaluators=[accuracy_evaluator],\n    blocking=False\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#run-evaluation",
+  "links": []
+}

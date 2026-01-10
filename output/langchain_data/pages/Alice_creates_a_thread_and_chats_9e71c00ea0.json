@@ -1,0 +1,8 @@
+{
+  "title": "Alice creates a thread and chats",
+  "content": "alice_thread = await alice.threads.create()\nprint(f\"✅ Alice created thread: {alice_thread['thread_id']}\")\n\nawait alice.runs.create(\n    thread_id=alice_thread[\"thread_id\"],\n    assistant_id=\"agent\",\n    input={\"messages\": [{\"role\": \"user\", \"content\": \"Hi, this is Alice's private chat\"}]}\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#alice-creates-a-thread-and-chats",
+  "links": []
+}

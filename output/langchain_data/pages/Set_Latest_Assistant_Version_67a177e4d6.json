@@ -1,0 +1,8 @@
+{
+  "title": "Set Latest Assistant Version",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/assistants/set-latest-assistant-version\n\nlangsmith/agent-server-openapi.json post /assistants/{assistant_id}/latest\nSet the latest version for an assistant.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#set-latest-assistant-version",
+  "links": []
+}

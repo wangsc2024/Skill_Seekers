@@ -1,0 +1,8 @@
+{
+  "title": "Get Assistant",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/assistants/get-assistant\n\nlangsmith/agent-server-openapi.json get /assistants/{assistant_id}\nGet an assistant by ID.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-assistant",
+  "links": []
+}

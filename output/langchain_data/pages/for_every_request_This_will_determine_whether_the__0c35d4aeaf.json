@@ -1,0 +1,36 @@
+{
+  "title": "for every request. This will determine whether the request is allowed or not",
+  "content": "@auth.authenticate\nasync def get_current_user(authorization: str | None) -> Auth.types.MinimalUserDict:\n    \"\"\"Check if the user's token is valid.\"\"\"\n    assert authorization\n    scheme, token = authorization.split()\n    assert scheme.lower() == \"bearer\"\n    # Check if token is valid\n    if token not in VALID_TOKENS:\n        raise Auth.exceptions.HTTPException(status_code=401, detail=\"Invalid token\")\n\n# Return user info if valid\n    user_data = VALID_TOKENS[token]\n    return {\n        \"identity\": user_data[\"id\"],\n    }\njson {highlight={7-9}} title=\"langgraph.json\" theme={null}\n{\n  \"dependencies\": [\".\"],\n  \"graphs\": {\n    \"agent\": \"./src/agent/graph.py:graph\"\n  },\n  \"env\": \".env\",\n  \"auth\": {\n    \"path\": \"src/security/auth.py:auth\"\n  }\n}\nbash  theme={null}\nlanggraph dev --no-browser\njson  theme={null}\n{\n    \"auth\": {\n        \"path\": \"src/security/auth.py:auth\",\n        \"disable_studio_auth\": true\n    }\n}\npython  theme={null}\nfrom langgraph_sdk import get_client",
+  "code_samples": [
+    {
+      "code": "Notice that your [Auth.authenticate](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler does two important things:\n\n1. Checks if a valid token is provided in the request's [Authorization header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization)\n2. Returns the user's [MinimalUserDict](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.types.MinimalUserDict)\n\nNow tell LangGraph to use authentication by adding the following to the [langgraph.json](https://reference.langchain.com/python/cloud/reference/cli/#configuration-file) configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Test your bot\n\nStart the server again to test everything out:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you didn't add the `--no-browser`, the Studio UI will open in the browser. By default, we also permit access from Studio, even when using custom auth. This makes it easier to develop and test your bot in Studio. You can remove this alternative authentication option by setting `disable_studio_auth: true` in your auth configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Chat with your bot\n\nYou should now only be able to access the bot if you provide a valid token in the request header. Users will still, however, be able to access each other's resources until you add [resource authorization handlers](/langsmith/auth#resource-specific-handlers) in the next section of the tutorial.\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authentication.png?fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=3ccfa86789baea630b8f418e9eb5b648\" alt=\"Auth gate passes requests with a valid token, but no per-resource filters are applied yet—so users share visibility until authorization handlers are added in the next step.\" data-og-width=\"2617\" width=\"2617\" data-og-height=\"1673\" height=\"1673\" data-path=\"langsmith/images/authentication.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authentication.png?w=280&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=0216c0cf0cb74f67f43e65561a787c96 280w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authentication.png?w=560&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=c4a9ab37e2413a38dc61ef6f4288c1b1 560w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authentication.png?w=840&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=d1146dee549ab13c949efae260706988 840w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authentication.png?w=1100&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=e430d8ebe4534d20c1d4d3d887f0c938 1100w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authentication.png?w=1650&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=3aeaa334e3ff1457c165821966721f94 1650w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authentication.png?w=2500&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=74d6dd4c73baa0182624085d13f08530 2500w\" />\n\nRun the following code in a file or notebook:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "3. Test your bot",
+      "id": "3.-test-your-bot"
+    },
+    {
+      "level": "h2",
+      "text": "4. Chat with your bot",
+      "id": "4.-chat-with-your-bot"
+    }
+  ],
+  "url": "llms-txt#for-every-request.-this-will-determine-whether-the-request-is-allowed-or-not",
+  "links": []
+}

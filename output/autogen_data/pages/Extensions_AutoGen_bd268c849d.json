@@ -1,0 +1,37 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+  "title": "Extensions — AutoGen",
+  "content": "AutoGen is designed to be extensible. The autogen-ext package contains the built-in component implementations maintained by the AutoGen project.\n\nExamples of components include:\n\nautogen_ext.agents.* for agent implementations like MultimodalWebSurfer\n\nautogen_ext.models.* for model clients like OpenAIChatCompletionClient and SKChatCompletionAdapter for connecting to hosted and local models.\n\nautogen_ext.tools.* for tools like GraphRAG LocalSearchTool and mcp_server_tools().\n\nautogen_ext.executors.* for executors like DockerCommandLineCodeExecutor and ACADynamicSessionsCodeExecutor\n\nautogen_ext.runtimes.* for agent runtimes like GrpcWorkerAgentRuntime\n\nSee API Reference for the full list of components and their APIs.\n\nWe strongly encourage developers to build their own components and publish them as part of the ecosytem.\n\nDiscover community extensions and samples\n\nCreate your own extension",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Extensions#",
+      "id": ""
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/discover.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/create-your-own.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-container-code-executor.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-foundry-agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html"
+  ]
+}

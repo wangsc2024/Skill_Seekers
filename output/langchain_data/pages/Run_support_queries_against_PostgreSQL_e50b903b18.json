@@ -1,0 +1,38 @@
+{
+  "title": "Run support queries against PostgreSQL",
+  "content": "Source: https://docs.langchain.com/langsmith/script-running-pg-support-queries\n\nThis Helm repository contains queries to produce output that the LangSmith UI does not currently support directly (e.g. obtaining trace counts for multiple organizations in a single query).\n\nThis command takes a postgres connection string that contains an embedded name and password (which can be passed in from a call to a secrets manager) and executes a query from an input file. In the example below, we are using the `pg_get_trace_counts_daily.sql` input file in the `support_queries/postgres` directory.\n\nEnsure you have the following tools/items ready.\n\n* [https://kubernetes.io/docs/tasks/tools/](https://kubernetes.io/docs/tasks/tools/)\n\n* [https://www.postgresql.org/download/](https://www.postgresql.org/download/)\n\n3. PostgreSQL database connection:\n\n* Host\n   * Port\n   * Username\n     * If using the bundled version, this is `postgres`\n   * Password\n     * If using the bundled version, this is `postgres`\n   * Database name\n     * If using the bundled version, this is `postgres`\n\n4. Connectivity to the PostgreSQL database from the machine you will be running the migration script on.\n\n* If you are using the bundled version, you may need to port forward the postgresql service to your local machine.\n   * Run `kubectl port-forward svc/langsmith-postgres 5432:5432` to port forward the postgresql service to your local machine.\n\n5. The script to run a support query\n\n* You can download the script from [here](https://github.com/langchain-ai/helm/blob/main/charts/langsmith/scripts/run_support_query_pg.sh)\n\n## Running the query script\n\nRun the following command to run the desired query:\n\nFor example, if you are using the bundled version with port-forwarding, the command might look like:\n\nwhich will output the count of daily traces by workspace ID and organization ID. To extract this to a file add the flag `--output path/to/file.csv`\n\n<Note>\n  Exporting usage data requires running Helm chart version 0.11.4 or later.\n</Note>\n\n### Get customer information\n\nYou need to retrieve your customer information from the LangSmith API before running the export scripts. This information is required as input for the export scripts.\n\n```bash  theme={null}\ncurl https://<langsmith_url>/api/v1/info",
+  "code_samples": [
+    {
+      "code": "For example, if you are using the bundled version with port-forwarding, the command might look like:",
+      "language": "unknown"
+    },
+    {
+      "code": "which will output the count of daily traces by workspace ID and organization ID. To extract this to a file add the flag `--output path/to/file.csv`\n\n## Export usage data\n\n<Note>\n  Exporting usage data requires running Helm chart version 0.11.4 or later.\n</Note>\n\n### Get customer information\n\nYou need to retrieve your customer information from the LangSmith API before running the export scripts. This information is required as input for the export scripts.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Running the query script",
+      "id": "running-the-query-script"
+    },
+    {
+      "level": "h2",
+      "text": "Export usage data",
+      "id": "export-usage-data"
+    },
+    {
+      "level": "h3",
+      "text": "Get customer information",
+      "id": "get-customer-information"
+    }
+  ],
+  "url": "llms-txt#run-support-queries-against-postgresql",
+  "links": []
+}

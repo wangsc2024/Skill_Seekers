@@ -1,0 +1,99 @@
+{
+  "title": "DeepSeek-R1-0528: How to Run Locally",
+  "content": "A guide on how to run DeepSeek-R1-0528 including Qwen3 on your own local device!\n\nDeepSeek-R1-0528 is DeepSeek's new update to their R1 reasoning model. The full 671B parameter model requires 715GB of disk space. The quantized dynamic **1.66-bit** version uses 162GB (-80% reduction in size). GGUF: [DeepSeek-R1-0528-GGUF](https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF)\n\nDeepSeek also released a R1-0528 distilled version by fine-tuning Qwen3 (8B). The distill achieves similar performance to Qwen3 (235B). ***You can also*** [***fine-tune Qwen3 Distill***](#fine-tuning-deepseek-r1-0528-with-unsloth) ***with Unsloth***. Qwen3 GGUF: [DeepSeek-R1-0528-Qwen3-8B-GGUF](https://huggingface.co/unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF)\n\nAll uploads use Unsloth [Dynamic 2.0](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs) for SOTA 5-shot MMLU and KL Divergence performance, meaning you can run & fine-tune quantized DeepSeek LLMs with minimal accuracy loss.\n\n**Tutorials navigation:**\n\n<a href=\"#run-qwen3-distilled-r1-in-llama.cpp\" class=\"button secondary\">Run in llama.cpp</a><a href=\"#run-in-ollama-open-webui\" class=\"button secondary\">Run in Ollama/Open WebUI</a><a href=\"#fine-tuning-deepseek-r1-0528-with-unsloth\" class=\"button secondary\">Fine-tuning R1-0528</a>\n\n{% hint style=\"success\" %}\nNEW: Huge improvements to tool calling and chat template fixes.\\\n\\\nNew [TQ1\\_0 dynamic 1.66-bit quant](https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF?show_file_info=DeepSeek-R1-0528-UD-TQ1_0.gguf) - 162GB in size. Ideal for 192GB RAM (including Mac) and Ollama users. Try: `ollama run hf.co/unsloth/DeepSeek-R1-0528-GGUF:TQ1_0`\n{% endhint %}\n\n## :gear: Recommended Settings\n\nFor DeepSeek-R1-0528-Qwen3-8B, the model can pretty much fit in any setup, and even those with as less as 20GB RAM. There is no need for any prep beforehand.\\\n\\\nHowever, for the full R1-0528 model which is 715GB in size, you will need extra prep. The 1.78-bit (IQ1\\_S) quant will fit in a 1x 24GB GPU (with all layers offloaded). Expect around 5 tokens/s with this setup if you have bonus 128GB RAM as well.\n\nIt is recommended to have at least 64GB RAM to run this quant (you will get 1 token/s without a GPU). For optimal performance you will need at least **180GB unified memory or 180GB combined RAM+VRAM** for 5+ tokens/s.\n\nWe suggest using our 2.7bit (Q2\\_K\\_XL) or 2.4bit (IQ2\\_XXS) quant to balance size and accuracy! The 2.4bit one also works well.\n\n{% hint style=\"success\" %}\nThough not necessary, for the best performance, have your VRAM + RAM combined = to the size of the quant you're downloading.\n{% endhint %}\n\n### 🐳 Official Recommended Settings:\n\nAccording to [DeepSeek](https://huggingface.co/deepseek-ai/DeepSeek-R1-0528), these are the recommended settings for R1 (R1-0528 and Qwen3 distill should use the same settings) inference:\n\n* Set the <mark style=\"background-color:green;\">**temperature 0.6**</mark> to reduce repetition and incoherence.\n* Set <mark style=\"background-color:green;\">**top\\_p to 0.95**</mark> (recommended)\n* Run multiple tests and average results for reliable evaluation.\n\n### :1234: Chat template/prompt format\n\nR1-0528 uses the same chat template as the original R1 model. You do not need to force `<think>\\n` , but you can still add it in!\n\nA BOS is forcibly added, and an EOS separates each interaction. To counteract double BOS tokens during inference, you should only call `tokenizer.encode(..., add_special_tokens = False)` since the chat template auto adds a BOS token as well.\\\nFor llama.cpp / GGUF inference, you should skip the BOS since it’ll auto add it:\n\nThe `<think>` and `</think>` tokens get their own designated tokens.\n\n**ALL our uploads** - including those that are not imatrix-based or dynamic, utilize our calibration dataset, which is specifically optimized for conversational, coding, and language tasks.\n\n* Qwen3 (8B) distill: [DeepSeek-R1-0528-Qwen3-8B-GGUF](https://huggingface.co/unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF)\n* Full DeepSeek-R1-0528 model uploads below:\n\nWe also uploaded [IQ4\\_NL](https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/IQ4_NL) and [Q4\\_1](https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/Q4_1) quants which run specifically faster for ARM and Apple devices respectively.\n\n<table data-full-width=\"false\"><thead><tr><th>MoE Bits</th><th>Type + Link</th><th>Disk Size</th><th>Details</th></tr></thead><tbody><tr><td>1.66bit</td><td><a href=\"https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF?show_file_info=DeepSeek-R1-0528-UD-TQ1_0.gguf\">TQ1_0</a></td><td><strong>162GB</strong></td><td>1.92/1.56bit</td></tr><tr><td>1.78bit</td><td><a href=\"https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/UD-IQ1_S\">IQ1_S</a></td><td><strong>185GB</strong></td><td>2.06/1.56bit</td></tr><tr><td>1.93bit</td><td><a href=\"https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/UD-IQ1_M\">IQ1_M</a></td><td><strong>200GB</strong></td><td>2.5/2.06/1.56</td></tr><tr><td>2.42bit</td><td><a href=\"https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/UD-IQ2_XXS\">IQ2_XXS</a></td><td><strong>216GB</strong></td><td>2.5/2.06bit</td></tr><tr><td>2.71bit</td><td><a href=\"https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/UD-Q2_K_XL\">Q2_K_XL</a></td><td><strong>251GB</strong></td><td>3.5/2.5bit</td></tr><tr><td>3.12bit</td><td><a href=\"https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/UD-IQ3_XXS\">IQ3_XXS</a></td><td><strong>273GB</strong></td><td>3.5/2.06bit</td></tr><tr><td>3.5bit</td><td><a href=\"https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/UD-Q3_K_XL\">Q3_K_XL</a></td><td><strong>296GB</strong></td><td>4.5/3.5bit</td></tr><tr><td>4.5bit</td><td><a href=\"https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/UD-Q4_K_XL\">Q4_K_XL</a></td><td><strong>384GB</strong></td><td>5.5/4.5bit</td></tr><tr><td>5.5bit</td><td><a href=\"https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF/tree/main/UD-Q5_K_XL\">Q5_K_XL</a></td><td><strong>481GB</strong></td><td>6.5/5.5bit</td></tr></tbody></table>\n\nWe've also uploaded versions in [BF16 format](https://huggingface.co/unsloth/DeepSeek-R1-0528-BF16), and original [FP8 (float8) format](https://huggingface.co/unsloth/DeepSeek-R1-0528).\n\n## Run DeepSeek-R1-0528 Tutorials:\n\n### :llama: Run in Ollama/Open WebUI\n\n1. Install `ollama` if you haven't already! You can only run models up to 32B in size. To run the full 720GB R1-0528 model, [see here](#run-full-r1-0528-on-ollama-open-webui).\n\n2. Run the model! Note you can call `ollama serve`in another terminal if it fails! We include all our fixes and suggested parameters (temperature etc) in `params` in our Hugging Face upload!\n\n3. <mark style=\"color:green;background-color:yellow;\">**(NEW) To run the full R1-0528 model in Ollama, you can use our TQ1\\_0 (162GB quant):**</mark>\n\n### :llama: Run Full R1-0528 on Ollama/Open WebUI\n\nOpen WebUI has made an step-by-step tutorial on how to run R1 here and for R1-0528, you will just need to replace R1 with the new 0528 quant: [docs.openwebui.com/tutorials/integrations/deepseekr1-dynamic/](https://docs.openwebui.com/tutorials/integrations/deepseekr1-dynamic/)\n\n<mark style=\"background-color:green;\">**(NEW) To run the full R1-0528 model in Ollama, you can use our TQ1\\_0 (162GB quant):**</mark>\n\nIf you want to use any of the quants that are larger than TQ1\\_0 (162GB) on Ollama, you need to first merge the 3 GGUF split files into 1 like the code below. Then you will need to run the model locally.\n\n### ✨ Run Qwen3 distilled R1 in llama.cpp\n\n1. <mark style=\"background-color:yellow;\">**To run the full 720GB R1-0528 model,**</mark> [<mark style=\"background-color:yellow;\">**see here**</mark>](#run-full-r1-0528-on-llama.cpp)<mark style=\"background-color:yellow;\">**.**</mark> Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. Then use llama.cpp directly to download the model:\n\n### ✨ Run Full R1-0528 on llama.cpp\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. If you want to use `llama.cpp` directly to load models, you can do the below: (:IQ1\\_S) is the quantization type. You can also download via Hugging Face (point 3). This is similar to `ollama run` . Use `export LLAMA_CACHE=\"folder\"` to force `llama.cpp` to save to a specific location.\n\n{% hint style=\"success\" %}\nPlease try out `-ot \".ffn_.*_exps.=CPU\"` to offload all MoE layers to the CPU! This effectively allows you to fit all non MoE layers on 1 GPU, improving generation speeds. You can customize the regex expression to fit more layers if you have more GPU capacity.\n\nIf you have a bit more GPU memory, try `-ot \".ffn_(up|down)_exps.=CPU\"` This offloads up and down projection MoE layers.\n\nTry `-ot \".ffn_(up)_exps.=CPU\"` if you have even more GPU memory. This offloads only up projection MoE layers.\n\nAnd finally offload all layers via `-ot \".ffn_.*_exps.=CPU\"` This uses the least VRAM.\n\nYou can also customize the regex, for example `-ot \"\\.(6|7|8|9|[0-9][0-9]|[0-9][0-9][0-9])\\.ffn_(gate|up|down)_exps.=CPU\"` means to offload gate, up and down MoE layers but only from the 6th layer onwards.\n{% endhint %}\n\n3. Download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose `UD-IQ1_S`(dynamic 1.78bit quant) or other quantized versions like `Q4_K_M` . We <mark style=\"background-color:green;\">**recommend using our 2.7bit dynamic quant**</mark><mark style=\"background-color:green;\">**&#x20;**</mark><mark style=\"background-color:green;\">**`UD-Q2_K_XL`**</mark><mark style=\"background-color:green;\">**&#x20;**</mark><mark style=\"background-color:green;\">**to balance size and accuracy**</mark>. More versions at: [https://huggingface.co/unsloth/DeepSeek-R1-0528-GGUF](https://huggingface.co/unsloth/DeepSeek-V3-0324-GGUF)\n\n{% code overflow=\"wrap\" %}",
+  "code_samples": [
+    {
+      "code": "<｜begin▁of▁sentence｜><｜User｜>What is 1+1?<｜Assistant｜>It's 2.<｜end▁of▁sentence｜><｜User｜>Explain more!<｜Assistant｜>",
+      "language": "unknown"
+    },
+    {
+      "code": "<｜User｜>What is 1+1?<｜Assistant｜>",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils -y\ncurl -fsSL https://ollama.com/install.sh | sh",
+      "language": "bash"
+    },
+    {
+      "code": "ollama run hf.co/unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF:Q4_K_XL",
+      "language": "bash"
+    },
+    {
+      "code": "OLLAMA_MODELS=unsloth_downloaded_models ollama serve &\n\nollama run hf.co/unsloth/DeepSeek-R1-0528-GGUF:TQ1_0",
+      "language": "unknown"
+    },
+    {
+      "code": "OLLAMA_MODELS=unsloth_downloaded_models ollama serve &\n\nollama run hf.co/unsloth/DeepSeek-R1-0528-GGUF:TQ1_0",
+      "language": "unknown"
+    },
+    {
+      "code": "./llama.cpp/llama-gguf-split --merge \\\n  DeepSeek-R1-0528-GGUF/DeepSeek-R1-0528-UD-IQ1_S/DeepSeek-R1-0528-UD-IQ1_S-00001-of-00003.gguf \\\n\tmerged_file.gguf",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli -hf unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF:Q4_K_XL --jinja",
+      "language": "bash"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggerganov/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-quantize llama-cli llama-gguf-split llama-mtmd-cli\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "export LLAMA_CACHE=\"unsloth/DeepSeek-R1-0528-GGUF\"\n./llama.cpp/llama-cli \\\n    -hf unsloth/DeepSeek-R1-0528-GGUF:IQ1_S \\\n    --cache-type-k q4_0 \\\n    --threads -1 \\\n    --n-gpu-layers 99 \\\n    --prio 3 \\\n    --temp 0.6 \\\n    --top-p 0.95 \\\n    --min-p 0.01 \\\n    --ctx-size 16384 \\\n    --seed 3407 \\\n    -ot \".ffn_.*_exps.=CPU\"",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": ":gear: Recommended Settings",
+      "id": ":gear:-recommended-settings"
+    },
+    {
+      "level": "h3",
+      "text": "🐳 Official Recommended Settings:",
+      "id": "🐳-official-recommended-settings:"
+    },
+    {
+      "level": "h3",
+      "text": ":1234: Chat template/prompt format",
+      "id": ":1234:-chat-template/prompt-format"
+    },
+    {
+      "level": "h2",
+      "text": "Model uploads",
+      "id": "model-uploads"
+    },
+    {
+      "level": "h2",
+      "text": "Run DeepSeek-R1-0528 Tutorials:",
+      "id": "run-deepseek-r1-0528-tutorials:"
+    },
+    {
+      "level": "h3",
+      "text": ":llama: Run in Ollama/Open WebUI",
+      "id": ":llama:-run-in-ollama/open-webui"
+    },
+    {
+      "level": "h3",
+      "text": ":llama: Run Full R1-0528 on Ollama/Open WebUI",
+      "id": ":llama:-run-full-r1-0528-on-ollama/open-webui"
+    },
+    {
+      "level": "h3",
+      "text": "✨ Run Qwen3 distilled R1 in llama.cpp",
+      "id": "✨-run-qwen3-distilled-r1-in-llama.cpp"
+    },
+    {
+      "level": "h3",
+      "text": "✨ Run Full R1-0528 on llama.cpp",
+      "id": "✨-run-full-r1-0528-on-llama.cpp"
+    }
+  ],
+  "url": "llms-txt#deepseek-r1-0528:-how-to-run-locally",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "use in our SQL queries.",
+  "content": "def index_fields() -> tuple[InMemoryVectorStore, InMemoryVectorStore, InMemoryVectorStore]: ...\n\ntrack_store, artist_store, album_store = index_fields()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-in-our-sql-queries.",
+  "links": []
+}

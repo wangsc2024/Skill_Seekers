@@ -1,0 +1,14 @@
+{
+  "title": "null",
+  "content": "Source: https://docs.langchain.com/oss/python/integrations/document_loaders/index\n\nDocument loaders provide a **standard interface** for reading data from different sources (such as Slack, Notion, or Google Drive) into LangChain’s [Document](https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document) format.\nThis ensures that data can be handled consistently regardless of the source.\n\nAll document loaders implement the [`BaseLoader`](https://reference.langchain.com/python/langchain_core/document_loaders/#langchain_core.document_loaders.BaseLoader) interface.\n\nEach document loader may define its own parameters, but they share a common API:\n\n* `load()` – Loads all documents at once.\n* `lazy_load()` – Streams documents lazily, useful for large datasets.\n\n```python  theme={null}\nfrom langchain_community.document_loaders.csv_loader import CSVLoader\n\nloader = CSVLoader(\n    ...  # Integration-specific parameters here\n)",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Interface",
+      "id": "interface"
+    }
+  ],
+  "url": "llms-txt#null",
+  "links": []
+}

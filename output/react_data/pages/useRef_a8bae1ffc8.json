@@ -1,0 +1,309 @@
+{
+  "url": "https://react.dev/reference/react/useRef",
+  "title": "useRef",
+  "content": "useRef is a React Hook that lets you reference a value that’s not needed for rendering.\n\nCall useRef at the top level of your component to declare a ref.\n\nSee more examples below.\n\nuseRef returns an object with a single property:\n\nOn the next renders, useRef will return the same object.\n\nCall useRef at the top level of your component to declare one or more refs.\n\nuseRef returns a ref object with a single current property initially set to the initial value you provided.\n\nOn the next renders, useRef will return the same object. You can change its current property to store information and read it later. This might remind you of state, but there is an important difference.\n\nChanging a ref does not trigger a re-render. This means refs are perfect for storing information that doesn’t affect the visual output of your component. For example, if you need to store an interval ID and retrieve it later, you can put it in a ref. To update the value inside the ref, you need to manually change its current property:\n\nLater, you can read that interval ID from the ref so that you can call clear that interval:\n\nBy using a ref, you ensure that:\n\nChanging a ref does not trigger a re-render, so refs are not appropriate for storing information you want to display on the screen. Use state for that instead. Read more about choosing between useRef and useState.\n\nThis component uses a ref to keep track of how many times the button was clicked. Note that it’s okay to use a ref instead of state here because the click count is only read and written in an event handler.\n\nIf you show {ref.current} in the JSX, the number won’t update on click. This is because setting ref.current does not trigger a re-render. Information that’s used for rendering should be state instead.\n\nDo not write or read ref.current during rendering.\n\nReact expects that the body of your component behaves like a pure function:\n\nReading or writing a ref during rendering breaks these expectations.\n\nYou can read or write refs from event handlers or effects instead.\n\nIf you have to read or write something during rendering, use state instead.\n\nWhen you break these rules, your component might still work, but most of the newer features we’re adding to React will rely on these expectations. Read more about keeping your components pure.\n\nIt’s particularly common to use a ref to manipulate the DOM. React has built-in support for this.\n\nFirst, declare a ref object with an initial value of null:\n\nThen pass your ref object as the ref attribute to the JSX of the DOM node you want to manipulate:\n\nAfter React creates the DOM node and puts it on the screen, React will set the current property of your ref object to that DOM node. Now you can access the <input>’s DOM node and call methods like focus():\n\nReact will set the current property back to null when the node is removed from the screen.\n\nRead more about manipulating the DOM with refs.\n\nIn this example, clicking the button will focus the input:\n\nReact saves the initial ref value once and ignores it on the next renders.\n\nAlthough the result of new VideoPlayer() is only used for the initial render, you’re still calling this function on every render. This can be wasteful if it’s creating expensive objects.\n\nTo solve it, you may initialize the ref like this instead:\n\nNormally, writing or reading ref.current during render is not allowed. However, it’s fine in this case because the result is always the same, and the condition only executes during initialization so it’s fully predictable.\n\nIf you use a type checker and don’t want to always check for null, you can try a pattern like this instead:\n\nHere, the playerRef itself is nullable. However, you should be able to convince your type checker that there is no case in which getPlayer() returns null. Then use getPlayer() in your event handlers.\n\nIf you try to pass a ref to your own component like this:\n\nYou might get an error in the console:\n\nBy default, your own components don’t expose refs to the DOM nodes inside them.\n\nTo fix this, find the component that you want to get a ref to:\n\nAnd then add ref to the list of props your component accepts and pass ref as a prop to the relevant child built-in component like this:\n\nThen the parent component can get a ref to it.\n\nRead more about accessing another component’s DOM nodes.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "useRef",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "useRef(initialValue)",
+      "id": "useref"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Referencing a value with a ref",
+      "id": "referencing-a-value-with-a-ref"
+    },
+    {
+      "level": "h4",
+      "text": "Examples of referencing a value with useRef",
+      "id": "examples-value"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 2: Click counter",
+      "id": "click-counter"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Manipulating the DOM with a ref",
+      "id": "manipulating-the-dom-with-a-ref"
+    },
+    {
+      "level": "h4",
+      "text": "Examples of manipulating the DOM with useRef",
+      "id": "examples-dom"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 4: Focusing a text input",
+      "id": "focusing-a-text-input"
+    },
+    {
+      "level": "h3",
+      "text": "Avoiding recreating the ref contents",
+      "id": "avoiding-recreating-the-ref-contents"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "How to avoid null checks when initializing useRef later",
+      "id": "how-to-avoid-null-checks-when-initializing-use-ref-later"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "I can’t get a ref to a custom component",
+      "id": "i-cant-get-a-ref-to-a-custom-component"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "const ref = useRef(initialValue)",
+      "language": "jsx"
+    },
+    {
+      "code": "import { useRef } from 'react';function MyComponent() {  const intervalRef = useRef(0);  const inputRef = useRef(null);  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "import { useRef } from 'react';function Stopwatch() {  const intervalRef = useRef(0);  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function handleStartClick() {  const intervalId = setInterval(() => {    // ...  }, 1000);  intervalRef.current = intervalId;}",
+      "language": "javascript"
+    },
+    {
+      "code": "function handleStopClick() {  const intervalId = intervalRef.current;  clearInterval(intervalId);}",
+      "language": "javascript"
+    },
+    {
+      "code": "function MyComponent() {  // ...  // 🚩 Don't write a ref during rendering  myRef.current = 123;  // ...  // 🚩 Don't read a ref during rendering  return <h1>{myOtherRef.current}</h1>;}",
+      "language": "javascript"
+    },
+    {
+      "code": "function MyComponent() {  // ...  useEffect(() => {    // ✅ You can read or write refs in effects    myRef.current = 123;  });  // ...  function handleClick() {    // ✅ You can read or write refs in event handlers    doSomething(myOtherRef.current);  }  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "import { useRef } from 'react';function MyComponent() {  const inputRef = useRef(null);  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...  return <input ref={inputRef} />;",
+      "language": "jsx"
+    },
+    {
+      "code": "function handleClick() {    inputRef.current.focus();  }",
+      "language": "javascript"
+    },
+    {
+      "code": "function Video() {  const playerRef = useRef(new VideoPlayer());  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function Video() {  const playerRef = useRef(null);  if (playerRef.current === null) {    playerRef.current = new VideoPlayer();  }  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function Video() {  const playerRef = useRef(null);  function getPlayer() {    if (playerRef.current !== null) {      return playerRef.current;    }    const player = new VideoPlayer();    playerRef.current = player;    return player;  }  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "const inputRef = useRef(null);return <MyInput ref={inputRef} />;",
+      "language": "jsx"
+    },
+    {
+      "code": "export default function MyInput({ value, onChange }) {  return (    <input      value={value}      onChange={onChange}    />  );}",
+      "language": "javascript"
+    },
+    {
+      "code": "function MyInput({ value, onChange, ref }) {  return (    <input      value={value}      onChange={onChange}      ref={ref}    />  );};export default MyInput;",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

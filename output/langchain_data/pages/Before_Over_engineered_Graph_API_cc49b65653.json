@@ -1,0 +1,8 @@
+{
+  "title": "Before: Over-engineered Graph API",
+  "content": "class SimpleState(TypedDict):\n    input: str\n    step1: str\n    step2: str\n    result: str",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#before:-over-engineered-graph-api",
+  "links": []
+}

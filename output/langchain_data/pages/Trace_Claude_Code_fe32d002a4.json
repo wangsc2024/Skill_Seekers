@@ -1,0 +1,97 @@
+{
+  "title": "Trace Claude Code",
+  "content": "Source: https://docs.langchain.com/langsmith/trace-claude-code\n\nThis guide shows you how to automatically send conversations from the [Claude Code CLI](https://code.claude.com/docs/en/overview) to LangSmith.\n\nOnce configured, you can opt-in to sending traces from Claude Code projects to LangSmith. Traces will include user messages, tool calls and assistant responses.\n\n<div style={{ textAlign: 'center' }}>\n  <img className=\"block dark:hidden\" src=\"https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace.png?fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=d59e2e68fb03e868ddf5d6d2887c25e6\" alt=\"LangSmith UI showing trace from Claude Code.\" data-og-width=\"2478\" width=\"2478\" data-og-height=\"1596\" height=\"1596\" data-path=\"langsmith/images/claude-code-trace.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace.png?w=280&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=d1cec3f7adf1c3cbad885e77918f9017 280w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace.png?w=560&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=d3fceeffc8c9796cb3d2d2a95d9f9785 560w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace.png?w=840&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=531f7631f8c70fb5cbb021053bec3d29 840w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace.png?w=1100&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=37355ed63ffecac752419053857f4f68 1100w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace.png?w=1650&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=5bb693851b27f81483b25c06e917d582 1650w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace.png?w=2500&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=a6ad02ca2d3ba75f7a696040a5e8db11 2500w\" />\n\n<img className=\"hidden dark:block\" src=\"https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace-dark.png?fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=81330e8bbd01d5ef740a7b7472e5e173\" alt=\"LangSmith UI showing trace from Claude Code.\" data-og-width=\"2480\" width=\"2480\" data-og-height=\"1564\" height=\"1564\" data-path=\"langsmith/images/claude-code-trace-dark.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace-dark.png?w=280&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=c8d35a77173846ba56d3cf841a5b663a 280w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace-dark.png?w=560&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=61083b3e1bf841ed1e2df85233410fad 560w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace-dark.png?w=840&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=a782d8898b2a38c41a7ff5b89a2adaed 840w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace-dark.png?w=1100&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=e4e089ff508bc5e2bdf89052aa0fde5d 1100w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace-dark.png?w=1650&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=ea8be6805edcdb5cb3a2047c0dea216b 1650w, https://mintcdn.com/langchain-5e9cc07a/ibZBFaqiLl4UuJmc/langsmith/images/claude-code-trace-dark.png?w=2500&fit=max&auto=format&n=ibZBFaqiLl4UuJmc&q=85&s=a9266da4f4042d694b90474639cb2a29 2500w\" />\n</div>\n\n1. A global \"Stop\" [hook](https://code.claude.com/docs/en/hooks-guide#get-started-with-claude-code-hooks) is configured to run each time Claude Code responds.\n2. The hook reads Claude Code’s generated conversation transcripts.\n3. Messages in the transcript are converted into LangSmith runs and sent to your LangSmith project.\n\n<Note> Tracing is opt-in and is enabled per Claude Code project using environment variables. </Note>\n\nBefore setting up tracing, ensure you have:\n\n* **Claude Code CLI** installed.\n* **LangSmith API key** ([get it here](https://smith.langchain.com/settings/apikeys)).\n* **Command-line tool** `jq` - JSON processor ([install guide](https://jqlang.github.io/jq/download/))\n\n<Info>\n  This guide currently only supports macOS.\n</Info>\n\n## 1. Create the hook script\n\n`stop_hook.sh` processes Claude Code's generated conversation transcripts and sends traces to LangSmith. Create the file `~/.claude/hooks/stop_hook.sh` with the following script:\n\n<sup>Last Updated: 2025-12-21</sup>\n\n<Accordion title=\"`stop_hook.sh` file\">\n  \n</Accordion>\n\n## 2. Configure the global hook\n\nSet up a global hook in `~/.claude/settings.json` that runs the `stop_hook.sh` script. The global setting enables you to easily trace any Claude Code CLI project.\n\nIn `~/.claude/settings.json`, add the `Stop` hook.\n\nFor each Claude Code project (a Claude Code project is a directory with Claude Code initialized) where you want tracing enabled, create or edit [Claude Code's project settings file](https://code.claude.com/docs/en/settings#:~:text=Project%20settings%20are%20saved%20in%20your%20project%20directory%3A) `.claude/settings.local.json` to include the following environment variables:\n\n* `TRACE_TO_LANGSMITH: \"true\"` - Enables tracing for this project. Remove or set to `false` to disable tracing.\n* `CC_LANGSMITH_API_KEY` - Your LangSmith API key\n* `CC_LANGSMITH_PROJECT` - The LangSmith project name where traces are sent\n* (optional) `CC_LANGSMITH_DEBUG: \"true\"` - Enables detailed debug logging. Remove or set to `false` to disable tracing.\n\n<Note> Alternativley, to enable tracing to LangSmith for all Claude Code sessions, you can add the above JSON to your [global Claude Code settings.json](https://code.claude.com/docs/en/settings#:~:text=User%20settings%20are%20defined%20in%20~/.claude/settings.json%20and%20apply%20to%20all%20projects.) file. </Note>\n\nStart a Claude Code session in your configured project. Traces will appear in LangSmith after Claude Code responds.\n\nIn LangSmith, you'll see:\n\n* Each message to Claude Code appears as a trace.\n* All turns from the same Claude Code session are grouped using a shared `thread_id` and can be viewed in the **Threads** tab of a project.\n\n### No traces appearing in LangSmith\n\n1. **Check the hook is running**:\n   \n   You should see log entries after each Claude response.\n\n2. **Verify environment variables**:\n   * Check that `TRACE_TO_LANGSMITH=\"true\"` in your project's `.claude/settings.local.json`\n   * Verify your API key is correct (starts with `lsv2_pt_`)\n   * Ensure the project name exists in LangSmith\n\n3. **Enable debug mode** to see detailed API activity:\n   \n   Then check logs for API calls and HTTP status codes.\n\n### Permission errors\n\nMake sure the hook script is executable:\n\n### Required commands not found\n\nVerify all required commands are installed:\n\n* **macOS**: `brew install jq`\n* **Ubuntu/Debian**: `sudo apt-get install jq`\n\n### Managing log file size\n\nThe hook logs all activity to `~/.claude/state/hook.log`. With debug mode enabled, this file can grow large:\n\n```bash  theme={null}",
+  "code_samples": [
+    {
+      "code": "</Accordion>\n\nMake it executable:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 2. Configure the global hook\n\nSet up a global hook in `~/.claude/settings.json` that runs the `stop_hook.sh` script. The global setting enables you to easily trace any Claude Code CLI project.\n\nIn `~/.claude/settings.json`, add the `Stop` hook.",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Enable Tracing\n\nFor each Claude Code project (a Claude Code project is a directory with Claude Code initialized) where you want tracing enabled, create or edit [Claude Code's project settings file](https://code.claude.com/docs/en/settings#:~:text=Project%20settings%20are%20saved%20in%20your%20project%20directory%3A) `.claude/settings.local.json` to include the following environment variables:\n\n* `TRACE_TO_LANGSMITH: \"true\"` - Enables tracing for this project. Remove or set to `false` to disable tracing.\n* `CC_LANGSMITH_API_KEY` - Your LangSmith API key\n* `CC_LANGSMITH_PROJECT` - The LangSmith project name where traces are sent\n* (optional) `CC_LANGSMITH_DEBUG: \"true\"` - Enables detailed debug logging. Remove or set to `false` to disable tracing.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note> Alternativley, to enable tracing to LangSmith for all Claude Code sessions, you can add the above JSON to your [global Claude Code settings.json](https://code.claude.com/docs/en/settings#:~:text=User%20settings%20are%20defined%20in%20~/.claude/settings.json%20and%20apply%20to%20all%20projects.) file. </Note>\n\n## 4. Verify Setup\n\nStart a Claude Code session in your configured project. Traces will appear in LangSmith after Claude Code responds.\n\nIn LangSmith, you'll see:\n\n* Each message to Claude Code appears as a trace.\n* All turns from the same Claude Code session are grouped using a shared `thread_id` and can be viewed in the **Threads** tab of a project.\n\n## Troubleshooting\n\n### No traces appearing in LangSmith\n\n1. **Check the hook is running**:",
+      "language": "unknown"
+    },
+    {
+      "code": "You should see log entries after each Claude response.\n\n2. **Verify environment variables**:\n   * Check that `TRACE_TO_LANGSMITH=\"true\"` in your project's `.claude/settings.local.json`\n   * Verify your API key is correct (starts with `lsv2_pt_`)\n   * Ensure the project name exists in LangSmith\n\n3. **Enable debug mode** to see detailed API activity:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then check logs for API calls and HTTP status codes.\n\n### Permission errors\n\nMake sure the hook script is executable:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Required commands not found\n\nVerify all required commands are installed:",
+      "language": "unknown"
+    },
+    {
+      "code": "If `jq` is missing:\n\n* **macOS**: `brew install jq`\n* **Ubuntu/Debian**: `sudo apt-get install jq`\n\n### Managing log file size\n\nThe hook logs all activity to `~/.claude/state/hook.log`. With debug mode enabled, this file can grow large:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "How it works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Create the hook script",
+      "id": "1.-create-the-hook-script"
+    },
+    {
+      "level": "h2",
+      "text": "2. Configure the global hook",
+      "id": "2.-configure-the-global-hook"
+    },
+    {
+      "level": "h2",
+      "text": "3. Enable Tracing",
+      "id": "3.-enable-tracing"
+    },
+    {
+      "level": "h2",
+      "text": "4. Verify Setup",
+      "id": "4.-verify-setup"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "No traces appearing in LangSmith",
+      "id": "no-traces-appearing-in-langsmith"
+    },
+    {
+      "level": "h3",
+      "text": "Permission errors",
+      "id": "permission-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Required commands not found",
+      "id": "required-commands-not-found"
+    },
+    {
+      "level": "h3",
+      "text": "Managing log file size",
+      "id": "managing-log-file-size"
+    }
+  ],
+  "url": "llms-txt#trace-claude-code",
+  "links": []
+}

@@ -1,0 +1,248 @@
+{
+  "url": "https://react.dev/learn/separating-events-from-effects",
+  "title": "Separating Events from Effects",
+  "content": "Event handlers only re-run when you perform the same interaction again. Unlike event handlers, Effects re-synchronize if some value they read, like a prop or a state variable, is different from what it was during the last render. Sometimes, you also want a mix of both behaviors: an Effect that re-runs in response to some values but not others. This page will teach you how to do that.\n\nFirst, let’s recap the difference between event handlers and Effects.\n\nImagine you’re implementing a chat room component. Your requirements look like this:\n\nLet’s say you’ve already implemented the code for them, but you’re not sure where to put it. Should you use event handlers or Effects? Every time you need to answer this question, consider why the code needs to run.\n\nFrom the user’s perspective, sending a message should happen because the particular “Send” button was clicked. The user will get rather upset if you send their message at any other time or for any other reason. This is why sending a message should be an event handler. Event handlers let you handle specific interactions:\n\nWith an event handler, you can be sure that sendMessage(message) will only run if the user presses the button.\n\nRecall that you also need to keep the component connected to the chat room. Where does that code go?\n\nThe reason to run this code is not some particular interaction. It doesn’t matter why or how the user navigated to the chat room screen. Now that they’re looking at it and could interact with it, the component needs to stay connected to the selected chat server. Even if the chat room component was the initial screen of your app, and the user has not performed any interactions at all, you would still need to connect. This is why it’s an Effect:\n\nWith this code, you can be sure that there is always an active connection to the currently selected chat server, regardless of the specific interactions performed by the user. Whether the user has only opened your app, selected a different room, or navigated to another screen and back, your Effect ensures that the component will remain synchronized with the currently selected room, and will re-connect whenever it’s necessary.\n\nIntuitively, you could say that event handlers are always triggered “manually”, for example by clicking a button. Effects, on the other hand, are “automatic”: they run and re-run as often as it’s needed to stay synchronized.\n\nThere is a more precise way to think about this.\n\nProps, state, and variables declared inside your component’s body are called reactive values. In this example, serverUrl is not a reactive value, but roomId and message are. They participate in the rendering data flow:\n\nReactive values like these can change due to a re-render. For example, the user may edit the message or choose a different roomId in a dropdown. Event handlers and Effects respond to changes differently:\n\nLet’s revisit the previous example to illustrate this difference.\n\nTake a look at this line of code. Should this logic be reactive or not?\n\nFrom the user’s perspective, a change to the message does not mean that they want to send a message. It only means that the user is typing. In other words, the logic that sends a message should not be reactive. It should not run again only because the reactive value has changed. That’s why it belongs in the event handler:\n\nEvent handlers aren’t reactive, so sendMessage(message) will only run when the user clicks the Send button.\n\nNow let’s return to these lines:\n\nFrom the user’s perspective, a change to the roomId does mean that they want to connect to a different room. In other words, the logic for connecting to the room should be reactive. You want these lines of code to “keep up” with the reactive value, and to run again if that value is different. That’s why it belongs in an Effect:\n\nEffects are reactive, so createConnection(serverUrl, roomId) and connection.connect() will run for every distinct value of roomId. Your Effect keeps the chat connection synchronized to the currently selected room.\n\nThings get more tricky when you want to mix reactive logic with non-reactive logic.\n\nFor example, imagine that you want to show a notification when the user connects to the chat. You read the current theme (dark or light) from the props so that you can show the notification in the correct color:\n\nHowever, theme is a reactive value (it can change as a result of re-rendering), and every reactive value read by an Effect must be declared as its dependency. Now you have to specify theme as a dependency of your Effect:\n\nPlay with this example and see if you can spot the problem with this user experience:\n\nWhen the roomId changes, the chat re-connects as you would expect. But since theme is also a dependency, the chat also re-connects every time you switch between the dark and the light theme. That’s not great!\n\nIn other words, you don’t want this line to be reactive, even though it is inside an Effect (which is reactive):\n\nYou need a way to separate this non-reactive logic from the reactive Effect around it.\n\nUse a special Hook called useEffectEvent to extract this non-reactive logic out of your Effect:\n\nHere, onConnected is called an Effect Event. It’s a part of your Effect logic, but it behaves a lot more like an event handler. The logic inside it is not reactive, and it always “sees” the latest values of your props and state.\n\nNow you can call the onConnected Effect Event from inside your Effect:\n\nThis solves the problem. Note that you had to remove theme from the list of your Effect’s dependencies, because it’s no longer used in the Effect. You also don’t need to add onConnected to it, because Effect Events are not reactive and must be omitted from dependencies.\n\nVerify that the new behavior works as you would expect:\n\nYou can think of Effect Events as being very similar to event handlers. The main difference is that event handlers run in response to a user interactions, whereas Effect Events are triggered by you from Effects. Effect Events let you “break the chain” between the reactivity of Effects and code that should not be reactive.\n\nEffect Events let you fix many patterns where you might be tempted to suppress the dependency linter.\n\nFor example, say you have an Effect to log the page visits:\n\nLater, you add multiple routes to your site. Now your Page component receives a url prop with the current path. You want to pass the url as a part of your logVisit call, but the dependency linter complains:\n\nThink about what you want the code to do. You want to log a separate visit for different URLs since each URL represents a different page. In other words, this logVisit call should be reactive with respect to the url. This is why, in this case, it makes sense to follow the dependency linter, and add url as a dependency:\n\nNow let’s say you want to include the number of items in the shopping cart together with every page visit:\n\nYou used numberOfItems inside the Effect, so the linter asks you to add it as a dependency. However, you don’t want the logVisit call to be reactive with respect to numberOfItems. If the user puts something into the shopping cart, and the numberOfItems changes, this does not mean that the user visited the page again. In other words, visiting the page is, in some sense, an “event”. It happens at a precise moment in time.\n\nSplit the code in two parts:\n\nHere, onVisit is an Effect Event. The code inside it isn’t reactive. This is why you can use numberOfItems (or any other reactive value!) without worrying that it will cause the surrounding code to re-execute on changes.\n\nOn the other hand, the Effect itself remains reactive. Code inside the Effect uses the url prop, so the Effect will re-run after every re-render with a different url. This, in turn, will call the onVisit Effect Event.\n\nAs a result, you will call logVisit for every change to the url, and always read the latest numberOfItems. However, if numberOfItems changes on its own, this will not cause any of the code to re-run.\n\nYou might be wondering if you could call onVisit() with no arguments, and read the url inside it:\n\nThis would work, but it’s better to pass this url to the Effect Event explicitly. By passing url as an argument to your Effect Event, you are saying that visiting a page with a different url constitutes a separate “event” from the user’s perspective. The visitedUrl is a part of the “event” that happened:\n\nSince your Effect Event explicitly “asks” for the visitedUrl, now you can’t accidentally remove url from the Effect’s dependencies. If you remove the url dependency (causing distinct page visits to be counted as one), the linter will warn you about it. You want onVisit to be reactive with regards to the url, so instead of reading the url inside (where it wouldn’t be reactive), you pass it from your Effect.\n\nThis becomes especially important if there is some asynchronous logic inside the Effect:\n\nHere, url inside onVisit corresponds to the latest url (which could have already changed), but visitedUrl corresponds to the url that originally caused this Effect (and this onVisit call) to run.\n\nIn the existing codebases, you may sometimes see the lint rule suppressed like this:\n\nWe recommend never suppressing the linter.\n\nThe first downside of suppressing the rule is that React will no longer warn you when your Effect needs to “react” to a new reactive dependency you’ve introduced to your code. In the earlier example, you added url to the dependencies because React reminded you to do it. You will no longer get such reminders for any future edits to that Effect if you disable the linter. This leads to bugs.\n\nHere is an example of a confusing bug caused by suppressing the linter. In this example, the handleMove function is supposed to read the current canMove state variable value in order to decide whether the dot should follow the cursor. However, canMove is always true inside handleMove.\n\nThe problem with this code is in suppressing the dependency linter. If you remove the suppression, you’ll see that this Effect should depend on the handleMove function. This makes sense: handleMove is declared inside the component body, which makes it a reactive value. Every reactive value must be specified as a dependency, or it can potentially get stale over time!\n\nThe author of the original code has “lied” to React by saying that the Effect does not depend ([]) on any reactive values. This is why React did not re-synchronize the Effect after canMove has changed (and handleMove with it). Because React did not re-synchronize the Effect, the handleMove attached as a listener is the handleMove function created during the initial render. During the initial render, canMove was true, which is why handleMove from the initial render will forever see that value.\n\nIf you never suppress the linter, you will never see problems with stale values.\n\nWith useEffectEvent, there is no need to “lie” to the linter, and the code works as you would expect:\n\nThis doesn’t mean that useEffectEvent is always the correct solution. You should only apply it to the lines of code that you don’t want to be reactive. In the above sandbox, you didn’t want the Effect’s code to be reactive with regards to canMove. That’s why it made sense to extract an Effect Event.\n\nRead Removing Effect Dependencies for other correct alternatives to suppressing the linter.\n\nEffect Events are very limited in how you can use them:\n\nFor example, don’t declare and pass an Effect Event like this:\n\nInstead, always declare Effect Events directly next to the Effects that use them:\n\nEffect Events are non-reactive “pieces” of your Effect code. They should be next to the Effect using them.\n\nThis Timer component keeps a count state variable which increases every second. The value by which it’s increasing is stored in the increment state variable. You can control the increment variable with the plus and minus buttons.\n\nHowever, no matter how many times you click the plus button, the counter is still incremented by one every second. What’s wrong with this code? Why is increment always equal to 1 inside the Effect’s code? Find the mistake and fix it.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Separating Events from Effects",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Choosing between event handlers and Effects",
+      "id": "choosing-between-event-handlers-and-effects"
+    },
+    {
+      "level": "h3",
+      "text": "Event handlers run in response to specific interactions",
+      "id": "event-handlers-run-in-response-to-specific-interactions"
+    },
+    {
+      "level": "h3",
+      "text": "Effects run whenever synchronization is needed",
+      "id": "effects-run-whenever-synchronization-is-needed"
+    },
+    {
+      "level": "h2",
+      "text": "Reactive values and reactive logic",
+      "id": "reactive-values-and-reactive-logic"
+    },
+    {
+      "level": "h3",
+      "text": "Logic inside event handlers is not reactive",
+      "id": "logic-inside-event-handlers-is-not-reactive"
+    },
+    {
+      "level": "h3",
+      "text": "Logic inside Effects is reactive",
+      "id": "logic-inside-effects-is-reactive"
+    },
+    {
+      "level": "h2",
+      "text": "Extracting non-reactive logic out of Effects",
+      "id": "extracting-non-reactive-logic-out-of-effects"
+    },
+    {
+      "level": "h3",
+      "text": "Declaring an Effect Event",
+      "id": "declaring-an-effect-event"
+    },
+    {
+      "level": "h3",
+      "text": "Reading latest props and state with Effect Events",
+      "id": "reading-latest-props-and-state-with-effect-events"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Is it okay to suppress the dependency linter instead?",
+      "id": "is-it-okay-to-suppress-the-dependency-linter-instead"
+    },
+    {
+      "level": "h3",
+      "text": "Limitations of Effect Events",
+      "id": "limitations-of-effect-events"
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    },
+    {
+      "level": "h2",
+      "text": "Try out some challenges",
+      "id": "challenges"
+    },
+    {
+      "level": "h4",
+      "text": "Challenge 1 of 4: Fix a variable that doesn’t update",
+      "id": "fix-a-variable-that-doesnt-update"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "function ChatRoom({ roomId }) {  const [message, setMessage] = useState('');  // ...  function handleSendClick() {    sendMessage(message);  }  // ...  return (    <>      <input value={message} onChange={e => setMessage(e.target.value)} />      <button onClick={handleSendClick}>Send</button>    </>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "function ChatRoom({ roomId }) {  // ...  useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.connect();    return () => {      connection.disconnect();    };  }, [roomId]);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "const serverUrl = 'https://localhost:1234';function ChatRoom({ roomId }) {  const [message, setMessage] = useState('');  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...    sendMessage(message);    // ...",
+      "language": "unknown"
+    },
+    {
+      "code": "function handleSendClick() {    sendMessage(message);  }",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...    const connection = createConnection(serverUrl, roomId);    connection.connect();    // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.connect();    return () => {      connection.disconnect()    };  }, [roomId]);",
+      "language": "jsx"
+    },
+    {
+      "code": "function ChatRoom({ roomId, theme }) {  useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.on('connected', () => {      showNotification('Connected!', theme);    });    connection.connect();    // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function ChatRoom({ roomId, theme }) {  useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.on('connected', () => {      showNotification('Connected!', theme);    });    connection.connect();    return () => {      connection.disconnect()    };  }, [roomId, theme]); // ✅ All dependencies declared  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...      showNotification('Connected!', theme);      // ...",
+      "language": "unknown"
+    },
+    {
+      "code": "import { useEffect, useEffectEvent } from 'react';function ChatRoom({ roomId, theme }) {  const onConnected = useEffectEvent(() => {    showNotification('Connected!', theme);  });  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function ChatRoom({ roomId, theme }) {  const onConnected = useEffectEvent(() => {    showNotification('Connected!', theme);  });  useEffect(() => {    const connection = createConnection(serverUrl, roomId);    connection.on('connected', () => {      onConnected();    });    connection.connect();    return () => connection.disconnect();  }, [roomId]); // ✅ All dependencies declared  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function Page() {  useEffect(() => {    logVisit();  }, []);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function Page({ url }) {  useEffect(() => {    logVisit(url);  }, []); // 🔴 React Hook useEffect has a missing dependency: 'url'  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function Page({ url }) {  useEffect(() => {    logVisit(url);  }, [url]); // ✅ All dependencies declared  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function Page({ url }) {  const { items } = useContext(ShoppingCartContext);  const numberOfItems = items.length;  useEffect(() => {    logVisit(url, numberOfItems);  }, [url]); // 🔴 React Hook useEffect has a missing dependency: 'numberOfItems'  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function Page({ url }) {  const { items } = useContext(ShoppingCartContext);  const numberOfItems = items.length;  const onVisit = useEffectEvent(visitedUrl => {    logVisit(visitedUrl, numberOfItems);  });  useEffect(() => {    onVisit(url);  }, [url]); // ✅ All dependencies declared  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "const onVisit = useEffectEvent(() => {    logVisit(url, numberOfItems);  });  useEffect(() => {    onVisit();  }, [url]);",
+      "language": "jsx"
+    },
+    {
+      "code": "const onVisit = useEffectEvent(visitedUrl => {    logVisit(visitedUrl, numberOfItems);  });  useEffect(() => {    onVisit(url);  }, [url]);",
+      "language": "jsx"
+    },
+    {
+      "code": "const onVisit = useEffectEvent(visitedUrl => {    logVisit(visitedUrl, numberOfItems);  });  useEffect(() => {    setTimeout(() => {      onVisit(url);    }, 5000); // Delay logging visits  }, [url]);",
+      "language": "jsx"
+    },
+    {
+      "code": "function Page({ url }) {  const { items } = useContext(ShoppingCartContext);  const numberOfItems = items.length;  useEffect(() => {    logVisit(url, numberOfItems);    // 🔴 Avoid suppressing the linter like this:    // eslint-disable-next-line react-hooks/exhaustive-deps  }, [url]);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function Timer() {  const [count, setCount] = useState(0);  const onTick = useEffectEvent(() => {    setCount(count + 1);  });  useTimer(onTick, 1000); // 🔴 Avoid: Passing Effect Events  return <h1>{count}</h1>}function useTimer(callback, delay) {  useEffect(() => {    const id = setInterval(() => {      callback();    }, delay);    return () => {      clearInterval(id);    };  }, [delay, callback]); // Need to specify \"callback\" in dependencies}",
+      "language": "jsx"
+    },
+    {
+      "code": "function Timer() {  const [count, setCount] = useState(0);  useTimer(() => {    setCount(count + 1);  }, 1000);  return <h1>{count}</h1>}function useTimer(callback, delay) {  const onTick = useEffectEvent(() => {    callback();  });  useEffect(() => {    const id = setInterval(() => {      onTick(); // ✅ Good: Only called locally inside an Effect    }, delay);    return () => {      clearInterval(id);    };  }, [delay]); // No need to specify \"onTick\" (an Effect Event) as a dependency}",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react-dom"
+  ]
+}

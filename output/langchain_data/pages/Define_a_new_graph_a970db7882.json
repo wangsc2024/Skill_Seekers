@@ -1,0 +1,8 @@
+{
+  "title": "Define a new graph",
+  "content": "workflow = StateGraph(State)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-a-new-graph",
+  "links": []
+}

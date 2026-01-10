@@ -1,0 +1,8 @@
+{
+  "title": "Assumes you've installed pydantic",
+  "content": "from pydantic import BaseModel",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#assumes-you've-installed-pydantic",
+  "links": []
+}

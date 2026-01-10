@@ -1,0 +1,14 @@
+{
+  "title": "RL Reward Hacking",
+  "content": "Learn what is Reward Hacking in Reinforcement Learning and how to counter it.\n\nThe ultimate goal of RL is to maximize some reward (say speed, revenue, some metric). But RL can **cheat.** When the RL algorithm learns a trick or exploits something to increase the reward, without actually doing the task at end, this is called \"**Reward Hacking**\".\n\nIt's the reason models learn to modify unit tests to pass coding challenges, and these are critical blockers for real world deployment. Some other good examples are from [Wikipedia](https://en.wikipedia.org/wiki/Reward_hacking).\n\n<div align=\"center\"><figure><img src=\"https://i.pinimg.com/originals/55/e0/1b/55e01b94a9c5546b61b59ae300811c83.gif\" alt=\"\" width=\"188\"><figcaption></figcaption></figure></div>\n\n**Can you counter reward hacking? Yes!** In our [free gpt-oss RL notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/gpt-oss-\\(20B\\)-GRPO.ipynb) we explore how to counter reward hacking in a code generation setting and showcase tangible solutions to common error modes. We saw the model edit the timing function, outsource to other libraries, cache the results, and outright cheat. After countering, the result is our model generates genuinely optimized matrix multiplication kernels, not clever cheats.\n\n## :trophy: Reward Hacking Overview\n\nSome common examples of reward hacking during RL include:\n\nRL learns to use Numpy, Torch, other libraries, which calls optimized CUDA kernels. We can stop the RL algorithm from calling optimized code by inspecting if the generated code imports other non standard Python libraries.\n\n#### Caching & Cheating\n\nRL learns to cache the result of the output and RL learns to find the actual output by inspecting Python global variables.\n\nWe can stop the RL algorithm from using cached data by wiping the cache with a large fake matrix. We also have to benchmark carefully with multiple loops and turns.\n\nRL learns to edit the timing function to make it output 0 time as passed. We can stop the RL algorithm from using global or cached variables by restricting it's `locals` and `globals`. We are also going to use `exec` to create the function, so we have to save the output to an empty dict. We also disallow global variable access via `types.FunctionType(f.__code__, {})`\\\\",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": ":trophy: Reward Hacking Overview",
+      "id": ":trophy:-reward-hacking-overview"
+    }
+  ],
+  "url": "llms-txt#rl-reward-hacking",
+  "links": []
+}

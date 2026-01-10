@@ -1,0 +1,51 @@
+{
+  "title": "Define structured output schema for the classifier",
+  "content": "class ClassificationResult(BaseModel):  # [!code highlight]\n    \"\"\"Result of classifying a user query into agent-specific sub-questions.\"\"\"\n    classifications: list[Classification] = Field(\n        description=\"List of agents to invoke with their targeted sub-questions\"\n    )\n\ndef classify_query(state: RouterState) -> dict:\n    \"\"\"Classify query and determine which agents to invoke.\"\"\"\n    structured_llm = router_llm.with_structured_output(ClassificationResult)  # [!code highlight]\n\nresult = structured_llm.invoke([\n        {\n            \"role\": \"system\",\n            \"content\": \"\"\"Analyze this query and determine which knowledge bases to consult.\nFor each relevant source, generate a targeted sub-question optimized for that source.\n\nAvailable sources:\n- github: Code, API references, implementation details, issues, pull requests\n- notion: Internal documentation, processes, policies, team wikis\n- slack: Team discussions, informal knowledge sharing, recent conversations\n\nReturn ONLY the sources that are relevant to the query. Each source should have\na targeted sub-question optimized for that specific knowledge domain.\n\nExample for \"How do I authenticate API requests?\":\n- github: \"What authentication code exists? Search for auth middleware, JWT handling\"\n- notion: \"What authentication documentation exists? Look for API auth guides\"\n(slack omitted because it's not relevant for this technical question)\"\"\"\n        },\n        {\"role\": \"user\", \"content\": state[\"query\"]}\n    ])\n\nreturn {\"classifications\": result.classifications}\n\ndef route_to_agents(state: RouterState) -> list[Send]:\n    \"\"\"Fan out to agents based on classifications.\"\"\"\n    return [\n        Send(c[\"source\"], {\"query\": c[\"query\"]})  # [!code highlight]\n        for c in state[\"classifications\"]\n    ]\n\ndef query_github(state: AgentInput) -> dict:\n    \"\"\"Query the GitHub agent.\"\"\"\n    result = github_agent.invoke({\n        \"messages\": [{\"role\": \"user\", \"content\": state[\"query\"]}]  # [!code highlight]\n    })\n    return {\"results\": [{\"source\": \"github\", \"result\": result[\"messages\"][-1].content}]}\n\ndef query_notion(state: AgentInput) -> dict:\n    \"\"\"Query the Notion agent.\"\"\"\n    result = notion_agent.invoke({\n        \"messages\": [{\"role\": \"user\", \"content\": state[\"query\"]}]  # [!code highlight]\n    })\n    return {\"results\": [{\"source\": \"notion\", \"result\": result[\"messages\"][-1].content}]}\n\ndef query_slack(state: AgentInput) -> dict:\n    \"\"\"Query the Slack agent.\"\"\"\n    result = slack_agent.invoke({\n        \"messages\": [{\"role\": \"user\", \"content\": state[\"query\"]}]  # [!code highlight]\n    })\n    return {\"results\": [{\"source\": \"slack\", \"result\": result[\"messages\"][-1].content}]}\n\ndef synthesize_results(state: RouterState) -> dict:\n    \"\"\"Combine results from all agents into a coherent answer.\"\"\"\n    if not state[\"results\"]:\n        return {\"final_answer\": \"No results found from any knowledge source.\"}\n\n# Format results for synthesis\n    formatted = [\n        f\"**From {r['source'].title()}:**\\n{r['result']}\"\n        for r in state[\"results\"]\n    ]\n\nsynthesis_response = router_llm.invoke([\n        {\n            \"role\": \"system\",\n            \"content\": f\"\"\"Synthesize these search results to answer the original question: \"{state['query']}\"\n\n- Combine information from multiple sources without redundancy\n- Highlight the most relevant and actionable information\n- Note any discrepancies between sources\n- Keep the response concise and well-organized\"\"\"\n        },\n        {\"role\": \"user\", \"content\": \"\\n\\n\".join(formatted)}\n    ])\n\nreturn {\"final_answer\": synthesis_response.content}\npython  theme={null}\nworkflow = (\n    StateGraph(RouterState)\n    .add_node(\"classify\", classify_query)\n    .add_node(\"github\", query_github)\n    .add_node(\"notion\", query_notion)\n    .add_node(\"slack\", query_slack)\n    .add_node(\"synthesize\", synthesize_results)\n    .add_edge(START, \"classify\")\n    .add_conditional_edges(\"classify\", route_to_agents, [\"github\", \"notion\", \"slack\"])\n    .add_edge(\"github\", \"synthesize\")\n    .add_edge(\"notion\", \"synthesize\")\n    .add_edge(\"slack\", \"synthesize\")\n    .add_edge(\"synthesize\", END)\n    .compile()\n)\npython  theme={null}\nresult = workflow.invoke({\n    \"query\": \"How do I authenticate API requests?\"\n})\n\nprint(\"Original query:\", result[\"query\"])\nprint(\"\\nClassifications:\")\nfor c in result[\"classifications\"]:\n    print(f\"  {c['source']}: {c['query']}\")\nprint(\"\\n\" + \"=\" * 60 + \"\\n\")\nprint(\"Final Answer:\")\nprint(result[\"final_answer\"])\n\nOriginal query: How do I authenticate API requests?\n\nClassifications:\n  github: What authentication code exists? Search for auth middleware, JWT handling\n  notion: What authentication documentation exists? Look for API auth guides\n\n============================================================\n\nFinal Answer:\nTo authenticate API requests, you have several options:\n\n1. **JWT Tokens**: The recommended approach for most use cases.\n   Implementation details are in `src/auth.py` (PR #156).\n\n2. **OAuth2 Flow**: For third-party integrations, follow the OAuth2\n   flow documented in Notion's 'API Authentication Guide'.\n\n3. **API Keys**: For server-to-server communication, use Bearer tokens\n   in the Authorization header.\n\nFor token refresh handling, see issue #203 and PR #178 for the latest\nOAuth scope updates.\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "## 5. Compile the workflow\n\nNow assemble the workflow by connecting nodes with edges. The key is using `add_conditional_edges` with the routing function to enable parallel execution:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `add_conditional_edges` call connects the classify node to the agent nodes through the `route_to_agents` function. When `route_to_agents` returns multiple `Send` objects, those nodes execute in parallel.\n\n## 6. Use the router\n\nTest your router with queries that span multiple knowledge domains:",
+      "language": "unknown"
+    },
+    {
+      "code": "Expected output:",
+      "language": "unknown"
+    },
+    {
+      "code": "The router analyzed the query, classified it to determine which agents to invoke (GitHub and Notion, but not Slack for this technical question), queried both agents in parallel, and synthesized the results into a coherent answer.\n\n## 7. Understanding the architecture\n\nThe router workflow follows a clear pattern:\n\n### Classification phase\n\nThe `classify_query` function uses **structured output** to analyze the user's query and determine which agents to invoke. This is where the routing intelligence lives:\n\n* Uses a Pydantic model (Python) or Zod schema (JS) to ensure valid output\n* Returns a list of `Classification` objects, each with a `source` and targeted `query`\n* Only includes relevant sources—irrelevant ones are simply omitted\n\nThis structured approach is more reliable than free-form JSON parsing and makes the routing logic explicit.\n\n### Parallel execution with Send\n\nThe `route_to_agents` function maps classifications to `Send` objects. Each `Send` specifies the target node and the state to pass:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "5. Compile the workflow",
+      "id": "5.-compile-the-workflow"
+    },
+    {
+      "level": "h2",
+      "text": "6. Use the router",
+      "id": "6.-use-the-router"
+    },
+    {
+      "level": "h2",
+      "text": "7. Understanding the architecture",
+      "id": "7.-understanding-the-architecture"
+    },
+    {
+      "level": "h3",
+      "text": "Classification phase",
+      "id": "classification-phase"
+    },
+    {
+      "level": "h3",
+      "text": "Parallel execution with Send",
+      "id": "parallel-execution-with-send"
+    }
+  ],
+  "url": "llms-txt#define-structured-output-schema-for-the-classifier",
+  "links": []
+}

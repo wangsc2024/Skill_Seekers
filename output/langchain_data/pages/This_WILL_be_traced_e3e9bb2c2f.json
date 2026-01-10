@@ -1,0 +1,8 @@
+{
+  "title": "This WILL be traced",
+  "content": "with ls.tracing_context(enabled=True):\n    agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"Send a test email to alice@example.com\"}]})",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#this-will-be-traced",
+  "links": []
+}

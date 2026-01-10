@@ -1,0 +1,31 @@
+{
+  "title": "Call the graph: here we call it to generate a list of jokes",
+  "content": "for step in graph.stream({\"topic\": \"animals\"}):\n    print(step)\n\n{'generate_topics': {'subjects': ['lions', 'elephants', 'penguins']}}\n{'generate_joke': {'jokes': [\"Why don't lions like fast food? Because they can't catch it!\"]}}\n{'generate_joke': {'jokes': [\"Why don't elephants use computers? They're afraid of the mouse!\"]}}\n{'generate_joke': {'jokes': ['Why don't penguins like talking to strangers at parties? Because they find it hard to break the ice.']}}\n{'best_joke': {'best_selected_joke': 'penguins'}}\npython  theme={null}\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\n\ndef route(state: State) -> Literal[\"b\", END]:\n    if termination_condition(state):\n        return END\n    else:\n        return \"b\"\n\nbuilder.add_edge(START, \"a\")\nbuilder.add_conditional_edges(\"a\", route)\nbuilder.add_edge(\"b\", \"a\")\ngraph = builder.compile()\npython  theme={null}\nfrom langgraph.errors import GraphRecursionError\n\ntry:\n    graph.invoke(inputs, {\"recursion_limit\": 3})\nexcept GraphRecursionError:\n    print(\"Recursion Error\")\npython  theme={null}\nimport operator\nfrom typing import Annotated, Literal\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n    # The operator.add reducer fn makes this append-only\n    aggregate: Annotated[list, operator.add]\n\ndef a(state: State):\n    print(f'Node A sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n    print(f'Node B sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Create and control loops\n\nWhen creating a graph with a loop, we require a mechanism for terminating execution. This is most commonly done by adding a [conditional edge](/oss/python/langgraph/graph-api#conditional-edges) that routes to the [END](/oss/python/langgraph/graph-api#end-node) node once we reach some termination condition.\n\nYou can also set the graph recursion limit when invoking or streaming the graph. The recursion limit sets the number of [supersteps](/oss/python/langgraph/graph-api#graphs) that the graph is allowed to execute before it raises an error. Read more about the concept of recursion limits [here](/oss/python/langgraph/graph-api#recursion-limit).\n\nLet's consider a simple graph with a loop to better understand how these mechanisms work.\n\n<Tip>\n  To return the last value of your state instead of receiving a recursion limit error, see the [next section](#impose-a-recursion-limit).\n</Tip>\n\nWhen creating a loop, you can include a conditional edge that specifies a termination condition:",
+      "language": "unknown"
+    },
+    {
+      "code": "To control the recursion limit, specify `\"recursionLimit\"` in the config. This will raise a `GraphRecursionError`, which you can catch and handle:",
+      "language": "unknown"
+    },
+    {
+      "code": "Let's define a graph with a simple loop. Note that we use a conditional edge to implement a termination condition.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create and control loops",
+      "id": "create-and-control-loops"
+    }
+  ],
+  "url": "llms-txt#call-the-graph:-here-we-call-it-to-generate-a-list-of-jokes",
+  "links": []
+}

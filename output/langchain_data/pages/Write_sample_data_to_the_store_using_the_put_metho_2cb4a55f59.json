@@ -1,0 +1,8 @@
+{
+  "title": "Write sample data to the store using the put method",
+  "content": "store.put( # [!code highlight]\n    (\"users\",),  # Namespace to group related data together (users namespace for user data)\n    \"user_123\",  # Key within the namespace (user ID as key)\n    {\n        \"name\": \"John Smith\",\n        \"language\": \"English\",\n    }  # Data to store for the given user\n)\n\n@tool\ndef get_user_info(runtime: ToolRuntime[Context]) -> str:\n    \"\"\"Look up user info.\"\"\"\n    # Access the store - same as that provided to `create_agent`\n    store = runtime.store # [!code highlight]\n    user_id = runtime.context.user_id\n    # Retrieve data from store - returns StoreValue object with value and metadata\n    user_info = store.get((\"users\",), user_id) # [!code highlight]\n    return str(user_info.value) if user_info else \"Unknown user\"\n\nagent = create_agent(\n    model=\"claude-sonnet-4-5-20250929\",\n    tools=[get_user_info],\n    # Pass store to agent - enables agent to access store when running tools\n    store=store, # [!code highlight]\n    context_schema=Context\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#write-sample-data-to-the-store-using-the-put-method",
+  "links": []
+}

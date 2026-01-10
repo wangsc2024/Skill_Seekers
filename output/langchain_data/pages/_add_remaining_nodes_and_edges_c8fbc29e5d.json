@@ -1,0 +1,19 @@
+{
+  "title": "... add remaining nodes and edges",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "### From Graph to Functional API\n\nWhen your graph becomes overly complex for simple linear processes:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "From Graph to Functional API",
+      "id": "from-graph-to-functional-api"
+    }
+  ],
+  "url": "llms-txt#...-add-remaining-nodes-and-edges",
+  "links": []
+}

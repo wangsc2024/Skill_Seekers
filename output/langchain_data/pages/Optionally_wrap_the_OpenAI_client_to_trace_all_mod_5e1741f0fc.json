@@ -1,0 +1,8 @@
+{
+  "title": "Optionally wrap the OpenAI client to trace all model calls.",
+  "content": "oai_client = wrappers.wrap_openai(OpenAI())\n\ndef valid_reasoning(inputs: dict, outputs: dict) -> bool:\n    \"\"\"Use an LLM to judge if the reasoning and the answer are consistent.\"\"\"\n    instructions = \"\"\"\nGiven the following question, answer, and reasoning, determine if the reasoning\nfor the answer is logically valid and consistent with the question and the answer.\"\"\"\n\nclass Response(BaseModel):\n        reasoning_is_valid: bool\n\nmsg = f\"Question: {inputs['question']}\\nAnswer: {outputs['answer']}\\nReasoning: {outputs['reasoning']}\"\n    response = oai_client.beta.chat.completions.parse(\n        model=\"gpt-4o\",\n        messages=[{\"role\": \"system\", \"content\": instructions,}, {\"role\": \"user\", \"content\": msg}],\n        response_format=Response\n    )\n    return response.choices[0].message.parsed.reasoning_is_valid",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#optionally-wrap-the-openai-client-to-trace-all-model-calls.",
+  "links": []
+}

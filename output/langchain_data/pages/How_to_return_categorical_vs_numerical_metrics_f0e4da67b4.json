@@ -1,0 +1,19 @@
+{
+  "title": "How to return categorical vs numerical metrics",
+  "content": "Source: https://docs.langchain.com/langsmith/metric-type\n\nLangSmith supports both categorical and numerical metrics, and you can return either when writing a custom evaluator.\n\nFor an evaluator result to be logged as a numerical metric, it must returned as:\n\n* (Python only) an `int`, `float`, or `bool`\n* a dict of the form `{\"key\": \"metric_name\", \"score\": int | float | bool}`\n\nFor an evaluator result to be logged as a categorical metric, it must be returned as:\n\n* (Python only) a `str`\n* a dict of the form `{\"key\": \"metric_name\", \"value\": str | int | float | bool}`\n\nHere are some examples:\n\n* Python: Requires `langsmith>=0.2.0`\n* TypeScript: Support for multiple scores is available in `langsmith@0.1.32` and higher\n\n* [Return multiple metrics in one evaluator](/langsmith/multiple-scores)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/metric-type.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Related",
+      "id": "related"
+    }
+  ],
+  "url": "llms-txt#how-to-return-categorical-vs-numerical-metrics",
+  "links": []
+}

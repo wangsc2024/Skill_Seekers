@@ -1,0 +1,8 @@
+{
+  "title": "shortlived: \"604800\"  # 7 days (default is 14 days)",
+  "content": "frontend:\n  deployment:\n    replicas: 4 # OR enable autoscaling to this level (example below)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#shortlived:-\"604800\"--#-7-days-(default-is-14-days)",
+  "links": []
+}

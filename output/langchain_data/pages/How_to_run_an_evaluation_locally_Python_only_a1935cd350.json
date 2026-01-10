@@ -1,0 +1,14 @@
+{
+  "title": "How to run an evaluation locally (Python only)",
+  "content": "Source: https://docs.langchain.com/langsmith/local\n\nSometimes it is helpful to run an evaluation locally without uploading any results to LangSmith. For example, if you're quickly iterating on a prompt and want to smoke test it on a few examples, or if you're validating that your target and evaluator functions are defined correctly, you may not want to record these evaluations.\n\nYou can do this by using the LangSmith Python SDK and passing `upload_results=False` to `evaluate()` / `aevaluate()`.\n\nThis will run you application and evaluators exactly as it always does and return the same output, but nothing will be recorded to LangSmith. This includes not just the experiment results but also the application and evaluator traces.\n\n<Note>\n  If you want to upload results to LangSmith but also need to process them in your script (for quality gates, custom aggregations, etc.), refer to [Read experiment results locally](/langsmith/read-local-experiment-results).\n</Note>\n\nLet's take a look at an example:\n\nRequires `langsmith>=0.2.0`. Example also uses `pandas`.\n\n```python  theme={null}\nfrom langsmith import Client",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    }
+  ],
+  "url": "llms-txt#how-to-run-an-evaluation-locally-(python-only)",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Send your API Key in the request headers",
+  "content": "headers = {\n    \"x-api-key\": os.environ[\"LANGSMITH_API_KEY\"],\n    \"x-tenant-id\": os.environ[\"LANGSMITH_WORKSPACE_ID\"]\n}\n\ndef post_run(run_id, name, run_type, inputs, parent_id=None):\n    \"\"\"Function to post a new run to the API.\"\"\"\n    data = {\n        \"id\": run_id.hex,\n        \"name\": name,\n        \"run_type\": run_type,\n        \"inputs\": inputs,\n        \"start_time\": datetime.utcnow().isoformat(),\n        # \"session_name\": \"project-name\",  # the name of the project to trace to\n        # \"session_id\": \"project-id\",  # the ID of the project to trace to. specify one of session_name or session_id\n    }\n    if parent_id:\n        data[\"parent_run_id\"] = parent_id.hex\n\nrequests.post(\n        \"https://api.smith.langchain.com/runs\",  # Update appropriately for self-hosted installations or the EU region\n        json=data,\n        headers=headers\n    )\n\ndef patch_run(run_id, outputs):\n    \"\"\"Function to patch a run with outputs.\"\"\"\n    requests.patch(\n        f\"https://api.smith.langchain.com/runs/{run_id}\",\n        json={\n            \"outputs\": outputs,\n            \"end_time\": datetime.now(timezone.utc).isoformat(),\n        },\n        headers=headers,\n    )",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#send-your-api-key-in-the-request-headers",
+  "links": []
+}

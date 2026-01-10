@@ -1,0 +1,19 @@
+{
+  "title": "Evaluate each run by comparing outputs to expected values",
+  "content": "for run in runs:\n    # Get the expected output from the original example\n    example_id = run[\"reference_example_id\"]\n    expected_output = next(\n        ex[\"outputs\"][\"label\"]\n        for ex in examples\n        if ex[\"id\"] == example_id\n    )\n\n# Compare the model output to the expected output\n    actual_output = run[\"outputs\"].get(\"label\", \"\")\n    is_correct = expected_output.lower() == actual_output.lower()\n\n# Post feedback score\n    # API Reference: https://api.smith.langchain.com/redoc#tag/feedback/operation/create_feedback_api_v1_feedback_post\n    feedback = {\n        \"run_id\": str(run[\"id\"]),\n        \"key\": \"correctness\",  # The name of your evaluation metric\n        \"score\": 1.0 if is_correct else 0.0,\n        \"comment\": f\"Expected: {expected_output}, Got: {actual_output}\",  # Optional\n    }\n\nresp = requests.post(\n        \"https://api.smith.langchain.com/api/v1/feedback\",\n        json=feedback,\n        headers={\"x-api-key\": os.environ[\"LANGSMITH_API_KEY\"]}\n    )\n    resp.raise_for_status()\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "You can add multiple feedback scores with different keys to track various metrics. For example, you might add both a \"correctness\" score and a \"toxicity\\_detected\" score.\n\n## Run a pairwise experiment\n\nNext, we'll demonstrate how to run a pairwise experiment. In a pairwise experiment, you compare two examples against each other.\n\nFor more information, check out [this guide](/langsmith/evaluate-pairwise).",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Run a pairwise experiment",
+      "id": "run-a-pairwise-experiment"
+    }
+  ],
+  "url": "llms-txt#evaluate-each-run-by-comparing-outputs-to-expected-values",
+  "links": []
+}

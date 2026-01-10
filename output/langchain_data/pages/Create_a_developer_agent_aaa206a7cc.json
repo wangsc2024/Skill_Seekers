@@ -1,0 +1,8 @@
+{
+  "title": "Create a developer agent",
+  "content": "developer = autogen.AssistantAgent(\n    name=\"developer\",\n    llm_config={\"config_list\": config_list},\n    system_message=\"\"\"You are a senior software developer. Your role is to:\n    1. Write clean, efficient code\n    2. Address feedback from code reviews\n    3. Explain your implementation decisions\n    4. Implement requested features and fixes\"\"\",\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-developer-agent",
+  "links": []
+}

@@ -1,0 +1,75 @@
+{
+  "title": "Agent reads /memories/project_notes.txt from previous conversation",
+  "content": "python  theme={null}\nresearch_agent = create_deep_agent(\n    store=InMemoryStore(),\n    backend=lambda rt: CompositeBackend(\n        default=StateBackend(rt),\n        routes={\"/memories/\": StoreBackend(rt)}\n    ),\n    system_prompt=\"\"\"You are a research assistant.\n\nSave your research progress to /memories/research/:\n    - /memories/research/sources.txt - List of sources found\n    - /memories/research/notes.txt - Key findings and notes\n    - /memories/research/report.md - Final report draft\n\nThis allows research to continue across multiple sessions.\"\"\"\n)\npython  theme={null}\nfrom langgraph.store.memory import InMemoryStore\n\nstore = InMemoryStore()\nagent = create_deep_agent(\n    store=store,\n    backend=lambda rt: CompositeBackend(\n        default=StateBackend(rt),\n        routes={\"/memories/\": StoreBackend(rt)}\n    )\n)\npython  theme={null}\nfrom langgraph.store.postgres import PostgresStore\nimport os\n\nstore = PostgresStore(connection_string=os.environ[\"DATABASE_URL\"])\nagent = create_deep_agent(\n    store=store,\n    backend=lambda rt: CompositeBackend(\n        default=StateBackend(rt),\n        routes={\"/memories/\": StoreBackend(rt)}\n    )\n)\n\n/memories/user_preferences.txt\n/memories/research/topic_a/sources.txt\n/memories/research/topic_a/notes.txt\n/memories/project/requirements.md\n\nYour persistent memory structure:\n- /memories/preferences.txt: User preferences and settings\n- /memories/context/: Long-term context about the user\n- /memories/knowledge/: Facts and information learned over time\n```\n\nImplement periodic cleanup of outdated persistent files to keep storage manageable.\n\n### Choose the right storage\n\n* **Development**: Use `InMemoryStore` for quick iteration\n* **Production**: Use `PostgresStore` or other persistent stores\n* **Multi-tenant**: Consider using assistant\\_id-based namespacing in your store\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/deepagents/long-term-memory.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "### Research projects\n\nMaintain research state across sessions:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Store implementations\n\nAny LangGraph `BaseStore` implementation works:\n\n### InMemoryStore (development)\n\nGood for testing and development, but data is lost on restart:",
+      "language": "unknown"
+    },
+    {
+      "code": "### PostgresStore (production)\n\nFor production, use a persistent store:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Best practices\n\n### Use descriptive paths\n\nOrganize persistent files with clear paths:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Document the memory structure\n\nTell the agent what's stored where in your system prompt:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Research projects",
+      "id": "research-projects"
+    },
+    {
+      "level": "h2",
+      "text": "Store implementations",
+      "id": "store-implementations"
+    },
+    {
+      "level": "h3",
+      "text": "InMemoryStore (development)",
+      "id": "inmemorystore-(development)"
+    },
+    {
+      "level": "h3",
+      "text": "PostgresStore (production)",
+      "id": "postgresstore-(production)"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Use descriptive paths",
+      "id": "use-descriptive-paths"
+    },
+    {
+      "level": "h3",
+      "text": "Document the memory structure",
+      "id": "document-the-memory-structure"
+    },
+    {
+      "level": "h3",
+      "text": "Prune old data",
+      "id": "prune-old-data"
+    },
+    {
+      "level": "h3",
+      "text": "Choose the right storage",
+      "id": "choose-the-right-storage"
+    }
+  ],
+  "url": "llms-txt#agent-reads-/memories/project_notes.txt-from-previous-conversation",
+  "links": []
+}

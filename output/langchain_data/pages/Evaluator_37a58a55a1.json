@@ -1,0 +1,8 @@
+{
+  "title": "Evaluator",
+  "content": "def correct(outputs: dict, reference_outputs: dict) -> bool:\n    \"\"\"Check if the agent chose the correct route.\"\"\"\n    return outputs[\"route\"] == reference_outputs[\"route\"]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#evaluator",
+  "links": []
+}

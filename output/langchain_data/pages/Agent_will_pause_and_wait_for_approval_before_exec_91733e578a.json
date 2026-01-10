@@ -1,0 +1,55 @@
+{
+  "title": "Agent will pause and wait for approval before executing sensitive tools",
+  "content": "result = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Send an email to the team\"}]},\n    config=config\n)\n\nresult = agent.invoke(\n    Command(resume={\"decisions\": [{\"type\": \"approve\"}]}),\n    config=config  # Same thread ID to resume the paused conversation\n)\npython title=\"Class syntax\" theme={null}\n  from typing import Any\n\nfrom langchain.agents.middleware import AgentMiddleware, AgentState, hook_config\n  from langgraph.runtime import Runtime\n\nclass ContentFilterMiddleware(AgentMiddleware):\n      \"\"\"Deterministic guardrail: Block requests containing banned keywords.\"\"\"\n\ndef __init__(self, banned_keywords: list[str]):\n          super().__init__()\n          self.banned_keywords = [kw.lower() for kw in banned_keywords]\n\n@hook_config(can_jump_to=[\"end\"])\n      def before_agent(self, state: AgentState, runtime: Runtime) -> dict[str, Any] | None:\n          # Get the first user message\n          if not state[\"messages\"]:\n              return None\n\nfirst_message = state[\"messages\"][0]\n          if first_message.type != \"human\":\n              return None\n\ncontent = first_message.content.lower()\n\n# Check for banned keywords\n          for keyword in self.banned_keywords:\n              if keyword in content:\n                  # Block execution before any processing\n                  return {\n                      \"messages\": [{\n                          \"role\": \"assistant\",\n                          \"content\": \"I cannot process requests containing inappropriate content. Please rephrase your request.\"\n                      }],\n                      \"jump_to\": \"end\"\n                  }\n\n# Use the custom guardrail\n  from langchain.agents import create_agent\n\nagent = create_agent(\n      model=\"gpt-4o\",\n      tools=[search_tool, calculator_tool],\n      middleware=[\n          ContentFilterMiddleware(\n              banned_keywords=[\"hack\", \"exploit\", \"malware\"]\n          ),\n      ],\n  )\n\n# This request will be blocked before any processing\n  result = agent.invoke({\n      \"messages\": [{\"role\": \"user\", \"content\": \"How do I hack into a database?\"}]\n  })\n  python title=\"Decorator syntax\" theme={null}\n  from typing import Any\n\nfrom langchain.agents.middleware import before_agent, AgentState, hook_config\n  from langgraph.runtime import Runtime\n\nbanned_keywords = [\"hack\", \"exploit\", \"malware\"]\n\n@before_agent(can_jump_to=[\"end\"])\n  def content_filter(state: AgentState, runtime: Runtime) -> dict[str, Any] | None:\n      \"\"\"Deterministic guardrail: Block requests containing banned keywords.\"\"\"\n      # Get the first user message\n      if not state[\"messages\"]:\n          return None\n\nfirst_message = state[\"messages\"][0]\n      if first_message.type != \"human\":\n          return None\n\ncontent = first_message.content.lower()\n\n# Check for banned keywords\n      for keyword in banned_keywords:\n          if keyword in content:\n              # Block execution before any processing\n              return {\n                  \"messages\": [{\n                      \"role\": \"assistant\",\n                      \"content\": \"I cannot process requests containing inappropriate content. Please rephrase your request.\"\n                  }],\n                  \"jump_to\": \"end\"\n              }\n\n# Use the custom guardrail\n  from langchain.agents import create_agent\n\nagent = create_agent(\n      model=\"gpt-4o\",\n      tools=[search_tool, calculator_tool],\n      middleware=[content_filter],\n  )\n\n# This request will be blocked before any processing\n  result = agent.invoke({\n      \"messages\": [{\"role\": \"user\", \"content\": \"How do I hack into a database?\"}]\n  })\n  python title=\"Class syntax\" theme={null}\n  from langchain.agents.middleware import AgentMiddleware, AgentState, hook_config\n  from langgraph.runtime import Runtime\n  from langchain.messages import AIMessage\n  from langchain.chat_models import init_chat_model\n  from typing import Any\n\nclass SafetyGuardrailMiddleware(AgentMiddleware):\n      \"\"\"Model-based guardrail: Use an LLM to evaluate response safety.\"\"\"\n\ndef __init__(self):\n          super().__init__()\n          self.safety_model = init_chat_model(\"gpt-4o-mini\")\n\n@hook_config(can_jump_to=[\"end\"])\n      def after_agent(self, state: AgentState, runtime: Runtime) -> dict[str, Any] | None:\n          # Get the final AI response\n          if not state[\"messages\"]:\n              return None\n\nlast_message = state[\"messages\"][-1]\n          if not isinstance(last_message, AIMessage):\n              return None\n\n# Use a model to evaluate safety\n          safety_prompt = f\"\"\"Evaluate if this response is safe and appropriate.\n          Respond with only 'SAFE' or 'UNSAFE'.\n\nResponse: {last_message.content}\"\"\"\n\nresult = self.safety_model.invoke([{\"role\": \"user\", \"content\": safety_prompt}])\n\nif \"UNSAFE\" in result.content:\n              last_message.content = \"I cannot provide that response. Please rephrase your request.\"\n\n# Use the safety guardrail\n  from langchain.agents import create_agent\n\nagent = create_agent(\n      model=\"gpt-4o\",\n      tools=[search_tool, calculator_tool],\n      middleware=[SafetyGuardrailMiddleware()],\n  )\n\nresult = agent.invoke({\n      \"messages\": [{\"role\": \"user\", \"content\": \"How do I make explosives?\"}]\n  })\n  python title=\"Decorator syntax\" theme={null}\n  from langchain.agents.middleware import after_agent, AgentState, hook_config\n  from langgraph.runtime import Runtime\n  from langchain.messages import AIMessage\n  from langchain.chat_models import init_chat_model\n  from typing import Any\n\nsafety_model = init_chat_model(\"gpt-4o-mini\")\n\n@after_agent(can_jump_to=[\"end\"])\n  def safety_guardrail(state: AgentState, runtime: Runtime) -> dict[str, Any] | None:\n      \"\"\"Model-based guardrail: Use an LLM to evaluate response safety.\"\"\"\n      # Get the final AI response\n      if not state[\"messages\"]:\n          return None\n\nlast_message = state[\"messages\"][-1]\n      if not isinstance(last_message, AIMessage):\n          return None\n\n# Use a model to evaluate safety\n      safety_prompt = f\"\"\"Evaluate if this response is safe and appropriate.\n      Respond with only 'SAFE' or 'UNSAFE'.\n\nResponse: {last_message.content}\"\"\"\n\nresult = safety_model.invoke([{\"role\": \"user\", \"content\": safety_prompt}])\n\nif \"UNSAFE\" in result.content:\n          last_message.content = \"I cannot provide that response. Please rephrase your request.\"\n\n# Use the safety guardrail\n  from langchain.agents import create_agent\n\nagent = create_agent(\n      model=\"gpt-4o\",\n      tools=[search_tool, calculator_tool],\n      middleware=[safety_guardrail],\n  )\n\nresult = agent.invoke({\n      \"messages\": [{\"role\": \"user\", \"content\": \"How do I make explosives?\"}]\n  })\n  python  theme={null}\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import PIIMiddleware, HumanInTheLoopMiddleware\n\nagent = create_agent(\n    model=\"gpt-4o\",\n    tools=[search_tool, send_email_tool],\n    middleware=[\n        # Layer 1: Deterministic input filter (before agent)\n        ContentFilterMiddleware(banned_keywords=[\"hack\", \"exploit\"]),\n\n# Layer 2: PII protection (before and after model)\n        PIIMiddleware(\"email\", strategy=\"redact\", apply_to_input=True),\n        PIIMiddleware(\"email\", strategy=\"redact\", apply_to_output=True),\n\n# Layer 3: Human approval for sensitive tools\n        HumanInTheLoopMiddleware(interrupt_on={\"send_email\": True}),\n\n# Layer 4: Model-based safety check (after agent)\n        SafetyGuardrailMiddleware(),\n    ],\n)\n```\n\n## Additional resources\n\n* [Middleware documentation](/oss/python/langchain/middleware) - Complete guide to custom middleware\n* [Middleware API reference](https://reference.langchain.com/python/langchain/middleware/) - Complete guide to custom middleware\n* [Human-in-the-loop](/oss/python/langchain/human-in-the-loop) - Add human review for sensitive operations\n* [Testing agents](/oss/python/langchain/test) - Strategies for testing safety mechanisms\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/guardrails.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "<Tip>\n  See the [human-in-the-loop documentation](/oss/python/langchain/human-in-the-loop) for complete details on implementing approval workflows.\n</Tip>\n\n## Custom guardrails\n\nFor more sophisticated guardrails, you can create custom middleware that runs before or after the agent executes. This gives you full control over validation logic, content filtering, and safety checks.\n\n### Before agent guardrails\n\nUse \"before agent\" hooks to validate requests once at the start of each invocation. This is useful for session-level checks like authentication, rate limiting, or blocking inappropriate requests before any processing begins.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### After agent guardrails\n\nUse \"after agent\" hooks to validate final outputs once before returning to the user. This is useful for model-based safety checks, quality validation, or final compliance scans on the complete agent response.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Combine multiple guardrails\n\nYou can stack multiple guardrails by adding them to the middleware array. They execute in order, allowing you to build layered protection:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Custom guardrails",
+      "id": "custom-guardrails"
+    },
+    {
+      "level": "h3",
+      "text": "Before agent guardrails",
+      "id": "before-agent-guardrails"
+    },
+    {
+      "level": "h3",
+      "text": "After agent guardrails",
+      "id": "after-agent-guardrails"
+    },
+    {
+      "level": "h3",
+      "text": "Combine multiple guardrails",
+      "id": "combine-multiple-guardrails"
+    },
+    {
+      "level": "h2",
+      "text": "Additional resources",
+      "id": "additional-resources"
+    }
+  ],
+  "url": "llms-txt#agent-will-pause-and-wait-for-approval-before-executing-sensitive-tools",
+  "links": []
+}

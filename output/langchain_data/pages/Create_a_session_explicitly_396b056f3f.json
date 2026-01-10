@@ -1,0 +1,28 @@
+{
+  "title": "Create a session explicitly",
+  "content": "async with client.session(\"server_name\") as session:  # [!code highlight]\n    # Pass the session to load tools, resources, or prompts\n    tools = await load_mcp_tools(session)  # [!code highlight]\n    agent = create_agent(\n        \"anthropic:claude-3-7-sonnet-latest\",\n        tools\n    )\npython  theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\nfrom langchain.agents import create_agent\n\nclient = MultiServerMCPClient({...})\ntools = await client.get_tools()  # [!code highlight]\nagent = create_agent(\"claude-sonnet-4-5-20250929\", tools)\npython  theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\nfrom langchain.agents import create_agent\nfrom langchain.messages import ToolMessage\n\nclient = MultiServerMCPClient({...})\ntools = await client.get_tools()\nagent = create_agent(\"claude-sonnet-4-5-20250929\", tools)\n\nresult = await agent.ainvoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Get data from the server\"}]}\n)",
+  "code_samples": [
+    {
+      "code": "## Core features\n\n### Tools\n\n[Tools](https://modelcontextprotocol.io/docs/concepts/tools) allow MCP servers to expose executable functions that LLMs can invoke to perform actions—such as querying databases, calling APIs, or interacting with external systems. LangChain converts MCP tools into LangChain [tools](/oss/python/langchain/tools), making them directly usable in any LangChain agent or workflow.\n\n#### Loading tools\n\nUse `client.get_tools()` to retrieve tools from MCP servers and pass them to your agent:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Structured content\n\nMCP tools can return [structured content](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#structured-content) alongside the human-readable text response. This is useful when a tool needs to return machine-parseable data (like JSON) in addition to text that gets shown to the model.\n\nWhen an MCP tool returns `structuredContent`, the adapter wraps it in an [`MCPToolArtifact`](/docs/reference/langchain-mcp-adapters#MCPToolArtifact) and returns it as the tool's artifact. You can access this using the `artifact` field on the `ToolMessage`. You can also use [interceptors](#tool-interceptors) to process or transform structured content automatically.\n\n**Extracting structured content from artifact**\n\nAfter invoking your agent, you can access the structured content from tool messages in the response:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Core features",
+      "id": "core-features"
+    },
+    {
+      "level": "h3",
+      "text": "Tools",
+      "id": "tools"
+    }
+  ],
+  "url": "llms-txt#create-a-session-explicitly",
+  "links": []
+}

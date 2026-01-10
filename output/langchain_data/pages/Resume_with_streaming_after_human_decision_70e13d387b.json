@@ -1,0 +1,19 @@
+{
+  "title": "Resume with streaming after human decision",
+  "content": "for mode, chunk in agent.stream(\n    Command(resume={\"decisions\": [{\"type\": \"approve\"}]}),\n    config=config,\n    stream_mode=[\"updates\", \"messages\"],\n):\n    if mode == \"messages\":\n        token, metadata = chunk\n        if token.content:\n            print(token.content, end=\"\", flush=True)\n```\n\nSee the [Streaming](/oss/python/langchain/streaming) guide for more details on stream modes.\n\n## Execution lifecycle\n\nThe middleware defines an `after_model` hook that runs after the model generates a response but before any tool calls are executed:\n\n1. The agent invokes the model to generate a response.\n2. The middleware inspects the response for tool calls.\n3. If any calls require human input, the middleware builds a `HITLRequest` with `action_requests` and `review_configs` and calls [interrupt](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt).\n4. The agent waits for human decisions.\n5. Based on the `HITLResponse` decisions, the middleware executes approved or edited calls, synthesizes [ToolMessage](https://reference.langchain.com/python/langchain/messages/#langchain.messages.ToolMessage)'s for rejected calls, and resumes execution.\n\nFor more specialized workflows, you can build custom HITL logic directly using the [interrupt](https://reference.langchain.com/python/langgraph/types/#langgraph.types.interrupt) primitive and [middleware](/oss/python/langchain/middleware) abstraction.\n\nReview the [execution lifecycle](#execution-lifecycle) above to understand how to integrate interrupts into the agent's operation.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/human-in-the-loop.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Execution lifecycle",
+      "id": "execution-lifecycle"
+    },
+    {
+      "level": "h2",
+      "text": "Custom HITL logic",
+      "id": "custom-hitl-logic"
+    }
+  ],
+  "url": "llms-txt#resume-with-streaming-after-human-decision",
+  "links": []
+}

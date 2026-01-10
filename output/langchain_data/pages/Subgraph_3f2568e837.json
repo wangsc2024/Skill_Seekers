@@ -1,0 +1,8 @@
+{
+  "title": "Subgraph",
+  "content": "def subgraph_node_1(state: State):\n    return {\"foo\": state[\"foo\"] + \"bar\"}\n\nsubgraph_builder = StateGraph(State)\nsubgraph_builder.add_node(subgraph_node_1)\nsubgraph_builder.add_edge(START, \"subgraph_node_1\")\nsubgraph = subgraph_builder.compile()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#subgraph",
+  "links": []
+}

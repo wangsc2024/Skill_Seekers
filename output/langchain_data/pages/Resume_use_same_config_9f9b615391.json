@@ -1,0 +1,28 @@
+{
+  "title": "Resume (use same config)",
+  "content": "result = agent.invoke(Command(resume={...}), config=config)\npython  theme={null}\nif result.get(\"__interrupt__\"):\n    interrupts = result[\"__interrupt__\"][0].value\n    action_requests = interrupts[\"action_requests\"]\n\n# Create one decision per action, in order\n    decisions = []\n    for action in action_requests:\n        decision = get_user_decision(action)  # Your logic\n        decisions.append(decision)\n\nresult = agent.invoke(\n        Command(resume={\"decisions\": decisions}),\n        config=config\n    )\npython  theme={null}\ninterrupt_on = {\n    # High risk: full control (approve, edit, reject)\n    \"delete_file\": {\"allowed_decisions\": [\"approve\", \"edit\", \"reject\"]},\n    \"send_email\": {\"allowed_decisions\": [\"approve\", \"edit\", \"reject\"]},\n\n# Medium risk: no editing allowed\n    \"write_file\": {\"allowed_decisions\": [\"approve\", \"reject\"]},\n\n# Low risk: no interrupts\n    \"read_file\": False,\n    \"list_files\": False,\n}\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/deepagents/human-in-the-loop.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "### Match decision order to actions\n\nThe decisions list must match the order of `action_requests`:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Tailor configurations by risk\n\nConfigure different tools based on their risk level:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Match decision order to actions",
+      "id": "match-decision-order-to-actions"
+    },
+    {
+      "level": "h3",
+      "text": "Tailor configurations by risk",
+      "id": "tailor-configurations-by-risk"
+    }
+  ],
+  "url": "llms-txt#resume-(use-same-config)",
+  "links": []
+}

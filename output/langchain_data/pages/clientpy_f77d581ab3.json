@@ -1,0 +1,21 @@
+{
+  "title": "client.py",
+  "content": "from langsmith.run_helpers import get_current_run_tree, traceable\nimport httpx\n\n@traceable\nasync def my_client_function():\n    headers = {}\n    async with httpx.AsyncClient(base_url=\"...\") as client:\n        if run_tree := get_current_run_tree():\n            # add langsmith-id to headers\n            headers.update(run_tree.to_headers())\n        return await client.post(\"/my-route\", headers=headers)\npython  theme={null}\nfrom langsmith import traceable\nfrom langsmith.middleware import TracingMiddleware\nfrom fastapi import FastAPI, Request\n\napp = FastAPI()  # Or Flask, Django, or any other framework\napp.add_middleware(TracingMiddleware)\n\n@traceable\nasync def some_function():\n    ...\n\n@app.post(\"/my-route\")\nasync def fake_route(request: Request):\n    return await some_function()\npython  theme={null}\nfrom starlette.applications import Starlette\nfrom starlette.middleware import Middleware\nfrom langsmith.middleware import TracingMiddleware\n\nroutes = ...\nmiddleware = [\n    Middleware(TracingMiddleware),\n]\napp = Starlette(..., middleware=middleware)\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "Then the server (or other service) can continue the trace by handling the headers appropriately. If you are using an asgi app Starlette or FastAPI, you can connect the distributed trace using LangSmith's `TracingMiddleware`.\n\n<Info>\n  The `TracingMiddleware` class was added in `langsmith==0.1.133`.\n</Info>\n\nExample using FastAPI:",
+      "language": "unknown"
+    },
+    {
+      "code": "Or in Starlette:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you are using other server frameworks, you can always \"receive\" the distributed trace by passing the headers in through `langsmith_extra`:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#client.py",
+  "links": []
+}

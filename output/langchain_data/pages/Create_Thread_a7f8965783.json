@@ -1,0 +1,8 @@
+{
+  "title": "Create Thread",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/threads/create-thread\n\nlangsmith/agent-server-openapi.json post /threads\nCreate a thread.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-thread",
+  "links": []
+}

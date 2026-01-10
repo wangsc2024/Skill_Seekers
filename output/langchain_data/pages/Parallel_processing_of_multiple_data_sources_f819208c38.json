@@ -1,0 +1,8 @@
+{
+  "title": "Parallel processing of multiple data sources",
+  "content": "workflow.add_node(\"fetch_news\", fetch_news)\nworkflow.add_node(\"fetch_weather\", fetch_weather)\nworkflow.add_node(\"fetch_stocks\", fetch_stocks)\nworkflow.add_node(\"combine_data\", combine_all_data)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#parallel-processing-of-multiple-data-sources",
+  "links": []
+}

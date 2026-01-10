@@ -1,0 +1,8 @@
+{
+  "title": "Before: Functional API",
+  "content": "@entrypoint(checkpointer=checkpointer)\ndef complex_workflow(input_data: dict) -> dict:\n    step1 = process_step1(input_data).result()\n\nif step1[\"needs_analysis\"]:\n        analysis = analyze_data(step1).result()\n        if analysis[\"confidence\"] > 0.8:\n            result = high_confidence_path(analysis).result()\n        else:\n            result = low_confidence_path(analysis).result()\n    else:\n        result = simple_path(step1).result()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#before:-functional-api",
+  "links": []
+}

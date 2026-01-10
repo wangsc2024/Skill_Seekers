@@ -1,0 +1,158 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+  "title": "Agent and Agent Runtime — AutoGen",
+  "content": "In this and the following section, we focus on the core concepts of AutoGen: agents, agent runtime, messages, and communication – the foundational building blocks for an multi-agent applications.\n\nThe Core API is designed to be unopinionated and flexible. So at times, you may find it challenging. Continue if you are building an interactive, scalable and distributed multi-agent system and want full control of all workflows. If you just want to get something running quickly, you may take a look at the AgentChat API.\n\nAn agent in AutoGen is an entity defined by the base interface Agent. It has a unique identifier of the type AgentId, a metadata dictionary of the type AgentMetadata.\n\nIn most cases, you can subclass your agents from higher level class RoutedAgent which enables you to route messages to corresponding message handler specified with message_handler() decorator and proper type hint for the message variable. An agent runtime is the execution environment for agents in AutoGen.\n\nSimilar to the runtime environment of a programming language, an agent runtime provides the necessary infrastructure to facilitate communication between agents, manage agent lifecycles, enforce security boundaries, and support monitoring and debugging.\n\nFor local development, developers can use SingleThreadedAgentRuntime, which can be embedded in a Python application.\n\nAgents are not directly instantiated and managed by application code. Instead, they are created by the runtime when needed and managed by the runtime.\n\nIf you are already familiar with AgentChat, it is important to note that AgentChat’s agents such as AssistantAgent are created by application and thus not directly managed by the runtime. To use an AgentChat agent in Core, you need to create a wrapper Core agent that delegates messages to the AgentChat agent and let the runtime manage the wrapper agent.\n\nTo implement an agent, the developer must subclass the RoutedAgent class and implement a message handler method for each message type the agent is expected to handle using the message_handler() decorator. For example, the following agent handles a simple message type MyMessageType and prints the message it receives:\n\nThis agent only handles MyMessageType and messages will be delivered to handle_my_message_type method. Developers can have multiple message handlers for different message types by using message_handler() decorator and setting the type hint for the message variable in the handler function. You can also leverage python typing union for the message variable in one message handler function if it better suits agent’s logic. See the next section on message and communication.\n\nIf you have an AgentChat agent and want to use it in the Core API, you can create a wrapper RoutedAgent that delegates messages to the AgentChat agent. The following example shows how to create a wrapper agent for the AssistantAgent in AgentChat.\n\nFor how to use model client, see the Model Client section.\n\nSince the Core API is unopinionated, you are not required to use the AgentChat API to use the Core API. You can implement your own agents or use another agent framework.\n\nTo make agents available to the runtime, developers can use the register() class method of the BaseAgent class. The process of registration associates an agent type, which is uniquely identified by a string, and a factory function that creates an instance of the agent type of the given class. The factory function is used to allow automatic creation of agent instances when they are needed.\n\nAgent type (AgentType) is not the same as the agent class. In this example, the agent type is AgentType(\"my_agent\") or AgentType(\"my_assistant\") and the agent class is the Python class MyAgent or MyAssistantAgent. The factory function is expected to return an instance of the agent class on which the register() class method is invoked. Read Agent Identity and Lifecycles to learn more about agent type and identity.\n\nDifferent agent types can be registered with factory functions that return the same agent class. For example, in the factory functions, variations of the constructor parameters can be used to create different instances of the same agent class.\n\nTo register our agent types with the SingleThreadedAgentRuntime, the following code can be used:\n\nOnce an agent type is registered, we can send a direct message to an agent instance using an AgentId. The runtime will create the instance the first time it delivers a message to this instance.\n\nBecause the runtime manages the lifecycle of agents, an AgentId is only used to communicate with the agent or retrieve its metadata (e.g., description).\n\nThe above code snippet uses start() to start a background task to process and deliver messages to recepients’ message handlers. This is a feature of the local embedded runtime SingleThreadedAgentRuntime.\n\nTo stop the background task immediately, use the stop() method:\n\nYou can resume the background task by calling start() again.\n\nFor batch scenarios such as running benchmarks for evaluating agents, you may want to wait for the background task to stop automatically when there are no unprocessed messages and no agent is handling messages – the batch may considered complete. You can achieve this by using the stop_when_idle() method:\n\nTo close the runtime and release resources, use the close() method:\n\nOther runtime implementations will have their own ways of running the runtime.\n\nTopic and Subscription\n\nMessage and Communication",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Agent and Agent Runtime#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Implementing an Agent#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Using an AgentChat Agent#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Registering Agent Type#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Running the Single-Threaded Agent Runtime#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import AgentId, MessageContext, RoutedAgent, message_handler\n\n\n@dataclass\nclass MyMessageType:\n    content: str\n\n\nclass MyAgent(RoutedAgent):\n    def __init__(self) -> None:\n        super().__init__(\"MyAgent\")\n\n    @message_handler\n    async def handle_my_message_type(self, message: MyMessageType, ctx: MessageContext) -> None:\n        print(f\"{self.id.type} received message: {message.content}\")",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import AgentId, MessageContext, RoutedAgent, message_handler\n\n\n@dataclass\nclass MyMessageType:\n    content: str\n\n\nclass MyAgent(RoutedAgent):\n    def __init__(self) -> None:\n        super().__init__(\"MyAgent\")\n\n    @message_handler\n    async def handle_my_message_type(self, message: MyMessageType, ctx: MessageContext) -> None:\n        print(f\"{self.id.type} received message: {message.content}\")",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.messages import TextMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n\nclass MyAssistant(RoutedAgent):\n    def __init__(self, name: str) -> None:\n        super().__init__(name)\n        model_client = OpenAIChatCompletionClient(model=\"gpt-4o\")\n        self._delegate = AssistantAgent(name, model_client=model_client)\n\n    @message_handler\n    async def handle_my_message_type(self, message: MyMessageType, ctx: MessageContext) -> None:\n        print(f\"{self.id.type} received message: {message.content}\")\n        response = await self._delegate.on_messages(\n            [TextMessage(content=message.content, source=\"user\")], ctx.cancellation_token\n        )\n        print(f\"{self.id.type} responded: {response.chat_message}\")",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.messages import TextMessage\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n\nclass MyAssistant(RoutedAgent):\n    def __init__(self, name: str) -> None:\n        super().__init__(name)\n        model_client = OpenAIChatCompletionClient(model=\"gpt-4o\")\n        self._delegate = AssistantAgent(name, model_client=model_client)\n\n    @message_handler\n    async def handle_my_message_type(self, message: MyMessageType, ctx: MessageContext) -> None:\n        print(f\"{self.id.type} received message: {message.content}\")\n        response = await self._delegate.on_messages(\n            [TextMessage(content=message.content, source=\"user\")], ctx.cancellation_token\n        )\n        print(f\"{self.id.type} responded: {response.chat_message}\")",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core import SingleThreadedAgentRuntime\n\nruntime = SingleThreadedAgentRuntime()\nawait MyAgent.register(runtime, \"my_agent\", lambda: MyAgent())\nawait MyAssistant.register(runtime, \"my_assistant\", lambda: MyAssistant(\"my_assistant\"))",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_core import SingleThreadedAgentRuntime\n\nruntime = SingleThreadedAgentRuntime()\nawait MyAgent.register(runtime, \"my_agent\", lambda: MyAgent())\nawait MyAssistant.register(runtime, \"my_assistant\", lambda: MyAssistant(\"my_assistant\"))",
+      "language": "python"
+    },
+    {
+      "code": "AgentType(type='my_assistant')",
+      "language": "unknown"
+    },
+    {
+      "code": "AgentType(type='my_assistant')",
+      "language": "unknown"
+    },
+    {
+      "code": "runtime.start()  # Start processing messages in the background.\nawait runtime.send_message(MyMessageType(\"Hello, World!\"), AgentId(\"my_agent\", \"default\"))\nawait runtime.send_message(MyMessageType(\"Hello, World!\"), AgentId(\"my_assistant\", \"default\"))\nawait runtime.stop()  # Stop processing messages in the background.",
+      "language": "csharp"
+    },
+    {
+      "code": "runtime.start()  # Start processing messages in the background.\nawait runtime.send_message(MyMessageType(\"Hello, World!\"), AgentId(\"my_agent\", \"default\"))\nawait runtime.send_message(MyMessageType(\"Hello, World!\"), AgentId(\"my_assistant\", \"default\"))\nawait runtime.stop()  # Stop processing messages in the background.",
+      "language": "csharp"
+    },
+    {
+      "code": "my_agent received message: Hello, World!\nmy_assistant received message: Hello, World!\nmy_assistant responded: Hello! How can I assist you today?",
+      "language": "unknown"
+    },
+    {
+      "code": "my_agent received message: Hello, World!\nmy_assistant received message: Hello, World!\nmy_assistant responded: Hello! How can I assist you today?",
+      "language": "unknown"
+    },
+    {
+      "code": "runtime.start()\n# ... Send messages, publish messages, etc.\nawait runtime.stop()  # This will return immediately but will not cancel\n# any in-progress message handling.",
+      "language": "markdown"
+    },
+    {
+      "code": "runtime.start()\n# ... Send messages, publish messages, etc.\nawait runtime.stop()  # This will return immediately but will not cancel\n# any in-progress message handling.",
+      "language": "markdown"
+    },
+    {
+      "code": "runtime.start()\n# ... Send messages, publish messages, etc.\nawait runtime.stop_when_idle()  # This will block until the runtime is idle.",
+      "language": "markdown"
+    },
+    {
+      "code": "runtime.start()\n# ... Send messages, publish messages, etc.\nawait runtime.stop_when_idle()  # This will block until the runtime is idle.",
+      "language": "markdown"
+    },
+    {
+      "code": "await runtime.close()",
+      "language": "csharp"
+    },
+    {
+      "code": "await runtime.close()",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html"
+  ]
+}

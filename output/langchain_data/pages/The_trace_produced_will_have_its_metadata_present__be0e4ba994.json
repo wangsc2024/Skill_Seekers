@@ -1,0 +1,8 @@
+{
+  "title": "The trace produced will have its metadata present, but the inputs and outputs will be anonymized",
+  "content": "response_with_anonymization = openai_client.chat.completions.create(\n  model=\"gpt-4o-mini\",\n  messages=[\n      {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n      {\"role\": \"user\", \"content\": \"My name is Slim Shady, call me at 313-666-7440 or email me at real.slim.shady@gmail.com\"},\n  ],\n  langsmith_extra={\"client\": langsmith_client},\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-trace-produced-will-have-its-metadata-present,-but-the-inputs-and-outputs-will-be-anonymized",
+  "links": []
+}

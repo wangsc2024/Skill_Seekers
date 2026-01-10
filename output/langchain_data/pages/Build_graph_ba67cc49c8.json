@@ -1,0 +1,8 @@
+{
+  "title": "Build graph",
+  "content": "builder = StateGraph(State)\nbuilder.add_node(\"agent\", agent_with_monitoring)\nbuilder.add_edge(START, \"agent\")\nbuilder.add_conditional_edges(\"agent\", route_decision)\ngraph = builder.compile()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#build-graph",
+  "links": []
+}

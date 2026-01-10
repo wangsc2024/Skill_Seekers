@@ -1,0 +1,24 @@
+{
+  "title": "How to add semantic search to your agent deployment",
+  "content": "Source: https://docs.langchain.com/langsmith/semantic-search\n\nThis guide explains how to add semantic search to your deployment's cross-thread [store](/oss/python/langgraph/persistence#memory-store), so that your agent can search for memories and other documents by semantic similarity.\n\n* A deployment (refer to [how to set up an application for deployment](/langsmith/setup-app-requirements-txt)) and details on [hosting options](/langsmith/platform-setup).\n* API keys for your embedding provider (in this case, OpenAI).\n* `langchain >= 0.3.8` (if you specify using the string format below).\n\n1. Update your `langgraph.json` configuration file to include the store configuration:\n\n* Uses OpenAI's text-embedding-3-small model for generating embeddings\n* Sets the embedding dimension to 1536 (matching the model's output)\n* Indexes all fields in your stored data (`[\"$\"]` means index everything, or specify specific fields like `[\"text\", \"metadata.title\"]`)\n\n1. To use the string embedding format above, make sure your dependencies include `langchain >= 0.3.8`:\n\n```toml  theme={null}",
+  "code_samples": [
+    {
+      "code": "This configuration:\n\n* Uses OpenAI's text-embedding-3-small model for generating embeddings\n* Sets the embedding dimension to 1536 (matching the model's output)\n* Indexes all fields in your stored data (`[\"$\"]` means index everything, or specify specific fields like `[\"text\", \"metadata.title\"]`)\n\n1. To use the string embedding format above, make sure your dependencies include `langchain >= 0.3.8`:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Steps",
+      "id": "steps"
+    }
+  ],
+  "url": "llms-txt#how-to-add-semantic-search-to-your-agent-deployment",
+  "links": []
+}

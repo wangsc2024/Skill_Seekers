@@ -1,0 +1,66 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+  "title": "AutoGen Studio — AutoGen",
+  "content": "AutoGen Studio is a low-code interface built to help you rapidly prototype AI agents, enhance them with tools, compose them into teams and interact with them to accomplish tasks. It is built on AutoGen AgentChat - a high-level API for building multi-agent applications.\n\nSee a video tutorial on AutoGen Studio v0.4 (02/25) - https://youtu.be/oum6EI7wohM\n\nCode for AutoGen Studio is on GitHub at microsoft/autogen\n\nAutoGen Studio is meant to help you rapidly prototype multi-agent workflows and demonstrate an example of end user interfaces built with AutoGen. It is not meant to be a production-ready app. Developers are encouraged to use the AutoGen framework to build their own applications, implementing authentication, security and other features required for deployed applications.\n\nAutoGen Studio offers four main interfaces to help you build and manage multi-agent systems:\n\nA visual interface for creating agent teams through declarative specification (JSON) or drag-and-drop\n\nSupports configuration of all core components: teams, agents, tools, models, and termination conditions\n\nFully compatible with AgentChat’s component definitions\n\nInteractive environment for testing and running agent teams\n\nLive message streaming between agents\n\nVisual representation of message flow through a control transition graph\n\nInteractive sessions with teams using UserProxyAgent\n\nFull run control with the ability to pause or stop execution\n\nCentral hub for discovering and importing community-created components\n\nEnables easy integration of third-party components\n\nExport and run teams in python code\n\nSetup and test endpoints based on a team configuration\n\nRun teams in a docker container\n\nReview project roadmap and issues here .\n\nWe welcome contributions to AutoGen Studio. We recommend the following general steps to contribute to the project:\n\nReview the overall AutoGen project contribution guide\n\nPlease review the AutoGen Studio roadmap to get a sense of the current priorities for the project. Help is appreciated especially with Studio issues tagged with help-wanted\n\nPlease use the tag proj-studio tag for any issues, questions, and PRs related to Studio\n\nPlease initiate a discussion on the roadmap issue or a new issue to discuss your proposed contribution.\n\nSubmit a pull request with your contribution!\n\nIf you are modifying AutoGen Studio, it has its own devcontainer. See instructions in .devcontainer/README.md to use it\n\nAutoGen Studio is a research prototype and is not meant to be used in a production environment. Some baseline practices are encouraged e.g., using Docker code execution environment for your agents.\n\nHowever, other considerations such as rigorous tests related to jailbreaking, ensuring LLMs only have access to the right keys of data given the end user’s permissions, and other security features are not implemented in AutoGen Studio.\n\nIf you are building a production application, please use the AutoGen framework and implement the necessary security features.\n\nAutoGen Studio is based on the AutoGen project. It was adapted from a research prototype built in October 2023 (original credits: Victor Dibia, Gagan Bansal, Adam Fourney, Piali Choudhury, Saleema Amershi, Ahmed Awadallah, Chi Wang).\n\nIf you use AutoGen Studio in your research, please cite the following paper:\n\nTo begin, follow the installation instructions to install AutoGen Studio.\n\nAzure AI Foundry Agent",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "AutoGen Studio#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Capabilities - What Can You Do with AutoGen Studio?#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Roadmap#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Contribution Guide#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "A Note on Security#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Acknowledgements and Citation#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "@inproceedings{autogenstudio,\n  title={AUTOGEN STUDIO: A No-Code Developer Tool for Building and Debugging Multi-Agent Systems},\n  author={Dibia, Victor and Chen, Jingya and Bansal, Gagan and Syed, Suff and Fourney, Adam and Zhu, Erkang and Wang, Chi and Amershi, Saleema},\n  booktitle={Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: System Demonstrations},\n  pages={72--79},\n  year={2024}\n}",
+      "language": "python"
+    },
+    {
+      "code": "@inproceedings{autogenstudio,\n  title={AUTOGEN STUDIO: A No-Code Developer Tool for Building and Debugging Multi-Agent Systems},\n  author={Dibia, Victor and Chen, Jingya and Bansal, Gagan and Syed, Suff and Fourney, Adam and Zhu, Erkang and Wang, Chi and Amershi, Saleema},\n  booktitle={Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: System Demonstrations},\n  pages={72--79},\n  year={2024}\n}",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/usage.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/experimental.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/faq.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-foundry-agent.html"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Set up TracerProvider manually",
+  "content": "provider = TracerProvider()\ntrace.set_tracer_provider(provider)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#set-up-tracerprovider-manually",
+  "links": []
+}

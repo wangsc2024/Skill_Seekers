@@ -1,0 +1,8 @@
+{
+  "title": "Set up LangSmith tracing",
+  "content": "def setup_langsmith():\n    \"\"\"Setup OpenTelemetry tracing to export spans to LangSmith.\"\"\"\n    endpoint = os.getenv(\"OTEL_EXPORTER_OTLP_ENDPOINT\")\n    headers = os.getenv(\"OTEL_EXPORTER_OTLP_HEADERS\")\n\nif not endpoint or not headers:\n        print(\"⚠️  Warning: OTEL environment variables not set. Tracing disabled.\")\n        return\n\n# Create tracer provider with custom span processor\n    trace_provider = TracerProvider()\n    trace_provider.add_span_processor(LangSmithSpanProcessor())\n\n# Set as LiveKit's tracer provider\n    set_tracer_provider(trace_provider)\n    print(\"✅ LangSmith tracing enabled\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#set-up-langsmith-tracing",
+  "links": []
+}

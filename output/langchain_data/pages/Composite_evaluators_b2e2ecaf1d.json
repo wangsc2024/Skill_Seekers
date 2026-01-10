@@ -1,0 +1,49 @@
+{
+  "title": "Composite evaluators",
+  "content": "Source: https://docs.langchain.com/langsmith/composite-evaluators\n\n*Composite evaluators* are a way to combine multiple evaluator scores into a single [score](/langsmith/evaluation-concepts#evaluator-outputs). This is useful when you want to evaluate multiple aspects of your application and combine the results into a single result.\n\n## Create a composite evaluator using the UI\n\nYou can create composite evaluators on a [tracing project](/langsmith/observability-concepts#projects) (for [online evaluations](/langsmith/evaluation-concepts#online-evaluation)) or a [dataset](/langsmith/evaluation-concepts#datasets) (for [offline evaluations](/langsmith/evaluation-concepts#offline-evaluation)). With composite evaluators in the UI, you can compute a weighted average or weighted sum of multiple evaluator scores, with configurable weights.\n\n<div style={{ textAlign: 'center' }}>\n  <img className=\"block dark:hidden\" src=\"https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-light.png?fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=b3859ada8b576ebeaf5399ff15359b10\" alt=\"LangSmith UI showing an LLM call trace called ChatOpenAI with a system and human input followed by an AI Output.\" data-og-width=\"756\" width=\"756\" data-og-height=\"594\" height=\"594\" data-path=\"langsmith/images/create_composite_evaluator-light.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-light.png?w=280&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=9bab5ad812328acdd6ffe858f487262b 280w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-light.png?w=560&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=4637a2dc732f945d98b0214023266180 560w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-light.png?w=840&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=c3e7b24dde21ed45f481b7a513ecc256 840w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-light.png?w=1100&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=1310a99e2a8b37d68d78f794b8ce6606 1100w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-light.png?w=1650&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=6beb89dcc6ec734b2ad012bc46c58821 1650w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-light.png?w=2500&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=ba7fd7ba48a3e46d8701b6f64bb68f66 2500w\" />\n\n<img className=\"hidden dark:block\" src=\"https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-dark.png?fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=ac13f4d2d4a5e3b67285284150b7d592\" alt=\"LangSmith UI showing an LLM call trace called ChatOpenAI with a system and human input followed by an AI Output.\" data-og-width=\"761\" width=\"761\" data-og-height=\"585\" height=\"585\" data-path=\"langsmith/images/create_composite_evaluator-dark.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-dark.png?w=280&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=bfc19d802f0327a579d90e519441cf9a 280w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-dark.png?w=560&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=23ab26db75e25795c17abf07e487ba5d 560w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-dark.png?w=840&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=7ce9597b62f3e68b2dc1afa5f17f0e8c 840w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-dark.png?w=1100&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=ee7058d60185a820fe23decf003bd2c1 1100w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-dark.png?w=1650&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=cff38ad541c55d6834edfa67f5650818 1650w, https://mintcdn.com/langchain-5e9cc07a/cRRwi1N4-QohYC73/langsmith/images/create_composite_evaluator-dark.png?w=2500&fit=max&auto=format&n=cRRwi1N4-QohYC73&q=85&s=0f85093799a489eff72dae01ed5b6d94 2500w\" />\n</div>\n\n### 1. Navigate to the tracing project or dataset\n\nTo start configuring a composite evaluator, navigate to the **Tracing Projects** or **Dataset & Experiments** tab and select a project or dataset.\n\n* From within a tracing project: **+ New** > **Evaluator** > **Composite score**\n* From within a dataset: **+ Evaluator** > **Composite score**\n\n### 2. Configure the composite evaluator\n\n1. Name your evaluator.\n2. Select an aggregation method, either **Average** or **Sum**.\n   * **Average**: ∑(weight\\*score) / ∑(weight).\n   * **Sum**: ∑(weight\\*score).\n3. Add the feedback keys you want to include in the composite score.\n4. Add the weights for the feedback keys. By default, the weights are equal for each feedback key. Adjust the weights to increase or decrease the importance of specific feedback keys in the final score.\n5. Click **Create** to save the evaluator.\n\n<Tip> If you need to adjust the weights for the composite scores, they can be updated after the evaluator is created. The resulting scores will be updated for all runs that have the evaluator configured. </Tip>\n\n### 3. View composite evaluator results\n\nComposite scores are attached to a run as **feedback**, similarly to feedback from a single evaluator. How you can view them depends on where the evaluation was run:\n\n**On a tracing project**:\n\n* Composite scores appear as feedback on runs.\n* [Filter for runs](/langsmith/filter-traces-in-application) with a composite score, or where the composite score meets a certain threshold.\n* [Create a chart](/langsmith/dashboards#custom-dashboards) to visualize trends in the composite score over time.\n\n* View the composite scores in the experiments tab. You can also filter and sort experiments based on the average composite score of their runs.\n* Click into an experiment to view the composite score for each run.\n\n<Note> If any of the constituent evaluators are not configured on the run, the composite score will not be calculated for that run. </Note>\n\n## Create composite feedback with the SDK\n\nThis guide describes setting up an evaluation that uses multiple evaluators and combines their scores with a custom aggregation function.\n\n<Note> Requires langsmith>=0.4.29 </Note>\n\n### 1. Configure evaluators on a dataset\n\nStart by configuring your evaluators. In this example, the application generates a tweet from a blog introduction and uses three evaluators — summary, tone, and formatting — to assess the output.\n\nIf you already have your own dataset with evaluators configured, you can skip this step.\n\n<Accordion title=\"Configure evaluators on a dataset.\">\n  \n</Accordion>\n\n### 2. Create composite feedback\n\nCreate composite feedback that aggregates the individual evaluator scores using your custom function. This example uses a weighted average of the individual evaluator scores.\n\n<Accordion title=\"Create a composite feedback.\">\n  \n</Accordion>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/composite-evaluators.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Accordion>\n\n### 2. Create composite feedback\n\nCreate composite feedback that aggregates the individual evaluator scores using your custom function. This example uses a weighted average of the individual evaluator scores.\n\n<Accordion title=\"Create a composite feedback.\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create a composite evaluator using the UI",
+      "id": "create-a-composite-evaluator-using-the-ui"
+    },
+    {
+      "level": "h3",
+      "text": "1. Navigate to the tracing project or dataset",
+      "id": "1.-navigate-to-the-tracing-project-or-dataset"
+    },
+    {
+      "level": "h3",
+      "text": "2. Configure the composite evaluator",
+      "id": "2.-configure-the-composite-evaluator"
+    },
+    {
+      "level": "h3",
+      "text": "3. View composite evaluator results",
+      "id": "3.-view-composite-evaluator-results"
+    },
+    {
+      "level": "h2",
+      "text": "Create composite feedback with the SDK",
+      "id": "create-composite-feedback-with-the-sdk"
+    },
+    {
+      "level": "h3",
+      "text": "1. Configure evaluators on a dataset",
+      "id": "1.-configure-evaluators-on-a-dataset"
+    },
+    {
+      "level": "h3",
+      "text": "2. Create composite feedback",
+      "id": "2.-create-composite-feedback"
+    }
+  ],
+  "url": "llms-txt#composite-evaluators",
+  "links": []
+}

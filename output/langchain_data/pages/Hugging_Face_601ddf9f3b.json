@@ -1,0 +1,172 @@
+{
+  "title": "Hugging Face",
+  "content": "Source: https://docs.langchain.com/oss/python/integrations/providers/huggingface\n\nThis page covers all LangChain integrations with [Hugging Face Hub](https://huggingface.co/) and libraries like [transformers](https://huggingface.co/docs/transformers/index), [sentence transformers](https://sbert.net/), and [datasets](https://huggingface.co/docs/datasets/index).\n\nWe can use the `Hugging Face` LLM classes or directly use the `ChatHuggingFace` class.\n\nSee a [usage example](/oss/python/integrations/chat/huggingface).\n\n### HuggingFaceEndpoint\n\nWe can use the `HuggingFaceEndpoint` class to run open source models via serverless [Inference Providers](https://huggingface.co/docs/inference-providers) or via dedicated [Inference Endpoints](https://huggingface.co/inference-endpoints/dedicated).\n\nSee a [usage example](/oss/python/integrations/llms/huggingface_endpoint).\n\n### HuggingFacePipeline\n\nWe can use the `HuggingFacePipeline` class to run open source models locally.\n\nSee a [usage example](/oss/python/integrations/llms/huggingface_pipelines).\n\n### HuggingFaceEmbeddings\n\nWe can use the `HuggingFaceEmbeddings` class to run open source embedding models locally.\n\nSee a [usage example](/oss/python/integrations/text_embedding/huggingfacehub).\n\n### HuggingFaceEndpointEmbeddings\n\nWe can use the `HuggingFaceEndpointEmbeddings` class to run open source embedding models via a dedicated [Inference Endpoint](https://huggingface.co/inference-endpoints/dedicated).\n\nSee a [usage example](/oss/python/integrations/text_embedding/huggingfacehub).\n\n### HuggingFaceInferenceAPIEmbeddings\n\nWe can use the `HuggingFaceInferenceAPIEmbeddings` class to run open source embedding models via [Inference Providers](https://huggingface.co/docs/inference-providers).\n\nSee a [usage example](/oss/python/integrations/text_embedding/huggingfacehub).\n\n### HuggingFaceInstructEmbeddings\n\nWe can use the `HuggingFaceInstructEmbeddings` class to run open source embedding models locally.\n\nSee a [usage example](/oss/python/integrations/text_embedding/instruct_embeddings).\n\n### HuggingFaceBgeEmbeddings\n\n> [BGE models on the HuggingFace](https://huggingface.co/BAAI/bge-large-en-v1.5) are one of [the best open-source embedding models](https://huggingface.co/spaces/mteb/leaderboard).\n> BGE model is created by the [Beijing Academy of Artificial Intelligence (BAAI)](https://en.wikipedia.org/wiki/Beijing_Academy_of_Artificial_Intelligence). `BAAI` is a private non-profit organization engaged in AI research and development.\n\nSee a [usage example](/oss/python/integrations/text_embedding/bge_huggingface).\n\n### Hugging Face dataset\n\n> [Hugging Face Hub](https://huggingface.co/docs/hub/index) is home to over 75,000\n> [datasets](https://huggingface.co/docs/hub/index#datasets) in more than 100 languages\n> that can be used for a broad range of tasks across NLP, Computer Vision, and Audio.\n> They used for a diverse range of tasks such as translation, automatic speech\n> recognition, and image classification.\n\nWe need to install `datasets` python package.\n\nSee a [usage example](/oss/python/integrations/document_loaders/hugging_face_dataset).\n\n### Hugging Face model loader\n\n> Load model information from `Hugging Face Hub`, including README content.\n>\n> This loader interfaces with the `Hugging Face Models API` to fetch\n> and load model metadata and README files.\n> The API allows you to search and filter models based on\n> specific criteria such as model tags, authors, and more.\n\nIt uses the Hugging Face models to generate image captions.\n\nWe need to install several python packages.\n\nSee a [usage example](/oss/python/integrations/document_loaders/image_captions).\n\n### Hugging Face Hub Tools\n\n> [Hugging Face Tools](https://huggingface.co/docs/transformers/v4.29.0/en/custom_tools)\n> support text I/O and are loaded using the `load_huggingface_tool` function.\n\nWe need to install several python packages.\n\nSee a [usage example](/oss/python/integrations/tools/huggingface_tools).\n\n### Hugging Face Text-to-Speech Model Inference.\n\n> It is a wrapper around `OpenAI Text-to-Speech API`.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/python/integrations/providers/huggingface.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## LLMs\n\n### HuggingFaceEndpoint\n\nWe can use the `HuggingFaceEndpoint` class to run open source models via serverless [Inference Providers](https://huggingface.co/docs/inference-providers) or via dedicated [Inference Endpoints](https://huggingface.co/inference-endpoints/dedicated).\n\nSee a [usage example](/oss/python/integrations/llms/huggingface_endpoint).",
+      "language": "unknown"
+    },
+    {
+      "code": "### HuggingFacePipeline\n\nWe can use the `HuggingFacePipeline` class to run open source models locally.\n\nSee a [usage example](/oss/python/integrations/llms/huggingface_pipelines).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Embedding Models\n\n### HuggingFaceEmbeddings\n\nWe can use the `HuggingFaceEmbeddings` class to run open source embedding models locally.\n\nSee a [usage example](/oss/python/integrations/text_embedding/huggingfacehub).",
+      "language": "unknown"
+    },
+    {
+      "code": "### HuggingFaceEndpointEmbeddings\n\nWe can use the `HuggingFaceEndpointEmbeddings` class to run open source embedding models via a dedicated [Inference Endpoint](https://huggingface.co/inference-endpoints/dedicated).\n\nSee a [usage example](/oss/python/integrations/text_embedding/huggingfacehub).",
+      "language": "unknown"
+    },
+    {
+      "code": "### HuggingFaceInferenceAPIEmbeddings\n\nWe can use the `HuggingFaceInferenceAPIEmbeddings` class to run open source embedding models via [Inference Providers](https://huggingface.co/docs/inference-providers).\n\nSee a [usage example](/oss/python/integrations/text_embedding/huggingfacehub).",
+      "language": "unknown"
+    },
+    {
+      "code": "### HuggingFaceInstructEmbeddings\n\nWe can use the `HuggingFaceInstructEmbeddings` class to run open source embedding models locally.\n\nSee a [usage example](/oss/python/integrations/text_embedding/instruct_embeddings).",
+      "language": "unknown"
+    },
+    {
+      "code": "### HuggingFaceBgeEmbeddings\n\n> [BGE models on the HuggingFace](https://huggingface.co/BAAI/bge-large-en-v1.5) are one of [the best open-source embedding models](https://huggingface.co/spaces/mteb/leaderboard).\n> BGE model is created by the [Beijing Academy of Artificial Intelligence (BAAI)](https://en.wikipedia.org/wiki/Beijing_Academy_of_Artificial_Intelligence). `BAAI` is a private non-profit organization engaged in AI research and development.\n\nSee a [usage example](/oss/python/integrations/text_embedding/bge_huggingface).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Document loaders\n\n### Hugging Face dataset\n\n> [Hugging Face Hub](https://huggingface.co/docs/hub/index) is home to over 75,000\n> [datasets](https://huggingface.co/docs/hub/index#datasets) in more than 100 languages\n> that can be used for a broad range of tasks across NLP, Computer Vision, and Audio.\n> They used for a diverse range of tasks such as translation, automatic speech\n> recognition, and image classification.\n\nWe need to install `datasets` python package.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee a [usage example](/oss/python/integrations/document_loaders/hugging_face_dataset).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Hugging Face model loader\n\n> Load model information from `Hugging Face Hub`, including README content.\n>\n> This loader interfaces with the `Hugging Face Models API` to fetch\n> and load model metadata and README files.\n> The API allows you to search and filter models based on\n> specific criteria such as model tags, authors, and more.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Image captions\n\nIt uses the Hugging Face models to generate image captions.\n\nWe need to install several python packages.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee a [usage example](/oss/python/integrations/document_loaders/image_captions).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Tools\n\n### Hugging Face Hub Tools\n\n> [Hugging Face Tools](https://huggingface.co/docs/transformers/v4.29.0/en/custom_tools)\n> support text I/O and are loaded using the `load_huggingface_tool` function.\n\nWe need to install several python packages.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee a [usage example](/oss/python/integrations/tools/huggingface_tools).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Hugging Face Text-to-Speech Model Inference.\n\n> It is a wrapper around `OpenAI Text-to-Speech API`.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Chat models",
+      "id": "chat-models"
+    },
+    {
+      "level": "h3",
+      "text": "ChatHuggingFace",
+      "id": "chathuggingface"
+    },
+    {
+      "level": "h2",
+      "text": "LLMs",
+      "id": "llms"
+    },
+    {
+      "level": "h3",
+      "text": "HuggingFaceEndpoint",
+      "id": "huggingfaceendpoint"
+    },
+    {
+      "level": "h3",
+      "text": "HuggingFacePipeline",
+      "id": "huggingfacepipeline"
+    },
+    {
+      "level": "h2",
+      "text": "Embedding Models",
+      "id": "embedding-models"
+    },
+    {
+      "level": "h3",
+      "text": "HuggingFaceEmbeddings",
+      "id": "huggingfaceembeddings"
+    },
+    {
+      "level": "h3",
+      "text": "HuggingFaceEndpointEmbeddings",
+      "id": "huggingfaceendpointembeddings"
+    },
+    {
+      "level": "h3",
+      "text": "HuggingFaceInferenceAPIEmbeddings",
+      "id": "huggingfaceinferenceapiembeddings"
+    },
+    {
+      "level": "h3",
+      "text": "HuggingFaceInstructEmbeddings",
+      "id": "huggingfaceinstructembeddings"
+    },
+    {
+      "level": "h3",
+      "text": "HuggingFaceBgeEmbeddings",
+      "id": "huggingfacebgeembeddings"
+    },
+    {
+      "level": "h2",
+      "text": "Document loaders",
+      "id": "document-loaders"
+    },
+    {
+      "level": "h3",
+      "text": "Hugging Face dataset",
+      "id": "hugging-face-dataset"
+    },
+    {
+      "level": "h3",
+      "text": "Hugging Face model loader",
+      "id": "hugging-face-model-loader"
+    },
+    {
+      "level": "h3",
+      "text": "Image captions",
+      "id": "image-captions"
+    },
+    {
+      "level": "h2",
+      "text": "Tools",
+      "id": "tools"
+    },
+    {
+      "level": "h3",
+      "text": "Hugging Face Hub Tools",
+      "id": "hugging-face-hub-tools"
+    },
+    {
+      "level": "h3",
+      "text": "Hugging Face Text-to-Speech Model Inference.",
+      "id": "hugging-face-text-to-speech-model-inference."
+    }
+  ],
+  "url": "llms-txt#hugging-face",
+  "links": []
+}

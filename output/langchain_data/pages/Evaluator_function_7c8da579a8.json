@@ -1,0 +1,13 @@
+{
+  "title": "Evaluator function",
+  "content": "async def final_answer_correct(inputs: dict, outputs: dict, reference_outputs: dict) -> bool:\n    \"\"\"Evaluate if the final response is equivalent to reference response.\"\"\"\n\n# Note that we assume the outputs has a 'response' dictionary. We'll need to make sure\n    # that the target function we define includes this key.\n    user = f\"\"\"QUESTION: {inputs['question']}\n    GROUND TRUTH RESPONSE: {reference_outputs['response']}\n    STUDENT RESPONSE: {outputs['response']}\"\"\"\n\ngrade = await grader_llm.ainvoke([{\"role\": \"system\", \"content\": grader_instructions}, {\"role\": \"user\", \"content\": user}])\n    return grade[\"is_correct\"]\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "Now we can run our evaluation. Our evaluator assumes that our target function returns a 'response' key, so lets define a target function that does so.\n\nAlso remember that in our refund graph we made the refund node configurable, so that if we specified `config={\"env\": \"test\"}`, we would mock out the refunds without actually updating the DB. We'll use this configurable variable in our target `run_graph` method when invoking our graph:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#evaluator-function",
+  "links": []
+}

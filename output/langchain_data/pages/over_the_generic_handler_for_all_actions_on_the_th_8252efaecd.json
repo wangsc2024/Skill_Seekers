@@ -1,0 +1,8 @@
+{
+  "title": "over the generic handler for all actions on the \"threads\" resource",
+  "content": "@auth.on.threads\nasync def on_thread(\n    ctx: Auth.types.AuthContext,\n    value: Auth.types.threads.create.value\n):\n    # Setting metadata on the thread being created\n    # will ensure that the resource contains an \"owner\" field\n    # Then any time a user tries to access this thread or runs within the thread,\n    # we can filter by owner\n    metadata = value.setdefault(\"metadata\", {})\n    metadata[\"owner\"] = ctx.user.identity\n    return {\"owner\": ctx.user.identity}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#over-the-generic-handler-for-all-actions-on-the-\"threads\"-resource",
+  "links": []
+}

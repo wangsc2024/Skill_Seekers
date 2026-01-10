@@ -1,0 +1,8 @@
+{
+  "title": "Get Deployment",
+  "content": "Source: https://docs.langchain.com/api-reference/deployments-v2/get-deployment\n\nhttps://api.host.langchain.com/openapi.json get /v2/deployments/{deployment_id}\nGet a deployment by ID.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-deployment",
+  "links": []
+}

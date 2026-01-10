@@ -1,0 +1,23 @@
+{
+  "title": "Fine-tuning LLMs with Blackwell, RTX 50 series & Unsloth",
+  "content": "Learn how to fine-tune LLMs on NVIDIA's Blackwell RTX 50 series and B200 GPUs with our step-by-step guide.\n\nUnsloth now supports NVIDIA’s Blackwell architecture GPUs, including RTX 50-series GPUs (5060–5090), RTX PRO 6000, and GPUS such as B200, B40, GB100, GB102 and more! You can read the official [NVIDIA blogpost here](https://developer.nvidia.com/blog/train-an-llm-on-an-nvidia-blackwell-desktop-with-unsloth-and-scale-it/).\n\nUnsloth is now compatible with every NVIDIA GPU from 2018+ including the [DGX Spark](https://docs.unsloth.ai/basics/fine-tuning-llms-with-nvidia-dgx-spark-and-unsloth).\n\n> **Our new** [**Docker image**](#docker) **supports Blackwell. Run the Docker image and start training!** [**Guide**](https://docs.unsloth.ai/basics/fine-tuning-llms-with-blackwell-rtx-50-series-and-unsloth)\n\nSimply install Unsloth:\n\nIf you see issues, another option is to create a separate isolated environment:\n\nNote it might be `pip3` or `pip3.13` and also `python3` or `python3.13`\n\nYou might encounter some Xformers issues, in which cause you should build from source:\n\n{% code overflow=\"wrap\" %}",
+  "code_samples": [
+    {
+      "code": "pip install unsloth",
+      "language": "bash"
+    },
+    {
+      "code": "python -m venv unsloth\nsource unsloth/bin/activate\npip install unsloth",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Pip install",
+      "id": "pip-install"
+    }
+  ],
+  "url": "llms-txt#fine-tuning-llms-with-blackwell,-rtx-50-series-&-unsloth",
+  "links": []
+}

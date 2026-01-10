@@ -1,0 +1,8 @@
+{
+  "title": "Schema for structured output",
+  "content": "from pydantic import BaseModel, Field\n\nclass SearchQuery(BaseModel):\n    search_query: str = Field(None, description=\"Query that is optimized web search.\")\n    justification: str = Field(\n        None, description=\"Why this query is relevant to the user's request.\"\n    )",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#schema-for-structured-output",
+  "links": []
+}

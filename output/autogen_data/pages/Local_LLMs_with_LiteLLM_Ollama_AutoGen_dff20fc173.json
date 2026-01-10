@@ -1,0 +1,137 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+  "title": "Local LLMs with LiteLLM & Ollama — AutoGen",
+  "content": "In this notebook we’ll create two agents, Joe and Cathy who like to tell jokes to each other. The agents will use locally running LLMs.\n\nFollow the guide at https://microsoft.github.io/autogen/docs/topics/non-openai-models/local-litellm-ollama/ to understand how to install LiteLLM and Ollama.\n\nWe encourage going through the link, but if you’re in a hurry and using Linux, run these:\n\nThis will run the proxy server and it will be available at ‘http://0.0.0.0:4000/’.\n\nTo get started, let’s import some classes.\n\nSet up out local LLM model client.\n\nDefine a simple message class\n\nWe define the role of the Agent using the SystemMessage and set up a condition for termination.\n\nLet’s run everything!\n\nUsing LlamaIndex-Backed Agent\n\nInstrumentating your code locally",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Local LLMs with LiteLLM & Ollama#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "curl -fsSL https://ollama.com/install.sh | sh\n\nollama pull llama3.2:1b\n\npip install 'litellm[proxy]'\nlitellm --model ollama/llama3.2:1b",
+      "language": "json"
+    },
+    {
+      "code": "curl -fsSL https://ollama.com/install.sh | sh\n\nollama pull llama3.2:1b\n\npip install 'litellm[proxy]'\nlitellm --model ollama/llama3.2:1b",
+      "language": "json"
+    },
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import (\n    AgentId,\n    DefaultTopicId,\n    MessageContext,\n    RoutedAgent,\n    SingleThreadedAgentRuntime,\n    default_subscription,\n    message_handler,\n)\nfrom autogen_core.model_context import BufferedChatCompletionContext\nfrom autogen_core.models import (\n    AssistantMessage,\n    ChatCompletionClient,\n    SystemMessage,\n    UserMessage,\n)\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import (\n    AgentId,\n    DefaultTopicId,\n    MessageContext,\n    RoutedAgent,\n    SingleThreadedAgentRuntime,\n    default_subscription,\n    message_handler,\n)\nfrom autogen_core.model_context import BufferedChatCompletionContext\nfrom autogen_core.models import (\n    AssistantMessage,\n    ChatCompletionClient,\n    SystemMessage,\n    UserMessage,\n)\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient",
+      "language": "python"
+    },
+    {
+      "code": "def get_model_client() -> OpenAIChatCompletionClient:  # type: ignore\n    \"Mimic OpenAI API using Local LLM Server.\"\n    return OpenAIChatCompletionClient(\n        model=\"llama3.2:1b\",\n        api_key=\"NotRequiredSinceWeAreLocal\",\n        base_url=\"http://0.0.0.0:4000\",\n        model_capabilities={\n            \"json_output\": False,\n            \"vision\": False,\n            \"function_calling\": True,\n        },\n    )",
+      "language": "json"
+    },
+    {
+      "code": "def get_model_client() -> OpenAIChatCompletionClient:  # type: ignore\n    \"Mimic OpenAI API using Local LLM Server.\"\n    return OpenAIChatCompletionClient(\n        model=\"llama3.2:1b\",\n        api_key=\"NotRequiredSinceWeAreLocal\",\n        base_url=\"http://0.0.0.0:4000\",\n        model_capabilities={\n            \"json_output\": False,\n            \"vision\": False,\n            \"function_calling\": True,\n        },\n    )",
+      "language": "json"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: str",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: str",
+      "language": "python"
+    },
+    {
+      "code": "@default_subscription\nclass Assistant(RoutedAgent):\n    def __init__(self, name: str, model_client: ChatCompletionClient) -> None:\n        super().__init__(\"An assistant agent.\")\n        self._model_client = model_client\n        self.name = name\n        self.count = 0\n        self._system_messages = [\n            SystemMessage(\n                content=f\"Your name is {name} and you are a part of a duo of comedians.\"\n                \"You laugh when you find the joke funny, else reply 'I need to go now'.\",\n            )\n        ]\n        self._model_context = BufferedChatCompletionContext(buffer_size=5)\n\n    @message_handler\n    async def handle_message(self, message: Message, ctx: MessageContext) -> None:\n        self.count += 1\n        await self._model_context.add_message(UserMessage(content=message.content, source=\"user\"))\n        result = await self._model_client.create(self._system_messages + await self._model_context.get_messages())\n\n        print(f\"\\n{self.name}: {message.content}\")\n\n        if \"I need to go\".lower() in message.content.lower() or self.count > 2:\n            return\n\n        await self._model_context.add_message(AssistantMessage(content=result.content, source=\"assistant\"))  # type: ignore\n        await self.publish_message(Message(content=result.content), DefaultTopicId())  # type: ignore",
+      "language": "python"
+    },
+    {
+      "code": "@default_subscription\nclass Assistant(RoutedAgent):\n    def __init__(self, name: str, model_client: ChatCompletionClient) -> None:\n        super().__init__(\"An assistant agent.\")\n        self._model_client = model_client\n        self.name = name\n        self.count = 0\n        self._system_messages = [\n            SystemMessage(\n                content=f\"Your name is {name} and you are a part of a duo of comedians.\"\n                \"You laugh when you find the joke funny, else reply 'I need to go now'.\",\n            )\n        ]\n        self._model_context = BufferedChatCompletionContext(buffer_size=5)\n\n    @message_handler\n    async def handle_message(self, message: Message, ctx: MessageContext) -> None:\n        self.count += 1\n        await self._model_context.add_message(UserMessage(content=message.content, source=\"user\"))\n        result = await self._model_client.create(self._system_messages + await self._model_context.get_messages())\n\n        print(f\"\\n{self.name}: {message.content}\")\n\n        if \"I need to go\".lower() in message.content.lower() or self.count > 2:\n            return\n\n        await self._model_context.add_message(AssistantMessage(content=result.content, source=\"assistant\"))  # type: ignore\n        await self.publish_message(Message(content=result.content), DefaultTopicId())  # type: ignore",
+      "language": "python"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\n\nmodel_client = get_model_client()\n\ncathy = await Assistant.register(\n    runtime,\n    \"cathy\",\n    lambda: Assistant(name=\"Cathy\", model_client=model_client),\n)\n\njoe = await Assistant.register(\n    runtime,\n    \"joe\",\n    lambda: Assistant(name=\"Joe\", model_client=model_client),\n)",
+      "language": "csharp"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\n\nmodel_client = get_model_client()\n\ncathy = await Assistant.register(\n    runtime,\n    \"cathy\",\n    lambda: Assistant(name=\"Cathy\", model_client=model_client),\n)\n\njoe = await Assistant.register(\n    runtime,\n    \"joe\",\n    lambda: Assistant(name=\"Joe\", model_client=model_client),\n)",
+      "language": "csharp"
+    },
+    {
+      "code": "runtime.start()\nawait runtime.send_message(\n    Message(\"Joe, tell me a joke.\"),\n    recipient=AgentId(joe, \"default\"),\n    sender=AgentId(cathy, \"default\"),\n)\nawait runtime.stop_when_idle()\n\n# Close the connections to the model clients.\nawait model_client.close()",
+      "language": "markdown"
+    },
+    {
+      "code": "runtime.start()\nawait runtime.send_message(\n    Message(\"Joe, tell me a joke.\"),\n    recipient=AgentId(joe, \"default\"),\n    sender=AgentId(cathy, \"default\"),\n)\nawait runtime.stop_when_idle()\n\n# Close the connections to the model clients.\nawait model_client.close()",
+      "language": "markdown"
+    },
+    {
+      "code": "/tmp/ipykernel_1417357/2124203426.py:22: UserWarning: Resolved model mismatch: gpt-4o-2024-05-13 != ollama/llama3.1:8b. Model mapping may be incorrect.\n  result = await self._model_client.create(self._system_messages + await self._model_context.get_messages())",
+      "language": "python"
+    },
+    {
+      "code": "/tmp/ipykernel_1417357/2124203426.py:22: UserWarning: Resolved model mismatch: gpt-4o-2024-05-13 != ollama/llama3.1:8b. Model mapping may be incorrect.\n  result = await self._model_client.create(self._system_messages + await self._model_context.get_messages())",
+      "language": "python"
+    },
+    {
+      "code": "Joe: Joe, tell me a joke.\n\nCathy: Here's one:\n\nWhy couldn't the bicycle stand up by itself?\n\n(waiting for your reaction...)\n\nJoe: *laughs* It's because it was two-tired! Ahahaha! That's a good one! I love it!\n\nCathy: *roars with laughter* HAHAHAHA! Oh man, that's a classic! I'm glad you liked it! The setup is perfect and the punchline is just... *chuckles* Two-tired! I mean, come on! That's genius! We should definitely add that one to our act!\n\nJoe: I need to go now.",
+      "language": "yaml"
+    },
+    {
+      "code": "Joe: Joe, tell me a joke.\n\nCathy: Here's one:\n\nWhy couldn't the bicycle stand up by itself?\n\n(waiting for your reaction...)\n\nJoe: *laughs* It's because it was two-tired! Ahahaha! That's a good one! I love it!\n\nCathy: *roars with laughter* HAHAHAHA! Oh man, that's a classic! I'm glad you liked it! The setup is perfect and the punchline is just... *chuckles* Two-tired! I mean, come on! That's genius! We should definitely add that one to our act!\n\nJoe: I need to go now.",
+      "language": "yaml"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Agent definition",
+  "content": "graph_builder = StateGraph(State)\ngraph_builder.add_node(intent_classifier)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#agent-definition",
+  "links": []
+}

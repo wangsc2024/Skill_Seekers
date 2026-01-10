@@ -1,0 +1,14 @@
+{
+  "title": "Auth-aware tool responses",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-builder-auth-format\n\nFormat tool responses to trigger OAuth flows and resume execution automatically.\n\nSome [tools](/langsmith/agent-builder-tools) require user authorization (for example, Google, Slack, GitHub). Agent Builder includes middleware to detect when a tool needs authorization and to pause the run with a clear prompt to the user. After the user completes auth, the same tool call is retried automatically.\n\n## Return shape to request auth\n\nIf a tool detects missing authorization, return a JSON string containing the following fields:\n\n* `auth_required`: set to `true` to signal an interrupt is needed.\n* `auth_url`: where the user should be redirected to authorize.\n* `auth_id`: optional correlation ID to track the auth session.\n\nWhen Agent Builder detects this response, it interrupts the run, displays the authentication UI to the user, and automatically retries the tool call once authorization completes.\n\nIf you want your custom tools to reuse the same authentication required interrupt + UI, ensure your tools return the same shape of JSON.\n\n<Note>\n  Return only this JSON as the tool's output. Avoid including additional text or content. Agent Builder parses the response to trigger the authentication flow.\n</Note>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/agent-builder-auth-format.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Return shape to request auth",
+      "id": "return-shape-to-request-auth"
+    }
+  ],
+  "url": "llms-txt#auth-aware-tool-responses",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Accept licenses",
+  "content": "yes | sdkmanager --licenses",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#accept-licenses",
+  "links": []
+}

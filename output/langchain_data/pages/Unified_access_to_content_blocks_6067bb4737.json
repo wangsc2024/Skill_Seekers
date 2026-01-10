@@ -1,0 +1,29 @@
+{
+  "title": "Unified access to content blocks",
+  "content": "for block in response.content_blocks:\n    if block[\"type\"] == \"reasoning\":\n        print(f\"Model reasoning: {block['reasoning']}\")\n    elif block[\"type\"] == \"text\":\n        print(f\"Response: {block['text']}\")\n    elif block[\"type\"] == \"tool_call\":\n        print(f\"Tool call: {block['name']}({block['args']})\")\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "### Benefits\n\n* **Provider agnostic**: Access reasoning traces, citations, built-in tools (web search, code interpreters, etc.), and other features using the same API regardless of provider\n* **Type safe**: Full type hints for all content block types\n* **Backward compatible**: Standard content can be [loaded lazily](/oss/python/langchain/messages#standard-content-blocks), so there are no associated breaking changes\n\nFor more information, see our guide on [content blocks](/oss/python/langchain/messages#standard-content-blocks).\n\n***\n\n## Simplified package\n\nLangChain v1 streamlines the [`langchain`](https://pypi.org/project/langchain/) package namespace to focus on essential building blocks for agents. The refined namespace exposes the most useful and relevant functionality:\n\n### Namespace\n\n| Module                                                                                | What's available                                                                                                                                                                                                                                                          | Notes                                                                                       |\n| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |\n| [`langchain.agents`](https://reference.langchain.com/python/langchain/agents)         | [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent), [`AgentState`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.AgentState)                                                            | Core agent creation functionality                                                           |\n| [`langchain.messages`](https://reference.langchain.com/python/langchain/messages)     | Message types, [content blocks](https://reference.langchain.com/python/langchain/messages/#langchain.messages.ContentBlock), [`trim_messages`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.trim_messages)                               | Re-exported from [`langchain-core`](https://reference.langchain.com/python/langchain_core/) |\n| [`langchain.tools`](https://reference.langchain.com/python/langchain/tools)           | [`@tool`](https://reference.langchain.com/python/langchain/tools/#langchain.tools.tool), [`BaseTool`](https://reference.langchain.com/python/langchain/tools/#langchain.tools.BaseTool), injection helpers                                                                | Re-exported from [`langchain-core`](https://reference.langchain.com/python/langchain_core/) |\n| [`langchain.chat_models`](https://reference.langchain.com/python/langchain/models)    | [`init_chat_model`](https://reference.langchain.com/python/langchain/models/#langchain.chat_models.init_chat_model), [`BaseChatModel`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.chat_models.BaseChatModel)   | Unified model initialization                                                                |\n| [`langchain.embeddings`](https://reference.langchain.com/python/langchain/embeddings) | [`Embeddings`](https://reference.langchain.com/python/langchain_core/embeddings/#langchain_core.embeddings.embeddings.Embeddings), [`init_embeddings`](https://reference.langchain.com/python/langchain_core/embeddings/#langchain_core.embeddings.embeddings.Embeddings) | Embedding models                                                                            |\n\nMost of these are re-exported from `langchain-core` for convenience, which gives you a focused API surface for building agents.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Benefits",
+      "id": "benefits"
+    },
+    {
+      "level": "h2",
+      "text": "Simplified package",
+      "id": "simplified-package"
+    },
+    {
+      "level": "h3",
+      "text": "Namespace",
+      "id": "namespace"
+    }
+  ],
+  "url": "llms-txt#unified-access-to-content-blocks",
+  "links": []
+}

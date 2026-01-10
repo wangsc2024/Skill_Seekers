@@ -1,0 +1,8 @@
+{
+  "title": "Proactive Approach (recommended) - using RemainingSteps",
+  "content": "def agent_with_monitoring(state: State) -> dict:\n    \"\"\"Proactively monitor and handle recursion within the graph\"\"\"\n    remaining = state[\"remaining_steps\"]\n\n# Early detection - route to internal handling\n    if remaining <= 2:\n        return {\n            \"messages\": [\"Approaching limit, returning partial result\"]\n        }\n\n# Normal processing\n    return {\"messages\": [f\"Processing... ({remaining} steps remaining)\"]}\n\ndef route_decision(state: State) -> Literal[\"agent\", END]:\n    if state[\"remaining_steps\"] <= 2:\n        return END\n    return \"agent\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#proactive-approach-(recommended)---using-remainingsteps",
+  "links": []
+}

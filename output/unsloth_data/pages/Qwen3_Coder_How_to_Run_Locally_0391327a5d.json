@@ -1,0 +1,53 @@
+{
+  "title": "Qwen3-Coder: How to Run Locally",
+  "content": "Run Qwen3-Coder-30B-A3B-Instruct and 480B-A35B locally with Unsloth Dynamic quants.\n\nQwen3-Coder is Qwen’s new series of coding agent models, available in 30B (**Qwen3-Coder-Flash**) and 480B parameters. **Qwen3-480B-A35B-Instruct** achieves SOTA coding performance rivalling Claude Sonnet-4, GPT-4.1, and [Kimi K2](https://docs.unsloth.ai/models/kimi-k2-thinking-how-to-run-locally), with 61.8% on Aider Polygot and support for 256K (extendable to 1M) token context.\n\nWe also uploaded Qwen3-Coder with native <mark style=\"background-color:purple;\">**1M context length**</mark> extended by YaRN and full-precision 8bit and 16bit versions. [Unsloth](https://github.com/unslothai/unsloth) also now supports fine-tuning and [RL](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide) of Qwen3-Coder.\n\n{% hint style=\"success\" %}\n[**UPDATE:** We fixed tool-calling for Qwen3-Coder! ](#tool-calling-fixes)You can now use tool-calling seamlessly in llama.cpp, Ollama, LMStudio, Open WebUI, Jan etc. This issue was universal and affected all uploads (not just Unsloth), and we've communicated with the Qwen team about our fixes! [Read more](#tool-calling-fixes)\n{% endhint %}\n\n<a href=\"#run-qwen3-coder-30b-a3b-instruct\" class=\"button secondary\">Run 30B-A3B</a><a href=\"#run-qwen3-coder-480b-a35b-instruct\" class=\"button secondary\">Run 480B-A35B</a>\n\n{% hint style=\"success\" %}\n**Does** [**Unsloth Dynamic Quants**](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs) **work?** Yes, and very well. In third-party testing on the Aider Polyglot benchmark, the **UD-Q4\\_K\\_XL (276GB)** dynamic quant nearly matched the **full bf16 (960GB)** Qwen3-coder model, scoring 60.9% vs 61.8%. [More details here.](https://huggingface.co/unsloth/Qwen3-Coder-480B-A35B-Instruct-GGUF/discussions/8)\n{% endhint %}\n\n#### **Qwen3 Coder - Unsloth Dynamic 2.0 GGUFs**:\n\n| Dynamic 2.0 GGUF (to run)                                                                                                                                                                                                     | 1M Context Dynamic 2.0 GGUF                                                                                                                                                                                                         |\n| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| <ul><li><a href=\"https://huggingface.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF\">30B-A3B-Instruct</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-Coder-480B-A35B-Instruct-GGUF\">480B-A35B-Instruct</a></li></ul> | <ul><li><a href=\"https://huggingface.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-1M-GGUF\">30B-A3B-Instruct</a></li><li><a href=\"https://huggingface.co/unsloth/Qwen3-Coder-480B-A35B-Instruct-1M-GGUF\">480B-A35B-Instruct</a></li></ul> |\n\n## 🖥️ **Running Qwen3-Coder**\n\nBelow are guides for the [**30B-A3B**](#run-qwen3-coder-30b-a3b-instruct) and [**480B-A35B**](#run-qwen3-coder-480b-a35b-instruct) variants of the model.\n\n### :gear: Recommended Settings\n\nQwen recommends these inference settings for both models:\n\n`temperature=0.7`, `top_p=0.8`, `top_k=20`, `repetition_penalty=1.05`\n\n* <mark style=\"background-color:green;\">**Temperature of 0.7**</mark>\n* Top\\_K of 20\n* Min\\_P of 0.00 (optional, but 0.01 works well, llama.cpp default is 0.1)\n* Top\\_P of 0.8\n* <mark style=\"background-color:green;\">**Repetition Penalty of 1.05**</mark>\n* Chat template:\n\n{% code overflow=\"wrap\" %}\n\n{% endcode %}\n* Recommended context output: 65,536 tokens (can be increased). Details here.\n\n**Chat template/prompt format with newlines un-rendered**\n\n{% code overflow=\"wrap\" %}\n\n<mark style=\"background-color:yellow;\">**Chat template for tool calling**</mark> (Getting the current temperature for San Francisco). More details here for how to format tool calls.\n\n{% hint style=\"info\" %}\nReminder that this model supports only non-thinking mode and does not generate `<think></think>` blocks in its output. Meanwhile, specifying `enable_thinking=False` is no longer required.\n{% endhint %}\n\n### Run Qwen3-Coder-30B-A3B-Instruct:\n\nTo achieve inference speeds of 6+ tokens per second for our Dynamic 4-bit quant, have at least **18GB of unified memory** (combined VRAM and RAM) or **18GB of system RAM** alone. As a rule of thumb, your available memory should match or exceed the size of the model you’re using. E.g. the UD\\_Q8\\_K\\_XL quant (full precision), which is 32.5GB, will require at least **33GB of unified memory** (VRAM + RAM) or **33GB of RAM** for optimal performance.\n\n**NOTE:** The model can run on less memory than its total size, but this will slow down inference. Maximum memory is only needed for the fastest speeds.\n\nGiven that this is a non thinking model, there is no need to set `thinking=False` and the model does not generate `<think> </think>` blocks.\n\n{% hint style=\"info\" %}\nFollow the [**best practices above**](#recommended-settings). They're the same as the 480B model.\n{% endhint %}\n\n#### 🦙 Ollama: Run Qwen3-Coder-30B-A3B-Instruct Tutorial\n\n1. Install `ollama` if you haven't already! You can only run models up to 32B in size.\n\n2. Run the model! Note you can call `ollama serve`in another terminal if it fails! We include all our fixes and suggested parameters (temperature etc) in `params` in our Hugging Face upload!\n\n#### :sparkles: Llama.cpp: Run Qwen3-Coder-30B-A3B-Instruct Tutorial\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. You can directly pull from HuggingFace via:\n\n3. Download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose UD\\_Q4\\_K\\_XL or other quantized versions.",
+  "code_samples": [
+    {
+      "code": "<|im_start|>user\n  Hey there!<|im_end|>\n  <|im_start|>assistant\n  What is 1+1?<|im_end|>\n  <|im_start|>user\n  2<|im_end|>\n  <|im_start|>assistant",
+      "language": "unknown"
+    },
+    {
+      "code": "<|im_start|>user\\nHey there!<|im_end|>\\n<|im_start|>assistant\\nWhat is 1+1?<|im_end|>\\n<|im_start|>user\\n2<|im_end|>\\n<|im_start|>assistant\\n",
+      "language": "unknown"
+    },
+    {
+      "code": "<|im_start|>user\nWhat's the temperature in San Francisco now? How about tomorrow?<|im_end|>\n<|im_start|>assistant\n<tool_call>\\n<function=get_current_temperature>\\n<parameter=location>\\nSan Francisco, CA, USA\n</parameter>\\n</function>\\n</tool_call><|im_end|>\n<|im_start|>user\n<tool_response>\n{\"temperature\": 26.1, \"location\": \"San Francisco, CA, USA\", \"unit\": \"celsius\"}\n</tool_response>\\n<|im_end|>",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils -y\ncurl -fsSL https://ollama.com/install.sh | sh",
+      "language": "bash"
+    },
+    {
+      "code": "ollama run hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q4_K_XL",
+      "language": "bash"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli \\\n       -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q4_K_XL \\\n       --jinja -ngl 99 --threads -1 --ctx-size 32768 \\\n       --temp 0.7 --min-p 0.0 --top-p 0.80 --top-k 20 --repeat-penalty 1.05",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "🖥️ **Running Qwen3-Coder**",
+      "id": "🖥️-**running-qwen3-coder**"
+    },
+    {
+      "level": "h3",
+      "text": ":gear: Recommended Settings",
+      "id": ":gear:-recommended-settings"
+    },
+    {
+      "level": "h3",
+      "text": "Run Qwen3-Coder-30B-A3B-Instruct:",
+      "id": "run-qwen3-coder-30b-a3b-instruct:"
+    }
+  ],
+  "url": "llms-txt#qwen3-coder:-how-to-run-locally",
+  "links": []
+}

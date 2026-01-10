@@ -1,0 +1,8 @@
+{
+  "title": "Set the project name to whichever project you'd like to be testing against",
+  "content": "project_name = \"Tweet Writing Task\"\nos.environ[\"LANGSMITH_PROJECT\"] = project_name\nos.environ[\"LANGSMITH_TRACING\"] = \"true\"\n\nif not os.environ.get(\"LANGSMITH_API_KEY\"):\n    os.environ[\"LANGSMITH_API_KEY\"] = getpass.getpass(\"YOUR API KEY\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#set-the-project-name-to-whichever-project-you'd-like-to-be-testing-against",
+  "links": []
+}

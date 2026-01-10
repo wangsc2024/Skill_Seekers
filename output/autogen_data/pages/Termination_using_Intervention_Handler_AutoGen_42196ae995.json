@@ -1,0 +1,113 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+  "title": "Termination using Intervention Handler — AutoGen",
+  "content": "This method is valid when using SingleThreadedAgentRuntime.\n\nThere are many different ways to handle termination in autogen_core. Ultimately, the goal is to detect that the runtime no longer needs to be executed and you can proceed to finalization tasks. One way to do this is to use an autogen_core.base.intervention.InterventionHandler to detect a termination message and then act on it.\n\nFirst, we define a dataclass for regular message and message that will be used to signal termination.\n\nWe code our agent to publish a termination message when it decides it is time to terminate.\n\nNext, we create an InterventionHandler that will detect the termination message and act on it. This one hooks into publishes and when it encounters Termination it alters its internal state to indicate that termination has been requested.\n\nFinally, we add this handler to the runtime and use it to detect termination and stop the runtime when the termination message is received.\n\nAzure OpenAI with AAD Auth\n\nUser Approval for Tool Execution using Intervention Handler",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Termination using Intervention Handler#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from dataclasses import dataclass\nfrom typing import Any\n\nfrom autogen_core import (\n    DefaultInterventionHandler,\n    DefaultTopicId,\n    MessageContext,\n    RoutedAgent,\n    SingleThreadedAgentRuntime,\n    default_subscription,\n    message_handler,\n)",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\nfrom typing import Any\n\nfrom autogen_core import (\n    DefaultInterventionHandler,\n    DefaultTopicId,\n    MessageContext,\n    RoutedAgent,\n    SingleThreadedAgentRuntime,\n    default_subscription,\n    message_handler,\n)",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: Any\n\n\n@dataclass\nclass Termination:\n    reason: str",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass Message:\n    content: Any\n\n\n@dataclass\nclass Termination:\n    reason: str",
+      "language": "python"
+    },
+    {
+      "code": "@default_subscription\nclass AnAgent(RoutedAgent):\n    def __init__(self) -> None:\n        super().__init__(\"MyAgent\")\n        self.received = 0\n\n    @message_handler\n    async def on_new_message(self, message: Message, ctx: MessageContext) -> None:\n        self.received += 1\n        if self.received > 3:\n            await self.publish_message(Termination(reason=\"Reached maximum number of messages\"), DefaultTopicId())",
+      "language": "python"
+    },
+    {
+      "code": "@default_subscription\nclass AnAgent(RoutedAgent):\n    def __init__(self) -> None:\n        super().__init__(\"MyAgent\")\n        self.received = 0\n\n    @message_handler\n    async def on_new_message(self, message: Message, ctx: MessageContext) -> None:\n        self.received += 1\n        if self.received > 3:\n            await self.publish_message(Termination(reason=\"Reached maximum number of messages\"), DefaultTopicId())",
+      "language": "python"
+    },
+    {
+      "code": "class TerminationHandler(DefaultInterventionHandler):\n    def __init__(self) -> None:\n        self._termination_value: Termination | None = None\n\n    async def on_publish(self, message: Any, *, message_context: MessageContext) -> Any:\n        if isinstance(message, Termination):\n            self._termination_value = message\n        return message\n\n    @property\n    def termination_value(self) -> Termination | None:\n        return self._termination_value\n\n    @property\n    def has_terminated(self) -> bool:\n        return self._termination_value is not None",
+      "language": "python"
+    },
+    {
+      "code": "class TerminationHandler(DefaultInterventionHandler):\n    def __init__(self) -> None:\n        self._termination_value: Termination | None = None\n\n    async def on_publish(self, message: Any, *, message_context: MessageContext) -> Any:\n        if isinstance(message, Termination):\n            self._termination_value = message\n        return message\n\n    @property\n    def termination_value(self) -> Termination | None:\n        return self._termination_value\n\n    @property\n    def has_terminated(self) -> bool:\n        return self._termination_value is not None",
+      "language": "python"
+    },
+    {
+      "code": "termination_handler = TerminationHandler()\nruntime = SingleThreadedAgentRuntime(intervention_handlers=[termination_handler])\n\nawait AnAgent.register(runtime, \"my_agent\", AnAgent)\n\nruntime.start()\n\n# Publish more than 3 messages to trigger termination.\nawait runtime.publish_message(Message(\"hello\"), DefaultTopicId())\nawait runtime.publish_message(Message(\"hello\"), DefaultTopicId())\nawait runtime.publish_message(Message(\"hello\"), DefaultTopicId())\nawait runtime.publish_message(Message(\"hello\"), DefaultTopicId())\n\n# Wait for termination.\nawait runtime.stop_when(lambda: termination_handler.has_terminated)\n\nprint(termination_handler.termination_value)",
+      "language": "python"
+    },
+    {
+      "code": "termination_handler = TerminationHandler()\nruntime = SingleThreadedAgentRuntime(intervention_handlers=[termination_handler])\n\nawait AnAgent.register(runtime, \"my_agent\", AnAgent)\n\nruntime.start()\n\n# Publish more than 3 messages to trigger termination.\nawait runtime.publish_message(Message(\"hello\"), DefaultTopicId())\nawait runtime.publish_message(Message(\"hello\"), DefaultTopicId())\nawait runtime.publish_message(Message(\"hello\"), DefaultTopicId())\nawait runtime.publish_message(Message(\"hello\"), DefaultTopicId())\n\n# Wait for termination.\nawait runtime.stop_when(lambda: termination_handler.has_terminated)\n\nprint(termination_handler.termination_value)",
+      "language": "python"
+    },
+    {
+      "code": "Termination(reason='Reached maximum number of messages')",
+      "language": "unknown"
+    },
+    {
+      "code": "Termination(reason='Reached maximum number of messages')",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

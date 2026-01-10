@@ -1,0 +1,8 @@
+{
+  "title": "Output from node_1 contains private data that is not part of the overall state",
+  "content": "class Node1Output(TypedDict):\n    private_data: str",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#output-from-node_1-contains-private-data-that-is-not-part-of-the-overall-state",
+  "links": []
+}

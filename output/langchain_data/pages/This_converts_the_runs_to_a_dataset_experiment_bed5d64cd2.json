@@ -1,0 +1,33 @@
+{
+  "title": "This converts the runs to a dataset + experiment",
+  "content": "convert_runs_to_test(\n    prod_runs,\n    # Name of the resulting dataset\n    dataset_name=dataset_name,\n    # Whether to include the run outputs as reference/ground truth\n    include_outputs=False,\n    # Whether to include the full traces in the resulting experiment\n    # (default is to just include the root run)\n    load_child_runs=True,\n    # Name of the experiment so we can apply evalautors to it after\n    test_project_name=baseline_experiment_name\n)\npython  theme={null}\nimport emoji\nfrom pydantic import BaseModel, Field\nfrom langchain_core.messages import convert_to_openai_messages\n\nclass Grade(BaseModel):\n    \"\"\"Grade whether a response is supported by some context.\"\"\"\n    grounded: bool = Field(..., description=\"Is the majority of the response supported by the retrieved context?\")\n\ngrounded_instructions = f\"\"\"You have given somebody some contextual information and asked them to write a statement grounded in that context.\n\nGrade whether their response is fully supported by the context you have provided. \\\nIf any meaningful part of their statement is not backed up directly by the context you provided, then their response is not grounded. \\\nOtherwise it is grounded.\"\"\"\ngrounded_model = init_chat_model(model=\"gpt-4o\").with_structured_output(Grade)\n\ndef lt_280_chars(outputs: dict) -> bool:\n    messages = convert_to_openai_messages(outputs[\"messages\"])\n    return len(messages[-1]['content']) <= 280\n\ndef gte_3_emojis(outputs: dict) -> bool:\n    messages = convert_to_openai_messages(outputs[\"messages\"])\n    return len(emoji.emoji_list(messages[-1]['content'])) >= 3\n\nasync def is_grounded(outputs: dict) -> bool:\n    context = \"\"\n    messages = convert_to_openai_messages(outputs[\"messages\"])\n    for message in messages:\n        if message[\"role\"] == \"tool\":\n            # Tool message outputs are the results returned from the Tavily/DuckDuckGo tool\n            context += \"\\n\\n\" + message[\"content\"]\n    tweet = messages[-1][\"content\"]\n    user = f\"\"\"CONTEXT PROVIDED:\n    {context}\n\nRESPONSE GIVEN:\n    {tweet}\"\"\"\n    grade = await grounded_model.ainvoke([\n        {\"role\": \"system\", \"content\": grounded_instructions},\n        {\"role\": \"user\", \"content\": user}\n    ])\n    return grade.grounded\npython  theme={null}\nbaseline_results = await client.aevaluate(\n    baseline_experiment_name,\n    evaluators=[lt_280_chars, gte_3_emojis, is_grounded],\n)",
+  "code_samples": [
+    {
+      "code": "Once this step is complete, you should see a new dataset in your LangSmith project called \"Tweet Writing Task-backtesting TODAYS DATE\", with a single experiment like so:\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/baseline-experiment.png?fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=73b60a75d6b33f2830f5ed68464c586b\" alt=\"Baseline experiment\" data-og-width=\"3456\" width=\"3456\" data-og-height=\"1852\" height=\"1852\" data-path=\"langsmith/images/baseline-experiment.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/baseline-experiment.png?w=280&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=e459a884bbec6e3741617830b9e70848 280w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/baseline-experiment.png?w=560&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=6116dd6057709be29d84f0cbad32e7a1 560w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/baseline-experiment.png?w=840&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=a86ab5cffeac0ceace81adbc59dba649 840w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/baseline-experiment.png?w=1100&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=e0058d68f4061df5fe4249c9e3954c38 1100w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/baseline-experiment.png?w=1650&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=270a7eb33f39fd612d1732aadaa0b373 1650w, https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/baseline-experiment.png?w=2500&fit=max&auto=format&n=E8FdemkcQxROovD9&q=85&s=fe9dc037876fcf1c4eb22317d7bb3f45 2500w\" />\n\n## Benchmark against new system\n\nNow we can start the process of benchmarking our production runs against a new system.\n\n### Define evaluators\n\nFirst let's define the evaluators we will use to compare the two systems. Note that we have no reference outputs, so we'll need to come up with evaluation metrics that only require the actual outputs.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Evaluate baseline\n\nNow, let's run our evaluators against the baseline experiment.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Benchmark against new system",
+      "id": "benchmark-against-new-system"
+    },
+    {
+      "level": "h3",
+      "text": "Define evaluators",
+      "id": "define-evaluators"
+    },
+    {
+      "level": "h3",
+      "text": "Evaluate baseline",
+      "id": "evaluate-baseline"
+    }
+  ],
+  "url": "llms-txt#this-converts-the-runs-to-a-dataset-+-experiment",
+  "links": []
+}

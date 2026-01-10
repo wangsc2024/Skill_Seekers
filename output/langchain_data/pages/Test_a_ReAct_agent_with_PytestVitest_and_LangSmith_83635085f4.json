@@ -1,0 +1,221 @@
+{
+  "title": "Test a ReAct agent with Pytest/Vitest and LangSmith",
+  "content": "Source: https://docs.langchain.com/langsmith/test-react-agent-pytest\n\nThis tutorial will show you how to use LangSmith's integrations with popular testing tools (Pytest, Vitest, and Jest) to evaluate your LLM application. We will create a ReAct agent that answers questions about publicly traded stocks and write a comprehensive test suite for it.\n\nThis tutorial uses [LangGraph](https://langchain-ai.github.io/langgraph/tutorials/introduction/) for agent orchestration, [OpenAI's GPT-4o](https://platform.openai.com/docs/models#gpt-4o), [Tavily](https://tavily.com/) for search, [E2B's](https://e2b.dev/) code interpreter, and [Polygon](https://polygon.io/stocks) to retrieve stock data but it can be adapted for other frameworks, models and tools with minor modifications. Tavily, E2B and Polygon are free to sign up for.\n\nFirst, install the packages required for making the agent:\n\nNext, install the testing framework:\n\n### Environment variables\n\nSet the following environment variables:\n\nTo define our React agent, we will use LangGraph/LangGraph.js for the orchestation and LangChain for the LLM and tools.\n\nFirst we are going to define the tools we are going to use in our agent. There are going to be 3 tools:\n\n* A search tool using Tavily\n* A code interpreter tool using E2B\n* A stock information tool using Polygon\n\nNow that we have defined all of our tools, we can use [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) to create our agent.\n\nNow that we have defined our agent, let's write a few tests to ensure basic functionality. In this tutorial we are going to test whether the agent's tool calling abilities are working, whether the agent knows to ignore irrelevant questions, and whether it is able to answer complex questions that involve using all of the tools.\n\nWe need to first set up a test file and add the imports needed at the top of the file.\n\n### Test 1: Handle off-topic questions\n\nThe first test will be a simple check that the agent does not use tools on irrelevant queries.\n\n### Test 2: Simple tool calling\n\nFor tool calling, we are going to verify that the agent calls the correct tool with the correct parameters.\n\n### Test 3: Complex tool calling\n\nSome tool calls are easier to test than others. With the ticker lookup, we can assert that the correct ticker is searched. With the coding tool, the inputs and outputs of the tool are much less constrained, and there are lots of ways to get to the right answer. In this case, it's simpler to test that the tool is used correctly by running the full agent and asserting that it both calls the coding tool and that it ends up with the right answer.\n\n### Test 4: LLM-as-a-judge\n\nWe are going to ensure that the agent's answer is grounded in the search results by running an LLM-as-a-judge evaluation. In order to trace the LLM as a judge call separately from our agent, we will use the LangSmith provided `trace_feedback` context manager in Python and `wrapEvaluator` function in JS/TS.\n\nOnce you have setup your config files (if you are using Vitest or Jest), you can run your tests using the following commands:\n\n<Accordion title=\"Config files for Vitest/Jest\">\n  <CodeGroup>\n\n</CodeGroup>\n</Accordion>\n\nRemember to also add the config files for [Vitest](#config-files-for-vitestjest) and [Jest](#config-files-for-vitestjest) to your project.\n\n<Accordion title=\"Agent code\">\n  <CodeGroup>\n\n</CodeGroup>\n</Accordion>\n\n<Accordion title=\"Test code\">\n  <CodeGroup>\n\n</CodeGroup>\n</Accordion>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/test-react-agent-pytest.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nNext, install the testing framework:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Environment variables\n\nSet the following environment variables:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Create your app\n\nTo define our React agent, we will use LangGraph/LangGraph.js for the orchestation and LangChain for the LLM and tools.\n\n### Define tools\n\nFirst we are going to define the tools we are going to use in our agent. There are going to be 3 tools:\n\n* A search tool using Tavily\n* A code interpreter tool using E2B\n* A stock information tool using Polygon\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Define agent\n\nNow that we have defined all of our tools, we can use [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) to create our agent.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Write tests\n\nNow that we have defined our agent, let's write a few tests to ensure basic functionality. In this tutorial we are going to test whether the agent's tool calling abilities are working, whether the agent knows to ignore irrelevant questions, and whether it is able to answer complex questions that involve using all of the tools.\n\nWe need to first set up a test file and add the imports needed at the top of the file.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Test 1: Handle off-topic questions\n\nThe first test will be a simple check that the agent does not use tools on irrelevant queries.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Test 2: Simple tool calling\n\nFor tool calling, we are going to verify that the agent calls the correct tool with the correct parameters.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Test 3: Complex tool calling\n\nSome tool calls are easier to test than others. With the ticker lookup, we can assert that the correct ticker is searched. With the coding tool, the inputs and outputs of the tool are much less constrained, and there are lots of ways to get to the right answer. In this case, it's simpler to test that the tool is used correctly by running the full agent and asserting that it both calls the coding tool and that it ends up with the right answer.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Test 4: LLM-as-a-judge\n\nWe are going to ensure that the agent's answer is grounded in the search results by running an LLM-as-a-judge evaluation. In order to trace the LLM as a judge call separately from our agent, we will use the LangSmith provided `trace_feedback` context manager in Python and `wrapEvaluator` function in JS/TS.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Run tests\n\nOnce you have setup your config files (if you are using Vitest or Jest), you can run your tests using the following commands:\n\n<Accordion title=\"Config files for Vitest/Jest\">\n  <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n</Accordion>\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Reference code\n\nRemember to also add the config files for [Vitest](#config-files-for-vitestjest) and [Jest](#config-files-for-vitestjest) to your project.\n\n### Agent\n\n<Accordion title=\"Agent code\">\n  <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n</Accordion>\n\n### Tests\n\n<Accordion title=\"Test code\">\n  <CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h3",
+      "text": "Environment variables",
+      "id": "environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Create your app",
+      "id": "create-your-app"
+    },
+    {
+      "level": "h3",
+      "text": "Define tools",
+      "id": "define-tools"
+    },
+    {
+      "level": "h3",
+      "text": "Define agent",
+      "id": "define-agent"
+    },
+    {
+      "level": "h2",
+      "text": "Write tests",
+      "id": "write-tests"
+    },
+    {
+      "level": "h3",
+      "text": "Test 1: Handle off-topic questions",
+      "id": "test-1:-handle-off-topic-questions"
+    },
+    {
+      "level": "h3",
+      "text": "Test 2: Simple tool calling",
+      "id": "test-2:-simple-tool-calling"
+    },
+    {
+      "level": "h3",
+      "text": "Test 3: Complex tool calling",
+      "id": "test-3:-complex-tool-calling"
+    },
+    {
+      "level": "h3",
+      "text": "Test 4: LLM-as-a-judge",
+      "id": "test-4:-llm-as-a-judge"
+    },
+    {
+      "level": "h2",
+      "text": "Run tests",
+      "id": "run-tests"
+    },
+    {
+      "level": "h2",
+      "text": "Reference code",
+      "id": "reference-code"
+    },
+    {
+      "level": "h3",
+      "text": "Agent",
+      "id": "agent"
+    },
+    {
+      "level": "h3",
+      "text": "Tests",
+      "id": "tests"
+    }
+  ],
+  "url": "llms-txt#test-a-react-agent-with-pytest/vitest-and-langsmith",
+  "links": []
+}

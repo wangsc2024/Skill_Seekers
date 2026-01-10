@@ -1,0 +1,32 @@
+{
+  "title": "Define the possible workflow steps",
+  "content": "SupportStep = Literal[\"warranty_collector\", \"issue_classifier\", \"resolution_specialist\"]  # [!code highlight]\n\nclass SupportState(AgentState):  # [!code highlight]\n    \"\"\"State for customer support workflow.\"\"\"\n    current_step: NotRequired[SupportStep]  # [!code highlight]\n    warranty_status: NotRequired[Literal[\"in_warranty\", \"out_of_warranty\"]]\n    issue_type: NotRequired[Literal[\"hardware\", \"software\"]]\npython  theme={null}\nfrom langchain.tools import tool, ToolRuntime\nfrom langchain.messages import ToolMessage\nfrom langgraph.types import Command\n\n@tool\ndef record_warranty_status(\n    status: Literal[\"in_warranty\", \"out_of_warranty\"],\n    runtime: ToolRuntime[None, SupportState],\n) -> Command:  # [!code highlight]\n    \"\"\"Record the customer's warranty status and transition to issue classification.\"\"\"\n    return Command(  # [!code highlight]\n        update={  # [!code highlight]\n            \"messages\": [\n                ToolMessage(\n                    content=f\"Warranty status recorded as: {status}\",\n                    tool_call_id=runtime.tool_call_id,\n                )\n            ],\n            \"warranty_status\": status,\n            \"current_step\": \"issue_classifier\",  # [!code highlight]\n        }\n    )\n\n@tool\ndef record_issue_type(\n    issue_type: Literal[\"hardware\", \"software\"],\n    runtime: ToolRuntime[None, SupportState],\n) -> Command:  # [!code highlight]\n    \"\"\"Record the type of issue and transition to resolution specialist.\"\"\"\n    return Command(  # [!code highlight]\n        update={  # [!code highlight]\n            \"messages\": [\n                ToolMessage(\n                    content=f\"Issue type recorded as: {issue_type}\",\n                    tool_call_id=runtime.tool_call_id,\n                )\n            ],\n            \"issue_type\": issue_type,\n            \"current_step\": \"resolution_specialist\",  # [!code highlight]\n        }\n    )\n\n@tool\ndef escalate_to_human(reason: str) -> str:\n    \"\"\"Escalate the case to a human support specialist.\"\"\"\n    # In a real system, this would create a ticket, notify staff, etc.\n    return f\"Escalating to human support. Reason: {reason}\"\n\n@tool\ndef provide_solution(solution: str) -> str:\n    \"\"\"Provide a solution to the customer's issue.\"\"\"\n    return f\"Solution provided: {solution}\"\npython  theme={null}\n  # Define prompts as constants for easy reference\n  WARRANTY_COLLECTOR_PROMPT = \"\"\"You are a customer support agent helping with device issues.\n\nCURRENT STAGE: Warranty verification\n\nAt this step, you need to:\n  1. Greet the customer warmly\n  2. Ask if their device is under warranty\n  3. Use record_warranty_status to record their response and move to the next step\n\nBe conversational and friendly. Don't ask multiple questions at once.\"\"\"\n\nISSUE_CLASSIFIER_PROMPT = \"\"\"You are a customer support agent helping with device issues.\n\nCURRENT STAGE: Issue classification\n  CUSTOMER INFO: Warranty status is {warranty_status}\n\nAt this step, you need to:\n  1. Ask the customer to describe their issue\n  2. Determine if it's a hardware issue (physical damage, broken parts) or software issue (app crashes, performance)\n  3. Use record_issue_type to record the classification and move to the next step\n\nIf unclear, ask clarifying questions before classifying.\"\"\"\n\nRESOLUTION_SPECIALIST_PROMPT = \"\"\"You are a customer support agent helping with device issues.\n\nCURRENT STAGE: Resolution\n  CUSTOMER INFO: Warranty status is {warranty_status}, issue type is {issue_type}\n\nAt this step, you need to:\n  1. For SOFTWARE issues: provide troubleshooting steps using provide_solution\n  2. For HARDWARE issues:\n     - If IN WARRANTY: explain warranty repair process using provide_solution\n     - If OUT OF WARRANTY: escalate_to_human for paid repair options\n\nBe specific and helpful in your solutions.\"\"\"\n  python  theme={null}",
+  "code_samples": [
+    {
+      "code": "The `current_step` field is the core of the state machine pattern - it determines which configuration (prompt + tools) is loaded on each turn.\n\n## 2. Create tools that manage workflow state\n\nCreate tools that update the workflow state. These tools allow the agent to record information and transition to the next step.\n\nThe key is using `Command` to update state, including the `current_step` field:",
+      "language": "unknown"
+    },
+    {
+      "code": "Notice how `record_warranty_status` and `record_issue_type` return `Command` objects that update both the data (`warranty_status`, `issue_type`) AND the `current_step`. This is how the state machine works - tools control workflow progression.\n\n## 3. Define step configurations\n\nDefine prompts and tools for each step. First, define the prompts for each step:\n\n<Accordion title=\"View complete prompt definitions\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\nThen map step names to their configurations using a dictionary:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "2. Create tools that manage workflow state",
+      "id": "2.-create-tools-that-manage-workflow-state"
+    },
+    {
+      "level": "h2",
+      "text": "3. Define step configurations",
+      "id": "3.-define-step-configurations"
+    }
+  ],
+  "url": "llms-txt#define-the-possible-workflow-steps",
+  "links": []
+}

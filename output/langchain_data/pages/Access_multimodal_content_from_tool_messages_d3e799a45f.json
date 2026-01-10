@@ -1,0 +1,19 @@
+{
+  "title": "Access multimodal content from tool messages",
+  "content": "for message in result[\"messages\"]:\n    if message.type == \"tool\":\n        # Raw content in provider-native format\n        print(f\"Raw content: {message.content}\")\n\n# Standardized content blocks  # [!code highlight]\n        for block in message.content_blocks:  # [!code highlight]\n            if block[\"type\"] == \"text\":  # [!code highlight]\n                print(f\"Text: {block['text']}\")  # [!code highlight]\n            elif block[\"type\"] == \"image\":  # [!code highlight]\n                print(f\"Image URL: {block.get('url')}\")  # [!code highlight]\n                print(f\"Image base64: {block.get('base64', '')[:50]}...\")  # [!code highlight]\npython  theme={null}\nfrom langchain_mcp_adapters.client import MultiServerMCPClient\n\nclient = MultiServerMCPClient({...})",
+  "code_samples": [
+    {
+      "code": "This allows you to handle multimodal tool responses in a provider-agnostic way, regardless of how the underlying MCP server formats its content.\n\n### Resources\n\n[Resources](https://modelcontextprotocol.io/docs/concepts/resources) allow MCP servers to expose data—such as files, database records, or API responses—that can be read by clients. LangChain converts MCP resources into [Blob](/docs/reference/langchain-core/documents#Blob) objects, which provide a unified interface for handling both text and binary content.\n\n#### Loading resources\n\nUse `client.get_resources()` to load resources from an MCP server:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Resources",
+      "id": "resources"
+    }
+  ],
+  "url": "llms-txt#access-multimodal-content-from-tool-messages",
+  "links": []
+}

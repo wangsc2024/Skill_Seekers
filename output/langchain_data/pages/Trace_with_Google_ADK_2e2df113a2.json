@@ -1,0 +1,42 @@
+{
+  "title": "Trace with Google ADK",
+  "content": "Source: https://docs.langchain.com/langsmith/trace-with-google-adk\n\nLangSmith supports tracing Google Agent Development Kit (ADK) applications through the OpenTelemetry integration. This guide shows you how to automatically capture traces from your [Google ADK](https://github.com/google/adk-python) agents and send them to LangSmith for monitoring and analysis.\n\nInstall the required packages using your preferred package manager:\n\n<Info>\n  Requires LangSmith Python SDK version `langsmith>=0.4.26` for optimal OpenTelemetry support.\n</Info>\n\n### 1. Configure environment variables\n\nSet your LangSmith API key and project name:\n\n<CodeGroup>\n  \n</CodeGroup>\n\n### 2. Configure OpenTelemetry integration\n\nIn your Google ADK application, import and configure the LangSmith OpenTelemetry integration. This will automatically instrument Google ADK spans for OpenTelemetry.\n\n```python  theme={null}\nfrom langsmith.integrations.otel import configure",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n<Info>\n  Requires LangSmith Python SDK version `langsmith>=0.4.26` for optimal OpenTelemetry support.\n</Info>\n\n## Setup\n\n### 1. Configure environment variables\n\nSet your LangSmith API key and project name:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### 2. Configure OpenTelemetry integration\n\nIn your Google ADK application, import and configure the LangSmith OpenTelemetry integration. This will automatically instrument Google ADK spans for OpenTelemetry.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "1. Configure environment variables",
+      "id": "1.-configure-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "2. Configure OpenTelemetry integration",
+      "id": "2.-configure-opentelemetry-integration"
+    }
+  ],
+  "url": "llms-txt#trace-with-google-adk",
+  "links": []
+}

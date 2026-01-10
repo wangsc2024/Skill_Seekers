@@ -1,0 +1,49 @@
+{
+  "title": "Authentication methods",
+  "content": "Source: https://docs.langchain.com/langsmith/authentication-methods\n\nLangSmith supports multiple authentication methods for easy sign-up and login.\n\nUsers can use an email address and password to sign up and login to LangSmith.\n\nUsers can alternatively use their credentials from GitHub or Google.\n\nEnterprise customers can configure [SAML SSO](/langsmith/user-management) and [SCIM](/langsmith/user-management)\n\nSelf-hosted customers have more control over how their users can login to LangSmith. For more in-depth coverage of configuration options, see [the self-hosting docs](/langsmith/self-hosted) and [Helm chart](https://github.com/langchain-ai/helm/tree/main/charts/langsmith).\n\n### SSO with OAuth 2.0 and OIDC\n\nProduction installations should configure SSO in order to use an external identity provider. This enables users to login through an identity platform like Auth0/Okta. LangSmith supports almost any OIDC-compliant provider. Learn more about configuring SSO in the [SSO configuration guide](/langsmith/self-host-sso)\n\n### Email/Password a.k.a. basic auth\n\nThis auth method requires very little configuration as it does not require an external identity provider. It is most appropriate to use for self-hosted trials. Learn more in the [basic auth configuration guide](/langsmith/self-host-basic-auth)\n\n<Warning>\n  This authentication mode will be removed after the launch of Basic Auth.\n</Warning>\n\nIf zero authentication methods are enabled, a self-hosted installation does not require any login/sign-up. This configuration should only be used for verifying installation at the infrastructure level, as the feature set supported in this mode is restricted with only a single organization and workspace.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/authentication-methods.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Cloud",
+      "id": "cloud"
+    },
+    {
+      "level": "h3",
+      "text": "Email/Password",
+      "id": "email/password"
+    },
+    {
+      "level": "h3",
+      "text": "Social Providers",
+      "id": "social-providers"
+    },
+    {
+      "level": "h3",
+      "text": "SAML SSO",
+      "id": "saml-sso"
+    },
+    {
+      "level": "h2",
+      "text": "Self-Hosted",
+      "id": "self-hosted"
+    },
+    {
+      "level": "h3",
+      "text": "SSO with OAuth 2.0 and OIDC",
+      "id": "sso-with-oauth-2.0-and-oidc"
+    },
+    {
+      "level": "h3",
+      "text": "Email/Password a.k.a. basic auth",
+      "id": "email/password-a.k.a.-basic-auth"
+    },
+    {
+      "level": "h3",
+      "text": "None",
+      "id": "none"
+    }
+  ],
+  "url": "llms-txt#authentication-methods",
+  "links": []
+}

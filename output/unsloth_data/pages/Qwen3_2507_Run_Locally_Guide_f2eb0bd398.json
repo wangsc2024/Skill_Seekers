@@ -1,0 +1,45 @@
+{
+  "title": "Qwen3-2507: Run Locally Guide",
+  "content": "Run Qwen3-30B-A3B-2507 and 235B-A22B Thinking and Instruct versions locally on your device!\n\nQwen released 2507 (July 2025) updates for their [Qwen3](https://docs.unsloth.ai/models/qwen3-how-to-run-and-fine-tune) 4B, 30B and 235B models, introducing both \"thinking\" and \"non-thinking\" variants. The non-thinking '**Qwen3-30B-A3B-Instruct-2507**' and '**Qwen3-235B-A22B-Instruct-2507'** features a 256K context window, improved instruction following, multilingual capabilities and alignment.\n\nThe thinking models '**Qwen3-30B-A3B-Thinking-2507**' and '**Qwen3-235B-A22B-Thinking-2507**' excel at reasoning, with the 235B achieving SOTA results in logic, math, science, coding, and advanced academic tasks.\n\n[Unsloth](https://github.com/unslothai/unsloth) also now supports fine-tuning and [Reinforcement Learning (RL)](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide) of Qwen3-2507 models — 2x faster, with 70% less VRAM, and 8x longer context lengths\n\n<a href=\"#run-qwen3-30b-a3b-2507-tutorials\" class=\"button secondary\">Run 30B-A3B</a><a href=\"#run-qwen3-235b-a22b-thinking-2507\" class=\"button secondary\">Run 235B-A22B</a><a href=\"#fine-tuning-qwen3-2507-with-unsloth\" class=\"button secondary\">Fine-tune Qwen3-2507</a>\n\n**Unsloth** [**Dynamic 2.0**](https://docs.unsloth.ai/basics/unsloth-dynamic-2.0-ggufs) **GGUFs:**\n\n| Model                    | GGUFs to run:                                                                                                                                                 |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| Qwen3-**4B-2507**        | [Instruct](https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF) • [Thinking](https://huggingface.co/unsloth/Qwen3-4B-Thinking-2507-GGUF)               |\n| Qwen3-**30B-A3B**-2507   | [Instruct](#llama.cpp-run-qwen3-30b-a3b-instruct-2507-tutorial) • [Thinking](https://huggingface.co/unsloth/Qwen3-30B-A3B-Thinking-2507-GGUF)                 |\n| Qwen3-**235B-A22B**-2507 | [Instruct](https://huggingface.co/unsloth/Qwen3-235B-A22B-Instruct-2507-GGUF) • [Thinking](https://huggingface.co/unsloth/Qwen3-235B-A22B-Thinking-2507-GGUF) |\n\n{% hint style=\"success\" %}\nThe settings for the Thinking and Instruct model are different.\\\nThe thinking model uses temperature = 0.6, but the instruct model uses temperature = 0.7\\\nThe thinking model uses top\\_p = 0.95, but the instruct model uses top\\_p = 0.8\n{% endhint %}\n\nTo achieve optimal performance, Qwen recommends these settings:\n\n| Instruct Model Settings:                                                                                      | Thinking Model Settings:                                                                                      |\n| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |\n| <mark style=\"background-color:blue;\">`Temperature = 0.7`</mark>                                               | <mark style=\"background-color:blue;\">`Temperature = 0.6`</mark>                                               |\n| `Min_P = 0.00` (llama.cpp's default is 0.1)                                                                   | `Min_P = 0.00` (llama.cpp's default is 0.1)                                                                   |\n| `Top_P = 0.80`                                                                                                | `Top_P = 0.95`                                                                                                |\n| `TopK = 20`                                                                                                   | `TopK = 20`                                                                                                   |\n| `presence_penalty = 0.0 to 2.0` (llama.cpp default turns it off, but to reduce repetitions, you can use this) | `presence_penalty = 0.0 to 2.0` (llama.cpp default turns it off, but to reduce repetitions, you can use this) |\n\n**Adequate Output Length**: Use an output length of `32,768` tokens for most queries, which is adequate for most queries.\n\nChat template for both Thinking (thinking has `<think></think>`) and Instruct is below:\n\n## 📖 Run Qwen3-30B-A3B-2507 Tutorials\n\nBelow are guides for the [Thinking](#thinking-qwen3-30b-a3b-thinking-2507) and [Instruct](#instruct-qwen3-30b-a3b-instruct-2507) versions of the model.\n\n### Instruct: Qwen3-30B-A3B-Instruct-2507\n\nGiven that this is a non thinking model, there is no need to set `thinking=False` and the model does not generate `<think> </think>` blocks.\n\n#### ⚙️Best Practices\n\nTo achieve optimal performance, Qwen recommends the following settings:\n\n* We suggest using `temperature=0.7, top_p=0.8, top_k=20, and min_p=0.0` `presence_penalty` between 0 and 2 if the framework supports to reduce endless repetitions.\n* **`temperature = 0.7`**\n* `top_k = 20`\n* `min_p = 0.00` (llama.cpp's default is 0.1)\n* **`top_p = 0.80`**\n* `presence_penalty = 0.0 to 2.0` (llama.cpp default turns it off, but to reduce repetitions, you can use this) Try 1.0 for example.\n* Supports up to `262,144` context natively but you can set it to `32,768` tokens for less RAM use\n\n#### 🦙 Ollama: Run Qwen3-30B-A3B-Instruct-2507 Tutorial\n\n1. Install `ollama` if you haven't already! You can only run models up to 32B in size.\n\n2. Run the model! Note you can call `ollama serve`in another terminal if it fails! We include all our fixes and suggested parameters (temperature etc) in `params` in our Hugging Face upload!\n\n#### :sparkles: Llama.cpp: Run Qwen3-30B-A3B-Instruct-2507 Tutorial\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. You can directly pull from HuggingFace via:\n\n3. Download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose UD\\_Q4\\_K\\_XL or other quantized versions.",
+  "code_samples": [
+    {
+      "code": "<|im_start|>user\nHey there!<|im_end|>\n<|im_start|>assistant\nWhat is 1+1?<|im_end|>\n<|im_start|>user\n2<|im_end|>\n<|im_start|>assistant",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils -y\ncurl -fsSL https://ollama.com/install.sh | sh",
+      "language": "bash"
+    },
+    {
+      "code": "ollama run hf.co/unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF:UD-Q4_K_XL",
+      "language": "bash"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli \\\n       -hf unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF:Q4_K_XL \\\n       --jinja -ngl 99 --threads -1 --ctx-size 32768 \\\n       --temp 0.7 --min-p 0.0 --top-p 0.80 --top-k 20 --presence-penalty 1.0",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "⚙️Best Practices",
+      "id": "⚙️best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "📖 Run Qwen3-30B-A3B-2507 Tutorials",
+      "id": "📖-run-qwen3-30b-a3b-2507-tutorials"
+    },
+    {
+      "level": "h3",
+      "text": "Instruct: Qwen3-30B-A3B-Instruct-2507",
+      "id": "instruct:-qwen3-30b-a3b-instruct-2507"
+    }
+  ],
+  "url": "llms-txt#qwen3-2507:-run-locally-guide",
+  "links": []
+}

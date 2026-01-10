@@ -1,0 +1,8 @@
+{
+  "title": "Create a sub-agent",
+  "content": "subagent = create_agent(model=\"...\", tools=[...])  # [!code highlight]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-sub-agent",
+  "links": []
+}

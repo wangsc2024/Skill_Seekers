@@ -1,0 +1,273 @@
+{
+  "title": "Streaming API",
+  "content": "Source: https://docs.langchain.com/langsmith/streaming\n\n[LangGraph SDK](/langsmith/langgraph-python-sdk) allows you to [stream outputs](/oss/python/langgraph/streaming/) from the [LangSmith Deployment API](/langsmith/server-api-ref).\n\n<Note>\n  LangGraph SDK and Agent Server are a part of [LangSmith](/langsmith/home).\n</Note>\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    Create a thread:\n\nCreate a streaming run:\n\n<Accordion title=\"Extended example: streaming updates\">\n  This is an example graph you can run in the Agent Server.\n  See [LangSmith quickstart](/langsmith/deployment-quickstart) for more details.\n\nOnce you have a running Agent Server, you can interact with it using\n  [LangGraph SDK](/langsmith/langgraph-python-sdk)\n\n<Tabs>\n    <Tab title=\"Python\">\n\n1. The `client.runs.stream()` method returns an iterator that yields streamed outputs.\n         2\\. Set `stream_mode=\"updates\"` to stream only the updates to the graph state after each node. Other stream modes are also available. See [supported stream modes](#supported-stream-modes) for details.\n    </Tab>\n\n<Tab title=\"JavaScript\">\n\n1. The `client.runs.stream()` method returns an iterator that yields streamed outputs.\n      2. Set `streamMode: \"updates\"` to stream only the updates to the graph state after each node. Other stream modes are also available. See [supported stream modes](#supported-stream-modes) for details.\n    </Tab>\n\n<Tab title=\"cURL\">\n      Create a thread:\n\nCreate a streaming run:\n\n### Supported stream modes\n\n| Mode                             | Description                                                                                                                                                                         | LangGraph Library Method                                                                                      |\n| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |\n| [`values`](#stream-graph-state)  | Stream the full graph state after each [super-step](/langsmith/graph-rebuild#graphs).                                                                                               | `.stream()` / `.astream()` with [`stream_mode=\"values\"`](/oss/python/langgraph/streaming#stream-graph-state)  |\n| [`updates`](#stream-graph-state) | Streams the updates to the state after each step of the graph. If multiple updates are made in the same step (e.g., multiple nodes are run), those updates are streamed separately. | `.stream()` / `.astream()` with [`stream_mode=\"updates\"`](/oss/python/langgraph/streaming#stream-graph-state) |\n| [`messages-tuple`](#messages)    | Streams LLM tokens and metadata for the graph node where the LLM is invoked (useful for chat apps).                                                                                 | `.stream()` / `.astream()` with [`stream_mode=\"messages\"`](/oss/python/langgraph/streaming#messages)          |\n| [`debug`](#debug)                | Streams as much information as possible throughout the execution of the graph.                                                                                                      | `.stream()` / `.astream()` with [`stream_mode=\"debug\"`](/oss/python/langgraph/streaming#stream-graph-state)   |\n| [`custom`](#stream-custom-data)  | Streams custom data from inside your graph                                                                                                                                          | `.stream()` / `.astream()` with [`stream_mode=\"custom\"`](/oss/python/langgraph/streaming#stream-custom-data)  |\n| [`events`](#stream-events)       | Stream all events (including the state of the graph); mainly useful when migrating large LCEL apps.                                                                                 | `.astream_events()`                                                                                           |\n\n### Stream multiple modes\n\nYou can pass a list as the `stream_mode` parameter to stream multiple modes at once.\n\nThe streamed outputs will be tuples of `(mode, chunk)` where `mode` is the name of the stream mode and `chunk` is the data streamed by that mode.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\n## Stream graph state\n\nUse the stream modes `updates` and `values` to stream the state of the graph as it executes.\n\n* `updates` streams the **updates** to the state after each step of the graph.\n* `values` streams the **full value** of the state after each step of the graph.\n\n<Accordion title=\"Example graph\">\n  \n</Accordion>\n\n<Note>\n  **Stateful runs**\n  Examples below assume that you want to **persist the outputs** of a streaming run in the [checkpointer](/oss/python/langgraph/persistence) DB and have created a thread. To create a thread:\n\n<Tabs>\n    <Tab title=\"Python\">\n      \n    </Tab>\n\n<Tab title=\"JavaScript\">\n      \n    </Tab>\n\n<Tab title=\"cURL\">\n      \n    </Tab>\n  </Tabs>\n\nIf you don't need to persist the outputs of a run, you can pass `None` instead of `thread_id` when streaming.\n</Note>\n\n### Stream Mode: `updates`\n\nUse this to stream only the **state updates** returned by the nodes after each step. The streamed outputs include the name of the node as well as the update.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\n### Stream Mode: `values`\n\nUse this to stream the **full state** of the graph after each step.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\nTo include outputs from [subgraphs](/oss/python/langgraph/use-subgraphs) in the streamed outputs, you can set `subgraphs=True` in the `.stream()` method of the parent graph. This will stream outputs from both the parent graph and any subgraphs.\n\n1. Set `stream_subgraphs=True` to stream outputs from subgraphs.\n\n<Accordion title=\"Extended example: streaming from subgraphs\">\n  This is an example graph you can run in the Agent Server.\n  See [LangSmith quickstart](/langsmith/deployment-quickstart) for more details.\n\nOnce you have a running Agent Server, you can interact with it using\n  [LangGraph SDK](/langsmith/langgraph-python-sdk)\n\n<Tabs>\n    <Tab title=\"Python\">\n\n1. Set `stream_subgraphs=True` to stream outputs from subgraphs.\n    </Tab>\n\n<Tab title=\"JavaScript\">\n\n1. Set `streamSubgraphs: true` to stream outputs from subgraphs.\n    </Tab>\n\n<Tab title=\"cURL\">\n      Create a thread:\n\nCreate a streaming run:\n\n**Note** that we are receiving not just the node updates, but we also the namespaces which tell us what graph (or subgraph) we are streaming from.\n</Accordion>\n\nUse the `debug` streaming mode to stream as much information as possible throughout the execution of the graph. The streamed outputs include the name of the node as well as the full state.\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\nUse the `messages-tuple` streaming mode to stream Large Language Model (LLM) outputs **token by token** from any part of your graph, including nodes, tools, subgraphs, or tasks.\n\nThe streamed output from [`messages-tuple` mode](#supported-stream-modes) is a tuple `(message_chunk, metadata)` where:\n\n* `message_chunk`: the token or message segment from the LLM.\n* `metadata`: a dictionary containing details about the graph node and LLM invocation.\n\n<Accordion title=\"Example graph\">\n\n1. Note that the message events are emitted even when the LLM is run using `invoke` rather than `stream`.\n</Accordion>\n\n<Tabs>\n  <Tab title=\"Python\">\n\n1. The \"messages-tuple\" stream mode returns an iterator of tuples `(message_chunk, metadata)` where `message_chunk` is the token streamed by the LLM and `metadata` is a dictionary with information about the graph node where the LLM was called and other information.\n  </Tab>\n\n<Tab title=\"JavaScript\">\n\n1. The \"messages-tuple\" stream mode returns an iterator of tuples `(message_chunk, metadata)` where `message_chunk` is the token streamed by the LLM and `metadata` is a dictionary with information about the graph node where the LLM was called and other information.\n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\n### Filter LLM tokens\n\n* To filter the streamed tokens by LLM invocation, you can [associate `tags` with LLM invocations](/oss/python/langgraph/streaming#filter-by-llm-invocation).\n* To stream tokens only from specific nodes, use `stream_mode=\"messages\"` and [filter the outputs by the `langgraph_node` field](/oss/python/langgraph/streaming#filter-by-node) in the streamed metadata.\n\n## Stream custom data\n\nTo send **custom user-defined data**:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\nTo stream all events, including the state of the graph:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"JavaScript\">\n    \n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\nIf you don't want to **persist the outputs** of a streaming run in the [checkpointer](/oss/python/langgraph/persistence) DB, you can create a stateless run without creating a thread:\n\n<Tabs>\n  <Tab title=\"Python\">\n\n1. We are passing `None` instead of a `thread_id` UUID.\n  </Tab>\n\n<Tab title=\"JavaScript\">\n\n1. We are passing `None` instead of a `thread_id` UUID.\n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\nLangSmith allows you to join an active [background run](/langsmith/background-run) and stream outputs from it. To do so, you can use [LangGraph SDK's](/langsmith/langgraph-python-sdk) `client.runs.join_stream` method:\n\n<Tabs>\n  <Tab title=\"Python\">\n\n1. This is the `run_id` of an existing run you want to join.\n  </Tab>\n\n<Tab title=\"JavaScript\">\n\n1. This is the `run_id` of an existing run you want to join.\n  </Tab>\n\n<Tab title=\"cURL\">\n    \n  </Tab>\n</Tabs>\n\n<Warning>\n  **Outputs not buffered**\n  When you use `.join_stream`, output is not buffered, so any output produced before joining will not be received.\n</Warning>\n\nFor API usage and implementation, refer to the [API reference](https://langchain-ai.github.io/langgraph/cloud/reference/api/api_ref.html#tag/thread-runs/POST/threads/\\{thread_id}/runs/stream).\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/streaming.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">\n    Create a thread:",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a streaming run:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n<Accordion title=\"Extended example: streaming updates\">\n  This is an example graph you can run in the Agent Server.\n  See [LangSmith quickstart](/langsmith/deployment-quickstart) for more details.",
+      "language": "unknown"
+    },
+    {
+      "code": "Once you have a running Agent Server, you can interact with it using\n  [LangGraph SDK](/langsmith/langgraph-python-sdk)\n\n  <Tabs>\n    <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The `client.runs.stream()` method returns an iterator that yields streamed outputs.\n         2\\. Set `stream_mode=\"updates\"` to stream only the updates to the graph state after each node. Other stream modes are also available. See [supported stream modes](#supported-stream-modes) for details.\n    </Tab>\n\n    <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The `client.runs.stream()` method returns an iterator that yields streamed outputs.\n      2. Set `streamMode: \"updates\"` to stream only the updates to the graph state after each node. Other stream modes are also available. See [supported stream modes](#supported-stream-modes) for details.\n    </Tab>\n\n    <Tab title=\"cURL\">\n      Create a thread:",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a streaming run:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n  </Tabs>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n### Supported stream modes\n\n| Mode                             | Description                                                                                                                                                                         | LangGraph Library Method                                                                                      |\n| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |\n| [`values`](#stream-graph-state)  | Stream the full graph state after each [super-step](/langsmith/graph-rebuild#graphs).                                                                                               | `.stream()` / `.astream()` with [`stream_mode=\"values\"`](/oss/python/langgraph/streaming#stream-graph-state)  |\n| [`updates`](#stream-graph-state) | Streams the updates to the state after each step of the graph. If multiple updates are made in the same step (e.g., multiple nodes are run), those updates are streamed separately. | `.stream()` / `.astream()` with [`stream_mode=\"updates\"`](/oss/python/langgraph/streaming#stream-graph-state) |\n| [`messages-tuple`](#messages)    | Streams LLM tokens and metadata for the graph node where the LLM is invoked (useful for chat apps).                                                                                 | `.stream()` / `.astream()` with [`stream_mode=\"messages\"`](/oss/python/langgraph/streaming#messages)          |\n| [`debug`](#debug)                | Streams as much information as possible throughout the execution of the graph.                                                                                                      | `.stream()` / `.astream()` with [`stream_mode=\"debug\"`](/oss/python/langgraph/streaming#stream-graph-state)   |\n| [`custom`](#stream-custom-data)  | Streams custom data from inside your graph                                                                                                                                          | `.stream()` / `.astream()` with [`stream_mode=\"custom\"`](/oss/python/langgraph/streaming#stream-custom-data)  |\n| [`events`](#stream-events)       | Stream all events (including the state of the graph); mainly useful when migrating large LCEL apps.                                                                                 | `.astream_events()`                                                                                           |\n\n### Stream multiple modes\n\nYou can pass a list as the `stream_mode` parameter to stream multiple modes at once.\n\nThe streamed outputs will be tuples of `(mode, chunk)` where `mode` is the name of the stream mode and `chunk` is the data streamed by that mode.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Stream graph state\n\nUse the stream modes `updates` and `values` to stream the state of the graph as it executes.\n\n* `updates` streams the **updates** to the state after each step of the graph.\n* `values` streams the **full value** of the state after each step of the graph.\n\n<Accordion title=\"Example graph\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n<Note>\n  **Stateful runs**\n  Examples below assume that you want to **persist the outputs** of a streaming run in the [checkpointer](/oss/python/langgraph/persistence) DB and have created a thread. To create a thread:\n\n  <Tabs>\n    <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n    <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n    <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n  </Tabs>\n\n  If you don't need to persist the outputs of a run, you can pass `None` instead of `thread_id` when streaming.\n</Note>\n\n### Stream Mode: `updates`\n\nUse this to stream only the **state updates** returned by the nodes after each step. The streamed outputs include the name of the node as well as the update.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Stream Mode: `values`\n\nUse this to stream the **full state** of the graph after each step.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Subgraphs\n\nTo include outputs from [subgraphs](/oss/python/langgraph/use-subgraphs) in the streamed outputs, you can set `subgraphs=True` in the `.stream()` method of the parent graph. This will stream outputs from both the parent graph and any subgraphs.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Set `stream_subgraphs=True` to stream outputs from subgraphs.\n\n<Accordion title=\"Extended example: streaming from subgraphs\">\n  This is an example graph you can run in the Agent Server.\n  See [LangSmith quickstart](/langsmith/deployment-quickstart) for more details.",
+      "language": "unknown"
+    },
+    {
+      "code": "Once you have a running Agent Server, you can interact with it using\n  [LangGraph SDK](/langsmith/langgraph-python-sdk)\n\n  <Tabs>\n    <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Set `stream_subgraphs=True` to stream outputs from subgraphs.\n    </Tab>\n\n    <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Set `streamSubgraphs: true` to stream outputs from subgraphs.\n    </Tab>\n\n    <Tab title=\"cURL\">\n      Create a thread:",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a streaming run:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n  </Tabs>\n\n  **Note** that we are receiving not just the node updates, but we also the namespaces which tell us what graph (or subgraph) we are streaming from.\n</Accordion>\n\n<a id=\"debug\" />\n\n## Debugging\n\nUse the `debug` streaming mode to stream as much information as possible throughout the execution of the graph. The streamed outputs include the name of the node as well as the full state.\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n<a id=\"messages\" />\n\n## LLM tokens\n\nUse the `messages-tuple` streaming mode to stream Large Language Model (LLM) outputs **token by token** from any part of your graph, including nodes, tools, subgraphs, or tasks.\n\nThe streamed output from [`messages-tuple` mode](#supported-stream-modes) is a tuple `(message_chunk, metadata)` where:\n\n* `message_chunk`: the token or message segment from the LLM.\n* `metadata`: a dictionary containing details about the graph node and LLM invocation.\n\n<Accordion title=\"Example graph\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Note that the message events are emitted even when the LLM is run using `invoke` rather than `stream`.\n</Accordion>\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The \"messages-tuple\" stream mode returns an iterator of tuples `(message_chunk, metadata)` where `message_chunk` is the token streamed by the LLM and `metadata` is a dictionary with information about the graph node where the LLM was called and other information.\n  </Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. The \"messages-tuple\" stream mode returns an iterator of tuples `(message_chunk, metadata)` where `message_chunk` is the token streamed by the LLM and `metadata` is a dictionary with information about the graph node where the LLM was called and other information.\n  </Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Filter LLM tokens\n\n* To filter the streamed tokens by LLM invocation, you can [associate `tags` with LLM invocations](/oss/python/langgraph/streaming#filter-by-llm-invocation).\n* To stream tokens only from specific nodes, use `stream_mode=\"messages\"` and [filter the outputs by the `langgraph_node` field](/oss/python/langgraph/streaming#filter-by-node) in the streamed metadata.\n\n## Stream custom data\n\nTo send **custom user-defined data**:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Stream events\n\nTo stream all events, including the state of the graph:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Stateless runs\n\nIf you don't want to **persist the outputs** of a streaming run in the [checkpointer](/oss/python/langgraph/persistence) DB, you can create a stateless run without creating a thread:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. We are passing `None` instead of a `thread_id` UUID.\n  </Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. We are passing `None` instead of a `thread_id` UUID.\n  </Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Join and stream\n\nLangSmith allows you to join an active [background run](/langsmith/background-run) and stream outputs from it. To do so, you can use [LangGraph SDK's](/langsmith/langgraph-python-sdk) `client.runs.join_stream` method:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. This is the `run_id` of an existing run you want to join.\n  </Tab>\n\n  <Tab title=\"JavaScript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "1. This is the `run_id` of an existing run you want to join.\n  </Tab>\n\n  <Tab title=\"cURL\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Basic usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Supported stream modes",
+      "id": "supported-stream-modes"
+    },
+    {
+      "level": "h3",
+      "text": "Stream multiple modes",
+      "id": "stream-multiple-modes"
+    },
+    {
+      "level": "h2",
+      "text": "Stream graph state",
+      "id": "stream-graph-state"
+    },
+    {
+      "level": "h3",
+      "text": "Stream Mode: `updates`",
+      "id": "stream-mode:-`updates`"
+    },
+    {
+      "level": "h3",
+      "text": "Stream Mode: `values`",
+      "id": "stream-mode:-`values`"
+    },
+    {
+      "level": "h2",
+      "text": "Subgraphs",
+      "id": "subgraphs"
+    },
+    {
+      "level": "h2",
+      "text": "Debugging",
+      "id": "debugging"
+    },
+    {
+      "level": "h2",
+      "text": "LLM tokens",
+      "id": "llm-tokens"
+    },
+    {
+      "level": "h3",
+      "text": "Filter LLM tokens",
+      "id": "filter-llm-tokens"
+    },
+    {
+      "level": "h2",
+      "text": "Stream custom data",
+      "id": "stream-custom-data"
+    },
+    {
+      "level": "h2",
+      "text": "Stream events",
+      "id": "stream-events"
+    },
+    {
+      "level": "h2",
+      "text": "Stateless runs",
+      "id": "stateless-runs"
+    },
+    {
+      "level": "h2",
+      "text": "Join and stream",
+      "id": "join-and-stream"
+    },
+    {
+      "level": "h2",
+      "text": "API reference",
+      "id": "api-reference"
+    }
+  ],
+  "url": "llms-txt#streaming-api",
+  "links": []
+}

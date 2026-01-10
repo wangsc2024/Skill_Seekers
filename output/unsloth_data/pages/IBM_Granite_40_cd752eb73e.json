@@ -1,0 +1,50 @@
+{
+  "title": "IBM Granite 4.0",
+  "content": "How to run IBM Granite-4.0 with Unsloth GGUFs on llama.cpp, Ollama and how to fine-tune!\n\nIBM releases Granite-4.0 models with 3 sizes including **Nano** (350M & 1B), **Micro** (3B), **Tiny** (7B/1B active) and **Small** (32B/9B active). Trained on 15T tokens, IBM’s new Hybrid (H) Mamba architecture enables Granite-4.0 models to run faster with lower memory use.\n\nLearn [how to run](#run-granite-4.0-tutorials) Unsloth Granite-4.0 Dynamic GGUFs or fine-tune/RL the model. You can [fine-tune Granite-4.0](#fine-tuning-granite-4.0-in-unsloth) with our free Colab notebook for a support agent use-case.\n\n<a href=\"#run-granite-4.0-tutorials\" class=\"button secondary\">Running Tutorial</a><a href=\"#fine-tuning-granite-4.0-in-unsloth\" class=\"button secondary\">Fine-tuning Tutorial</a>\n\n**Unsloth Granite-4.0 uploads:**\n\n<table><thead><tr><th width=\"249\">Dynamic GGUFs</th><th>Dynamic 4-bit + FP8</th><th>16-bit Instruct</th></tr></thead><tbody><tr><td><ul><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-350m-GGUF\">H-350M</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-350m-GGUF\">350M</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-1b-GGUF\">H-1B</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-1b-GGUF\">1B</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-small-GGUF\">H-Small</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-tiny-GGUF\">H-Tiny</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-micro-GGUF\">H-Micro</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-micro-GGUF\">Micro</a></li></ul></td><td><p>Dynamic 4-bit Instruct:</p><ul><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-micro-unsloth-bnb-4bit\">H-Micro</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-micro-unsloth-bnb-4bit\">Micro</a></li></ul><p>FP8 Dynamic:</p><ul><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-small-FP8-Dynamic\">H-Small FP8</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-tiny-FP8-Dynamic\">H-Tiny FP8</a></li></ul></td><td><ul><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-350m\">H-350M</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-350m\">350M</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-1b\">H-1B</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-1b\">1B</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-small\">H-Small</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-tiny\">H-Tiny</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-h-micro\">H-Micro</a></li><li><a href=\"https://huggingface.co/unsloth/granite-4.0-micro\">Micro</a></li></ul></td></tr></tbody></table>\n\nYou can also view our [Granite-4.0 collection](https://huggingface.co/collections/unsloth/granite-40-68ddf64b4a8717dc22a9322d) for all uploads including Dynamic Float8 quants etc.\n\n**Granite-4.0 Models Explanations:**\n\n* **Nano and H-Nano:** The 350M and 1B models offer strong instruction-following abilities, enabling advanced on-device and edge AI and research/fine-tuning applications.\n* **H-Small (MoE):** Enterprise workhorse for daily tasks, supports multiple long-context sessions on entry GPUs like L40S (32B total, 9B active).\n* **H-Tiny (MoE):** Fast, cost-efficient for high-volume, low-complexity tasks; optimized for local and edge use (7B total, 1B active).\n* **H-Micro (Dense):** Lightweight, efficient for high-volume, low-complexity workloads; ideal for local and edge deployment (3B total).\n* **Micro (Dense):** Alternative dense option when Mamba2 isn’t fully supported (3B total).\n\n## Run Granite-4.0 Tutorials\n\n### :gear: Recommended Inference Settings\n\nIBM recommends these settings:\n\n`temperature=0.0`, `top_p=1.0`, `top_k=0`\n\n* <mark style=\"background-color:green;\">**Temperature of 0.0**</mark>\n* Top\\_K = 0\n* Top\\_P = 1.0\n* Recommended minimum context: 16,384\n* Maximum context length window: 131,072 (128K context)\n\n### :llama: Ollama: Run Granite-4.0 Tutorial\n\n1. Install `ollama` if you haven't already!\n\n2. Run the model! Note you can call `ollama serve`in another terminal if it fails! We include all our fixes and suggested parameters (temperature etc) in `params` in our Hugging Face upload! You can change the model name '`granite-4.0-h-small-GGUF`' to any Granite model like 'granite-4.0-h-micro:Q8\\_K\\_XL'.\n\n### 📖 llama.cpp: Run Granite-4.0 Tutorial\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. If you want to use `llama.cpp` directly to load models, you can do the below: (:Q4\\_K\\_XL) is the quantization type. You can also download via Hugging Face (point 3). This is similar to `ollama run`\n\n3. **OR** download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose Q4\\_K\\_M, or other quantized versions (like BF16 full precision).",
+  "code_samples": [
+    {
+      "code": "<|start_of_role|>system<|end_of_role|>You are a helpful assistant. Please ensure responses are professional, accurate, and safe.<|end_of_text|>\n<|start_of_role|>user<|end_of_role|>Please list one IBM Research laboratory located in the United States. You should only output its name and location.<|end_of_text|>\n<|start_of_role|>assistant<|end_of_role|>Almaden Research Center, San Jose, California<|end_of_text|>",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils -y\ncurl -fsSL https://ollama.com/install.sh | sh",
+      "language": "bash"
+    },
+    {
+      "code": "ollama run hf.co/unsloth/granite-4.0-h-small-GGUF:UD-Q4_K_XL",
+      "language": "bash"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli \\\n    -hf unsloth/granite-4.0-h-small-GGUF:UD-Q4_K_XL",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Run Granite-4.0 Tutorials",
+      "id": "run-granite-4.0-tutorials"
+    },
+    {
+      "level": "h3",
+      "text": ":gear: Recommended Inference Settings",
+      "id": ":gear:-recommended-inference-settings"
+    },
+    {
+      "level": "h3",
+      "text": ":llama: Ollama: Run Granite-4.0 Tutorial",
+      "id": ":llama:-ollama:-run-granite-4.0-tutorial"
+    },
+    {
+      "level": "h3",
+      "text": "📖 llama.cpp: Run Granite-4.0 Tutorial",
+      "id": "📖-llama.cpp:-run-granite-4.0-tutorial"
+    }
+  ],
+  "url": "llms-txt#ibm-granite-4.0",
+  "links": []
+}

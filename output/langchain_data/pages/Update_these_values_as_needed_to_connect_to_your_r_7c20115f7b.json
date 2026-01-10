@@ -1,0 +1,8 @@
+{
+  "title": "Update these values as needed to connect to your replicated clickhouse cluster.",
+  "content": "clickhouse:\n  external:\n    # If using a 3 node replicated setup, each replica in the cluster should have resource requests of 14+ cores and 24+ GB memory, and resource limit of 20 cores and 48 GB memory.\n    enabled: true\n    host: langsmith-ch-clickhouse-replicated.default.svc.cluster.local\n    port: \"8123\"\n    nativePort: \"9000\"\n    user: \"default\"\n    password: \"password\"\n    database: \"default\"\n    cluster: \"replicated\"\n\ncommonEnv:\n  - name: \"CLICKHOUSE_ASYNC_INSERT_WAIT_PCT_FLOAT\"\n    value: \"0\"\n```\n\n<Note>\n  Ensure that the Kubernetes cluster is configured with sufficient resources to scale to the recommended size. After deployment, all of the pods in the Kubernetes cluster should be in a `Running` state. Pods stuck in `Pending` may indicate that you are reaching node pool limits or need larger nodes.\n\nAlso, ensure that any ingress controller deployed on the cluster is able to handle the desired load to prevent bottlenecks.\n</Note>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/self-host-scale.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#update-these-values-as-needed-to-connect-to-your-replicated-clickhouse-cluster.",
+  "links": []
+}

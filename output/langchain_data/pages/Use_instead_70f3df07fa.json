@@ -1,0 +1,107 @@
+{
+  "title": "Use instead",
+  "content": "agent = create_agent(\"gpt-4o-mini\", tools=[some_tool])\npython v1 (new) theme={null}\n  from langchain.agents import create_agent\n\nagent = create_agent(\n      model=\"claude-sonnet-4-5-20250929\",\n      tools=[check_weather, search_web]\n  )\n  python v0 (old) theme={null}\n  from langgraph.prebuilt import create_react_agent, ToolNode\n\nagent = create_react_agent(\n      model=\"claude-sonnet-4-5-20250929\",\n      tools=ToolNode([check_weather, search_web]) # [!code highlight]\n  )\n  python v1 (new) theme={null}\n  from langchain.agents import create_agent\n  from langchain.agents.middleware import wrap_tool_call\n  from langchain.messages import ToolMessage\n\n@wrap_tool_call\n  def handle_tool_errors(request, handler):\n      \"\"\"Handle tool execution errors with custom messages.\"\"\"\n      try:\n          return handler(request)\n      except Exception as e:\n          # Only handle errors that occur during tool execution due to invalid inputs\n          # that pass schema validation but fail at runtime (e.g., invalid SQL syntax).\n          # Do NOT handle:\n          # - Network failures (use tool retry middleware instead)\n          # - Incorrect tool implementation errors (should bubble up)\n          # - Schema mismatch errors (already auto-handled by the framework)\n          #\n          # Return a custom error message to the model\n          return ToolMessage(\n              content=f\"Tool error: Please check your input and try again. ({str(e)})\",\n              tool_call_id=request.tool_call[\"id\"]\n          )\n\nagent = create_agent(\n      model=\"claude-sonnet-4-5-20250929\",\n      tools=[check_weather, search_web],\n      middleware=[handle_tool_errors]\n  )\n  python v0 (old) theme={null}\n  from langgraph.prebuilt import create_react_agent, ToolNode\n  from langchain.messages import ToolMessage\n\ndef handle_tool_error(error: Exception) -> str:\n      \"\"\"Custom error handler function.\"\"\"\n      return f\"Tool error: Please check your input and try again. ({str(error)})\"\n\nagent = create_react_agent(\n      model=\"claude-sonnet-4-5-20250929\",\n      tools=ToolNode(\n          [check_weather, search_web],\n          handle_tool_errors=handle_tool_error  # [!code highlight]\n      )\n  )\n  python v1 (new) theme={null}\n  from langchain.agents import create_agent\n  from langchain.agents.structured_output import ToolStrategy, ProviderStrategy\n  from pydantic import BaseModel\n\nclass OutputSchema(BaseModel):\n      summary: str\n      sentiment: str\n\n# Using ToolStrategy\n  agent = create_agent(\n      model=\"gpt-4o-mini\",\n      tools=tools,\n      # explicitly using tool strategy\n      response_format=ToolStrategy(OutputSchema)  # [!code highlight]\n  )\n  python v0 (old) theme={null}\n  from langgraph.prebuilt import create_react_agent\n  from pydantic import BaseModel\n\nclass OutputSchema(BaseModel):\n      summary: str\n      sentiment: str\n\nagent = create_react_agent(\n      model=\"gpt-4o-mini\",\n      tools=tools,\n      # using tool strategy by default with no option for provider strategy\n      response_format=OutputSchema  # [!code highlight]\n  )\n\nagent = create_react_agent(\n      model=\"gpt-4o-mini\",\n      tools=tools,\n      # using a custom prompt to instruct the model to generate the output schema\n      response_format=(\"please generate ...\", OutputSchema)  # [!code highlight]\n  )\n  python v1 (new) theme={null}\n  from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\n\n@dataclass\n  class Context:\n      user_id: str\n      session_id: str\n\nagent = create_agent(\n      model=model,\n      tools=tools,\n      context_schema=Context  # [!code highlight]\n  )\n\nresult = agent.invoke(\n      {\"messages\": [{\"role\": \"user\", \"content\": \"Hello\"}]},\n      context=Context(user_id=\"123\", session_id=\"abc\")  # [!code highlight]\n  )\n  python v0 (old) theme={null}\n  from langgraph.prebuilt import create_react_agent\n\nagent = create_react_agent(model, tools)\n\n# Pass context via configurable\n  result = agent.invoke(\n      {\"messages\": [{\"role\": \"user\", \"content\": \"Hello\"}]},\n      config={  # [!code highlight]\n          \"configurable\": {  # [!code highlight]\n              \"user_id\": \"123\",  # [!code highlight]\n              \"session_id\": \"abc\"  # [!code highlight]\n          }  # [!code highlight]\n      }  # [!code highlight]\n  )\n  python v1 (new) theme={null}\n  from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\"gpt-5-nano\")\n  response = model.invoke(\"Explain AI\")\n\nfor block in response.content_blocks:\n      if block[\"type\"] == \"reasoning\":\n          print(block.get(\"reasoning\"))\n      elif block[\"type\"] == \"text\":\n          print(block.get(\"text\"))\n  python v0 (old) theme={null}\n  # Provider-native formats vary; you needed per-provider handling\n  response = model.invoke(\"Explain AI\")\n  for item in response.content:\n      if item.get(\"type\") == \"reasoning\":\n          ...  # OpenAI-style reasoning\n      elif item.get(\"type\") == \"thinking\":\n          ...  # Anthropic-style thinking\n      elif item.get(\"type\") == \"text\":\n          ...  # Text\n  python v1 (new) theme={null}\n  from langchain.messages import HumanMessage\n\nmessage = HumanMessage(content_blocks=[\n      {\"type\": \"text\", \"text\": \"Describe this image.\"},\n      {\"type\": \"image\", \"url\": \"https://example.com/image.jpg\"},\n  ])\n  res = model.invoke([message])\n  python v0 (old) theme={null}\n  from langchain.messages import HumanMessage\n\nmessage = HumanMessage(content=[\n      # Provider-native structure\n      {\"type\": \"text\", \"text\": \"Describe this image.\"},\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://example.com/image.jpg\"}},\n  ])\n  res = model.invoke([message])\n  python  theme={null}",
+  "code_samples": [
+    {
+      "code": "<Note>\n  Dynamic model functions can return pre-bound models if structured output is *not* used.\n</Note>\n\n### Tools\n\nThe [`tools`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent\\(tools\\)) argument to [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) accepts a list of:\n\n* LangChain [`BaseTool`](https://reference.langchain.com/python/langchain/tools/#langchain.tools.BaseTool) instances (functions decorated with [`@tool`](https://reference.langchain.com/python/langchain/tools/#langchain.tools.tool))\n* Callable objects (functions) with proper type hints and a docstring\n* `dict` that represents a built-in provider tools\n\nThe argument will no longer accept [`ToolNode`](https://reference.langchain.com/python/langgraph/agents/#langgraph.prebuilt.tool_node.ToolNode) instances.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n#### Handling tool errors\n\nYou can now configure the handling of tool errors with middleware implementing the `wrap_tool_call` method.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Structured output\n\n#### Node changes\n\nStructured output used to be generated in a separate node from the main agent. This is no longer the case.\nWe generate structured output in the main loop, reducing cost and latency.\n\n#### Tool and provider strategies\n\nIn v1, there are two new structured output strategies:\n\n* `ToolStrategy` uses artificial tool calling to generate structured output\n* `ProviderStrategy` uses provider-native structured output generation\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n#### Prompted output removed\n\n**Prompted output** is no longer supported via the `response_format` argument. Compared to strategies\nlike artificial tool calling and provider native structured output, prompted output has not proven to be particularly reliable.\n\n### Streaming node name rename\n\nWhen streaming events from agents, the node name has changed from `\"agent\"` to `\"model\"` to better reflect the node's purpose.\n\n### Runtime context\n\nWhen you invoke an agent, it's often the case that you want to pass two types of data:\n\n* Dynamic state that changes throughout the conversation (e.g., message history)\n* Static context that doesn't change during the conversation (e.g., user metadata)\n\nIn v1, static context is supported by setting the `context` parameter to `invoke` and `stream`.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n<Note>\n  The old `config[\"configurable\"]` pattern still works for backward compatibility, but using the new `context` parameter is recommended for new applications or applications migrating to v1.\n</Note>\n\n***\n\n## Standard content\n\nIn v1, messages gain provider-agnostic standard content blocks. Access them via [`message.content_blocks`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.messages.BaseMessage.content_blocks) for a consistent, typed view across providers. The existing [`message.content`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.messages.BaseMessage.content_blocks) field remains unchanged for strings or provider-native structures.\n\n### What changed\n\n* New [`content_blocks`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.messages.BaseMessage.content_blocks) property on messages for normalized content\n* Standardized block shapes, documented in [Messages](/oss/python/langchain/messages#standard-content-blocks)\n* Optional serialization of standard blocks into `content` via `LC_OUTPUT_VERSION=v1` or `output_version=\"v1\"`\n\n### Read standardized content\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Create multimodal messages\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Example block shapes",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Tools",
+      "id": "tools"
+    },
+    {
+      "level": "h3",
+      "text": "Structured output",
+      "id": "structured-output"
+    },
+    {
+      "level": "h3",
+      "text": "Streaming node name rename",
+      "id": "streaming-node-name-rename"
+    },
+    {
+      "level": "h3",
+      "text": "Runtime context",
+      "id": "runtime-context"
+    },
+    {
+      "level": "h2",
+      "text": "Standard content",
+      "id": "standard-content"
+    },
+    {
+      "level": "h3",
+      "text": "What changed",
+      "id": "what-changed"
+    },
+    {
+      "level": "h3",
+      "text": "Read standardized content",
+      "id": "read-standardized-content"
+    },
+    {
+      "level": "h3",
+      "text": "Create multimodal messages",
+      "id": "create-multimodal-messages"
+    },
+    {
+      "level": "h3",
+      "text": "Example block shapes",
+      "id": "example-block-shapes"
+    }
+  ],
+  "url": "llms-txt#use-instead",
+  "links": []
+}

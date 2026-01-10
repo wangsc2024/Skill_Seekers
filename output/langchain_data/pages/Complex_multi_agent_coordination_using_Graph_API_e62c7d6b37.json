@@ -1,0 +1,8 @@
+{
+  "title": "Complex multi-agent coordination using Graph API",
+  "content": "coordination_graph = StateGraph(CoordinationState)\ncoordination_graph.add_node(\"orchestrator\", orchestrator_node)\ncoordination_graph.add_node(\"agent_a\", agent_a_node)\ncoordination_graph.add_node(\"agent_b\", agent_b_node)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#complex-multi-agent-coordination-using-graph-api",
+  "links": []
+}

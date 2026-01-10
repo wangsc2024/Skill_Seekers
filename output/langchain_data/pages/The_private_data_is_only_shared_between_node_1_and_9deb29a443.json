@@ -1,0 +1,8 @@
+{
+  "title": "The private data is only shared between node_1 and node_2",
+  "content": "def node_1(state: OverallState) -> Node1Output:\n    output = {\"private_data\": \"set by node_1\"}\n    print(f\"Entered node `node_1`:\\n\\tInput: {state}.\\n\\tReturned: {output}\")\n    return output",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-private-data-is-only-shared-between-node_1-and-node_2",
+  "links": []
+}

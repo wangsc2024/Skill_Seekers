@@ -1,0 +1,14 @@
+{
+  "title": "Upload files with traces",
+  "content": "Source: https://docs.langchain.com/langsmith/upload-files-with-traces\n\n<Check>\n  Before diving into this content, it would be helpful to read the following guides:\n\n* [Trace with LangSmith using the traceable decorator or wrapper](/langsmith/annotate-code#use-traceable--traceable)\n</Check>\n\n<Note>\n  The following features are available in the following SDK versions:\n\n* Python SDK: >=0.1.141\n  * JS/TS SDK: >=0.2.5\n</Note>\n\nLangSmith supports uploading binary files (such as images, audio, videos, PDFs, and CSVs) with your traces. This is particularly useful when working with LLM pipelines using multimodal inputs or outputs.\n\nIn both the Python and TypeScript SDKs, attachments can be added to your traces by specifying the MIME type and binary content of each file. This guide explains how to define and trace attachments using the `Attachment` type in Python and `Uint8Array` / `ArrayBuffer` in TypeScript.\n\nIn the Python SDK, you can use the `Attachment` type to add files to your traces. Each `Attachment` requires:\n\n* `mime_type` (str): The MIME type of the file (e.g., `\"image/png\"`).\n* `data` (bytes | Path): The binary content of the file, or the file path.\n\nYou can also define an attachment with a tuple tuple of the form `(mime_type, data)` for convenience.\n\nSimply decorate a function with `@traceable` and include your `Attachment` instances as arguments. Note that to use the file path instead of the raw bytes, you need to set the `dangerously_allow_filesystem` flag to `True` in your traceable decorator.\n\n```python Python theme={null}\nfrom langsmith import traceable\nfrom langsmith.schemas import Attachment\nfrom pathlib import Path\nimport os",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Python",
+      "id": "python"
+    }
+  ],
+  "url": "llms-txt#upload-files-with-traces",
+  "links": []
+}

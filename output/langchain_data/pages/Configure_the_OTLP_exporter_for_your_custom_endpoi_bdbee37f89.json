@@ -1,0 +1,8 @@
+{
+  "title": "Configure the OTLP exporter for your custom endpoint",
+  "content": "provider = TracerProvider()\notlp_exporter = OTLPSpanExporter(\n    # Change to your provider's endpoint\n    endpoint=\"https://otel.your-provider.com/v1/traces\",\n    # Add any required headers for authentication\n    headers={\"api-key\": \"your-api-key\"}\n)\nprocessor = BatchSpanProcessor(otlp_exporter)\nprovider.add_span_processor(processor)\ntrace.set_tracer_provider(provider)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#configure-the-otlp-exporter-for-your-custom-endpoint",
+  "links": []
+}

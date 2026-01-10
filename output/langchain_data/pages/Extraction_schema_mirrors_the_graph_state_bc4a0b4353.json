@@ -1,0 +1,8 @@
+{
+  "title": "Extraction schema, mirrors the graph state.",
+  "content": "class PurchaseInformation(TypedDict):\n    \"\"\"All of the known information about the invoice / invoice lines the customer would like refunded. Do not make up values, leave fields as null if you don't know their value.\"\"\"\n\ninvoice_id: int | None\n    invoice_line_ids: list[int] | None\n    customer_first_name: str | None\n    customer_last_name: str | None\n    customer_phone: str | None\n    track_name: str | None\n    album_title: str | None\n    artist_name: str | None\n    purchase_date_iso_8601: str | None\n    followup: Annotated[\n        str | None,\n        ...,\n        \"If the user hasn't enough identifying information, please tell them what the required information is and ask them to specify it.\",\n    ]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#extraction-schema,-mirrors-the-graph-state.",
+  "links": []
+}

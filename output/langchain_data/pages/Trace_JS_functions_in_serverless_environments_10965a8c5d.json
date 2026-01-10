@@ -1,0 +1,23 @@
+{
+  "title": "Trace JS functions in serverless environments",
+  "content": "Source: https://docs.langchain.com/langsmith/serverless-environments\n\n<Note>\n  This section is relevant for those using the LangSmith JS SDK version 0.2.0 and higher. If you are tracing using LangChain.js or LangGraph.js in serverless environments, see [this guide](https://js.langchain.com/docs/how_to/callbacks_serverless).\n</Note>\n\nWhen tracing JavaScript functions, LangSmith will trace runs in the background by default to avoid adding latency. In serverless environments where the execution context may be terminated abruptly, it's important to ensure that all tracing data is properly flushed before the function completes.\n\nTo make sure this occurs, you can either:\n\n* Set an environment variable named `LANGSMITH_TRACING_BACKGROUND` to `\"false\"`. This will cause your traced functions to wait for tracing to complete before returning.\n  * Note that this is named differently from the [environment variable](https://js.langchain.com/docs/how_to/callbacks_serverless) in LangChain.js because LangSmith can be used without LangChain.\n* Pass a custom client into your traced runs and `await` the `client.awaitPendingTraceBatches();` method.\n\nHere's an example of using `awaitPendingTraceBatches` alongside the [`traceable`](/langsmith/annotate-code) method:\n\n## Rate limits at high concurrency[\u000b](#rate-limits-at-high-concurrency \"Direct link to Rate limits at high concurrency\")\n\nBy default, the LangSmith client will batch operations as your traced run executions, sending a new batch every few milliseconds.\n\nThis works well in most situations, but if your traced function is long-running and you have very high concurrency, you may also hit rate limits related to overall request count.\n\nIf you are seeing rate limit errors related to this, you can try setting `manualFlushMode: true` in your client like this:\n\nAnd then manually calling `client.flush()` like this before your serverless function closes:\n\nNote that this will prevent runs from appearing in the LangSmith UI until you call `.flush()`.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/serverless-environments.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## Rate limits at high concurrency[\u000b](#rate-limits-at-high-concurrency \"Direct link to Rate limits at high concurrency\")\n\nBy default, the LangSmith client will batch operations as your traced run executions, sending a new batch every few milliseconds.\n\nThis works well in most situations, but if your traced function is long-running and you have very high concurrency, you may also hit rate limits related to overall request count.\n\nIf you are seeing rate limit errors related to this, you can try setting `manualFlushMode: true` in your client like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "And then manually calling `client.flush()` like this before your serverless function closes:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Rate limits at high concurrency[\u000b](#rate-limits-at-high-concurrency \"Direct link to Rate limits at high concurrency\")",
+      "id": "rate-limits-at-high-concurrency[\u000b](#rate-limits-at-high-concurrency-\"direct-link-to-rate-limits-at-high-concurrency\")"
+    }
+  ],
+  "url": "llms-txt#trace-js-functions-in-serverless-environments",
+  "links": []
+}

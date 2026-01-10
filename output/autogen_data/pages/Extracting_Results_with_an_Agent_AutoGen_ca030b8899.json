@@ -1,0 +1,137 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+  "title": "Extracting Results with an Agent — AutoGen",
+  "content": "When running a multi-agent system to solve some task, you may want to extract the result of the system once it has reached termination. This guide showcases one way to achieve this. Given that agent instances are not directly accessible from the outside, we will use an agent to publish the final result to an accessible location.\n\nIf you model your system to publish some FinalResult type then you can create an agent whose sole job is to subscribe to this and make it available externally. For simple agents like this the ClosureAgent is an option to reduce the amount of boilerplate code. This allows you to define a function that will be associated as the agent’s message handler. In this example, we’re going to use a queue shared between the agent and the external code to pass the result.\n\nWhen considering how to extract results from a multi-agent system, you must always consider the subscriptions of the agent and the topics they publish to. This is because the agent will only receive messages from topics it is subscribed to.\n\nDefine a dataclass for the final result.\n\nCreate a queue to pass the result from the agent to the external code.\n\nCreate a function closure for outputting the final result to the queue. The function must follow the signature Callable[[AgentRuntime, AgentId, T, MessageContext], Awaitable[Any]] where T is the type of the message the agent will receive. You can use union types to handle multiple message types.\n\nLet’s create a runtime and register a ClosureAgent that will publish the final result to the queue.\n\nWe can simulate the collection of final results by publishing them directly to the runtime.\n\nWe can take a look at the queue to see the final result.\n\nUser Approval for Tool Execution using Intervention Handler\n\nOpenAI Assistant Agent",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Extracting Results with an Agent#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "import asyncio\nfrom dataclasses import dataclass\n\nfrom autogen_core import (\n    ClosureAgent,\n    ClosureContext,\n    DefaultSubscription,\n    DefaultTopicId,\n    MessageContext,\n    SingleThreadedAgentRuntime,\n)",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\nfrom dataclasses import dataclass\n\nfrom autogen_core import (\n    ClosureAgent,\n    ClosureContext,\n    DefaultSubscription,\n    DefaultTopicId,\n    MessageContext,\n    SingleThreadedAgentRuntime,\n)",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass FinalResult:\n    value: str",
+      "language": "python"
+    },
+    {
+      "code": "@dataclass\nclass FinalResult:\n    value: str",
+      "language": "python"
+    },
+    {
+      "code": "queue = asyncio.Queue[FinalResult]()",
+      "language": "markdown"
+    },
+    {
+      "code": "queue = asyncio.Queue[FinalResult]()",
+      "language": "markdown"
+    },
+    {
+      "code": "async def output_result(_agent: ClosureContext, message: FinalResult, ctx: MessageContext) -> None:\n    await queue.put(message)",
+      "language": "python"
+    },
+    {
+      "code": "async def output_result(_agent: ClosureContext, message: FinalResult, ctx: MessageContext) -> None:\n    await queue.put(message)",
+      "language": "python"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\nawait ClosureAgent.register_closure(\n    runtime, \"output_result\", output_result, subscriptions=lambda: [DefaultSubscription()]\n)",
+      "language": "csharp"
+    },
+    {
+      "code": "runtime = SingleThreadedAgentRuntime()\nawait ClosureAgent.register_closure(\n    runtime, \"output_result\", output_result, subscriptions=lambda: [DefaultSubscription()]\n)",
+      "language": "csharp"
+    },
+    {
+      "code": "AgentType(type='output_result')",
+      "language": "unknown"
+    },
+    {
+      "code": "AgentType(type='output_result')",
+      "language": "unknown"
+    },
+    {
+      "code": "runtime.start()\nawait runtime.publish_message(FinalResult(\"Result 1\"), DefaultTopicId())\nawait runtime.publish_message(FinalResult(\"Result 2\"), DefaultTopicId())\nawait runtime.stop_when_idle()",
+      "language": "csharp"
+    },
+    {
+      "code": "runtime.start()\nawait runtime.publish_message(FinalResult(\"Result 1\"), DefaultTopicId())\nawait runtime.publish_message(FinalResult(\"Result 2\"), DefaultTopicId())\nawait runtime.stop_when_idle()",
+      "language": "csharp"
+    },
+    {
+      "code": "while not queue.empty():\n    print((result := await queue.get()).value)",
+      "language": "python"
+    },
+    {
+      "code": "while not queue.empty():\n    print((result := await queue.get()).value)",
+      "language": "python"
+    },
+    {
+      "code": "Result 1\nResult 2",
+      "language": "unknown"
+    },
+    {
+      "code": "Result 1\nResult 2",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

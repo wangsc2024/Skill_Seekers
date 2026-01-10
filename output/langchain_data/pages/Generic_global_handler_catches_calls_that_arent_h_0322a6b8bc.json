@@ -1,0 +1,8 @@
+{
+  "title": "Generic / global handler catches calls that aren't handled by more specific handlers",
+  "content": "@auth.on\nasync def reject_unhandled_requests(ctx: Auth.types.AuthContext, value: Any) -> False:\n    print(f\"Request to {ctx.path} by {ctx.user.identity}\")\n    raise Auth.exceptions.HTTPException(\n        status_code=403,\n        detail=\"Forbidden\"\n    )",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#generic-/-global-handler-catches-calls-that-aren't-handled-by-more-specific-handlers",
+  "links": []
+}

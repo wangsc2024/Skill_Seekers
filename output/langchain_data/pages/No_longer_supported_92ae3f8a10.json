@@ -1,0 +1,8 @@
+{
+  "title": "No longer supported",
+  "content": "model_with_tools = ChatOpenAI().bind_tools([some_tool])\nagent = create_agent(model_with_tools, tools=[])",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#no-longer-supported",
+  "links": []
+}

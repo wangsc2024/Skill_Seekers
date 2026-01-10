@@ -1,0 +1,41 @@
+{
+  "title": "Trace with LangGraph",
+  "content": "Source: https://docs.langchain.com/langsmith/trace-with-langgraph\n\nLangSmith smoothly integrates with LangGraph (Python and JS) to help you trace agents, whether you're using LangChain modules or other SDKs.\n\nIf you are using LangChain modules within LangGraph, you only need to set a few environment variables to enable tracing.\n\nThis guide will walk through a basic example. For more detailed information on configuration, see the [Trace With LangChain](/langsmith/trace-with-langchain) guide.\n\nInstall the LangGraph library and the OpenAI integration for Python and JS (we use the OpenAI integration for the code snippets below).\n\nFor a full list of packages available, see the [LangChain Python docs](https://python.langchain.com/docs/integrations/platforms/) and [LangChain JS docs](https://js.langchain.com/docs/integrations/platforms/).\n\n### 2. Configure your environment\n\n```bash wrap theme={null}\nexport LANGSMITH_TRACING=true\nexport LANGSMITH_API_KEY=<your-api-key>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### 2. Configure your environment",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "With LangChain",
+      "id": "with-langchain"
+    },
+    {
+      "level": "h3",
+      "text": "1. Installation",
+      "id": "1.-installation"
+    },
+    {
+      "level": "h3",
+      "text": "2. Configure your environment",
+      "id": "2.-configure-your-environment"
+    }
+  ],
+  "url": "llms-txt#trace-with-langgraph",
+  "links": []
+}

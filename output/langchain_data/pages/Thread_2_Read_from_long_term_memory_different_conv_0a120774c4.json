@@ -1,0 +1,8 @@
+{
+  "title": "Thread 2: Read from long-term memory (different conversation!)",
+  "content": "config2 = {\"configurable\": {\"thread_id\": str(uuid.uuid4())}}\nagent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"What are my preferences?\"}]\n}, config=config2)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#thread-2:-read-from-long-term-memory-(different-conversation!)",
+  "links": []
+}

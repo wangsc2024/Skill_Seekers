@@ -1,0 +1,13 @@
+{
+  "title": "Assumes you're in an interactive Python environmentfrom IPython.display import Image, display ...",
+  "content": "python  theme={null}\nfrom langchain.embeddings import init_embeddings\nfrom langchain.tools import tool\nfrom langchain_core.vectorstores import InMemoryVectorStore\nfrom langchain.agents import create_agent",
+  "code_samples": [
+    {
+      "code": "<img src=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/refund-graph.png?fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=a65951850208fd3b03848629bdda8ae0\" alt=\"Refund graph\" data-og-width=\"256\" width=\"256\" data-og-height=\"333\" height=\"333\" data-path=\"langsmith/images/refund-graph.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/refund-graph.png?w=280&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=8817f44b37322ab9a51fd01ee7902181 280w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/refund-graph.png?w=560&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=753a20158640cbeeeb81498d5c5ae95d 560w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/refund-graph.png?w=840&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=8d38bcff07b53e1f5648b3dd45cffa66 840w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/refund-graph.png?w=1100&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=50a7f863cf45d9df7b59cc3614fdb4e9 1100w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/refund-graph.png?w=1650&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=cfbda86ec83a651bfe8e38235579302d 1650w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/refund-graph.png?w=2500&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=56745d2e7603dca7fa233e1fd5818008 2500w\" />\n\n#### Lookup agent\n\nFor the lookup (i.e. question-answering) agent, we'll use a simple ReACT architecture and give the agent tools for looking up track names, artist names, and album names based on various filters. For example, you can look up albums by a particular artist, artists who released songs with a specific name, etc.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#assumes-you're-in-an-interactive-python-environmentfrom-ipython.display-import-image,-display-...",
+  "links": []
+}

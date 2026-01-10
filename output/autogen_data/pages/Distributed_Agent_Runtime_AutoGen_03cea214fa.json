@@ -1,0 +1,132 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+  "title": "Distributed Agent Runtime — AutoGen",
+  "content": "The distributed agent runtime is an experimental feature. Expect breaking changes to the API.\n\nA distributed agent runtime facilitates communication and agent lifecycle management across process boundaries. It consists of a host service and at least one worker runtime.\n\nThe host service maintains connections to all active worker runtimes, facilitates message delivery, and keeps sessions for all direct messages (i.e., RPCs). A worker runtime processes application code (agents) and connects to the host service. It also advertises the agents which they support to the host service, so the host service can deliver messages to the correct worker.\n\nThe distributed agent runtime requires extra dependencies, install them using:\n\nWe can start a host service using GrpcWorkerAgentRuntimeHost.\n\nThe above code starts the host service in the background and accepts worker connections on port 50051.\n\nBefore running worker runtimes, let’s define our agent. The agent will publish a new message on every message it receives. It also keeps track of how many messages it has published, and stops publishing new messages once it has published 5 messages.\n\nNow we can set up the worker agent runtimes. We use GrpcWorkerAgentRuntime. We set up two worker runtimes. Each runtime hosts one agent. All agents publish and subscribe to the default topic, so they can see all messages being published.\n\nTo run the agents, we publish a message from a worker.\n\nWe can see each agent published exactly 5 messages.\n\nTo stop the worker runtimes, we can call stop().\n\nWe can call stop() to stop the host service.\n\nThe process described above is largely the same, however all message types MUST use shared protobuf schemas for all cross-agent message types.\n\nTo see complete examples of using distributed runtime, please take a look at the following samples:\n\nDistributed Semantic Router\n\nDistributed Group Chat",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Distributed Agent Runtime#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Cross-Language Runtimes#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "pip install \"autogen-ext[grpc]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[grpc]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "from autogen_ext.runtimes.grpc import GrpcWorkerAgentRuntimeHost\n\nhost = GrpcWorkerAgentRuntimeHost(address=\"localhost:50051\")\nhost.start()  # Start a host service in the background.",
+      "language": "sql"
+    },
+    {
+      "code": "from autogen_ext.runtimes.grpc import GrpcWorkerAgentRuntimeHost\n\nhost = GrpcWorkerAgentRuntimeHost(address=\"localhost:50051\")\nhost.start()  # Start a host service in the background.",
+      "language": "sql"
+    },
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import DefaultTopicId, MessageContext, RoutedAgent, default_subscription, message_handler\n\n\n@dataclass\nclass MyMessage:\n    content: str\n\n\n@default_subscription\nclass MyAgent(RoutedAgent):\n    def __init__(self, name: str) -> None:\n        super().__init__(\"My agent\")\n        self._name = name\n        self._counter = 0\n\n    @message_handler\n    async def my_message_handler(self, message: MyMessage, ctx: MessageContext) -> None:\n        self._counter += 1\n        if self._counter > 5:\n            return\n        content = f\"{self._name}: Hello x {self._counter}\"\n        print(content)\n        await self.publish_message(MyMessage(content=content), DefaultTopicId())",
+      "language": "python"
+    },
+    {
+      "code": "from dataclasses import dataclass\n\nfrom autogen_core import DefaultTopicId, MessageContext, RoutedAgent, default_subscription, message_handler\n\n\n@dataclass\nclass MyMessage:\n    content: str\n\n\n@default_subscription\nclass MyAgent(RoutedAgent):\n    def __init__(self, name: str) -> None:\n        super().__init__(\"My agent\")\n        self._name = name\n        self._counter = 0\n\n    @message_handler\n    async def my_message_handler(self, message: MyMessage, ctx: MessageContext) -> None:\n        self._counter += 1\n        if self._counter > 5:\n            return\n        content = f\"{self._name}: Hello x {self._counter}\"\n        print(content)\n        await self.publish_message(MyMessage(content=content), DefaultTopicId())",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_ext.runtimes.grpc import GrpcWorkerAgentRuntime\n\nworker1 = GrpcWorkerAgentRuntime(host_address=\"localhost:50051\")\nawait worker1.start()\nawait MyAgent.register(worker1, \"worker1\", lambda: MyAgent(\"worker1\"))\n\nworker2 = GrpcWorkerAgentRuntime(host_address=\"localhost:50051\")\nawait worker2.start()\nawait MyAgent.register(worker2, \"worker2\", lambda: MyAgent(\"worker2\"))\n\nawait worker2.publish_message(MyMessage(content=\"Hello!\"), DefaultTopicId())\n\n# Let the agents run for a while.\nawait asyncio.sleep(5)",
+      "language": "python"
+    },
+    {
+      "code": "import asyncio\n\nfrom autogen_ext.runtimes.grpc import GrpcWorkerAgentRuntime\n\nworker1 = GrpcWorkerAgentRuntime(host_address=\"localhost:50051\")\nawait worker1.start()\nawait MyAgent.register(worker1, \"worker1\", lambda: MyAgent(\"worker1\"))\n\nworker2 = GrpcWorkerAgentRuntime(host_address=\"localhost:50051\")\nawait worker2.start()\nawait MyAgent.register(worker2, \"worker2\", lambda: MyAgent(\"worker2\"))\n\nawait worker2.publish_message(MyMessage(content=\"Hello!\"), DefaultTopicId())\n\n# Let the agents run for a while.\nawait asyncio.sleep(5)",
+      "language": "python"
+    },
+    {
+      "code": "worker1: Hello x 1\nworker2: Hello x 1\nworker2: Hello x 2\nworker1: Hello x 2\nworker1: Hello x 3\nworker2: Hello x 3\nworker2: Hello x 4\nworker1: Hello x 4\nworker1: Hello x 5\nworker2: Hello x 5",
+      "language": "yaml"
+    },
+    {
+      "code": "worker1: Hello x 1\nworker2: Hello x 1\nworker2: Hello x 2\nworker1: Hello x 2\nworker1: Hello x 3\nworker2: Hello x 3\nworker2: Hello x 4\nworker1: Hello x 4\nworker1: Hello x 5\nworker2: Hello x 5",
+      "language": "yaml"
+    },
+    {
+      "code": "await worker1.stop()\nawait worker2.stop()\n\n# To keep the worker running until a termination signal is received (e.g., SIGTERM).\n# await worker1.stop_when_signal()",
+      "language": "markdown"
+    },
+    {
+      "code": "await worker1.stop()\nawait worker2.stop()\n\n# To keep the worker running until a termination signal is received (e.g., SIGTERM).\n# await worker1.stop_when_signal()",
+      "language": "markdown"
+    },
+    {
+      "code": "await host.stop()\n\n# To keep the host service running until a termination signal (e.g., SIGTERM)\n# await host.stop_when_signal()",
+      "language": "markdown"
+    },
+    {
+      "code": "await host.stop()\n\n# To keep the host service running until a termination signal (e.g., SIGTERM)\n# await host.stop_when_signal()",
+      "language": "markdown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Becomes:",
+  "content": "[Send(\"github\", {\"query\": \"...\"}), Send(\"notion\", {\"query\": \"...\"})]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#becomes:",
+  "links": []
+}

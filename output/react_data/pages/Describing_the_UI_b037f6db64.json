@@ -1,0 +1,169 @@
+{
+  "url": "https://react.dev/learn/describing-the-ui",
+  "title": "Describing the UI",
+  "content": "React is a JavaScript library for rendering user interfaces (UI). UI is built from small units like buttons, text, and images. React lets you combine them into reusable, nestable components. From web sites to phone apps, everything on the screen can be broken down into components. In this chapter, you’ll learn to create, customize, and conditionally display React components.\n\nReact applications are built from isolated pieces of UI called components. A React component is a JavaScript function that you can sprinkle with markup. Components can be as small as a button, or as large as an entire page. Here is a Gallery component rendering three Profile components:\n\nRead Your First Component to learn how to declare and use React components.\n\nYou can declare many components in one file, but large files can get difficult to navigate. To solve this, you can export a component into its own file, and then import that component from another file:\n\nRead Importing and Exporting Components to learn how to split components into their own files.\n\nEach React component is a JavaScript function that may contain some markup that React renders into the browser. React components use a syntax extension called JSX to represent that markup. JSX looks a lot like HTML, but it is a bit stricter and can display dynamic information.\n\nIf we paste existing HTML markup into a React component, it won’t always work:\n\nIf you have existing HTML like this, you can fix it using a converter:\n\nRead Writing Markup with JSX to learn how to write valid JSX.\n\nJSX lets you write HTML-like markup inside a JavaScript file, keeping rendering logic and content in the same place. Sometimes you will want to add a little JavaScript logic or reference a dynamic property inside that markup. In this situation, you can use curly braces in your JSX to “open a window” to JavaScript:\n\nRead JavaScript in JSX with Curly Braces to learn how to access JavaScript data from JSX.\n\nReact components use props to communicate with each other. Every parent component can pass some information to its child components by giving them props. Props might remind you of HTML attributes, but you can pass any JavaScript value through them, including objects, arrays, functions, and even JSX!\n\nRead Passing Props to a Component to learn how to pass and read props.\n\nYour components will often need to display different things depending on different conditions. In React, you can conditionally render JSX using JavaScript syntax like if statements, &&, and ? : operators.\n\nIn this example, the JavaScript && operator is used to conditionally render a checkmark:\n\nRead Conditional Rendering to learn the different ways to render content conditionally.\n\nYou will often want to display multiple similar components from a collection of data. You can use JavaScript’s filter() and map() with React to filter and transform your array of data into an array of components.\n\nFor each array item, you will need to specify a key. Usually, you will want to use an ID from the database as a key. Keys let React keep track of each item’s place in the list even if the list changes.\n\nRead Rendering Lists to learn how to render a list of components, and how to choose a key.\n\nSome JavaScript functions are pure. A pure function:\n\nBy strictly only writing your components as pure functions, you can avoid an entire class of baffling bugs and unpredictable behavior as your codebase grows. Here is an example of an impure component:\n\nYou can make this component pure by passing a prop instead of modifying a preexisting variable:\n\nRead Keeping Components Pure to learn how to write components as pure, predictable functions.\n\nReact uses trees to model the relationships between components and modules.\n\nA React render tree is a representation of the parent and child relationship between components.\n\nAn example React render tree.\n\nComponents near the top of the tree, near the root component, are considered top-level components. Components with no child components are leaf components. This categorization of components is useful for understanding data flow and rendering performance.\n\nModelling the relationship between JavaScript modules is another useful way to understand your app. We refer to it as a module dependency tree.\n\nAn example module dependency tree.\n\nA dependency tree is often used by build tools to bundle all the relevant JavaScript code for the client to download and render. A large bundle size regresses user experience for React apps. Understanding the module dependency tree is helpful to debug such issues.\n\nRead Your UI as a Tree to learn how to create a render and module dependency trees for a React app and how they’re useful mental models for improving user experience and performance.\n\nHead over to Your First Component to start reading this chapter page by page!\n\nOr, if you’re already familiar with these topics, why not read about Adding Interactivity?",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Describing the UI",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "In this chapter",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Your first component",
+      "id": "your-first-component"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Importing and exporting components",
+      "id": "importing-and-exporting-components"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Writing markup with JSX",
+      "id": "writing-markup-with-jsx"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "JavaScript in JSX with curly braces",
+      "id": "javascript-in-jsx-with-curly-braces"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Passing props to a component",
+      "id": "passing-props-to-a-component"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Conditional rendering",
+      "id": "conditional-rendering"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Rendering lists",
+      "id": "rendering-lists"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Keeping components pure",
+      "id": "keeping-components-pure"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Your UI as a tree",
+      "id": "your-ui-as-a-tree"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to learn this topic?",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "What’s next?",
+      "id": "whats-next"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react-dom"
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "title": "Build a custom SQL agent",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/sql-agent\n\nIn this tutorial we will build a custom agent that can answer questions about a SQL database using LangGraph.\n\nLangChain offers built-in [agent](/oss/python/langchain/agents) implementations, implemented using [LangGraph](/oss/python/langgraph/overview) primitives. If deeper customization is required, agents can be implemented directly in LangGraph. This guide demonstrates an example implementation of a SQL agent. You can find a tutorial building a SQL agent using higher-level LangChain abstractions [here](/oss/python/langchain/sql-agent).\n\n<Warning>\n  Building Q\\&A systems of SQL databases requires executing model-generated SQL queries. There are inherent risks in doing this. Make sure that your database connection permissions are always scoped as narrowly as possible for your agent's needs. This will mitigate, though not eliminate, the risks of building a model-driven system.\n</Warning>\n\nThe [prebuilt agent](/oss/python/langchain/sql-agent) lets us get started quickly, but we relied on the system prompt to constrain its behavior— for example, we instructed the agent to always start with the \"list tables\" tool, and to always run a query-checker tool before executing the query.\n\nWe can enforce a higher degree of control in LangGraph by customizing the agent. Here, we implement a simple ReAct-agent setup, with dedicated nodes for specific tool-calls. We will use the same \\[state] as the pre-built agent.\n\nWe will cover the following concepts:\n\n* [Tools](/oss/python/langchain/tools) for reading from SQL databases\n* The LangGraph [Graph API](/oss/python/langgraph/graph-api), including state, nodes, edges, and conditional edges.\n* [Human-in-the-loop](/oss/python/langgraph/interrupts) processes\n\n<CodeGroup>\n  \n</CodeGroup>\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your chain or agent. Then set the following environment variables:\n\nSelect a model that supports [tool-calling](/oss/python/integrations/providers/overview):\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)\n\n</CodeGroup>\n  </Tab>\n</Tabs>\n\nThe output shown in the examples below used OpenAI.\n\n## 2. Configure the database\n\nYou will be creating a [SQLite database](https://www.sqlitetutorial.net/sqlite-sample-database/) for this tutorial. SQLite is a lightweight database that is easy to set up and use. We will be loading the `chinook` database, which is a sample database that represents a digital media store.\n\nFor convenience, we have hosted the database (`Chinook.db`) on a public GCS bucket.\n\nWe will use a handy SQL database wrapper available in the `langchain_community` package to interact with the database. The wrapper provides a simple interface to execute SQL queries and fetch results:\n\n## 3. Add tools for database interactions\n\nUse the `SQLDatabase` wrapper available in the `langchain_community` package to interact with the database. The wrapper provides a simple interface to execute SQL queries and fetch results:\n\n## 4. Define application steps\n\nWe construct dedicated nodes for the following steps:\n\n* Listing DB tables\n* Calling the \"get schema\" tool\n* Generating a query\n* Checking the query\n\nPutting these steps in dedicated nodes lets us (1) force tool-calls when needed, and (2) customize the prompts associated with each step.\n\n```python  theme={null}\nfrom typing import Literal\n\nfrom langchain.messages import AIMessage\nfrom langchain_core.runnables import RunnableConfig\nfrom langgraph.graph import END, START, MessagesState, StateGraph\nfrom langgraph.prebuilt import ToolNode\n\nget_schema_tool = next(tool for tool in tools if tool.name == \"sql_db_schema\")\nget_schema_node = ToolNode([get_schema_tool], name=\"get_schema\")\n\nrun_query_tool = next(tool for tool in tools if tool.name == \"sql_db_query\")\nrun_query_node = ToolNode([run_query_tool], name=\"run_query\")",
+  "code_samples": [
+    {
+      "code": "</CodeGroup>\n\n### LangSmith\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your chain or agent. Then set the following environment variables:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 1. Select an LLM\n\nSelect a model that supports [tool-calling](/oss/python/integrations/providers/overview):\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n</Tabs>\n\nThe output shown in the examples below used OpenAI.\n\n## 2. Configure the database\n\nYou will be creating a [SQLite database](https://www.sqlitetutorial.net/sqlite-sample-database/) for this tutorial. SQLite is a lightweight database that is easy to set up and use. We will be loading the `chinook` database, which is a sample database that represents a digital media store.\n\nFor convenience, we have hosted the database (`Chinook.db`) on a public GCS bucket.",
+      "language": "unknown"
+    },
+    {
+      "code": "We will use a handy SQL database wrapper available in the `langchain_community` package to interact with the database. The wrapper provides a simple interface to execute SQL queries and fetch results:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Add tools for database interactions\n\nUse the `SQLDatabase` wrapper available in the `langchain_community` package to interact with the database. The wrapper provides a simple interface to execute SQL queries and fetch results:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Define application steps\n\nWe construct dedicated nodes for the following steps:\n\n* Listing DB tables\n* Calling the \"get schema\" tool\n* Generating a query\n* Checking the query\n\nPutting these steps in dedicated nodes lets us (1) force tool-calls when needed, and (2) customize the prompts associated with each step.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Concepts",
+      "id": "concepts"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h3",
+      "text": "LangSmith",
+      "id": "langsmith"
+    },
+    {
+      "level": "h2",
+      "text": "1. Select an LLM",
+      "id": "1.-select-an-llm"
+    },
+    {
+      "level": "h2",
+      "text": "2. Configure the database",
+      "id": "2.-configure-the-database"
+    },
+    {
+      "level": "h2",
+      "text": "3. Add tools for database interactions",
+      "id": "3.-add-tools-for-database-interactions"
+    },
+    {
+      "level": "h2",
+      "text": "4. Define application steps",
+      "id": "4.-define-application-steps"
+    }
+  ],
+  "url": "llms-txt#build-a-custom-sql-agent",
+  "links": []
+}

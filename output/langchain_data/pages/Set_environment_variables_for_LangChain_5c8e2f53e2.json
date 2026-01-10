@@ -1,0 +1,8 @@
+{
+  "title": "Set environment variables for LangChain",
+  "content": "os.environ[\"LANGSMITH_OTEL_ENABLED\"] = \"true\"\nos.environ[\"LANGSMITH_TRACING\"] = \"true\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#set-environment-variables-for-langchain",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "For production use, consider using a configuration file or environment variables",
+  "content": "api_url = \"https://api.smith.langchain.com\"\napi_key = os.environ.get(\"LANGSMITH_API_KEY\")\n\nif not api_key:\n    raise ValueError(\"LANGSMITH_API_KEY environment variable is not set\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#for-production-use,-consider-using-a-configuration-file-or-environment-variables",
+  "links": []
+}

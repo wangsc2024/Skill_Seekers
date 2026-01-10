@@ -1,0 +1,28 @@
+{
+  "title": "Subgraphs",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/use-subgraphs\n\nThis guide explains the mechanics of using subgraphs. A subgraph is a [graph](/oss/python/langgraph/graph-api#graphs) that is used as a [node](/oss/python/langgraph/graph-api#nodes) in another graph.\n\nSubgraphs are useful for:\n\n* Building [multi-agent systems](/oss/python/langchain/multi-agent)\n* Re-using a set of nodes in multiple graphs\n* Distributing development: when you want different teams to work on different parts of the graph independently, you can define each part as a subgraph, and as long as the subgraph interface (the input and output schemas) is respected, the parent graph can be built without knowing any details of the subgraph\n\nWhen adding subgraphs, you need to define how the parent graph and the subgraph communicate:\n\n* [Invoke a graph from a node](#invoke-a-graph-from-a-node) — subgraphs are called from inside a node in the parent graph\n* [Add a graph as a node](#add-a-graph-as-a-node) — a subgraph is added directly as a node in the parent and **shares [state keys](/oss/python/langgraph/graph-api#state)** with the parent\n\n<Tip>\n  **Set up LangSmith for LangGraph development**\n  Sign up for [LangSmith](https://smith.langchain.com) to quickly spot issues and improve the performance of your LangGraph projects. LangSmith lets you use trace data to debug, test, and monitor your LLM apps built with LangGraph — read more about how to get started [here](https://docs.smith.langchain.com).\n</Tip>\n\n## Invoke a graph from a node\n\nA simple way to implement a subgraph is to invoke a graph from inside the node of another graph. In this case subgraphs can have **completely different schemas** from the parent graph (no shared keys). For example, you might want to keep a private message history for each of the agents in a [multi-agent](/oss/python/langchain/multi-agent) system.\n\nIf that's the case for your application, you need to define a node **function that invokes the subgraph**. This function needs to transform the input (parent) state to the subgraph state before invoking the subgraph, and transform the results back to the parent state before returning the state update from the node.\n\n```python  theme={null}\nfrom typing_extensions import TypedDict\nfrom langgraph.graph.state import StateGraph, START\n\nclass SubgraphState(TypedDict):\n    bar: str",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n<Tip>\n  **Set up LangSmith for LangGraph development**\n  Sign up for [LangSmith](https://smith.langchain.com) to quickly spot issues and improve the performance of your LangGraph projects. LangSmith lets you use trace data to debug, test, and monitor your LLM apps built with LangGraph — read more about how to get started [here](https://docs.smith.langchain.com).\n</Tip>\n\n## Invoke a graph from a node\n\nA simple way to implement a subgraph is to invoke a graph from inside the node of another graph. In this case subgraphs can have **completely different schemas** from the parent graph (no shared keys). For example, you might want to keep a private message history for each of the agents in a [multi-agent](/oss/python/langchain/multi-agent) system.\n\nIf that's the case for your application, you need to define a node **function that invokes the subgraph**. This function needs to transform the input (parent) state to the subgraph state before invoking the subgraph, and transform the results back to the parent state before returning the state update from the node.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "Invoke a graph from a node",
+      "id": "invoke-a-graph-from-a-node"
+    }
+  ],
+  "url": "llms-txt#subgraphs",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Bob tries to access Alice's thread",
+  "content": "try:\n    await bob.threads.get(alice_thread[\"thread_id\"])\n    print(\"❌ Bob shouldn't see Alice's thread!\")\nexcept Exception as e:\n    print(\"✅ Bob correctly denied access:\", e)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#bob-tries-to-access-alice's-thread",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Fetch the comparative experiment",
+  "content": "resp = requests.get(\n    f\"https://api.smith.langchain.com/api/v1/datasets/{str(dataset_id)}/comparative\",\n    params={\"id\": comparative_experiment_id},\n    headers={\"x-api-key\": os.environ[\"LANGSMITH_API_KEY\"]}\n)\n\ncomparative_experiment = resp.json()[0]\nexperiment_ids = [info[\"id\"] for info in comparative_experiment[\"experiments_info\"]]\n\nfrom collections import defaultdict\nexample_id_to_runs_map = defaultdict(list)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#fetch-the-comparative-experiment",
+  "links": []
+}

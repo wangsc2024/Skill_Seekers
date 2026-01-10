@@ -1,0 +1,42 @@
+{
+  "title": "Short-term memory",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/short-term-memory\n\nMemory is a system that remembers information about previous interactions. For AI agents, memory is crucial because it lets them remember previous interactions, learn from feedback, and adapt to user preferences. As agents tackle more complex tasks with numerous user interactions, this capability becomes essential for both efficiency and user satisfaction.\n\nShort term memory lets your application remember previous interactions within a single thread or conversation.\n\n<Note>\n  A thread organizes multiple interactions in a session, similar to the way email groups messages in a single conversation.\n</Note>\n\nConversation history is the most common form of short-term memory. Long conversations pose a challenge to today's LLMs; a full history may not fit inside an LLM's context window, resulting in an context loss or errors.\n\nEven if your model supports the full context length, most LLMs still perform poorly over long contexts. They get \"distracted\" by stale or off-topic content, all while suffering from slower response times and higher costs.\n\nChat models accept context using [messages](/oss/python/langchain/messages), which include instructions (a system message) and inputs (human messages). In chat applications, messages alternate between human inputs and model responses, resulting in a list of messages that grows longer over time. Because context windows are limited, many applications can benefit from using techniques to remove or \"forget\" stale information.\n\nTo add short-term memory (thread-level persistence) to an agent, you need to specify a `checkpointer` when creating an agent.\n\n<Info>\n  LangChain's agent manages short-term memory as a part of your agent's state.\n\nBy storing these in the graph's state, the agent can access the full context for a given conversation while maintaining separation between different threads.\n\nState is persisted to a database (or memory) using a checkpointer so the thread can be resumed at any time.\n\nShort-term memory updates when the agent is invoked or a step (like a tool call) is completed, and the state is read at the start of each step.\n</Info>\n\nIn production, use a checkpointer backed by a database:\n\n## Customizing agent memory\n\nBy default, agents use [`AgentState`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.AgentState) to manage short term memory, specifically the conversation history via a `messages` key.\n\nYou can extend [`AgentState`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.AgentState) to add additional fields. Custom state schemas are passed to [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) using the [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) parameter.\n\n```python  theme={null}\nfrom langchain.agents import create_agent, AgentState\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nclass CustomAgentState(AgentState):  # [!code highlight]\n    user_id: str  # [!code highlight]\n    preferences: dict  # [!code highlight]\n\nagent = create_agent(\n    \"gpt-5\",\n    tools=[get_user_info],\n    state_schema=CustomAgentState,  # [!code highlight]\n    checkpointer=InMemorySaver(),\n)",
+  "code_samples": [
+    {
+      "code": "### In production\n\nIn production, use a checkpointer backed by a database:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Customizing agent memory\n\nBy default, agents use [`AgentState`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.AgentState) to manage short term memory, specifically the conversation history via a `messages` key.\n\nYou can extend [`AgentState`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.AgentState) to add additional fields. Custom state schemas are passed to [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) using the [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) parameter.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "In production",
+      "id": "in-production"
+    },
+    {
+      "level": "h2",
+      "text": "Customizing agent memory",
+      "id": "customizing-agent-memory"
+    }
+  ],
+  "url": "llms-txt#short-term-memory",
+  "links": []
+}

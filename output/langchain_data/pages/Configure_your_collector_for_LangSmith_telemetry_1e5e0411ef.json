@@ -1,0 +1,8 @@
+{
+  "title": "Configure your collector for LangSmith telemetry",
+  "content": "Source: https://docs.langchain.com/langsmith/langsmith-collector\n\nThe various services in a LangSmith deployment emit telemetry data in the form of logs, metrics, and traces. You may already have telemetry collectors set up in your Kubernetes cluster, or would like to deploy one to monitor your application.\n\nThis page describes how to configure an [OTel Collector](https://opentelemetry.io/docs/collector/configuration/) to gather telemetry data from LangSmith. Note that all of the concepts discussed below can be translated to other collectors such as [Fluentd](https://www.fluentd.org/) or [FluentBit](https://fluentbit.io/).\n\n<Warning>\n  **This section is only applicable for Kubernetes deployments.**\n</Warning>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#configure-your-collector-for-langsmith-telemetry",
+  "links": []
+}

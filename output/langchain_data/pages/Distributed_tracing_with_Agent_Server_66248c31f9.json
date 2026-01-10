@@ -1,0 +1,19 @@
+{
+  "title": "Distributed tracing with Agent Server",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-distributed-tracing\n\nUnify traces when calling your deployed Agent Server from another service using RemoteGraph or the SDK.\n\nWhen you call a deployed [Agent Server](/langsmith/agent-server) from another service, you can propagate trace context so that the entire request appears as a single unified trace in LangSmith. This uses LangSmith's [distributed tracing](/langsmith/distributed-tracing) capabilities, which propagate context via HTTP headers.\n\nDistributed tracing links runs across services using context propagation headers:\n\n1. The **client** infers the trace context from the current run and sends it as HTTP headers.\n2. The **server** reads the headers and adds them to the run's config and metadata as `langsmith-trace` and `langsmith-project` configurable values. You can choose to use these to set the tracing context for a given run when your agent is used.\n\nThe headers used are:\n\n* `langsmith-trace`: Contains the trace's dotted order.\n* `baggage`: Specifies the LangSmith project and other optional tags and metadata.\n\nTo opt-in to distributed tracing, both client and server need to opt in.\n\n## Configure the server\n\nTo accept distributed trace context, your graph must read the trace headers from the config and set the tracing context. The headers are passed through the `configurable` field as `langsmith-trace` and `langsmith-project`.\n\n```python  theme={null}\nimport contextlib\nimport langsmith as ls\nfrom langgraph.graph import StateGraph, MessagesState",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "How it works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Configure the server",
+      "id": "configure-the-server"
+    }
+  ],
+  "url": "llms-txt#distributed-tracing-with-agent-server",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Invoke the graph",
+  "content": "config = {\"configurable\": {\"thread_id\": \"2\", \"user_id\": \"1\"}}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#invoke-the-graph",
+  "links": []
+}

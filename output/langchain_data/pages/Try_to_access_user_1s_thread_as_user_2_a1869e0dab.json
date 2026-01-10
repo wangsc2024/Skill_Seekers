@@ -1,0 +1,19 @@
+{
+  "title": "Try to access user 1's thread as user 2",
+  "content": "user2_token = await login(email2, password)\nuser2_client = get_client(\n    url=\"http://localhost:2024\", headers={\"Authorization\": f\"Bearer {user2_token}\"}\n)\n\ntry:\n    await user2_client.threads.get(thread[\"thread_id\"])\n    print(\"❌ User 2 shouldn't see User 1's thread!\")\nexcept Exception as e:\n    print(\"✅ User 2 blocked from User 1's thread:\", e)\nshell  theme={null}\n✅ User 1 created thread: d6af3754-95df-4176-aa10-dbd8dca40f1a\n✅ Unauthenticated access blocked: Client error '403 Forbidden' for url 'http://localhost:2024/threads'\n✅ User 2 blocked from User 1's thread: Client error '404 Not Found' for url 'http://localhost:2024/threads/d6af3754-95df-4176-aa10-dbd8dca40f1a'\n```\n\nYour authentication and authorization are working together:\n\n1. Users must log in to access the bot\n2. Each user can only see their own threads\n\nAll users are managed by the Supabase auth provider, so you don't need to implement any additional user management logic.\n\nYou've successfully built a production-ready authentication system for your LangGraph application! Let's review what you've accomplished:\n\n1. Set up an authentication provider (Supabase in this case)\n2. Added real user accounts with email/password authentication\n3. Integrated JWT token validation into your Agent Server\n4. Implemented proper authorization to ensure users can only access their own data\n5. Created a foundation that's ready to handle your next authentication challenge\n\nNow that you have production authentication, consider:\n\n1. Building a web UI with your preferred framework (see the [Custom Auth](https://github.com/langchain-ai/custom-auth) template for an example)\n2. Learn more about the other aspects of authentication and authorization in the [conceptual guide on authentication](/langsmith/auth).\n3. Customize your handlers and setup further after reading the [reference docs](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth).\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/add-auth-server.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "The output should look like this:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#try-to-access-user-1's-thread-as-user-2",
+  "links": []
+}

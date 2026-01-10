@@ -1,0 +1,8 @@
+{
+  "title": "How to evaluate an existing experiment (Python only)",
+  "content": "Source: https://docs.langchain.com/langsmith/evaluate-existing-experiment\n\nEvaluation of existing experiments is currently only supported in the Python SDK.\n\nIf you have already run an experiment and want to add additional evaluation metrics, you can apply any evaluators to the experiment using the `evaluate()` / `aevaluate()` methods as before. Just pass in the experiment name / ID instead of a target function:\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/evaluate-existing-experiment.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#how-to-evaluate-an-existing-experiment-(python-only)",
+  "links": []
+}

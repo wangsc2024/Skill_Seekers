@@ -1,0 +1,242 @@
+{
+  "url": "https://react.dev/learn/updating-objects-in-state",
+  "title": "Updating Objects in State",
+  "content": "State can hold any kind of JavaScript value, including objects. But you shouldn’t change objects that you hold in the React state directly. Instead, when you want to update an object, you need to create a new one (or make a copy of an existing one), and then set the state to use that copy.\n\nYou can store any kind of JavaScript value in state.\n\nSo far you’ve been working with numbers, strings, and booleans. These kinds of JavaScript values are “immutable”, meaning unchangeable or “read-only”. You can trigger a re-render to replace a value:\n\nThe x state changed from 0 to 5, but the number 0 itself did not change. It’s not possible to make any changes to the built-in primitive values like numbers, strings, and booleans in JavaScript.\n\nNow consider an object in state:\n\nTechnically, it is possible to change the contents of the object itself. This is called a mutation:\n\nHowever, although objects in React state are technically mutable, you should treat them as if they were immutable—like numbers, booleans, and strings. Instead of mutating them, you should always replace them.\n\nIn other words, you should treat any JavaScript object that you put into state as read-only.\n\nThis example holds an object in state to represent the current pointer position. The red dot is supposed to move when you touch or move the cursor over the preview area. But the dot stays in the initial position:\n\nThe problem is with this bit of code.\n\nThis code modifies the object assigned to position from the previous render. But without using the state setting function, React has no idea that object has changed. So React does not do anything in response. It’s like trying to change the order after you’ve already eaten the meal. While mutating state can work in some cases, we don’t recommend it. You should treat the state value you have access to in a render as read-only.\n\nTo actually trigger a re-render in this case, create a new object and pass it to the state setting function:\n\nWith setPosition, you’re telling React:\n\nNotice how the red dot now follows your pointer when you touch or hover over the preview area:\n\nCode like this is a problem because it modifies an existing object in state:\n\nBut code like this is absolutely fine because you’re mutating a fresh object you have just created:\n\nIn fact, it is completely equivalent to writing this:\n\nMutation is only a problem when you change existing objects that are already in state. Mutating an object you’ve just created is okay because no other code references it yet. Changing it isn’t going to accidentally impact something that depends on it. This is called a “local mutation”. You can even do local mutation while rendering. Very convenient and completely okay!\n\nIn the previous example, the position object is always created fresh from the current cursor position. But often, you will want to include existing data as a part of the new object you’re creating. For example, you may want to update only one field in a form, but keep the previous values for all other fields.\n\nThese input fields don’t work because the onChange handlers mutate the state:\n\nFor example, this line mutates the state from a past render:\n\nThe reliable way to get the behavior you’re looking for is to create a new object and pass it to setPerson. But here, you want to also copy the existing data into it because only one of the fields has changed:\n\nYou can use the ... object spread syntax so that you don’t need to copy every property separately.\n\nNotice how you didn’t declare a separate state variable for each input field. For large forms, keeping all data grouped in an object is very convenient—as long as you update it correctly!\n\nNote that the ... spread syntax is “shallow”—it only copies things one level deep. This makes it fast, but it also means that if you want to update a nested property, you’ll have to use it more than once.\n\nYou can also use the [ and ] braces inside your object definition to specify a property with a dynamic name. Here is the same example, but with a single event handler instead of three different ones:\n\nHere, e.target.name refers to the name property given to the <input> DOM element.\n\nConsider a nested object structure like this:\n\nIf you wanted to update person.artwork.city, it’s clear how to do it with mutation:\n\nBut in React, you treat state as immutable! In order to change city, you would first need to produce the new artwork object (pre-populated with data from the previous one), and then produce the new person object which points at the new artwork:\n\nOr, written as a single function call:\n\nThis gets a bit wordy, but it works fine for many cases:\n\nAn object like this appears “nested” in code:\n\nHowever, “nesting” is an inaccurate way to think about how objects behave. When the code executes, there is no such thing as a “nested” object. You are really looking at two different objects:\n\nThe obj1 object is not “inside” obj2. For example, obj3 could “point” at obj1 too:\n\nIf you were to mutate obj3.artwork.city, it would affect both obj2.artwork.city and obj1.city. This is because obj3.artwork, obj2.artwork, and obj1 are the same object. This is difficult to see when you think of objects as “nested”. Instead, they are separate objects “pointing” at each other with properties.\n\nIf your state is deeply nested, you might want to consider flattening it. But, if you don’t want to change your state structure, you might prefer a shortcut to nested spreads. Immer is a popular library that lets you write using the convenient but mutating syntax and takes care of producing the copies for you. With Immer, the code you write looks like you are “breaking the rules” and mutating an object:\n\nBut unlike a regular mutation, it doesn’t overwrite the past state!\n\nThe draft provided by Immer is a special type of object, called a Proxy, that “records” what you do with it. This is why you can mutate it freely as much as you like! Under the hood, Immer figures out which parts of the draft have been changed, and produces a completely new object that contains your edits.\n\nHere is the above example converted to Immer:\n\nNotice how much more concise the event handlers have become. You can mix and match useState and useImmer in a single component as much as you like. Immer is a great way to keep the update handlers concise, especially if there’s nesting in your state, and copying objects leads to repetitive code.\n\nThere are a few reasons:\n\nIn practice, you can often “get away” with mutating state in React, but we strongly advise you not to do that so that you can use new React features developed with this approach in mind. Future contributors and perhaps even your future self will thank you!\n\nThis form has a few bugs. Click the button that increases the score a few times. Notice that it does not increase. Then edit the first name, and notice that the score has suddenly “caught up” with your changes. Finally, edit the last name, and notice that the score has disappeared completely.\n\nYour task is to fix all of these bugs. As you fix them, explain why each of them happens.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Updating Objects in State",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "What’s a mutation?",
+      "id": "whats-a-mutation"
+    },
+    {
+      "level": "h2",
+      "text": "Treat state as read-only",
+      "id": "treat-state-as-read-only"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Local mutation is fine",
+      "id": "local-mutation-is-fine"
+    },
+    {
+      "level": "h2",
+      "text": "Copying objects with the spread syntax",
+      "id": "copying-objects-with-the-spread-syntax"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Using a single event handler for multiple fields",
+      "id": "using-a-single-event-handler-for-multiple-fields"
+    },
+    {
+      "level": "h2",
+      "text": "Updating a nested object",
+      "id": "updating-a-nested-object"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Objects are not really nested",
+      "id": "objects-are-not-really-nested"
+    },
+    {
+      "level": "h3",
+      "text": "Write concise update logic with Immer",
+      "id": "write-concise-update-logic-with-immer"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "How does Immer work?",
+      "id": "how-does-immer-work"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Why is mutating state not recommended in React?",
+      "id": "why-is-mutating-state-not-recommended-in-react"
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    },
+    {
+      "level": "h2",
+      "text": "Try out some challenges",
+      "id": "challenges"
+    },
+    {
+      "level": "h4",
+      "text": "Challenge 1 of 3: Fix incorrect state updates",
+      "id": "fix-incorrect-state-updates"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "const [x, setX] = useState(0);",
+      "language": "jsx"
+    },
+    {
+      "code": "const [position, setPosition] = useState({ x: 0, y: 0 });",
+      "language": "jsx"
+    },
+    {
+      "code": "position.x = 5;",
+      "language": "unknown"
+    },
+    {
+      "code": "onPointerMove={e => {  position.x = e.clientX;  position.y = e.clientY;}}",
+      "language": "javascript"
+    },
+    {
+      "code": "onPointerMove={e => {  setPosition({    x: e.clientX,    y: e.clientY  });}}",
+      "language": "css"
+    },
+    {
+      "code": "position.x = e.clientX;position.y = e.clientY;",
+      "language": "unknown"
+    },
+    {
+      "code": "const nextPosition = {};nextPosition.x = e.clientX;nextPosition.y = e.clientY;setPosition(nextPosition);",
+      "language": "javascript"
+    },
+    {
+      "code": "setPosition({  x: e.clientX,  y: e.clientY});",
+      "language": "css"
+    },
+    {
+      "code": "person.firstName = e.target.value;",
+      "language": "unknown"
+    },
+    {
+      "code": "setPerson({  firstName: e.target.value, // New first name from the input  lastName: person.lastName,  email: person.email});",
+      "language": "sql"
+    },
+    {
+      "code": "setPerson({  ...person, // Copy the old fields  firstName: e.target.value // But override this one});",
+      "language": "unknown"
+    },
+    {
+      "code": "const [person, setPerson] = useState({  name: 'Niki de Saint Phalle',  artwork: {    title: 'Blue Nana',    city: 'Hamburg',    image: 'https://i.imgur.com/Sd1AgUOm.jpg',  }});",
+      "language": "jsx"
+    },
+    {
+      "code": "person.artwork.city = 'New Delhi';",
+      "language": "unknown"
+    },
+    {
+      "code": "const nextArtwork = { ...person.artwork, city: 'New Delhi' };const nextPerson = { ...person, artwork: nextArtwork };setPerson(nextPerson);",
+      "language": "javascript"
+    },
+    {
+      "code": "setPerson({  ...person, // Copy other fields  artwork: { // but replace the artwork    ...person.artwork, // with the same one    city: 'New Delhi' // but in New Delhi!  }});",
+      "language": "json"
+    },
+    {
+      "code": "let obj = {  name: 'Niki de Saint Phalle',  artwork: {    title: 'Blue Nana',    city: 'Hamburg',    image: 'https://i.imgur.com/Sd1AgUOm.jpg',  }};",
+      "language": "css"
+    },
+    {
+      "code": "let obj1 = {  title: 'Blue Nana',  city: 'Hamburg',  image: 'https://i.imgur.com/Sd1AgUOm.jpg',};let obj2 = {  name: 'Niki de Saint Phalle',  artwork: obj1};",
+      "language": "css"
+    },
+    {
+      "code": "let obj1 = {  title: 'Blue Nana',  city: 'Hamburg',  image: 'https://i.imgur.com/Sd1AgUOm.jpg',};let obj2 = {  name: 'Niki de Saint Phalle',  artwork: obj1};let obj3 = {  name: 'Copycat',  artwork: obj1};",
+      "language": "css"
+    },
+    {
+      "code": "updatePerson(draft => {  draft.artwork.city = 'Lagos';});",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react-dom"
+  ]
+}

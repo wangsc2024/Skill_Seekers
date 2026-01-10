@@ -1,0 +1,8 @@
+{
+  "title": "Create an AI message manually (e.g., for conversation history)",
+  "content": "ai_msg = AIMessage(\"I'd be happy to help you with that question!\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-an-ai-message-manually-(e.g.,-for-conversation-history)",
+  "links": []
+}

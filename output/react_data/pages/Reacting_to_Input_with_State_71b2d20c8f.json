@@ -1,0 +1,163 @@
+{
+  "url": "https://react.dev/learn/reacting-to-input-with-state",
+  "title": "Reacting to Input with State",
+  "content": "React provides a declarative way to manipulate the UI. Instead of manipulating individual pieces of the UI directly, you describe the different states that your component can be in, and switch between them in response to the user input. This is similar to how designers think about the UI.\n\nWhen you design UI interactions, you probably think about how the UI changes in response to user actions. Consider a form that lets the user submit an answer:\n\nIn imperative programming, the above corresponds directly to how you implement interaction. You have to write the exact instructions to manipulate the UI depending on what just happened. Here’s another way to think about this: imagine riding next to someone in a car and telling them turn by turn where to go.\n\nIllustrated by Rachel Lee Nabors\n\nThey don’t know where you want to go, they just follow your commands. (And if you get the directions wrong, you end up in the wrong place!) It’s called imperative because you have to “command” each element, from the spinner to the button, telling the computer how to update the UI.\n\nIn this example of imperative UI programming, the form is built without React. It only uses the browser DOM:\n\nManipulating the UI imperatively works well enough for isolated examples, but it gets exponentially more difficult to manage in more complex systems. Imagine updating a page full of different forms like this one. Adding a new UI element or a new interaction would require carefully checking all existing code to make sure you haven’t introduced a bug (for example, forgetting to show or hide something).\n\nReact was built to solve this problem.\n\nIn React, you don’t directly manipulate the UI—meaning you don’t enable, disable, show, or hide components directly. Instead, you declare what you want to show, and React figures out how to update the UI. Think of getting into a taxi and telling the driver where you want to go instead of telling them exactly where to turn. It’s the driver’s job to get you there, and they might even know some shortcuts you haven’t considered!\n\nIllustrated by Rachel Lee Nabors\n\nYou’ve seen how to implement a form imperatively above. To better understand how to think in React, you’ll walk through reimplementing this UI in React below:\n\nIn computer science, you may hear about a “state machine” being in one of several “states”. If you work with a designer, you may have seen mockups for different “visual states”. React stands at the intersection of design and computer science, so both of these ideas are sources of inspiration.\n\nFirst, you need to visualize all the different “states” of the UI the user might see:\n\nJust like a designer, you’ll want to “mock up” or create “mocks” for the different states before you add logic. For example, here is a mock for just the visual part of the form. This mock is controlled by a prop called status with a default value of 'empty':\n\nYou could call that prop anything you like, the naming is not important. Try editing status = 'empty' to status = 'success' to see the success message appear. Mocking lets you quickly iterate on the UI before you wire up any logic. Here is a more fleshed out prototype of the same component, still “controlled” by the status prop:\n\nIf a component has a lot of visual states, it can be convenient to show them all on one page:\n\nPages like this are often called “living styleguides” or “storybooks”.\n\nYou can trigger state updates in response to two kinds of inputs:\n\nIllustrated by Rachel Lee Nabors\n\nIn both cases, you must set state variables to update the UI. For the form you’re developing, you will need to change state in response to a few different inputs:\n\nNotice that human inputs often require event handlers!\n\nTo help visualize this flow, try drawing each state on paper as a labeled circle, and each change between two states as an arrow. You can sketch out many flows this way and sort out bugs long before implementation.\n\nNext you’ll need to represent the visual states of your component in memory with useState. Simplicity is key: each piece of state is a “moving piece”, and you want as few “moving pieces” as possible. More complexity leads to more bugs!\n\nStart with the state that absolutely must be there. For example, you’ll need to store the answer for the input, and the error (if it exists) to store the last error:\n\nThen, you’ll need a state variable representing which one of the visual states that you want to display. There’s usually more than a single way to represent that in memory, so you’ll need to experiment with it.\n\nIf you struggle to think of the best way immediately, start by adding enough state that you’re definitely sure that all the possible visual states are covered:\n\nYour first idea likely won’t be the best, but that’s ok—refactoring state is a part of the process!\n\nYou want to avoid duplication in the state content so you’re only tracking what is essential. Spending a little time on refactoring your state structure will make your components easier to understand, reduce duplication, and avoid unintended meanings. Your goal is to prevent the cases where the state in memory doesn’t represent any valid UI that you’d want a user to see. (For example, you never want to show an error message and disable the input at the same time, or the user won’t be able to correct the error!)\n\nHere are some questions you can ask about your state variables:\n\nAfter this clean-up, you’re left with 3 (down from 7!) essential state variables:\n\nYou know they are essential, because you can’t remove any of them without breaking the functionality.\n\nThese three variables are a good enough representation of this form’s state. However, there are still some intermediate states that don’t fully make sense. For example, a non-null error doesn’t make sense when status is 'success'. To model the state more precisely, you can extract it into a reducer. Reducers let you unify multiple state variables into a single object and consolidate all the related logic!\n\nLastly, create event handlers that update the state. Below is the final form, with all event handlers wired up:\n\nAlthough this code is longer than the original imperative example, it is much less fragile. Expressing all interactions as state changes lets you later introduce new visual states without breaking existing ones. It also lets you change what should be displayed in each state without changing the logic of the interaction itself.\n\nMake it so that clicking on the picture removes the background--active CSS class from the outer <div>, but adds the picture--active class to the <img>. Clicking the background again should restore the original CSS classes.\n\nVisually, you should expect that clicking on the picture removes the purple background and highlights the picture border. Clicking outside the picture highlights the background, but removes the picture border highlight.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Reacting to Input with State",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "How declarative UI compares to imperative",
+      "id": "how-declarative-ui-compares-to-imperative"
+    },
+    {
+      "level": "h2",
+      "text": "Thinking about UI declaratively",
+      "id": "thinking-about-ui-declaratively"
+    },
+    {
+      "level": "h3",
+      "text": "Step 1: Identify your component’s different visual states",
+      "id": "step-1-identify-your-components-different-visual-states"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Displaying many visual states at once",
+      "id": "displaying-many-visual-states-at-once"
+    },
+    {
+      "level": "h3",
+      "text": "Step 2: Determine what triggers those state changes",
+      "id": "step-2-determine-what-triggers-those-state-changes"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Step 3: Represent the state in memory with useState",
+      "id": "step-3-represent-the-state-in-memory-with-usestate"
+    },
+    {
+      "level": "h3",
+      "text": "Step 4: Remove any non-essential state variables",
+      "id": "step-4-remove-any-non-essential-state-variables"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Eliminating “impossible” states with a reducer",
+      "id": "eliminating-impossible-states-with-a-reducer"
+    },
+    {
+      "level": "h3",
+      "text": "Step 5: Connect the event handlers to set state",
+      "id": "step-5-connect-the-event-handlers-to-set-state"
+    },
+    {
+      "level": "h2",
+      "text": "Recap",
+      "id": "recap"
+    },
+    {
+      "level": "h2",
+      "text": "Try out some challenges",
+      "id": "challenges"
+    },
+    {
+      "level": "h4",
+      "text": "Challenge 1 of 3: Add and remove a CSS class",
+      "id": "add-and-remove-a-css-class"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "const [answer, setAnswer] = useState('');const [error, setError] = useState(null);",
+      "language": "jsx"
+    },
+    {
+      "code": "const [isEmpty, setIsEmpty] = useState(true);const [isTyping, setIsTyping] = useState(false);const [isSubmitting, setIsSubmitting] = useState(false);const [isSuccess, setIsSuccess] = useState(false);const [isError, setIsError] = useState(false);",
+      "language": "jsx"
+    },
+    {
+      "code": "const [answer, setAnswer] = useState('');const [error, setError] = useState(null);const [status, setStatus] = useState('typing'); // 'typing', 'submitting', or 'success'",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react-dom"
+  ]
+}

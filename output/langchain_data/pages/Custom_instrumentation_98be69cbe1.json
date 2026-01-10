@@ -1,0 +1,50 @@
+{
+  "title": "Custom instrumentation",
+  "content": "Source: https://docs.langchain.com/langsmith/annotate-code\n\n<Note>\n  If you've decided you no longer want to trace your runs, you can remove the `LANGSMITH_TRACING` environment variable. Note that this does not affect the `RunTree` objects or API users, as these are meant to be low-level and not affected by the tracing toggle.\n</Note>\n\nThere are several ways to log traces to LangSmith.\n\n<Check>\n  If you are using LangChain (either Python or JS/TS), you can skip this section and go directly to the [LangChain-specific instructions](/langsmith/trace-with-langchain).\n</Check>\n\n## Use `@traceable` / `traceable`\n\nLangSmith makes it easy to log traces with minimal changes to your existing code with the `@traceable` decorator in Python and `traceable` function in TypeScript.\n\n<Note>\n  The `LANGSMITH_TRACING` environment variable must be set to `'true'` in order for traces to be logged to LangSmith, even when using `@traceable` or `traceable`. This allows you to toggle tracing on and off without changing your code.\n\nAdditionally, you will need to set the `LANGSMITH_API_KEY` environment variable to your API key (see [Setup](/) for more information).\n\nBy default, the traces will be logged to a project named `default`. To log traces to a different project, see [this section](/langsmith/log-traces-to-project).\n</Note>\n\nThe `@traceable` decorator is a simple way to log traces from the LangSmith Python SDK. Simply decorate any function with `@traceable`.\n\nNote that when wrapping a sync function with `traceable`, (e.g. `formatPrompt` in the example below), you should use the `await` keyword when calling it to\nensure the trace is logged correctly.\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/annotate-code-trace.gif?s=bb81d0cb45382f2d793d43624db6e9ba\" alt=\"Annotate code trace\" data-og-width=\"822\" width=\"822\" data-og-height=\"480\" height=\"480\" data-path=\"langsmith/images/annotate-code-trace.gif\" data-optimize=\"true\" data-opv=\"3\" />\n\n## Use the `trace` context manager (Python only)\n\nIn Python, you can use the `trace` context manager to log traces to LangSmith. This is useful in situations where:\n\n1. You want to log traces for a specific block of code.\n2. You want control over the inputs, outputs, and other attributes of the trace.\n3. It is not feasible to use a decorator or wrapper.\n4. Any or all of the above.\n\nThe context manager integrates seamlessly with the `traceable` decorator and `wrap_openai` wrapper, so you can use them together in the same application.\n\n## Use the `RunTree` API\n\nAnother, more explicit way to log traces to LangSmith is via the `RunTree` API. This API allows you more control over your tracing - you can manually create runs and children runs to assemble your trace. You still need to set your `LANGSMITH_API_KEY`, but `LANGSMITH_TRACING` is not necessary for this method.\n\nThis method is not recommended, as it's easier to make mistakes in propagating trace context.\n\nYou can extend the utilities above to conveniently trace any code. Below are some example extensions:\n\nTrace any public method in a class:\n\n```python  theme={null}\nfrom typing import Any, Callable, Type, TypeVar\n\ndef traceable_cls(cls: Type[T]) -> Type[T]:\n    \"\"\"Instrument all public methods in a class.\"\"\"\n    def wrap_method(name: str, method: Any) -> Any:\n        if callable(method) and not name.startswith(\"__\"):\n            return traceable(name=f\"{cls.__name__}.{name}\")(method)\n        return method\n\n# Handle __dict__ case\n    for name in dir(cls):\n        if not name.startswith(\"_\"):\n            try:\n                method = getattr(cls, name)\n                setattr(cls, name, wrap_method(name, method))\n            except AttributeError:\n                # Skip attributes that can't be set (e.g., some descriptors)\n                pass\n\n# Handle __slots__ case\n    if hasattr(cls, \"__slots__\"):\n        for slot in cls.__slots__:  # type: ignore[attr-defined]\n            if not slot.startswith(\"__\"):\n                try:\n                    method = getattr(cls, slot)\n                    setattr(cls, slot, wrap_method(slot, method))\n                except AttributeError:\n                    # Skip slots that don't have a value yet\n                    pass\n\n@traceable_cls\nclass MyClass:\n    def __init__(self, some_val: int):\n        self.some_val = some_val\n\ndef combine(self, other_val: int):\n        return self.some_val + other_val",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/E8FdemkcQxROovD9/langsmith/images/annotate-code-trace.gif?s=bb81d0cb45382f2d793d43624db6e9ba\" alt=\"Annotate code trace\" data-og-width=\"822\" width=\"822\" data-og-height=\"480\" height=\"480\" data-path=\"langsmith/images/annotate-code-trace.gif\" data-optimize=\"true\" data-opv=\"3\" />\n\n## Use the `trace` context manager (Python only)\n\nIn Python, you can use the `trace` context manager to log traces to LangSmith. This is useful in situations where:\n\n1. You want to log traces for a specific block of code.\n2. You want control over the inputs, outputs, and other attributes of the trace.\n3. It is not feasible to use a decorator or wrapper.\n4. Any or all of the above.\n\nThe context manager integrates seamlessly with the `traceable` decorator and `wrap_openai` wrapper, so you can use them together in the same application.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Use the `RunTree` API\n\nAnother, more explicit way to log traces to LangSmith is via the `RunTree` API. This API allows you more control over your tracing - you can manually create runs and children runs to assemble your trace. You still need to set your `LANGSMITH_API_KEY`, but `LANGSMITH_TRACING` is not necessary for this method.\n\nThis method is not recommended, as it's easier to make mistakes in propagating trace context.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Example usage\n\nYou can extend the utilities above to conveniently trace any code. Below are some example extensions:\n\nTrace any public method in a class:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Use `@traceable` / `traceable`",
+      "id": "use-`@traceable`-/-`traceable`"
+    },
+    {
+      "level": "h2",
+      "text": "Use the `trace` context manager (Python only)",
+      "id": "use-the-`trace`-context-manager-(python-only)"
+    },
+    {
+      "level": "h2",
+      "text": "Use the `RunTree` API",
+      "id": "use-the-`runtree`-api"
+    },
+    {
+      "level": "h2",
+      "text": "Example usage",
+      "id": "example-usage"
+    }
+  ],
+  "url": "llms-txt#custom-instrumentation",
+  "links": []
+}

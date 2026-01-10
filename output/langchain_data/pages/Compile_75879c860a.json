@@ -1,0 +1,23 @@
+{
+  "title": "Compile",
+  "content": "checkpointer = InMemorySaver()\ngraph = workflow.compile(checkpointer=checkpointer)\ngraph\npython  theme={null}\nconfig = {\n    \"configurable\": {\n        \"thread_id\": uuid.uuid4(),\n    }\n}\nstate = graph.invoke({}, config)\n\nprint(state[\"topic\"])\nprint()\nprint(state[\"joke\"])\n\nHow about \"The Secret Life of Socks in the Dryer\"? You know, exploring the mysterious phenomenon of how socks go into the laundry as pairs but come out as singles. Where do they go? Are they starting new lives elsewhere? Is there a sock paradise we don't know about? There's a lot of comedic potential in the everyday mystery that unites us all!",
+  "code_samples": [
+    {
+      "code": "### 1. Run the graph",
+      "language": "unknown"
+    },
+    {
+      "code": "**Output:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "1. Run the graph",
+      "id": "1.-run-the-graph"
+    }
+  ],
+  "url": "llms-txt#compile",
+  "links": []
+}

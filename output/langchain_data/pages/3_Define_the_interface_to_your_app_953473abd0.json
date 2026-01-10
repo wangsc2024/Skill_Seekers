@@ -1,0 +1,8 @@
+{
+  "title": "3. Define the interface to your app",
+  "content": "def chatbot(inputs: dict) -> dict:\n    return {\"answer\": inputs[\"question\"] + \" is a good question. I don't know the answer.\"}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#3.-define-the-interface-to-your-app",
+  "links": []
+}

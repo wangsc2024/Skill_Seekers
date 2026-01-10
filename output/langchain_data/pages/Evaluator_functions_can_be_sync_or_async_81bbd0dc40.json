@@ -1,0 +1,8 @@
+{
+  "title": "Evaluator functions can be sync or async",
+  "content": "def concise(inputs: dict, outputs: dict) -> bool:\n    return len(outputs[\"output\"]) < 3 * len(inputs[\"idea\"])\n\nls_client = Client()\nideas = [\n    \"universal basic income\",\n    \"nuclear fusion\",\n    \"hyperloop\",\n    \"nuclear powered rockets\",\n]\ndataset = ls_client.create_dataset(\"research ideas\")\nls_client.create_examples(\n    dataset_name=dataset.name,\n    examples=[{\"inputs\": {\"idea\": i}} for i in ideas],\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#evaluator-functions-can-be-sync-or-async",
+  "links": []
+}

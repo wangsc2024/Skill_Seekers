@@ -1,0 +1,8 @@
+{
+  "title": "Helper functions to extract answers from different formats",
+  "content": "def extract_xml_answer(text: str) -> str:\n    answer = text.split(\"<answer>\")[-1]\n    answer = answer.split(\"</answer>\")[0]\n    return answer.strip()\n\ndef extract_hash_answer(text: str) -> str | None:\n    if \"####\" not in text:\n        return None\n    return text.split(\"####\")[1].strip()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#helper-functions-to-extract-answers-from-different-formats",
+  "links": []
+}

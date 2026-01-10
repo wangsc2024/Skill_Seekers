@@ -1,0 +1,8 @@
+{
+  "title": "Load a prompt with arguments",
+  "content": "messages = await client.get_prompt(  # [!code highlight]\n    \"server_name\",  # [!code highlight]\n    \"code_review\",  # [!code highlight]\n    arguments={\"language\": \"python\", \"focus\": \"security\"}  # [!code highlight]\n)  # [!code highlight]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#load-a-prompt-with-arguments",
+  "links": []
+}

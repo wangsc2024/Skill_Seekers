@@ -1,0 +1,69 @@
+{
+  "title": "Handoffs",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs\n\nIn the **handoffs** architecture, behavior changes dynamically based on state. The core mechanism: [tools](/oss/python/langchain/tools) update a state variable (e.g., `current_step` or `active_agent`) that persists across turns, and the system reads this variable to adjust behavior—either applying different configuration (system prompt, tools) or routing to a different [agent](/oss/python/langchain/agents). This pattern supports both handoffs between distinct agents and dynamic configuration changes within a single agent.\n\n<Tip>\n  The term **handoffs** was coined by [OpenAI](https://openai.github.io/openai-agents-python/handoffs/) for using tool calls (e.g., `transfer_to_sales_agent`) to transfer control between agents or states.\n</Tip>\n\n## Key characteristics\n\n* State-driven behavior: Behavior changes based on a state variable (e.g., `current_step` or `active_agent`)\n* Tool-based transitions: Tools update the state variable to move between states\n* Direct user interaction: Each state's configuration handles user messages directly\n* Persistent state: State survives across conversation turns\n\nUse the handoffs pattern when you need to enforce sequential constraints (unlock capabilities only after preconditions are met), the agent needs to converse directly with the user across different states, or you're building multi-stage conversational flows. This pattern is particularly valuable for customer support scenarios where you need to collect information in a specific sequence — for example, collecting a warranty ID before processing a refund.\n\n## Basic implementation\n\nThe core mechanism is a [tool](/oss/python/langchain/tools) that returns a [`Command`](/oss/python/langgraph/graph-api#command) to update state, triggering a transition to a new step or agent:\n\n<Note>\n  **Why include a `ToolMessage`?** When an LLM calls a tool, it expects a response. The `ToolMessage` with matching `tool_call_id` completes this request-response cycle—without it, the conversation history becomes malformed. This is required whenever your handoff tool updates messages.\n</Note>\n\nFor a complete implementation, see the tutorial below.\n\n<Card title=\"Tutorial: Build customer support with handoffs\" icon=\"people-arrows\" href=\"/oss/python/langchain/multi-agent/handoffs-customer-support\" arrow cta=\"Learn more\">\n  Learn how to build a customer support agent using the handoffs pattern, where a single agent transitions between different configurations.\n</Card>\n\n## Implementation approaches\n\nThere are two ways to implement handoffs: **[single agent with middleware](#single-agent-with-middleware)** (one agent with dynamic configuration) or **[multiple agent subgraphs](#multiple-agent-subgraphs)** (distinct agents as graph nodes).\n\n### Single agent with middleware\n\nA single agent changes its behavior based on state. Middleware intercepts each model call and dynamically adjusts the system prompt and available tools. Tools update the state variable to trigger transitions:\n\n<Accordion title=\"Complete example: Customer support with middleware\">\n  \n</Accordion>\n\n### Multiple agent subgraphs\n\nMultiple distinct agents exist as separate nodes in a graph. Handoff tools navigate between agent nodes using `Command.PARENT` to specify which node to execute next.\n\n<Warning>\n  Subgraph handoffs require careful **[context engineering](/oss/python/langchain/context-engineering)**. Unlike single-agent middleware (where message history flows naturally), you must explicitly decide what messages pass between agents. Get this wrong and agents receive malformed conversation history or bloated context. See [Context engineering](#context-engineering) below.\n</Warning>\n\n<Accordion title=\"Complete example: Sales and support with handoffs\">\n  This example shows a multi-agent system with separate sales and support agents. Each agent is a separate graph node, and handoff tools allow agents to transfer conversations to each other.\n\n<Tip>\n  Use **single agent with middleware** for most handoffs use cases—it's simpler. Only use **multiple agent subgraphs** when you need bespoke agent implementations (e.g., a node that's itself a complex graph with reflection or retrieval steps).\n</Tip>\n\n#### Context engineering\n\nWith subgraph handoffs, you control exactly what messages flow between agents. This precision is essential for maintaining valid conversation history and avoiding context bloat that could confuse downstream agents. For more on this topic, see [context engineering](/oss/python/langchain/context-engineering).\n\n**Handling context during handoffs**\n\nWhen handing off between agents, you need to ensure the conversation history remains valid. LLMs expect tool calls to be paired with their responses, so when using `Command.PARENT` to hand off to another agent, you must include both:\n\n1. **The `AIMessage` containing the tool call** (the message that triggered the handoff)\n2. **A `ToolMessage` acknowledging the handoff** (the artificial response to that tool call)\n\nWithout this pairing, the receiving agent will see an incomplete conversation and may produce errors or unexpected behavior.\n\nThe example below assumes only the handoff tool was called (no parallel tool calls):\n\n<Note>\n  **Why not pass all subagent messages?** While you could include the full subagent conversation in the handoff, this often creates problems. The receiving agent may become confused by irrelevant internal reasoning, and token costs increase unnecessarily. By passing only the handoff pair, you keep the parent graph's context focused on high-level coordination. If the receiving agent needs additional context, consider summarizing the subagent's work in the ToolMessage content instead of passing raw message history.\n</Note>\n\n**Returning control to the user**\n\nWhen returning control to the user (ending the agent's turn), ensure the final message is an `AIMessage`. This maintains valid conversation history and signals to the user interface that the agent has finished its work.\n\n## Implementation Considerations\n\nAs you design your multi-agent system, consider:\n\n* **Context filtering strategy**: Will each agent receive full conversation history, filtered portions, or summaries? Different agents may need different context depending on their role.\n* **Tool semantics**: Clarify whether handoff tools only update routing state or also perform side effects. For example, should `transfer_to_sales()` also create a support ticket, or should that be a separate action?\n* **Token efficiency**: Balance context completeness against token costs. Summarization and selective context passing become more important as conversations grow longer.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/multi-agent/handoffs.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## Key characteristics\n\n* State-driven behavior: Behavior changes based on a state variable (e.g., `current_step` or `active_agent`)\n* Tool-based transitions: Tools update the state variable to move between states\n* Direct user interaction: Each state's configuration handles user messages directly\n* Persistent state: State survives across conversation turns\n\n## When to use\n\nUse the handoffs pattern when you need to enforce sequential constraints (unlock capabilities only after preconditions are met), the agent needs to converse directly with the user across different states, or you're building multi-stage conversational flows. This pattern is particularly valuable for customer support scenarios where you need to collect information in a specific sequence — for example, collecting a warranty ID before processing a refund.\n\n## Basic implementation\n\nThe core mechanism is a [tool](/oss/python/langchain/tools) that returns a [`Command`](/oss/python/langgraph/graph-api#command) to update state, triggering a transition to a new step or agent:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n  **Why include a `ToolMessage`?** When an LLM calls a tool, it expects a response. The `ToolMessage` with matching `tool_call_id` completes this request-response cycle—without it, the conversation history becomes malformed. This is required whenever your handoff tool updates messages.\n</Note>\n\nFor a complete implementation, see the tutorial below.\n\n<Card title=\"Tutorial: Build customer support with handoffs\" icon=\"people-arrows\" href=\"/oss/python/langchain/multi-agent/handoffs-customer-support\" arrow cta=\"Learn more\">\n  Learn how to build a customer support agent using the handoffs pattern, where a single agent transitions between different configurations.\n</Card>\n\n## Implementation approaches\n\nThere are two ways to implement handoffs: **[single agent with middleware](#single-agent-with-middleware)** (one agent with dynamic configuration) or **[multiple agent subgraphs](#multiple-agent-subgraphs)** (distinct agents as graph nodes).\n\n### Single agent with middleware\n\nA single agent changes its behavior based on state. Middleware intercepts each model call and dynamically adjusts the system prompt and available tools. Tools update the state variable to trigger transitions:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Complete example: Customer support with middleware\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n### Multiple agent subgraphs\n\nMultiple distinct agents exist as separate nodes in a graph. Handoff tools navigate between agent nodes using `Command.PARENT` to specify which node to execute next.\n\n<Warning>\n  Subgraph handoffs require careful **[context engineering](/oss/python/langchain/context-engineering)**. Unlike single-agent middleware (where message history flows naturally), you must explicitly decide what messages pass between agents. Get this wrong and agents receive malformed conversation history or bloated context. See [Context engineering](#context-engineering) below.\n</Warning>",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Complete example: Sales and support with handoffs\">\n  This example shows a multi-agent system with separate sales and support agents. Each agent is a separate graph node, and handoff tools allow agents to transfer conversations to each other.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n<Tip>\n  Use **single agent with middleware** for most handoffs use cases—it's simpler. Only use **multiple agent subgraphs** when you need bespoke agent implementations (e.g., a node that's itself a complex graph with reflection or retrieval steps).\n</Tip>\n\n#### Context engineering\n\nWith subgraph handoffs, you control exactly what messages flow between agents. This precision is essential for maintaining valid conversation history and avoiding context bloat that could confuse downstream agents. For more on this topic, see [context engineering](/oss/python/langchain/context-engineering).\n\n**Handling context during handoffs**\n\nWhen handing off between agents, you need to ensure the conversation history remains valid. LLMs expect tool calls to be paired with their responses, so when using `Command.PARENT` to hand off to another agent, you must include both:\n\n1. **The `AIMessage` containing the tool call** (the message that triggered the handoff)\n2. **A `ToolMessage` acknowledging the handoff** (the artificial response to that tool call)\n\nWithout this pairing, the receiving agent will see an incomplete conversation and may produce errors or unexpected behavior.\n\nThe example below assumes only the handoff tool was called (no parallel tool calls):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Key characteristics",
+      "id": "key-characteristics"
+    },
+    {
+      "level": "h2",
+      "text": "When to use",
+      "id": "when-to-use"
+    },
+    {
+      "level": "h2",
+      "text": "Basic implementation",
+      "id": "basic-implementation"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation approaches",
+      "id": "implementation-approaches"
+    },
+    {
+      "level": "h3",
+      "text": "Single agent with middleware",
+      "id": "single-agent-with-middleware"
+    },
+    {
+      "level": "h3",
+      "text": "Multiple agent subgraphs",
+      "id": "multiple-agent-subgraphs"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation Considerations",
+      "id": "implementation-considerations"
+    }
+  ],
+  "url": "llms-txt#handoffs",
+  "links": []
+}

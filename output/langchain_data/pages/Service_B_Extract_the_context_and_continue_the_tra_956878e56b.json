@@ -1,0 +1,8 @@
+{
+  "title": "Service B: Extract the context and continue the trace",
+  "content": "from flask import Flask, request, jsonify\n\napp = Flask(__name__)\n\n@app.route(\"/process\", methods=[\"POST\"])\ndef service_b_endpoint():\n    # Extract the trace context from the request headers\n    context = extract(request.headers)\n    with tracer.start_as_current_span(\"service_b_operation\", context=context) as span:\n        data = request.json\n        summary = data.get(\"summary\", \"\")\n\n# Process the summary with another LLM chain\n        prompt = ChatPromptTemplate.from_template(\"Analyze the sentiment of: {text}\")\n        model = ChatOpenAI()\n        chain = prompt | model\n        result = chain.invoke({\"text\": summary})\n\nreturn jsonify({\"analysis\": result.content})\n\nif __name__ == \"__main__\":\n    app.run(port=5000)\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/trace-with-opentelemetry.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#service-b:-extract-the-context-and-continue-the-trace",
+  "links": []
+}

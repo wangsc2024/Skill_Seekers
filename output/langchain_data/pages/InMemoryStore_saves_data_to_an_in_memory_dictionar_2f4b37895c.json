@@ -1,0 +1,8 @@
+{
+  "title": "InMemoryStore saves data to an in-memory dictionary. Use a DB-backed store in production use.",
+  "content": "store = InMemoryStore(index={\"embed\": embed, \"dims\": 2}) # [!code highlight]\nuser_id = \"my-user\"\napplication_context = \"chitchat\"\nnamespace = (user_id, application_context) # [!code highlight]\nstore.put( # [!code highlight]\n    namespace,\n    \"a-memory\",\n    {\n        \"rules\": [\n            \"User likes short, direct language\",\n            \"User only speaks English & python\",\n        ],\n        \"my-key\": \"my-value\",\n    },\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#inmemorystore-saves-data-to-an-in-memory-dictionary.-use-a-db-backed-store-in-production-use.",
+  "links": []
+}

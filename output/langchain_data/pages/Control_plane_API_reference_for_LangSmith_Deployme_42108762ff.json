@@ -1,0 +1,39 @@
+{
+  "title": "Control plane API reference for LangSmith Deployment",
+  "content": "Source: https://docs.langchain.com/langsmith/api-ref-control-plane\n\nThe control plane API is part of [LangSmith Deployment](/langsmith/deployments). With the control plane API, you can programmatically create, manage, and automate your [Agent Server](/langsmith/agent-server) deployments—for example, as part of a custom CI/CD workflow.\n\nBrowse the full API reference in the **Control Plane API** section in the sidebar, or refer to the endpoint groups:\n\n* [Integrations (v1)](/api-reference/integrations-v1/list-github-integrations): GitHub integrations and repository listings\n* [Deployments (v2)](/api-reference/deployments-v2): Create, manage, and update Agent Server deployments\n* [Listeners (v2)](/api-reference/listeners-v2): Listener resources for self-hosted enterprise organizations\n* [Auth Service (v2)](/api-reference/auth-service-v2): OAuth provider configuration and authentication flows\n\nThe control plane hosts for Cloud data regions:\n\n| US                               | EU                                  |\n| -------------------------------- | ----------------------------------- |\n| `https://api.host.langchain.com` | `https://eu.api.host.langchain.com` |\n\n**Note**: Self-hosted deployments of LangSmith will have a custom host for the control plane. The control plane APIs can be accessed at the path `/api-host`. For example, `http(s)://<host>/api-host/v2/deployments`. See [here](../langsmith/self-host-usage#configuring-the-application-you-want-to-use-with-langsmith) for more details.\n\nTo authenticate with the control plane API, set the `X-Api-Key` header to a valid LangSmith API key and set the `X-Tenant-Id` header to a valid workspace ID to target.\n\nExample `curl` command:\n\nEach endpoint path is prefixed with a version (e.g. `v1`, `v2`).\n\n1. Call `POST /v2/deployments` to create a new Deployment. The response body contains the Deployment ID (`id`) and the ID of the latest (and first) revision (`latest_revision_id`).\n2. Call `GET /v2/deployments/{deployment_id}` to retrieve the Deployment. Set `deployment_id` in the URL to the value of Deployment ID (`id`).\n3. Poll for revision `status` until `status` is `DEPLOYED` by calling `GET /v2/deployments/{deployment_id}/revisions/{latest_revision_id}`.\n4. Call `PATCH /v2/deployments/{deployment_id}` to update the deployment.\n\nBelow is example Python code that demonstrates how to orchestrate the control plane APIs to create a deployment, update the deployment, and delete the deployment.\n\n```python  theme={null}\nimport os\nimport time\n\nimport requests\nfrom dotenv import load_dotenv",
+  "code_samples": [
+    {
+      "code": "## Versioning\n\nEach endpoint path is prefixed with a version (e.g. `v1`, `v2`).\n\n## Quick Start\n\n1. Call `POST /v2/deployments` to create a new Deployment. The response body contains the Deployment ID (`id`) and the ID of the latest (and first) revision (`latest_revision_id`).\n2. Call `GET /v2/deployments/{deployment_id}` to retrieve the Deployment. Set `deployment_id` in the URL to the value of Deployment ID (`id`).\n3. Poll for revision `status` until `status` is `DEPLOYED` by calling `GET /v2/deployments/{deployment_id}/revisions/{latest_revision_id}`.\n4. Call `PATCH /v2/deployments/{deployment_id}` to update the deployment.\n\n## Example Code\n\nBelow is example Python code that demonstrates how to orchestrate the control plane APIs to create a deployment, update the deployment, and delete the deployment.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Host",
+      "id": "host"
+    },
+    {
+      "level": "h2",
+      "text": "Authentication",
+      "id": "authentication"
+    },
+    {
+      "level": "h2",
+      "text": "Versioning",
+      "id": "versioning"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start",
+      "id": "quick-start"
+    },
+    {
+      "level": "h2",
+      "text": "Example Code",
+      "id": "example-code"
+    }
+  ],
+  "url": "llms-txt#control-plane-api-reference-for-langsmith-deployment",
+  "links": []
+}

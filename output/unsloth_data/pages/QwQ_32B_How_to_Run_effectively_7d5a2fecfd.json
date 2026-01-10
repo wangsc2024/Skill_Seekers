@@ -1,0 +1,59 @@
+{
+  "title": "QwQ-32B: How to Run effectively",
+  "content": "How to run QwQ-32B effectively with our bug fixes and without endless generations + GGUFs.\n\nQwen released QwQ-32B - a reasoning model with performance comparable to DeepSeek-R1 on many [benchmarks](https://qwenlm.github.io/blog/qwq-32b/). However, people have been experiencing **infinite generations**, **many repetitions**, \\<think> token issues and finetuning issues. We hope this guide will help debug and fix most issues!\n\n{% hint style=\"info\" %}\nOur model uploads with our bug fixes work great for fine-tuning, vLLM and Transformers. If you're using llama.cpp and engines that use llama.cpp as backend, follow our [instructions here](#tutorial-how-to-run-qwq-32b) to fix endless generations.\n{% endhint %}\n\n**Unsloth QwQ-32B uploads with our bug fixes:**\n\n| [GGUF](https://huggingface.co/unsloth/QwQ-32B-GGUF) | [Dynamic 4-bit](https://huggingface.co/unsloth/QwQ-32B-unsloth-bnb-4bit) | [BnB 4-bit](https://huggingface.co/unsloth/QwQ-32B-bnb-4bit) | [16-bit](https://huggingface.co/unsloth/QwQ-32B) |\n| --------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |\n\n## :gear: Official Recommended Settings\n\nAccording to [Qwen](https://huggingface.co/Qwen/QwQ-32B), these are the recommended settings for inference:\n\n* Temperature of 0.6\n* Top\\_K of 40 (or 20 to 40)\n* Min\\_P of 0.00 (optional, but 0.01 works well, llama.cpp default is 0.1)\n* Top\\_P of 0.95\n* Repetition Penalty of 1.0. (1.0 means disabled in llama.cpp and transformers)\n* Chat template: `<|im_start|>user\\nCreate a Flappy Bird game in Python.<|im_end|>\\n<|im_start|>assistant\\n<think>\\n`\n\n{% hint style=\"warning\" %}\n`llama.cpp` uses `min_p = 0.1`by default, which might cause issues. Force it to 0.0.\n{% endhint %}\n\n## :thumbsup: Recommended settings for llama.cpp\n\nWe noticed many people use a `Repetition Penalty` greater than 1.0. For example 1.1 to 1.5. This actually interferes with llama.cpp's sampling mechanisms. The goal of a repetition penalty is to penalize repeated generations, but we found this doesn't work as expected.\n\nTurning off `Repetition Penalty` also works (ie setting it to 1.0), but we found using it to be useful to penalize endless generations.\n\nTo use it, we found you must also edit the ordering of samplers in llama.cpp to before applying `Repetition Penalty`, otherwise there will be endless generations. So add this:\n\nBy default, llama.cpp uses this ordering:\n\nWe reorder essentially temperature and dry, and move min\\_p forward. This means we apply samplers in this order:\n\nIf you still encounter issues, you can increase the`--repeat-penalty 1.0 to 1.2 or 1.3.`\n\nCourtesy to [@krist486](https://x.com/krist486/status/1897885598196654180) for bringing llama.cpp sampling directions to my attention.\n\n## :sunny: Dry Repetition Penalty\n\nWe investigated usage of `dry penalty` as suggested in <https://github.com/ggml-org/llama.cpp/blob/master/examples/main/README.md> using a value of 0.8, but we actually found this to **rather cause syntax issues especially for coding**. If you still encounter issues, you can increase the`dry penalty to 0.8.`\n\nUtilizing our swapped sampling ordering can also help if you decide to use `dry penalty`.\n\n## :llama: Tutorial: How to Run QwQ-32B in Ollama\n\n1. Install `ollama` if you haven't already!\n\n2. Run run the model! Note you can call `ollama serve`in another terminal if it fails! We include all our fixes and suggested parameters (temperature, min\\_p etc) in `param` in our Hugging Face upload!\n\n## 📖 Tutorial: How to Run QwQ-32B in llama.cpp\n\n1. Obtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n2. Download the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose Q4\\_K\\_M, or other quantized versions (like BF16 full precision). More versions at: <https://huggingface.co/unsloth/QwQ-32B-GGUF>",
+  "code_samples": [
+    {
+      "code": "--samplers \"top_k;top_p;min_p;temperature;dry;typ_p;xtc\"",
+      "language": "bash"
+    },
+    {
+      "code": "--samplers \"dry;top_k;typ_p;top_p;min_p;xtc;temperature\"",
+      "language": "bash"
+    },
+    {
+      "code": "top_k=40\ntop_p=0.95\nmin_p=0.0\ntemperature=0.6\ndry\ntyp_p\nxtc",
+      "language": "bash"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils -y\ncurl -fsSL https://ollama.com/install.sh | sh",
+      "language": "bash"
+    },
+    {
+      "code": "ollama run hf.co/unsloth/QwQ-32B-GGUF:Q4_K_M",
+      "language": "bash"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggerganov/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=ON -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-quantize llama-cli llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": ":gear: Official Recommended Settings",
+      "id": ":gear:-official-recommended-settings"
+    },
+    {
+      "level": "h2",
+      "text": ":thumbsup: Recommended settings for llama.cpp",
+      "id": ":thumbsup:-recommended-settings-for-llama.cpp"
+    },
+    {
+      "level": "h2",
+      "text": ":sunny: Dry Repetition Penalty",
+      "id": ":sunny:-dry-repetition-penalty"
+    },
+    {
+      "level": "h2",
+      "text": ":llama: Tutorial: How to Run QwQ-32B in Ollama",
+      "id": ":llama:-tutorial:-how-to-run-qwq-32b-in-ollama"
+    },
+    {
+      "level": "h2",
+      "text": "📖 Tutorial: How to Run QwQ-32B in llama.cpp",
+      "id": "📖-tutorial:-how-to-run-qwq-32b-in-llama.cpp"
+    }
+  ],
+  "url": "llms-txt#qwq-32b:-how-to-run-effectively",
+  "links": []
+}

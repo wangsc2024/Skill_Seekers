@@ -1,0 +1,29 @@
+{
+  "title": "Environment variables",
+  "content": "Source: https://docs.langchain.com/langsmith/env-var\n\nThe Agent Server supports specific environment variables for configuring a deployment.\n\n## `BG_JOB_ISOLATED_LOOPS`\n\nSet `BG_JOB_ISOLATED_LOOPS` to `True` to execute background runs in an isolated event loop separate from the serving API event loop.\n\nThis environment variable should be set to `True` if the implementation of a graph/node contains synchronous code. In this situation, the synchronous code will block the serving API event loop, which may cause the API to be unavailable. A symptom of an unavailable API is continuous application restarts due to failing health checks.\n\n## `BG_JOB_SHUTDOWN_GRACE_PERIOD_SECS`\n\nSpecifies, in seconds, how long the server will wait for background jobs to finish after the queue receives a shutdown signal. After this period, the server will force termination. Defaults to `180` seconds. The maximum value is `3600` seconds. Set this to ensure jobs have enough time to complete cleanly during shutdown. Added in `langgraph-api==0.2.16`.\n\n## `BG_JOB_TIMEOUT_SECS`\n\nThe timeout of a background run can be increased. However, the infrastructure for a Cloud deployment enforces a 1 hour timeout limit for API requests. This means the connection between client and server will timeout after 1 hour. This is not configurable.\n\nA background run can execute for longer than 1 hour, but a client must reconnect to the server (e.g. join stream via `POST /threads/{thread_id}/runs/{run_id}/stream`) to retrieve output from the run if the run is taking longer than 1 hour.\n\n## `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`\n\nSpecify `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` to configure OpenTelemetry APM tracing for the deployment. Specify other [`OTEL_*` environment variables](https://opentelemetry.io/docs/collector/configuration/) to configure tracing, logging, and other instrumentation.\n\n```shell  theme={null}",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "`BG_JOB_ISOLATED_LOOPS`",
+      "id": "`bg_job_isolated_loops`"
+    },
+    {
+      "level": "h2",
+      "text": "`BG_JOB_SHUTDOWN_GRACE_PERIOD_SECS`",
+      "id": "`bg_job_shutdown_grace_period_secs`"
+    },
+    {
+      "level": "h2",
+      "text": "`BG_JOB_TIMEOUT_SECS`",
+      "id": "`bg_job_timeout_secs`"
+    },
+    {
+      "level": "h2",
+      "text": "`OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`",
+      "id": "`otel_exporter_otlp_traces_endpoint`"
+    }
+  ],
+  "url": "llms-txt#environment-variables",
+  "links": []
+}

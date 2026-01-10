@@ -1,0 +1,351 @@
+{
+  "url": "https://react.dev/reference/react/cache",
+  "title": "cache",
+  "content": "cache is only for use with React Server Components.\n\ncache lets you cache the result of a data fetch or computation.\n\nCall cache outside of any components to create a version of the function with caching.\n\nWhen getMetrics is first called with data, getMetrics will call calculateMetrics(data) and store the result in cache. If getMetrics is called again with the same data, it will return the cached result instead of calling calculateMetrics(data) again.\n\nSee more examples below.\n\ncache returns a cached version of fn with the same type signature. It does not call fn in the process.\n\nWhen calling cachedFn with given arguments, it first checks if a cached result exists in the cache. If a cached result exists, it returns the result. If not, it calls fn with the arguments, stores the result in the cache, and returns the result. The only time fn is called is when there is a cache miss.\n\nThe optimization of caching return values based on inputs is known as memoization. We refer to the function returned from cache as a memoized function.\n\nUse cache to skip duplicate work.\n\nIf the same user object is rendered in both Profile and TeamReport, the two components can share work and only call calculateUserMetrics once for that user.\n\nAssume Profile is rendered first. It will call getUserMetrics, and check if there is a cached result. Since it is the first time getUserMetrics is called with that user, there will be a cache miss. getUserMetrics will then call calculateUserMetrics with that user and write the result to cache.\n\nWhen TeamReport renders its list of users and reaches the same user object, it will call getUserMetrics and read the result from cache.\n\nIf calculateUserMetrics can be aborted by passing an AbortSignal, you can use cacheSignal() to cancel the expensive computation if React has finished rendering. calculateUserMetrics may already handle cancellation internally by using cacheSignal directly.\n\nTo access the same cache, components must call the same memoized function.\n\nIn the above example, Precipitation and Temperature each call cache to create a new memoized function with their own cache look-up. If both components render for the same cityData, they will do duplicate work to call calculateWeekReport.\n\nIn addition, Temperature creates a new memoized function each time the component is rendered which doesn’t allow for any cache sharing.\n\nTo maximize cache hits and reduce work, the two components should call the same memoized function to access the same cache. Instead, define the memoized function in a dedicated module that can be import-ed across components.\n\nHere, both components call the same memoized function exported from ./getWeekReport.js to read and write to the same cache.\n\nTo share a snapshot of data between components, call cache with a data-fetching function like fetch. When multiple components make the same data fetch, only one request is made and the data returned is cached and shared across components. All components refer to the same snapshot of data across the server render.\n\nIf AnimatedWeatherCard and MinimalWeatherCard both render for the same city, they will receive the same snapshot of data from the memoized function.\n\nIf AnimatedWeatherCard and MinimalWeatherCard supply different city arguments to getTemperature, then fetchTemperature will be called twice and each call site will receive different data.\n\nThe city acts as a cache key.\n\nAsynchronous rendering is only supported for Server Components.\n\nTo render components that use asynchronous data in Client Components, see use() documentation.\n\nBy caching a long-running data fetch, you can kick off asynchronous work prior to rendering the component.\n\nWhen rendering Page, the component calls getUser but note that it doesn’t use the returned data. This early getUser call kicks off the asynchronous database query that occurs while Page is doing other computational work and rendering children.\n\nWhen rendering Profile, we call getUser again. If the initial getUser call has already returned and cached the user data, when Profile asks and waits for this data, it can simply read from the cache without requiring another remote procedure call. If the initial data request hasn’t been completed, preloading data in this pattern reduces delay in data-fetching.\n\nWhen evaluating an asynchronous function, you will receive a Promise for that work. The promise holds the state of that work (pending, fulfilled, failed) and its eventual settled result.\n\nIn this example, the asynchronous function fetchData returns a promise that is awaiting the fetch.\n\nIn calling getData the first time, the promise returned from fetchData is cached. Subsequent look-ups will then return the same promise.\n\nNotice that the first getData call does not await whereas the second does. await is a JavaScript operator that will wait and return the settled result of the promise. The first getData call simply initiates the fetch to cache the promise for the second getData to look-up.\n\nIf by the second call the promise is still pending, then await will pause for the result. The optimization is that while we wait on the fetch, React can continue with computational work, thus reducing the wait time for the second call.\n\nIf the promise is already settled, either to an error or the fulfilled result, await will return that value immediately. In both outcomes, there is a performance benefit.\n\nReact only provides cache access to the memoized function in a component. When calling getUser outside of a component, it will still evaluate the function but not read or update the cache.\n\nThis is because cache access is provided through a context which is only accessible from a component.\n\nAll mentioned APIs offer memoization but the difference is what they’re intended to memoize, who can access the cache, and when their cache is invalidated.\n\nIn general, you should use useMemo for caching an expensive computation in a Client Component across renders. As an example, to memoize a transformation of data within a component.\n\nIn this example, App renders two WeatherReports with the same record. Even though both components do the same work, they cannot share work. useMemo’s cache is only local to the component.\n\nHowever, useMemo does ensure that if App re-renders and the record object doesn’t change, each component instance would skip work and use the memoized value of avgTemp. useMemo will only cache the last computation of avgTemp with the given dependencies.\n\nIn general, you should use cache in Server Components to memoize work that can be shared across components.\n\nRe-writing the previous example to use cache, in this case the second instance of WeatherReport will be able to skip duplicate work and read from the same cache as the first WeatherReport. Another difference from the previous example is that cache is also recommended for memoizing data fetches, unlike useMemo which should only be used for computations.\n\nAt this time, cache should only be used in Server Components and the cache will be invalidated across server requests.\n\nYou should use memo to prevent a component re-rendering if its props are unchanged.\n\nIn this example, both MemoWeatherReport components will call calculateAvg when first rendered. However, if App re-renders, with no changes to record, none of the props have changed and MemoWeatherReport will not re-render.\n\nCompared to useMemo, memo memoizes the component render based on props vs. specific computations. Similar to useMemo, the memoized component only caches the last render with the last prop values. Once the props change, the cache invalidates and the component re-renders.\n\nSee prior mentioned pitfalls\n\nIf none of the above apply, it may be a problem with how React checks if something exists in cache.\n\nIf your arguments are not primitives (ex. objects, functions, arrays), ensure you’re passing the same object reference.\n\nWhen calling a memoized function, React will look up the input arguments to see if a result is already cached. React will use shallow equality of the arguments to determine if there is a cache hit.\n\nIn this case the two MapMarkers look like they’re doing the same work and calling calculateNorm with the same value of {x: 10, y: 10, z:10}. Even though the objects contain the same values, they are not the same object reference as each component creates its own props object.\n\nReact will call Object.is on the input to verify if there is a cache hit.\n\nOne way to address this could be to pass the vector dimensions to calculateNorm. This works because the dimensions themselves are primitives.\n\nAnother solution may be to pass the vector object itself as a prop to the component. We’ll need to pass the same object to both component instances.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "cache",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "React Server Components",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "cache(fn)",
+      "id": "cache"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Cache an expensive computation",
+      "id": "cache-expensive-computation"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h5",
+      "text": "Calling different memoized functions will read from different caches.",
+      "id": "pitfall-different-memoized-functions"
+    },
+    {
+      "level": "h3",
+      "text": "Share a snapshot of data",
+      "id": "take-and-share-snapshot-of-data"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Preload data",
+      "id": "preload-data"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Caching asynchronous work",
+      "id": "caching-asynchronous-work"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h5",
+      "text": "Calling a memoized function outside of a component will not use the cache.",
+      "id": "pitfall-memoized-call-outside-component"
+    },
+    {
+      "level": "h5",
+      "text": "Deep Dive",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "When should I use cache, memo, or useMemo?",
+      "id": "cache-memo-usememo"
+    },
+    {
+      "level": "h4",
+      "text": "useMemo",
+      "id": "deep-dive-use-memo"
+    },
+    {
+      "level": "h4",
+      "text": "cache",
+      "id": "deep-dive-cache"
+    },
+    {
+      "level": "h4",
+      "text": "memo",
+      "id": "deep-dive-memo"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "My memoized function still runs even though I’ve called it with the same arguments",
+      "id": "memoized-function-still-runs"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "const cachedFn = cache(fn);",
+      "language": "javascript"
+    },
+    {
+      "code": "import {cache} from 'react';import calculateMetrics from 'lib/metrics';const getMetrics = cache(calculateMetrics);function Chart({data}) {  const report = getMetrics(data);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "import {cache} from 'react';import calculateUserMetrics from 'lib/user';const getUserMetrics = cache(calculateUserMetrics);function Profile({user}) {  const metrics = getUserMetrics(user);  // ...}function TeamReport({users}) {  for (let user in users) {    const metrics = getUserMetrics(user);    // ...  }  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "// Temperature.jsimport {cache} from 'react';import {calculateWeekReport} from './report';export function Temperature({cityData}) {  // 🚩 Wrong: Calling `cache` in component creates new `getWeekReport` for each render  const getWeekReport = cache(calculateWeekReport);  const report = getWeekReport(cityData);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "// Precipitation.jsimport {cache} from 'react';import {calculateWeekReport} from './report';// 🚩 Wrong: `getWeekReport` is only accessible for `Precipitation` component.const getWeekReport = cache(calculateWeekReport);export function Precipitation({cityData}) {  const report = getWeekReport(cityData);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "// getWeekReport.jsimport {cache} from 'react';import {calculateWeekReport} from './report';export default cache(calculateWeekReport);",
+      "language": "sql"
+    },
+    {
+      "code": "// Temperature.jsimport getWeekReport from './getWeekReport';export default function Temperature({cityData}) {\tconst report = getWeekReport(cityData);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "// Precipitation.jsimport getWeekReport from './getWeekReport';export default function Precipitation({cityData}) {  const report = getWeekReport(cityData);  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "import {cache} from 'react';import {fetchTemperature} from './api.js';const getTemperature = cache(async (city) => {\treturn await fetchTemperature(city);});async function AnimatedWeatherCard({city}) {\tconst temperature = await getTemperature(city);\t// ...}async function MinimalWeatherCard({city}) {\tconst temperature = await getTemperature(city);\t// ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "async function AnimatedWeatherCard({city}) {\tconst temperature = await getTemperature(city);\t// ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "const getUser = cache(async (id) => {  return await db.user.query(id);});async function Profile({id}) {  const user = await getUser(id);  return (    <section>      <img src={user.profilePic} />      <h2>{user.name}</h2>    </section>  );}function Page({id}) {  // ✅ Good: start fetching the user data  getUser(id);  // ... some computational work  return (    <>      <Profile id={id} />    </>  );}",
+      "language": "javascript"
+    },
+    {
+      "code": "async function fetchData() {  return await fetch(`https://...`);}const getData = cache(fetchData);async function MyComponent() {  getData();  // ... some computational work  await getData();  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "import {cache} from 'react';const getUser = cache(async (userId) => {  return await db.user.query(userId);});// 🚩 Wrong: Calling memoized function outside of component will not memoize.getUser('demo-id');async function DemoProfile() {  // ✅ Good: `getUser` will memoize.  const user = await getUser('demo-id');  return <Profile user={user} />;}",
+      "language": "javascript"
+    },
+    {
+      "code": "'use client';function WeatherReport({record}) {  const avgTemp = useMemo(() => calculateAvg(record), record);  // ...}function App() {  const record = getRecord();  return (    <>      <WeatherReport record={record} />      <WeatherReport record={record} />    </>  );}",
+      "language": "jsx"
+    },
+    {
+      "code": "const cachedFetchReport = cache(fetchReport);function WeatherReport({city}) {  const report = cachedFetchReport(city);  // ...}function App() {  const city = \"Los Angeles\";  return (    <>      <WeatherReport city={city} />      <WeatherReport city={city} />    </>  );}",
+      "language": "javascript"
+    },
+    {
+      "code": "'use client';function WeatherReport({record}) {  const avgTemp = calculateAvg(record);  // ...}const MemoWeatherReport = memo(WeatherReport);function App() {  const record = getRecord();  return (    <>      <MemoWeatherReport record={record} />      <MemoWeatherReport record={record} />    </>  );}",
+      "language": "javascript"
+    },
+    {
+      "code": "import {cache} from 'react';const calculateNorm = cache((vector) => {  // ...});function MapMarker(props) {  // 🚩 Wrong: props is an object that changes every render.  const length = calculateNorm(props);  // ...}function App() {  return (    <>      <MapMarker x={10} y={10} z={10} />      <MapMarker x={10} y={10} z={10} />    </>  );}",
+      "language": "javascript"
+    },
+    {
+      "code": "import {cache} from 'react';const calculateNorm = cache((x, y, z) => {  // ...});function MapMarker(props) {  // ✅ Good: Pass primitives to memoized function  const length = calculateNorm(props.x, props.y, props.z);  // ...}function App() {  return (    <>      <MapMarker x={10} y={10} z={10} />      <MapMarker x={10} y={10} z={10} />    </>  );}",
+      "language": "javascript"
+    },
+    {
+      "code": "import {cache} from 'react';const calculateNorm = cache((vector) => {  // ...});function MapMarker(props) {  // ✅ Good: Pass the same `vector` object  const length = calculateNorm(props.vector);  // ...}function App() {  const vector = [10, 10, 10];  return (    <>      <MapMarker vector={vector} />      <MapMarker vector={vector} />    </>  );}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

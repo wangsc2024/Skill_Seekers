@@ -1,0 +1,323 @@
+{
+  "title": "AWS (Amazon)",
+  "content": "Source: https://docs.langchain.com/oss/python/integrations/providers/aws\n\nThis page covers all LangChain integrations with the [Amazon Web Services (AWS)](https://aws.amazon.com/) platform.\n\n> [Amazon Bedrock](https://aws.amazon.com/bedrock/) is a fully managed service that offers a choice of\n> high-performing foundation models (FMs) from leading AI companies like `AI21 Labs`, `Anthropic`, `Cohere`,\n> `Meta`, `Stability AI`, and `Amazon` via a single API, along with a broad set of capabilities you need to\n> build generative AI applications with security, privacy, and responsible AI. Using `Amazon Bedrock`,\n> you can easily experiment with and evaluate top FMs for your use case, privately customize them with\n> your data using techniques such as fine-tuning and `Retrieval Augmented Generation` (`RAG`), and build\n> agents that execute tasks using your enterprise systems and data sources. Since `Amazon Bedrock` is\n> serverless, you don't have to manage any infrastructure, and you can securely integrate and deploy\n> generative AI capabilities into your applications using the AWS services you are already familiar with.\n\nSee a [usage example](/oss/python/integrations/chat/bedrock).\n\nAWS Bedrock maintains a [Converse API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html)\nthat provides a unified conversational interface for Bedrock models. This API does not\nyet support custom models. You can see a list of all\n[models that are supported here](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html).\n\n<Info>\n  **We recommend the Converse API for users who do not need to use custom models. It can be accessed using [ChatBedrockConverse](https://python.langchain.com/api_reference/aws/chat_models/langchain_aws.chat_models.bedrock_converse.ChatBedrockConverse.html).**\n</Info>\n\nSee a [usage example](/oss/python/integrations/chat/bedrock).\n\nSee a [usage example](/oss/python/integrations/llms/bedrock).\n\n### Amazon API Gateway\n\n> [Amazon API Gateway](https://aws.amazon.com/api-gateway/) is a fully managed service that makes it easy for\n> developers to create, publish, maintain, monitor, and secure APIs at any scale. APIs act as the \"front door\"\n> for applications to access data, business logic, or functionality from your backend services. Using\n> `API Gateway`, you can create RESTful APIs and WebSocket APIs that enable real-time two-way communication\n> applications. `API Gateway` supports containerized and serverless workloads, as well as web applications.\n>\n> `API Gateway` handles all the tasks involved in accepting and processing up to hundreds of thousands of\n> concurrent API calls, including traffic management, CORS support, authorization and access control,\n> throttling, monitoring, and API version management. `API Gateway` has no minimum fees or startup costs.\n> You pay for the API calls you receive and the amount of data transferred out and, with the `API Gateway`\n> tiered pricing model, you can reduce your cost as your API usage scales.\n\nSee a [usage example](/oss/python/integrations/llms/amazon_api_gateway).\n\n### SageMaker Endpoint\n\n> [Amazon SageMaker](https://aws.amazon.com/sagemaker/) is a system that can build, train, and deploy\n> machine learning (ML) models with fully managed infrastructure, tools, and workflows.\n\nWe use `SageMaker` to host our model and expose it as the `SageMaker Endpoint`.\n\nSee a [usage example](/oss/python/integrations/llms/sagemaker).\n\nSee a [usage example](/oss/python/integrations/text_embedding/bedrock).\n\n### SageMaker Endpoint\n\nSee a [usage example](/oss/python/integrations/text_embedding/sagemaker-endpoint).\n\n### AWS S3 Directory and File\n\n> [Amazon Simple Storage Service (Amazon S3)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-folders.html)\n> is an object storage service.\n> [AWS S3 Directory](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-folders.html)\n> [AWS S3 Buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html)\n\nSee a [usage example for S3DirectoryLoader](/oss/python/integrations/document_loaders/aws_s3_directory).\n\nSee a [usage example for S3FileLoader](/oss/python/integrations/document_loaders/aws_s3_file).\n\n> [Amazon Textract](https://docs.aws.amazon.com/managedservices/latest/userguide/textract.html) is a machine\n> learning (ML) service that automatically extracts text, handwriting, and data from scanned documents.\n\nSee a [usage example](/oss/python/integrations/document_loaders/amazon_textract).\n\n> [Amazon Athena](https://aws.amazon.com/athena/) is a serverless, interactive analytics service built\n> on open-source frameworks, supporting open-table and file formats.\n\nSee a [usage example](/oss/python/integrations/document_loaders/athena).\n\n> The [AWS Glue Data Catalog](https://docs.aws.amazon.com/en_en/glue/latest/dg/catalog-and-crawler.html) is a centralized metadata\n> repository that allows you to manage, access, and share metadata about\n> your data stored in AWS. It acts as a metadata store for your data assets,\n> enabling various AWS services and your applications to query and connect\n> to the data they need efficiently.\n\nSee a [usage example](/oss/python/integrations/document_loaders/glue_catalog).\n\n### Amazon OpenSearch Service\n\n> [Amazon OpenSearch Service](https://aws.amazon.com/opensearch-service/) performs\n> interactive log analytics, real-time application monitoring, website search, and more. `OpenSearch` is\n> an open source,\n> distributed search and analytics suite derived from `Elasticsearch`. `Amazon OpenSearch Service` offers the\n> latest versions of `OpenSearch`, support for many versions of `Elasticsearch`, as well as\n> visualization capabilities powered by `OpenSearch Dashboards` and `Kibana`.\n\nWe need to install several python libraries.\n\nSee a [usage example](/oss/python/integrations/vectorstores/opensearch#using-aos-amazon-opensearch-service).\n\n### Amazon DocumentDB Vector Search\n\n> [Amazon DocumentDB (with MongoDB Compatibility)](https://docs.aws.amazon.com/documentdb/) makes it easy to set up, operate, and scale MongoDB-compatible databases in the cloud.\n> With Amazon DocumentDB, you can run the same application code and use the same drivers and tools that you use with MongoDB.\n> Vector search for Amazon DocumentDB combines the flexibility and rich querying capability of a JSON-based document database with the power of vector search.\n\n#### Installation and Setup\n\nSee [detail configuration instructions](/oss/python/integrations/vectorstores/documentdb).\n\nWe need to install the `pymongo` python package.\n\n#### Deploy DocumentDB on AWS\n\n[Amazon DocumentDB (with MongoDB Compatibility)](https://docs.aws.amazon.com/documentdb/) is a fast, reliable, and fully managed database service. Amazon DocumentDB makes it easy to set up, operate, and scale MongoDB-compatible databases in the cloud.\n\nAWS offers services for computing, databases, storage, analytics, and other functionality. For an overview of all AWS services, see [Cloud Computing with Amazon Web Services](https://aws.amazon.com/what-is-aws/).\n\nSee a [usage example](/oss/python/integrations/vectorstores/documentdb).\n\n[Amazon MemoryDB](https://aws.amazon.com/memorydb/) is a durable, in-memory database service that delivers ultra-fast performance. MemoryDB is compatible with Redis OSS, a popular open source data store,\nenabling you to quickly build applications using the same flexible and friendly Redis OSS APIs, and commands that they already use today.\n\nInMemoryVectorStore class provides a vectorstore to connect with Amazon MemoryDB.\n\nSee a [usage example](/oss/python/integrations/vectorstores/memorydb).\n\n> [Amazon Kendra](https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html) is an intelligent search service\n> provided by `Amazon Web Services` (`AWS`). It utilizes advanced natural language processing (NLP) and machine\n> learning algorithms to enable powerful search capabilities across various data sources within an organization.\n> `Kendra` is designed to help users find the information they need quickly and accurately,\n> improving productivity and decision-making.\n\n> With `Kendra`, we can search across a wide range of content types, including documents, FAQs, knowledge bases,\n> manuals, and websites. It supports multiple languages and can understand complex queries, synonyms, and\n> contextual meanings to provide highly relevant search results.\n\nWe need to install the `langchain-aws` library.\n\nSee a [usage example](/oss/python/integrations/retrievers/amazon_kendra_retriever).\n\n### Amazon Bedrock (Knowledge Bases)\n\n> [Knowledge bases for Amazon Bedrock](https://aws.amazon.com/bedrock/knowledge-bases/) is an\n> `Amazon Web Services` (`AWS`) offering which lets you quickly build RAG applications by using your\n> private data to customize foundation model response.\n\nWe need to install the `langchain-aws` library.\n\nSee a [usage example](/oss/python/integrations/retrievers/bedrock).\n\n> [`Amazon AWS Lambda`](https://aws.amazon.com/pm/lambda/) is a serverless computing service provided by\n> `Amazon Web Services` (`AWS`). It helps developers to build and run applications and services without\n> provisioning or managing servers. This serverless architecture enables you to focus on writing and\n> deploying code, while AWS automatically takes care of scaling, patching, and managing the\n> infrastructure required to run your applications.\n\nWe need to install `boto3` python library.\n\nSee a [usage example](/oss/python/integrations/tools/awslambda).\n\n> [Amazon Neptune](https://aws.amazon.com/neptune/)\n> is a high-performance graph analytics and serverless database for superior scalability and availability.\n\nFor the Cypher and SPARQL integrations below, we need to install the `langchain-aws` library.\n\n### Amazon Neptune with Cypher\n\nSee a [usage example](/oss/python/integrations/graphs/amazon_neptune_open_cypher).\n\n### Amazon Neptune with SPARQL\n\n### Bedrock token usage\n\n### SageMaker Tracking\n\n> [Amazon SageMaker](https://aws.amazon.com/sagemaker/) is a fully managed service that is used to quickly\n> and easily build, train and deploy machine learning (ML) models.\n\n> [Amazon SageMaker Experiments](https://docs.aws.amazon.com/sagemaker/latest/dg/experiments.html) is a capability\n> of `Amazon SageMaker` that lets you organize, track,\n> compare and evaluate ML experiments and model versions.\n\nWe need to install several python libraries.\n\nSee a [usage example](/oss/python/integrations/callbacks/sagemaker_tracking).\n\n### Amazon Comprehend Moderation Chain\n\n> [Amazon Comprehend](https://aws.amazon.com/comprehend/) is a natural-language processing (NLP) service that\n> uses machine learning to uncover valuable insights and connections in text.\n\nWe need to install the `boto3` and `nltk` libraries.\n\nSee a [usage example](https://python.langchain.com/v0.1/docs/guides/productionization/safety/amazon_comprehend_chain/).\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/python/integrations/providers/aws.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "### Bedrock Converse\n\nAWS Bedrock maintains a [Converse API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html)\nthat provides a unified conversational interface for Bedrock models. This API does not\nyet support custom models. You can see a list of all\n[models that are supported here](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html).\n\n<Info>\n  **We recommend the Converse API for users who do not need to use custom models. It can be accessed using [ChatBedrockConverse](https://python.langchain.com/api_reference/aws/chat_models/langchain_aws.chat_models.bedrock_converse.ChatBedrockConverse.html).**\n</Info>\n\nSee a [usage example](/oss/python/integrations/chat/bedrock).",
+      "language": "unknown"
+    },
+    {
+      "code": "## LLMs\n\n### Bedrock\n\nSee a [usage example](/oss/python/integrations/llms/bedrock).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Amazon API Gateway\n\n> [Amazon API Gateway](https://aws.amazon.com/api-gateway/) is a fully managed service that makes it easy for\n> developers to create, publish, maintain, monitor, and secure APIs at any scale. APIs act as the \"front door\"\n> for applications to access data, business logic, or functionality from your backend services. Using\n> `API Gateway`, you can create RESTful APIs and WebSocket APIs that enable real-time two-way communication\n> applications. `API Gateway` supports containerized and serverless workloads, as well as web applications.\n>\n> `API Gateway` handles all the tasks involved in accepting and processing up to hundreds of thousands of\n> concurrent API calls, including traffic management, CORS support, authorization and access control,\n> throttling, monitoring, and API version management. `API Gateway` has no minimum fees or startup costs.\n> You pay for the API calls you receive and the amount of data transferred out and, with the `API Gateway`\n> tiered pricing model, you can reduce your cost as your API usage scales.\n\nSee a [usage example](/oss/python/integrations/llms/amazon_api_gateway).",
+      "language": "unknown"
+    },
+    {
+      "code": "### SageMaker Endpoint\n\n> [Amazon SageMaker](https://aws.amazon.com/sagemaker/) is a system that can build, train, and deploy\n> machine learning (ML) models with fully managed infrastructure, tools, and workflows.\n\nWe use `SageMaker` to host our model and expose it as the `SageMaker Endpoint`.\n\nSee a [usage example](/oss/python/integrations/llms/sagemaker).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Embedding Models\n\n### Bedrock\n\nSee a [usage example](/oss/python/integrations/text_embedding/bedrock).",
+      "language": "unknown"
+    },
+    {
+      "code": "### SageMaker Endpoint\n\nSee a [usage example](/oss/python/integrations/text_embedding/sagemaker-endpoint).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Document loaders\n\n### AWS S3 Directory and File\n\n> [Amazon Simple Storage Service (Amazon S3)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-folders.html)\n> is an object storage service.\n> [AWS S3 Directory](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-folders.html)\n> [AWS S3 Buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html)\n\nSee a [usage example for S3DirectoryLoader](/oss/python/integrations/document_loaders/aws_s3_directory).\n\nSee a [usage example for S3FileLoader](/oss/python/integrations/document_loaders/aws_s3_file).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Amazon Textract\n\n> [Amazon Textract](https://docs.aws.amazon.com/managedservices/latest/userguide/textract.html) is a machine\n> learning (ML) service that automatically extracts text, handwriting, and data from scanned documents.\n\nSee a [usage example](/oss/python/integrations/document_loaders/amazon_textract).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Amazon Athena\n\n> [Amazon Athena](https://aws.amazon.com/athena/) is a serverless, interactive analytics service built\n> on open-source frameworks, supporting open-table and file formats.\n\nSee a [usage example](/oss/python/integrations/document_loaders/athena).",
+      "language": "unknown"
+    },
+    {
+      "code": "### AWS Glue\n\n> The [AWS Glue Data Catalog](https://docs.aws.amazon.com/en_en/glue/latest/dg/catalog-and-crawler.html) is a centralized metadata\n> repository that allows you to manage, access, and share metadata about\n> your data stored in AWS. It acts as a metadata store for your data assets,\n> enabling various AWS services and your applications to query and connect\n> to the data they need efficiently.\n\nSee a [usage example](/oss/python/integrations/document_loaders/glue_catalog).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Vector stores\n\n### Amazon OpenSearch Service\n\n> [Amazon OpenSearch Service](https://aws.amazon.com/opensearch-service/) performs\n> interactive log analytics, real-time application monitoring, website search, and more. `OpenSearch` is\n> an open source,\n> distributed search and analytics suite derived from `Elasticsearch`. `Amazon OpenSearch Service` offers the\n> latest versions of `OpenSearch`, support for many versions of `Elasticsearch`, as well as\n> visualization capabilities powered by `OpenSearch Dashboards` and `Kibana`.\n\nWe need to install several python libraries.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee a [usage example](/oss/python/integrations/vectorstores/opensearch#using-aos-amazon-opensearch-service).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Amazon DocumentDB Vector Search\n\n> [Amazon DocumentDB (with MongoDB Compatibility)](https://docs.aws.amazon.com/documentdb/) makes it easy to set up, operate, and scale MongoDB-compatible databases in the cloud.\n> With Amazon DocumentDB, you can run the same application code and use the same drivers and tools that you use with MongoDB.\n> Vector search for Amazon DocumentDB combines the flexibility and rich querying capability of a JSON-based document database with the power of vector search.\n\n#### Installation and Setup\n\nSee [detail configuration instructions](/oss/python/integrations/vectorstores/documentdb).\n\nWe need to install the `pymongo` python package.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n#### Deploy DocumentDB on AWS\n\n[Amazon DocumentDB (with MongoDB Compatibility)](https://docs.aws.amazon.com/documentdb/) is a fast, reliable, and fully managed database service. Amazon DocumentDB makes it easy to set up, operate, and scale MongoDB-compatible databases in the cloud.\n\nAWS offers services for computing, databases, storage, analytics, and other functionality. For an overview of all AWS services, see [Cloud Computing with Amazon Web Services](https://aws.amazon.com/what-is-aws/).\n\nSee a [usage example](/oss/python/integrations/vectorstores/documentdb).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Amazon MemoryDB\n\n[Amazon MemoryDB](https://aws.amazon.com/memorydb/) is a durable, in-memory database service that delivers ultra-fast performance. MemoryDB is compatible with Redis OSS, a popular open source data store,\nenabling you to quickly build applications using the same flexible and friendly Redis OSS APIs, and commands that they already use today.\n\nInMemoryVectorStore class provides a vectorstore to connect with Amazon MemoryDB.",
+      "language": "unknown"
+    },
+    {
+      "code": "See a [usage example](/oss/python/integrations/vectorstores/memorydb).\n\n## Retrievers\n\n### Amazon Kendra\n\n> [Amazon Kendra](https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html) is an intelligent search service\n> provided by `Amazon Web Services` (`AWS`). It utilizes advanced natural language processing (NLP) and machine\n> learning algorithms to enable powerful search capabilities across various data sources within an organization.\n> `Kendra` is designed to help users find the information they need quickly and accurately,\n> improving productivity and decision-making.\n\n> With `Kendra`, we can search across a wide range of content types, including documents, FAQs, knowledge bases,\n> manuals, and websites. It supports multiple languages and can understand complex queries, synonyms, and\n> contextual meanings to provide highly relevant search results.\n\nWe need to install the `langchain-aws` library.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee a [usage example](/oss/python/integrations/retrievers/amazon_kendra_retriever).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Amazon Bedrock (Knowledge Bases)\n\n> [Knowledge bases for Amazon Bedrock](https://aws.amazon.com/bedrock/knowledge-bases/) is an\n> `Amazon Web Services` (`AWS`) offering which lets you quickly build RAG applications by using your\n> private data to customize foundation model response.\n\nWe need to install the `langchain-aws` library.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee a [usage example](/oss/python/integrations/retrievers/bedrock).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Tools\n\n### AWS Lambda\n\n> [`Amazon AWS Lambda`](https://aws.amazon.com/pm/lambda/) is a serverless computing service provided by\n> `Amazon Web Services` (`AWS`). It helps developers to build and run applications and services without\n> provisioning or managing servers. This serverless architecture enables you to focus on writing and\n> deploying code, while AWS automatically takes care of scaling, patching, and managing the\n> infrastructure required to run your applications.\n\nWe need to install `boto3` python library.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee a [usage example](/oss/python/integrations/tools/awslambda).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Graphs\n\n### Amazon Neptune\n\n> [Amazon Neptune](https://aws.amazon.com/neptune/)\n> is a high-performance graph analytics and serverless database for superior scalability and availability.\n\nFor the Cypher and SPARQL integrations below, we need to install the `langchain-aws` library.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Amazon Neptune with Cypher\n\nSee a [usage example](/oss/python/integrations/graphs/amazon_neptune_open_cypher).",
+      "language": "unknown"
+    },
+    {
+      "code": "### Amazon Neptune with SPARQL",
+      "language": "unknown"
+    },
+    {
+      "code": "## Callbacks\n\n### Bedrock token usage",
+      "language": "unknown"
+    },
+    {
+      "code": "### SageMaker Tracking\n\n> [Amazon SageMaker](https://aws.amazon.com/sagemaker/) is a fully managed service that is used to quickly\n> and easily build, train and deploy machine learning (ML) models.\n\n> [Amazon SageMaker Experiments](https://docs.aws.amazon.com/sagemaker/latest/dg/experiments.html) is a capability\n> of `Amazon SageMaker` that lets you organize, track,\n> compare and evaluate ML experiments and model versions.\n\nWe need to install several python libraries.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee a [usage example](/oss/python/integrations/callbacks/sagemaker_tracking).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Chains\n\n### Amazon Comprehend Moderation Chain\n\n> [Amazon Comprehend](https://aws.amazon.com/comprehend/) is a natural-language processing (NLP) service that\n> uses machine learning to uncover valuable insights and connections in text.\n\nWe need to install the `boto3` and `nltk` libraries.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nSee a [usage example](https://python.langchain.com/v0.1/docs/guides/productionization/safety/amazon_comprehend_chain/).",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Chat models",
+      "id": "chat-models"
+    },
+    {
+      "level": "h3",
+      "text": "Bedrock Chat",
+      "id": "bedrock-chat"
+    },
+    {
+      "level": "h3",
+      "text": "Bedrock Converse",
+      "id": "bedrock-converse"
+    },
+    {
+      "level": "h2",
+      "text": "LLMs",
+      "id": "llms"
+    },
+    {
+      "level": "h3",
+      "text": "Bedrock",
+      "id": "bedrock"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon API Gateway",
+      "id": "amazon-api-gateway"
+    },
+    {
+      "level": "h3",
+      "text": "SageMaker Endpoint",
+      "id": "sagemaker-endpoint"
+    },
+    {
+      "level": "h2",
+      "text": "Embedding Models",
+      "id": "embedding-models"
+    },
+    {
+      "level": "h3",
+      "text": "Bedrock",
+      "id": "bedrock"
+    },
+    {
+      "level": "h3",
+      "text": "SageMaker Endpoint",
+      "id": "sagemaker-endpoint"
+    },
+    {
+      "level": "h2",
+      "text": "Document loaders",
+      "id": "document-loaders"
+    },
+    {
+      "level": "h3",
+      "text": "AWS S3 Directory and File",
+      "id": "aws-s3-directory-and-file"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon Textract",
+      "id": "amazon-textract"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon Athena",
+      "id": "amazon-athena"
+    },
+    {
+      "level": "h3",
+      "text": "AWS Glue",
+      "id": "aws-glue"
+    },
+    {
+      "level": "h2",
+      "text": "Vector stores",
+      "id": "vector-stores"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon OpenSearch Service",
+      "id": "amazon-opensearch-service"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon DocumentDB Vector Search",
+      "id": "amazon-documentdb-vector-search"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon MemoryDB",
+      "id": "amazon-memorydb"
+    },
+    {
+      "level": "h2",
+      "text": "Retrievers",
+      "id": "retrievers"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon Kendra",
+      "id": "amazon-kendra"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon Bedrock (Knowledge Bases)",
+      "id": "amazon-bedrock-(knowledge-bases)"
+    },
+    {
+      "level": "h2",
+      "text": "Tools",
+      "id": "tools"
+    },
+    {
+      "level": "h3",
+      "text": "AWS Lambda",
+      "id": "aws-lambda"
+    },
+    {
+      "level": "h2",
+      "text": "Graphs",
+      "id": "graphs"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon Neptune",
+      "id": "amazon-neptune"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon Neptune with Cypher",
+      "id": "amazon-neptune-with-cypher"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon Neptune with SPARQL",
+      "id": "amazon-neptune-with-sparql"
+    },
+    {
+      "level": "h2",
+      "text": "Callbacks",
+      "id": "callbacks"
+    },
+    {
+      "level": "h3",
+      "text": "Bedrock token usage",
+      "id": "bedrock-token-usage"
+    },
+    {
+      "level": "h3",
+      "text": "SageMaker Tracking",
+      "id": "sagemaker-tracking"
+    },
+    {
+      "level": "h2",
+      "text": "Chains",
+      "id": "chains"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon Comprehend Moderation Chain",
+      "id": "amazon-comprehend-moderation-chain"
+    }
+  ],
+  "url": "llms-txt#aws-(amazon)",
+  "links": []
+}

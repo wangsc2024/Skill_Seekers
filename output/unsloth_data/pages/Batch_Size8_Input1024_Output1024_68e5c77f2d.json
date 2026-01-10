@@ -1,0 +1,45 @@
+{
+  "title": "Batch Size=8, Input=1024, Output=1024",
+  "content": "python -m sglang.bench_one_batch_server \\\n    --model finetuned_model \\\n    --base-url http://0.0.0.0:30002 \\\n    --batch-size 8 \\\n    --input-len 1024 \\\n    --output-len 1024\npython\nimport sglang as sgl\nengine = sgl.Engine(model_path = \"unsloth/Qwen3-0.6B\", random_seed = 42)\n\nprompt = \"Today is a sunny day and I like\"\nsampling_params = {\"temperature\": 0, \"max_new_tokens\": 256}\noutputs = engine.generate(prompt, sampling_params)[\"text\"]\nprint(outputs)\nengine.shutdown()\nshellscript\npip install -e \"git+https://github.com/ggml-org/llama.cpp.git#egg=gguf&subdirectory=gguf-py\" # install a python package from a repo subdirectory\npython\nfrom huggingface_hub import hf_hub_download\nmodel_path = hf_hub_download(\n    \"unsloth/Qwen3-32B-GGUF\",\n    filename = \"Qwen3-32B-UD-Q4_K_XL.gguf\",\n)\nimport sglang as sgl\nengine = sgl.Engine(model_path = model_path, random_seed = 42)\n\nprompt = \"Today is a sunny day and I like\"\nsampling_params = {\"temperature\": 0, \"max_new_tokens\": 256}\noutputs = engine.generate(prompt, sampling_params)[\"text\"]\nprint(outputs)\nengine.shutdown()\npython\nfrom huggingface_hub import hf_hub_download\nhf_hub_download(\"unsloth/Qwen3-32B-GGUF\", filename=\"Qwen3-32B-UD-Q4_K_XL.gguf\", local_dir=\".\")\nshellscript\npython -m sglang.launch_server \\\n    --model-path Qwen3-32B-UD-Q4_K_XL.gguf \\\n    --host 0.0.0.0 --port 30002 \\\n    --served-model-name unsloth/Qwen3-32B \\\n    --tokenizer-path unsloth/Qwen3-32B\n```",
+  "code_samples": [
+    {
+      "code": "You will see the benchmarking run like below:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FhcGy7cwC2xFaPA7FcJJq%2Fimage.png?alt=media&#x26;token=05687013-8af5-4731-8dae-b8cc05d44f21\" alt=\"\"><figcaption></figcaption></figure>\n\nWe used a B200x1 GPU with gpt-oss-20b and got the below results (\\~2,500 tokens throughput)\n\n| Batch/Input/Output | TTFT (s) | ITL (s) | Input Throughput | Output Throughput |\n| ------------------ | -------- | ------- | ---------------- | ----------------- |\n| 8/1024/1024        | 0.40     | 3.59    | 20,718.95        | 2,562.87          |\n| 8/8192/1024        | 0.42     | 3.74    | 154,459.01       | 2,473.84          |\n\nSee <https://docs.sglang.ai/advanced_features/server_arguments.html> for server arguments for SGLang.\n\n### :person\\_running:SGLang Interactive Offline Mode\n\nYou can also use SGLang in offline mode (ie not a server) inside a Python interactive environment.\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\n### :sparkler:GGUFs in SGLang\n\nSGLang also interestingly supports GGUFs! **Qwen3 MoE is still under construction, but most dense models (Llama 3, Qwen 3, Mistral etc) are supported.**\n\nFirst install the latest gguf python package via:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\nThen for example in offline mode SGLang, you can do:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\n### :clapper:High throughput GGUF serving with SGLang\n\nFirst download the specific GGUF file like below:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\nThen serve the specific file `Qwen3-32B-UD-Q4_K_XL.gguf` and use `--served-model-name unsloth/Qwen3-32B` and also we need the HuggingFace compatible tokenizer via `--tokenizer-path`",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": ":person\\_running:SGLang Interactive Offline Mode",
+      "id": ":person\\_running:sglang-interactive-offline-mode"
+    },
+    {
+      "level": "h3",
+      "text": ":sparkler:GGUFs in SGLang",
+      "id": ":sparkler:ggufs-in-sglang"
+    },
+    {
+      "level": "h3",
+      "text": ":clapper:High throughput GGUF serving with SGLang",
+      "id": ":clapper:high-throughput-gguf-serving-with-sglang"
+    }
+  ],
+  "url": "llms-txt#batch-size=8,-input=1024,-output=1024",
+  "links": []
+}

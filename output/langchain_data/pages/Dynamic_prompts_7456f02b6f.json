@@ -1,0 +1,8 @@
+{
+  "title": "Dynamic prompts",
+  "content": "@dynamic_prompt\ndef dynamic_system_prompt(request: ModelRequest) -> str:\n    user_name = request.runtime.context.user_name  # [!code highlight]\n    system_prompt = f\"You are a helpful assistant. Address the user as {user_name}.\"\n    return system_prompt",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#dynamic-prompts",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Make conversations private",
+  "content": "Source: https://docs.langchain.com/langsmith/resource-auth\n\nIn this tutorial, you will extend [the chatbot created in the last tutorial](/langsmith/set-up-custom-auth) to give each user their own private conversations. You'll add [resource-level access control](/langsmith/auth#single-owner-resources) so users can only see their own threads.\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authorization.png?fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=8daa07dd8efb13d7f9d7aa35117b2138\" alt=\"Authorization flow: after authentication, an authorization handler tags each resource with owner=user id and returns a filter so users only see their own threads.\" data-og-width=\"2617\" width=\"2617\" data-og-height=\"1673\" height=\"1673\" data-path=\"langsmith/images/authorization.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authorization.png?w=280&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=a617e2e62772c307a7b69a78e627ac40 280w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authorization.png?w=560&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=c978257553e23b1cb19348959ed72ffc 560w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authorization.png?w=840&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=62370abd0f9ca0093d252fd9c1f7cda8 840w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authorization.png?w=1100&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=6388bdfb9d7a61105c32683b8b750db1 1100w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authorization.png?w=1650&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=95ff1d87241c5b94fd38483350159abb 1650w, https://mintcdn.com/langchain-5e9cc07a/IMK8wJkjSpMCGODD/langsmith/images/authorization.png?w=2500&fit=max&auto=format&n=IMK8wJkjSpMCGODD&q=85&s=bd94714727ddb6d79a49109d4ca7014f 2500w\" />\n\nBefore you start this tutorial, ensure you have the [bot from the first tutorial](/langsmith/set-up-custom-auth) running without errors.\n\n## 1. Add resource authorization\n\nRecall that in the last tutorial, the [`Auth`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth) object lets you register an [authentication function](/langsmith/auth#authentication), which LangSmith uses to validate the bearer tokens in incoming requests. Now you'll use it to register an **authorization** handler.\n\nAuthorization handlers are functions that run **after** authentication succeeds. These handlers can add [metadata](/langsmith/auth#filter-operations) to resources (like who owns them) and filter what each user can see.\n\nUpdate your `src/security/auth.py` and add one authorization handler to run on every request:\n\n```python {highlight={29-39}} title=\"src/security/auth.py\" theme={null}\nfrom langgraph_sdk import Auth",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Add resource authorization",
+      "id": "1.-add-resource-authorization"
+    }
+  ],
+  "url": "llms-txt#make-conversations-private",
+  "links": []
+}

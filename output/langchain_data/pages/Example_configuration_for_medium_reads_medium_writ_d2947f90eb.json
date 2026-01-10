@@ -1,0 +1,19 @@
+{
+  "title": "Example configuration for medium reads, medium writes (50 read/50 write requests per second)",
+  "content": "api:\n  replicas: 3\n  resources:\n    requests:\n      cpu: \"1\"\n      memory: \"2Gi\"\n    limits:\n      cpu: \"2\"\n      memory: \"4Gi\"\n\nqueue:\n  replicas: 5\n  resources:\n    requests:\n      cpu: \"1\"\n      memory: \"2Gi\"\n    limits:\n      cpu: \"2\"\n      memory: \"4Gi\"\n\nredis:\n  resources:\n    requests:\n      memory: \"2Gi\"\n    limits:\n      memory: \"2Gi\"\n\npostgres:\n  resources:\n    requests:\n      cpu: \"4\"\n      memory: \"16Gi\"\n    limits:\n      cpu: \"8\"\n      memory: \"32Gi\"\nyaml  theme={null}",
+  "code_samples": [
+    {
+      "code": "### High reads, high writes <a name=\"high-reads-high-writes\" />\n\nYou have high volumes of both read and write requests (500 read/500 write requests per second).\n\nFor this, we recommend a configuration like this:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "High reads, high writes <a name=\"high-reads-high-writes\" />",
+      "id": "high-reads,-high-writes-<a-name=\"high-reads-high-writes\"-/>"
+    }
+  ],
+  "url": "llms-txt#example-configuration-for-medium-reads,-medium-writes-(50-read/50-write-requests-per-second)",
+  "links": []
+}

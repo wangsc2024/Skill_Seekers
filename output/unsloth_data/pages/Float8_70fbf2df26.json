@@ -1,0 +1,29 @@
+{
+  "title": "Float8",
+  "content": "from torchao.quantization import PerRow\nfrom torchao.quantization import Float8DynamicActivationFloat8WeightConfig\ntorchao_config = Float8DynamicActivationFloat8WeightConfig(granularity = PerRow())\nmodel.save_pretrained_torchao(torchao_config = torchao_config)\nbash\npip install --upgrade --no-cache-dir --force-reinstall unsloth unsloth_zoo\npip install torchao==0.14.0 fbgemm-gpu-genai==1.3.0\n```\n\n### :person\\_tipping\\_hand:Acknowledgements\n\nHuge thanks to the entire PyTorch and TorchAO team for their help and collaboration! Extreme thanks to Andrew Or, Jerry Zhang, Supriya Rao, Scott Roy and Mergen Nachin for helping on many discussions on QAT, and on helping to integrate it into Unsloth! Also thanks to the Executorch team as well!",
+  "code_samples": [
+    {
+      "code": "{% endcode %}\n\n### :mobile\\_phone:ExecuTorch - QAT for mobile deployment\n\n{% columns %}\n{% column %}\nWith Unsloth and TorchAO’s QAT support, you can also fine-tune a model in Unsloth and seamlessly export it to [ExecuTorch](https://github.com/pytorch/executorch) (PyTorch’s solution for on-device inference) and deploy it directly on mobile. See an example in action [here](https://huggingface.co/metascroy/Qwen3-4B-int8-int4-unsloth) with more detailed workflows on the way!\n\n**Announcement coming soon!**\n{% endcolumn %}\n\n{% column %}\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-53631bae5588644d2c64cec18f371f0a7e2688c6%2Fswiftpm_xcode.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n{% endcolumn %}\n{% endcolumns %}\n\n### :sunflower:How to enable QAT\n\nUpdate Unsloth to the latest version, and also install the latest TorchAO!\n\nThen **try QAT with our free** [**Qwen3 (4B) notebook**](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_\\(4B\\)_Instruct-QAT.ipynb)\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": ":mobile\\_phone:ExecuTorch - QAT for mobile deployment",
+      "id": ":mobile\\_phone:executorch---qat-for-mobile-deployment"
+    },
+    {
+      "level": "h3",
+      "text": ":sunflower:How to enable QAT",
+      "id": ":sunflower:how-to-enable-qat"
+    },
+    {
+      "level": "h3",
+      "text": ":person\\_tipping\\_hand:Acknowledgements",
+      "id": ":person\\_tipping\\_hand:acknowledgements"
+    }
+  ],
+  "url": "llms-txt#float8",
+  "links": []
+}

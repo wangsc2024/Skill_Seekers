@@ -1,0 +1,36 @@
+{
+  "title": "with information about the graph node where the LLM was called and other information",
+  "content": "for msg, metadata in graph.stream(\n    inputs,\n    stream_mode=\"messages\",  # [!code highlight]\n):\n    # Filter the streamed tokens by the langgraph_node field in the metadata\n    # to only include the tokens from the specified node\n    if msg.content and metadata[\"langgraph_node\"] == \"some_node_name\":\n        ...\npython  theme={null}\n  from typing import TypedDict\n  from langgraph.graph import START, StateGraph\n  from langchain_openai import ChatOpenAI\n\nmodel = ChatOpenAI(model=\"gpt-4o-mini\")\n\nclass State(TypedDict):\n        topic: str\n        joke: str\n        poem: str\n\ndef write_joke(state: State):\n        topic = state[\"topic\"]\n        joke_response = model.invoke(\n              [{\"role\": \"user\", \"content\": f\"Write a joke about {topic}\"}]\n        )\n        return {\"joke\": joke_response.content}\n\ndef write_poem(state: State):\n        topic = state[\"topic\"]\n        poem_response = model.invoke(\n              [{\"role\": \"user\", \"content\": f\"Write a short poem about {topic}\"}]\n        )\n        return {\"poem\": poem_response.content}\n\ngraph = (\n        StateGraph(State)\n        .add_node(write_joke)\n        .add_node(write_poem)\n        # write both the joke and the poem concurrently\n        .add_edge(START, \"write_joke\")\n        .add_edge(START, \"write_poem\")\n        .compile()\n  )\n\n# The \"messages\" stream mode returns a tuple of (message_chunk, metadata)\n  # where message_chunk is the token streamed by the LLM and metadata is a dictionary\n  # with information about the graph node where the LLM was called and other information\n  for msg, metadata in graph.stream(\n      {\"topic\": \"cats\"},\n      stream_mode=\"messages\",  # [!code highlight]\n  ):\n      # Filter the streamed tokens by the langgraph_node field in the metadata\n      # to only include the tokens from the write_poem node\n      if msg.content and metadata[\"langgraph_node\"] == \"write_poem\":\n          print(msg.content, end=\"|\", flush=True)\n  python  theme={null}\n    from typing import TypedDict\n    from langgraph.config import get_stream_writer\n    from langgraph.graph import StateGraph, START\n\nclass State(TypedDict):\n        query: str\n        answer: str\n\ndef node(state: State):\n        # Get the stream writer to send custom data\n        writer = get_stream_writer()\n        # Emit a custom key-value pair (e.g., progress update)\n        writer({\"custom_key\": \"Generating custom data inside node\"})\n        return {\"answer\": \"some data\"}\n\ngraph = (\n        StateGraph(State)\n        .add_node(node)\n        .add_edge(START, \"node\")\n        .compile()\n    )\n\ninputs = {\"query\": \"example\"}\n\n# Set stream_mode=\"custom\" to receive the custom data in the stream\n    for chunk in graph.stream(inputs, stream_mode=\"custom\"):\n        print(chunk)\n    python  theme={null}\n    from langchain.tools import tool\n    from langgraph.config import get_stream_writer\n\n@tool\n    def query_database(query: str) -> str:\n        \"\"\"Query the database.\"\"\"\n        # Access the stream writer to send custom data\n        writer = get_stream_writer()  # [!code highlight]\n        # Emit a custom key-value pair (e.g., progress update)\n        writer({\"data\": \"Retrieved 0/100 records\", \"type\": \"progress\"})  # [!code highlight]\n        # perform query\n        # Emit another custom key-value pair\n        writer({\"data\": \"Retrieved 100/100 records\", \"type\": \"progress\"})\n        return \"some-answer\"\n\ngraph = ... # define a graph that uses this tool\n\n# Set stream_mode=\"custom\" to receive the custom data in the stream\n    for chunk in graph.stream(inputs, stream_mode=\"custom\"):\n        print(chunk)\n    python  theme={null}\nfrom langgraph.config import get_stream_writer\n\ndef call_arbitrary_model(state):\n    \"\"\"Example node that calls an arbitrary model and streams the output\"\"\"\n    # Get the stream writer to send custom data\n    writer = get_stream_writer()  # [!code highlight]\n    # Assume you have a streaming client that yields chunks\n    # Generate LLM tokens using your custom streaming client\n    for chunk in your_custom_streaming_client(state[\"topic\"]):\n        # Use the writer to send custom data to the stream\n        writer({\"custom_llm_chunk\": chunk})  # [!code highlight]\n    return {\"result\": \"completed\"}\n\ngraph = (\n    StateGraph(State)\n    .add_node(call_arbitrary_model)\n    # Add other nodes and edges as needed\n    .compile()\n)",
+  "code_samples": [
+    {
+      "code": "<Accordion title=\"Extended example: streaming LLM tokens from specific nodes\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n## Stream custom data\n\nTo send **custom user-defined data** from inside a LangGraph node or tool, follow these steps:\n\n1. Use [`get_stream_writer`](https://reference.langchain.com/python/langgraph/config/#langgraph.config.get_stream_writer) to access the stream writer and emit custom data.\n2. Set `stream_mode=\"custom\"` when calling `.stream()` or `.astream()` to get the custom data in the stream. You can combine multiple modes (e.g., `[\"updates\", \"custom\"]`), but at least one must be `\"custom\"`.\n\n<Warning>\n  **No [`get_stream_writer`](https://reference.langchain.com/python/langgraph/config/#langgraph.config.get_stream_writer) in async for Python \\< 3.11**\n  In async code running on Python \\< 3.11, [`get_stream_writer`](https://reference.langchain.com/python/langgraph/config/#langgraph.config.get_stream_writer) will not work.\n  Instead, add a `writer` parameter to your node or tool and pass it manually.\n  See [Async with Python \\< 3.11](#async) for usage examples.\n</Warning>\n\n<Tabs>\n  <Tab title=\"node\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"tool\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Use with any LLM\n\nYou can use `stream_mode=\"custom\"` to stream data from **any LLM API** — even if that API does **not** implement the LangChain chat model interface.\n\nThis lets you integrate raw LLM clients or external services that provide their own streaming interfaces, making LangGraph highly flexible for custom setups.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Stream custom data",
+      "id": "stream-custom-data"
+    },
+    {
+      "level": "h2",
+      "text": "Use with any LLM",
+      "id": "use-with-any-llm"
+    }
+  ],
+  "url": "llms-txt#with-information-about-the-graph-node-where-the-llm-was-called-and-other-information",
+  "links": []
+}

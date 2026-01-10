@@ -1,0 +1,8 @@
+{
+  "title": "Try searching for assistants. This also should fail",
+  "content": "try:\n    await alice.assistants.search()\n    print(\"❌ Alice shouldn't be able to search assistants!\")\nexcept Exception as e:\n    print(\"✅ Alice correctly denied access to searching assistants:\", e)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#try-searching-for-assistants.-this-also-should-fail",
+  "links": []
+}

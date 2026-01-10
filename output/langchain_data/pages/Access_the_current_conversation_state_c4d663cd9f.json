@@ -1,0 +1,8 @@
+{
+  "title": "Access the current conversation state",
+  "content": "@tool\ndef summarize_conversation(\n    runtime: ToolRuntime\n) -> str:\n    \"\"\"Summarize the conversation so far.\"\"\"\n    messages = runtime.state[\"messages\"]\n\nhuman_msgs = sum(1 for m in messages if m.__class__.__name__ == \"HumanMessage\")\n    ai_msgs = sum(1 for m in messages if m.__class__.__name__ == \"AIMessage\")\n    tool_msgs = sum(1 for m in messages if m.__class__.__name__ == \"ToolMessage\")\n\nreturn f\"Conversation has {human_msgs} user messages, {ai_msgs} AI responses, and {tool_msgs} tool results\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#access-the-current-conversation-state",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "it will take precedence for any \"read\" actions on the \"threads\" resource",
+  "content": "@auth.on.threads.read\nasync def on_thread_read(\n    ctx: Auth.types.AuthContext,\n    value: Auth.types.threads.read.value\n):\n    # Since we are reading (and not creating) a thread,\n    # we don't need to set metadata. We just need to\n    # return a filter to ensure users can only see their own threads\n    return {\"owner\": ctx.user.identity}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#it-will-take-precedence-for-any-\"read\"-actions-on-the-\"threads\"-resource",
+  "links": []
+}

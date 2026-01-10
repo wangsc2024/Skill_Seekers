@@ -1,0 +1,8 @@
+{
+  "title": "Create a code analysis prompt template",
+  "content": "code_analysis_prompt = \"\"\"\nAnalyze the following code and provide insights:\n\nPlease provide:\n1. A brief summary of what the code does\n2. Any potential improvements\n3. Code quality assessment\n\"\"\"\n\nprompt_template_config = PromptTemplateConfig(\n    template=code_analysis_prompt,\n    name=\"code_analyzer\",\n    template_format=\"semantic-kernel\",\n    input_variables=[\n        InputVariable(name=\"code\", description=\"The code to analyze\", is_required=True),\n    ],\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-code-analysis-prompt-template",
+  "links": []
+}

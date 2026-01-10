@@ -1,0 +1,19 @@
+{
+  "title": "-- This code should be in a separate file or service --",
+  "content": "@chain\ndef parent_chain(inputs):\n    rt = get_current_run_tree()\n    headers = rt.to_headers()\n    # ... make a request to another service with the headers\n    # The headers should be passed to the other service, eventually to the child_wrapper function\n\nparent_chain.invoke({\"test\": 1})\npython  theme={null}\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.prompts import ChatPromptTemplate\nfrom langchain_core.output_parsers import StrOutputParser\nfrom langsmith import traceable\n\nprompt = ChatPromptTemplate.from_messages([\n    (\"system\", \"You are a helpful assistant. Please respond to the user's request only based on the given context.\"),\n    (\"user\", \"Question: {question}\\nContext: {context}\")\n])\n\nmodel = ChatOpenAI(model=\"gpt-4o-mini\")\noutput_parser = StrOutputParser()\nchain = prompt | model | output_parser",
+  "code_samples": [
+    {
+      "code": "## Interoperability between LangChain (Python) and LangSmith SDK\n\nIf you are using LangChain for part of your application and the LangSmith SDK (see [this guide](/langsmith/annotate-code)) for other parts, you can still trace the entire application seamlessly.\n\nLangChain objects will be traced when invoked within a `traceable` function and be bound as a child run of the `traceable` function.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Interoperability between LangChain (Python) and LangSmith SDK",
+      "id": "interoperability-between-langchain-(python)-and-langsmith-sdk"
+    }
+  ],
+  "url": "llms-txt#---this-code-should-be-in-a-separate-file-or-service---",
+  "links": []
+}

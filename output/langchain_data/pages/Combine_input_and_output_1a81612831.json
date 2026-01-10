@@ -1,0 +1,8 @@
+{
+  "title": "Combine input and output",
+  "content": "class OverallState(InputState, OutputState):\n    pass",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#combine-input-and-output",
+  "links": []
+}

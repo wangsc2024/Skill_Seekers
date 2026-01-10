@@ -1,0 +1,306 @@
+{
+  "title": "Build a personal assistant with subagents",
+  "content": "Source: https://docs.langchain.com/oss/python/langchain/multi-agent/subagents-personal-assistant\n\nThe **supervisor pattern** is a [multi-agent](/oss/python/langchain/multi-agent) architecture where a central supervisor agent coordinates specialized worker agents. This approach excels when tasks require different types of expertise. Rather than building one agent that manages tool selection across domains, you create focused specialists coordinated by a supervisor who understands the overall workflow.\n\nIn this tutorial, you'll build a personal assistant system that demonstrates these benefits through a realistic workflow. The system will coordinate two specialists with fundamentally different responsibilities:\n\n* A **calendar agent** that handles scheduling, availability checking, and event management.\n* An **email agent** that manages communication, drafts messages, and sends notifications.\n\nWe will also incorporate [human-in-the-loop review](/oss/python/langchain/human-in-the-loop) to allow users to approve, edit, and reject actions (such as outbound emails) as desired.\n\n### Why use a supervisor?\n\nMulti-agent architectures allow you to partition [tools](/oss/python/langchain/tools) across workers, each with their own individual prompts or instructions. Consider an agent with direct access to all calendar and email APIs: it must choose from many similar tools, understand exact formats for each API, and handle multiple domains simultaneously. If performance degrades, it may be helpful to separate related tools and associated prompts into logical groups (in part to manage iterative improvements).\n\nWe will cover the following concepts:\n\n* [Multi-agent systems](/oss/python/langchain/multi-agent)\n* [Human-in-the-loop review](/oss/python/langchain/human-in-the-loop)\n\nThis tutorial requires the `langchain` package:\n\nFor more details, see our [Installation guide](/oss/python/langchain/install).\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your agent. Then set the following environment variables:\n\nWe will need to select a chat model from LangChain's suite of integrations:\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)\n\n</CodeGroup>\n  </Tab>\n\n<Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)\n\n</CodeGroup>\n  </Tab>\n</Tabs>\n\nStart by defining the tools that require structured inputs. In real applications, these would call actual APIs (Google Calendar, SendGrid, etc.). For this tutorial, you'll use stubs to demonstrate the pattern.\n\n## 2. Create specialized sub-agents\n\nNext, we'll create specialized sub-agents that handle each domain.\n\n### Create a calendar agent\n\nThe calendar agent understands natural language scheduling requests and translates them into precise API calls. It handles date parsing, availability checking, and event creation.\n\nTest the calendar agent to see how it handles natural language scheduling:\n\nThe agent parses \"next Tuesday at 2pm\" into ISO format (\"2024-01-16T14:00:00\"), calculates the end time, calls `create_calendar_event`, and returns a natural language confirmation.\n\n### Create an email agent\n\nThe email agent handles message composition and sending. It focuses on extracting recipient information, crafting appropriate subject lines and body text, and managing email communication.\n\nTest the email agent with a natural language request:\n\nThe agent infers the recipient from the informal request, crafts a professional subject line and body, calls `send_email`, and returns a confirmation. Each sub-agent has a narrow focus with domain-specific tools and prompts, allowing it to excel at its specific task.\n\n## 3. Wrap sub-agents as tools\n\nNow wrap each sub-agent as a tool that the supervisor can invoke. This is the key architectural step that creates the layered system. The supervisor will see high-level tools like \"schedule\\_event\", not low-level tools like \"create\\_calendar\\_event\".\n\nThe tool descriptions help the supervisor decide when to use each tool, so make them clear and specific. We return only the sub-agent's final response, as the supervisor doesn't need to see intermediate reasoning or tool calls.\n\n## 4. Create the supervisor agent\n\nNow create the supervisor that orchestrates the sub-agents. The supervisor only sees high-level tools and makes routing decisions at the domain level, not the individual API level.\n\n## 5. Use the supervisor\n\nNow test your complete system with complex requests that require coordination across multiple domains:\n\n### Example 1: Simple single-domain request\n\nThe supervisor identifies this as a calendar task, calls `schedule_event`, and the calendar agent handles date parsing and event creation.\n\n<Tip>\n  For full transparency into the information flow, including prompts and responses for each chat model call, check out the [LangSmith trace](https://smith.langchain.com/public/91a9a95f-fba9-4e84-aff0-371861ad2f4a/r) for the above run.\n</Tip>\n\n### Example 2: Complex multi-domain request\n\nThe supervisor recognizes this requires both calendar and email actions, calls `schedule_event` for the meeting, then calls `manage_email` for the reminder. Each sub-agent completes its task, and the supervisor synthesizes both results into a coherent response.\n\n<Tip>\n  Refer to the [LangSmith trace](https://smith.langchain.com/public/95cd00a3-d1f9-4dba-9731-7bf733fb6a3c/r) to see the detailed information flow for the above run, including individual chat model prompts and responses.\n</Tip>\n\n### Complete working example\n\nHere's everything together in a runnable script:\n\n<Expandable title=\"View complete code\" defaultOpen={false}>\n  \n</Expandable>\n\n### Understanding the architecture\n\nYour system has three layers. The bottom layer contains rigid API tools that require exact formats. The middle layer contains sub-agents that accept natural language, translate it to structured API calls, and return natural language confirmations. The top layer contains the supervisor that routes to high-level capabilities and synthesizes results.\n\nThis separation of concerns provides several benefits: each layer has a focused responsibility, you can add new domains without affecting existing ones, and you can test and iterate on each layer independently.\n\n## 6. Add human-in-the-loop review\n\nIt can be prudent to incorporate [human-in-the-loop review](/oss/python/langchain/human-in-the-loop) of sensitive actions. LangChain includes [built-in middleware](/oss/python/langchain/human-in-the-loop#configuring-interrupts) to review tool calls, in this case the tools invoked by sub-agents.\n\nLet's add human-in-the-loop review to both sub-agents:\n\n* We configure the `create_calendar_event` and `send_email` tools to interrupt, permitting all [response types](/oss/python/langchain/human-in-the-loop) (`approve`, `edit`, `reject`)\n* We add a [checkpointer](/oss/python/langchain/short-term-memory) **only to the top-level agent**. This is required to pause and resume execution.\n\nLet's repeat the query. Note that we gather interrupt events into a list to access downstream:\n\nThis time we've interrupted execution. Let's inspect the interrupt events:\n\nWe can specify decisions for each interrupt by referring to its ID using a [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command). Refer to the [human-in-the-loop guide](/oss/python/langchain/human-in-the-loop) for additional details. For demonstration purposes, here we will accept the calendar event, but edit the subject of the outbound email:\n\nThe run proceeds with our input.\n\n## 7. Advanced: Control information flow\n\nBy default, sub-agents receive only the request string from the supervisor. You might want to pass additional context, such as conversation history or user preferences.\n\n### Pass additional conversational context to sub-agents\n\nThis allows sub-agents to see the full conversation context, which can be useful for resolving ambiguities like \"schedule it for the same time tomorrow\" (referencing a previous conversation).\n\n<Tip>\n  You can see the full context received by the sub agent in the [chat model call](https://smith.langchain.com/public/c7d54882-afb8-4039-9c5a-4112d0f458b0/r/6803571e-af78-4c68-904a-ecf55771084d) of the LangSmith trace.\n</Tip>\n\n### Control what supervisor receives\n\nYou can also customize what information flows back to the supervisor:\n\n**Important:** Make sure sub-agent prompts emphasize that their final message should contain all relevant information. A common failure mode is sub-agents that perform tool calls but don't include the results in their final response.\n\nThe supervisor pattern creates layers of abstraction where each layer has a clear responsibility. When designing a supervisor system, start with clear domain boundaries and give each sub-agent focused tools and prompts. Write clear tool descriptions for the supervisor, test each layer independently before integration, and control information flow based on your specific needs.\n\n<Tip>\n  **When to use the supervisor pattern**\n\nUse the supervisor pattern when you have multiple distinct domains (calendar, email, CRM, database), each domain has multiple tools or complex logic, you want centralized workflow control, and sub-agents don't need to converse directly with users.\n\nFor simpler cases with just a few tools, use a single agent. When agents need to have conversations with users, use [handoffs](/oss/python/langchain/multi-agent/handoffs) instead. For peer-to-peer collaboration between agents, consider other multi-agent patterns.\n</Tip>\n\nLearn about [handoffs](/oss/python/langchain/multi-agent/handoffs) for agent-to-agent conversations, explore [context engineering](/oss/python/langchain/context-engineering) to fine-tune information flow, read the [multi-agent overview](/oss/python/langchain/multi-agent) to compare different patterns, and use [LangSmith](https://smith.langchain.com) to debug and monitor your multi-agent system.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/multi-agent/subagents-personal-assistant.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nFor more details, see our [Installation guide](/oss/python/langchain/install).\n\n### LangSmith\n\nSet up [LangSmith](https://smith.langchain.com) to inspect what is happening inside your agent. Then set the following environment variables:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Components\n\nWe will need to select a chat model from LangChain's suite of integrations:\n\n<Tabs>\n  <Tab title=\"OpenAI\">\n    👉 Read the [OpenAI chat model integration docs](/oss/python/integrations/chat/openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Anthropic\">\n    👉 Read the [Anthropic chat model integration docs](/oss/python/integrations/chat/anthropic/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Azure\">\n    👉 Read the [Azure chat model integration docs](/oss/python/integrations/chat/azure_chat_openai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"Google Gemini\">\n    👉 Read the [Google GenAI chat model integration docs](/oss/python/integrations/chat/google_generative_ai/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"AWS Bedrock\">\n    👉 Read the [AWS Bedrock chat model integration docs](/oss/python/integrations/chat/bedrock/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n\n  <Tab title=\"HuggingFace\">\n    👉 Read the [HuggingFace chat model integration docs](/oss/python/integrations/chat/huggingface/)",
+      "language": "unknown"
+    },
+    {
+      "code": "<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n  </Tab>\n</Tabs>\n\n## 1. Define tools\n\nStart by defining the tools that require structured inputs. In real applications, these would call actual APIs (Google Calendar, SendGrid, etc.). For this tutorial, you'll use stubs to demonstrate the pattern.",
+      "language": "unknown"
+    },
+    {
+      "code": "## 2. Create specialized sub-agents\n\nNext, we'll create specialized sub-agents that handle each domain.\n\n### Create a calendar agent\n\nThe calendar agent understands natural language scheduling requests and translates them into precise API calls. It handles date parsing, availability checking, and event creation.",
+      "language": "unknown"
+    },
+    {
+      "code": "Test the calendar agent to see how it handles natural language scheduling:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "The agent parses \"next Tuesday at 2pm\" into ISO format (\"2024-01-16T14:00:00\"), calculates the end time, calls `create_calendar_event`, and returns a natural language confirmation.\n\n### Create an email agent\n\nThe email agent handles message composition and sending. It focuses on extracting recipient information, crafting appropriate subject lines and body text, and managing email communication.",
+      "language": "unknown"
+    },
+    {
+      "code": "Test the email agent with a natural language request:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "The agent infers the recipient from the informal request, crafts a professional subject line and body, calls `send_email`, and returns a confirmation. Each sub-agent has a narrow focus with domain-specific tools and prompts, allowing it to excel at its specific task.\n\n## 3. Wrap sub-agents as tools\n\nNow wrap each sub-agent as a tool that the supervisor can invoke. This is the key architectural step that creates the layered system. The supervisor will see high-level tools like \"schedule\\_event\", not low-level tools like \"create\\_calendar\\_event\".",
+      "language": "unknown"
+    },
+    {
+      "code": "The tool descriptions help the supervisor decide when to use each tool, so make them clear and specific. We return only the sub-agent's final response, as the supervisor doesn't need to see intermediate reasoning or tool calls.\n\n## 4. Create the supervisor agent\n\nNow create the supervisor that orchestrates the sub-agents. The supervisor only sees high-level tools and makes routing decisions at the domain level, not the individual API level.",
+      "language": "unknown"
+    },
+    {
+      "code": "## 5. Use the supervisor\n\nNow test your complete system with complex requests that require coordination across multiple domains:\n\n### Example 1: Simple single-domain request",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "The supervisor identifies this as a calendar task, calls `schedule_event`, and the calendar agent handles date parsing and event creation.\n\n<Tip>\n  For full transparency into the information flow, including prompts and responses for each chat model call, check out the [LangSmith trace](https://smith.langchain.com/public/91a9a95f-fba9-4e84-aff0-371861ad2f4a/r) for the above run.\n</Tip>\n\n### Example 2: Complex multi-domain request",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "The supervisor recognizes this requires both calendar and email actions, calls `schedule_event` for the meeting, then calls `manage_email` for the reminder. Each sub-agent completes its task, and the supervisor synthesizes both results into a coherent response.\n\n<Tip>\n  Refer to the [LangSmith trace](https://smith.langchain.com/public/95cd00a3-d1f9-4dba-9731-7bf733fb6a3c/r) to see the detailed information flow for the above run, including individual chat model prompts and responses.\n</Tip>\n\n### Complete working example\n\nHere's everything together in a runnable script:\n\n<Expandable title=\"View complete code\" defaultOpen={false}>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Expandable>\n\n### Understanding the architecture\n\nYour system has three layers. The bottom layer contains rigid API tools that require exact formats. The middle layer contains sub-agents that accept natural language, translate it to structured API calls, and return natural language confirmations. The top layer contains the supervisor that routes to high-level capabilities and synthesizes results.\n\nThis separation of concerns provides several benefits: each layer has a focused responsibility, you can add new domains without affecting existing ones, and you can test and iterate on each layer independently.\n\n## 6. Add human-in-the-loop review\n\nIt can be prudent to incorporate [human-in-the-loop review](/oss/python/langchain/human-in-the-loop) of sensitive actions. LangChain includes [built-in middleware](/oss/python/langchain/human-in-the-loop#configuring-interrupts) to review tool calls, in this case the tools invoked by sub-agents.\n\nLet's add human-in-the-loop review to both sub-agents:\n\n* We configure the `create_calendar_event` and `send_email` tools to interrupt, permitting all [response types](/oss/python/langchain/human-in-the-loop) (`approve`, `edit`, `reject`)\n* We add a [checkpointer](/oss/python/langchain/short-term-memory) **only to the top-level agent**. This is required to pause and resume execution.",
+      "language": "unknown"
+    },
+    {
+      "code": "Let's repeat the query. Note that we gather interrupt events into a list to access downstream:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "This time we've interrupted execution. Let's inspect the interrupt events:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "We can specify decisions for each interrupt by referring to its ID using a [`Command`](https://reference.langchain.com/python/langgraph/types/#langgraph.types.Command). Refer to the [human-in-the-loop guide](/oss/python/langchain/human-in-the-loop) for additional details. For demonstration purposes, here we will accept the calendar event, but edit the subject of the outbound email:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "The run proceeds with our input.\n\n## 7. Advanced: Control information flow\n\nBy default, sub-agents receive only the request string from the supervisor. You might want to pass additional context, such as conversation history or user preferences.\n\n### Pass additional conversational context to sub-agents",
+      "language": "unknown"
+    },
+    {
+      "code": "This allows sub-agents to see the full conversation context, which can be useful for resolving ambiguities like \"schedule it for the same time tomorrow\" (referencing a previous conversation).\n\n<Tip>\n  You can see the full context received by the sub agent in the [chat model call](https://smith.langchain.com/public/c7d54882-afb8-4039-9c5a-4112d0f458b0/r/6803571e-af78-4c68-904a-ecf55771084d) of the LangSmith trace.\n</Tip>\n\n### Control what supervisor receives\n\nYou can also customize what information flows back to the supervisor:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "Why use a supervisor?",
+      "id": "why-use-a-supervisor?"
+    },
+    {
+      "level": "h3",
+      "text": "Concepts",
+      "id": "concepts"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h3",
+      "text": "LangSmith",
+      "id": "langsmith"
+    },
+    {
+      "level": "h3",
+      "text": "Components",
+      "id": "components"
+    },
+    {
+      "level": "h2",
+      "text": "1. Define tools",
+      "id": "1.-define-tools"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create specialized sub-agents",
+      "id": "2.-create-specialized-sub-agents"
+    },
+    {
+      "level": "h3",
+      "text": "Create a calendar agent",
+      "id": "create-a-calendar-agent"
+    },
+    {
+      "level": "h3",
+      "text": "Create an email agent",
+      "id": "create-an-email-agent"
+    },
+    {
+      "level": "h2",
+      "text": "3. Wrap sub-agents as tools",
+      "id": "3.-wrap-sub-agents-as-tools"
+    },
+    {
+      "level": "h2",
+      "text": "4. Create the supervisor agent",
+      "id": "4.-create-the-supervisor-agent"
+    },
+    {
+      "level": "h2",
+      "text": "5. Use the supervisor",
+      "id": "5.-use-the-supervisor"
+    },
+    {
+      "level": "h3",
+      "text": "Example 1: Simple single-domain request",
+      "id": "example-1:-simple-single-domain-request"
+    },
+    {
+      "level": "h3",
+      "text": "Example 2: Complex multi-domain request",
+      "id": "example-2:-complex-multi-domain-request"
+    },
+    {
+      "level": "h3",
+      "text": "Complete working example",
+      "id": "complete-working-example"
+    },
+    {
+      "level": "h3",
+      "text": "Understanding the architecture",
+      "id": "understanding-the-architecture"
+    },
+    {
+      "level": "h2",
+      "text": "6. Add human-in-the-loop review",
+      "id": "6.-add-human-in-the-loop-review"
+    },
+    {
+      "level": "h2",
+      "text": "7. Advanced: Control information flow",
+      "id": "7.-advanced:-control-information-flow"
+    },
+    {
+      "level": "h3",
+      "text": "Pass additional conversational context to sub-agents",
+      "id": "pass-additional-conversational-context-to-sub-agents"
+    },
+    {
+      "level": "h3",
+      "text": "Control what supervisor receives",
+      "id": "control-what-supervisor-receives"
+    },
+    {
+      "level": "h2",
+      "text": "8. Key takeaways",
+      "id": "8.-key-takeaways"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#build-a-personal-assistant-with-subagents",
+  "links": []
+}

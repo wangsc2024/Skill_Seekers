@@ -1,0 +1,24 @@
+{
+  "title": "Generate ClickHouse stats",
+  "content": "Source: https://docs.langchain.com/langsmith/script-generate-clickhouse-stats\n\nAs part of troubleshooting your self-hosted instance of LangSmith, the LangChain team may ask you to generate Clickhouse statistics that will help us understand memory and CPU consumption and connection concurrency.\n\nThis command will generate a CSV that can be shared with the LangChain team.\n\nEnsure you have the following tools/items ready.\n\n* [https://kubernetes.io/docs/tasks/tools/](https://kubernetes.io/docs/tasks/tools/)\n\n2. Clickhouse database credentials\n\n* Host\n   * Port\n   * Username\n     * If using the bundled version, this is `default`\n   * Password\n     * If using the bundled version, this is `password`\n   * Database name\n     * If using the bundled version, this is `default`\n\n3. Connectivity to the Clickhouse database from the machine you will be running the `get_clickhouse_stats` script on.\n\n* If you are using the bundled version, you may need to port forward the clickhouse service to your local machine.\n   * Run `kubectl port-forward svc/langsmith-clickhouse 8123:8123` to port forward the clickhouse service to your local machine.\n\n4. The script to generate ClickHouse stats\n\n* You can download the script from [here](https://github.com/langchain-ai/helm/blob/main/charts/langsmith/scripts/get_clickhouse_stats.sh)\n\n### Running the clickhouse stats generation script\n\nRun the following command to run the stats generation script:\n\nFor example, if you are using the bundled version with port-forwarding, the command would look like:\n\nand after running this command you should see a file, clickhouse\\_stats.csv, has been created with Clickhouse statistics.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/script-generate-clickhouse-stats.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "For example, if you are using the bundled version with port-forwarding, the command would look like:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h3",
+      "text": "Running the clickhouse stats generation script",
+      "id": "running-the-clickhouse-stats-generation-script"
+    }
+  ],
+  "url": "llms-txt#generate-clickhouse-stats",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Simple data processing using Functional API",
+  "content": "@entrypoint()\ndef data_processor(raw_data: dict) -> dict:\n    cleaned = clean_data(raw_data).result()\n    transformed = transform_data(cleaned).result()\n    return transformed",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#simple-data-processing-using-functional-api",
+  "links": []
+}

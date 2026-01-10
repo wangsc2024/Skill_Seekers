@@ -1,0 +1,8 @@
+{
+  "title": "Create a user proxy agent",
+  "content": "user_proxy = autogen.UserProxyAgent(\n    name=\"user_proxy\",\n    human_input_mode=\"NEVER\",\n    max_consecutive_auto_reply=8,\n    is_termination_msg=lambda x: x.get(\"content\", \"\").rstrip().endswith(\"TERMINATE\"),\n    code_execution_config={\"work_dir\": \"workspace\"},\n    llm_config={\"config_list\": config_list},\n)\n\ndef run_code_review_session(task_description: str):\n    \"\"\"Run a multi-agent code review session.\"\"\"\n\n# Create a group chat with the agents\n    groupchat = autogen.GroupChat(\n        agents=[user_proxy, developer, code_reviewer],\n        messages=[],\n        max_round=10\n    )\n\n# Create a group chat manager\n    manager = autogen.GroupChatManager(\n        groupchat=groupchat,\n        llm_config={\"config_list\": config_list}\n    )\n\n# Start the conversation\n    user_proxy.initiate_chat(\n        manager,\n        message=f\"\"\"\n        Task: {task_description}\n\nDeveloper: Please implement the requested feature.\n        Code Reviewer: Please review the implementation and provide feedback.\n\nWork together to create a high-quality solution.\n        \"\"\"\n    )\n\nreturn \"Code review session completed\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-user-proxy-agent",
+  "links": []
+}

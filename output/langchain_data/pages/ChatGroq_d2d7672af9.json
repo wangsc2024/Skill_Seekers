@@ -1,0 +1,83 @@
+{
+  "title": "ChatGroq",
+  "content": "Source: https://docs.langchain.com/oss/python/integrations/chat/groq\n\nGet started using Groq [chat models](/oss/python/langchain/models) in LangChain.\n\n<Warning>\n  This page makes reference to [Groq](https://console.groq.com/docs/overview), an AI hardware and software company. For information on how to use Grok models (provided by [xAI](https://docs.x.ai/docs/overview)), see the [xAI provider page](/oss/python/integrations/providers/xai).\n</Warning>\n\n<Tip>\n  **API Reference**\n\nFor detailed documentation of all features and configuration options, head to the [`ChatGroq`](https://reference.langchain.com/python/integrations/langchain_groq/#langchain_groq.ChatGroq) API reference.\n</Tip>\n\nFor a list of all Groq models, visit their [docs](https://console.groq.com/docs/models?utm_source=langchain).\n\n### Integration details\n\n| Class                                                                                                     | Package                                                                                | Local | Serializable | [JS support](https://js.langchain.com/docs/integrations/chat/groq) |                                            Downloads                                            |                                            Version                                           |\n| :-------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------- | :---: | :----------: | :----------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |\n| [`ChatGroq`](https://reference.langchain.com/python/integrations/langchain_groq/#langchain_groq.ChatGroq) | [`langchain-groq`](https://reference.langchain.com/python/integrations/langchain_groq) |   ❌   |     beta     |                                  ✅                                 | ![PyPI - Downloads](https://img.shields.io/pypi/dm/langchain-groq?style=flat-square\\&label=%20) | ![PyPI - Version](https://img.shields.io/pypi/v/langchain-groq?style=flat-square\\&label=%20) |\n\n| [Tool calling](/oss/python/langchain/tools) | [Structured output](/oss/python/langchain/structured-output) | JSON mode | [Image input](/oss/python/langchain/messages#multimodal) | Audio input | Video input | [Token-level streaming](/oss/python/langchain/streaming#llm-tokens) | Native async | [Token usage](/oss/python/langchain/models#token-usage) | [Logprobs](/oss/python/langchain/models#log-probabilities) |\n| :-----------------------------------------: | :----------------------------------------------------------: | :-------: | :------------------------------------------------------: | :---------: | :---------: | :-----------------------------------------------------------------: | :----------: | :-----------------------------------------------------: | :--------------------------------------------------------: |\n|                      ✅                      |                               ✅                              |     ✅     |                             ❌                            |      ❌      |      ❌      |                                  ✅                                  |       ✅      |                            ✅                            |                              ✅                             |\n\nTo access Groq models you'll need to create a Groq account, get an API key, and install the `langchain-groq` integration package.\n\nHead to the [Groq console](https://console.groq.com/login?utm_source=langchain\\&utm_content=chat_page) to sign up to Groq and generate an API key. Once you've done this set the GROQ\\_API\\_KEY environment variable:\n\nTo enable automated tracing of your model calls, set your [LangSmith](https://docs.langchain.com/langsmith/home) API key:\n\nThe LangChain Groq integration lives in the `langchain-groq` package:\n\nNow we can instantiate our model object and generate chat completions.\n\n<Note>\n  **Reasoning Format**\n\nIf you choose to set a `reasoning_format`, you must ensure that the model you are using supports it. You can find a list of supported models in the [Groq documentation](https://console.groq.com/docs/reasoning).\n</Note>\n\nFor detailed documentation of all ChatGroq features and configurations head to the [API reference](https://python.langchain.com/api_reference/groq/chat_models/langchain_groq.chat_models.ChatGroq.html).\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/python/integrations/chat/groq.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "To enable automated tracing of your model calls, set your [LangSmith](https://docs.langchain.com/langsmith/home) API key:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Installation\n\nThe LangChain Groq integration lives in the `langchain-groq` package:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Instantiation\n\nNow we can instantiate our model object and generate chat completions.\n\n<Note>\n  **Reasoning Format**\n\n  If you choose to set a `reasoning_format`, you must ensure that the model you are using supports it. You can find a list of supported models in the [Groq documentation](https://console.groq.com/docs/reasoning).\n</Note>",
+      "language": "unknown"
+    },
+    {
+      "code": "## Invocation",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "Integration details",
+      "id": "integration-details"
+    },
+    {
+      "level": "h3",
+      "text": "Model features",
+      "id": "model-features"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Credentials",
+      "id": "credentials"
+    },
+    {
+      "level": "h3",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Instantiation",
+      "id": "instantiation"
+    },
+    {
+      "level": "h2",
+      "text": "Invocation",
+      "id": "invocation"
+    },
+    {
+      "level": "h2",
+      "text": "API reference",
+      "id": "api-reference"
+    }
+  ],
+  "url": "llms-txt#chatgroq",
+  "links": []
+}

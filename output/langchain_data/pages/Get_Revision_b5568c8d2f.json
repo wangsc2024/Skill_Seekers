@@ -1,0 +1,8 @@
+{
+  "title": "Get Revision",
+  "content": "Source: https://docs.langchain.com/api-reference/deployments-v2/get-revision\n\nhttps://api.host.langchain.com/openapi.json get /v2/deployments/{deployment_id}/revisions/{revision_id}\nGet a revision by ID for a deployment.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-revision",
+  "links": []
+}

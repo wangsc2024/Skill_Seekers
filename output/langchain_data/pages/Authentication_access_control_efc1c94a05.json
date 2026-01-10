@@ -1,0 +1,81 @@
+{
+  "title": "Authentication & access control",
+  "content": "Source: https://docs.langchain.com/langsmith/auth\n\nLangSmith provides a flexible authentication and authorization system that can integrate with most authentication schemes.\n\n### Authentication vs authorization\n\nWhile often used interchangeably, these terms represent distinct security concepts:\n\n* [**Authentication**](#authentication) (\"AuthN\") verifies *who* you are. This runs as middleware for every request.\n* [**Authorization**](#authorization) (\"AuthZ\") determines *what you can do*. This validates the user's privileges and roles on a per-resource basis.\n\nIn LangSmith, authentication is handled by your [`@auth.authenticate`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler, and authorization is handled by your [`@auth.on`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.on) handlers.\n\n## Default security models\n\nLangSmith provides different security defaults:\n\n* Uses LangSmith API keys by default\n* Requires valid API key in `x-api-key` header\n* Can be customized with your auth handler\n\n<Note>\n  **Custom auth**\n  Custom auth **is supported** for all plans in LangSmith.\n</Note>\n\n* No default authentication\n* Complete flexibility to implement your security model\n* You control all aspects of authentication and authorization\n\n## System architecture\n\nA typical authentication setup involves three main components:\n\n1. **Authentication Provider** (Identity Provider/IdP)\n\n* A dedicated service that manages user identities and credentials\n* Handles user registration, login, password resets, etc.\n* Issues tokens (JWT, session tokens, etc.) after successful authentication\n* Examples: Auth0, Supabase Auth, Okta, or your own auth server\n\n2. **Agent Server** (Resource Server)\n\n* Your agent or LangGraph application, which contains business logic and protected resources\n* Validates tokens with the auth provider\n* Enforces access control based on user identity and permissions\n* Doesn't store user credentials directly\n\n3. **Client Application** (Frontend)\n\n* Web app, mobile app, or API client\n* Collects time-sensitive user credentials and sends to auth provider\n* Receives tokens from auth provider\n* Includes these tokens in requests to the Agent Server\n\nHere's how these components typically interact:\n\nYour [`@auth.authenticate`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler in LangGraph handles steps 4-6, while your [`@auth.on`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.on) handlers implement step 7.\n\nAuthentication in LangGraph runs as middleware on every request. Your [`@auth.authenticate`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler receives request information and should:\n\n1. Validate the credentials\n2. Return [user info](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.types.MinimalUserDict) containing the user's identity and user information if valid\n3. Raise an [HTTP exception](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.exceptions.HTTPException) or AssertionError if invalid\n\nThe returned user information is available:\n\n* To your authorization handlers via [`ctx.user`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.types.AuthContext)\n* In your application via `config[\"configuration\"][\"langgraph_auth_user\"]`\n\n<Accordion title=\"Supported Parameters\">\n  The [`@auth.authenticate`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler can accept any of the following parameters by name:\n\n* request (Request): The raw ASGI request object\n  * path (str): The request path, e.g., `\"/threads/abcd-1234-abcd-1234/runs/abcd-1234-abcd-1234/stream\"`\n  * method (str): The HTTP method, e.g., `\"GET\"`\n  * path\\_params (dict\\[str, str]): URL path parameters, e.g., `{\"thread_id\": \"abcd-1234-abcd-1234\", \"run_id\": \"abcd-1234-abcd-1234\"}`\n  * query\\_params (dict\\[str, str]): URL query parameters, e.g., `{\"stream\": \"true\"}`\n  * headers (dict\\[bytes, bytes]): Request headers\n  * authorization (str | None): The Authorization header value (e.g., `\"Bearer <token>\"`)\n\nIn many of our tutorials, we will just show the \"authorization\" parameter to be concise, but you can opt to accept more information as needed\n  to implement your custom authentication scheme.\n</Accordion>\n\n### Agent authentication\n\nCustom authentication permits delegated access. The values you return in  `@auth.authenticate` are added to the run context, giving agents user-scoped credentials lets them access resources on the user’s behalf.\n\nAfter authentication, the platform creates a special configuration object that is passed to your graph and all nodes via the configurable context.\nThis object contains information about the current user, including any custom fields you return from your [`@auth.authenticate`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler.\n\nTo enable an agent to act on behalf of the user, use [custom authentication middleware](/langsmith/custom-auth). This will allow the agent to interact with external systems like MCP servers, external databases, and even other agents on behalf of the user.\n\nFor more information, see the [Use custom auth](/langsmith/custom-auth#enable-agent-authentication) guide.\n\n### Agent authentication with MCP\n\nFor information on how to authenticate an agent to an MCP server, see the [MCP conceptual guide](/oss/python/langchain/mcp).\n\nAfter authentication, LangGraph calls your [`@auth.on`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth) handlers to control access to specific resources (e.g., threads, assistants, crons). These handlers can:\n\n1. Add metadata to be saved during resource creation by mutating the `value[\"metadata\"]` dictionary directly. See the [supported actions table](#supported-actions) for the list of types the value can take for each action.\n2. Filter resources by metadata during search/list or read operations by returning a [filter dictionary](#filter-operations).\n3. Raise an HTTP exception if access is denied.\n\nIf you want to just implement simple user-scoped access control, you can use a single [`@auth.on`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth) handler for all resources and actions. If you want to have different control depending on the resource and action, you can use [resource-specific handlers](#resource-specific-handlers). See the [Supported Resources](#supported-resources) section for a full list of the resources that support access control.\n\n<a id=\"resource-specific-handlers\" />\n\n### Resource-specific handlers\n\nYou can register handlers for specific resources and actions by chaining the resource and action names together with the [`@auth.on`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth) decorator.\nWhen a request is made, the most specific handler that matches that resource and action is called. Below is an example of how to register handlers for specific resources and actions. For the following setup:\n\n1. Authenticated users are able to create threads, read threads, and create runs on threads\n2. Only users with the \"assistants:create\" permission are allowed to create new assistants\n3. All other endpoints (e.g., e.g., delete assistant, crons, store) are disabled for all users.\n\n<Tip>\n  **Supported Handlers**\n  For a full list of supported resources and actions, see the [Supported Resources](#supported-resources) section below.\n</Tip>\n\n```python  theme={null}",
+  "code_samples": [
+    {
+      "code": "Your [`@auth.authenticate`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler in LangGraph handles steps 4-6, while your [`@auth.on`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.on) handlers implement step 7.\n\n## Authentication\n\nAuthentication in LangGraph runs as middleware on every request. Your [`@auth.authenticate`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler receives request information and should:\n\n1. Validate the credentials\n2. Return [user info](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.types.MinimalUserDict) containing the user's identity and user information if valid\n3. Raise an [HTTP exception](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.exceptions.HTTPException) or AssertionError if invalid",
+      "language": "unknown"
+    },
+    {
+      "code": "The returned user information is available:\n\n* To your authorization handlers via [`ctx.user`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.types.AuthContext)\n* In your application via `config[\"configuration\"][\"langgraph_auth_user\"]`\n\n<Accordion title=\"Supported Parameters\">\n  The [`@auth.authenticate`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler can accept any of the following parameters by name:\n\n  * request (Request): The raw ASGI request object\n  * path (str): The request path, e.g., `\"/threads/abcd-1234-abcd-1234/runs/abcd-1234-abcd-1234/stream\"`\n  * method (str): The HTTP method, e.g., `\"GET\"`\n  * path\\_params (dict\\[str, str]): URL path parameters, e.g., `{\"thread_id\": \"abcd-1234-abcd-1234\", \"run_id\": \"abcd-1234-abcd-1234\"}`\n  * query\\_params (dict\\[str, str]): URL query parameters, e.g., `{\"stream\": \"true\"}`\n  * headers (dict\\[bytes, bytes]): Request headers\n  * authorization (str | None): The Authorization header value (e.g., `\"Bearer <token>\"`)\n\n  In many of our tutorials, we will just show the \"authorization\" parameter to be concise, but you can opt to accept more information as needed\n  to implement your custom authentication scheme.\n</Accordion>\n\n### Agent authentication\n\nCustom authentication permits delegated access. The values you return in  `@auth.authenticate` are added to the run context, giving agents user-scoped credentials lets them access resources on the user’s behalf.",
+      "language": "unknown"
+    },
+    {
+      "code": "After authentication, the platform creates a special configuration object that is passed to your graph and all nodes via the configurable context.\nThis object contains information about the current user, including any custom fields you return from your [`@auth.authenticate`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth.authenticate) handler.\n\nTo enable an agent to act on behalf of the user, use [custom authentication middleware](/langsmith/custom-auth). This will allow the agent to interact with external systems like MCP servers, external databases, and even other agents on behalf of the user.\n\nFor more information, see the [Use custom auth](/langsmith/custom-auth#enable-agent-authentication) guide.\n\n### Agent authentication with MCP\n\nFor information on how to authenticate an agent to an MCP server, see the [MCP conceptual guide](/oss/python/langchain/mcp).\n\n## Authorization\n\nAfter authentication, LangGraph calls your [`@auth.on`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth) handlers to control access to specific resources (e.g., threads, assistants, crons). These handlers can:\n\n1. Add metadata to be saved during resource creation by mutating the `value[\"metadata\"]` dictionary directly. See the [supported actions table](#supported-actions) for the list of types the value can take for each action.\n2. Filter resources by metadata during search/list or read operations by returning a [filter dictionary](#filter-operations).\n3. Raise an HTTP exception if access is denied.\n\nIf you want to just implement simple user-scoped access control, you can use a single [`@auth.on`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth) handler for all resources and actions. If you want to have different control depending on the resource and action, you can use [resource-specific handlers](#resource-specific-handlers). See the [Supported Resources](#supported-resources) section for a full list of the resources that support access control.",
+      "language": "unknown"
+    },
+    {
+      "code": "<a id=\"resource-specific-handlers\" />\n\n### Resource-specific handlers\n\nYou can register handlers for specific resources and actions by chaining the resource and action names together with the [`@auth.on`](https://reference.langchain.com/python/langsmith/deployment/sdk/#langgraph_sdk.auth.Auth) decorator.\nWhen a request is made, the most specific handler that matches that resource and action is called. Below is an example of how to register handlers for specific resources and actions. For the following setup:\n\n1. Authenticated users are able to create threads, read threads, and create runs on threads\n2. Only users with the \"assistants:create\" permission are allowed to create new assistants\n3. All other endpoints (e.g., e.g., delete assistant, crons, store) are disabled for all users.\n\n<Tip>\n  **Supported Handlers**\n  For a full list of supported resources and actions, see the [Supported Resources](#supported-resources) section below.\n</Tip>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Core Concepts",
+      "id": "core-concepts"
+    },
+    {
+      "level": "h3",
+      "text": "Authentication vs authorization",
+      "id": "authentication-vs-authorization"
+    },
+    {
+      "level": "h2",
+      "text": "Default security models",
+      "id": "default-security-models"
+    },
+    {
+      "level": "h3",
+      "text": "LangSmith",
+      "id": "langsmith"
+    },
+    {
+      "level": "h3",
+      "text": "Self-hosted",
+      "id": "self-hosted"
+    },
+    {
+      "level": "h2",
+      "text": "System architecture",
+      "id": "system-architecture"
+    },
+    {
+      "level": "h2",
+      "text": "Authentication",
+      "id": "authentication"
+    },
+    {
+      "level": "h3",
+      "text": "Agent authentication",
+      "id": "agent-authentication"
+    },
+    {
+      "level": "h3",
+      "text": "Agent authentication with MCP",
+      "id": "agent-authentication-with-mcp"
+    },
+    {
+      "level": "h2",
+      "text": "Authorization",
+      "id": "authorization"
+    },
+    {
+      "level": "h3",
+      "text": "Resource-specific handlers",
+      "id": "resource-specific-handlers"
+    }
+  ],
+  "url": "llms-txt#authentication-&-access-control",
+  "links": []
+}

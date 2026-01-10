@@ -1,0 +1,8 @@
+{
+  "title": "Define the function that determines whether to continue or not",
+  "content": "def should_continue(state: State) -> Literal[\"tools\", END]:\n    messages = state['messages']\n    last_message = messages[-1]\n\n# If the LLM makes a tool call, then we route to the \"tools\" node\n    if last_message.tool_calls:\n        return \"tools\"\n\n# Otherwise, we stop (reply to the user)\n    return END",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-the-function-that-determines-whether-to-continue-or-not",
+  "links": []
+}

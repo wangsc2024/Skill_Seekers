@@ -1,0 +1,8 @@
+{
+  "title": "Tools",
+  "content": "from langchain.tools import tool",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#tools",
+  "links": []
+}

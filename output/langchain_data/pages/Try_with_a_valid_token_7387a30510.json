@@ -1,0 +1,8 @@
+{
+  "title": "Try with a valid token",
+  "content": "client = get_client(\n    url=\"http://localhost:2024\", headers={\"Authorization\": \"Bearer user1-token\"}\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#try-with-a-valid-token",
+  "links": []
+}

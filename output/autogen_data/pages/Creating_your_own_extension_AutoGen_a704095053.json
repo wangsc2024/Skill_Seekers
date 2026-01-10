@@ -1,0 +1,72 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/create-your-own.html",
+  "title": "Creating your own extension — AutoGen",
+  "content": "With the new package structure in 0.4, it is easier than ever to create and publish your own extension to the AutoGen ecosystem. This page details some best practices so that your extension package integrates well with the AutoGen ecosystem.\n\nThere is no requirement about naming. But prefixing the package name with autogen- makes it easier to find.\n\nWhenever possible, extensions should implement the provided interfaces from the autogen_core package. This will allow for a more consistent experience for users.\n\nTo ensure that the extension works with the version of AutoGen that it was designed for, it is recommended to specify the version of AutoGen the dependency section of the pyproject.toml with adequate constraints.\n\nAutoGen embraces the use of type hints to provide a better development experience. Extensions should use type hints whenever possible.\n\nTo make it easier for users to find your extension, sample, service or package, you can add the topic autogen to the GitHub repo.\n\nMore specific topics are also available:\n\nautogen-extension for extensions\n\nautogen-sample for samples\n\nIn AutoGen 0.2 it was common to merge 3rd party extensions and examples into the main repo. We are super appreciative of all of the users who have contributed to the ecosystem notebooks, modules and pages in 0.2. However, in general we are moving away from this model to allow for more flexibility and to reduce maintenance burden.\n\nThere is the autogen-ext package for 1st party supported extensions, but we want to be selective to manage maintenance load. If you would like to see if your extension makes sense to add into autogen-ext, please open an issue and let’s discuss. Otherwise, we encourage you to publish your extension as a separate package and follow the guidance under discovery to make it easy for users to find.\n\nDiscover community projects\n\nACA Dynamic Sessions Code Executor",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Creating your own extension#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Best practices#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Naming#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Common interfaces#",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Dependency on AutoGen#",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "Usage of typing#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Discovery#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Changes from 0.2#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "[project]\n# ...\ndependencies = [\n    \"autogen-core>=0.4,<0.5\"\n]",
+      "language": "json"
+    },
+    {
+      "code": "[project]\n# ...\ndependencies = [\n    \"autogen-core>=0.4,<0.5\"\n]",
+      "language": "json"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/create-your-own.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/discover.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-container-code-executor.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/azure-foundry-agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html"
+  ]
+}

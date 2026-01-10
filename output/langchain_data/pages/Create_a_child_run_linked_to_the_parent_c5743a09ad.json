@@ -1,0 +1,8 @@
+{
+  "title": "Create a child run, linked to the parent",
+  "content": "child_run = construct_run(\n    name=\"Child Run\",\n    run_type=\"llm\",\n    inputs={\"question\": \"What is the capital of France?\"},\n    parent_dotted_order=parent_run[\"dotted_order\"],\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-child-run,-linked-to-the-parent",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Define an example with attachments",
+  "content": "example_id = uuid.uuid4()\nexample = {\n  \"id\": example_id,\n  \"inputs\": inputs,\n  \"outputs\": outputs,\n  \"attachments\": {\n      \"my_pdf\": {\"mime_type\": \"application/pdf\", \"data\": pdf_bytes},\n      \"my_wav\": {\"mime_type\": \"audio/wav\", \"data\": wav_bytes},\n      \"my_img\": {\"mime_type\": \"image/png\", \"data\": img_bytes},\n      # Example of an attachment specified via a local file path:\n      # \"my_local_img\": {\"mime_type\": \"image/png\", \"data\": Path(__file__).parent / \"my_local_img.png\"},\n  },\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-an-example-with-attachments",
+  "links": []
+}

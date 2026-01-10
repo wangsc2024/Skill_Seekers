@@ -1,0 +1,113 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+  "title": "Structured output using GPT-4o models — AutoGen",
+  "content": "This cookbook demonstrates how to obtain structured output using GPT-4o models. The OpenAI beta client SDK provides a parse helper that allows you to use your own Pydantic model, eliminating the need to define a JSON schema. This approach is recommended for supported models.\n\nCurrently, this feature is supported for:\n\ngpt-4o-mini on OpenAI\n\ngpt-4o-2024-08-06 on OpenAI\n\ngpt-4o-2024-08-06 on Azure\n\nLet’s define a simple message type that carries explanation and output for a Math problem\n\nTopic and Subscription Example Scenarios\n\nTracking LLM usage with a logger",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Structured output using GPT-4o models#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from pydantic import BaseModel\n\n\nclass MathReasoning(BaseModel):\n    class Step(BaseModel):\n        explanation: str\n        output: str\n\n    steps: list[Step]\n    final_answer: str",
+      "language": "python"
+    },
+    {
+      "code": "from pydantic import BaseModel\n\n\nclass MathReasoning(BaseModel):\n    class Step(BaseModel):\n        explanation: str\n        output: str\n\n    steps: list[Step]\n    final_answer: str",
+      "language": "python"
+    },
+    {
+      "code": "import os\n\n# Set the environment variable\nos.environ[\"AZURE_OPENAI_ENDPOINT\"] = \"https://YOUR_ENDPOINT_DETAILS.openai.azure.com/\"\nos.environ[\"AZURE_OPENAI_API_KEY\"] = \"YOUR_API_KEY\"\nos.environ[\"AZURE_OPENAI_DEPLOYMENT_NAME\"] = \"gpt-4o-2024-08-06\"\nos.environ[\"AZURE_OPENAI_API_VERSION\"] = \"2024-08-01-preview\"",
+      "language": "markdown"
+    },
+    {
+      "code": "import os\n\n# Set the environment variable\nos.environ[\"AZURE_OPENAI_ENDPOINT\"] = \"https://YOUR_ENDPOINT_DETAILS.openai.azure.com/\"\nos.environ[\"AZURE_OPENAI_API_KEY\"] = \"YOUR_API_KEY\"\nos.environ[\"AZURE_OPENAI_DEPLOYMENT_NAME\"] = \"gpt-4o-2024-08-06\"\nos.environ[\"AZURE_OPENAI_API_VERSION\"] = \"2024-08-01-preview\"",
+      "language": "markdown"
+    },
+    {
+      "code": "import json\nimport os\nfrom typing import Optional\n\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import AzureOpenAIChatCompletionClient\n\n\n# Function to get environment variable and ensure it is not None\ndef get_env_variable(name: str) -> str:\n    value = os.getenv(name)\n    if value is None:\n        raise ValueError(f\"Environment variable {name} is not set\")\n    return value\n\n\n# Create the client with type-checked environment variables\nclient = AzureOpenAIChatCompletionClient(\n    azure_deployment=get_env_variable(\"AZURE_OPENAI_DEPLOYMENT_NAME\"),\n    model=get_env_variable(\"AZURE_OPENAI_MODEL\"),\n    api_version=get_env_variable(\"AZURE_OPENAI_API_VERSION\"),\n    azure_endpoint=get_env_variable(\"AZURE_OPENAI_ENDPOINT\"),\n    api_key=get_env_variable(\"AZURE_OPENAI_API_KEY\"),\n)",
+      "language": "python"
+    },
+    {
+      "code": "import json\nimport os\nfrom typing import Optional\n\nfrom autogen_core.models import UserMessage\nfrom autogen_ext.models.openai import AzureOpenAIChatCompletionClient\n\n\n# Function to get environment variable and ensure it is not None\ndef get_env_variable(name: str) -> str:\n    value = os.getenv(name)\n    if value is None:\n        raise ValueError(f\"Environment variable {name} is not set\")\n    return value\n\n\n# Create the client with type-checked environment variables\nclient = AzureOpenAIChatCompletionClient(\n    azure_deployment=get_env_variable(\"AZURE_OPENAI_DEPLOYMENT_NAME\"),\n    model=get_env_variable(\"AZURE_OPENAI_MODEL\"),\n    api_version=get_env_variable(\"AZURE_OPENAI_API_VERSION\"),\n    azure_endpoint=get_env_variable(\"AZURE_OPENAI_ENDPOINT\"),\n    api_key=get_env_variable(\"AZURE_OPENAI_API_KEY\"),\n)",
+      "language": "python"
+    },
+    {
+      "code": "# Define the user message\nmessages = [\n    UserMessage(content=\"What is 16 + 32?\", source=\"user\"),\n]\n\n# Call the create method on the client, passing the messages and additional arguments\n# The extra_create_args dictionary includes the response format as MathReasoning model we defined above\n# Providing the response format and pydantic model will use the new parse method from beta SDK\nresponse = await client.create(messages=messages, extra_create_args={\"response_format\": MathReasoning})\n\n# Ensure the response content is a valid JSON string before loading it\nresponse_content: Optional[str] = response.content if isinstance(response.content, str) else None\nif response_content is None:\n    raise ValueError(\"Response content is not a valid JSON string\")\n\n# Print the response content after loading it as JSON\nprint(json.loads(response_content))\n\n# Validate the response content with the MathReasoning model\nMathReasoning.model_validate(json.loads(response_content))",
+      "language": "python"
+    },
+    {
+      "code": "# Define the user message\nmessages = [\n    UserMessage(content=\"What is 16 + 32?\", source=\"user\"),\n]\n\n# Call the create method on the client, passing the messages and additional arguments\n# The extra_create_args dictionary includes the response format as MathReasoning model we defined above\n# Providing the response format and pydantic model will use the new parse method from beta SDK\nresponse = await client.create(messages=messages, extra_create_args={\"response_format\": MathReasoning})\n\n# Ensure the response content is a valid JSON string before loading it\nresponse_content: Optional[str] = response.content if isinstance(response.content, str) else None\nif response_content is None:\n    raise ValueError(\"Response content is not a valid JSON string\")\n\n# Print the response content after loading it as JSON\nprint(json.loads(response_content))\n\n# Validate the response content with the MathReasoning model\nMathReasoning.model_validate(json.loads(response_content))",
+      "language": "python"
+    },
+    {
+      "code": "{'steps': [{'explanation': 'Start by aligning the numbers vertically.', 'output': '\\n  16\\n+ 32'}, {'explanation': 'Add the units digits: 6 + 2 = 8.', 'output': '\\n  16\\n+ 32\\n   8'}, {'explanation': 'Add the tens digits: 1 + 3 = 4.', 'output': '\\n  16\\n+ 32\\n  48'}], 'final_answer': '48'}",
+      "language": "json"
+    },
+    {
+      "code": "{'steps': [{'explanation': 'Start by aligning the numbers vertically.', 'output': '\\n  16\\n+ 32'}, {'explanation': 'Add the units digits: 6 + 2 = 8.', 'output': '\\n  16\\n+ 32\\n   8'}, {'explanation': 'Add the tens digits: 1 + 3 = 4.', 'output': '\\n  16\\n+ 32\\n  48'}], 'final_answer': '48'}",
+      "language": "json"
+    },
+    {
+      "code": "MathReasoning(steps=[Step(explanation='Start by aligning the numbers vertically.', output='\\n  16\\n+ 32'), Step(explanation='Add the units digits: 6 + 2 = 8.', output='\\n  16\\n+ 32\\n   8'), Step(explanation='Add the tens digits: 1 + 3 = 4.', output='\\n  16\\n+ 32\\n  48')], final_answer='48')",
+      "language": "json"
+    },
+    {
+      "code": "MathReasoning(steps=[Step(explanation='Start by aligning the numbers vertically.', output='\\n  16\\n+ 32'), Step(explanation='Add the units digits: 6 + 2 = 8.', output='\\n  16\\n+ 32\\n   8'), Step(explanation='Add the tens digits: 1 + 3 = 4.', output='\\n  16\\n+ 32\\n  48')], final_answer='48')",
+      "language": "json"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/structured-output-agent.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/architecture.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/application-stack.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-identity-and-lifecycle.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/topic-and-subscription.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/message-and-communication.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/telemetry.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/distributed-agent-runtime.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/component-config.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-context.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/tools.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/workbench.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/command-line-code-executors.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/concurrent-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/sequential-workflow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/handoffs.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/mixture-of-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/multi-agent-debate.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/code-execution-groupchat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/azure-openai-with-aad-auth.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/termination-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/tool-use-with-intervention.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/extracting-results-with-an-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/openai-assistant-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/langgraph-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llamaindex-agent.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/local-llms-ollama-litellm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/instrumenting.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/topic-subscription-scenarios.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/cookbook/llm-usage-logger.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/faqs.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html"
+  ]
+}

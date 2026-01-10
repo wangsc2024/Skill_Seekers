@@ -1,0 +1,19 @@
+{
+  "title": "Fail the build if accuracy is too low",
+  "content": "if average_accuracy < 0.85:\n    print(\"❌ Evaluation failed! Accuracy below 85% threshold.\")\n    sys.exit(1)\n\nprint(\"✅ Evaluation passed!\")\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "### Batch processing with blocking=True\n\nWhen you need to perform operations that require the complete dataset (like calculating percentiles, sorting by score, or generating summary reports), use `blocking=True` to wait for all evaluations to complete before processing:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Batch processing with blocking=True",
+      "id": "batch-processing-with-blocking=true"
+    }
+  ],
+  "url": "llms-txt#fail-the-build-if-accuracy-is-too-low",
+  "links": []
+}

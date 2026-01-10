@@ -1,0 +1,14 @@
+{
+  "title": "SGLang Deployment & Inference Guide",
+  "content": "Guide on saving and deploying LLMs to SGLang for serving LLMs in production\n\nYou can serve any LLM or fine-tuned model via [SGLang](https://github.com/sgl-project/sglang) for low-latency, high-throughput inference. SGLang supports text, image/video model inference on any GPU setup, with support for some GGUFs.\n\n### :computer:Installing SGLang\n\nTo install SGLang and Unsloth on NVIDIA GPUs, you can use the below in a virtual environment (which won't break your other Python libraries)",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h3",
+      "text": ":computer:Installing SGLang",
+      "id": ":computer:installing-sglang"
+    }
+  ],
+  "url": "llms-txt#sglang-deployment-&-inference-guide",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Install unsloth and other dependencies",
+  "content": "RUN pip install unsloth unsloth_zoo bitsandbytes==0.48.0 transformers==4.56.2 trl==0.22.2",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#install-unsloth-and-other-dependencies",
+  "links": []
+}

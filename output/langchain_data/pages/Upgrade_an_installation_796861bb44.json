@@ -1,0 +1,78 @@
+{
+  "title": "Upgrade an installation",
+  "content": "Source: https://docs.langchain.com/langsmith/self-host-upgrades\n\nFor general upgrade instructions, please follow the instructions below. Certain versions may have specific upgrade instructions, which will be detailed in more specific upgrade guides.\n\nIf you don't have the repo added, run the following command to add it:\n\nUpdate your local helm repo\n\nUpdate your helm chart config file with any updates that are needed in the new version. These will be detailed in the release notes for the new version.\n\nRun the following command to upgrade the chart(replace version with the version you want to upgrade to):\n\n<Note>\n  If you are using a namespace other than the default namespace, you will need to specify the namespace in the `helm` and `kubectl` commands by using the `-n <namespace` flag.\n</Note>\n\nFind the latest version of the chart. You can find this in the [LangSmith Helm Chart GitHub repository](https://github.com/langchain-ai/helm/releases) or by running the following command:\n\nYou should see an output similar to this:\n\nChoose the version you want to upgrade to (generally the latest version is recommended) and note the version number.\n\nVerify that the upgrade was successful:\n\nAll pods should be in the `Running` state. Verify that clickhouse is running and that both `migrations` jobs have completed.\n\n### Validate your deployment:\n\n1. Run `kubectl get services`\n\nOutput should look something like:\n\n2. Curl the external ip of the `langsmith-frontend` service:\n\nCheck that the version matches the version you upgraded to.\n\n3. Visit the external ip for the `langsmith-frontend` service on your browser\n\nThe LangSmith UI should be visible/operational\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=5310f686e7b9eebaaee4fe2a152a8675\" alt=\"LangSmith UI\" data-og-width=\"2886\" width=\"2886\" data-og-height=\"1698\" height=\"1698\" data-path=\"langsmith/images/langsmith-ui.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=280&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=5f155ce778ca848f89fefff237b69bcb 280w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=560&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=1d55d4068a9f53387c129b4688b0971e 560w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=840&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=feb20198d67249ece559e5fd0e6d8e98 840w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=1100&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=3e5eba764d911e567d5aaa9e5702327b 1100w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=1650&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=d45af56632578a8d1b05e546dfc8d01d 1650w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=2500&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=16a49517a6c224930fdb81c9ccde5527 2500w\" />\n\nUpgrading the Docker version of LangSmith is a bit more involved than the Helm version and may require a small amount of downtime. Please follow the instructions below to upgrade your Docker version of LangSmith.\n\n1. Update your `docker-compose.yml` file to the file used in the latest release. You can find this in the [LangSmith SDK GitHub repository](https://github.com/langchain-ai/langsmith-sdk/blob/main/python/langsmith/cli/docker-compose.yaml)\n2. Update your `.env` file with any new environment variables that are required in the new version. These will be detailed in the release notes for the new version.\n3. Run the following command to stop your current LangSmith instance:\n\n4. Run the following command to start your new LangSmith instance in the background:\n\nIf everything ran successfully, you should see all the LangSmith containers running and healthy.\n\n### Validate your deployment:\n\n1. Curl the exposed port of the `cli-langchain-frontend-1` container:\n\n2. Visit the exposed port of the `cli-langchain-frontend-1` container on your browser\n\nThe LangSmith UI should be visible/operational\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=5310f686e7b9eebaaee4fe2a152a8675\" alt=\"LangSmith UI\" data-og-width=\"2886\" width=\"2886\" data-og-height=\"1698\" height=\"1698\" data-path=\"langsmith/images/langsmith-ui.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=280&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=5f155ce778ca848f89fefff237b69bcb 280w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=560&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=1d55d4068a9f53387c129b4688b0971e 560w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=840&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=feb20198d67249ece559e5fd0e6d8e98 840w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=1100&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=3e5eba764d911e567d5aaa9e5702327b 1100w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=1650&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=d45af56632578a8d1b05e546dfc8d01d 1650w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=2500&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=16a49517a6c224930fdb81c9ccde5527 2500w\" />\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/self-host-upgrades.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "Update your local helm repo",
+      "language": "unknown"
+    },
+    {
+      "code": "Update your helm chart config file with any updates that are needed in the new version. These will be detailed in the release notes for the new version.\n\nRun the following command to upgrade the chart(replace version with the version you want to upgrade to):\n\n<Note>\n  If you are using a namespace other than the default namespace, you will need to specify the namespace in the `helm` and `kubectl` commands by using the `-n <namespace` flag.\n</Note>\n\nFind the latest version of the chart. You can find this in the [LangSmith Helm Chart GitHub repository](https://github.com/langchain-ai/helm/releases) or by running the following command:",
+      "language": "unknown"
+    },
+    {
+      "code": "You should see an output similar to this:",
+      "language": "unknown"
+    },
+    {
+      "code": "Choose the version you want to upgrade to (generally the latest version is recommended) and note the version number.",
+      "language": "unknown"
+    },
+    {
+      "code": "Verify that the upgrade was successful:",
+      "language": "unknown"
+    },
+    {
+      "code": "All pods should be in the `Running` state. Verify that clickhouse is running and that both `migrations` jobs have completed.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Validate your deployment:\n\n1. Run `kubectl get services`\n\n   Output should look something like:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Curl the external ip of the `langsmith-frontend` service:",
+      "language": "unknown"
+    },
+    {
+      "code": "Check that the version matches the version you upgraded to.\n\n3. Visit the external ip for the `langsmith-frontend` service on your browser\n\n   The LangSmith UI should be visible/operational\n\n   <img src=\"https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=5310f686e7b9eebaaee4fe2a152a8675\" alt=\"LangSmith UI\" data-og-width=\"2886\" width=\"2886\" data-og-height=\"1698\" height=\"1698\" data-path=\"langsmith/images/langsmith-ui.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=280&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=5f155ce778ca848f89fefff237b69bcb 280w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=560&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=1d55d4068a9f53387c129b4688b0971e 560w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=840&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=feb20198d67249ece559e5fd0e6d8e98 840w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=1100&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=3e5eba764d911e567d5aaa9e5702327b 1100w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=1650&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=d45af56632578a8d1b05e546dfc8d01d 1650w, https://mintcdn.com/langchain-5e9cc07a/4kN8yiLrZX_amfFn/langsmith/images/langsmith-ui.png?w=2500&fit=max&auto=format&n=4kN8yiLrZX_amfFn&q=85&s=16a49517a6c224930fdb81c9ccde5527 2500w\" />\n\n## Docker\n\nUpgrading the Docker version of LangSmith is a bit more involved than the Helm version and may require a small amount of downtime. Please follow the instructions below to upgrade your Docker version of LangSmith.\n\n1. Update your `docker-compose.yml` file to the file used in the latest release. You can find this in the [LangSmith SDK GitHub repository](https://github.com/langchain-ai/langsmith-sdk/blob/main/python/langsmith/cli/docker-compose.yaml)\n2. Update your `.env` file with any new environment variables that are required in the new version. These will be detailed in the release notes for the new version.\n3. Run the following command to stop your current LangSmith instance:",
+      "language": "unknown"
+    },
+    {
+      "code": "4. Run the following command to start your new LangSmith instance in the background:",
+      "language": "unknown"
+    },
+    {
+      "code": "If everything ran successfully, you should see all the LangSmith containers running and healthy.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Validate your deployment:\n\n1. Curl the exposed port of the `cli-langchain-frontend-1` container:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Kubernetes(Helm)",
+      "id": "kubernetes(helm)"
+    },
+    {
+      "level": "h3",
+      "text": "Validate your deployment:",
+      "id": "validate-your-deployment:"
+    },
+    {
+      "level": "h2",
+      "text": "Docker",
+      "id": "docker"
+    },
+    {
+      "level": "h3",
+      "text": "Validate your deployment:",
+      "id": "validate-your-deployment:"
+    }
+  ],
+  "url": "llms-txt#upgrade-an-installation",
+  "links": []
+}

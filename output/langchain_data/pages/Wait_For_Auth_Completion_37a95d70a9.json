@@ -1,0 +1,8 @@
+{
+  "title": "Wait For Auth Completion",
+  "content": "Source: https://docs.langchain.com/api-reference/auth-service-v2/wait-for-auth-completion\n\nhttps://api.host.langchain.com/openapi.json get /v2/auth/wait/{auth_id}\nWait for OAuth authentication completion.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#wait-for-auth-completion",
+  "links": []
+}

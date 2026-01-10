@@ -1,0 +1,31 @@
+{
+  "title": "Ensure all audio is at 24 kHz sampling rate (Orpheus’s expected rate)",
+  "content": "dataset = dataset.cast_column(\"audio\", Audio(sampling_rate=24000))\n\nfilename,text\n  0001.wav,Hello there!\n  0002.wav,<sigh> I am very tired.\n  python\n  from datasets import Audio\n  dataset = load_dataset(\"csv\", data_files=\"mydata.csv\", split=\"train\")\n  dataset = dataset.cast_column(\"filename\", Audio(sampling_rate=24000))\n  python\nfrom unsloth import FastLanguageModel\nimport torch\ndtype = None # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+\nload_in_4bit = False # Use 4bit quantization to reduce memory usage. Can be False.\n\nmodel, tokenizer = FastLanguageModel.from_pretrained(\n    model_name = \"unsloth/orpheus-3b-0.1-ft\",\n    max_seq_length= 2048, # Choose any for long context!\n    dtype = dtype,\n    load_in_4bit = load_in_4bit,\n    #token = \"hf_...\", # use one if using gated models like meta-llama/Llama-2-7b-hf\n)\n\nfrom datasets import load_dataset\ndataset = load_dataset(\"MrDragonFox/Elise\", split = \"train\")\npython",
+  "code_samples": [
+    {
+      "code": "This will download the dataset (\\~328 MB for \\~1.2k samples). Each item in `dataset` is a dictionary with at least:\n\n* `\"audio\"`: the audio clip (waveform array and metadata like sampling rate), and\n* `\"text\"`: the transcript string\n\nOrpheus supports tags like `<laugh>`, `<chuckle>`, `<sigh>`, `<cough>`, `<sniffle>`, `<groan>`, `<yawn>`, `<gasp>`, etc. For example: `\"I missed you <laugh> so much!\"`. These tags are enclosed in angle brackets and will be treated as special tokens by the model (they match [Orpheus’s expected tags](https://github.com/canopyai/Orpheus-TTS) like `<laugh>` and `<sigh>`. During training, the model will learn to associate these tags with the corresponding audio patterns. The Elise dataset with tags already has many of these (e.g., 336 occurrences of “laughs”, 156 of “sighs”, etc. as listed in its card). If your dataset lacks such tags but you want to incorporate them, you can manually annotate the transcripts where the audio contains those expressions.\n\n**Option 2: Preparing a custom dataset** – If you have your own audio files and transcripts:\n\n* Organize audio clips (WAV/FLAC files) in a folder.\n* Create a CSV or TSV file with columns for file path and transcript. For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "* Use `load_dataset(\"csv\", data_files=\"mydata.csv\", split=\"train\")` to load it. You might need to tell the dataset loader how to handle audio paths. An alternative is using the `datasets.Audio` feature to load audio data on the fly:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then `dataset[i][\"audio\"]` will contain the audio array.\n* **Ensure transcripts are normalized** (no unusual characters that the tokenizer might not know, except the emotion tags if used). Also ensure all audio have a consistent sampling rate (resample them if necessary to the target rate the model expects, e.g. 24kHz for Orpheus).\n\nIn summary, for **dataset preparation**:\n\n* You need a **list of (audio, text)** pairs.\n* Use the HF `datasets` library to handle loading and optional preprocessing (like resampling).\n* Include any **special tags** in the text that you want the model to learn (ensure they are in `<angle_brackets>` format so the model treats them as distinct tokens).\n* (Optional) If multi-speaker, you could include a speaker ID token in the text or use a separate speaker embedding approach, but that’s beyond this basic guide (Elise is single-speaker).\n\n### Fine-Tuning TTS with Unsloth\n\nNow, let’s start fine-tuning! We’ll illustrate using Python code (which you can run in a Jupyter notebook, Colab, etc.).\n\n**Step 1: Load the Model and Dataset**\n\nIn all our TTS notebooks, we enable LoRA (16-bit) training and disable QLoRA (4-bit) training with: `load_in_4bit = False`. This is so the model can usually learn your dataset better and have higher accuracy.",
+      "language": "unknown"
+    },
+    {
+      "code": "{% hint style=\"info\" %}\nIf memory is very limited or if dataset is large, you can stream or load in chunks. Here, 3h of audio easily fits in RAM. If using your own dataset CSV, load it similarly.\n{% endhint %}\n\n**Step 2: Advanced - Preprocess the data for training (Optional)**\n\nWe need to prepare inputs for the Trainer. For text-to-speech, one approach is to train the model in a causal manner: concatenate text and audio token IDs as the target sequence. However, since Orpheus is a decoder-only LLM that outputs audio, we can feed the text as input (context) and have the audio token ids as labels. In practice, Unsloth’s integration might do this automatically if the model’s config identifies it as text-to-speech. If not, we can do something like:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Fine-Tuning TTS with Unsloth",
+      "id": "fine-tuning-tts-with-unsloth"
+    }
+  ],
+  "url": "llms-txt#ensure-all-audio-is-at-24-khz-sampling-rate-(orpheus’s-expected-rate)",
+  "links": []
+}

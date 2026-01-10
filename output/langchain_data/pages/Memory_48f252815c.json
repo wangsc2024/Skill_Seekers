@@ -1,0 +1,69 @@
+{
+  "title": "Memory",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/add-memory\n\nAI applications need [memory](/oss/python/concepts/memory) to share context across multiple interactions. In LangGraph, you can add two types of memory:\n\n* [Add short-term memory](#add-short-term-memory) as a part of your agent's [state](/oss/python/langgraph/graph-api#state) to enable multi-turn conversations.\n* [Add long-term memory](#add-long-term-memory) to store user-specific or application-level data across sessions.\n\n## Add short-term memory\n\n**Short-term** memory (thread-level [persistence](/oss/python/langgraph/persistence)) enables agents to track multi-turn conversations. To add short-term memory:\n\n### Use in production\n\nIn production, use a checkpointer backed by a database:\n\n<Accordion title=\"Example: using Postgres checkpointer\">\n\n<Tip>\n    You need to call `checkpointer.setup()` the first time you're using Postgres checkpointer\n  </Tip>\n\n<Tabs>\n    <Tab title=\"Sync\">\n      \n    </Tab>\n\n<Tab title=\"Async\">\n      \n    </Tab>\n  </Tabs>\n</Accordion>\n\n<Accordion title=\"Example: using [MongoDB](https://pypi.org/project/langgraph-checkpoint-mongodb/) checkpointer\">\n\n<Note>\n    **Setup**\n    To use the MongoDB checkpointer, you will need a MongoDB cluster. Follow [this guide](https://www.mongodb.com/docs/guides/atlas/cluster/) to create a cluster if you don't already have one.\n  </Note>\n\n<Tabs>\n    <Tab title=\"Sync\">\n      \n    </Tab>\n\n<Tab title=\"Async\">\n      \n    </Tab>\n  </Tabs>\n</Accordion>\n\n<Accordion title=\"Example: using Redis checkpointer\">\n\n<Tip>\n    You need to call `checkpointer.setup()` the first time you're using Redis checkpointer.\n  </Tip>\n\n<Tabs>\n    <Tab title=\"Sync\">\n      \n    </Tab>\n\n<Tab title=\"Async\">\n      \n    </Tab>\n  </Tabs>\n</Accordion>\n\nIf your graph contains [subgraphs](/oss/python/langgraph/use-subgraphs), you only need to provide the checkpointer when compiling the parent graph. LangGraph will automatically propagate the checkpointer to the child subgraphs.\n\n```python  theme={null}\nfrom langgraph.graph import START, StateGraph\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom typing import TypedDict\n\nclass State(TypedDict):\n    foo: str",
+  "code_samples": [
+    {
+      "code": "### Use in production\n\nIn production, use a checkpointer backed by a database:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Example: using Postgres checkpointer\">",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n    You need to call `checkpointer.setup()` the first time you're using Postgres checkpointer\n  </Tip>\n\n  <Tabs>\n    <Tab title=\"Sync\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n    <Tab title=\"Async\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n  </Tabs>\n</Accordion>\n\n<Accordion title=\"Example: using [MongoDB](https://pypi.org/project/langgraph-checkpoint-mongodb/) checkpointer\">",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n    **Setup**\n    To use the MongoDB checkpointer, you will need a MongoDB cluster. Follow [this guide](https://www.mongodb.com/docs/guides/atlas/cluster/) to create a cluster if you don't already have one.\n  </Note>\n\n  <Tabs>\n    <Tab title=\"Sync\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n    <Tab title=\"Async\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n  </Tabs>\n</Accordion>\n\n<Accordion title=\"Example: using Redis checkpointer\">",
+      "language": "unknown"
+    },
+    {
+      "code": "<Tip>\n    You need to call `checkpointer.setup()` the first time you're using Redis checkpointer.\n  </Tip>\n\n  <Tabs>\n    <Tab title=\"Sync\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n    <Tab title=\"Async\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n  </Tabs>\n</Accordion>\n\n### Use in subgraphs\n\nIf your graph contains [subgraphs](/oss/python/langgraph/use-subgraphs), you only need to provide the checkpointer when compiling the parent graph. LangGraph will automatically propagate the checkpointer to the child subgraphs.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Add short-term memory",
+      "id": "add-short-term-memory"
+    },
+    {
+      "level": "h3",
+      "text": "Use in production",
+      "id": "use-in-production"
+    },
+    {
+      "level": "h3",
+      "text": "Use in subgraphs",
+      "id": "use-in-subgraphs"
+    }
+  ],
+  "url": "llms-txt#memory",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Second session: get user info",
+  "content": "agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Get user info for user with id 'abc123'\"}]\n})",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#second-session:-get-user-info",
+  "links": []
+}

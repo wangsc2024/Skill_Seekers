@@ -1,0 +1,8 @@
+{
+  "title": "Create the dataset",
+  "content": "ls_client = Client()\ndataset_name = \"attachment-test-dataset\"\ndataset = ls_client.create_dataset(\n  dataset_name=dataset_name,\n  description=\"Test dataset for evals with publicly available attachments\",\n)\n\ninputs = {\n  \"audio_question\": \"What is in this audio clip?\",\n  \"image_question\": \"What is in this image?\",\n}\n\noutputs = {\n  \"audio_answer\": \"The sun rises in the east and sets in the west. This simple fact has been observed by humans for thousands of years.\",\n  \"image_answer\": \"A mug with a blanket over it.\",\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-the-dataset",
+  "links": []
+}

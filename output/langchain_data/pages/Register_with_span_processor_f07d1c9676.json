@@ -1,0 +1,8 @@
+{
+  "title": "Register with span processor",
+  "content": "span_processor.register_turn_audio_recorder(conversation_id, turn_audio_recorder)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#register-with-span-processor",
+  "links": []
+}

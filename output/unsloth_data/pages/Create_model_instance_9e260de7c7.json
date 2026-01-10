@@ -1,0 +1,8 @@
+{
+  "title": "Create model instance",
+  "content": "llm = LLM(\n    model=\"unsloth/DeepSeek-OCR\",\n    enable_prefix_caching=False,\n    mm_processor_cache_gb=0,\n    logits_processors=[NGramPerReqLogitsProcessor]\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-model-instance",
+  "links": []
+}

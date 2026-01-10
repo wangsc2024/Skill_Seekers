@@ -1,0 +1,24 @@
+{
+  "title": "Push to your container registry",
+  "content": "docker push my-agent:latest\nbash  theme={null}",
+  "code_samples": [
+    {
+      "code": "You can push to any container registry (Docker Hub, AWS ECR, Azure ACR, Google GCR, etc.) that your deployment environment has access to.\n\n**Supported deployments:**\n\n* <Icon icon=\"cloud\" /> **Cloud LangSmith**: Use the Control Plane API to create deployments from your GitHub repository\n* <Icon icon=\"server\" /> **Self-Hosted/Hybrid LangSmith**: Use the Control Plane API to create deployments from your container registry\n\nSee the [LangGraph CLI build documentation](/langsmith/cli#build) for more details.\n\n### Connect to Your Deployed Agent\n\n* <Icon icon=\"code\" /> **[LangGraph SDK](https://langchain-ai.github.io/langgraph/cloud/reference/sdk/python_sdk_ref/#langgraph-sdk-python)**: Use the LangGraph SDK for programmatic integration.\n* <Icon icon=\"project-diagram\" /> **[RemoteGraph](/langsmith/use-remote-graph)**: Connect using RemoteGraph for remote graph connections (to use your graph in other graphs).\n* <Icon icon=\"globe\" /> **[REST API](/langsmith/server-api-ref)**: Use HTTP-based interactions with your deployed agent.\n* <Icon icon=\"desktop\" /> **[Studio](/langsmith/studio)**: Access the visual interface for testing and debugging.\n\n### Environment configuration\n\n#### Database & cache configuration\n\nBy default, LangSmith Deployment create PostgreSQL and Redis instances for you. To use external services, set the following environment variables in your new deployment or revision:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Connect to Your Deployed Agent",
+      "id": "connect-to-your-deployed-agent"
+    },
+    {
+      "level": "h3",
+      "text": "Environment configuration",
+      "id": "environment-configuration"
+    }
+  ],
+  "url": "llms-txt#push-to-your-container-registry",
+  "links": []
+}

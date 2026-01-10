@@ -1,0 +1,8 @@
+{
+  "title": "A2A Post",
+  "content": "Source: https://docs.langchain.com/langsmith/agent-server-api/a2a/a2a-post\n\nlangsmith/agent-server-openapi.json post /a2a/{assistant_id}\nCommunicate with an assistant using the Agent-to-Agent Protocol.\nSends a JSON-RPC 2.0 message to the assistant.\n\n- **Request**: Provide an object with `jsonrpc`, `id`, `method`, and optional `params`.\n- **Response**: Returns a JSON-RPC response with task information or error.\n\n**Supported Methods:**\n- `message/send`: Send a message to the assistant\n- `tasks/get`: Get the status and result of a task\n\n**Notes:**\n- Supports threaded conversations via thread context\n- Messages can contain text and data parts\n- Tasks run asynchronously and return completion status",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#a2a-post",
+  "links": []
+}

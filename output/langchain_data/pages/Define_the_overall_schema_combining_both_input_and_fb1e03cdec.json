@@ -1,0 +1,8 @@
+{
+  "title": "Define the overall schema, combining both input and output",
+  "content": "class OverallState(InputState, OutputState):\n    pass",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-the-overall-schema,-combining-both-input-and-output",
+  "links": []
+}

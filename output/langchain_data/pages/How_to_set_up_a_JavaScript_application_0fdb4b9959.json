@@ -1,0 +1,67 @@
+{
+  "title": "How to set up a JavaScript application",
+  "content": "Source: https://docs.langchain.com/langsmith/setup-javascript\n\nAn application must be configured with a [configuration file](/langsmith/cli#configuration-file) in order to be deployed to LangSmith (or to be self-hosted). This how-to guide discusses the basic steps to set up a JavaScript application for deployment using `package.json` to specify project dependencies.\n\nThis walkthrough is based on [this repository](https://github.com/langchain-ai/langgraphjs-studio-starter), which you can play around with to learn more about how to set up your application for deployment.\n\nThe final repository structure will look something like this:\n\n<Tip>\n  LangSmith Deployment supports deploying a [LangGraph](/oss/python/langgraph/overview) *graph*. However, the implementation of a *node* of a graph can contain arbitrary code. This means any framework can be implemented within a node and deployed on LangSmith Deployment. This lets you implement your core application logic without using additional LangGraph OSS APIs while still using LangSmith for [deployment](/langsmith/deployments), scaling, and [observability](/langsmith/observability). For more details, refer to [Use any framework with LangSmith Deployment](/langsmith/application-structure#use-any-framework-with-langsmith-deployment).\n</Tip>\n\nAfter each step, an example file directory is provided to demonstrate how code can be organized.\n\n## Specify dependencies\n\nDependencies can be specified in a `package.json`. If none of these files is created, then dependencies can be specified later in the [configuration file](#create-the-api-config).\n\nExample `package.json` file:\n\nWhen deploying your app, the dependencies will be installed using the package manager of your choice, provided they adhere to the compatible version ranges listed below:\n\nExample file directory:\n\n## Specify environment variables\n\nEnvironment variables can optionally be specified in a file (e.g. `.env`). See the [Environment Variables reference](/langsmith/env-var) to configure additional variables for a deployment.\n\nExample file directory:\n\nImplement your graphs. Graphs can be defined in a single file or multiple files. Make note of the variable names of each compiled graph to be included in the application. The variable names will be used later when creating the [configuration file](/langsmith/cli#configuration-file).\n\nHere is an example `agent.ts`:\n\nExample file directory:\n\n## Create the API config\n\nCreate a [configuration file](/langsmith/cli#configuration-file) called `langgraph.json`. See the [configuration file reference](/langsmith/cli#configuration-file) for detailed explanations of each key in the JSON object of the configuration file.\n\nExample `langgraph.json` file:\n\nNote that the variable name of the `CompiledGraph` appears at the end of the value of each subkey in the top-level `graphs` key (i.e. `:<variable_name>`).\n\n<Info>\n  **Configuration Location**\n  The configuration file must be placed in a directory that is at the same level or higher than the TypeScript files that contain compiled graphs and associated dependencies.\n</Info>\n\nAfter you setup your project and place it in a GitHub repository, it's time to [deploy your app](/langsmith/deployment-quickstart).\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/setup-javascript.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "<Tip>\n  LangSmith Deployment supports deploying a [LangGraph](/oss/python/langgraph/overview) *graph*. However, the implementation of a *node* of a graph can contain arbitrary code. This means any framework can be implemented within a node and deployed on LangSmith Deployment. This lets you implement your core application logic without using additional LangGraph OSS APIs while still using LangSmith for [deployment](/langsmith/deployments), scaling, and [observability](/langsmith/observability). For more details, refer to [Use any framework with LangSmith Deployment](/langsmith/application-structure#use-any-framework-with-langsmith-deployment).\n</Tip>\n\nAfter each step, an example file directory is provided to demonstrate how code can be organized.\n\n## Specify dependencies\n\nDependencies can be specified in a `package.json`. If none of these files is created, then dependencies can be specified later in the [configuration file](#create-the-api-config).\n\nExample `package.json` file:",
+      "language": "unknown"
+    },
+    {
+      "code": "When deploying your app, the dependencies will be installed using the package manager of your choice, provided they adhere to the compatible version ranges listed below:",
+      "language": "unknown"
+    },
+    {
+      "code": "Example file directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Specify environment variables\n\nEnvironment variables can optionally be specified in a file (e.g. `.env`). See the [Environment Variables reference](/langsmith/env-var) to configure additional variables for a deployment.\n\nExample `.env` file:",
+      "language": "unknown"
+    },
+    {
+      "code": "Example file directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Define graphs\n\nImplement your graphs. Graphs can be defined in a single file or multiple files. Make note of the variable names of each compiled graph to be included in the application. The variable names will be used later when creating the [configuration file](/langsmith/cli#configuration-file).\n\nHere is an example `agent.ts`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Example file directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Create the API config\n\nCreate a [configuration file](/langsmith/cli#configuration-file) called `langgraph.json`. See the [configuration file reference](/langsmith/cli#configuration-file) for detailed explanations of each key in the JSON object of the configuration file.\n\nExample `langgraph.json` file:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Specify dependencies",
+      "id": "specify-dependencies"
+    },
+    {
+      "level": "h2",
+      "text": "Specify environment variables",
+      "id": "specify-environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Define graphs",
+      "id": "define-graphs"
+    },
+    {
+      "level": "h2",
+      "text": "Create the API config",
+      "id": "create-the-api-config"
+    },
+    {
+      "level": "h2",
+      "text": "Next",
+      "id": "next"
+    }
+  ],
+  "url": "llms-txt#how-to-set-up-a-javascript-application",
+  "links": []
+}

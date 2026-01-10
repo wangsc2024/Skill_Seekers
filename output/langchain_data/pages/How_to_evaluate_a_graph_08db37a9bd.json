@@ -1,0 +1,19 @@
+{
+  "title": "How to evaluate a graph",
+  "content": "Source: https://docs.langchain.com/langsmith/evaluate-graph\n\n<Info>\n  [langgraph](https://langchain-ai.github.io/langgraph/)\n</Info>\n\n`langgraph` is a library for building stateful, multi-actor applications with LLMs, used to create agent and multi-agent workflows. Evaluating `langgraph` graphs can be challenging because a single invocation can involve many LLM calls, and which LLM calls are made may depend on the outputs of preceding calls. In this guide we will focus on the mechanics of how to pass graphs and graph nodes to `evaluate()` / `aevaluate()`. For evaluation techniques and best practices when building agents head to the [langgraph docs](https://langchain-ai.github.io/langgraph/tutorials/#evaluation).\n\n## End-to-end evaluations\n\nThe most common type of evaluation is an end-to-end one, where we want to evaluate the final graph output for each example input.\n\nLets construct a simple ReACT agent to start:\n\n```python  theme={null}\nfrom typing import Annotated, Literal, TypedDict\nfrom langchain.chat_models import init_chat_model\nfrom langchain.tools import tool\nfrom langgraph.prebuilt import ToolNode\nfrom langgraph.graph import END, START, StateGraph\nfrom langgraph.graph.message import add_messages\n\nclass State(TypedDict):\n    # Messages have the type \"list\". The 'add_messages' function\n    # in the annotation defines how this state key should be updated\n    # (in this case, it appends messages to the list, rather than overwriting them)\n    messages: Annotated[list, add_messages]",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "End-to-end evaluations",
+      "id": "end-to-end-evaluations"
+    },
+    {
+      "level": "h3",
+      "text": "Define a graph",
+      "id": "define-a-graph"
+    }
+  ],
+  "url": "llms-txt#how-to-evaluate-a-graph",
+  "links": []
+}

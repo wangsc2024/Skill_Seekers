@@ -1,0 +1,8 @@
+{
+  "title": "View log file size",
+  "content": "ls -lh ~/.claude/state/hook.log",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#view-log-file-size",
+  "links": []
+}

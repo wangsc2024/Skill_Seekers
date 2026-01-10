@@ -1,0 +1,8 @@
+{
+  "title": "Define the processing node",
+  "content": "def answer_node(state: InputState):\n    # Replace with actual logic and do something useful\n    return {\"answer\": \"bye\", \"question\": state[\"question\"]}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-the-processing-node",
+  "links": []
+}

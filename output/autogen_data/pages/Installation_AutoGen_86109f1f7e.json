@@ -1,0 +1,119 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+  "title": "Installation — AutoGen",
+  "content": "When installing AgentChat locally, we recommend using a virtual environment for the installation. This will ensure that the dependencies for AgentChat are isolated from the rest of your system.\n\nWindows command-line:\n\nTo deactivate later, run:\n\nInstall Conda if you have not already.\n\nTo deactivate later, run:\n\nInstall the autogen-agentchat package using pip:\n\nPython 3.10 or later is required.\n\nTo use the OpenAI and Azure OpenAI models, you need to install the following extensions:\n\nIf you are using Azure OpenAI with AAD authentication, you need to install the following:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Installation#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Create a Virtual Environment (optional)#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Install Using pip#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Install OpenAI for Model Client#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "python3 -m venv .venv\nsource .venv/bin/activate",
+      "language": "unknown"
+    },
+    {
+      "code": "python3 -m venv .venv\nsource .venv/bin/activate",
+      "language": "unknown"
+    },
+    {
+      "code": "# The command may be `python3` instead of `python` depending on your setup\npython -m venv .venv\n.venv\\Scripts\\activate.bat",
+      "language": "markdown"
+    },
+    {
+      "code": "# The command may be `python3` instead of `python` depending on your setup\npython -m venv .venv\n.venv\\Scripts\\activate.bat",
+      "language": "markdown"
+    },
+    {
+      "code": "conda create -n autogen python=3.12\nconda activate autogen",
+      "language": "unknown"
+    },
+    {
+      "code": "conda create -n autogen python=3.12\nconda activate autogen",
+      "language": "unknown"
+    },
+    {
+      "code": "conda deactivate",
+      "language": "unknown"
+    },
+    {
+      "code": "conda deactivate",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install -U \"autogen-agentchat\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install -U \"autogen-agentchat\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[openai]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[azure]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install \"autogen-ext[azure]\"",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html"
+  ]
+}

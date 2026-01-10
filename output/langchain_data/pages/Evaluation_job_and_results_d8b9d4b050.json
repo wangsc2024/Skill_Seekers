@@ -1,0 +1,32 @@
+{
+  "title": "Evaluation job and results",
+  "content": "experiment_results = await client.aevaluate(\n    run_graph,\n    data=dataset_name,\n    evaluators=[final_answer_correct],\n    experiment_prefix=\"sql-agent-gpt4o-e2e\",\n    num_repetitions=1,\n    max_concurrency=4,\n)\nexperiment_results.to_pandas()\npython  theme={null}\ndef trajectory_subsequence(outputs: dict, reference_outputs: dict) -> float:\n    \"\"\"Check how many of the desired steps the agent took.\"\"\"\n    if len(reference_outputs['trajectory']) > len(outputs['trajectory']):\n        return False\n\ni = j = 0\n    while i < len(reference_outputs['trajectory']) and j < len(outputs['trajectory']):\n        if reference_outputs['trajectory'][i] == outputs['trajectory'][j]:\n            i += 1\n        j += 1\n\nreturn i / len(reference_outputs['trajectory'])\npython  theme={null}\nasync def run_graph(inputs: dict) -> dict:\n    \"\"\"Run graph and track the trajectory it takes along with the final response.\"\"\"\n    trajectory = []\n    # Set subgraph=True to stream events from subgraphs of the main graph: https://langchain-ai.github.io/langgraph/how-tos/streaming-subgraphs/\n    # Set stream_mode=\"debug\" to stream all possible events: https://langchain-ai.github.io/langgra/langsmith/observability-concepts/streaming\n    async for namespace, chunk in graph.astream({\"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": inputs['question'],\n            }\n        ]}, subgraphs=True, stream_mode=\"debug\"):\n        # Event type for entering a node\n        if chunk['type'] == 'task':\n            # Record the node name\n            trajectory.append(chunk['payload']['name'])\n            # Given how we defined our dataset, we also need to track when specific tools are\n            # called by our question answering ReACT agent. These tool calls can be found\n            # when the ToolsNode (named \"tools\") is invoked by looking at the AIMessage.tool_calls\n            # of the latest input message.\n            if chunk['payload']['name'] == 'tools' and chunk['type'] == 'task':\n                for tc in chunk['payload']['input']['messages'][-1].tool_calls:\n                    trajectory.append(tc['name'])\n    return {\"trajectory\": trajectory}\n\nexperiment_results = await client.aevaluate(\n    run_graph,\n    data=dataset_name,\n    evaluators=[trajectory_subsequence],\n    experiment_prefix=\"sql-agent-gpt4o-trajectory\",\n    num_repetitions=1,\n    max_concurrency=4,\n)\nexperiment_results.to_pandas()\npython  theme={null}",
+  "code_samples": [
+    {
+      "code": "You can see what these results look like here: [LangSmith link](https://smith.langchain.com/public/708d08f4-300e-4c75-9677-c6b71b0d28c9/d).\n\n### Trajectory evaluator\n\nAs agents become more complex, they have more potential points of failure. Rather than using simple pass/fail evaluations, it's often better to use evaluations that can give partial credit when an agent takes some correct steps, even if it doesn't reach the right final answer.\n\nThis is where trajectory evaluations come in. A trajectory evaluation:\n\n1. Compares the actual sequence of steps the agent took against an expected sequence\n2. Calculates a score based on how many of the expected steps were completed correctly\n\nFor this example, our end-to-end dataset contains an ordered list of steps that we expect the agent to take. Let's create an evaluator that checks the agent's actual trajectory against these expected steps and calculates what percentage were completed:",
+      "language": "unknown"
+    },
+    {
+      "code": "Now we can run our evaluation. Our evaluator assumes that our target function returns a 'trajectory' key, so lets define a target function that does so. We'll need to usage [LangGraph's streaming capabilities](https://langchain-ai.github.io/langgra/langsmith/observability-concepts/streaming/) to record the trajectory.\n\nNote that we are reusing the same dataset as for our final response evaluation, so we could have run both evaluators together and defined a target function that returns both \"response\" and \"trajectory\". In practice it's often useful to have separate datasets for each type of evaluation, which is why we show them separately here:",
+      "language": "unknown"
+    },
+    {
+      "code": "You can see what these results look like here: [LangSmith link](https://smith.langchain.com/public/708d08f4-300e-4c75-9677-c6b71b0d28c9/d).\n\n### Single step evaluators\n\nWhile end-to-end tests give you the most signal about your agents performance, for the sake of debugging and iterating on your agent it can be helpful to pinpoint specific steps that are difficult and evaluate them directly.\n\nIn our case, a crucial part of our agent is that it routes the user's intention correctly into either the \"refund\" path or the \"question answering\" path. Let's create a dataset and run some evaluations to directly stress test this one component.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Trajectory evaluator",
+      "id": "trajectory-evaluator"
+    },
+    {
+      "level": "h3",
+      "text": "Single step evaluators",
+      "id": "single-step-evaluators"
+    }
+  ],
+  "url": "llms-txt#evaluation-job-and-results",
+  "links": []
+}

@@ -1,0 +1,102 @@
+{
+  "url": "https://react.dev/learn/react-developer-tools",
+  "title": "React Developer Tools",
+  "content": "Use React Developer Tools to inspect React components, edit props and state, and identify performance problems.\n\nThe easiest way to debug websites built with React is to install the React Developer Tools browser extension. It is available for several popular browsers:\n\nNow, if you visit a website built with React, you will see the Components and Profiler panels.\n\nFor other browsers (for example, Safari), install the react-devtools npm package:\n\nNext open the developer tools from the terminal:\n\nThen connect your website by adding the following <script> tag to the beginning of your website’s <head>:\n\nReload your website in the browser now to view it in developer tools.\n\nTo inspect apps built with React Native, you can use React Native DevTools, the built-in debugger that deeply integrates React Developer Tools. All features work identically to the browser extension, including native element highlighting and selection.\n\nLearn more about debugging in React Native.\n\nFor versions of React Native earlier than 0.76, please use the standalone build of React DevTools by following the Safari and other browsers guide above.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "React Developer Tools",
+      "id": ""
+    },
+    {
+      "level": "h3",
+      "text": "You will learn",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Browser extension",
+      "id": "browser-extension"
+    },
+    {
+      "level": "h3",
+      "text": "Safari and other browsers",
+      "id": "safari-and-other-browsers"
+    },
+    {
+      "level": "h2",
+      "text": "Mobile (React Native)",
+      "id": "mobile-react-native"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# Yarnyarn global add react-devtools# Npmnpm install -g react-devtools",
+      "language": "markdown"
+    },
+    {
+      "code": "react-devtools",
+      "language": "unknown"
+    },
+    {
+      "code": "<html>  <head>    <script src=\"http://localhost:8097\"></script>",
+      "language": "html"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/learn/tutorial-tic-tac-toe",
+    "https://react.dev/learn/thinking-in-react",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/creating-a-react-app",
+    "https://react.dev/learn/build-a-react-app-from-scratch",
+    "https://react.dev/learn/add-react-to-an-existing-project",
+    "https://react.dev/learn/setup",
+    "https://react.dev/learn/editor-setup",
+    "https://react.dev/learn/typescript",
+    "https://react.dev/learn/react-developer-tools",
+    "https://react.dev/learn/react-compiler",
+    "https://react.dev/learn/react-compiler/introduction",
+    "https://react.dev/learn/react-compiler/installation",
+    "https://react.dev/learn/react-compiler/incremental-adoption",
+    "https://react.dev/learn/react-compiler/debugging",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/your-first-component",
+    "https://react.dev/learn/importing-and-exporting-components",
+    "https://react.dev/learn/writing-markup-with-jsx",
+    "https://react.dev/learn/javascript-in-jsx-with-curly-braces",
+    "https://react.dev/learn/passing-props-to-a-component",
+    "https://react.dev/learn/conditional-rendering",
+    "https://react.dev/learn/rendering-lists",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/understanding-your-ui-as-a-tree",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/responding-to-events",
+    "https://react.dev/learn/state-a-components-memory",
+    "https://react.dev/learn/render-and-commit",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/reacting-to-input-with-state",
+    "https://react.dev/learn/choosing-the-state-structure",
+    "https://react.dev/learn/sharing-state-between-components",
+    "https://react.dev/learn/preserving-and-resetting-state",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/passing-data-deeply-with-context",
+    "https://react.dev/learn/scaling-up-with-reducer-and-context",
+    "https://react.dev/learn/escape-hatches",
+    "https://react.dev/learn/referencing-values-with-refs",
+    "https://react.dev/learn/manipulating-the-dom-with-refs",
+    "https://react.dev/learn/synchronizing-with-effects",
+    "https://react.dev/learn/you-might-not-need-an-effect",
+    "https://react.dev/learn/lifecycle-of-reactive-effects",
+    "https://react.dev/learn/separating-events-from-effects",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/reusing-logic-with-custom-hooks",
+    "https://react.dev/reference/react-dom"
+  ]
+}

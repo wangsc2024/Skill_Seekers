@@ -1,0 +1,8 @@
+{
+  "title": "Judge LLM",
+  "content": "grader_llm = init_chat_model(\"gpt-4o-mini\", temperature=0).with_structured_output(Grade, method=\"json_schema\", strict=True)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#judge-llm",
+  "links": []
+}

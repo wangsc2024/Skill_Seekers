@@ -1,0 +1,24 @@
+{
+  "title": "The agent can now track additional state beyond messages",
+  "content": "result = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"I prefer technical explanations\"}],\n    \"user_preferences\": {\"style\": \"technical\", \"verbosity\": \"detailed\"},\n})\npython  theme={null}\nfor chunk in agent.stream({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Search for AI news and summarize the findings\"}]\n}, stream_mode=\"values\"):\n    # Each chunk contains the full state at that point\n    latest_message = chunk[\"messages\"][-1]\n    if latest_message.content:\n        print(f\"Agent: {latest_message.content}\")\n    elif latest_message.tool_calls:\n        print(f\"Calling tools: {[tc['name'] for tc in latest_message.tool_calls]}\")\n```\n\n<Tip>\n  For more details on streaming, see [Streaming](/oss/python/langchain/streaming).\n</Tip>\n\n[Middleware](/oss/python/langchain/middleware) provides powerful extensibility for customizing agent behavior at different stages of execution. You can use middleware to:\n\n* Process state before the model is called (e.g., message trimming, context injection)\n* Modify or validate the model's response (e.g., guardrails, content filtering)\n* Handle tool execution errors with custom logic\n* Implement dynamic model selection based on state or context\n* Add custom logging, monitoring, or analytics\n\nMiddleware integrates seamlessly into the agent's execution, allowing you to intercept and modify data flow at key points without changing the core agent logic.\n\n<Tip>\n  For comprehensive middleware documentation including decorators like [`@before_model`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.before_model), [`@after_model`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.after_model), and [`@wrap_tool_call`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.wrap_tool_call), see [Middleware](/oss/python/langchain/middleware).\n</Tip>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/agents.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "<Note>\n  As of `langchain 1.0`, custom state schemas **must** be `TypedDict` types. Pydantic models and dataclasses are no longer supported. See the [v1 migration guide](/oss/python/migrate/langchain-v1#state-type-restrictions) for more details.\n</Note>\n\n<Note>\n  Defining custom state via middleware is preferred over defining it via [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) on [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent) because it allows you to keep state extensions conceptually scoped to the relevant middleware and tools.\n\n  [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) is still supported for backwards compatibility on [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent).\n</Note>\n\n<Tip>\n  To learn more about memory, see [Memory](/oss/python/concepts/memory). For information on implementing long-term memory that persists across sessions, see [Long-term memory](/oss/python/langchain/long-term-memory).\n</Tip>\n\n### Streaming\n\nWe've seen how the agent can be called with `invoke` to get a final response. If the agent executes multiple steps, this may take a while. To show intermediate progress, we can stream back messages as they occur.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Streaming",
+      "id": "streaming"
+    },
+    {
+      "level": "h3",
+      "text": "Middleware",
+      "id": "middleware"
+    }
+  ],
+  "url": "llms-txt#the-agent-can-now-track-additional-state-beyond-messages",
+  "links": []
+}

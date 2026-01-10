@@ -1,0 +1,27 @@
+{
+  "title": "... same as above",
+  "content": "@app.post(\"/my-route\")\nasync def fake_route(request: Request):\n    # request.headers:  {\"langsmith-trace\": \"...\"}\n    my_application(langsmith_extra={\"parent\": request.headers})\ntypescript  theme={null}\n// client.mts\nimport { getCurrentRunTree, traceable } from \"langsmith/traceable\";\n\nconst client = traceable(\n    async () => {\n        const runTree = getCurrentRunTree();\n        return await fetch(\"...\", {\n            method: \"POST\",\n            headers: runTree.toHeaders(),\n        }).then((a) => a.text());\n    },\n    { name: \"client\" }\n);\n\nawait client();\ntypescript Express.JS theme={null}\n  // server.mts\n  import { RunTree } from \"langsmith\";\n  import { traceable, withRunTree } from \"langsmith/traceable\";\n  import express from \"express\";\n  import bodyParser from \"body-parser\";\n\nconst server = traceable(\n          (text: string) => `Hello from the server! Received \"${text}\"`,\n          { name: \"server\" }\n      );\n\nconst app = express();\n      app.use(bodyParser.text());\n\napp.post(\"/\", async (req, res) => {\n      const runTree = RunTree.fromHeaders(req.headers);\n      const result = await withRunTree(runTree, () => server(req.body));\n      res.send(result);\n  });\n  typescript Hono theme={null}\n  // server.mts\n  import { RunTree } from \"langsmith\";\n  import { traceable, withRunTree } from \"langsmith/traceable\";\n  import { Hono } from \"hono\";\n\nconst server = traceable(\n          (text: string) => `Hello from the server! Received \"${text}\"`,\n          { name: \"server\" }\n      );\n\nconst app = new Hono();\n\napp.post(\"/\", async (c) => {\n      const body = await c.req.text();\n      const runTree = RunTree.fromHeaders(c.req.raw.headers);\n      const result = await withRunTree(runTree, () => server(body));\n      return c.body(result);\n  });\n  ```\n</CodeGroup>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/distributed-tracing.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "## Distributed tracing in TypeScript\n\n<Note>\n  Distributed tracing in TypeScript requires `langsmith` version `>=0.1.31`\n</Note>\n\nFirst, we obtain the current run tree from the client and convert it to `langsmith-trace` and `baggage` header values, which we can pass to the server:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then, the server converts the headers back to a run tree, which it uses to further continue the tracing.\n\nTo pass the newly created run tree to a traceable function, we can use the `withRunTree` helper, which will ensure the run tree is propagated within traceable invocations.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Distributed tracing in TypeScript",
+      "id": "distributed-tracing-in-typescript"
+    }
+  ],
+  "url": "llms-txt#...-same-as-above",
+  "links": []
+}

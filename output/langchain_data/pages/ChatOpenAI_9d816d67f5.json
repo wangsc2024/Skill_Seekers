@@ -1,0 +1,39 @@
+{
+  "title": "ChatOpenAI",
+  "content": "Source: https://docs.langchain.com/oss/javascript/integrations/chat/openai\n\n[OpenAI](https://en.wikipedia.org/wiki/OpenAI) is an artificial intelligence (AI) research laboratory.\n\nThis guide will help you getting started with ChatOpenAI [chat models](/oss/javascript/langchain/models). For detailed documentation of all ChatOpenAI features and configurations head to the [API reference](https://api.js.langchain.com/classes/langchain_openai.ChatOpenAI.html).\n\n<Note>\n  **Chat Completions API compatibility**\n\n`ChatOpenAI` is fully compatible with OpenAI's (legacy) [Chat Completions API](https://platform.openai.com/docs/guides/completions). If you are looking to connect to other model providers that support the Chat Completions API, you can do so – see [instructions](/oss/javascript/integrations/chat#chat-completions-api).\n</Note>\n\n<Info>\n  **OpenAI models hosted on Azure**\n\nNote that certain OpenAI models can also be accessed via the [Microsoft Azure platform](https://azure.microsoft.com/en-us/products/ai-foundry/models/openai/).\n</Info>\n\n### Integration details\n\n| Class                                                                               | Package                                                                | Local | Serializable | [PY support](https://python.langchain.com/docs/integrations/chat/openai) |                                             Downloads                                             |                                             Version                                            |\n| :---------------------------------------------------------------------------------- | :--------------------------------------------------------------------- | :---: | :----------: | :----------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------: |\n| [ChatOpenAI](https://api.js.langchain.com/classes/langchain_openai.ChatOpenAI.html) | [`@langchain/openai`](https://www.npmjs.com/package/@langchain/openai) |   ❌   |       ✅      |                                     ✅                                    | ![NPM - Downloads](https://img.shields.io/npm/dm/@langchain/openai?style=flat-square\\&label=%20&) | ![NPM - Version](https://img.shields.io/npm/v/@langchain/openai?style=flat-square\\&label=%20&) |\n\nSee the links in the table headers below for guides on how to use specific features.\n\n| [Tool calling](/oss/javascript/langchain/tools) | [Structured output](/oss/javascript/langchain/structured-output) | JSON mode | [Image input](/oss/javascript/langchain/messages#multimodal) | Audio input | Video input | [Token-level streaming](/oss/javascript/langchain/streaming/) | [Token usage](/oss/javascript/langchain/models#token-usage) | [Logprobs](/oss/javascript/langchain/models#log-probabilities) |\n| :---------------------------------------------: | :--------------------------------------------------------------: | :-------: | :----------------------------------------------------------: | :---------: | :---------: | :-----------------------------------------------------------: | :---------------------------------------------------------: | :------------------------------------------------------------: |\n|                        ✅                        |                                 ✅                                |     ✅     |                               ✅                              |      ❌      |      ❌      |                               ✅                               |                              ✅                              |                                ✅                               |\n\nTo access OpenAI chat models you'll need to create an OpenAI account, get an API key, and install the `@langchain/openai` integration package.\n\nHead to [OpenAI's website](https://platform.openai.com/) to sign up for OpenAI and generate an API key. Once you've done this set the `OPENAI_API_KEY` environment variable:\n\nIf you want to get automated tracing of your model calls you can also set your [LangSmith](https://docs.langchain.com/langsmith/home) API key by uncommenting below:\n\n```bash  theme={null}",
+  "code_samples": [
+    {
+      "code": "If you want to get automated tracing of your model calls you can also set your [LangSmith](https://docs.langchain.com/langsmith/home) API key by uncommenting below:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "Integration details",
+      "id": "integration-details"
+    },
+    {
+      "level": "h3",
+      "text": "Model features",
+      "id": "model-features"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Credentials",
+      "id": "credentials"
+    }
+  ],
+  "url": "llms-txt#chatopenai",
+  "links": []
+}

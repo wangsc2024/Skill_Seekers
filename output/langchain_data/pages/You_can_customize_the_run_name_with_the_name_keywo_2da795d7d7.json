@@ -1,0 +1,8 @@
+{
+  "title": "You can customize the run name with the `name` keyword argument",
+  "content": "@traceable(name=\"Extract User Details\")\ndef my_function(text: str) -> UserDetail:\n    return client.chat.completions.create(\n        model=\"gpt-4o-mini\",\n        response_model=UserDetail,\n        messages=[\n            {\"role\": \"user\", \"content\": f\"Extract {text}\"},\n        ]\n    )\n\nmy_function(\"Jason is 25 years old\")\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/trace-with-instructor.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#you-can-customize-the-run-name-with-the-`name`-keyword-argument",
+  "links": []
+}

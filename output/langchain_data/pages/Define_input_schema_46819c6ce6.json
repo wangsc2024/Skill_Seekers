@@ -1,0 +1,8 @@
+{
+  "title": "Define input schema",
+  "content": "class InputState(TypedDict):\n    question: str",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-input-schema",
+  "links": []
+}

@@ -1,0 +1,128 @@
+{
+  "title": "Connect to an external Redis database",
+  "content": "Source: https://docs.langchain.com/langsmith/self-host-external-redis\n\nLangSmith uses Redis to back our queuing/caching operations. By default, LangSmith Self-Hosted will use an internal Redis instance. However, you can configure LangSmith to use an external Redis instance. By configuring an external Redis instance, you can more easily manage backups, scaling, and other operational tasks for your Redis instance.\n\n* A provisioned Redis instance that your LangSmith instance will have network access to. We recommend using a managed Redis service like:\n\n* [Amazon ElastiCache](https://aws.amazon.com/elasticache/redis/)\n  * [Google Cloud Memorystore](https://cloud.google.com/memorystore)\n  * [Azure Cache for Redis](https://azure.microsoft.com/en-us/services/cache/)\n\n* Note: We only officially support Redis versions >= 5.\n\n* We support both Standalone and Redis Cluster. See the appropriate sections for deployment instructions.\n\n* By default, we recommend an instance with at least 2 vCPUs and 8GB of memory. However, the actual requirements will depend on your tracing workload. We recommend monitoring your Redis instance and scaling up as needed.\n\n### Connection String\n\nYou will need to assemble the connection string for your Redis instance. This connection string should include the following information:\n\n* Host\n* Database\n* Port\n* URL params\n\nThis will take the form of:\n\nAn example connection string might look like:\n\nNote: If your Standalone Redis requires authentication or TLS, include these directly in the connection URL:\n\n* Use `rediss://` when TLS is enabled on your Redis server.\n* Provide the password in the connection string.\n\nWith your connection string in hand, you can configure your LangSmith instance to use an external Redis instance. You can do this by modifying the `values` file for your LangSmith Helm Chart installation or the `.env` file for your Docker installation.\n\nYou can also store the connection URL in an existing Kubernetes Secret and reference it in your Helm values.\n\nOnce configured, you should be able to reinstall your LangSmith instance. If everything is configured correctly, your LangSmith instance should now be using your external Redis instance.\n\nAs of LangSmith helm version **0.12.25**, we officially support **Redis Cluster**.\n\nWhen using Redis Cluster, provide a list of node hostnames and ports. Each node URI must be in the form:\n\nDo not include a password in these URIs, and do not use `rediss` here. For Redis Cluster:\n\n* Provide the password separately via `redis.external.cluster.password` or through a Secret using `passwordSecretKey`.\n* Enable TLS separately with `redis.external.cluster.tlsEnabled: true`.\n\nWhen connecting to an external Redis Cluster, configure the Helm values under `redis.external.cluster`. You can either:\n\n* Provide node URIs and (optionally) a password directly in `values.yaml`.\n* Or reference an existing Kubernetes `Secret` containing node URIs and password.\n\nIf using an existing Secret, it should contain:\n\n<CodeGroup>\n  \n</CodeGroup>\n\nUse this section to configure TLS for Redis connections. For mounting internal/public CAs so LangSmith trusts your Redis server certificate, see [Configure custom TLS certificates](/langsmith/self-host-custom-tls-certificates#mount-internal-cas-for-tls).\n\n### Server TLS (one-way)\n\nTo validate the Redis server certificate:\n\n* Provide a CA bundle using `config.customCa.secretName` and `config.customCa.secretKey`.\n* For Standalone Redis, use `rediss://` in the connection URL.\n* For Redis Cluster, set `redis.external.cluster.tlsEnabled: true`.\n\n<Warning>\n  Mount a custom CA only when your Redis server uses an internal or private CA. Publicly trusted CAs do not require this configuration.\n</Warning>\n\n### Mutual TLS with Client Auth (mTLS)\n\nAs of LangSmith helm chart version **0.12.29**, we support mTLS for Redis clients. For server-side authentication in mTLS, use the [Server TLS steps](#server-tls-one-way) (custom CA) in addition to the following client certificate configuration.\n\nIf your Redis server requires client certificate authentication:\n\n* Provide a Secret with your client certificate and key.\n* Reference it via `redis.external.clientCert.secretName` and specify the keys with `certSecretKey` and `keySecretKey`.\n* For Standalone Redis, keep using `rediss://` in the connection URL.\n* For Redis Cluster, set `redis.external.cluster.tlsEnabled: true`.\n\n#### Pod security context for certificate volumes\n\nThe certificate volumes mounted for mTLS are protected by file access restrictions. To ensure all LangSmith pods can read the certificate files, you must set `fsGroup: 1000` in the pod security context.\n\nYou can configure this in one of two ways:\n\n**Option 1: Use `commonPodSecurityContext`**\n\nSet the `fsGroup` at the top level to apply it to all pods:\n\n**Option 2: Add to individual pod security contexts**\n\nIf you need more granular control, add the `fsGroup` to each pod's security context individually. See the [mtls configuration example](https://github.com/langchain-ai/helm/blob/main/charts/langsmith/examples/mtls_config.yaml) for a complete reference.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/self-host-external-redis.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "\"redis://host:port/db?<url_params>\"",
+      "language": "unknown"
+    },
+    {
+      "code": "\"redis://langsmith-redis:6379/0\"",
+      "language": "unknown"
+    },
+    {
+      "code": "### Configuration\n\nWith your connection string in hand, you can configure your LangSmith instance to use an external Redis instance. You can do this by modifying the `values` file for your LangSmith Helm Chart installation or the `.env` file for your Docker installation.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nYou can also store the connection URL in an existing Kubernetes Secret and reference it in your Helm values.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nOnce configured, you should be able to reinstall your LangSmith instance. If everything is configured correctly, your LangSmith instance should now be using your external Redis instance.\n\n## Redis Cluster\n\nAs of LangSmith helm version **0.12.25**, we officially support **Redis Cluster**.\n\n### Host Names\n\nWhen using Redis Cluster, provide a list of node hostnames and ports. Each node URI must be in the form:",
+      "language": "unknown"
+    },
+    {
+      "code": "For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "Do not include a password in these URIs, and do not use `rediss` here. For Redis Cluster:\n\n* Provide the password separately via `redis.external.cluster.password` or through a Secret using `passwordSecretKey`.\n* Enable TLS separately with `redis.external.cluster.tlsEnabled: true`.\n\n### Configuration\n\nWhen connecting to an external Redis Cluster, configure the Helm values under `redis.external.cluster`. You can either:\n\n* Provide node URIs and (optionally) a password directly in `values.yaml`.\n* Or reference an existing Kubernetes `Secret` containing node URIs and password.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nIf using an existing Secret, it should contain:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## TLS with Redis\n\nUse this section to configure TLS for Redis connections. For mounting internal/public CAs so LangSmith trusts your Redis server certificate, see [Configure custom TLS certificates](/langsmith/self-host-custom-tls-certificates#mount-internal-cas-for-tls).\n\n### Server TLS (one-way)\n\nTo validate the Redis server certificate:\n\n* Provide a CA bundle using `config.customCa.secretName` and `config.customCa.secretKey`.\n* For Standalone Redis, use `rediss://` in the connection URL.\n* For Redis Cluster, set `redis.external.cluster.tlsEnabled: true`.\n\n<Warning>\n  Mount a custom CA only when your Redis server uses an internal or private CA. Publicly trusted CAs do not require this configuration.\n</Warning>\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Mutual TLS with Client Auth (mTLS)\n\nAs of LangSmith helm chart version **0.12.29**, we support mTLS for Redis clients. For server-side authentication in mTLS, use the [Server TLS steps](#server-tls-one-way) (custom CA) in addition to the following client certificate configuration.\n\nIf your Redis server requires client certificate authentication:\n\n* Provide a Secret with your client certificate and key.\n* Reference it via `redis.external.clientCert.secretName` and specify the keys with `certSecretKey` and `keySecretKey`.\n* For Standalone Redis, keep using `rediss://` in the connection URL.\n* For Redis Cluster, set `redis.external.cluster.tlsEnabled: true`.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n#### Pod security context for certificate volumes\n\nThe certificate volumes mounted for mTLS are protected by file access restrictions. To ensure all LangSmith pods can read the certificate files, you must set `fsGroup: 1000` in the pod security context.\n\nYou can configure this in one of two ways:\n\n**Option 1: Use `commonPodSecurityContext`**\n\nSet the `fsGroup` at the top level to apply it to all pods:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Requirements",
+      "id": "requirements"
+    },
+    {
+      "level": "h2",
+      "text": "Standalone Redis",
+      "id": "standalone-redis"
+    },
+    {
+      "level": "h3",
+      "text": "Connection String",
+      "id": "connection-string"
+    },
+    {
+      "level": "h3",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Redis Cluster",
+      "id": "redis-cluster"
+    },
+    {
+      "level": "h3",
+      "text": "Host Names",
+      "id": "host-names"
+    },
+    {
+      "level": "h3",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h2",
+      "text": "TLS with Redis",
+      "id": "tls-with-redis"
+    },
+    {
+      "level": "h3",
+      "text": "Server TLS (one-way)",
+      "id": "server-tls-(one-way)"
+    },
+    {
+      "level": "h3",
+      "text": "Mutual TLS with Client Auth (mTLS)",
+      "id": "mutual-tls-with-client-auth-(mtls)"
+    }
+  ],
+  "url": "llms-txt#connect-to-an-external-redis-database",
+  "links": []
+}

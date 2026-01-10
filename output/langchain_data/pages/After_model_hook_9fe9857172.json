@@ -1,0 +1,8 @@
+{
+  "title": "After model hook",
+  "content": "@after_model\ndef log_after_model(state: AgentState, runtime: Runtime[Context]) -> dict | None:  # [!code highlight]\n    print(f\"Completed request for user: {runtime.context.user_name}\")  # [!code highlight]\n    return None\n\nagent = create_agent(\n    model=\"gpt-5-nano\",\n    tools=[...],\n    middleware=[dynamic_system_prompt, log_before_model, log_after_model],  # [!code highlight]\n    context_schema=Context\n)\n\nagent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my name?\"}]},\n    context=Context(user_name=\"John Smith\")\n)\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/runtime.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#after-model-hook",
+  "links": []
+}

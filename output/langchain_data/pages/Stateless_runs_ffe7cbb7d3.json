@@ -1,0 +1,65 @@
+{
+  "title": "Stateless runs",
+  "content": "Source: https://docs.langchain.com/langsmith/stateless-runs\n\nMost of the time, you provide a `thread_id` to your client when you run your graph in order to keep track of prior runs through the persistent state implemented in LangSmith Deployment. However, if you don't need to persist the runs you don't need to use the built-in persistent state and can create stateless runs.\n\nFirst, let's setup our client:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\n## Stateless streaming\n\nWe can stream the results of a stateless run in an almost identical fashion to how we stream from a run with the state attribute, but instead of passing a value to the `thread_id` parameter, we pass `None`:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\n## Waiting for stateless results\n\nIn addition to streaming, you can also wait for a stateless result by using the `.wait` function like follows:\n\n<Tabs>\n  <Tab title=\"Python\">\n    \n  </Tab>\n\n<Tab title=\"Javascript\">\n    \n  </Tab>\n\n<Tab title=\"CURL\">\n    \n  </Tab>\n</Tabs>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/stateless-runs.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n## Stateless streaming\n\nWe can stream the results of a stateless run in an almost identical fashion to how we stream from a run with the state attribute, but instead of passing a value to the `thread_id` parameter, we pass `None`:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Waiting for stateless results\n\nIn addition to streaming, you can also wait for a stateless result by using the `.wait` function like follows:\n\n<Tabs>\n  <Tab title=\"Python\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Javascript\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"CURL\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\nOutput:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "Stateless streaming",
+      "id": "stateless-streaming"
+    },
+    {
+      "level": "h2",
+      "text": "Waiting for stateless results",
+      "id": "waiting-for-stateless-results"
+    }
+  ],
+  "url": "llms-txt#stateless-runs",
+  "links": []
+}

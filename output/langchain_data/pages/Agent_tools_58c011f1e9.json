@@ -1,0 +1,8 @@
+{
+  "title": "Agent tools",
+  "content": "@tool\ndef lookup_track( ...\n\n@tool\ndef lookup_album( ...\n\n@tool\ndef lookup_artist( ...",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#agent-tools",
+  "links": []
+}

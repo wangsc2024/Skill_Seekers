@@ -1,0 +1,39 @@
+{
+  "title": "}",
+  "content": "python  theme={null}\n  custom_profile = {\n      \"max_input_tokens\": 100_000,\n      \"tool_calling\": True,\n      \"structured_output\": True,\n      # ...\n  }\n  model = init_chat_model(\"...\", profile=custom_profile)\n  python  theme={null}\n  new_profile = model.profile | {\"key\": \"value\"}\n  model.model_copy(update={\"profile\": new_profile})\n  bash  theme={null}\n  pip install langchain-model-profiles\n  bash  theme={null}\n  langchain-profiles refresh --provider <provider> --data-dir <data_dir>\n  bash  theme={null}\n  uv run --with langchain-model-profiles --provider anthropic --data-dir langchain_anthropic/data\n  python Multimodal output theme={null}\nresponse = model.invoke(\"Create a picture of a cat\")\nprint(response.content_blocks)",
+  "code_samples": [
+    {
+      "code": "Refer to the full set of fields in the [API reference](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.BaseChatModel.profile).\n\nMuch of the model profile data is powered by the [models.dev](https://github.com/sst/models.dev) project, an open source initiative that provides model capability data. These data are augmented with additional fields for purposes of use with LangChain. These augmentations are kept aligned with the upstream project as it evolves.\n\nModel profile data allow applications to work around model capabilities dynamically. For example:\n\n1. [Summarization middleware](/oss/python/langchain/middleware/built-in#summarization) can trigger summarization based on a model's context window size.\n2. [Structured output](/oss/python/langchain/structured-output) strategies in `create_agent` can be inferred automatically (e.g., by checking support for native structured output features).\n3. Model inputs can be gated based on supported [modalities](#multimodal) and maximum input tokens.\n\n<Accordion title=\"Updating or overwriting profile data\">\n  Model profile data can be changed if it is missing, stale, or incorrect.\n\n  **Option 1 (quick fix)**\n\n  You can instantiate a chat model with any valid profile:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `profile` is also a regular `dict` and can be updated in place. If the model instance is shared, consider using `model_copy` to avoid mutating shared state.",
+      "language": "unknown"
+    },
+    {
+      "code": "**Option 2 (fix data upstream)**\n\n  The primary source for the data is the [models.dev](https://models.dev/) project. This data is merged with additional fields and overrides in LangChain [integration packages](/oss/python/integrations/providers/overview) and are shipped with those packages.\n\n  Model profile data can be updated through the following process:\n\n  1. (If needed) update the source data at [models.dev](https://models.dev/) through a pull request to its [repository on GitHub](https://github.com/sst/models.dev).\n  2. (If needed) update additional fields and overrides in `langchain_<package>/data/profile_augmentations.toml` through a pull request to the LangChain [integration package](/oss/python/integrations/providers/overview)\\`.\n  3. Use the [`langchain-model-profiles`](https://pypi.org/project/langchain-model-profiles/) CLI tool to pull the latest data from [models.dev](https://models.dev/), merge in the augmentations and update the profile data:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "This command:\n\n  * Downloads the latest data for `<provider>` from models.dev\n  * Merges augmentations from `profile_augmentations.toml` in `<data_dir>`\n  * Writes merged profiles to `profiles.py` in `<data_dir>`\n\n  For example: from [`libs/partners/anthropic`](https://github.com/langchain-ai/langchain/tree/master/libs/partners/anthropic) in the [LangChain monorepo](https://github.com/langchain-ai/langchain):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Accordion>\n\n### Multimodal\n\nCertain models can process and return non-textual data such as images, audio, and video. You can pass non-textual data to a model by providing [content blocks](/oss/python/langchain/messages#message-content).\n\n<Tip>\n  All LangChain chat models with underlying multimodal capabilities support:\n\n  1. Data in the cross-provider standard format (see [our messages guide](/oss/python/langchain/messages))\n  2. OpenAI [chat completions](https://platform.openai.com/docs/api-reference/chat) format\n  3. Any format that is native to that specific provider (e.g., Anthropic models accept Anthropic native format)\n</Tip>\n\nSee the [multimodal section](/oss/python/langchain/messages#multimodal) of the messages guide for details.\n\n<Tooltip tip=\"Not all LLMs are made equally!\" cta=\"See reference\" href=\"https://models.dev/\">Some models</Tooltip> can return multimodal data as part of their response. If invoked to do so, the resulting [`AIMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.AIMessage) will have content blocks with multimodal types.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Multimodal",
+      "id": "multimodal"
+    }
+  ],
+  "url": "llms-txt#}",
+  "links": []
+}

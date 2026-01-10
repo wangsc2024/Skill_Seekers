@@ -1,0 +1,140 @@
+{
+  "title": "]",
+  "content": "python Stream reasoning output theme={null}\n  for chunk in model.stream(\"Why do parrots have colorful feathers?\"):\n      reasoning_steps = [r for r in chunk.content_blocks if r[\"type\"] == \"reasoning\"]\n      print(reasoning_steps if reasoning_steps else chunk.text)\n  python Complete reasoning output theme={null}\n  response = model.invoke(\"Why do parrots have colorful feathers?\")\n  reasoning_steps = [b for b in response.content_blocks if b[\"type\"] == \"reasoning\"]\n  print(\" \".join(step[\"reasoning\"] for step in reasoning_steps))\n  python Invoke with server-side tool use theme={null}\nfrom langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\"gpt-4.1-mini\")\n\ntool = {\"type\": \"web_search\"}\nmodel_with_tools = model.bind_tools([tool])\n\nresponse = model_with_tools.invoke(\"What was a positive news story from today?\")\nresponse.content_blocks\npython Result expandable theme={null}\n[\n    {\n        \"type\": \"server_tool_call\",\n        \"name\": \"web_search\",\n        \"args\": {\n            \"query\": \"positive news stories today\",\n            \"type\": \"search\"\n        },\n        \"id\": \"ws_abc123\"\n    },\n    {\n        \"type\": \"server_tool_result\",\n        \"tool_call_id\": \"ws_abc123\",\n        \"status\": \"success\"\n    },\n    {\n        \"type\": \"text\",\n        \"text\": \"Here are some positive news stories from today...\",\n        \"annotations\": [\n            {\n                \"end_index\": 410,\n                \"start_index\": 337,\n                \"title\": \"article title\",\n                \"type\": \"citation\",\n                \"url\": \"...\"\n            }\n        ]\n    }\n]\npython Define a rate limiter theme={null}\n  from langchain_core.rate_limiters import InMemoryRateLimiter\n\nrate_limiter = InMemoryRateLimiter(\n      requests_per_second=0.1,  # 1 request every 10s\n      check_every_n_seconds=0.1,  # Check every 100ms whether allowed to make a request\n      max_bucket_size=10,  # Controls the maximum burst size.\n  )\n\nmodel = init_chat_model(\n      model=\"gpt-5\",\n      model_provider=\"openai\",\n      rate_limiter=rate_limiter  # [!code highlight]\n  )\n  python  theme={null}\n  model = init_chat_model(\n      model=\"MODEL_NAME\",\n      model_provider=\"openai\",\n      base_url=\"BASE_URL\",\n      api_key=\"YOUR_API_KEY\",\n  )\n  python  theme={null}\n  from langchain_openai import ChatOpenAI\n\nmodel = ChatOpenAI(\n      model=\"gpt-4o\",\n      openai_proxy=\"http://proxy.example.com:8080\"\n  )\n  python  theme={null}\nmodel = init_chat_model(\n    model=\"gpt-4o\",\n    model_provider=\"openai\"\n).bind(logprobs=True)\n\nresponse = model.invoke(\"Why do parrots talk?\")\nprint(response.response_metadata[\"logprobs\"])\npython  theme={null}\n    from langchain.chat_models import init_chat_model\n    from langchain_core.callbacks import UsageMetadataCallbackHandler\n\nmodel_1 = init_chat_model(model=\"gpt-4o-mini\")\n    model_2 = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\ncallback = UsageMetadataCallbackHandler()\n    result_1 = model_1.invoke(\"Hello\", config={\"callbacks\": [callback]})\n    result_2 = model_2.invoke(\"Hello\", config={\"callbacks\": [callback]})\n    callback.usage_metadata\n    python  theme={null}\n    {\n        'gpt-4o-mini-2024-07-18': {\n            'input_tokens': 8,\n            'output_tokens': 10,\n            'total_tokens': 18,\n            'input_token_details': {'audio': 0, 'cache_read': 0},\n            'output_token_details': {'audio': 0, 'reasoning': 0}\n        },\n        'claude-haiku-4-5-20251001': {\n            'input_tokens': 8,\n            'output_tokens': 21,\n            'total_tokens': 29,\n            'input_token_details': {'cache_read': 0, 'cache_creation': 0}\n        }\n    }\n    python  theme={null}\n    from langchain.chat_models import init_chat_model\n    from langchain_core.callbacks import get_usage_metadata_callback\n\nmodel_1 = init_chat_model(model=\"gpt-4o-mini\")\n    model_2 = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\nwith get_usage_metadata_callback() as cb:\n        model_1.invoke(\"Hello\")\n        model_2.invoke(\"Hello\")\n        print(cb.usage_metadata)\n    python  theme={null}\n    {\n        'gpt-4o-mini-2024-07-18': {\n            'input_tokens': 8,\n            'output_tokens': 10,\n            'total_tokens': 18,\n            'input_token_details': {'audio': 0, 'cache_read': 0},\n            'output_token_details': {'audio': 0, 'reasoning': 0}\n        },\n        'claude-haiku-4-5-20251001': {\n            'input_tokens': 8,\n            'output_tokens': 21,\n            'total_tokens': 29,\n            'input_token_details': {'cache_read': 0, 'cache_creation': 0}\n        }\n    }\n    python Invocation with config theme={null}\nresponse = model.invoke(\n    \"Tell me a joke\",\n    config={\n        \"run_name\": \"joke_generation\",      # Custom name for this run\n        \"tags\": [\"humor\", \"demo\"],          # Tags for categorization\n        \"metadata\": {\"user_id\": \"123\"},     # Custom metadata\n        \"callbacks\": [my_callback_handler], # Callback handlers\n    }\n)\npython  theme={null}\nfrom langchain.chat_models import init_chat_model\n\nconfigurable_model = init_chat_model(temperature=0)\n\nconfigurable_model.invoke(\n    \"what's your name\",\n    config={\"configurable\": {\"model\": \"gpt-5-nano\"}},  # Run with GPT-5-Nano\n)\nconfigurable_model.invoke(\n    \"what's your name\",\n    config={\"configurable\": {\"model\": \"claude-sonnet-4-5-20250929\"}},  # Run with Claude\n)\npython  theme={null}\n  first_model = init_chat_model(\n          model=\"gpt-4.1-mini\",\n          temperature=0,\n          configurable_fields=(\"model\", \"model_provider\", \"temperature\", \"max_tokens\"),\n          config_prefix=\"first\",  # Useful when you have a chain with multiple models\n  )\n\nfirst_model.invoke(\"what's your name\")\n  python  theme={null}\n  first_model.invoke(\n      \"what's your name\",\n      config={\n          \"configurable\": {\n              \"first_model\": \"claude-sonnet-4-5-20250929\",\n              \"first_temperature\": 0.5,\n              \"first_max_tokens\": 100,\n          }\n      },\n  )\n  python  theme={null}\n  from pydantic import BaseModel, Field\n\nclass GetWeather(BaseModel):\n      \"\"\"Get the current weather in a given location\"\"\"\n\nlocation: str = Field(..., description=\"The city and state, e.g. San Francisco, CA\")\n\nclass GetPopulation(BaseModel):\n      \"\"\"Get the current population in a given location\"\"\"\n\nlocation: str = Field(..., description=\"The city and state, e.g. San Francisco, CA\")\n\nmodel = init_chat_model(temperature=0)\n  model_with_tools = model.bind_tools([GetWeather, GetPopulation])\n\nmodel_with_tools.invoke(\n      \"what's bigger in 2024 LA or NYC\", config={\"configurable\": {\"model\": \"gpt-4.1-mini\"}}\n  ).tool_calls\n  \n  [\n      {\n          'name': 'GetPopulation',\n          'args': {'location': 'Los Angeles, CA'},\n          'id': 'call_Ga9m8FAArIyEjItHmztPYA22',\n          'type': 'tool_call'\n      },\n      {\n          'name': 'GetPopulation',\n          'args': {'location': 'New York, NY'},\n          'id': 'call_jh2dEvBaAHRaw5JUDthOs7rt',\n          'type': 'tool_call'\n      }\n  ]\n  python  theme={null}\n  model_with_tools.invoke(\n      \"what's bigger in 2024 LA or NYC\",\n      config={\"configurable\": {\"model\": \"claude-sonnet-4-5-20250929\"}},\n  ).tool_calls\n  \n  [\n      {\n          'name': 'GetPopulation',\n          'args': {'location': 'Los Angeles, CA'},\n          'id': 'toolu_01JMufPf4F4t2zLj7miFeqXp',\n          'type': 'tool_call'\n      },\n      {\n          'name': 'GetPopulation',\n          'args': {'location': 'New York City, NY'},\n          'id': 'toolu_01RQBHcE8kEEbYTuuS8WqY1u',\n          'type': 'tool_call'\n      }\n  ]\n  ```\n</Accordion>\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langchain/models.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "See the [integrations page](/oss/python/integrations/providers/overview) for details on specific providers.\n\n### Reasoning\n\nMany models are capable of performing multi-step reasoning to arrive at a conclusion. This involves breaking down complex problems into smaller, more manageable steps.\n\n**If supported by the underlying model,** you can surface this reasoning process to better understand how the model arrived at its final answer.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nDepending on the model, you can sometimes specify the level of effort it should put into reasoning. Similarly, you can request that the model turn off reasoning entirely. This may take the form of categorical \"tiers\" of reasoning (e.g., `'low'` or `'high'`) or integer token budgets.\n\nFor details, see the [integrations page](/oss/python/integrations/providers/overview) or [reference](https://reference.langchain.com/python/integrations/) for your respective chat model.\n\n### Local models\n\nLangChain supports running models locally on your own hardware. This is useful for scenarios where either data privacy is critical, you want to invoke a custom model, or when you want to avoid the costs incurred when using a cloud-based model.\n\n[Ollama](/oss/python/integrations/chat/ollama) is one of the easiest ways to run models locally. See the full list of local integrations on the [integrations page](/oss/python/integrations/providers/overview).\n\n### Prompt caching\n\nMany providers offer prompt caching features to reduce latency and cost on repeat processing of the same tokens. These features can be **implicit** or **explicit**:\n\n* **Implicit prompt caching:** providers will automatically pass on cost savings if a request hits a cache. Examples: [OpenAI](/oss/python/integrations/chat/openai) and [Gemini](/oss/python/integrations/chat/google_generative_ai).\n* **Explicit caching:** providers allow you to manually indicate cache points for greater control or to guarantee cost savings. Examples:\n  * [`ChatOpenAI`](https://reference.langchain.com/python/integrations/langchain_openai/ChatOpenAI) (via `prompt_cache_key`)\n  * Anthropic's [`AnthropicPromptCachingMiddleware`](/oss/python/integrations/chat/anthropic#prompt-caching)\n  * [Gemini](https://python.langchain.com/api_reference/google_genai/chat_models/langchain_google_genai.chat_models.ChatGoogleGenerativeAI.html).\n  * [AWS Bedrock](/oss/python/integrations/chat/bedrock#prompt-caching)\n\n<Warning>\n  Prompt caching is often only engaged above a minimum input token threshold. See [provider pages](/oss/python/integrations/chat) for details.\n</Warning>\n\nCache usage will be reflected in the [usage metadata](/oss/python/langchain/messages#token-usage) of the model response.\n\n### Server-side tool use\n\nSome providers support server-side [tool-calling](#tool-calling) loops: models can interact with web search, code interpreters, and other tools and analyze the results in a single conversational turn.\n\nIf a model invokes a tool server-side, the content of the response message will include content representing the invocation and result of the tool. Accessing the [content blocks](/oss/python/langchain/messages#standard-content-blocks) of the response will return the server-side tool calls and results in a provider-agnostic format:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "This represents a single conversational turn; there are no associated [ToolMessage](/oss/python/langchain/messages#tool-message) objects that need to be passed in as in client-side [tool-calling](#tool-calling).\n\nSee the [integration page](/oss/python/integrations/chat) for your given provider for available tools and usage details.\n\n### Rate limiting\n\nMany chat model providers impose a limit on the number of invocations that can be made in a given time period. If you hit a rate limit, you will typically receive a rate limit error response from the provider, and will need to wait before making more requests.\n\nTo help manage rate limits, chat model integrations accept a `rate_limiter` parameter that can be provided during initialization to control the rate at which requests are made.\n\n<Accordion title=\"Initialize and use a rate limiter\" icon=\"gauge-high\">\n  LangChain in comes with (an optional) built-in [`InMemoryRateLimiter`](https://reference.langchain.com/python/langchain_core/rate_limiters/#langchain_core.rate_limiters.InMemoryRateLimiter). This limiter is thread safe and can be shared by multiple threads in the same process.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Warning>\n    The provided rate limiter can only limit the number of requests per unit time. It will not help if you need to also limit based on the size of the requests.\n  </Warning>\n</Accordion>\n\n### Base URL or proxy\n\nFor many chat model integrations, you can configure the base URL for API requests, which allows you to use model providers that have OpenAI-compatible APIs or to use a proxy server.\n\n<Accordion title=\"Base URL\" icon=\"link\">\n  Many model providers offer OpenAI-compatible APIs (e.g., [Together AI](https://www.together.ai/), [vLLM](https://github.com/vllm-project/vllm)). You can use [`init_chat_model`](https://reference.langchain.com/python/langchain/models/#langchain.chat_models.init_chat_model) with these providers by specifying the appropriate `base_url` parameter:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n    When using direct chat model class instantiation, the parameter name may vary by provider. Check the respective [reference](/oss/python/integrations/providers/overview) for details.\n  </Note>\n</Accordion>\n\n<Accordion title=\"Proxy configuration\" icon=\"shield\">\n  For deployments requiring HTTP proxies, some model integrations support proxy configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n    Proxy support varies by integration. Check the specific model provider's [reference](/oss/python/integrations/providers/overview) for proxy configuration options.\n  </Note>\n</Accordion>\n\n### Log probabilities\n\nCertain models can be configured to return token-level log probabilities representing the likelihood of a given token by setting the `logprobs` parameter when initializing the model:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Token usage\n\nA number of model providers return token usage information as part of the invocation response. When available, this information will be included on the [`AIMessage`](https://reference.langchain.com/python/langchain/messages/#langchain.messages.AIMessage) objects produced by the corresponding model. For more details, see the [messages](/oss/python/langchain/messages) guide.\n\n<Note>\n  Some provider APIs, notably OpenAI and Azure OpenAI chat completions, require users opt-in to receiving token usage data in streaming contexts. See the [streaming usage metadata](/oss/python/integrations/chat/openai#streaming-usage-metadata) section of the integration guide for details.\n</Note>\n\nYou can track aggregate token counts across models in an application using either a callback or context manager, as shown below:\n\n<Tabs>\n  <Tab title=\"Callback handler\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n\n  <Tab title=\"Context manager\">",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</Tab>\n</Tabs>\n\n### Invocation config\n\nWhen invoking a model, you can pass additional configuration through the `config` parameter using a [`RunnableConfig`](https://reference.langchain.com/python/langchain_core/runnables/#langchain_core.runnables.RunnableConfig) dictionary. This provides run-time control over execution behavior, callbacks, and metadata tracking.\n\nCommon configuration options include:",
+      "language": "unknown"
+    },
+    {
+      "code": "These configuration values are particularly useful when:\n\n* Debugging with [LangSmith](https://docs.langchain.com/langsmith/home) tracing\n* Implementing custom logging or monitoring\n* Controlling resource usage in production\n* Tracking invocations across complex pipelines\n\n<Accordion title=\"Key configuration attributes\">\n  <ParamField body=\"run_name\" type=\"string\">\n    Identifies this specific invocation in logs and traces. Not inherited by sub-calls.\n  </ParamField>\n\n  <ParamField body=\"tags\" type=\"string[]\">\n    Labels inherited by all sub-calls for filtering and organization in debugging tools.\n  </ParamField>\n\n  <ParamField body=\"metadata\" type=\"object\">\n    Custom key-value pairs for tracking additional context, inherited by all sub-calls.\n  </ParamField>\n\n  <ParamField body=\"max_concurrency\" type=\"number\">\n    Controls the maximum number of parallel calls when using [`batch()`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.chat_models.BaseChatModel.batch) or [`batch_as_completed()`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.chat_models.BaseChatModel.batch_as_completed).\n  </ParamField>\n\n  <ParamField body=\"callbacks\" type=\"array\">\n    Handlers for monitoring and responding to events during execution.\n  </ParamField>\n\n  <ParamField body=\"recursion_limit\" type=\"number\">\n    Maximum recursion depth for chains to prevent infinite loops in complex pipelines.\n  </ParamField>\n</Accordion>\n\n<Tip>\n  See full [`RunnableConfig`](https://reference.langchain.com/python/langchain_core/runnables/#langchain_core.runnables.RunnableConfig) reference for all supported attributes.\n</Tip>\n\n### Configurable models\n\nYou can also create a runtime-configurable model by specifying [`configurable_fields`](https://reference.langchain.com/python/langchain_core/language_models/#langchain_core.language_models.chat_models.BaseChatModel.configurable_fields). If you don't specify a model value, then `'model'` and `'model_provider'` will be configurable by default.",
+      "language": "unknown"
+    },
+    {
+      "code": "<Accordion title=\"Configurable model with default values\">\n  We can create a configurable model with default model values, specify which parameters are configurable, and add prefixes to configurable params:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "See the [`init_chat_model`](https://reference.langchain.com/python/langchain/models/#langchain.chat_models.init_chat_model) reference for more details on `configurable_fields` and `config_prefix`.\n</Accordion>\n\n<Accordion title=\"Using a configurable model declaratively\">\n  We can call declarative operations like `bind_tools`, `with_structured_output`, `with_configurable`, etc. on a configurable model and chain a configurable model in the same way that we would a regularly instantiated chat model object.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Reasoning",
+      "id": "reasoning"
+    },
+    {
+      "level": "h3",
+      "text": "Local models",
+      "id": "local-models"
+    },
+    {
+      "level": "h3",
+      "text": "Prompt caching",
+      "id": "prompt-caching"
+    },
+    {
+      "level": "h3",
+      "text": "Server-side tool use",
+      "id": "server-side-tool-use"
+    },
+    {
+      "level": "h3",
+      "text": "Rate limiting",
+      "id": "rate-limiting"
+    },
+    {
+      "level": "h3",
+      "text": "Base URL or proxy",
+      "id": "base-url-or-proxy"
+    },
+    {
+      "level": "h3",
+      "text": "Log probabilities",
+      "id": "log-probabilities"
+    },
+    {
+      "level": "h3",
+      "text": "Token usage",
+      "id": "token-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Invocation config",
+      "id": "invocation-config"
+    },
+    {
+      "level": "h3",
+      "text": "Configurable models",
+      "id": "configurable-models"
+    }
+  ],
+  "url": "llms-txt#]",
+  "links": []
+}

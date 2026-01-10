@@ -1,0 +1,8 @@
+{
+  "title": ">                'arguments': {'query': 'DELETE FROM records WHERE created_at < NOW() - INTERVAL \\'30 days\\';'},",
+  "content": "",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#>----------------'arguments':-{'query':-'delete-from-records-where-created_at-<-now()---interval-\\'30-days\\';'},",
+  "links": []
+}

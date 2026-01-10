@@ -1,0 +1,8 @@
+{
+  "title": "Or run a specific test file",
+  "content": "pnpm test src/tests/FILENAME_BEING_TESTED.test.ts",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#or-run-a-specific-test-file",
+  "links": []
+}

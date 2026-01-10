@@ -1,0 +1,60 @@
+{
+  "title": "Vision Fine-tuning",
+  "content": "Learn how to fine-tune vision/multimodal LLMs with Unsloth\n\nFine-tuning vision models enables model to excel at certain tasks normal LLMs won't be as good as such as object/movement detection. **You can also train** [**VLMs with RL**](https://docs.unsloth.ai/get-started/reinforcement-learning-rl-guide/vision-reinforcement-learning-vlm-rl)**.** We have many free notebooks for vision fine-tuning:\n\n* **NEW: Qwen3-VL (8B) Vision:** [**Notebook**](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_VL_\\(8B\\)-Vision.ipynb)\n* **Gemma 3 (4B) Vision:** [Notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Gemma3_\\(4B\\)-Vision.ipynb)\n* **Llama 3.2 Vision** fine-tuning for radiography: [Notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.2_\\(11B\\)-Vision.ipynb)\\\n  How can we assist medical professionals in analyzing Xrays, CT Scans & ultrasounds faster.\n* **Qwen2.5 VL** fine-tuning for converting handwriting to LaTeX: [Notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen2.5_VL_\\(7B\\)-Vision.ipynb)\\\n  This allows complex math formulas to be easily transcribed as LaTeX without manually writing it.\n* **Pixtral 12B 2409** vision fine-tuning for general Q\\&A: [Notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Pixtral_\\(12B\\)-Vision.ipynb)\\\n  One can concatenate general Q\\&A datasets with more niche datasets to make the finetune not forget base model skills.\n\n{% hint style=\"info\" %}\nIt is best to ensure your dataset has images of all the same size/dimensions. Use dimensions of 300-1000px to ensure your training does not take too long or use too many resources.\n{% endhint %}\n\nTo finetune vision models, we now allow you to select which parts of the mode to finetune. You can select to only finetune the vision layers, or the language layers, or the attention / MLP layers! We set them all on by default!\n\n### Vision Fine-tuning Dataset\n\nThe dataset for fine-tuning a vision or multimodal model is similar to standard question & answer pair [datasets ](https://docs.unsloth.ai/get-started/fine-tuning-llms-guide/datasets-guide), but this time, they also includes image inputs. For example, the [Llama 3.2 Vision Notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.2_\\(11B\\)-Vision.ipynb#scrollTo=vITh0KVJ10qX) uses a radiography case to show how AI can help medical professionals analyze X-rays, CT scans, and ultrasounds more efficiently.\n\nWe'll be using a sampled version of the ROCO radiography dataset. You can access the dataset [here](https://www.google.com/url?q=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Funsloth%2FRadiology_mini). The dataset includes X-rays, CT scans and ultrasounds showcasing medical conditions and diseases. Each image has a caption written by experts describing it. The goal is to finetune a VLM to make it a useful analysis tool for medical professionals.\n\nLet's take a look at the dataset, and check what the 1st example shows:\n\n| Image                                                                                                                                                                                                                                                                              | Caption                                                                                                                                       |\n| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |\n| <div><figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-97d4489827403bd4795494f33d01a10979788c30%2Fxray.png?alt=media\" alt=\"\" width=\"164\"><figcaption></figcaption></figure></div> | Panoramic radiography shows an osteolytic lesion in the right posterior maxilla with resorption of the floor of the maxillary sinus (arrows). |\n\nTo format the dataset, all vision finetuning tasks should be formatted as follows:\n\nWe will craft an custom instruction asking the VLM to be an expert radiographer. Notice also instead of just 1 instruction, you can add multiple turns to make it a dynamic conversation.\n\nLet's convert the dataset into the \"correct\" format for finetuning:\n\nThe first example is now structured like below:\n\n{% code overflow=\"wrap\" %}\n\nBefore we do any finetuning, maybe the vision model already knows how to analyse the images? Let's check if this is the case!\n\nFor more details, view our dataset section in the [notebook here](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.2_\\(11B\\)-Vision.ipynb#scrollTo=vITh0KVJ10qX).\n\n### Multi-image training\n\nIn order to fine-tune or train a VLM like Qwen3-VL with multi-images the most straightforward change is to swap\n\nUsing map kicks in dataset standardization and arrow processing rules which can be strict and more complicated to define.",
+  "code_samples": [
+    {
+      "code": "model = FastVisionModel.get_peft_model(\n    model,\n    finetune_vision_layers     = True, # False if not finetuning vision layers\n    finetune_language_layers   = True, # False if not finetuning language layers\n    finetune_attention_modules = True, # False if not finetuning attention layers\n    finetune_mlp_modules       = True, # False if not finetuning MLP layers\n\n    r = 16,                           # The larger, the higher the accuracy, but might overfit\n    lora_alpha = 16,                  # Recommended alpha == r at least\n    lora_dropout = 0,\n    bias = \"none\",\n    random_state = 3407,\n    use_rslora = False,               # We support rank stabilized LoRA\n    loftq_config = None,               # And LoftQ\n    target_modules = \"all-linear\",    # Optional now! Can specify a list if needed\n    modules_to_save=[\n        \"lm_head\",\n        \"embed_tokens\",\n    ],\n)",
+      "language": "python"
+    },
+    {
+      "code": "Dataset({\n    features: ['image', 'image_id', 'caption', 'cui'],\n    num_rows: 1978\n})",
+      "language": "unknown"
+    },
+    {
+      "code": "[\n{ \"role\": \"user\",\n  \"content\": [{\"type\": \"text\",  \"text\": instruction}, {\"type\": \"image\", \"image\": image} ]\n},\n{ \"role\": \"assistant\",\n  \"content\": [{\"type\": \"text\",  \"text\": answer} ]\n},\n]",
+      "language": "python"
+    },
+    {
+      "code": "Let's convert the dataset into the \"correct\" format for finetuning:",
+      "language": "unknown"
+    },
+    {
+      "code": "The first example is now structured like below:",
+      "language": "unknown"
+    },
+    {
+      "code": "{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\nBefore we do any finetuning, maybe the vision model already knows how to analyse the images? Let's check if this is the case!",
+      "language": "unknown"
+    },
+    {
+      "code": "And the result:",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, view our dataset section in the [notebook here](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Llama3.2_\\(11B\\)-Vision.ipynb#scrollTo=vITh0KVJ10qX).\n\n### Multi-image training\n\nIn order to fine-tune or train a VLM like Qwen3-VL with multi-images the most straightforward change is to swap",
+      "language": "unknown"
+    },
+    {
+      "code": "with:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Vision Fine-tuning Dataset",
+      "id": "vision-fine-tuning-dataset"
+    },
+    {
+      "level": "h3",
+      "text": "Multi-image training",
+      "id": "multi-image-training"
+    }
+  ],
+  "url": "llms-txt#vision-fine-tuning",
+  "links": []
+}

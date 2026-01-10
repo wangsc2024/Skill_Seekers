@@ -1,0 +1,183 @@
+{
+  "title": "How to run evaluations with pytest (beta)",
+  "content": "Source: https://docs.langchain.com/langsmith/pytest\n\nThe LangSmith pytest plugin lets Python developers define their datasets and evaluations as pytest test cases.\n\nCompared to the standard evaluation flow, this is useful when:\n\n* **Each example requires different evaluation logic**: Standard evaluation flows assume consistent application and evaluator execution across all dataset examples. For more complex systems or comprehensive evaluations, specific system subsets may require evaluation with particular input types and metrics. These heterogeneous evaluations are simpler to write as distinct test case suites that track together.\n* **You want to assert binary expectations**: Track assertions in LangSmith and raise assertion errors locally (e.g. in CI pipelines). Testing tools help when both evaluating system outputs and asserting basic properties about them.\n* **You want pytest-like terminal outputs**: Get familiar pytest output formatting\n* **You already use pytest to test your app**: Add LangSmith tracking to existing pytest workflows\n\n<Warning>\n  The pytest integration is in beta and is subject to change in upcoming releases.\n</Warning>\n\n<Info>\n  The JS/TS SDK has an analogous [Vitest/Jest integration](/langsmith/vitest-jest).\n</Info>\n\nThis functionality requires Python SDK version `langsmith>=0.3.4`.\n\nFor extra features like [rich terminal outputs](#rich-outputs) and [test caching](#caching) install:\n\n## Define and run tests\n\nThe pytest integration lets you define datasets and evaluators as test cases.\n\nTo track a test in LangSmith add the `@pytest.mark.langsmith` decorator. Every decorated test case will be synced to a dataset example. When you run the test suite, the dataset will be updated and a new experiment will be created with one result for each test case.\n\n<CodeGroup>\n  \n</CodeGroup>\n\nWhen you run this test it will have a default `pass` boolean feedback key based on the test case passing / failing. It will also track any inputs, outputs, and reference (expected) outputs that you log.\n\nUse `pytest` as you normally would to run the tests:\n\nIn most cases we recommend setting a test suite name:\n\nEach time you run this test suite, LangSmith:\n\n* creates a [dataset](/langsmith/evaluation-concepts#datasets) for each test file. If a dataset for this test file already exists it will be updated\n* creates an [experiment](/langsmith/evaluation-concepts#experiment) in each created/updated dataset\n* creates an experiment row for each test case, with the inputs, outputs, reference outputs and feedback you've logged\n* collects the pass/fail rate under the `pass` feedback key for each test case\n\nHere's what a test suite dataset looks like:\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=f40d29e4260eebc87838ea7be78bd08d\" alt=\"Dataset\" data-og-width=\"1078\" width=\"1078\" data-og-height=\"437\" height=\"437\" data-path=\"langsmith/images/simple-pytest-dataset.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=280&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=ac625f42dd28d99e4fedaf193421d7f5 280w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=560&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=169fc45042f5c75d61e5c9a0dc9117cf 560w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=840&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=b63c8752c2356d297cc44969da407673 840w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=1100&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=f9a727e2fed9369844b4e6de59d72c0f 1100w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=1650&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=e5d14240d3d0df568adb1655a28dbc58 1650w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=2500&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=9adad58f251fc1dba96c9b6f4092a11f 2500w\" />\n\nAnd what an experiment against that test suite looks like:\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=09776ac389e88f7f5058f4f7cf44dc72\" alt=\"Experiment\" data-og-width=\"1077\" width=\"1077\" data-og-height=\"444\" height=\"444\" data-path=\"langsmith/images/simple-pytest.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=280&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=250e774ba91ea54112577a40466fdf51 280w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=560&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=e77b0e75d32f47f9b9ab86df83f0ac99 560w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=840&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=1b1bd6106aaed9412a2e56b52598e412 840w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=1100&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=65630e87475c1c8570e0d47d18fd1629 1100w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=1650&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=a4507629b61206359c2546afb17ac77a 1650w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=2500&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=a5ee150a76f3e40e704c7de4b2d74fdf 2500w\" />\n\n## Log inputs, outputs, and reference outputs\n\nEvery time we run a test we're syncing it to a dataset example and tracing it as a run. There's a few different ways that we can trace the example inputs and reference outputs and the run outputs. The simplest is to use the `log_inputs`, `log_outputs`, and `log_reference_outputs` methods. You can run these any time in a test to update the example and run for that test:\n\nRunning this test will create/update an example with name \"test\\_foo\", inputs `{\"a\": 1, \"b\": 2}`, reference outputs `{\"foo\": \"bar\"}` and trace a run with outputs `{\"foo\": \"baz\"}`.\n\n**NOTE**: If you run `log_inputs`, `log_outputs`, or `log_reference_outputs` twice, the previous values will be overwritten.\n\nAnother way to define example inputs and reference outputs is via pytest fixtures/parametrizations. By default any arguments to your test function will be logged as inputs on the corresponding example. If certain arguments are meant to represet reference outputs, you can specify that they should be logged as such using `@pytest.mark.langsmith(output_keys=[\"name_of_ref_output_arg\"])`:\n\nThis will create/sync an example with name \"test\\_cd\", inputs `{\"c\": 5}` and reference outputs `{\"d\": 6}`, and run output `{\"d\": 10}`.\n\nBy default LangSmith collects the pass/fail rate under the `pass` feedback key for each test case. You can add additional feedback with `log_feedback`.\n\nNote the use of the `trace_feedback()` context manager. This makes it so that the LLM-as-judge call is traced separately from the rest of the test case. Instead of showing up in the main test case run it will instead show up in the trace for the `correct` feedback key.\n\n**NOTE**: Make sure that the `log_feedback` call associated with the feedback trace occurs inside the `trace_feedback` context. This way we'll be able to associate the feedback with the trace, and when seeing the feedback in the UI you'll be able to click on it to see the trace that generated it.\n\n## Trace intermediate calls\n\nLangSmith will automatically trace any traceable intermediate calls that happen in the course of test case execution.\n\n## Grouping tests into a test suite\n\nBy default, all tests within a given file will be grouped as a single \"test suite\" with a corresponding dataset. You can configure which test suite a test belongs to by passing the `test_suite_name` parameter to `@pytest.mark.langsmith` for case-by-case grouping, or you can set the `LANGSMITH_TEST_SUITE` env var to group all tests from an execution into a single test suite:\n\nWe generally recommend setting `LANGSMITH_TEST_SUITE` to get a consolidated view of all of your results.\n\n## Naming experiments\n\nYou can name an experiment using the `LANGSMITH_EXPERIMENT` env var:\n\nLLMs on every commit in CI can get expensive. To save time and resources, LangSmith lets you cache HTTP requests to disk. To enable caching, install with `langsmith[pytest]` and set an env var: `LANGSMITH_TEST_CACHE=/my/cache/path`:\n\nAll requests will be cached to `tests/cassettes` and loaded from there on subsequent runs. If you check this in to your repository, your CI will be able to use the cache as well.\n\nIn `langsmith>=0.4.10`, you may selectively enable caching for requests to individual URLs or hostnames like this:\n\n`@pytest.mark.langsmith` is designed to stay out of your way and works well with familiar `pytest` features.\n\n### Parametrize with `pytest.mark.parametrize`\n\nYou can use the `parametrize` decorator as before. This will create a new test case for each parametrized instance of the test.\n\n**Note:** as the parametrized list grows, you may consider using `evaluate()` instead. This parallelizes the evaluation and makes it easier to control individual experiments and the corresponding dataset.\n\n### Parallelize with `pytest-xdist`\n\nYou can use [pytest-xdist](https://pytest-xdist.readthedocs.io/en/stable/) as you normally would to parallelize test execution:\n\n### Async tests with `pytest-asyncio`\n\n`@pytest.mark.langsmith` works with sync or async tests, so you can run async tests exactly as before.\n\n### Watch mode with `pytest-watch`\n\nUse watch mode to quickly iterate on your tests. We *highly* recommend ony using this with test caching (see below) enabled to avoid unnecessary LLM calls:\n\nIf you'd like to see a rich display of the LangSmith results of your test run you can specify `--langsmith-output`:\n\n**Note:** This flag used to be `--output=langsmith` in `langsmith<=0.3.3` but was updated to avoid collisions with other pytest plugins.\n\nYou'll get a nice table per test suite that updates live as the results are uploaded to LangSmith:\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=10712bc97e37900ca83cb70df1c9357d\" alt=\"Rich pytest outputs\" data-og-width=\"1340\" width=\"1340\" data-og-height=\"548\" height=\"548\" data-path=\"langsmith/images/rich-pytest-outputs.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=280&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=b689a6512f89045fdda11112f344c0aa 280w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=560&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=be71e1c2abb5e14616ab8f9c4cf05912 560w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=840&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=4d7beb30f4e5f72bc30def219831184d 840w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=1100&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=85478a1e6830a5bc01b35eda991e86c7 1100w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=1650&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=2980269c433c3a30c0da34e57a6232ba 1650w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=2500&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=fc52452a3b17850b27d4922b392185f8 2500w\" />\n\nSome important notes for using this feature:\n\n* Make sure you've installed `pip install -U \"langsmith[pytest]\"`\n* Rich outputs do not currently work with `pytest-xdist`\n\n**NOTE**: The custom output removes all the standard pytest outputs. If you're trying to debug some unexpected behavior it's often better to show the regular pytest outputs so to get full error traces.\n\nIf you want to run the tests without syncing the results to LangSmith, you can set `LANGSMITH_TEST_TRACKING=false` in your environment.\n\nThe tests will run as normal, but the experiment logs will not be sent to LangSmith.\n\nLangSmith provides an [expect](https://docs.smith.langchain.com/reference/python/_expect/langsmith._expect._Expect#langsmith._expect._Expect) utility to help define expectations about your LLM output. For example:\n\nThis will log the binary \"expectation\" score to the experiment results, additionally `assert`ing that the expectation is met possibly triggering a test failure.\n\n`expect` also provides \"fuzzy match\" methods. For example:\n\nThis test case will be assigned 4 scores:\n\n1. The `embedding_distance` between the prediction and the expectation\n2. The binary `expectation` score (1 if cosine distance is less than 0.5, 0 if not)\n3. The `edit_distance` between the prediction and the expectation\n4. The overall test pass/fail score (binary)\n\nThe `expect` utility is modeled off of [Jest](https://jestjs.io/docs/expect)'s expect API, with some off-the-shelf functionality to make it easier to grade your LLMs.\n\n#### `@test` / `@unit` decorator\n\nThe legacy method for marking test cases is using the `@test` or `@unit` decorators:\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/pytest.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Define and run tests\n\nThe pytest integration lets you define datasets and evaluators as test cases.\n\nTo track a test in LangSmith add the `@pytest.mark.langsmith` decorator. Every decorated test case will be synced to a dataset example. When you run the test suite, the dataset will be updated and a new experiment will be created with one result for each test case.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nWhen you run this test it will have a default `pass` boolean feedback key based on the test case passing / failing. It will also track any inputs, outputs, and reference (expected) outputs that you log.\n\nUse `pytest` as you normally would to run the tests:",
+      "language": "unknown"
+    },
+    {
+      "code": "In most cases we recommend setting a test suite name:",
+      "language": "unknown"
+    },
+    {
+      "code": "Each time you run this test suite, LangSmith:\n\n* creates a [dataset](/langsmith/evaluation-concepts#datasets) for each test file. If a dataset for this test file already exists it will be updated\n* creates an [experiment](/langsmith/evaluation-concepts#experiment) in each created/updated dataset\n* creates an experiment row for each test case, with the inputs, outputs, reference outputs and feedback you've logged\n* collects the pass/fail rate under the `pass` feedback key for each test case\n\nHere's what a test suite dataset looks like:\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=f40d29e4260eebc87838ea7be78bd08d\" alt=\"Dataset\" data-og-width=\"1078\" width=\"1078\" data-og-height=\"437\" height=\"437\" data-path=\"langsmith/images/simple-pytest-dataset.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=280&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=ac625f42dd28d99e4fedaf193421d7f5 280w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=560&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=169fc45042f5c75d61e5c9a0dc9117cf 560w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=840&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=b63c8752c2356d297cc44969da407673 840w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=1100&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=f9a727e2fed9369844b4e6de59d72c0f 1100w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=1650&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=e5d14240d3d0df568adb1655a28dbc58 1650w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest-dataset.png?w=2500&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=9adad58f251fc1dba96c9b6f4092a11f 2500w\" />\n\nAnd what an experiment against that test suite looks like:\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=09776ac389e88f7f5058f4f7cf44dc72\" alt=\"Experiment\" data-og-width=\"1077\" width=\"1077\" data-og-height=\"444\" height=\"444\" data-path=\"langsmith/images/simple-pytest.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=280&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=250e774ba91ea54112577a40466fdf51 280w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=560&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=e77b0e75d32f47f9b9ab86df83f0ac99 560w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=840&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=1b1bd6106aaed9412a2e56b52598e412 840w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=1100&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=65630e87475c1c8570e0d47d18fd1629 1100w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=1650&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=a4507629b61206359c2546afb17ac77a 1650w, https://mintcdn.com/langchain-5e9cc07a/ImHGLQW1HnQYwnJV/langsmith/images/simple-pytest.png?w=2500&fit=max&auto=format&n=ImHGLQW1HnQYwnJV&q=85&s=a5ee150a76f3e40e704c7de4b2d74fdf 2500w\" />\n\n## Log inputs, outputs, and reference outputs\n\nEvery time we run a test we're syncing it to a dataset example and tracing it as a run. There's a few different ways that we can trace the example inputs and reference outputs and the run outputs. The simplest is to use the `log_inputs`, `log_outputs`, and `log_reference_outputs` methods. You can run these any time in a test to update the example and run for that test:",
+      "language": "unknown"
+    },
+    {
+      "code": "Running this test will create/update an example with name \"test\\_foo\", inputs `{\"a\": 1, \"b\": 2}`, reference outputs `{\"foo\": \"bar\"}` and trace a run with outputs `{\"foo\": \"baz\"}`.\n\n**NOTE**: If you run `log_inputs`, `log_outputs`, or `log_reference_outputs` twice, the previous values will be overwritten.\n\nAnother way to define example inputs and reference outputs is via pytest fixtures/parametrizations. By default any arguments to your test function will be logged as inputs on the corresponding example. If certain arguments are meant to represet reference outputs, you can specify that they should be logged as such using `@pytest.mark.langsmith(output_keys=[\"name_of_ref_output_arg\"])`:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will create/sync an example with name \"test\\_cd\", inputs `{\"c\": 5}` and reference outputs `{\"d\": 6}`, and run output `{\"d\": 10}`.\n\n## Log feedback\n\nBy default LangSmith collects the pass/fail rate under the `pass` feedback key for each test case. You can add additional feedback with `log_feedback`.",
+      "language": "unknown"
+    },
+    {
+      "code": "Note the use of the `trace_feedback()` context manager. This makes it so that the LLM-as-judge call is traced separately from the rest of the test case. Instead of showing up in the main test case run it will instead show up in the trace for the `correct` feedback key.\n\n**NOTE**: Make sure that the `log_feedback` call associated with the feedback trace occurs inside the `trace_feedback` context. This way we'll be able to associate the feedback with the trace, and when seeing the feedback in the UI you'll be able to click on it to see the trace that generated it.\n\n## Trace intermediate calls\n\nLangSmith will automatically trace any traceable intermediate calls that happen in the course of test case execution.\n\n## Grouping tests into a test suite\n\nBy default, all tests within a given file will be grouped as a single \"test suite\" with a corresponding dataset. You can configure which test suite a test belongs to by passing the `test_suite_name` parameter to `@pytest.mark.langsmith` for case-by-case grouping, or you can set the `LANGSMITH_TEST_SUITE` env var to group all tests from an execution into a single test suite:",
+      "language": "unknown"
+    },
+    {
+      "code": "We generally recommend setting `LANGSMITH_TEST_SUITE` to get a consolidated view of all of your results.\n\n## Naming experiments\n\nYou can name an experiment using the `LANGSMITH_EXPERIMENT` env var:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Caching\n\nLLMs on every commit in CI can get expensive. To save time and resources, LangSmith lets you cache HTTP requests to disk. To enable caching, install with `langsmith[pytest]` and set an env var: `LANGSMITH_TEST_CACHE=/my/cache/path`:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nAll requests will be cached to `tests/cassettes` and loaded from there on subsequent runs. If you check this in to your repository, your CI will be able to use the cache as well.\n\nIn `langsmith>=0.4.10`, you may selectively enable caching for requests to individual URLs or hostnames like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "## pytest features\n\n`@pytest.mark.langsmith` is designed to stay out of your way and works well with familiar `pytest` features.\n\n### Parametrize with `pytest.mark.parametrize`\n\nYou can use the `parametrize` decorator as before. This will create a new test case for each parametrized instance of the test.",
+      "language": "unknown"
+    },
+    {
+      "code": "**Note:** as the parametrized list grows, you may consider using `evaluate()` instead. This parallelizes the evaluation and makes it easier to control individual experiments and the corresponding dataset.\n\n### Parallelize with `pytest-xdist`\n\nYou can use [pytest-xdist](https://pytest-xdist.readthedocs.io/en/stable/) as you normally would to parallelize test execution:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n### Async tests with `pytest-asyncio`\n\n`@pytest.mark.langsmith` works with sync or async tests, so you can run async tests exactly as before.\n\n### Watch mode with `pytest-watch`\n\nUse watch mode to quickly iterate on your tests. We *highly* recommend ony using this with test caching (see below) enabled to avoid unnecessary LLM calls:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Rich outputs\n\nIf you'd like to see a rich display of the LangSmith results of your test run you can specify `--langsmith-output`:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Note:** This flag used to be `--output=langsmith` in `langsmith<=0.3.3` but was updated to avoid collisions with other pytest plugins.\n\nYou'll get a nice table per test suite that updates live as the results are uploaded to LangSmith:\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=10712bc97e37900ca83cb70df1c9357d\" alt=\"Rich pytest outputs\" data-og-width=\"1340\" width=\"1340\" data-og-height=\"548\" height=\"548\" data-path=\"langsmith/images/rich-pytest-outputs.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=280&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=b689a6512f89045fdda11112f344c0aa 280w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=560&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=be71e1c2abb5e14616ab8f9c4cf05912 560w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=840&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=4d7beb30f4e5f72bc30def219831184d 840w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=1100&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=85478a1e6830a5bc01b35eda991e86c7 1100w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=1650&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=2980269c433c3a30c0da34e57a6232ba 1650w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/rich-pytest-outputs.png?w=2500&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=fc52452a3b17850b27d4922b392185f8 2500w\" />\n\nSome important notes for using this feature:\n\n* Make sure you've installed `pip install -U \"langsmith[pytest]\"`\n* Rich outputs do not currently work with `pytest-xdist`\n\n**NOTE**: The custom output removes all the standard pytest outputs. If you're trying to debug some unexpected behavior it's often better to show the regular pytest outputs so to get full error traces.\n\n## Dry-run mode\n\nIf you want to run the tests without syncing the results to LangSmith, you can set `LANGSMITH_TEST_TRACKING=false` in your environment.",
+      "language": "unknown"
+    },
+    {
+      "code": "The tests will run as normal, but the experiment logs will not be sent to LangSmith.\n\n## Expectations\n\nLangSmith provides an [expect](https://docs.smith.langchain.com/reference/python/_expect/langsmith._expect._Expect#langsmith._expect._Expect) utility to help define expectations about your LLM output. For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will log the binary \"expectation\" score to the experiment results, additionally `assert`ing that the expectation is met possibly triggering a test failure.\n\n`expect` also provides \"fuzzy match\" methods. For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "This test case will be assigned 4 scores:\n\n1. The `embedding_distance` between the prediction and the expectation\n2. The binary `expectation` score (1 if cosine distance is less than 0.5, 0 if not)\n3. The `edit_distance` between the prediction and the expectation\n4. The overall test pass/fail score (binary)\n\nThe `expect` utility is modeled off of [Jest](https://jestjs.io/docs/expect)'s expect API, with some off-the-shelf functionality to make it easier to grade your LLMs.\n\n## Legacy\n\n#### `@test` / `@unit` decorator\n\nThe legacy method for marking test cases is using the `@test` or `@unit` decorators:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Define and run tests",
+      "id": "define-and-run-tests"
+    },
+    {
+      "level": "h2",
+      "text": "Log inputs, outputs, and reference outputs",
+      "id": "log-inputs,-outputs,-and-reference-outputs"
+    },
+    {
+      "level": "h2",
+      "text": "Log feedback",
+      "id": "log-feedback"
+    },
+    {
+      "level": "h2",
+      "text": "Trace intermediate calls",
+      "id": "trace-intermediate-calls"
+    },
+    {
+      "level": "h2",
+      "text": "Grouping tests into a test suite",
+      "id": "grouping-tests-into-a-test-suite"
+    },
+    {
+      "level": "h2",
+      "text": "Naming experiments",
+      "id": "naming-experiments"
+    },
+    {
+      "level": "h2",
+      "text": "Caching",
+      "id": "caching"
+    },
+    {
+      "level": "h2",
+      "text": "pytest features",
+      "id": "pytest-features"
+    },
+    {
+      "level": "h3",
+      "text": "Parametrize with `pytest.mark.parametrize`",
+      "id": "parametrize-with-`pytest.mark.parametrize`"
+    },
+    {
+      "level": "h3",
+      "text": "Parallelize with `pytest-xdist`",
+      "id": "parallelize-with-`pytest-xdist`"
+    },
+    {
+      "level": "h3",
+      "text": "Async tests with `pytest-asyncio`",
+      "id": "async-tests-with-`pytest-asyncio`"
+    },
+    {
+      "level": "h3",
+      "text": "Watch mode with `pytest-watch`",
+      "id": "watch-mode-with-`pytest-watch`"
+    },
+    {
+      "level": "h2",
+      "text": "Rich outputs",
+      "id": "rich-outputs"
+    },
+    {
+      "level": "h2",
+      "text": "Dry-run mode",
+      "id": "dry-run-mode"
+    },
+    {
+      "level": "h2",
+      "text": "Expectations",
+      "id": "expectations"
+    },
+    {
+      "level": "h2",
+      "text": "Legacy",
+      "id": "legacy"
+    }
+  ],
+  "url": "llms-txt#how-to-run-evaluations-with-pytest-(beta)",
+  "links": []
+}

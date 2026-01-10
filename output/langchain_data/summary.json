@@ -1,0 +1,5909 @@
+{
+  "name": "langchain",
+  "total_pages": 1475,
+  "base_url": "https://docs.langchain.com/oss/python/langchain/overview",
+  "llms_txt_detected": true,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "Authenticate",
+      "url": "llms-txt#authenticate"
+    },
+    {
+      "title": "Create Oauth Provider",
+      "url": "llms-txt#create-oauth-provider"
+    },
+    {
+      "title": "Delete Oauth Provider",
+      "url": "llms-txt#delete-oauth-provider"
+    },
+    {
+      "title": "Get Oauth Provider",
+      "url": "llms-txt#get-oauth-provider"
+    },
+    {
+      "title": "List Oauth Providers",
+      "url": "llms-txt#list-oauth-providers"
+    },
+    {
+      "title": "Oauth Callback",
+      "url": "llms-txt#oauth-callback"
+    },
+    {
+      "title": "Update Oauth Provider",
+      "url": "llms-txt#update-oauth-provider"
+    },
+    {
+      "title": "Wait For Auth Completion",
+      "url": "llms-txt#wait-for-auth-completion"
+    },
+    {
+      "title": "Create Deployment",
+      "url": "llms-txt#create-deployment"
+    },
+    {
+      "title": "Delete Deployment",
+      "url": "llms-txt#delete-deployment"
+    },
+    {
+      "title": "Get Deployment",
+      "url": "llms-txt#get-deployment"
+    },
+    {
+      "title": "Get Revision",
+      "url": "llms-txt#get-revision"
+    },
+    {
+      "title": "List Deployments",
+      "url": "llms-txt#list-deployments"
+    },
+    {
+      "title": "List Revisions",
+      "url": "llms-txt#list-revisions"
+    },
+    {
+      "title": "Patch Deployment",
+      "url": "llms-txt#patch-deployment"
+    },
+    {
+      "title": "Redeploy Revision",
+      "url": "llms-txt#redeploy-revision"
+    },
+    {
+      "title": "List GitHub Integrations",
+      "url": "llms-txt#list-github-integrations"
+    },
+    {
+      "title": "List GitHub Repositories",
+      "url": "llms-txt#list-github-repositories"
+    },
+    {
+      "title": "Create Listener",
+      "url": "llms-txt#create-listener"
+    },
+    {
+      "title": "Delete Listener",
+      "url": "llms-txt#delete-listener"
+    },
+    {
+      "title": "Get Listener",
+      "url": "llms-txt#get-listener"
+    },
+    {
+      "title": "List Listeners",
+      "url": "llms-txt#list-listeners"
+    },
+    {
+      "title": "Patch Listener",
+      "url": "llms-txt#patch-listener"
+    },
+    {
+      "title": "null",
+      "url": "llms-txt#null"
+    },
+    {
+      "title": "Connect an authentication provider",
+      "url": "llms-txt#connect-an-authentication-provider"
+    },
+    {
+      "title": "This is loaded from the `.env` file you created above",
+      "url": "llms-txt#this-is-loaded-from-the-`.env`-file-you-created-above"
+    },
+    {
+      "title": "... the rest is the same as before",
+      "url": "llms-txt#...-the-rest-is-the-same-as-before"
+    },
+    {
+      "title": "Keep our resource authorization from the previous tutorial",
+      "url": "llms-txt#keep-our-resource-authorization-from-the-previous-tutorial"
+    },
+    {
+      "title": "Get email from command line",
+      "url": "llms-txt#get-email-from-command-line"
+    },
+    {
+      "title": "This is your PUBLIC anon key (which is safe to use client-side)",
+      "url": "llms-txt#this-is-your-public-anon-key-(which-is-safe-to-use-client-side)"
+    },
+    {
+      "title": "Do NOT mistake this for the secret service role key",
+      "url": "llms-txt#do-not-mistake-this-for-the-secret-service-role-key"
+    },
+    {
+      "title": "Create two test users",
+      "url": "llms-txt#create-two-test-users"
+    },
+    {
+      "title": "Log in as user 1",
+      "url": "llms-txt#log-in-as-user-1"
+    },
+    {
+      "title": "Create a thread as user 1",
+      "url": "llms-txt#create-a-thread-as-user-1"
+    },
+    {
+      "title": "Try to access without a token",
+      "url": "llms-txt#try-to-access-without-a-token"
+    },
+    {
+      "title": "Try to access user 1's thread as user 2",
+      "url": "llms-txt#try-to-access-user-1's-thread-as-user-2"
+    },
+    {
+      "title": "Human-in-the-loop using server API",
+      "url": "llms-txt#human-in-the-loop-using-server-api"
+    },
+    {
+      "title": "Add metadata and tags to traces",
+      "url": "llms-txt#add-metadata-and-tags-to-traces"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "Set up Agent Auth (Beta)",
+      "url": "llms-txt#set-up-agent-auth-(beta)"
+    },
+    {
+      "title": "Or if you'd like a token that can be used by any agent, set agent_scoped=False",
+      "url": "llms-txt#or-if-you'd-like-a-token-that-can-be-used-by-any-agent,-set-agent_scoped=false"
+    },
+    {
+      "title": "Default: user-scoped token (works for any agent under this user)",
+      "url": "llms-txt#default:-user-scoped-token-(works-for-any-agent-under-this-user)"
+    },
+    {
+      "title": "Agent Builder",
+      "url": "llms-txt#agent-builder"
+    },
+    {
+      "title": "Auth-aware tool responses",
+      "url": "llms-txt#auth-aware-tool-responses"
+    },
+    {
+      "title": "Call agents from code",
+      "url": "llms-txt#call-agents-from-code"
+    },
+    {
+      "title": "Essentials",
+      "url": "llms-txt#essentials"
+    },
+    {
+      "title": "LangSmith Tool Server",
+      "url": "llms-txt#langsmith-tool-server"
+    },
+    {
+      "title": "Agent Builder setup",
+      "url": "llms-txt#agent-builder-setup"
+    },
+    {
+      "title": "LangSmith Agent Builder App for Slack",
+      "url": "llms-txt#langsmith-agent-builder-app-for-slack"
+    },
+    {
+      "title": "Templates",
+      "url": "llms-txt#templates"
+    },
+    {
+      "title": "Tools",
+      "url": "llms-txt#tools"
+    },
+    {
+      "title": "Workspace vs. private agents",
+      "url": "llms-txt#workspace-vs.-private-agents"
+    },
+    {
+      "title": "Agent Server",
+      "url": "llms-txt#agent-server"
+    },
+    {
+      "title": "A2A Post",
+      "url": "llms-txt#a2a-post"
+    },
+    {
+      "title": "Count Assistants",
+      "url": "llms-txt#count-assistants"
+    },
+    {
+      "title": "Create Assistant",
+      "url": "llms-txt#create-assistant"
+    },
+    {
+      "title": "Delete Assistant",
+      "url": "llms-txt#delete-assistant"
+    },
+    {
+      "title": "Get Assistant",
+      "url": "llms-txt#get-assistant"
+    },
+    {
+      "title": "Get Assistant Graph",
+      "url": "llms-txt#get-assistant-graph"
+    },
+    {
+      "title": "Get Assistant Schemas",
+      "url": "llms-txt#get-assistant-schemas"
+    },
+    {
+      "title": "Get Assistant Subgraphs",
+      "url": "llms-txt#get-assistant-subgraphs"
+    },
+    {
+      "title": "Get Assistant Subgraphs by Namespace",
+      "url": "llms-txt#get-assistant-subgraphs-by-namespace"
+    },
+    {
+      "title": "Get Assistant Versions",
+      "url": "llms-txt#get-assistant-versions"
+    },
+    {
+      "title": "Patch Assistant",
+      "url": "llms-txt#patch-assistant"
+    },
+    {
+      "title": "Search Assistants",
+      "url": "llms-txt#search-assistants"
+    },
+    {
+      "title": "Set Latest Assistant Version",
+      "url": "llms-txt#set-latest-assistant-version"
+    },
+    {
+      "title": "Count Crons",
+      "url": "llms-txt#count-crons"
+    },
+    {
+      "title": "Create Cron",
+      "url": "llms-txt#create-cron"
+    },
+    {
+      "title": "Create Thread Cron",
+      "url": "llms-txt#create-thread-cron"
+    },
+    {
+      "title": "Delete Cron",
+      "url": "llms-txt#delete-cron"
+    },
+    {
+      "title": "Search Crons",
+      "url": "llms-txt#search-crons"
+    },
+    {
+      "title": "MCP Get",
+      "url": "llms-txt#mcp-get"
+    },
+    {
+      "title": "MCP Post",
+      "url": "llms-txt#mcp-post"
+    },
+    {
+      "title": "Terminate Session",
+      "url": "llms-txt#terminate-session"
+    },
+    {
+      "title": "Create Background Run",
+      "url": "llms-txt#create-background-run"
+    },
+    {
+      "title": "Create Run Batch",
+      "url": "llms-txt#create-run-batch"
+    },
+    {
+      "title": "Create Run, Stream Output",
+      "url": "llms-txt#create-run,-stream-output"
+    },
+    {
+      "title": "Create Run, Wait for Output",
+      "url": "llms-txt#create-run,-wait-for-output"
+    },
+    {
+      "title": "Delete an item.",
+      "url": "llms-txt#delete-an-item."
+    },
+    {
+      "title": "List namespaces with optional match conditions.",
+      "url": "llms-txt#list-namespaces-with-optional-match-conditions."
+    },
+    {
+      "title": "Retrieve a single item.",
+      "url": "llms-txt#retrieve-a-single-item."
+    },
+    {
+      "title": "Search for items within a namespace prefix.",
+      "url": "llms-txt#search-for-items-within-a-namespace-prefix."
+    },
+    {
+      "title": "Store or update an item.",
+      "url": "llms-txt#store-or-update-an-item."
+    },
+    {
+      "title": "Health Check",
+      "url": "llms-txt#health-check"
+    },
+    {
+      "title": "Server Information",
+      "url": "llms-txt#server-information"
+    },
+    {
+      "title": "System Metrics",
+      "url": "llms-txt#system-metrics"
+    },
+    {
+      "title": "Cancel Run",
+      "url": "llms-txt#cancel-run"
+    },
+    {
+      "title": "Cancel Runs",
+      "url": "llms-txt#cancel-runs"
+    },
+    {
+      "title": "Create Background Run",
+      "url": "llms-txt#create-background-run"
+    },
+    {
+      "title": "Create Run, Stream Output",
+      "url": "llms-txt#create-run,-stream-output"
+    },
+    {
+      "title": "Create Run, Wait for Output",
+      "url": "llms-txt#create-run,-wait-for-output"
+    },
+    {
+      "title": "Delete Run",
+      "url": "llms-txt#delete-run"
+    },
+    {
+      "title": "Get Run",
+      "url": "llms-txt#get-run"
+    },
+    {
+      "title": "Join Run",
+      "url": "llms-txt#join-run"
+    },
+    {
+      "title": "Join Run Stream",
+      "url": "llms-txt#join-run-stream"
+    },
+    {
+      "title": "List Runs",
+      "url": "llms-txt#list-runs"
+    },
+    {
+      "title": "Copy Thread",
+      "url": "llms-txt#copy-thread"
+    },
+    {
+      "title": "Count Threads",
+      "url": "llms-txt#count-threads"
+    },
+    {
+      "title": "Create Thread",
+      "url": "llms-txt#create-thread"
+    },
+    {
+      "title": "Delete Thread",
+      "url": "llms-txt#delete-thread"
+    },
+    {
+      "title": "Get Thread",
+      "url": "llms-txt#get-thread"
+    },
+    {
+      "title": "Get Thread History",
+      "url": "llms-txt#get-thread-history"
+    },
+    {
+      "title": "Get Thread History Post",
+      "url": "llms-txt#get-thread-history-post"
+    },
+    {
+      "title": "Get Thread State",
+      "url": "llms-txt#get-thread-state"
+    },
+    {
+      "title": "Get Thread State At Checkpoint",
+      "url": "llms-txt#get-thread-state-at-checkpoint"
+    },
+    {
+      "title": "Get Thread State At Checkpoint",
+      "url": "llms-txt#get-thread-state-at-checkpoint"
+    },
+    {
+      "title": "Join Thread Stream",
+      "url": "llms-txt#join-thread-stream"
+    },
+    {
+      "title": "Patch Thread",
+      "url": "llms-txt#patch-thread"
+    },
+    {
+      "title": "Search Threads",
+      "url": "llms-txt#search-threads"
+    },
+    {
+      "title": "Update Thread State",
+      "url": "llms-txt#update-thread-state"
+    },
+    {
+      "title": "Agent Server changelog",
+      "url": "llms-txt#agent-server-changelog"
+    },
+    {
+      "title": "Distributed tracing with Agent Server",
+      "url": "llms-txt#distributed-tracing-with-agent-server"
+    },
+    {
+      "title": "Define your graph",
+      "url": "llms-txt#define-your-graph"
+    },
+    {
+      "title": "... add nodes and edges ...",
+      "url": "llms-txt#...-add-nodes-and-edges-..."
+    },
+    {
+      "title": "Configure LangSmith Agent Server for scale",
+      "url": "llms-txt#configure-langsmith-agent-server-for-scale"
+    },
+    {
+      "title": "Example configuration for low reads, high writes (5 read/500 write requests per second)",
+      "url": "llms-txt#example-configuration-for-low-reads,-high-writes-(5-read/500-write-requests-per-second)"
+    },
+    {
+      "title": "Example configuration for high reads, low writes (500 read/5 write requests per second)",
+      "url": "llms-txt#example-configuration-for-high-reads,-low-writes-(500-read/5-write-requests-per-second)"
+    },
+    {
+      "title": "Example configuration for medium reads, medium writes (50 read/50 write requests per second)",
+      "url": "llms-txt#example-configuration-for-medium-reads,-medium-writes-(50-read/50-write-requests-per-second)"
+    },
+    {
+      "title": "Example configuration for high reads, high writes (500 read/500 write requests per second)",
+      "url": "llms-txt#example-configuration-for-high-reads,-high-writes-(500-read/500-write-requests-per-second)"
+    },
+    {
+      "title": "Alerts in LangSmith",
+      "url": "llms-txt#alerts-in-langsmith"
+    },
+    {
+      "title": "Configure webhook notifications for LangSmith alerts",
+      "url": "llms-txt#configure-webhook-notifications-for-langsmith-alerts"
+    },
+    {
+      "title": "Analyze an experiment",
+      "url": "llms-txt#analyze-an-experiment"
+    },
+    {
+      "title": "Custom instrumentation",
+      "url": "llms-txt#custom-instrumentation"
+    },
+    {
+      "title": "See trace: https://smith.langchain.com/public/882f9ecf-5057-426a-ae98-0edf84fdcaf9/r",
+      "url": "llms-txt#see-trace:-https://smith.langchain.com/public/882f9ecf-5057-426a-ae98-0edf84fdcaf9/r"
+    },
+    {
+      "title": "Annotate traces and runs inline",
+      "url": "llms-txt#annotate-traces-and-runs-inline"
+    },
+    {
+      "title": "Use annotation queues",
+      "url": "llms-txt#use-annotation-queues"
+    },
+    {
+      "title": "Control plane API reference for LangSmith Deployment",
+      "url": "llms-txt#control-plane-api-reference-for-langsmith-deployment"
+    },
+    {
+      "title": "required environment variables",
+      "url": "llms-txt#required-environment-variables"
+    },
+    {
+      "title": "App development in LangSmith Deployment",
+      "url": "llms-txt#app-development-in-langsmith-deployment"
+    },
+    {
+      "title": "Application structure",
+      "url": "llms-txt#application-structure"
+    },
+    {
+      "title": "Assistants",
+      "url": "llms-txt#assistants"
+    },
+    {
+      "title": "Log user feedback using the SDK",
+      "url": "llms-txt#log-user-feedback-using-the-sdk"
+    },
+    {
+      "title": "How to audit evaluator scores",
+      "url": "llms-txt#how-to-audit-evaluator-scores"
+    },
+    {
+      "title": "Authentication & access control",
+      "url": "llms-txt#authentication-&-access-control"
+    },
+    {
+      "title": "Generic / global handler catches calls that aren't handled by more specific handlers",
+      "url": "llms-txt#generic-/-global-handler-catches-calls-that-aren't-handled-by-more-specific-handlers"
+    },
+    {
+      "title": "Matches the \"thread\" resource and all actions - create, read, update, delete, search",
+      "url": "llms-txt#matches-the-\"thread\"-resource-and-all-actions---create,-read,-update,-delete,-search"
+    },
+    {
+      "title": "Since this is **more specific** than the generic @auth.on handler, it will take precedence",
+      "url": "llms-txt#since-this-is-**more-specific**-than-the-generic-@auth.on-handler,-it-will-take-precedence"
+    },
+    {
+      "title": "over the generic handler for all actions on the \"threads\" resource",
+      "url": "llms-txt#over-the-generic-handler-for-all-actions-on-the-\"threads\"-resource"
+    },
+    {
+      "title": "Thread creation. This will match only on thread create actions",
+      "url": "llms-txt#thread-creation.-this-will-match-only-on-thread-create-actions"
+    },
+    {
+      "title": "Since this is **more specific** than both the generic @auth.on handler and the @auth.on.threads handler,",
+      "url": "llms-txt#since-this-is-**more-specific**-than-both-the-generic-@auth.on-handler-and-the-@auth.on.threads-handler,"
+    },
+    {
+      "title": "it will take precedence for any \"create\" actions on the \"threads\" resources",
+      "url": "llms-txt#it-will-take-precedence-for-any-\"create\"-actions-on-the-\"threads\"-resources"
+    },
+    {
+      "title": "Reading a thread. Since this is also more specific than the generic @auth.on handler, and the @auth.on.threads handler,",
+      "url": "llms-txt#reading-a-thread.-since-this-is-also-more-specific-than-the-generic-@auth.on-handler,-and-the-@auth.on.threads-handler,"
+    },
+    {
+      "title": "it will take precedence for any \"read\" actions on the \"threads\" resource",
+      "url": "llms-txt#it-will-take-precedence-for-any-\"read\"-actions-on-the-\"threads\"-resource"
+    },
+    {
+      "title": "Run creation, streaming, updates, etc.",
+      "url": "llms-txt#run-creation,-streaming,-updates,-etc."
+    },
+    {
+      "title": "This takes precedenceover the generic @auth.on handler and the @auth.on.threads handler",
+      "url": "llms-txt#this-takes-precedenceover-the-generic-@auth.on-handler-and-the-@auth.on.threads-handler"
+    },
+    {
+      "title": "Assistant creation",
+      "url": "llms-txt#assistant-creation"
+    },
+    {
+      "title": "In your auth handler:",
+      "url": "llms-txt#in-your-auth-handler:"
+    },
+    {
+      "title": "Authentication methods",
+      "url": "llms-txt#authentication-methods"
+    },
+    {
+      "title": "Self-hosted on AWS",
+      "url": "llms-txt#self-hosted-on-aws"
+    },
+    {
+      "title": "Self-hosted on Azure",
+      "url": "llms-txt#self-hosted-on-azure"
+    },
+    {
+      "title": "How to kick off background runs",
+      "url": "llms-txt#how-to-kick-off-background-runs"
+    },
+    {
+      "title": "Manage billing in your account",
+      "url": "llms-txt#manage-billing-in-your-account"
+    },
+    {
+      "title": "Automatically run evaluators on experiments",
+      "url": "llms-txt#automatically-run-evaluators-on-experiments"
+    },
+    {
+      "title": "Implement a CI/CD pipeline using LangSmith Deployment and Evaluation",
+      "url": "llms-txt#implement-a-ci/cd-pipeline-using-langsmith-deployment-and-evaluation"
+    },
+    {
+      "title": "Start local development server with Studio",
+      "url": "llms-txt#start-local-development-server-with-studio"
+    },
+    {
+      "title": "Build Docker image",
+      "url": "llms-txt#build-docker-image"
+    },
+    {
+      "title": "Push to your container registry",
+      "url": "llms-txt#push-to-your-container-registry"
+    },
+    {
+      "title": "Set environment variables for external services",
+      "url": "llms-txt#set-environment-variables-for-external-services"
+    },
+    {
+      "title": "LangGraph CLI",
+      "url": "llms-txt#langgraph-cli"
+    },
+    {
+      "title": "Cloud",
+      "url": "llms-txt#cloud"
+    },
+    {
+      "title": "How to define a code evaluator",
+      "url": "llms-txt#how-to-define-a-code-evaluator"
+    },
+    {
+      "title": "Beta LangSmith Collector-Proxy",
+      "url": "llms-txt#beta-langsmith-collector-proxy"
+    },
+    {
+      "title": "How to compare experiment results",
+      "url": "llms-txt#how-to-compare-experiment-results"
+    },
+    {
+      "title": "Compare traces",
+      "url": "llms-txt#compare-traces"
+    },
+    {
+      "title": "LangSmith Deployment components",
+      "url": "llms-txt#langsmith-deployment-components"
+    },
+    {
+      "title": "Composite evaluators",
+      "url": "llms-txt#composite-evaluators"
+    },
+    {
+      "title": "Use HTTP headers for runtime configuration",
+      "url": "llms-txt#use-http-headers-for-runtime-configuration"
+    },
+    {
+      "title": "my_graph.py.",
+      "url": "llms-txt#my_graph.py."
+    },
+    {
+      "title": "Include HTTP headers in server logs",
+      "url": "llms-txt#include-http-headers-in-server-logs"
+    },
+    {
+      "title": "Manage assistants",
+      "url": "llms-txt#manage-assistants"
+    },
+    {
+      "title": "How to add TTLs to your application",
+      "url": "llms-txt#how-to-add-ttls-to-your-application"
+    },
+    {
+      "title": "LangSmith control plane",
+      "url": "llms-txt#langsmith-control-plane"
+    },
+    {
+      "title": "Cost tracking",
+      "url": "llms-txt#cost-tracking"
+    },
+    {
+      "title": "Create a prompt",
+      "url": "llms-txt#create-a-prompt"
+    },
+    {
+      "title": "Next steps",
+      "url": "llms-txt#next-steps"
+    },
+    {
+      "title": "Create an account and API key",
+      "url": "llms-txt#create-an-account-and-api-key"
+    },
+    {
+      "title": "How to improve your evaluator with few-shot examples",
+      "url": "llms-txt#how-to-improve-your-evaluator-with-few-shot-examples"
+    },
+    {
+      "title": "Use cron jobs",
+      "url": "llms-txt#use-cron-jobs"
+    },
+    {
+      "title": "Add custom authentication",
+      "url": "llms-txt#add-custom-authentication"
+    },
+    {
+      "title": "... Setup authenticate, etc.",
+      "url": "llms-txt#...-setup-authenticate,-etc."
+    },
+    {
+      "title": "How to customize the Dockerfile",
+      "url": "llms-txt#how-to-customize-the-dockerfile"
+    },
+    {
+      "title": "Connect to a custom model",
+      "url": "llms-txt#connect-to-a-custom-model"
+    },
+    {
+      "title": "How to add custom lifespan events",
+      "url": "llms-txt#how-to-add-custom-lifespan-events"
+    },
+    {
+      "title": "./src/agent/webapp.py",
+      "url": "llms-txt#./src/agent/webapp.py"
+    },
+    {
+      "title": "... can add custom routes if needed.",
+      "url": "llms-txt#...-can-add-custom-routes-if-needed."
+    },
+    {
+      "title": "How to add custom middleware",
+      "url": "llms-txt#how-to-add-custom-middleware"
+    },
+    {
+      "title": "./src/agent/webapp.py",
+      "url": "llms-txt#./src/agent/webapp.py"
+    },
+    {
+      "title": "Add the middleware to the app",
+      "url": "llms-txt#add-the-middleware-to-the-app"
+    },
+    {
+      "title": "Connect to an OpenAI compliant model provider/proxy",
+      "url": "llms-txt#connect-to-an-openai-compliant-model-provider/proxy"
+    },
+    {
+      "title": "Custom output rendering",
+      "url": "llms-txt#custom-output-rendering"
+    },
+    {
+      "title": "How to add custom routes",
+      "url": "llms-txt#how-to-add-custom-routes"
+    },
+    {
+      "title": "./src/agent/webapp.py",
+      "url": "llms-txt#./src/agent/webapp.py"
+    },
+    {
+      "title": "Monitor projects with dashboards",
+      "url": "llms-txt#monitor-projects-with-dashboards"
+    },
+    {
+      "title": "Bulk Exporting Trace Data",
+      "url": "llms-txt#bulk-exporting-trace-data"
+    },
+    {
+      "title": "set the same access key credentials and region as you used for the destination",
+      "url": "llms-txt#set-the-same-access-key-credentials-and-region-as-you-used-for-the-destination"
+    },
+    {
+      "title": "List buckets",
+      "url": "llms-txt#list-buckets"
+    },
+    {
+      "title": "test write permissions",
+      "url": "llms-txt#test-write-permissions"
+    },
+    {
+      "title": "set the same access key credentials and region as you used for the destination",
+      "url": "llms-txt#set-the-same-access-key-credentials-and-region-as-you-used-for-the-destination"
+    },
+    {
+      "title": "List buckets",
+      "url": "llms-txt#list-buckets"
+    },
+    {
+      "title": "test write permissions",
+      "url": "llms-txt#test-write-permissions"
+    },
+    {
+      "title": "LangSmith data plane",
+      "url": "llms-txt#langsmith-data-plane"
+    },
+    {
+      "title": "Data purging for compliance",
+      "url": "llms-txt#data-purging-for-compliance"
+    },
+    {
+      "title": "Data storage and privacy",
+      "url": "llms-txt#data-storage-and-privacy"
+    },
+    {
+      "title": "Dataset prebuilt JSON schema types",
+      "url": "llms-txt#dataset-prebuilt-json-schema-types"
+    },
+    {
+      "title": "Dataset transformations",
+      "url": "llms-txt#dataset-transformations"
+    },
+    {
+      "title": "How to define a target function to evaluate",
+      "url": "llms-txt#how-to-define-a-target-function-to-evaluate"
+    },
+    {
+      "title": "'inputs' will come from your dataset.",
+      "url": "llms-txt#'inputs'-will-come-from-your-dataset."
+    },
+    {
+      "title": "'inputs' will come from your dataset.",
+      "url": "llms-txt#'inputs'-will-come-from-your-dataset."
+    },
+    {
+      "title": "'outputs' will come from your target function.",
+      "url": "llms-txt#'outputs'-will-come-from-your-target-function."
+    },
+    {
+      "title": "Set up hybrid LangSmith",
+      "url": "llms-txt#set-up-hybrid-langsmith"
+    },
+    {
+      "title": "Deploy other frameworks",
+      "url": "llms-txt#deploy-other-frameworks"
+    },
+    {
+      "title": "Turn off LangSmith default tracing, as we want to only trace with OpenTelemetry",
+      "url": "llms-txt#turn-off-langsmith-default-tracing,-as-we-want-to-only-trace-with-opentelemetry"
+    },
+    {
+      "title": "Enable LangSmith Deployment",
+      "url": "llms-txt#enable-langsmith-deployment"
+    },
+    {
+      "title": "Self-host standalone servers",
+      "url": "llms-txt#self-host-standalone-servers"
+    },
+    {
+      "title": "Deploy on Cloud",
+      "url": "llms-txt#deploy-on-cloud"
+    },
+    {
+      "title": "Deploy with control plane",
+      "url": "llms-txt#deploy-with-control-plane"
+    },
+    {
+      "title": "Deploy your app to Cloud",
+      "url": "llms-txt#deploy-your-app-to-cloud"
+    },
+    {
+      "title": "LangSmith Deployment",
+      "url": "llms-txt#langsmith-deployment"
+    },
+    {
+      "title": "Implement distributed tracing",
+      "url": "llms-txt#implement-distributed-tracing"
+    },
+    {
+      "title": "client.py",
+      "url": "llms-txt#client.py"
+    },
+    {
+      "title": "server.py",
+      "url": "llms-txt#server.py"
+    },
+    {
+      "title": "... same as above",
+      "url": "llms-txt#...-same-as-above"
+    },
+    {
+      "title": "Self-host LangSmith with Docker",
+      "url": "llms-txt#self-host-langsmith-with-docker"
+    },
+    {
+      "title": "Double texting",
+      "url": "llms-txt#double-texting"
+    },
+    {
+      "title": "Enqueue concurrent",
+      "url": "llms-txt#enqueue-concurrent"
+    },
+    {
+      "title": "Environment variables",
+      "url": "llms-txt#environment-variables"
+    },
+    {
+      "title": "If you set OTEL_EXPORTER_OTLP_TRACES_ENDPOINT or OTEL_EXPORTER_OTLP_ENDPOINT,",
+      "url": "llms-txt#if-you-set-otel_exporter_otlp_traces_endpoint-or-otel_exporter_otlp_endpoint,"
+    },
+    {
+      "title": "the server starts with OpenTelemetry instrumentation enabled.",
+      "url": "llms-txt#the-server-starts-with-opentelemetry-instrumentation-enabled."
+    },
+    {
+      "title": "Common OTEL settings",
+      "url": "llms-txt#common-otel-settings"
+    },
+    {
+      "title": "Optional: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true",
+      "url": "llms-txt#optional:-otel_python_logging_auto_instrumentation_enabled=true"
+    },
+    {
+      "title": "Evaluate a chatbot",
+      "url": "llms-txt#evaluate-a-chatbot"
+    },
+    {
+      "title": "Define dataset: these are your test cases",
+      "url": "llms-txt#define-dataset:-these-are-your-test-cases"
+    },
+    {
+      "title": "Evaluate a complex agent",
+      "url": "llms-txt#evaluate-a-complex-agent"
+    },
+    {
+      "title": "... database connection and query code",
+      "url": "llms-txt#...-database-connection-and-query-code"
+    },
+    {
+      "title": "Graph state.",
+      "url": "llms-txt#graph-state."
+    },
+    {
+      "title": "Instructions for extracting the user/purchase info from the conversation.",
+      "url": "llms-txt#instructions-for-extracting-the-user/purchase-info-from-the-conversation."
+    },
+    {
+      "title": "Extraction schema, mirrors the graph state.",
+      "url": "llms-txt#extraction-schema,-mirrors-the-graph-state."
+    },
+    {
+      "title": "Model for performing extraction.",
+      "url": "llms-txt#model-for-performing-extraction."
+    },
+    {
+      "title": "Graph node for extracting user info and routing to lookup/refund/END.",
+      "url": "llms-txt#graph-node-for-extracting-user-info-and-routing-to-lookup/refund/end."
+    },
+    {
+      "title": "Graph node for executing the refund.",
+      "url": "llms-txt#graph-node-for-executing-the-refund."
+    },
+    {
+      "title": "Note that here we inspect the runtime config for an \"env\" variable.",
+      "url": "llms-txt#note-that-here-we-inspect-the-runtime-config-for-an-\"env\"-variable."
+    },
+    {
+      "title": "If \"env\" is set to \"test\", then we don't actually delete any rows from our database.",
+      "url": "llms-txt#if-\"env\"-is-set-to-\"test\",-then-we-don't-actually-delete-any-rows-from-our-database."
+    },
+    {
+      "title": "This will become important when we're running our evaluations.",
+      "url": "llms-txt#this-will-become-important-when-we're-running-our-evaluations."
+    },
+    {
+      "title": "Graph node for looking up the users purchases",
+      "url": "llms-txt#graph-node-for-looking-up-the-users-purchases"
+    },
+    {
+      "title": "Building our graph",
+      "url": "llms-txt#building-our-graph"
+    },
+    {
+      "title": "Assumes you're in an interactive Python environmentfrom IPython.display import Image, display ...",
+      "url": "llms-txt#assumes-you're-in-an-interactive-python-environmentfrom-ipython.display-import-image,-display-..."
+    },
+    {
+      "title": "Our SQL queries will only work if we filter on the exact string values that are in the DB.",
+      "url": "llms-txt#our-sql-queries-will-only-work-if-we-filter-on-the-exact-string-values-that-are-in-the-db."
+    },
+    {
+      "title": "To ensure this, we'll create vectorstore indexes for all of the artists, tracks and albums",
+      "url": "llms-txt#to-ensure-this,-we'll-create-vectorstore-indexes-for-all-of-the-artists,-tracks-and-albums"
+    },
+    {
+      "title": "ahead of time and use those to disambiguate the user input. E.g. if a user searches for",
+      "url": "llms-txt#ahead-of-time-and-use-those-to-disambiguate-the-user-input.-e.g.-if-a-user-searches-for"
+    },
+    {
+      "title": "songs by \"prince\" and our DB records the artist as \"Prince\", ideally when we query our",
+      "url": "llms-txt#songs-by-\"prince\"-and-our-db-records-the-artist-as-\"prince\",-ideally-when-we-query-our"
+    },
+    {
+      "title": "artist vectorstore for \"prince\" we'll get back the value \"Prince\", which we can then",
+      "url": "llms-txt#artist-vectorstore-for-\"prince\"-we'll-get-back-the-value-\"prince\",-which-we-can-then"
+    },
+    {
+      "title": "use in our SQL queries.",
+      "url": "llms-txt#use-in-our-sql-queries."
+    },
+    {
+      "title": "Agent tools",
+      "url": "llms-txt#agent-tools"
+    },
+    {
+      "title": "Agent model",
+      "url": "llms-txt#agent-model"
+    },
+    {
+      "title": "The prebuilt ReACT agent only expects State to have a 'messages' key, so the",
+      "url": "llms-txt#the-prebuilt-react-agent-only-expects-state-to-have-a-'messages'-key,-so-the"
+    },
+    {
+      "title": "state we defined for the refund agent can also be passed to our lookup agent.",
+      "url": "llms-txt#state-we-defined-for-the-refund-agent-can-also-be-passed-to-our-lookup-agent."
+    },
+    {
+      "title": "Schema for routing user intent.",
+      "url": "llms-txt#schema-for-routing-user-intent."
+    },
+    {
+      "title": "We'll use structured output to enforce that the model returns only",
+      "url": "llms-txt#we'll-use-structured-output-to-enforce-that-the-model-returns-only"
+    },
+    {
+      "title": "the desired output.",
+      "url": "llms-txt#the-desired-output."
+    },
+    {
+      "title": "Routing model with structured output",
+      "url": "llms-txt#routing-model-with-structured-output"
+    },
+    {
+      "title": "Instructions for routing.",
+      "url": "llms-txt#instructions-for-routing."
+    },
+    {
+      "title": "Node for routing.",
+      "url": "llms-txt#node-for-routing."
+    },
+    {
+      "title": "Node for making sure the 'followup' key is set before our agent run completes.",
+      "url": "llms-txt#node-for-making-sure-the-'followup'-key-is-set-before-our-agent-run-completes."
+    },
+    {
+      "title": "Agent definition",
+      "url": "llms-txt#agent-definition"
+    },
+    {
+      "title": "Since all of our subagents have compatible state,",
+      "url": "llms-txt#since-all-of-our-subagents-have-compatible-state,"
+    },
+    {
+      "title": "we can add them as nodes directly.",
+      "url": "llms-txt#we-can-add-them-as-nodes-directly."
+    },
+    {
+      "title": "Create a dataset",
+      "url": "llms-txt#create-a-dataset"
+    },
+    {
+      "title": "LLM-as-judge instructions",
+      "url": "llms-txt#llm-as-judge-instructions"
+    },
+    {
+      "title": "LLM-as-judge output schema",
+      "url": "llms-txt#llm-as-judge-output-schema"
+    },
+    {
+      "title": "Judge LLM",
+      "url": "llms-txt#judge-llm"
+    },
+    {
+      "title": "Evaluator function",
+      "url": "llms-txt#evaluator-function"
+    },
+    {
+      "title": "Target function",
+      "url": "llms-txt#target-function"
+    },
+    {
+      "title": "Evaluation job and results",
+      "url": "llms-txt#evaluation-job-and-results"
+    },
+    {
+      "title": "Create dataset",
+      "url": "llms-txt#create-dataset"
+    },
+    {
+      "title": "Evaluator",
+      "url": "llms-txt#evaluator"
+    },
+    {
+      "title": "Target function for running the relevant step",
+      "url": "llms-txt#target-function-for-running-the-relevant-step"
+    },
+    {
+      "title": "Run evaluation",
+      "url": "llms-txt#run-evaluation"
+    },
+    {
+      "title": "How to evaluate an existing experiment (Python only)",
+      "url": "llms-txt#how-to-evaluate-an-existing-experiment-(python-only)"
+    },
+    {
+      "title": "How to evaluate a graph",
+      "url": "llms-txt#how-to-evaluate-a-graph"
+    },
+    {
+      "title": "Define the tools for the agent to use",
+      "url": "llms-txt#define-the-tools-for-the-agent-to-use"
+    },
+    {
+      "title": "Define the function that determines whether to continue or not",
+      "url": "llms-txt#define-the-function-that-determines-whether-to-continue-or-not"
+    },
+    {
+      "title": "Define the function that calls the model",
+      "url": "llms-txt#define-the-function-that-calls-the-model"
+    },
+    {
+      "title": "Define a new graph",
+      "url": "llms-txt#define-a-new-graph"
+    },
+    {
+      "title": "Define the two nodes we will cycle between",
+      "url": "llms-txt#define-the-two-nodes-we-will-cycle-between"
+    },
+    {
+      "title": "Set the entrypoint as 'agent'",
+      "url": "llms-txt#set-the-entrypoint-as-'agent'"
+    },
+    {
+      "title": "This means that this node is the first one called",
+      "url": "llms-txt#this-means-that-this-node-is-the-first-one-called"
+    },
+    {
+      "title": "We now add a conditional edge",
+      "url": "llms-txt#we-now-add-a-conditional-edge"
+    },
+    {
+      "title": "We now add a normal edge from 'tools' to 'agent'.",
+      "url": "llms-txt#we-now-add-a-normal-edge-from-'tools'-to-'agent'."
+    },
+    {
+      "title": "This means that after 'tools' is called, 'agent' node is called next.",
+      "url": "llms-txt#this-means-that-after-'tools'-is-called,-'agent'-node-is-called-next."
+    },
+    {
+      "title": "Finally, we compile it!",
+      "url": "llms-txt#finally,-we-compile-it!"
+    },
+    {
+      "title": "This compiles it into a LangChain Runnable,",
+      "url": "llms-txt#this-compiles-it-into-a-langchain-runnable,"
+    },
+    {
+      "title": "meaning you can use it as you would any other runnable.",
+      "url": "llms-txt#meaning-you-can-use-it-as-you-would-any-other-runnable."
+    },
+    {
+      "title": "Note that we're (optionally) passing the memory when compiling the graph",
+      "url": "llms-txt#note-that-we're-(optionally)-passing-the-memory-when-compiling-the-graph"
+    },
+    {
+      "title": "We use LCEL declarative syntax here.",
+      "url": "llms-txt#we-use-lcel-declarative-syntax-here."
+    },
+    {
+      "title": "Remember that langgraph graphs are also langchain runnables.",
+      "url": "llms-txt#remember-that-langgraph-graphs-are-also-langchain-runnables."
+    },
+    {
+      "title": "How to evaluate an LLM application",
+      "url": "llms-txt#how-to-evaluate-an-llm-application"
+    },
+    {
+      "title": "How to evaluate an application's intermediate steps",
+      "url": "llms-txt#how-to-evaluate-an-application's-intermediate-steps"
+    },
+    {
+      "title": "How to run a pairwise evaluation",
+      "url": "llms-txt#how-to-run-a-pairwise-evaluation"
+    },
+    {
+      "title": "Evaluate a RAG application",
+      "url": "llms-txt#evaluate-a-rag-application"
+    },
+    {
+      "title": "Run an evaluation with multimodal content",
+      "url": "llms-txt#run-an-evaluation-with-multimodal-content"
+    },
+    {
+      "title": "Publicly available test files",
+      "url": "llms-txt#publicly-available-test-files"
+    },
+    {
+      "title": "Fetch the files as bytes",
+      "url": "llms-txt#fetch-the-files-as-bytes"
+    },
+    {
+      "title": "Create the dataset",
+      "url": "llms-txt#create-the-dataset"
+    },
+    {
+      "title": "Define an example with attachments",
+      "url": "llms-txt#define-an-example-with-attachments"
+    },
+    {
+      "title": "Create the example",
+      "url": "llms-txt#create-the-example"
+    },
+    {
+      "title": "Define target function that uses attachments",
+      "url": "llms-txt#define-target-function-that-uses-attachments"
+    },
+    {
+      "title": "LangSmith Evaluation",
+      "url": "llms-txt#langsmith-evaluation"
+    },
+    {
+      "title": "Application-specific evaluation approaches",
+      "url": "llms-txt#application-specific-evaluation-approaches"
+    },
+    {
+      "title": "How to run an evaluation asynchronously",
+      "url": "llms-txt#how-to-run-an-evaluation-asynchronously"
+    },
+    {
+      "title": "Optionally wrap the OpenAI client to trace all model calls.",
+      "url": "llms-txt#optionally-wrap-the-openai-client-to-trace-all-model-calls."
+    },
+    {
+      "title": "Optionally add the 'traceable' decorator to trace the inputs/outputs of this function.",
+      "url": "llms-txt#optionally-add-the-'traceable'-decorator-to-trace-the-inputs/outputs-of-this-function."
+    },
+    {
+      "title": "Evaluator functions can be sync or async",
+      "url": "llms-txt#evaluator-functions-can-be-sync-or-async"
+    },
+    {
+      "title": "Can equivalently use the 'aevaluate' function directly:",
+      "url": "llms-txt#can-equivalently-use-the-'aevaluate'-function-directly:"
+    },
+    {
+      "title": "from langsmith import aevaluate",
+      "url": "llms-txt#from-langsmith-import-aevaluate"
+    },
+    {
+      "title": "await aevaluate(...)",
+      "url": "llms-txt#await-aevaluate(...)"
+    },
+    {
+      "title": "Evaluation concepts",
+      "url": "llms-txt#evaluation-concepts"
+    },
+    {
+      "title": "Evaluation quickstart",
+      "url": "llms-txt#evaluation-quickstart"
+    },
+    {
+      "title": "Evaluation types",
+      "url": "llms-txt#evaluation-types"
+    },
+    {
+      "title": "Example data format",
+      "url": "llms-txt#example-data-format"
+    },
+    {
+      "title": "Experiment configuration",
+      "url": "llms-txt#experiment-configuration"
+    },
+    {
+      "title": "Export LangSmith telemetry to your observability backend",
+      "url": "llms-txt#export-langsmith-telemetry-to-your-observability-backend"
+    },
+    {
+      "title": "Logs: [OTel Example](/langsmith/langsmith-collector#logs)",
+      "url": "llms-txt#logs:-[otel-example](/langsmith/langsmith-collector#logs)"
+    },
+    {
+      "title": "Metrics: [OTel Example](/langsmith/langsmith-collector#metrics)",
+      "url": "llms-txt#metrics:-[otel-example](/langsmith/langsmith-collector#metrics)"
+    },
+    {
+      "title": "Traces: [OTel Example](/langsmith/langsmith-collector#traces)",
+      "url": "llms-txt#traces:-[otel-example](/langsmith/langsmith-collector#traces)"
+    },
+    {
+      "title": "Query traces (SDK)",
+      "url": "llms-txt#query-traces-(sdk)"
+    },
+    {
+      "title": "Frequently asked questions",
+      "url": "llms-txt#frequently-asked-questions"
+    },
+    {
+      "title": "Feedback data format",
+      "url": "llms-txt#feedback-data-format"
+    },
+    {
+      "title": "How to fetch performance metrics for an experiment",
+      "url": "llms-txt#how-to-fetch-performance-metrics-for-an-experiment"
+    },
+    {
+      "title": "Create a dataset",
+      "url": "llms-txt#create-a-dataset"
+    },
+    {
+      "title": "How to filter experiments in the UI",
+      "url": "llms-txt#how-to-filter-experiments-in-the-ui"
+    },
+    {
+      "title": "Filter traces",
+      "url": "llms-txt#filter-traces"
+    },
+    {
+      "title": "How to implement generative user interfaces with LangGraph",
+      "url": "llms-txt#how-to-implement-generative-user-interfaces-with-langgraph"
+    },
+    {
+      "title": "Rebuild graph at runtime",
+      "url": "llms-txt#rebuild-graph-at-runtime"
+    },
+    {
+      "title": "this is the graph making function that will decide which graph to",
+      "url": "llms-txt#this-is-the-graph-making-function-that-will-decide-which-graph-to"
+    },
+    {
+      "title": "build based on the provided config",
+      "url": "llms-txt#build-based-on-the-provided-config"
+    },
+    {
+      "title": "LangSmith docs",
+      "url": "llms-txt#langsmith-docs"
+    },
+    {
+      "title": "Time travel using the server API",
+      "url": "llms-txt#time-travel-using-the-server-api"
+    },
+    {
+      "title": "Hybrid",
+      "url": "llms-txt#hybrid"
+    },
+    {
+      "title": "Improve LLM-as-judge evaluators using human feedback",
+      "url": "llms-txt#improve-llm-as-judge-evaluators-using-human-feedback"
+    },
+    {
+      "title": "Dynamic few shot example selection",
+      "url": "llms-txt#dynamic-few-shot-example-selection"
+    },
+    {
+      "title": "Discover errors and usage patterns with the Insights Agent",
+      "url": "llms-txt#discover-errors-and-usage-patterns-with-the-insights-agent"
+    },
+    {
+      "title": "Integrations",
+      "url": "llms-txt#integrations"
+    },
+    {
+      "title": "Interrupt concurrent",
+      "url": "llms-txt#interrupt-concurrent"
+    },
+    {
+      "title": "Self-host LangSmith on Kubernetes",
+      "url": "llms-txt#self-host-langsmith-on-kubernetes"
+    },
+    {
+      "title": "How to evaluate a runnable",
+      "url": "llms-txt#how-to-evaluate-a-runnable"
+    },
+    {
+      "title": "LangGraph JS/TS SDK",
+      "url": "llms-txt#langgraph-js/ts-sdk"
+    },
+    {
+      "title": "LangGraph Python SDK",
+      "url": "llms-txt#langgraph-python-sdk"
+    },
+    {
+      "title": "Configure your collector for LangSmith telemetry",
+      "url": "llms-txt#configure-your-collector-for-langsmith-telemetry"
+    },
+    {
+      "title": "Receivers",
+      "url": "llms-txt#receivers"
+    },
+    {
+      "title": "Example Collector Configuration: Logs Sidecar",
+      "url": "llms-txt#example-collector-configuration:-logs-sidecar"
+    },
+    {
+      "title": "Example Collector Configuration: Metrics and Traces Gateway",
+      "url": "llms-txt#example-collector-configuration:-metrics-and-traces-gateway"
+    },
+    {
+      "title": "LangSmith Fetch",
+      "url": "llms-txt#langsmith-fetch"
+    },
+    {
+      "title": "LangSmith-managed ClickHouse",
+      "url": "llms-txt#langsmith-managed-clickhouse"
+    },
+    {
+      "title": "How to define an LLM-as-a-judge evaluator",
+      "url": "llms-txt#how-to-define-an-llm-as-a-judge-evaluator"
+    },
+    {
+      "title": "Assumes you've installed pydantic",
+      "url": "llms-txt#assumes-you've-installed-pydantic"
+    },
+    {
+      "title": "Optionally wrap the OpenAI client to trace all model calls.",
+      "url": "llms-txt#optionally-wrap-the-openai-client-to-trace-all-model-calls."
+    },
+    {
+      "title": "Optionally add the 'traceable' decorator to trace the inputs/outputs of this function.",
+      "url": "llms-txt#optionally-add-the-'traceable'-decorator-to-trace-the-inputs/outputs-of-this-function."
+    },
+    {
+      "title": "How to run an evaluation locally (Python only)",
+      "url": "llms-txt#how-to-run-an-evaluation-locally-(python-only)"
+    },
+    {
+      "title": "1. Create and/or select your dataset",
+      "url": "llms-txt#1.-create-and/or-select-your-dataset"
+    },
+    {
+      "title": "2. Define an evaluator",
+      "url": "llms-txt#2.-define-an-evaluator"
+    },
+    {
+      "title": "3. Define the interface to your app",
+      "url": "llms-txt#3.-define-the-interface-to-your-app"
+    },
+    {
+      "title": "4. Run an evaluation",
+      "url": "llms-txt#4.-run-an-evaluation"
+    },
+    {
+      "title": "5. Analyze results locally",
+      "url": "llms-txt#5.-analyze-results-locally"
+    },
+    {
+      "title": "Check if 'is_concise' returned False.",
+      "url": "llms-txt#check-if-'is_concise'-returned-false."
+    },
+    {
+      "title": "Explore the failed inputs and outputs.",
+      "url": "llms-txt#explore-the-failed-inputs-and-outputs."
+    },
+    {
+      "title": "Explore the results as a Pandas DataFrame.",
+      "url": "llms-txt#explore-the-results-as-a-pandas-dataframe."
+    },
+    {
+      "title": "Must have 'pandas' installed.",
+      "url": "llms-txt#must-have-'pandas'-installed."
+    },
+    {
+      "title": "Run a LangGraph app locally",
+      "url": "llms-txt#run-a-langgraph-app-locally"
+    },
+    {
+      "title": "Log LLM calls",
+      "url": "llms-txt#log-llm-calls"
+    },
+    {
+      "title": "Log multimodal traces",
+      "url": "llms-txt#log-multimodal-traces"
+    },
+    {
+      "title": "Log retriever traces",
+      "url": "llms-txt#log-retriever-traces"
+    },
+    {
+      "title": "Log traces to a specific project",
+      "url": "llms-txt#log-traces-to-a-specific-project"
+    },
+    {
+      "title": "Metadata parameters reference",
+      "url": "llms-txt#metadata-parameters-reference"
+    },
+    {
+      "title": "Manage datasets",
+      "url": "llms-txt#manage-datasets"
+    },
+    {
+      "title": "You can tag a specific dataset version with a semantic name, like \"prod\"",
+      "url": "llms-txt#you-can-tag-a-specific-dataset-version-with-a-semantic-name,-like-\"prod\""
+    },
+    {
+      "title": "Create and manage datasets in the UI",
+      "url": "llms-txt#create-and-manage-datasets-in-the-ui"
+    },
+    {
+      "title": "How to create and manage datasets programmatically",
+      "url": "llms-txt#how-to-create-and-manage-datasets-programmatically"
+    },
+    {
+      "title": "Manage your organization using the API",
+      "url": "llms-txt#manage-your-organization-using-the-api"
+    },
+    {
+      "title": "Manage prompts",
+      "url": "llms-txt#manage-prompts"
+    },
+    {
+      "title": "If prod tag points to commit a1b2c3d4, this is equivalent to:",
+      "url": "llms-txt#if-prod-tag-points-to-commit-a1b2c3d4,-this-is-equivalent-to:"
+    },
+    {
+      "title": "Manage prompts programmatically",
+      "url": "llms-txt#manage-prompts-programmatically"
+    },
+    {
+      "title": "Configure prompt settings",
+      "url": "llms-txt#configure-prompt-settings"
+    },
+    {
+      "title": "Prevent logging of sensitive data in traces",
+      "url": "llms-txt#prevent-logging-of-sensitive-data-in-traces"
+    },
+    {
+      "title": "Define regex patterns for various PII",
+      "url": "llms-txt#define-regex-patterns-for-various-pii"
+    },
+    {
+      "title": "Initialize the LangSmith client with the anonymization functions",
+      "url": "llms-txt#initialize-the-langsmith-client-with-the-anonymization-functions"
+    },
+    {
+      "title": "The trace produced will have its metadata present, but the inputs and outputs will be anonymized",
+      "url": "llms-txt#the-trace-produced-will-have-its-metadata-present,-but-the-inputs-and-outputs-will-be-anonymized"
+    },
+    {
+      "title": "The trace produced will not have anonymized inputs and outputs",
+      "url": "llms-txt#the-trace-produced-will-not-have-anonymized-inputs-and-outputs"
+    },
+    {
+      "title": "initialize the langsmith client with the anonymization functions",
+      "url": "llms-txt#initialize-the-langsmith-client-with-the-anonymization-functions"
+    },
+    {
+      "title": "The trace produced will have its metadata present, but the inputs and outputs will be anonymized",
+      "url": "llms-txt#the-trace-produced-will-have-its-metadata-present,-but-the-inputs-and-outputs-will-be-anonymized"
+    },
+    {
+      "title": "The trace produced will not have anonymized inputs and outputs",
+      "url": "llms-txt#the-trace-produced-will-not-have-anonymized-inputs-and-outputs"
+    },
+    {
+      "title": "initialize the langsmith client with the anonymization functions",
+      "url": "llms-txt#initialize-the-langsmith-client-with-the-anonymization-functions"
+    },
+    {
+      "title": "The trace produced will have its metadata present, but the inputs and outputs will be anonymized",
+      "url": "llms-txt#the-trace-produced-will-have-its-metadata-present,-but-the-inputs-and-outputs-will-be-anonymized"
+    },
+    {
+      "title": "The trace produced will not have anonymized inputs and outputs",
+      "url": "llms-txt#the-trace-produced-will-not-have-anonymized-inputs-and-outputs"
+    },
+    {
+      "title": "How to return categorical vs numerical metrics",
+      "url": "llms-txt#how-to-return-categorical-vs-numerical-metrics"
+    },
+    {
+      "title": "Monorepo support",
+      "url": "llms-txt#monorepo-support"
+    },
+    {
+      "title": "How to simulate multi-turn interactions",
+      "url": "llms-txt#how-to-simulate-multi-turn-interactions"
+    },
+    {
+      "title": "Include multimodal content in a prompt",
+      "url": "llms-txt#include-multimodal-content-in-a-prompt"
+    },
+    {
+      "title": "Test multi-turn conversations",
+      "url": "llms-txt#test-multi-turn-conversations"
+    },
+    {
+      "title": "How to return multiple scores in one evaluator",
+      "url": "llms-txt#how-to-return-multiple-scores-in-one-evaluator"
+    },
+    {
+      "title": "Troubleshoot trace nesting",
+      "url": "llms-txt#troubleshoot-trace-nesting"
+    },
+    {
+      "title": "LangSmith Observability",
+      "url": "llms-txt#langsmith-observability"
+    },
+    {
+      "title": "Observability concepts",
+      "url": "llms-txt#observability-concepts"
+    },
+    {
+      "title": "Trace a RAG application tutorial",
+      "url": "llms-txt#trace-a-rag-application-tutorial"
+    },
+    {
+      "title": "Tracing quickstart",
+      "url": "llms-txt#tracing-quickstart"
+    },
+    {
+      "title": "Deploy an observability stack for your LangSmith deployment",
+      "url": "llms-txt#deploy-an-observability-stack-for-your-langsmith-deployment"
+    },
+    {
+      "title": "Section 1: Prometheus Exporters",
+      "url": "llms-txt#section-1:-prometheus-exporters"
+    },
+    {
+      "title": "Section 2: Full Observability Stack",
+      "url": "llms-txt#section-2:-full-observability-stack"
+    },
+    {
+      "title": "Observability in Studio",
+      "url": "llms-txt#observability-in-studio"
+    },
+    {
+      "title": "Set up online evaluators",
+      "url": "llms-txt#set-up-online-evaluators"
+    },
+    {
+      "title": "Document API authentication in OpenAPI",
+      "url": "llms-txt#document-api-authentication-in-openapi"
+    },
+    {
+      "title": "Optimize a classifier",
+      "url": "llms-txt#optimize-a-classifier"
+    },
+    {
+      "title": "Initialize the LangSmith Client so we can use to get the dataset",
+      "url": "llms-txt#initialize-the-langsmith-client-so-we-can-use-to-get-the-dataset"
+    },
+    {
+      "title": "Create a function that will take in a list of examples and format them into a string",
+      "url": "llms-txt#create-a-function-that-will-take-in-a-list-of-examples-and-format-them-into-a-string"
+    },
+    {
+      "title": "Organization and workspace operations reference",
+      "url": "llms-txt#organization-and-workspace-operations-reference"
+    },
+    {
+      "title": "View server logs for a trace",
+      "url": "llms-txt#view-server-logs-for-a-trace"
+    },
+    {
+      "title": "Set up LangSmith",
+      "url": "llms-txt#set-up-langsmith"
+    },
+    {
+      "title": "LangSmith Polly",
+      "url": "llms-txt#langsmith-polly"
+    },
+    {
+      "title": "How to use prebuilt evaluators",
+      "url": "llms-txt#how-to-use-prebuilt-evaluators"
+    },
+    {
+      "title": "Frequently Asked Questions",
+      "url": "llms-txt#frequently-asked-questions"
+    },
+    {
+      "title": "Pricing plans",
+      "url": "llms-txt#pricing-plans"
+    },
+    {
+      "title": "How to sync prompts with GitHub",
+      "url": "llms-txt#how-to-sync-prompts-with-github"
+    },
+    {
+      "title": "Prompt engineering",
+      "url": "llms-txt#prompt-engineering"
+    },
+    {
+      "title": "Prompt engineering concepts",
+      "url": "llms-txt#prompt-engineering-concepts"
+    },
+    {
+      "title": "Prompt engineering quickstart",
+      "url": "llms-txt#prompt-engineering-quickstart"
+    },
+    {
+      "title": "How to run evaluations with pytest (beta)",
+      "url": "llms-txt#how-to-run-evaluations-with-pytest-(beta)"
+    },
+    {
+      "title": "Get started with Studio",
+      "url": "llms-txt#get-started-with-studio"
+    },
+    {
+      "title": "How to handle model rate limits",
+      "url": "llms-txt#how-to-handle-model-rate-limits"
+    },
+    {
+      "title": "Role-based access control",
+      "url": "llms-txt#role-based-access-control"
+    },
+    {
+      "title": "How to read experiment results locally",
+      "url": "llms-txt#how-to-read-experiment-results-locally"
+    },
+    {
+      "title": "Run evaluation with blocking=False to get an iterator",
+      "url": "llms-txt#run-evaluation-with-blocking=false-to-get-an-iterator"
+    },
+    {
+      "title": "Collect results as they stream in",
+      "url": "llms-txt#collect-results-as-they-stream-in"
+    },
+    {
+      "title": "Separate loop to avoid logging at the same time as logs from evaluate()",
+      "url": "llms-txt#separate-loop-to-avoid-logging-at-the-same-time-as-logs-from-evaluate()"
+    },
+    {
+      "title": "Run evaluation",
+      "url": "llms-txt#run-evaluation"
+    },
+    {
+      "title": "Calculate aggregate metrics",
+      "url": "llms-txt#calculate-aggregate-metrics"
+    },
+    {
+      "title": "Fail the build if accuracy is too low",
+      "url": "llms-txt#fail-the-build-if-accuracy-is-too-low"
+    },
+    {
+      "title": "Run evaluation and wait for all results",
+      "url": "llms-txt#run-evaluation-and-wait-for-all-results"
+    },
+    {
+      "title": "Process all results after evaluation completes",
+      "url": "llms-txt#process-all-results-after-evaluation-completes"
+    },
+    {
+      "title": "LangSmith reference",
+      "url": "llms-txt#langsmith-reference"
+    },
+    {
+      "title": "Regions FAQ",
+      "url": "llms-txt#regions-faq"
+    },
+    {
+      "title": "Reject Concurrent",
+      "url": "llms-txt#reject-concurrent"
+    },
+    {
+      "title": "Release versions",
+      "url": "llms-txt#release-versions"
+    },
+    {
+      "title": "RemoteGraph",
+      "url": "llms-txt#remotegraph"
+    },
+    {
+      "title": "How to evaluate with repetitions",
+      "url": "llms-txt#how-to-evaluate-with-repetitions"
+    },
+    {
+      "title": "Make conversations private",
+      "url": "llms-txt#make-conversations-private"
+    },
+    {
+      "title": "Keep our test users from the previous tutorial",
+      "url": "llms-txt#keep-our-test-users-from-the-previous-tutorial"
+    },
+    {
+      "title": "Create clients for both users",
+      "url": "llms-txt#create-clients-for-both-users"
+    },
+    {
+      "title": "Alice creates an assistant",
+      "url": "llms-txt#alice-creates-an-assistant"
+    },
+    {
+      "title": "Alice creates a thread and chats",
+      "url": "llms-txt#alice-creates-a-thread-and-chats"
+    },
+    {
+      "title": "Bob tries to access Alice's thread",
+      "url": "llms-txt#bob-tries-to-access-alice's-thread"
+    },
+    {
+      "title": "Bob creates his own thread",
+      "url": "llms-txt#bob-creates-his-own-thread"
+    },
+    {
+      "title": "List threads - each user only sees their own",
+      "url": "llms-txt#list-threads---each-user-only-sees-their-own"
+    },
+    {
+      "title": "Keep our previous handlers...",
+      "url": "llms-txt#keep-our-previous-handlers..."
+    },
+    {
+      "title": "Assumes you organize information in store like (user_id, resource_type, resource_id)",
+      "url": "llms-txt#assumes-you-organize-information-in-store-like-(user_id,-resource_type,-resource_id)"
+    },
+    {
+      "title": "... Same as before",
+      "url": "llms-txt#...-same-as-before"
+    },
+    {
+      "title": "Try creating an assistant. This should fail",
+      "url": "llms-txt#try-creating-an-assistant.-this-should-fail"
+    },
+    {
+      "title": "Try searching for assistants. This also should fail",
+      "url": "llms-txt#try-searching-for-assistants.-this-also-should-fail"
+    },
+    {
+      "title": "Alice can still create threads",
+      "url": "llms-txt#alice-can-still-create-threads"
+    },
+    {
+      "title": "Rollback Concurrent",
+      "url": "llms-txt#rollback-concurrent"
+    },
+    {
+      "title": "Set up automation rules",
+      "url": "llms-txt#set-up-automation-rules"
+    },
+    {
+      "title": "Run backtests on a new version of an agent",
+      "url": "llms-txt#run-backtests-on-a-new-version-of-an-agent"
+    },
+    {
+      "title": "Set the project name to whichever project you'd like to be testing against",
+      "url": "llms-txt#set-the-project-name-to-whichever-project-you'd-like-to-be-testing-against"
+    },
+    {
+      "title": "Optional. You can swap OpenAI for any other tool-calling chat model.",
+      "url": "llms-txt#optional.-you-can-swap-openai-for-any-other-tool-calling-chat-model."
+    },
+    {
+      "title": "Optional. You can swap Tavily for the free DuckDuckGo search tool if preferred.",
+      "url": "llms-txt#optional.-you-can-swap-tavily-for-the-free-duckduckgo-search-tool-if-preferred."
+    },
+    {
+      "title": "Get Tavily API key: https://tavily.com",
+      "url": "llms-txt#get-tavily-api-key:-https://tavily.com"
+    },
+    {
+      "title": "We will use GPT-3.5 Turbo as the baseline and compare against GPT-4o",
+      "url": "llms-txt#we-will-use-gpt-3.5-turbo-as-the-baseline-and-compare-against-gpt-4o"
+    },
+    {
+      "title": "The instrucitons are passed as a system message to the agent",
+      "url": "llms-txt#the-instrucitons-are-passed-as-a-system-message-to-the-agent"
+    },
+    {
+      "title": "Define the tools our agent can use",
+      "url": "llms-txt#define-the-tools-our-agent-can-use"
+    },
+    {
+      "title": "If you have a higher tiered Tavily API plan you can increase this",
+      "url": "llms-txt#if-you-have-a-higher-tiered-tavily-api-plan-you-can-increase-this"
+    },
+    {
+      "title": "Use DuckDuckGo if you don't have a Tavily API key:",
+      "url": "llms-txt#use-duckduckgo-if-you-don't-have-a-tavily-api-key:"
+    },
+    {
+      "title": "tools = [DuckDuckGoSearchRun(rate_limiter=rate_limiter)]",
+      "url": "llms-txt#tools-=-[duckduckgosearchrun(rate_limiter=rate_limiter)]"
+    },
+    {
+      "title": "Fetch the runs we want to convert to a dataset/experiment",
+      "url": "llms-txt#fetch-the-runs-we-want-to-convert-to-a-dataset/experiment"
+    },
+    {
+      "title": "How we are sampling runs to include in our dataset",
+      "url": "llms-txt#how-we-are-sampling-runs-to-include-in-our-dataset"
+    },
+    {
+      "title": "Name of the dataset we want to create",
+      "url": "llms-txt#name-of-the-dataset-we-want-to-create"
+    },
+    {
+      "title": "Name of the experiment we want to create from the historical runs",
+      "url": "llms-txt#name-of-the-experiment-we-want-to-create-from-the-historical-runs"
+    },
+    {
+      "title": "This converts the runs to a dataset + experiment",
+      "url": "llms-txt#this-converts-the-runs-to-a-dataset-+-experiment"
+    },
+    {
+      "title": "If you have pandas installed can easily explore results as df:",
+      "url": "llms-txt#if-you-have-pandas-installed-can-easily-explore-results-as-df:"
+    },
+    {
+      "title": "baseline_results.to_pandas()",
+      "url": "llms-txt#baseline_results.to_pandas()"
+    },
+    {
+      "title": "If you have pandas installed can easily explore results as df:",
+      "url": "llms-txt#if-you-have-pandas-installed-can-easily-explore-results-as-df:"
+    },
+    {
+      "title": "candidate_results.to_pandas()",
+      "url": "llms-txt#candidate_results.to_pandas()"
+    },
+    {
+      "title": "Run (span) data format",
+      "url": "llms-txt#run-(span)-data-format"
+    },
+    {
+      "title": "How to use the REST API",
+      "url": "llms-txt#how-to-use-the-rest-api"
+    },
+    {
+      "title": "Create a dataset",
+      "url": "llms-txt#create-a-dataset"
+    },
+    {
+      "title": "Pick a dataset id. In this case, we are using the dataset we created above.",
+      "url": "llms-txt#pick-a-dataset-id.-in-this-case,-we-are-using-the-dataset-we-created-above."
+    },
+    {
+      "title": "API Reference: https://api.smith.langchain.com/redoc#tag/examples/operation/read_examples_api_v1_examples_get",
+      "url": "llms-txt#api-reference:-https://api.smith.langchain.com/redoc#tag/examples/operation/read_examples_api_v1_examples_get"
+    },
+    {
+      "title": "Create a new experiment using the /sessions endpoint",
+      "url": "llms-txt#create-a-new-experiment-using-the-/sessions-endpoint"
+    },
+    {
+      "title": "An experiment is a collection of runs with a reference to the dataset used",
+      "url": "llms-txt#an-experiment-is-a-collection-of-runs-with-a-reference-to-the-dataset-used"
+    },
+    {
+      "title": "API Reference: https://api.smith.langchain.com/redoc#tag/tracer-sessions/operation/create_tracer_session_api_v1_sessions_post",
+      "url": "llms-txt#api-reference:-https://api.smith.langchain.com/redoc#tag/tracer-sessions/operation/create_tracer_session_api_v1_sessions_post"
+    },
+    {
+      "title": "Fetch the runs from one of the experiments",
+      "url": "llms-txt#fetch-the-runs-from-one-of-the-experiments"
+    },
+    {
+      "title": "API Reference: https://api.smith.langchain.com/redoc#tag/run/operation/query_runs_api_v1_runs_query_post",
+      "url": "llms-txt#api-reference:-https://api.smith.langchain.com/redoc#tag/run/operation/query_runs_api_v1_runs_query_post"
+    },
+    {
+      "title": "Evaluate each run by comparing outputs to expected values",
+      "url": "llms-txt#evaluate-each-run-by-comparing-outputs-to-expected-values"
+    },
+    {
+      "title": "A comparative experiment allows you to provide a preferential ranking on the outputs of two or more experiments",
+      "url": "llms-txt#a-comparative-experiment-allows-you-to-provide-a-preferential-ranking-on-the-outputs-of-two-or-more-experiments"
+    },
+    {
+      "title": "API Reference: https://api.smith.langchain.com/redoc#tag/datasets/operation/create_comparative_experiment_api_v1_datasets_comparative_post",
+      "url": "llms-txt#api-reference:-https://api.smith.langchain.com/redoc#tag/datasets/operation/create_comparative_experiment_api_v1_datasets_comparative_post"
+    },
+    {
+      "title": "You can iterate over the runs in the experiments belonging to the comparative experiment and preferentially rank the outputs",
+      "url": "llms-txt#you-can-iterate-over-the-runs-in-the-experiments-belonging-to-the-comparative-experiment-and-preferentially-rank-the-outputs"
+    },
+    {
+      "title": "Fetch the comparative experiment",
+      "url": "llms-txt#fetch-the-comparative-experiment"
+    },
+    {
+      "title": "API Reference: https://api.smith.langchain.com/redoc#tag/run/operation/query_runs_api_v1_runs_query_post",
+      "url": "llms-txt#api-reference:-https://api.smith.langchain.com/redoc#tag/run/operation/query_runs_api_v1_runs_query_post"
+    },
+    {
+      "title": "Run an evaluation from the prompt playground",
+      "url": "llms-txt#run-an-evaluation-from-the-prompt-playground"
+    },
+    {
+      "title": "How to run multiple agents on the same thread",
+      "url": "llms-txt#how-to-run-multiple-agents-on-the-same-thread"
+    },
+    {
+      "title": "Set a sampling rate for traces",
+      "url": "llms-txt#set-a-sampling-rate-for-traces"
+    },
+    {
+      "title": "Create clients with different sampling rates",
+      "url": "llms-txt#create-clients-with-different-sampling-rates"
+    },
+    {
+      "title": "Use different sampling rates for different operations",
+      "url": "llms-txt#use-different-sampling-rates-for-different-operations"
+    },
+    {
+      "title": "Scalability & resilience",
+      "url": "llms-txt#scalability-&-resilience"
+    },
+    {
+      "title": "Delete workspaces",
+      "url": "llms-txt#delete-workspaces"
+    },
+    {
+      "title": "Delete organizations",
+      "url": "llms-txt#delete-organizations"
+    },
+    {
+      "title": "Delete traces",
+      "url": "llms-txt#delete-traces"
+    },
+    {
+      "title": "Generate ClickHouse stats",
+      "url": "llms-txt#generate-clickhouse-stats"
+    },
+    {
+      "title": "Generate query stats",
+      "url": "llms-txt#generate-query-stats"
+    },
+    {
+      "title": "Run support queries against ClickHouse",
+      "url": "llms-txt#run-support-queries-against-clickhouse"
+    },
+    {
+      "title": "Run support queries against PostgreSQL",
+      "url": "llms-txt#run-support-queries-against-postgresql"
+    },
+    {
+      "title": "if configured with a subdomain / path prefix:",
+      "url": "llms-txt#if-configured-with-a-subdomain-/-path-prefix:"
+    },
+    {
+      "title": "Get the API response and extract customer information",
+      "url": "llms-txt#get-the-api-response-and-extract-customer-information"
+    },
+    {
+      "title": "Extract customer_id and customer_name using jq",
+      "url": "llms-txt#extract-customer_id-and-customer_name-using-jq"
+    },
+    {
+      "title": "Verify the variables are set",
+      "url": "llms-txt#verify-the-variables-are-set"
+    },
+    {
+      "title": "Get customer information from the API",
+      "url": "llms-txt#get-customer-information-from-the-api"
+    },
+    {
+      "title": "Run the export script with customer information as variables",
+      "url": "llms-txt#run-the-export-script-with-customer-information-as-variables"
+    },
+    {
+      "title": "Basic authentication with email and password",
+      "url": "llms-txt#basic-authentication-with-email-and-password"
+    },
+    {
+      "title": "Enable blob storage",
+      "url": "llms-txt#enable-blob-storage"
+    },
+    {
+      "title": "Configure custom TLS certificates",
+      "url": "llms-txt#configure-custom-tls-certificates"
+    },
+    {
+      "title": "Egress for subscription metrics and operational metadata",
+      "url": "llms-txt#egress-for-subscription-metrics-and-operational-metadata"
+    },
+    {
+      "title": "Connect to an external ClickHouse database",
+      "url": "llms-txt#connect-to-an-external-clickhouse-database"
+    },
+    {
+      "title": "Connect to an external PostgreSQL database",
+      "url": "llms-txt#connect-to-an-external-postgresql-database"
+    },
+    {
+      "title": "Connect to an external Redis database",
+      "url": "llms-txt#connect-to-an-external-redis-database"
+    },
+    {
+      "title": "Create an Ingress for installations (Kubernetes)",
+      "url": "llms-txt#create-an-ingress-for-installations-(kubernetes)"
+    },
+    {
+      "title": "Mirror images for your LangSmith installation",
+      "url": "llms-txt#mirror-images-for-your-langsmith-installation"
+    },
+    {
+      "title": "Pull the images from the public registry",
+      "url": "llms-txt#pull-the-images-from-the-public-registry"
+    },
+    {
+      "title": "View trace counts across your organization",
+      "url": "llms-txt#view-trace-counts-across-your-organization"
+    },
+    {
+      "title": "Use environment variables for model providers",
+      "url": "llms-txt#use-environment-variables-for-model-providers"
+    },
+    {
+      "title": "Configure LangSmith for scale",
+      "url": "llms-txt#configure-langsmith-for-scale"
+    },
+    {
+      "title": "ttl:",
+      "url": "llms-txt#ttl:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "ttl_period_seconds:",
+      "url": "llms-txt#ttl_period_seconds:"
+    },
+    {
+      "title": "longlived: \"7776000\"  # 90 days (default is 400 days)",
+      "url": "llms-txt#longlived:-\"7776000\"--#-90-days-(default-is-400-days)"
+    },
+    {
+      "title": "shortlived: \"604800\"  # 7 days (default is 14 days)",
+      "url": "llms-txt#shortlived:-\"604800\"--#-7-days-(default-is-14-days)"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 4",
+      "url": "llms-txt#maxreplicas:-4"
+    },
+    {
+      "title": "minReplicas: 2",
+      "url": "llms-txt#minreplicas:-2"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 20",
+      "url": "llms-txt#maxreplicas:-20"
+    },
+    {
+      "title": "minReplicas: 8",
+      "url": "llms-txt#minreplicas:-8"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 160",
+      "url": "llms-txt#maxreplicas:-160"
+    },
+    {
+      "title": "minReplicas: 40",
+      "url": "llms-txt#minreplicas:-40"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 5",
+      "url": "llms-txt#maxreplicas:-5"
+    },
+    {
+      "title": "minReplicas: 3",
+      "url": "llms-txt#minreplicas:-3"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 6",
+      "url": "llms-txt#maxreplicas:-6"
+    },
+    {
+      "title": "minReplicas: 4",
+      "url": "llms-txt#minreplicas:-4"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 40",
+      "url": "llms-txt#maxreplicas:-40"
+    },
+    {
+      "title": "minReplicas: 16",
+      "url": "llms-txt#minreplicas:-16"
+    },
+    {
+      "title": "We strongly recommend setting up a replicated clickhouse cluster for this load.",
+      "url": "llms-txt#we-strongly-recommend-setting-up-a-replicated-clickhouse-cluster-for-this-load."
+    },
+    {
+      "title": "Update these values as needed to connect to your replicated clickhouse cluster.",
+      "url": "llms-txt#update-these-values-as-needed-to-connect-to-your-replicated-clickhouse-cluster."
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 10",
+      "url": "llms-txt#maxreplicas:-10"
+    },
+    {
+      "title": "minReplicas: 5",
+      "url": "llms-txt#minreplicas:-5"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 16",
+      "url": "llms-txt#maxreplicas:-16"
+    },
+    {
+      "title": "minReplicas: 8",
+      "url": "llms-txt#minreplicas:-8"
+    },
+    {
+      "title": "ttl:",
+      "url": "llms-txt#ttl:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "ttl_period_seconds:",
+      "url": "llms-txt#ttl_period_seconds:"
+    },
+    {
+      "title": "longlived: \"7776000\"  # 90 days (default is 400 days)",
+      "url": "llms-txt#longlived:-\"7776000\"--#-90-days-(default-is-400-days)"
+    },
+    {
+      "title": "shortlived: \"604800\"  # 7 days (default is 14 days)",
+      "url": "llms-txt#shortlived:-\"604800\"--#-7-days-(default-is-14-days)"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 4",
+      "url": "llms-txt#maxreplicas:-4"
+    },
+    {
+      "title": "minReplicas: 2",
+      "url": "llms-txt#minreplicas:-2"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 20",
+      "url": "llms-txt#maxreplicas:-20"
+    },
+    {
+      "title": "minReplicas: 8",
+      "url": "llms-txt#minreplicas:-8"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 160",
+      "url": "llms-txt#maxreplicas:-160"
+    },
+    {
+      "title": "minReplicas: 40",
+      "url": "llms-txt#minreplicas:-40"
+    },
+    {
+      "title": "autoscaling:",
+      "url": "llms-txt#autoscaling:"
+    },
+    {
+      "title": "enabled: true",
+      "url": "llms-txt#enabled:-true"
+    },
+    {
+      "title": "maxReplicas: 50",
+      "url": "llms-txt#maxreplicas:-50"
+    },
+    {
+      "title": "minReplicas: 20",
+      "url": "llms-txt#minreplicas:-20"
+    },
+    {
+      "title": "We strongly recommend setting up a replicated clickhouse cluster for this load.",
+      "url": "llms-txt#we-strongly-recommend-setting-up-a-replicated-clickhouse-cluster-for-this-load."
+    },
+    {
+      "title": "Update these values as needed to connect to your replicated clickhouse cluster.",
+      "url": "llms-txt#update-these-values-as-needed-to-connect-to-your-replicated-clickhouse-cluster."
+    },
+    {
+      "title": "Set up SSO with OAuth2.0 and OIDC",
+      "url": "llms-txt#set-up-sso-with-oauth2.0-and-oidc"
+    },
+    {
+      "title": "Enable TTL and data retention",
+      "url": "llms-txt#enable-ttl-and-data-retention"
+    },
+    {
+      "title": "Upgrade an installation",
+      "url": "llms-txt#upgrade-an-installation"
+    },
+    {
+      "title": "Interact with your self-hosted instance of LangSmith",
+      "url": "llms-txt#interact-with-your-self-hosted-instance-of-langsmith"
+    },
+    {
+      "title": "The rest of your code",
+      "url": "llms-txt#the-rest-of-your-code"
+    },
+    {
+      "title": "Customize user management",
+      "url": "llms-txt#customize-user-management"
+    },
+    {
+      "title": "Use an existing secret for your installation (Kubernetes)",
+      "url": "llms-txt#use-an-existing-secret-for-your-installation-(kubernetes)"
+    },
+    {
+      "title": "Self-hosted LangSmith",
+      "url": "llms-txt#self-hosted-langsmith"
+    },
+    {
+      "title": "Self-hosted LangSmith changelog",
+      "url": "llms-txt#self-hosted-langsmith-changelog"
+    },
+    {
+      "title": "How to add semantic search to your agent deployment",
+      "url": "llms-txt#how-to-add-semantic-search-to-your-agent-deployment"
+    },
+    {
+      "title": "In pyproject.toml",
+      "url": "llms-txt#in-pyproject.toml"
+    },
+    {
+      "title": "path/to/embedding_function.py",
+      "url": "llms-txt#path/to/embedding_function.py"
+    },
+    {
+      "title": "Use in an async context",
+      "url": "llms-txt#use-in-an-async-context"
+    },
+    {
+      "title": "A2A endpoint in Agent Server",
+      "url": "llms-txt#a2a-endpoint-in-agent-server"
+    },
+    {
+      "title": "Define the graph",
+      "url": "llms-txt#define-the-graph"
+    },
+    {
+      "title": "Agent Server API reference for LangSmith Deployment",
+      "url": "llms-txt#agent-server-api-reference-for-langsmith-deployment"
+    },
+    {
+      "title": "MCP endpoint in Agent Server",
+      "url": "llms-txt#mcp-endpoint-in-agent-server"
+    },
+    {
+      "title": "Define input schema",
+      "url": "llms-txt#define-input-schema"
+    },
+    {
+      "title": "Define output schema",
+      "url": "llms-txt#define-output-schema"
+    },
+    {
+      "title": "Combine input and output",
+      "url": "llms-txt#combine-input-and-output"
+    },
+    {
+      "title": "Define the processing node",
+      "url": "llms-txt#define-the-processing-node"
+    },
+    {
+      "title": "Build the graph with explicit schemas",
+      "url": "llms-txt#build-the-graph-with-explicit-schemas"
+    },
+    {
+      "title": "Run the graph",
+      "url": "llms-txt#run-the-graph"
+    },
+    {
+      "title": "Trace JS functions in serverless environments",
+      "url": "llms-txt#trace-js-functions-in-serverless-environments"
+    },
+    {
+      "title": "Set up a workspace",
+      "url": "llms-txt#set-up-a-workspace"
+    },
+    {
+      "title": "Set up custom authentication",
+      "url": "llms-txt#set-up-custom-authentication"
+    },
+    {
+      "title": "This is our toy user database. Do not do this in production",
+      "url": "llms-txt#this-is-our-toy-user-database.-do-not-do-this-in-production"
+    },
+    {
+      "title": "The \"Auth\" object is a container that LangGraph will use to mark our authentication function",
+      "url": "llms-txt#the-\"auth\"-object-is-a-container-that-langgraph-will-use-to-mark-our-authentication-function"
+    },
+    {
+      "title": "The `authenticate` decorator tells LangGraph to call this function as middleware",
+      "url": "llms-txt#the-`authenticate`-decorator-tells-langgraph-to-call-this-function-as-middleware"
+    },
+    {
+      "title": "for every request. This will determine whether the request is allowed or not",
+      "url": "llms-txt#for-every-request.-this-will-determine-whether-the-request-is-allowed-or-not"
+    },
+    {
+      "title": "Try without a token (should fail)",
+      "url": "llms-txt#try-without-a-token-(should-fail)"
+    },
+    {
+      "title": "Try with a valid token",
+      "url": "llms-txt#try-with-a-valid-token"
+    },
+    {
+      "title": "Create a thread and chat",
+      "url": "llms-txt#create-a-thread-and-chat"
+    },
+    {
+      "title": "Set up feedback criteria",
+      "url": "llms-txt#set-up-feedback-criteria"
+    },
+    {
+      "title": "Set up resource tags",
+      "url": "llms-txt#set-up-resource-tags"
+    },
+    {
+      "title": "How to set up an application with requirements.txt",
+      "url": "llms-txt#how-to-set-up-an-application-with-requirements.txt"
+    },
+    {
+      "title": "my_agent/agent.py",
+      "url": "llms-txt#my_agent/agent.py"
+    },
+    {
+      "title": "Define the runtime context",
+      "url": "llms-txt#define-the-runtime-context"
+    },
+    {
+      "title": "How to set up a JavaScript application",
+      "url": "llms-txt#how-to-set-up-a-javascript-application"
+    },
+    {
+      "title": "How to set up an application with pyproject.toml",
+      "url": "llms-txt#how-to-set-up-an-application-with-pyproject.toml"
+    },
+    {
+      "title": "my_agent/agent.py",
+      "url": "llms-txt#my_agent/agent.py"
+    },
+    {
+      "title": "Define the runtime context",
+      "url": "llms-txt#define-the-runtime-context"
+    },
+    {
+      "title": "Share or unshare a trace publicly",
+      "url": "llms-txt#share-or-unshare-a-trace-publicly"
+    },
+    {
+      "title": "LangSmith API reference",
+      "url": "llms-txt#langsmith-api-reference"
+    },
+    {
+      "title": "LangSmith JS/TS SDK",
+      "url": "llms-txt#langsmith-js/ts-sdk"
+    },
+    {
+      "title": "LangSmith Python SDK",
+      "url": "llms-txt#langsmith-python-sdk"
+    },
+    {
+      "title": "Stateless runs",
+      "url": "llms-txt#stateless-runs"
+    },
+    {
+      "title": "LangSmith status",
+      "url": "llms-txt#langsmith-status"
+    },
+    {
+      "title": "Streaming API",
+      "url": "llms-txt#streaming-api"
+    },
+    {
+      "title": "LangSmith Studio",
+      "url": "llms-txt#langsmith-studio"
+    },
+    {
+      "title": "How to define a summary evaluator",
+      "url": "llms-txt#how-to-define-a-summary-evaluator"
+    },
+    {
+      "title": "Test a ReAct agent with Pytest/Vitest and LangSmith",
+      "url": "llms-txt#test-a-react-agent-with-pytest/vitest-and-langsmith"
+    },
+    {
+      "title": "Configure threads",
+      "url": "llms-txt#configure-threads"
+    },
+    {
+      "title": "Trace with Anthropic",
+      "url": "llms-txt#trace-with-anthropic"
+    },
+    {
+      "title": "You can also wrap the async client as well",
+      "url": "llms-txt#you-can-also-wrap-the-async-client-as-well"
+    },
+    {
+      "title": "async_client = wrap_anthropic(anthropic.AsyncAnthropic())",
+      "url": "llms-txt#async_client-=-wrap_anthropic(anthropic.asyncanthropic())"
+    },
+    {
+      "title": "Trace Claude Agent SDK",
+      "url": "llms-txt#trace-claude-agent-sdk"
+    },
+    {
+      "title": "Setup claude_agent_sdk with langsmith tracing",
+      "url": "llms-txt#setup-claude_agent_sdk-with-langsmith-tracing"
+    },
+    {
+      "title": "Trace Claude Code",
+      "url": "llms-txt#trace-claude-code"
+    },
+    {
+      "title": "View log file size",
+      "url": "llms-txt#view-log-file-size"
+    },
+    {
+      "title": "Clear logs if needed",
+      "url": "llms-txt#clear-logs-if-needed"
+    },
+    {
+      "title": "Trace generator functions",
+      "url": "llms-txt#trace-generator-functions"
+    },
+    {
+      "title": "Trace with OpenAI",
+      "url": "llms-txt#trace-with-openai"
+    },
+    {
+      "title": "Trace query syntax",
+      "url": "llms-txt#trace-query-syntax"
+    },
+    {
+      "title": "Trace with API",
+      "url": "llms-txt#trace-with-api"
+    },
+    {
+      "title": "Send your API Key in the request headers",
+      "url": "llms-txt#send-your-api-key-in-the-request-headers"
+    },
+    {
+      "title": "This can be a user input to your app",
+      "url": "llms-txt#this-can-be-a-user-input-to-your-app"
+    },
+    {
+      "title": "This can be retrieved in a retrieval step",
+      "url": "llms-txt#this-can-be-retrieved-in-a-retrieval-step"
+    },
+    {
+      "title": "Create parent run",
+      "url": "llms-txt#create-parent-run"
+    },
+    {
+      "title": "Create child run",
+      "url": "llms-txt#create-child-run"
+    },
+    {
+      "title": "Generate a completion",
+      "url": "llms-txt#generate-a-completion"
+    },
+    {
+      "title": "End runs",
+      "url": "llms-txt#end-runs"
+    },
+    {
+      "title": "Configure API URL and key",
+      "url": "llms-txt#configure-api-url-and-key"
+    },
+    {
+      "title": "For production use, consider using a configuration file or environment variables",
+      "url": "llms-txt#for-production-use,-consider-using-a-configuration-file-or-environment-variables"
+    },
+    {
+      "title": "Create a parent run",
+      "url": "llms-txt#create-a-parent-run"
+    },
+    {
+      "title": "Create a child run, linked to the parent",
+      "url": "llms-txt#create-a-child-run,-linked-to-the-parent"
+    },
+    {
+      "title": "First, post the runs to create them",
+      "url": "llms-txt#first,-post-the-runs-to-create-them"
+    },
+    {
+      "title": "Then, update the runs with their end times and any outputs",
+      "url": "llms-txt#then,-update-the-runs-with-their-end-times-and-any-outputs"
+    },
+    {
+      "title": "Note: This example requires the `requests` and `requests_toolbelt` libraries.",
+      "url": "llms-txt#note:-this-example-requires-the-`requests`-and-`requests_toolbelt`-libraries."
+    },
+    {
+      "title": "You can install them using pip:",
+      "url": "llms-txt#you-can-install-them-using-pip:"
+    },
+    {
+      "title": "pip install requests requests_toolbelt",
+      "url": "llms-txt#pip-install-requests-requests_toolbelt"
+    },
+    {
+      "title": "Trace with AutoGen",
+      "url": "llms-txt#trace-with-autogen"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Instrument AutoGen and OpenAI calls",
+      "url": "llms-txt#instrument-autogen-and-openai-calls"
+    },
+    {
+      "title": "Load environment variables",
+      "url": "llms-txt#load-environment-variables"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Instrument AutoGen and OpenAI",
+      "url": "llms-txt#instrument-autogen-and-openai"
+    },
+    {
+      "title": "Configure your agents",
+      "url": "llms-txt#configure-your-agents"
+    },
+    {
+      "title": "Create a code reviewer agent",
+      "url": "llms-txt#create-a-code-reviewer-agent"
+    },
+    {
+      "title": "Create a developer agent",
+      "url": "llms-txt#create-a-developer-agent"
+    },
+    {
+      "title": "Create a user proxy agent",
+      "url": "llms-txt#create-a-user-proxy-agent"
+    },
+    {
+      "title": "Example usage",
+      "url": "llms-txt#example-usage"
+    },
+    {
+      "title": "Get the current tracer",
+      "url": "llms-txt#get-the-current-tracer"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Initialize multiple instrumentors",
+      "url": "llms-txt#initialize-multiple-instrumentors"
+    },
+    {
+      "title": "Your application code using multiple frameworks",
+      "url": "llms-txt#your-application-code-using-multiple-frameworks"
+    },
+    {
+      "title": "Trace with CrewAI",
+      "url": "llms-txt#trace-with-crewai"
+    },
+    {
+      "title": "Get or create tracer provider",
+      "url": "llms-txt#get-or-create-tracer-provider"
+    },
+    {
+      "title": "Add OtelSpanProcessor to the tracer provider",
+      "url": "llms-txt#add-otelspanprocessor-to-the-tracer-provider"
+    },
+    {
+      "title": "Instrument CrewAI and OpenAI",
+      "url": "llms-txt#instrument-crewai-and-openai"
+    },
+    {
+      "title": "Load environment variables",
+      "url": "llms-txt#load-environment-variables"
+    },
+    {
+      "title": "Configure OpenTelemetry",
+      "url": "llms-txt#configure-opentelemetry"
+    },
+    {
+      "title": "Add OtelSpanProcessor to the tracer provider",
+      "url": "llms-txt#add-otelspanprocessor-to-the-tracer-provider"
+    },
+    {
+      "title": "Instrument CrewAI and OpenAI",
+      "url": "llms-txt#instrument-crewai-and-openai"
+    },
+    {
+      "title": "Define your agents",
+      "url": "llms-txt#define-your-agents"
+    },
+    {
+      "title": "Define your tasks",
+      "url": "llms-txt#define-your-tasks"
+    },
+    {
+      "title": "Create and run the crew",
+      "url": "llms-txt#create-and-run-the-crew"
+    },
+    {
+      "title": "Get the current tracer",
+      "url": "llms-txt#get-the-current-tracer"
+    },
+    {
+      "title": "Initialize multiple instrumentors",
+      "url": "llms-txt#initialize-multiple-instrumentors"
+    },
+    {
+      "title": "Trace with Google ADK",
+      "url": "llms-txt#trace-with-google-adk"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Instrument Google ADK directly",
+      "url": "llms-txt#instrument-google-adk-directly"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Define your tools",
+      "url": "llms-txt#define-your-tools"
+    },
+    {
+      "title": "Get the current tracer",
+      "url": "llms-txt#get-the-current-tracer"
+    },
+    {
+      "title": "Trace with Instructor",
+      "url": "llms-txt#trace-with-instructor"
+    },
+    {
+      "title": "For LangSmith API keys linked to multiple workspaces, set the LANGSMITH_WORKSPACE_ID environment variable to specify which workspace to use.",
+      "url": "llms-txt#for-langsmith-api-keys-linked-to-multiple-workspaces,-set-the-langsmith_workspace_id-environment-variable-to-specify-which-workspace-to-use."
+    },
+    {
+      "title": "You can customize the run name with the `name` keyword argument",
+      "url": "llms-txt#you-can-customize-the-run-name-with-the-`name`-keyword-argument"
+    },
+    {
+      "title": "Trace with LangChain (Python and JS/TS)",
+      "url": "llms-txt#trace-with-langchain-(python-and-js/ts)"
+    },
+    {
+      "title": "This example uses OpenAI, but you can use any LLM provider of choice",
+      "url": "llms-txt#this-example-uses-openai,-but-you-can-use-any-llm-provider-of-choice"
+    },
+    {
+      "title": "For LangSmith API keys linked to multiple workspaces, set the LANGSMITH_WORKSPACE_ID environment variable to specify which workspace to use.",
+      "url": "llms-txt#for-langsmith-api-keys-linked-to-multiple-workspaces,-set-the-langsmith_workspace_id-environment-variable-to-specify-which-workspace-to-use."
+    },
+    {
+      "title": "-- This code should be in a separate file or service --",
+      "url": "llms-txt#---this-code-should-be-in-a-separate-file-or-service---"
+    },
+    {
+      "title": "-- This code should be in a separate file or service --",
+      "url": "llms-txt#---this-code-should-be-in-a-separate-file-or-service---"
+    },
+    {
+      "title": "The above chain will be traced as a child run of the traceable function",
+      "url": "llms-txt#the-above-chain-will-be-traced-as-a-child-run-of-the-traceable-function"
+    },
+    {
+      "title": "Trace with LangGraph",
+      "url": "llms-txt#trace-with-langgraph"
+    },
+    {
+      "title": "This example uses OpenAI, but you can use any LLM provider of choice",
+      "url": "llms-txt#this-example-uses-openai,-but-you-can-use-any-llm-provider-of-choice"
+    },
+    {
+      "title": "For LangSmith API keys linked to multiple workspaces, set the LANGSMITH_WORKSPACE_ID environment variable to specify which workspace to use.",
+      "url": "llms-txt#for-langsmith-api-keys-linked-to-multiple-workspaces,-set-the-langsmith_workspace_id-environment-variable-to-specify-which-workspace-to-use."
+    },
+    {
+      "title": "This example uses OpenAI, but you can use any LLM provider of choice",
+      "url": "llms-txt#this-example-uses-openai,-but-you-can-use-any-llm-provider-of-choice"
+    },
+    {
+      "title": "Trace with LiveKit",
+      "url": "llms-txt#trace-with-livekit"
+    },
+    {
+      "title": "Load environment variables",
+      "url": "llms-txt#load-environment-variables"
+    },
+    {
+      "title": "Import LiveKit components",
+      "url": "llms-txt#import-livekit-components"
+    },
+    {
+      "title": "Import span processor to enable LangSmith tracing",
+      "url": "llms-txt#import-span-processor-to-enable-langsmith-tracing"
+    },
+    {
+      "title": "Set up LangSmith tracing",
+      "url": "llms-txt#set-up-langsmith-tracing"
+    },
+    {
+      "title": "Enable tracing before creating agents",
+      "url": "llms-txt#enable-tracing-before-creating-agents"
+    },
+    {
+      "title": "Trace with OpenAI Agents SDK",
+      "url": "llms-txt#trace-with-openai-agents-sdk"
+    },
+    {
+      "title": "Trace with OpenTelemetry",
+      "url": "llms-txt#trace-with-opentelemetry"
+    },
+    {
+      "title": "Set environment variables for LangChain",
+      "url": "llms-txt#set-environment-variables-for-langchain"
+    },
+    {
+      "title": "Configure the OTLP exporter for your custom endpoint",
+      "url": "llms-txt#configure-the-otlp-exporter-for-your-custom-endpoint"
+    },
+    {
+      "title": "Create and run a LangChain application",
+      "url": "llms-txt#create-and-run-a-langchain-application"
+    },
+    {
+      "title": "Configure LangSmith OpenTelemetry export (no OTEL env vars or headers needed)",
+      "url": "llms-txt#configure-langsmith-opentelemetry-export-(no-otel-env-vars-or-headers-needed)"
+    },
+    {
+      "title": "Set up TracerProvider manually",
+      "url": "llms-txt#set-up-tracerprovider-manually"
+    },
+    {
+      "title": "Add attachment processor FIRST (runs before LangSmith processor)",
+      "url": "llms-txt#add-attachment-processor-first-(runs-before-langsmith-processor)"
+    },
+    {
+      "title": "Add LangSmith processor SECOND (receives already-modified spans)",
+      "url": "llms-txt#add-langsmith-processor-second-(receives-already-modified-spans)"
+    },
+    {
+      "title": "Set up OpenTelemetry trace provider",
+      "url": "llms-txt#set-up-opentelemetry-trace-provider"
+    },
+    {
+      "title": "Service A: Create a span and propagate context to Service B",
+      "url": "llms-txt#service-a:-create-a-span-and-propagate-context-to-service-b"
+    },
+    {
+      "title": "Service B: Extract the context and continue the trace",
+      "url": "llms-txt#service-b:-extract-the-context-and-continue-the-trace"
+    },
+    {
+      "title": "Trace with Pipecat",
+      "url": "llms-txt#trace-with-pipecat"
+    },
+    {
+      "title": "Load environment variables",
+      "url": "llms-txt#load-environment-variables"
+    },
+    {
+      "title": "Import Pipecat components",
+      "url": "llms-txt#import-pipecat-components"
+    },
+    {
+      "title": "Import span processor to enable LangSmith tracing",
+      "url": "llms-txt#import-span-processor-to-enable-langsmith-tracing"
+    },
+    {
+      "title": "Setup recording directory",
+      "url": "llms-txt#setup-recording-directory"
+    },
+    {
+      "title": "Create audio recorder",
+      "url": "llms-txt#create-audio-recorder"
+    },
+    {
+      "title": "Register with span processor for attachment to conversation span",
+      "url": "llms-txt#register-with-span-processor-for-attachment-to-conversation-span"
+    },
+    {
+      "title": "Add to your pipeline",
+      "url": "llms-txt#add-to-your-pipeline"
+    },
+    {
+      "title": "Run pipeline",
+      "url": "llms-txt#run-pipeline"
+    },
+    {
+      "title": "Create turn audio recorder",
+      "url": "llms-txt#create-turn-audio-recorder"
+    },
+    {
+      "title": "Register with span processor",
+      "url": "llms-txt#register-with-span-processor"
+    },
+    {
+      "title": "Add to your pipeline",
+      "url": "llms-txt#add-to-your-pipeline"
+    },
+    {
+      "title": "Create task",
+      "url": "llms-txt#create-task"
+    },
+    {
+      "title": "Connect turn tracker after task creation",
+      "url": "llms-txt#connect-turn-tracker-after-task-creation"
+    },
+    {
+      "title": "Run pipeline",
+      "url": "llms-txt#run-pipeline"
+    },
+    {
+      "title": "Trace with PydanticAI",
+      "url": "llms-txt#trace-with-pydanticai"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Instrument all PydanticAI agents",
+      "url": "llms-txt#instrument-all-pydanticai-agents"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Instrument all PydanticAI agents",
+      "url": "llms-txt#instrument-all-pydanticai-agents"
+    },
+    {
+      "title": "Create and run an agent",
+      "url": "llms-txt#create-and-run-an-agent"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Initialize multiple instrumentors",
+      "url": "llms-txt#initialize-multiple-instrumentors"
+    },
+    {
+      "title": "Your application code using multiple frameworks",
+      "url": "llms-txt#your-application-code-using-multiple-frameworks"
+    },
+    {
+      "title": "Trace with Semantic Kernel",
+      "url": "llms-txt#trace-with-semantic-kernel"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Instrument OpenAI calls",
+      "url": "llms-txt#instrument-openai-calls"
+    },
+    {
+      "title": "Load environment variables",
+      "url": "llms-txt#load-environment-variables"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Instrument OpenAI calls",
+      "url": "llms-txt#instrument-openai-calls"
+    },
+    {
+      "title": "Configure Semantic Kernel",
+      "url": "llms-txt#configure-semantic-kernel"
+    },
+    {
+      "title": "Create a code analysis prompt template",
+      "url": "llms-txt#create-a-code-analysis-prompt-template"
+    },
+    {
+      "title": "Add the function to the kernel",
+      "url": "llms-txt#add-the-function-to-the-kernel"
+    },
+    {
+      "title": "Create a documentation generator",
+      "url": "llms-txt#create-a-documentation-generator"
+    },
+    {
+      "title": "Get the current tracer",
+      "url": "llms-txt#get-the-current-tracer"
+    },
+    {
+      "title": "Configure LangSmith tracing",
+      "url": "llms-txt#configure-langsmith-tracing"
+    },
+    {
+      "title": "Initialize multiple instrumentors",
+      "url": "llms-txt#initialize-multiple-instrumentors"
+    },
+    {
+      "title": "Your application code using multiple frameworks",
+      "url": "llms-txt#your-application-code-using-multiple-frameworks"
+    },
+    {
+      "title": "Trace with the Vercel AI SDK (JS/TS only)",
+      "url": "llms-txt#trace-with-the-vercel-ai-sdk-(js/ts-only)"
+    },
+    {
+      "title": "Trace without setting environment variables",
+      "url": "llms-txt#trace-without-setting-environment-variables"
+    },
+    {
+      "title": "How to evaluate your agent with trajectory evaluations",
+      "url": "llms-txt#how-to-evaluate-your-agent-with-trajectory-evaluations"
+    },
+    {
+      "title": "Troubleshooting",
+      "url": "llms-txt#troubleshooting"
+    },
+    {
+      "title": "Studio troubleshooting",
+      "url": "llms-txt#studio-troubleshooting"
+    },
+    {
+      "title": "Troubleshoot variable caching",
+      "url": "llms-txt#troubleshoot-variable-caching"
+    },
+    {
+      "title": "How to upload experiments run outside of LangSmith with the REST API",
+      "url": "llms-txt#how-to-upload-experiments-run-outside-of-langsmith-with-the-rest-api"
+    },
+    {
+      "title": "Upload files with traces",
+      "url": "llms-txt#upload-files-with-traces"
+    },
+    {
+      "title": "Must set dangerously_allow_filesystem to True if you want to use file paths",
+      "url": "llms-txt#must-set-dangerously_allow_filesystem-to-true-if-you-want-to-use-file-paths"
+    },
+    {
+      "title": "Helper function to load files as bytes",
+      "url": "llms-txt#helper-function-to-load-files-as-bytes"
+    },
+    {
+      "title": "Load files and create attachments",
+      "url": "llms-txt#load-files-and-create-attachments"
+    },
+    {
+      "title": "Define other parameters",
+      "url": "llms-txt#define-other-parameters"
+    },
+    {
+      "title": "Call the function with traced attachments",
+      "url": "llms-txt#call-the-function-with-traced-attachments"
+    },
+    {
+      "title": "How to interact with a deployment using RemoteGraph",
+      "url": "llms-txt#how-to-interact-with-a-deployment-using-remotegraph"
+    },
+    {
+      "title": "How to integrate LangGraph into your React application",
+      "url": "llms-txt#how-to-integrate-langgraph-into-your-react-application"
+    },
+    {
+      "title": "How to use Studio",
+      "url": "llms-txt#how-to-use-studio"
+    },
+    {
+      "title": "Use threads",
+      "url": "llms-txt#use-threads"
+    },
+    {
+      "title": "Use tools in a prompt",
+      "url": "llms-txt#use-tools-in-a-prompt"
+    },
+    {
+      "title": "Use webhooks",
+      "url": "llms-txt#use-webhooks"
+    },
+    {
+      "title": "User management",
+      "url": "llms-txt#user-management"
+    },
+    {
+      "title": "How to run evaluations with Vitest/Jest (beta)",
+      "url": "llms-txt#how-to-run-evaluations-with-vitest/jest-(beta)"
+    },
+    {
+      "title": "Configure webhook notifications for rules",
+      "url": "llms-txt#configure-webhook-notifications-for-rules"
+    },
+    {
+      "title": "We want this to be a `POST` endpoint since we will post data here",
+      "url": "llms-txt#we-want-this-to-be-a-`post`-endpoint-since-we-will-post-data-here"
+    },
+    {
+      "title": "We set up a `secret` query parameter",
+      "url": "llms-txt#we-set-up-a-`secret`-query-parameter"
+    },
+    {
+      "title": "Write your prompt with AI",
+      "url": "llms-txt#write-your-prompt-with-ai"
+    },
+    {
+      "title": "Errors",
+      "url": "llms-txt#errors"
+    },
+    {
+      "title": "Context overview",
+      "url": "llms-txt#context-overview"
+    },
+    {
+      "title": "Memory overview",
+      "url": "llms-txt#memory-overview"
+    },
+    {
+      "title": "Contributing to code",
+      "url": "llms-txt#contributing-to-code"
+    },
+    {
+      "title": "Run the entire test suite",
+      "url": "llms-txt#run-the-entire-test-suite"
+    },
+    {
+      "title": "Or run a specific test file",
+      "url": "llms-txt#or-run-a-specific-test-file"
+    },
+    {
+      "title": "Or run a specific test function",
+      "url": "llms-txt#or-run-a-specific-test-function"
+    },
+    {
+      "title": "Co-marketing",
+      "url": "llms-txt#co-marketing"
+    },
+    {
+      "title": "Contributing to documentation",
+      "url": "llms-txt#contributing-to-documentation"
+    },
+    {
+      "title": "Check broken links",
+      "url": "llms-txt#check-broken-links"
+    },
+    {
+      "title": "Format code automatically",
+      "url": "llms-txt#format-code-automatically"
+    },
+    {
+      "title": "Check for linting issues",
+      "url": "llms-txt#check-for-linting-issues"
+    },
+    {
+      "title": "Fix markdown issues",
+      "url": "llms-txt#fix-markdown-issues"
+    },
+    {
+      "title": "Run tests to ensure your changes don't break existing functionality",
+      "url": "llms-txt#run-tests-to-ensure-your-changes-don't-break-existing-functionality"
+    },
+    {
+      "title": "Implement a LangChain integration",
+      "url": "llms-txt#implement-a-langchain-integration"
+    },
+    {
+      "title": "Contributing integrations",
+      "url": "llms-txt#contributing-integrations"
+    },
+    {
+      "title": "Contributing",
+      "url": "llms-txt#contributing"
+    },
+    {
+      "title": "Publish an integration",
+      "url": "llms-txt#publish-an-integration"
+    },
+    {
+      "title": "Using standard tests",
+      "url": "llms-txt#using-standard-tests"
+    },
+    {
+      "title": "Backends",
+      "url": "llms-txt#backends"
+    },
+    {
+      "title": "Deep Agents CLI",
+      "url": "llms-txt#deep-agents-cli"
+    },
+    {
+      "title": "Applies conventions without prompting",
+      "url": "llms-txt#applies-conventions-without-prompting"
+    },
+    {
+      "title": "Customize Deep Agents",
+      "url": "llms-txt#customize-deep-agents"
+    },
+    {
+      "title": "Agent harness capabilities",
+      "url": "llms-txt#agent-harness-capabilities"
+    },
+    {
+      "title": "Human-in-the-loop",
+      "url": "llms-txt#human-in-the-loop"
+    },
+    {
+      "title": "Long-term memory",
+      "url": "llms-txt#long-term-memory"
+    },
+    {
+      "title": "Deep Agents Middleware",
+      "url": "llms-txt#deep-agents-middleware"
+    },
+    {
+      "title": "Deep Agents overview",
+      "url": "llms-txt#deep-agents-overview"
+    },
+    {
+      "title": "Quickstart",
+      "url": "llms-txt#quickstart"
+    },
+    {
+      "title": "Subagents",
+      "url": "llms-txt#subagents"
+    },
+    {
+      "title": "Callbacks",
+      "url": "llms-txt#callbacks"
+    },
+    {
+      "title": "ChatAnthropic",
+      "url": "llms-txt#chatanthropic"
+    },
+    {
+      "title": "export LANGSMITH_TRACING=\"true\"",
+      "url": "llms-txt#export-langsmith_tracing=\"true\""
+    },
+    {
+      "title": "export LANGSMITH_API_KEY=\"your-api-key\"",
+      "url": "llms-txt#export-langsmith_api_key=\"your-api-key\""
+    },
+    {
+      "title": "AzureChatOpenAI",
+      "url": "llms-txt#azurechatopenai"
+    },
+    {
+      "title": "export LANGSMITH_TRACING=\"true\"",
+      "url": "llms-txt#export-langsmith_tracing=\"true\""
+    },
+    {
+      "title": "export LANGSMITH_API_KEY=\"your-api-key\"",
+      "url": "llms-txt#export-langsmith_api_key=\"your-api-key\""
+    },
+    {
+      "title": "BedrockChat",
+      "url": "llms-txt#bedrockchat"
+    },
+    {
+      "title": "export LANGSMITH_TRACING=\"true\"",
+      "url": "llms-txt#export-langsmith_tracing=\"true\""
+    },
+    {
+      "title": "export LANGSMITH_API_KEY=\"your-api-key\"",
+      "url": "llms-txt#export-langsmith_api_key=\"your-api-key\""
+    },
+    {
+      "title": "ChatGoogleGenerativeAI",
+      "url": "llms-txt#chatgooglegenerativeai"
+    },
+    {
+      "title": "export LANGSMITH_TRACING=\"true\"",
+      "url": "llms-txt#export-langsmith_tracing=\"true\""
+    },
+    {
+      "title": "export LANGSMITH_API_KEY=\"your-api-key\"",
+      "url": "llms-txt#export-langsmith_api_key=\"your-api-key\""
+    },
+    {
+      "title": "Chat models",
+      "url": "llms-txt#chat-models"
+    },
+    {
+      "title": "ChatOpenAI",
+      "url": "llms-txt#chatopenai"
+    },
+    {
+      "title": "export LANGSMITH_TRACING=\"true\"",
+      "url": "llms-txt#export-langsmith_tracing=\"true\""
+    },
+    {
+      "title": "export LANGSMITH_API_KEY=\"your-api-key\"",
+      "url": "llms-txt#export-langsmith_api_key=\"your-api-key\""
+    },
+    {
+      "title": "null",
+      "url": "llms-txt#null"
+    },
+    {
+      "title": "Document transformers",
+      "url": "llms-txt#document-transformers"
+    },
+    {
+      "title": "Model caches",
+      "url": "llms-txt#model-caches"
+    },
+    {
+      "title": "LLMs",
+      "url": "llms-txt#llms"
+    },
+    {
+      "title": "Provider-specific middleware",
+      "url": "llms-txt#provider-specific-middleware"
+    },
+    {
+      "title": "All integrations",
+      "url": "llms-txt#all-integrations"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "Integration Packages",
+      "url": "llms-txt#integration-packages"
+    },
+    {
+      "title": "Retrievers",
+      "url": "llms-txt#retrievers"
+    },
+    {
+      "title": "Text splitters",
+      "url": "llms-txt#text-splitters"
+    },
+    {
+      "title": "Key-value stores",
+      "url": "llms-txt#key-value-stores"
+    },
+    {
+      "title": "AzureOpenAIEmbeddings",
+      "url": "llms-txt#azureopenaiembeddings"
+    },
+    {
+      "title": "export LANGSMITH_TRACING=\"true\"",
+      "url": "llms-txt#export-langsmith_tracing=\"true\""
+    },
+    {
+      "title": "export LANGSMITH_API_KEY=\"your-api-key\"",
+      "url": "llms-txt#export-langsmith_api_key=\"your-api-key\""
+    },
+    {
+      "title": "BedrockEmbeddings",
+      "url": "llms-txt#bedrockembeddings"
+    },
+    {
+      "title": "export LANGSMITH_TRACING=\"true\"",
+      "url": "llms-txt#export-langsmith_tracing=\"true\""
+    },
+    {
+      "title": "export LANGSMITH_API_KEY=\"your-api-key\"",
+      "url": "llms-txt#export-langsmith_api_key=\"your-api-key\""
+    },
+    {
+      "title": "Embedding models",
+      "url": "llms-txt#embedding-models"
+    },
+    {
+      "title": "OpenAIEmbeddings",
+      "url": "llms-txt#openaiembeddings"
+    },
+    {
+      "title": "export LANGSMITH_TRACING=\"true\"",
+      "url": "llms-txt#export-langsmith_tracing=\"true\""
+    },
+    {
+      "title": "export LANGSMITH_API_KEY=\"your-api-key\"",
+      "url": "llms-txt#export-langsmith_api_key=\"your-api-key\""
+    },
+    {
+      "title": "Tools",
+      "url": "llms-txt#tools"
+    },
+    {
+      "title": "Tools and Toolkits",
+      "url": "llms-txt#tools-and-toolkits"
+    },
+    {
+      "title": "Tools",
+      "url": "llms-txt#tools"
+    },
+    {
+      "title": "Vector stores",
+      "url": "llms-txt#vector-stores"
+    },
+    {
+      "title": "LangChain Academy",
+      "url": "llms-txt#langchain-academy"
+    },
+    {
+      "title": "Agents",
+      "url": "llms-txt#agents"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Component architecture",
+      "url": "llms-txt#component-architecture"
+    },
+    {
+      "title": "Context engineering in agents",
+      "url": "llms-txt#context-engineering-in-agents"
+    },
+    {
+      "title": "LangSmith Deployment",
+      "url": "llms-txt#langsmith-deployment"
+    },
+    {
+      "title": "Get help",
+      "url": "llms-txt#get-help"
+    },
+    {
+      "title": "Guardrails",
+      "url": "llms-txt#guardrails"
+    },
+    {
+      "title": "Human-in-the-loop",
+      "url": "llms-txt#human-in-the-loop"
+    },
+    {
+      "title": "Install LangChain",
+      "url": "llms-txt#install-langchain"
+    },
+    {
+      "title": "Build a semantic search engine with LangChain",
+      "url": "llms-txt#build-a-semantic-search-engine-with-langchain"
+    },
+    {
+      "title": "Long-term memory",
+      "url": "llms-txt#long-term-memory"
+    },
+    {
+      "title": "Model Context Protocol (MCP)",
+      "url": "llms-txt#model-context-protocol-(mcp)"
+    },
+    {
+      "title": "Messages",
+      "url": "llms-txt#messages"
+    },
+    {
+      "title": "Built-in middleware",
+      "url": "llms-txt#built-in-middleware"
+    },
+    {
+      "title": "Custom middleware",
+      "url": "llms-txt#custom-middleware"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "Models",
+      "url": "llms-txt#models"
+    },
+    {
+      "title": "Custom workflow",
+      "url": "llms-txt#custom-workflow"
+    },
+    {
+      "title": "Handoffs",
+      "url": "llms-txt#handoffs"
+    },
+    {
+      "title": "Multi-agent",
+      "url": "llms-txt#multi-agent"
+    },
+    {
+      "title": "Router",
+      "url": "llms-txt#router"
+    },
+    {
+      "title": "Build a multi-source knowledge base with routing",
+      "url": "llms-txt#build-a-multi-source-knowledge-base-with-routing"
+    },
+    {
+      "title": "Classifications: [{\"source\": \"github\", \"query\": \"...\"}, {\"source\": \"notion\", \"query\": \"...\"}]",
+      "url": "llms-txt#classifications:-[{\"source\":-\"github\",-\"query\":-\"...\"},-{\"source\":-\"notion\",-\"query\":-\"...\"}]"
+    },
+    {
+      "title": "Becomes:",
+      "url": "llms-txt#becomes:"
+    },
+    {
+      "title": "Both agents execute simultaneously, each receiving only the query it needs",
+      "url": "llms-txt#both-agents-execute-simultaneously,-each-receiving-only-the-query-it-needs"
+    },
+    {
+      "title": "Skills",
+      "url": "llms-txt#skills"
+    },
+    {
+      "title": "Subagents",
+      "url": "llms-txt#subagents"
+    },
+    {
+      "title": "Build a personal assistant with subagents",
+      "url": "llms-txt#build-a-personal-assistant-with-subagents"
+    },
+    {
+      "title": "LangSmith Observability",
+      "url": "llms-txt#langsmith-observability"
+    },
+    {
+      "title": "This WILL be traced",
+      "url": "llms-txt#this-will-be-traced"
+    },
+    {
+      "title": "This will NOT be traced (if LANGSMITH_TRACING is not set)",
+      "url": "llms-txt#this-will-not-be-traced-(if-langsmith_tracing-is-not-set)"
+    },
+    {
+      "title": "LangChain overview",
+      "url": "llms-txt#langchain-overview"
+    },
+    {
+      "title": "Philosophy",
+      "url": "llms-txt#philosophy"
+    },
+    {
+      "title": "Quickstart",
+      "url": "llms-txt#quickstart"
+    },
+    {
+      "title": "Build a RAG agent with LangChain",
+      "url": "llms-txt#build-a-rag-agent-with-langchain"
+    },
+    {
+      "title": "Retrieval",
+      "url": "llms-txt#retrieval"
+    },
+    {
+      "title": "Runtime",
+      "url": "llms-txt#runtime"
+    },
+    {
+      "title": "Short-term memory",
+      "url": "llms-txt#short-term-memory"
+    },
+    {
+      "title": "Build a SQL agent",
+      "url": "llms-txt#build-a-sql-agent"
+    },
+    {
+      "title": "Streaming",
+      "url": "llms-txt#streaming"
+    },
+    {
+      "title": "Structured output",
+      "url": "llms-txt#structured-output"
+    },
+    {
+      "title": "console.log(result);",
+      "url": "llms-txt#console.log(result);"
+    },
+    {
+      "title": "LangSmith Studio",
+      "url": "llms-txt#langsmith-studio"
+    },
+    {
+      "title": "Python >= 3.11 is required.",
+      "url": "llms-txt#python->=-3.11-is-required."
+    },
+    {
+      "title": "Test",
+      "url": "llms-txt#test"
+    },
+    {
+      "title": "Tools",
+      "url": "llms-txt#tools"
+    },
+    {
+      "title": "Agent Chat UI",
+      "url": "llms-txt#agent-chat-ui"
+    },
+    {
+      "title": "Build a voice agent with LangChain",
+      "url": "llms-txt#build-a-voice-agent-with-langchain"
+    },
+    {
+      "title": "Memory",
+      "url": "llms-txt#memory"
+    },
+    {
+      "title": "Build a custom RAG agent with LangGraph",
+      "url": "llms-txt#build-a-custom-rag-agent-with-langgraph"
+    },
+    {
+      "title": "Application structure",
+      "url": "llms-txt#application-structure"
+    },
+    {
+      "title": "Case studies",
+      "url": "llms-txt#case-studies"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Choosing between Graph and Functional APIs",
+      "url": "llms-txt#choosing-between-graph-and-functional-apis"
+    },
+    {
+      "title": "Graph API: Clear visualization of decision paths",
+      "url": "llms-txt#graph-api:-clear-visualization-of-decision-paths"
+    },
+    {
+      "title": "Multiple nodes can access and modify shared state",
+      "url": "llms-txt#multiple-nodes-can-access-and-modify-shared-state"
+    },
+    {
+      "title": "Parallel processing of multiple data sources",
+      "url": "llms-txt#parallel-processing-of-multiple-data-sources"
+    },
+    {
+      "title": "All fetch operations run in parallel",
+      "url": "llms-txt#all-fetch-operations-run-in-parallel"
+    },
+    {
+      "title": "Combine waits for all parallel operations to complete",
+      "url": "llms-txt#combine-waits-for-all-parallel-operations-to-complete"
+    },
+    {
+      "title": "Clear separation of concerns - each team member can work on different nodes",
+      "url": "llms-txt#clear-separation-of-concerns---each-team-member-can-work-on-different-nodes"
+    },
+    {
+      "title": "Functional API: Minimal changes to existing code",
+      "url": "llms-txt#functional-api:-minimal-changes-to-existing-code"
+    },
+    {
+      "title": "Complex multi-agent coordination using Graph API",
+      "url": "llms-txt#complex-multi-agent-coordination-using-graph-api"
+    },
+    {
+      "title": "Simple data processing using Functional API",
+      "url": "llms-txt#simple-data-processing-using-functional-api"
+    },
+    {
+      "title": "Use the functional API result in the graph",
+      "url": "llms-txt#use-the-functional-api-result-in-the-graph"
+    },
+    {
+      "title": "Before: Functional API",
+      "url": "llms-txt#before:-functional-api"
+    },
+    {
+      "title": "After: Graph API",
+      "url": "llms-txt#after:-graph-api"
+    },
+    {
+      "title": "... add remaining nodes and edges",
+      "url": "llms-txt#...-add-remaining-nodes-and-edges"
+    },
+    {
+      "title": "Before: Over-engineered Graph API",
+      "url": "llms-txt#before:-over-engineered-graph-api"
+    },
+    {
+      "title": "After: Simplified Functional API",
+      "url": "llms-txt#after:-simplified-functional-api"
+    },
+    {
+      "title": "LangSmith Deployment",
+      "url": "llms-txt#langsmith-deployment"
+    },
+    {
+      "title": "Durable execution",
+      "url": "llms-txt#durable-execution"
+    },
+    {
+      "title": "Functional API overview",
+      "url": "llms-txt#functional-api-overview"
+    },
+    {
+      "title": "Graph API overview",
+      "url": "llms-txt#graph-api-overview"
+    },
+    {
+      "title": "Install LangGraph",
+      "url": "llms-txt#install-langgraph"
+    },
+    {
+      "title": "Interrupts",
+      "url": "llms-txt#interrupts"
+    },
+    {
+      "title": "Run a local server",
+      "url": "llms-txt#run-a-local-server"
+    },
+    {
+      "title": "LangSmith Observability",
+      "url": "llms-txt#langsmith-observability"
+    },
+    {
+      "title": "LangGraph overview",
+      "url": "llms-txt#langgraph-overview"
+    },
+    {
+      "title": "Persistence",
+      "url": "llms-txt#persistence"
+    },
+    {
+      "title": "LangGraph runtime",
+      "url": "llms-txt#langgraph-runtime"
+    },
+    {
+      "title": "Quickstart",
+      "url": "llms-txt#quickstart"
+    },
+    {
+      "title": "Streaming",
+      "url": "llms-txt#streaming"
+    },
+    {
+      "title": "LangSmith Studio",
+      "url": "llms-txt#langsmith-studio"
+    },
+    {
+      "title": "Test",
+      "url": "llms-txt#test"
+    },
+    {
+      "title": "Thinking in LangGraph",
+      "url": "llms-txt#thinking-in-langgraph"
+    },
+    {
+      "title": "Agent Chat UI",
+      "url": "llms-txt#agent-chat-ui"
+    },
+    {
+      "title": "Use the functional API",
+      "url": "llms-txt#use-the-functional-api"
+    },
+    {
+      "title": "Use the graph API",
+      "url": "llms-txt#use-the-graph-api"
+    },
+    {
+      "title": "Subgraphs",
+      "url": "llms-txt#subgraphs"
+    },
+    {
+      "title": "Use time-travel",
+      "url": "llms-txt#use-time-travel"
+    },
+    {
+      "title": "The Secret Life of Socks in the Dryer",
+      "url": "llms-txt#the-secret-life-of-socks-in-the-dryer"
+    },
+    {
+      "title": "Workflows and agents",
+      "url": "llms-txt#workflows-and-agents"
+    },
+    {
+      "title": "Learn",
+      "url": "llms-txt#learn"
+    },
+    {
+      "title": "LangChain v1 migration guide",
+      "url": "llms-txt#langchain-v1-migration-guide"
+    },
+    {
+      "title": "LangGraph v1 migration guide",
+      "url": "llms-txt#langgraph-v1-migration-guide"
+    },
+    {
+      "title": "Deep Agents",
+      "url": "llms-txt#deep-agents"
+    },
+    {
+      "title": "LangChain SDK",
+      "url": "llms-txt#langchain-sdk"
+    },
+    {
+      "title": "LangGraph SDK",
+      "url": "llms-txt#langgraph-sdk"
+    },
+    {
+      "title": "Reference",
+      "url": "llms-txt#reference"
+    },
+    {
+      "title": "Release policy",
+      "url": "llms-txt#release-policy"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "What's new in LangChain v1",
+      "url": "llms-txt#what's-new-in-langchain-v1"
+    },
+    {
+      "title": "What's new in LangGraph v1",
+      "url": "llms-txt#what's-new-in-langgraph-v1"
+    },
+    {
+      "title": "Security policy",
+      "url": "llms-txt#security-policy"
+    },
+    {
+      "title": "Versioning",
+      "url": "llms-txt#versioning"
+    },
+    {
+      "title": "Errors",
+      "url": "llms-txt#errors"
+    },
+    {
+      "title": "Context overview",
+      "url": "llms-txt#context-overview"
+    },
+    {
+      "title": "Memory overview",
+      "url": "llms-txt#memory-overview"
+    },
+    {
+      "title": "Node that *uses* the instructions",
+      "url": "llms-txt#node-that-*uses*-the-instructions"
+    },
+    {
+      "title": "Node that updates instructions",
+      "url": "llms-txt#node-that-updates-instructions"
+    },
+    {
+      "title": "InMemoryStore saves data to an in-memory dictionary. Use a DB-backed store in production use.",
+      "url": "llms-txt#inmemorystore-saves-data-to-an-in-memory-dictionary.-use-a-db-backed-store-in-production-use."
+    },
+    {
+      "title": "get the \"memory\" by ID",
+      "url": "llms-txt#get-the-\"memory\"-by-id"
+    },
+    {
+      "title": "search for \"memories\" within this namespace, filtering on content equivalence, sorted by vector similarity",
+      "url": "llms-txt#search-for-\"memories\"-within-this-namespace,-filtering-on-content-equivalence,-sorted-by-vector-similarity"
+    },
+    {
+      "title": "Contributing to code",
+      "url": "llms-txt#contributing-to-code"
+    },
+    {
+      "title": "Or directly:",
+      "url": "llms-txt#or-directly:"
+    },
+    {
+      "title": "Co-marketing",
+      "url": "llms-txt#co-marketing"
+    },
+    {
+      "title": "Contributing to documentation",
+      "url": "llms-txt#contributing-to-documentation"
+    },
+    {
+      "title": "Check broken links",
+      "url": "llms-txt#check-broken-links"
+    },
+    {
+      "title": "Format code automatically",
+      "url": "llms-txt#format-code-automatically"
+    },
+    {
+      "title": "Check for linting issues",
+      "url": "llms-txt#check-for-linting-issues"
+    },
+    {
+      "title": "Fix markdown issues",
+      "url": "llms-txt#fix-markdown-issues"
+    },
+    {
+      "title": "Run tests to ensure your changes don't break existing functionality",
+      "url": "llms-txt#run-tests-to-ensure-your-changes-don't-break-existing-functionality"
+    },
+    {
+      "title": "Implement a LangChain integration",
+      "url": "llms-txt#implement-a-langchain-integration"
+    },
+    {
+      "title": "Contributing integrations",
+      "url": "llms-txt#contributing-integrations"
+    },
+    {
+      "title": "Contributing",
+      "url": "llms-txt#contributing"
+    },
+    {
+      "title": "Publish an integration",
+      "url": "llms-txt#publish-an-integration"
+    },
+    {
+      "title": "Using standard tests",
+      "url": "llms-txt#using-standard-tests"
+    },
+    {
+      "title": "Indicate that a chat model supports image inputs",
+      "url": "llms-txt#indicate-that-a-chat-model-supports-image-inputs"
+    },
+    {
+      "title": "Run all tests",
+      "url": "llms-txt#run-all-tests"
+    },
+    {
+      "title": "For certain unit tests, you may need to set certain flags and environment variables:",
+      "url": "llms-txt#for-certain-unit-tests,-you-may-need-to-set-certain-flags-and-environment-variables:"
+    },
+    {
+      "title": "Run a specific test file",
+      "url": "llms-txt#run-a-specific-test-file"
+    },
+    {
+      "title": "Run a specific test function in a file",
+      "url": "llms-txt#run-a-specific-test-function-in-a-file"
+    },
+    {
+      "title": "Run a specific test function within a class",
+      "url": "llms-txt#run-a-specific-test-function-within-a-class"
+    },
+    {
+      "title": "Backends",
+      "url": "llms-txt#backends"
+    },
+    {
+      "title": "By default we provide a StateBackend",
+      "url": "llms-txt#by-default-we-provide-a-statebackend"
+    },
+    {
+      "title": "Under the hood, it looks like",
+      "url": "llms-txt#under-the-hood,-it-looks-like"
+    },
+    {
+      "title": "Deep Agents CLI",
+      "url": "llms-txt#deep-agents-cli"
+    },
+    {
+      "title": "Applies conventions without prompting",
+      "url": "llms-txt#applies-conventions-without-prompting"
+    },
+    {
+      "title": "Customize Deep Agents",
+      "url": "llms-txt#customize-deep-agents"
+    },
+    {
+      "title": "Agent harness capabilities",
+      "url": "llms-txt#agent-harness-capabilities"
+    },
+    {
+      "title": "Human-in-the-loop",
+      "url": "llms-txt#human-in-the-loop"
+    },
+    {
+      "title": "Checkpointer is REQUIRED for human-in-the-loop",
+      "url": "llms-txt#checkpointer-is-required-for-human-in-the-loop"
+    },
+    {
+      "title": "Create config with thread_id for state persistence",
+      "url": "llms-txt#create-config-with-thread_id-for-state-persistence"
+    },
+    {
+      "title": "Invoke the agent",
+      "url": "llms-txt#invoke-the-agent"
+    },
+    {
+      "title": "Check if execution was interrupted",
+      "url": "llms-txt#check-if-execution-was-interrupted"
+    },
+    {
+      "title": "Process final result",
+      "url": "llms-txt#process-final-result"
+    },
+    {
+      "title": "First call",
+      "url": "llms-txt#first-call"
+    },
+    {
+      "title": "Resume (use same config)",
+      "url": "llms-txt#resume-(use-same-config)"
+    },
+    {
+      "title": "Long-term memory",
+      "url": "llms-txt#long-term-memory"
+    },
+    {
+      "title": "Transient file (lost after thread ends)",
+      "url": "llms-txt#transient-file-(lost-after-thread-ends)"
+    },
+    {
+      "title": "Persistent file (survives across threads)",
+      "url": "llms-txt#persistent-file-(survives-across-threads)"
+    },
+    {
+      "title": "Thread 1: Write to long-term memory",
+      "url": "llms-txt#thread-1:-write-to-long-term-memory"
+    },
+    {
+      "title": "Thread 2: Read from long-term memory (different conversation!)",
+      "url": "llms-txt#thread-2:-read-from-long-term-memory-(different-conversation!)"
+    },
+    {
+      "title": "Agent can read /memories/preferences.txt from the first thread",
+      "url": "llms-txt#agent-can-read-/memories/preferences.txt-from-the-first-thread"
+    },
+    {
+      "title": "Conversation 1: Learn about a project",
+      "url": "llms-txt#conversation-1:-learn-about-a-project"
+    },
+    {
+      "title": "Conversation 2: Use that knowledge",
+      "url": "llms-txt#conversation-2:-use-that-knowledge"
+    },
+    {
+      "title": "Agent reads /memories/project_notes.txt from previous conversation",
+      "url": "llms-txt#agent-reads-/memories/project_notes.txt-from-previous-conversation"
+    },
+    {
+      "title": "Deep Agents Middleware",
+      "url": "llms-txt#deep-agents-middleware"
+    },
+    {
+      "title": "TodoListMiddleware is included by default in create_deep_agent",
+      "url": "llms-txt#todolistmiddleware-is-included-by-default-in-create_deep_agent"
+    },
+    {
+      "title": "You can customize it if building a custom agent",
+      "url": "llms-txt#you-can-customize-it-if-building-a-custom-agent"
+    },
+    {
+      "title": "FilesystemMiddleware is included by default in create_deep_agent",
+      "url": "llms-txt#filesystemmiddleware-is-included-by-default-in-create_deep_agent"
+    },
+    {
+      "title": "You can customize it if building a custom agent",
+      "url": "llms-txt#you-can-customize-it-if-building-a-custom-agent"
+    },
+    {
+      "title": "Create a custom LangGraph graph",
+      "url": "llms-txt#create-a-custom-langgraph-graph"
+    },
+    {
+      "title": "Wrap it in a CompiledSubAgent",
+      "url": "llms-txt#wrap-it-in-a-compiledsubagent"
+    },
+    {
+      "title": "Deep Agents overview",
+      "url": "llms-txt#deep-agents-overview"
+    },
+    {
+      "title": "Quickstart",
+      "url": "llms-txt#quickstart"
+    },
+    {
+      "title": "System prompt to steer the agent to be an expert researcher",
+      "url": "llms-txt#system-prompt-to-steer-the-agent-to-be-an-expert-researcher"
+    },
+    {
+      "title": "Print the agent's response",
+      "url": "llms-txt#print-the-agent's-response"
+    },
+    {
+      "title": "Subagents",
+      "url": "llms-txt#subagents"
+    },
+    {
+      "title": "Create a custom agent graph",
+      "url": "llms-txt#create-a-custom-agent-graph"
+    },
+    {
+      "title": "Use it as a custom subagent",
+      "url": "llms-txt#use-it-as-a-custom-subagent"
+    },
+    {
+      "title": "✅ Good: Focused tool set",
+      "url": "llms-txt#✅-good:-focused-tool-set"
+    },
+    {
+      "title": "❌ Bad: Too many tools",
+      "url": "llms-txt#❌-bad:-too-many-tools"
+    },
+    {
+      "title": "ChatGroq",
+      "url": "llms-txt#chatgroq"
+    },
+    {
+      "title": "Chat models",
+      "url": "llms-txt#chat-models"
+    },
+    {
+      "title": "null",
+      "url": "llms-txt#null"
+    },
+    {
+      "title": "Load all documents",
+      "url": "llms-txt#load-all-documents"
+    },
+    {
+      "title": "For large datasets, lazily load documents",
+      "url": "llms-txt#for-large-datasets,-lazily-load-documents"
+    },
+    {
+      "title": "Provider-specific middleware",
+      "url": "llms-txt#provider-specific-middleware"
+    },
+    {
+      "title": "All integration providers",
+      "url": "llms-txt#all-integration-providers"
+    },
+    {
+      "title": "Anthropic (Claude)",
+      "url": "llms-txt#anthropic-(claude)"
+    },
+    {
+      "title": "AWS (Amazon)",
+      "url": "llms-txt#aws-(amazon)"
+    },
+    {
+      "title": "Google",
+      "url": "llms-txt#google"
+    },
+    {
+      "title": "Hugging Face",
+      "url": "llms-txt#hugging-face"
+    },
+    {
+      "title": "Microsoft",
+      "url": "llms-txt#microsoft"
+    },
+    {
+      "title": "Ollama",
+      "url": "llms-txt#ollama"
+    },
+    {
+      "title": "OpenAI",
+      "url": "llms-txt#openai"
+    },
+    {
+      "title": "LangChain integrations packages",
+      "url": "llms-txt#langchain-integrations-packages"
+    },
+    {
+      "title": "Retrievers",
+      "url": "llms-txt#retrievers"
+    },
+    {
+      "title": "Text splitters",
+      "url": "llms-txt#text-splitters"
+    },
+    {
+      "title": "Key-value stores",
+      "url": "llms-txt#key-value-stores"
+    },
+    {
+      "title": "Embedding models",
+      "url": "llms-txt#embedding-models"
+    },
+    {
+      "title": "Create your underlying embeddings model",
+      "url": "llms-txt#create-your-underlying-embeddings-model"
+    },
+    {
+      "title": "Store persists embeddings to the local filesystem",
+      "url": "llms-txt#store-persists-embeddings-to-the-local-filesystem"
+    },
+    {
+      "title": "This isn't for production use, but is useful for local",
+      "url": "llms-txt#this-isn't-for-production-use,-but-is-useful-for-local"
+    },
+    {
+      "title": "Example: caching a query embedding",
+      "url": "llms-txt#example:-caching-a-query-embedding"
+    },
+    {
+      "title": "Subsequent calls use the cache",
+      "url": "llms-txt#subsequent-calls-use-the-cache"
+    },
+    {
+      "title": "Tools and toolkits",
+      "url": "llms-txt#tools-and-toolkits"
+    },
+    {
+      "title": "Vector stores",
+      "url": "llms-txt#vector-stores"
+    },
+    {
+      "title": "LangChain Academy",
+      "url": "llms-txt#langchain-academy"
+    },
+    {
+      "title": "Agents",
+      "url": "llms-txt#agents"
+    },
+    {
+      "title": "The system prompt will be set dynamically based on context",
+      "url": "llms-txt#the-system-prompt-will-be-set-dynamically-based-on-context"
+    },
+    {
+      "title": "ContactInfo(name='John Doe', email='john@example.com', phone='(555) 123-4567')",
+      "url": "llms-txt#contactinfo(name='john-doe',-email='john@example.com',-phone='(555)-123-4567')"
+    },
+    {
+      "title": "The agent can now track additional state beyond messages",
+      "url": "llms-txt#the-agent-can-now-track-additional-state-beyond-messages"
+    },
+    {
+      "title": "The agent can now track additional state beyond messages",
+      "url": "llms-txt#the-agent-can-now-track-additional-state-beyond-messages"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Component architecture",
+      "url": "llms-txt#component-architecture"
+    },
+    {
+      "title": "Context engineering in agents",
+      "url": "llms-txt#context-engineering-in-agents"
+    },
+    {
+      "title": "LangSmith Deployment",
+      "url": "llms-txt#langsmith-deployment"
+    },
+    {
+      "title": "Get help",
+      "url": "llms-txt#get-help"
+    },
+    {
+      "title": "Guardrails",
+      "url": "llms-txt#guardrails"
+    },
+    {
+      "title": "When user provides PII, it will be handled according to the strategy",
+      "url": "llms-txt#when-user-provides-pii,-it-will-be-handled-according-to-the-strategy"
+    },
+    {
+      "title": "Human-in-the-loop requires a thread ID for persistence",
+      "url": "llms-txt#human-in-the-loop-requires-a-thread-id-for-persistence"
+    },
+    {
+      "title": "Agent will pause and wait for approval before executing sensitive tools",
+      "url": "llms-txt#agent-will-pause-and-wait-for-approval-before-executing-sensitive-tools"
+    },
+    {
+      "title": "Human-in-the-loop",
+      "url": "llms-txt#human-in-the-loop"
+    },
+    {
+      "title": "Human-in-the-loop leverages LangGraph's persistence layer.",
+      "url": "llms-txt#human-in-the-loop-leverages-langgraph's-persistence-layer."
+    },
+    {
+      "title": "You must provide a thread ID to associate the execution with a conversation thread,",
+      "url": "llms-txt#you-must-provide-a-thread-id-to-associate-the-execution-with-a-conversation-thread,"
+    },
+    {
+      "title": "so the conversation can be paused and resumed (as is needed for human review).",
+      "url": "llms-txt#so-the-conversation-can-be-paused-and-resumed-(as-is-needed-for-human-review)."
+    },
+    {
+      "title": "Run the graph until the interrupt is hit.",
+      "url": "llms-txt#run-the-graph-until-the-interrupt-is-hit."
+    },
+    {
+      "title": "The interrupt contains the full HITL request with action_requests and review_configs",
+      "url": "llms-txt#the-interrupt-contains-the-full-hitl-request-with-action_requests-and-review_configs"
+    },
+    {
+      "title": "> [",
+      "url": "llms-txt#>-["
+    },
+    {
+      "title": ">    Interrupt(",
+      "url": "llms-txt#>----interrupt("
+    },
+    {
+      "title": ">       value={",
+      "url": "llms-txt#>-------value={"
+    },
+    {
+      "title": ">          'action_requests': [",
+      "url": "llms-txt#>----------'action_requests':-["
+    },
+    {
+      "title": ">             {",
+      "url": "llms-txt#>-------------{"
+    },
+    {
+      "title": ">                'name': 'execute_sql',",
+      "url": "llms-txt#>----------------'name':-'execute_sql',"
+    },
+    {
+      "title": ">                'arguments': {'query': 'DELETE FROM records WHERE created_at < NOW() - INTERVAL \\'30 days\\';'},",
+      "url": "llms-txt#>----------------'arguments':-{'query':-'delete-from-records-where-created_at-<-now()---interval-\\'30-days\\';'},"
+    },
+    {
+      "title": ">                'description': 'Tool execution pending approval\\n\\nTool: execute_sql\\nArgs: {...}'",
+      "url": "llms-txt#>----------------'description':-'tool-execution-pending-approval\\n\\ntool:-execute_sql\\nargs:-{...}'"
+    },
+    {
+      "title": ">             }",
+      "url": "llms-txt#>-------------}"
+    },
+    {
+      "title": ">          ],",
+      "url": "llms-txt#>----------],"
+    },
+    {
+      "title": ">          'review_configs': [",
+      "url": "llms-txt#>----------'review_configs':-["
+    },
+    {
+      "title": ">             {",
+      "url": "llms-txt#>-------------{"
+    },
+    {
+      "title": ">                'action_name': 'execute_sql',",
+      "url": "llms-txt#>----------------'action_name':-'execute_sql',"
+    },
+    {
+      "title": ">                'allowed_decisions': ['approve', 'reject']",
+      "url": "llms-txt#>----------------'allowed_decisions':-['approve',-'reject']"
+    },
+    {
+      "title": ">             }",
+      "url": "llms-txt#>-------------}"
+    },
+    {
+      "title": ">          ]",
+      "url": "llms-txt#>----------]"
+    },
+    {
+      "title": ">       }",
+      "url": "llms-txt#>-------}"
+    },
+    {
+      "title": ">    )",
+      "url": "llms-txt#>----)"
+    },
+    {
+      "title": "> ]",
+      "url": "llms-txt#>-]"
+    },
+    {
+      "title": "Resume with approval decision",
+      "url": "llms-txt#resume-with-approval-decision"
+    },
+    {
+      "title": "Stream agent progress and LLM tokens until interrupt",
+      "url": "llms-txt#stream-agent-progress-and-llm-tokens-until-interrupt"
+    },
+    {
+      "title": "Resume with streaming after human decision",
+      "url": "llms-txt#resume-with-streaming-after-human-decision"
+    },
+    {
+      "title": "Install LangChain",
+      "url": "llms-txt#install-langchain"
+    },
+    {
+      "title": "Build a semantic search engine with LangChain",
+      "url": "llms-txt#build-a-semantic-search-engine-with-langchain"
+    },
+    {
+      "title": "Note that providers implement different scores; the score here",
+      "url": "llms-txt#note-that-providers-implement-different-scores;-the-score-here"
+    },
+    {
+      "title": "is a distance metric that varies inversely with similarity.",
+      "url": "llms-txt#is-a-distance-metric-that-varies-inversely-with-similarity."
+    },
+    {
+      "title": "Long-term memory",
+      "url": "llms-txt#long-term-memory"
+    },
+    {
+      "title": "InMemoryStore saves data to an in-memory dictionary. Use a DB-backed store in production use.",
+      "url": "llms-txt#inmemorystore-saves-data-to-an-in-memory-dictionary.-use-a-db-backed-store-in-production-use."
+    },
+    {
+      "title": "get the \"memory\" by ID",
+      "url": "llms-txt#get-the-\"memory\"-by-id"
+    },
+    {
+      "title": "search for \"memories\" within this namespace, filtering on content equivalence, sorted by vector similarity",
+      "url": "llms-txt#search-for-\"memories\"-within-this-namespace,-filtering-on-content-equivalence,-sorted-by-vector-similarity"
+    },
+    {
+      "title": "InMemoryStore saves data to an in-memory dictionary. Use a DB-backed store in production.",
+      "url": "llms-txt#inmemorystore-saves-data-to-an-in-memory-dictionary.-use-a-db-backed-store-in-production."
+    },
+    {
+      "title": "Write sample data to the store using the put method",
+      "url": "llms-txt#write-sample-data-to-the-store-using-the-put-method"
+    },
+    {
+      "title": "Run the agent",
+      "url": "llms-txt#run-the-agent"
+    },
+    {
+      "title": "InMemoryStore saves data to an in-memory dictionary. Use a DB-backed store in production.",
+      "url": "llms-txt#inmemorystore-saves-data-to-an-in-memory-dictionary.-use-a-db-backed-store-in-production."
+    },
+    {
+      "title": "TypedDict defines the structure of user information for the LLM",
+      "url": "llms-txt#typeddict-defines-the-structure-of-user-information-for-the-llm"
+    },
+    {
+      "title": "Tool that allows agent to update user information (useful for chat applications)",
+      "url": "llms-txt#tool-that-allows-agent-to-update-user-information-(useful-for-chat-applications)"
+    },
+    {
+      "title": "Run the agent",
+      "url": "llms-txt#run-the-agent"
+    },
+    {
+      "title": "You can access the store directly to get the value",
+      "url": "llms-txt#you-can-access-the-store-directly-to-get-the-value"
+    },
+    {
+      "title": "Model Context Protocol (MCP)",
+      "url": "llms-txt#model-context-protocol-(mcp)"
+    },
+    {
+      "title": "Create a session explicitly",
+      "url": "llms-txt#create-a-session-explicitly"
+    },
+    {
+      "title": "Extract structured content from tool messages",
+      "url": "llms-txt#extract-structured-content-from-tool-messages"
+    },
+    {
+      "title": "Access multimodal content from tool messages",
+      "url": "llms-txt#access-multimodal-content-from-tool-messages"
+    },
+    {
+      "title": "Load all resources from a server",
+      "url": "llms-txt#load-all-resources-from-a-server"
+    },
+    {
+      "title": "Or load specific resources by URI",
+      "url": "llms-txt#or-load-specific-resources-by-uri"
+    },
+    {
+      "title": "Load a prompt by name",
+      "url": "llms-txt#load-a-prompt-by-name"
+    },
+    {
+      "title": "Load a prompt with arguments",
+      "url": "llms-txt#load-a-prompt-with-arguments"
+    },
+    {
+      "title": "Use the messages in your workflow",
+      "url": "llms-txt#use-the-messages-in-your-workflow"
+    },
+    {
+      "title": "Original call: add(a=2, b=3) becomes add(a=4, b=6)",
+      "url": "llms-txt#original-call:-add(a=2,-b=3)-becomes-add(a=4,-b=6)"
+    },
+    {
+      "title": "Execution order:",
+      "url": "llms-txt#execution-order:"
+    },
+    {
+      "title": "outer: before -> inner: before -> tool execution -> inner: after -> outer: after",
+      "url": "llms-txt#outer:-before-->-inner:-before-->-tool-execution-->-inner:-after-->-outer:-after"
+    },
+    {
+      "title": "Accept with data",
+      "url": "llms-txt#accept-with-data"
+    },
+    {
+      "title": "Decline (user doesn't want to provide info)",
+      "url": "llms-txt#decline-(user-doesn't-want-to-provide-info)"
+    },
+    {
+      "title": "Cancel (abort the operation)",
+      "url": "llms-txt#cancel-(abort-the-operation)"
+    },
+    {
+      "title": "Messages",
+      "url": "llms-txt#messages"
+    },
+    {
+      "title": "Use with chat models",
+      "url": "llms-txt#use-with-chat-models"
+    },
+    {
+      "title": "Create an AI message manually (e.g., for conversation history)",
+      "url": "llms-txt#create-an-ai-message-manually-(e.g.,-for-conversation-history)"
+    },
+    {
+      "title": "Add to conversation history",
+      "url": "llms-txt#add-to-conversation-history"
+    },
+    {
+      "title": "After a model makes a tool call",
+      "url": "llms-txt#after-a-model-makes-a-tool-call"
+    },
+    {
+      "title": "(Here, we demonstrate manually creating the messages for brevity)",
+      "url": "llms-txt#(here,-we-demonstrate-manually-creating-the-messages-for-brevity)"
+    },
+    {
+      "title": "Execute tool and create result message",
+      "url": "llms-txt#execute-tool-and-create-result-message"
+    },
+    {
+      "title": "Continue conversation",
+      "url": "llms-txt#continue-conversation"
+    },
+    {
+      "title": "String content",
+      "url": "llms-txt#string-content"
+    },
+    {
+      "title": "Provider-native format (e.g., OpenAI)",
+      "url": "llms-txt#provider-native-format-(e.g.,-openai)"
+    },
+    {
+      "title": "List of standard content blocks",
+      "url": "llms-txt#list-of-standard-content-blocks"
+    },
+    {
+      "title": "Built-in middleware",
+      "url": "llms-txt#built-in-middleware"
+    },
+    {
+      "title": "Method 1: Regex pattern string",
+      "url": "llms-txt#method-1:-regex-pattern-string"
+    },
+    {
+      "title": "Method 2: Compiled regex pattern",
+      "url": "llms-txt#method-2:-compiled-regex-pattern"
+    },
+    {
+      "title": "Method 3: Custom detector function",
+      "url": "llms-txt#method-3:-custom-detector-function"
+    },
+    {
+      "title": "Custom middleware",
+      "url": "llms-txt#custom-middleware"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "Models",
+      "url": "llms-txt#models"
+    },
+    {
+      "title": "The",
+      "url": "llms-txt#the"
+    },
+    {
+      "title": "The sky",
+      "url": "llms-txt#the-sky"
+    },
+    {
+      "title": "The sky is",
+      "url": "llms-txt#the-sky-is"
+    },
+    {
+      "title": "The sky is typically",
+      "url": "llms-txt#the-sky-is-typically"
+    },
+    {
+      "title": "The sky is typically blue",
+      "url": "llms-txt#the-sky-is-typically-blue"
+    },
+    {
+      "title": "...",
+      "url": "llms-txt#..."
+    },
+    {
+      "title": "[{\"type\": \"text\", \"text\": \"The sky is typically blue...\"}]",
+      "url": "llms-txt#[{\"type\":-\"text\",-\"text\":-\"the-sky-is-typically-blue...\"}]"
+    },
+    {
+      "title": "{",
+      "url": "llms-txt#{"
+    },
+    {
+      "title": "\"max_input_tokens\": 400000,",
+      "url": "llms-txt#\"max_input_tokens\":-400000,"
+    },
+    {
+      "title": "\"image_inputs\": True,",
+      "url": "llms-txt#\"image_inputs\":-true,"
+    },
+    {
+      "title": "\"reasoning_output\": True,",
+      "url": "llms-txt#\"reasoning_output\":-true,"
+    },
+    {
+      "title": "\"tool_calling\": True,",
+      "url": "llms-txt#\"tool_calling\":-true,"
+    },
+    {
+      "title": "...",
+      "url": "llms-txt#..."
+    },
+    {
+      "title": "}",
+      "url": "llms-txt#}"
+    },
+    {
+      "title": "[",
+      "url": "llms-txt#["
+    },
+    {
+      "title": "{\"type\": \"text\", \"text\": \"Here's a picture of a cat\"},",
+      "url": "llms-txt#{\"type\":-\"text\",-\"text\":-\"here's-a-picture-of-a-cat\"},"
+    },
+    {
+      "title": "{\"type\": \"image\", \"base64\": \"...\", \"mime_type\": \"image/jpeg\"},",
+      "url": "llms-txt#{\"type\":-\"image\",-\"base64\":-\"...\",-\"mime_type\":-\"image/jpeg\"},"
+    },
+    {
+      "title": "]",
+      "url": "llms-txt#]"
+    },
+    {
+      "title": "Custom workflow",
+      "url": "llms-txt#custom-workflow"
+    },
+    {
+      "title": "Build a simple workflow",
+      "url": "llms-txt#build-a-simple-workflow"
+    },
+    {
+      "title": "Handoffs",
+      "url": "llms-txt#handoffs"
+    },
+    {
+      "title": "Build customer support with handoffs",
+      "url": "llms-txt#build-customer-support-with-handoffs"
+    },
+    {
+      "title": "Define the possible workflow steps",
+      "url": "llms-txt#define-the-possible-workflow-steps"
+    },
+    {
+      "title": "Step configuration: maps step name to (prompt, tools, required_state)",
+      "url": "llms-txt#step-configuration:-maps-step-name-to-(prompt,-tools,-required_state)"
+    },
+    {
+      "title": "Collect all tools from all step configurations",
+      "url": "llms-txt#collect-all-tools-from-all-step-configurations"
+    },
+    {
+      "title": "Create the agent with step-based configuration",
+      "url": "llms-txt#create-the-agent-with-step-based-configuration"
+    },
+    {
+      "title": "Configuration for this conversation thread",
+      "url": "llms-txt#configuration-for-this-conversation-thread"
+    },
+    {
+      "title": "Turn 1: Initial message - starts with warranty_collector step",
+      "url": "llms-txt#turn-1:-initial-message---starts-with-warranty_collector-step"
+    },
+    {
+      "title": "Turn 2: User responds about warranty",
+      "url": "llms-txt#turn-2:-user-responds-about-warranty"
+    },
+    {
+      "title": "Turn 3: User describes the issue",
+      "url": "llms-txt#turn-3:-user-describes-the-issue"
+    },
+    {
+      "title": "Turn 4: Resolution",
+      "url": "llms-txt#turn-4:-resolution"
+    },
+    {
+      "title": "Update the resolution_specialist configuration to include these tools",
+      "url": "llms-txt#update-the-resolution_specialist-configuration-to-include-these-tools"
+    },
+    {
+      "title": "Agent will call go_back_to_warranty and restart the warranty verification step",
+      "url": "llms-txt#agent-will-call-go_back_to_warranty-and-restart-the-warranty-verification-step"
+    },
+    {
+      "title": "Multi-agent",
+      "url": "llms-txt#multi-agent"
+    },
+    {
+      "title": "Router",
+      "url": "llms-txt#router"
+    },
+    {
+      "title": "Conversational agent uses the router as a tool",
+      "url": "llms-txt#conversational-agent-uses-the-router-as-a-tool"
+    },
+    {
+      "title": "Build a multi-source knowledge base with routing",
+      "url": "llms-txt#build-a-multi-source-knowledge-base-with-routing"
+    },
+    {
+      "title": "Define structured output schema for the classifier",
+      "url": "llms-txt#define-structured-output-schema-for-the-classifier"
+    },
+    {
+      "title": "Classifications: [{\"source\": \"github\", \"query\": \"...\"}, {\"source\": \"notion\", \"query\": \"...\"}]",
+      "url": "llms-txt#classifications:-[{\"source\":-\"github\",-\"query\":-\"...\"},-{\"source\":-\"notion\",-\"query\":-\"...\"}]"
+    },
+    {
+      "title": "Becomes:",
+      "url": "llms-txt#becomes:"
+    },
+    {
+      "title": "Both agents execute simultaneously, each receiving only the query it needs",
+      "url": "llms-txt#both-agents-execute-simultaneously,-each-receiving-only-the-query-it-needs"
+    },
+    {
+      "title": "Skills",
+      "url": "llms-txt#skills"
+    },
+    {
+      "title": "Build a SQL assistant with on-demand skills",
+      "url": "llms-txt#build-a-sql-assistant-with-on-demand-skills"
+    },
+    {
+      "title": "Create the agent with skill support",
+      "url": "llms-txt#create-the-agent-with-skill-support"
+    },
+    {
+      "title": "Configuration for this conversation thread",
+      "url": "llms-txt#configuration-for-this-conversation-thread"
+    },
+    {
+      "title": "Ask for a SQL query",
+      "url": "llms-txt#ask-for-a-sql-query"
+    },
+    {
+      "title": "Print the conversation",
+      "url": "llms-txt#print-the-conversation"
+    },
+    {
+      "title": "Sales Analytics Schema",
+      "url": "llms-txt#sales-analytics-schema"
+    },
+    {
+      "title": "Subagents",
+      "url": "llms-txt#subagents"
+    },
+    {
+      "title": "Create a subagent",
+      "url": "llms-txt#create-a-subagent"
+    },
+    {
+      "title": "Wrap it as a tool",
+      "url": "llms-txt#wrap-it-as-a-tool"
+    },
+    {
+      "title": "Main agent with subagent as a tool",
+      "url": "llms-txt#main-agent-with-subagent-as-a-tool"
+    },
+    {
+      "title": "Create a sub-agent",
+      "url": "llms-txt#create-a-sub-agent"
+    },
+    {
+      "title": "Wrap it as a tool  # [!code highlight]",
+      "url": "llms-txt#wrap-it-as-a-tool--#-[!code-highlight]"
+    },
+    {
+      "title": "Main agent with subagent as a tool  # [!code highlight]",
+      "url": "llms-txt#main-agent-with-subagent-as-a-tool--#-[!code-highlight]"
+    },
+    {
+      "title": "Build a personal assistant with subagents",
+      "url": "llms-txt#build-a-personal-assistant-with-subagents"
+    },
+    {
+      "title": "LangSmith Observability",
+      "url": "llms-txt#langsmith-observability"
+    },
+    {
+      "title": "Run the agent - all steps will be traced automatically",
+      "url": "llms-txt#run-the-agent---all-steps-will-be-traced-automatically"
+    },
+    {
+      "title": "This WILL be traced",
+      "url": "llms-txt#this-will-be-traced"
+    },
+    {
+      "title": "This will NOT be traced (if LANGSMITH_TRACING is not set)",
+      "url": "llms-txt#this-will-not-be-traced-(if-langsmith_tracing-is-not-set)"
+    },
+    {
+      "title": "LangChain overview",
+      "url": "llms-txt#langchain-overview"
+    },
+    {
+      "title": "pip install -qU langchain \"langchain[anthropic]\"",
+      "url": "llms-txt#pip-install--qu-langchain-\"langchain[anthropic]\""
+    },
+    {
+      "title": "Run the agent",
+      "url": "llms-txt#run-the-agent"
+    },
+    {
+      "title": "Philosophy",
+      "url": "llms-txt#philosophy"
+    },
+    {
+      "title": "Quickstart",
+      "url": "llms-txt#quickstart"
+    },
+    {
+      "title": "Run the agent",
+      "url": "llms-txt#run-the-agent"
+    },
+    {
+      "title": "Build a RAG agent with LangChain",
+      "url": "llms-txt#build-a-rag-agent-with-langchain"
+    },
+    {
+      "title": "Only keep post title, headers, and content from the full HTML.",
+      "url": "llms-txt#only-keep-post-title,-headers,-and-content-from-the-full-html."
+    },
+    {
+      "title": "If desired, specify custom instructions",
+      "url": "llms-txt#if-desired,-specify-custom-instructions"
+    },
+    {
+      "title": "Retrieval",
+      "url": "llms-txt#retrieval"
+    },
+    {
+      "title": "Runtime",
+      "url": "llms-txt#runtime"
+    },
+    {
+      "title": "Dynamic prompts",
+      "url": "llms-txt#dynamic-prompts"
+    },
+    {
+      "title": "Before model hook",
+      "url": "llms-txt#before-model-hook"
+    },
+    {
+      "title": "After model hook",
+      "url": "llms-txt#after-model-hook"
+    },
+    {
+      "title": "Short-term memory",
+      "url": "llms-txt#short-term-memory"
+    },
+    {
+      "title": "Custom state can be passed in invoke",
+      "url": "llms-txt#custom-state-can-be-passed-in-invoke"
+    },
+    {
+      "title": "> User is John Smith.",
+      "url": "llms-txt#>-user-is-john-smith."
+    },
+    {
+      "title": "Build a SQL agent",
+      "url": "llms-txt#build-a-sql-agent"
+    },
+    {
+      "title": "Streaming",
+      "url": "llms-txt#streaming"
+    },
+    {
+      "title": "Structured output",
+      "url": "llms-txt#structured-output"
+    },
+    {
+      "title": "LangSmith Studio",
+      "url": "llms-txt#langsmith-studio"
+    },
+    {
+      "title": "Python >= 3.11 is required.",
+      "url": "llms-txt#python->=-3.11-is-required."
+    },
+    {
+      "title": "Test",
+      "url": "llms-txt#test"
+    },
+    {
+      "title": "AIMessage(content='', ..., tool_calls=[{'name': 'foo', 'args': {'bar': 'baz'}, 'id': 'call_1', 'type': 'tool_call'}])",
+      "url": "llms-txt#aimessage(content='',-...,-tool_calls=[{'name':-'foo',-'args':-{'bar':-'baz'},-'id':-'call_1',-'type':-'tool_call'}])"
+    },
+    {
+      "title": "AIMessage(content='bar', ...)",
+      "url": "llms-txt#aimessage(content='bar',-...)"
+    },
+    {
+      "title": "First invocation",
+      "url": "llms-txt#first-invocation"
+    },
+    {
+      "title": "Second invocation: the first message is persisted (Sydney location), so the model returns GMT+10 time",
+      "url": "llms-txt#second-invocation:-the-first-message-is-persisted-(sydney-location),-so-the-model-returns-gmt+10-time"
+    },
+    {
+      "title": "Tools",
+      "url": "llms-txt#tools"
+    },
+    {
+      "title": "Access the current conversation state",
+      "url": "llms-txt#access-the-current-conversation-state"
+    },
+    {
+      "title": "Access custom state fields",
+      "url": "llms-txt#access-custom-state-fields"
+    },
+    {
+      "title": "Update the conversation history by removing all messages",
+      "url": "llms-txt#update-the-conversation-history-by-removing-all-messages"
+    },
+    {
+      "title": "Update the user_name in the agent state",
+      "url": "llms-txt#update-the-user_name-in-the-agent-state"
+    },
+    {
+      "title": "Access memory",
+      "url": "llms-txt#access-memory"
+    },
+    {
+      "title": "Update memory",
+      "url": "llms-txt#update-memory"
+    },
+    {
+      "title": "First session: save user info",
+      "url": "llms-txt#first-session:-save-user-info"
+    },
+    {
+      "title": "Second session: get user info",
+      "url": "llms-txt#second-session:-get-user-info"
+    },
+    {
+      "title": "Here is the user info for user with ID \"abc123\":",
+      "url": "llms-txt#here-is-the-user-info-for-user-with-id-\"abc123\":"
+    },
+    {
+      "title": "- Name: Foo",
+      "url": "llms-txt#--name:-foo"
+    },
+    {
+      "title": "- Age: 25",
+      "url": "llms-txt#--age:-25"
+    },
+    {
+      "title": "- Email: foo@langchain.dev",
+      "url": "llms-txt#--email:-foo@langchain.dev"
+    },
+    {
+      "title": "Agent Chat UI",
+      "url": "llms-txt#agent-chat-ui"
+    },
+    {
+      "title": "Build a voice agent with LangChain",
+      "url": "llms-txt#build-a-voice-agent-with-langchain"
+    },
+    {
+      "title": "Define agent tools",
+      "url": "llms-txt#define-agent-tools"
+    },
+    {
+      "title": "Create agent with tools and memory",
+      "url": "llms-txt#create-agent-with-tools-and-memory"
+    },
+    {
+      "title": "Use in WebSocket endpoint",
+      "url": "llms-txt#use-in-websocket-endpoint"
+    },
+    {
+      "title": "Memory",
+      "url": "llms-txt#memory"
+    },
+    {
+      "title": "Subgraph",
+      "url": "llms-txt#subgraph"
+    },
+    {
+      "title": "Parent graph",
+      "url": "llms-txt#parent-graph"
+    },
+    {
+      "title": "Create store with semantic search enabled",
+      "url": "llms-txt#create-store-with-semantic-search-enabled"
+    },
+    {
+      "title": "Build a custom RAG agent with LangGraph",
+      "url": "llms-txt#build-a-custom-rag-agent-with-langgraph"
+    },
+    {
+      "title": "Define the nodes we will cycle between",
+      "url": "llms-txt#define-the-nodes-we-will-cycle-between"
+    },
+    {
+      "title": "Decide whether to retrieve",
+      "url": "llms-txt#decide-whether-to-retrieve"
+    },
+    {
+      "title": "Edges taken after the `action` node is called.",
+      "url": "llms-txt#edges-taken-after-the-`action`-node-is-called."
+    },
+    {
+      "title": "Compile",
+      "url": "llms-txt#compile"
+    },
+    {
+      "title": "Application structure",
+      "url": "llms-txt#application-structure"
+    },
+    {
+      "title": "Case studies",
+      "url": "llms-txt#case-studies"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Choosing between Graph and Functional APIs",
+      "url": "llms-txt#choosing-between-graph-and-functional-apis"
+    },
+    {
+      "title": "Graph API: Clear visualization of decision paths",
+      "url": "llms-txt#graph-api:-clear-visualization-of-decision-paths"
+    },
+    {
+      "title": "Multiple nodes can access and modify shared state",
+      "url": "llms-txt#multiple-nodes-can-access-and-modify-shared-state"
+    },
+    {
+      "title": "Parallel processing of multiple data sources",
+      "url": "llms-txt#parallel-processing-of-multiple-data-sources"
+    },
+    {
+      "title": "All fetch operations run in parallel",
+      "url": "llms-txt#all-fetch-operations-run-in-parallel"
+    },
+    {
+      "title": "Combine waits for all parallel operations to complete",
+      "url": "llms-txt#combine-waits-for-all-parallel-operations-to-complete"
+    },
+    {
+      "title": "Clear separation of concerns - each team member can work on different nodes",
+      "url": "llms-txt#clear-separation-of-concerns---each-team-member-can-work-on-different-nodes"
+    },
+    {
+      "title": "Functional API: Minimal changes to existing code",
+      "url": "llms-txt#functional-api:-minimal-changes-to-existing-code"
+    },
+    {
+      "title": "Complex multi-agent coordination using Graph API",
+      "url": "llms-txt#complex-multi-agent-coordination-using-graph-api"
+    },
+    {
+      "title": "Simple data processing using Functional API",
+      "url": "llms-txt#simple-data-processing-using-functional-api"
+    },
+    {
+      "title": "Use the functional API result in the graph",
+      "url": "llms-txt#use-the-functional-api-result-in-the-graph"
+    },
+    {
+      "title": "Before: Functional API",
+      "url": "llms-txt#before:-functional-api"
+    },
+    {
+      "title": "After: Graph API",
+      "url": "llms-txt#after:-graph-api"
+    },
+    {
+      "title": "... add remaining nodes and edges",
+      "url": "llms-txt#...-add-remaining-nodes-and-edges"
+    },
+    {
+      "title": "Before: Over-engineered Graph API",
+      "url": "llms-txt#before:-over-engineered-graph-api"
+    },
+    {
+      "title": "After: Simplified Functional API",
+      "url": "llms-txt#after:-simplified-functional-api"
+    },
+    {
+      "title": "LangSmith Deployment",
+      "url": "llms-txt#langsmith-deployment"
+    },
+    {
+      "title": "Durable execution",
+      "url": "llms-txt#durable-execution"
+    },
+    {
+      "title": "Functional API overview",
+      "url": "llms-txt#functional-api-overview"
+    },
+    {
+      "title": "Graph API overview",
+      "url": "llms-txt#graph-api-overview"
+    },
+    {
+      "title": "{'graph_output': 'My name is Lance'}",
+      "url": "llms-txt#{'graph_output':-'my-name-is-lance'}"
+    },
+    {
+      "title": "this is supported",
+      "url": "llms-txt#this-is-supported"
+    },
+    {
+      "title": "and this is also supported",
+      "url": "llms-txt#and-this-is-also-supported"
+    },
+    {
+      "title": "You can then create edges to/from this node by referencing it as `\"my_node\"`",
+      "url": "llms-txt#you-can-then-create-edges-to/from-this-node-by-referencing-it-as-`\"my_node\"`"
+    },
+    {
+      "title": "[{'expensive_node': {'result': 10}}]",
+      "url": "llms-txt#[{'expensive_node':-{'result':-10}}]"
+    },
+    {
+      "title": "[{'expensive_node': {'result': 10}, '__metadata__': {'cached': True}}]",
+      "url": "llms-txt#[{'expensive_node':-{'result':-10},-'__metadata__':-{'cached':-true}}]"
+    },
+    {
+      "title": "Build graph",
+      "url": "llms-txt#build-graph"
+    },
+    {
+      "title": "RemainingSteps works with any recursion_limit",
+      "url": "llms-txt#remainingsteps-works-with-any-recursion_limit"
+    },
+    {
+      "title": "Proactive Approach (recommended) - using RemainingSteps",
+      "url": "llms-txt#proactive-approach-(recommended)---using-remainingsteps"
+    },
+    {
+      "title": "Build graph",
+      "url": "llms-txt#build-graph"
+    },
+    {
+      "title": "Proactive: Graph completes gracefully",
+      "url": "llms-txt#proactive:-graph-completes-gracefully"
+    },
+    {
+      "title": "Reactive Approach (fallback) - catching error externally",
+      "url": "llms-txt#reactive-approach-(fallback)---catching-error-externally"
+    },
+    {
+      "title": "Install LangGraph",
+      "url": "llms-txt#install-langgraph"
+    },
+    {
+      "title": "Interrupts",
+      "url": "llms-txt#interrupts"
+    },
+    {
+      "title": "Initial run - hits the interrupt and pauses",
+      "url": "llms-txt#initial-run---hits-the-interrupt-and-pauses"
+    },
+    {
+      "title": "thread_id is the persistent pointer (stores a stable ID in production)",
+      "url": "llms-txt#thread_id-is-the-persistent-pointer-(stores-a-stable-id-in-production)"
+    },
+    {
+      "title": "Check what was interrupted",
+      "url": "llms-txt#check-what-was-interrupted"
+    },
+    {
+      "title": "__interrupt__ contains the payload that was passed to interrupt()",
+      "url": "llms-txt#__interrupt__-contains-the-payload-that-was-passed-to-interrupt()"
+    },
+    {
+      "title": "> [Interrupt(value='Do you approve this action?')]",
+      "url": "llms-txt#>-[interrupt(value='do-you-approve-this-action?')]"
+    },
+    {
+      "title": "Resume with the human's response",
+      "url": "llms-txt#resume-with-the-human's-response"
+    },
+    {
+      "title": "The resume payload becomes the return value of interrupt() inside the node",
+      "url": "llms-txt#the-resume-payload-becomes-the-return-value-of-interrupt()-inside-the-node"
+    },
+    {
+      "title": "To approve",
+      "url": "llms-txt#to-approve"
+    },
+    {
+      "title": "To reject",
+      "url": "llms-txt#to-reject"
+    },
+    {
+      "title": "Run a local server",
+      "url": "llms-txt#run-a-local-server"
+    },
+    {
+      "title": "LangSmith Observability",
+      "url": "llms-txt#langsmith-observability"
+    },
+    {
+      "title": "This WILL be traced",
+      "url": "llms-txt#this-will-be-traced"
+    },
+    {
+      "title": "This will NOT be traced (if LANGSMITH_TRACING is not set)",
+      "url": "llms-txt#this-will-not-be-traced-(if-langsmith_tracing-is-not-set)"
+    },
+    {
+      "title": "Define the graph",
+      "url": "llms-txt#define-the-graph"
+    },
+    {
+      "title": "LangGraph overview",
+      "url": "llms-txt#langgraph-overview"
+    },
+    {
+      "title": "Persistence",
+      "url": "llms-txt#persistence"
+    },
+    {
+      "title": "get the latest state snapshot",
+      "url": "llms-txt#get-the-latest-state-snapshot"
+    },
+    {
+      "title": "get a state snapshot for a specific checkpoint_id",
+      "url": "llms-txt#get-a-state-snapshot-for-a-specific-checkpoint_id"
+    },
+    {
+      "title": "Find memories about food preferences",
+      "url": "llms-txt#find-memories-about-food-preferences"
+    },
+    {
+      "title": "(This can be done after putting memories into the store)",
+      "url": "llms-txt#(this-can-be-done-after-putting-memories-into-the-store)"
+    },
+    {
+      "title": "Store with specific fields to embed",
+      "url": "llms-txt#store-with-specific-fields-to-embed"
+    },
+    {
+      "title": "Store without embedding (still retrievable, but not searchable)",
+      "url": "llms-txt#store-without-embedding-(still-retrievable,-but-not-searchable)"
+    },
+    {
+      "title": "We need this because we want to enable threads (conversations)",
+      "url": "llms-txt#we-need-this-because-we-want-to-enable-threads-(conversations)"
+    },
+    {
+      "title": "... Define the graph ...",
+      "url": "llms-txt#...-define-the-graph-..."
+    },
+    {
+      "title": "Compile the graph with the checkpointer and store",
+      "url": "llms-txt#compile-the-graph-with-the-checkpointer-and-store"
+    },
+    {
+      "title": "Invoke the graph",
+      "url": "llms-txt#invoke-the-graph"
+    },
+    {
+      "title": "First let's just say hi to the AI",
+      "url": "llms-txt#first-let's-just-say-hi-to-the-ai"
+    },
+    {
+      "title": "Invoke the graph",
+      "url": "llms-txt#invoke-the-graph"
+    },
+    {
+      "title": "Let's say hi again",
+      "url": "llms-txt#let's-say-hi-again"
+    },
+    {
+      "title": "... Define the graph ...",
+      "url": "llms-txt#...-define-the-graph-..."
+    },
+    {
+      "title": "LangGraph runtime",
+      "url": "llms-txt#langgraph-runtime"
+    },
+    {
+      "title": "Quickstart",
+      "url": "llms-txt#quickstart"
+    },
+    {
+      "title": "Build a custom SQL agent",
+      "url": "llms-txt#build-a-custom-sql-agent"
+    },
+    {
+      "title": "Example: create a predetermined tool call",
+      "url": "llms-txt#example:-create-a-predetermined-tool-call"
+    },
+    {
+      "title": "Example: force a model to create a tool call",
+      "url": "llms-txt#example:-force-a-model-to-create-a-tool-call"
+    },
+    {
+      "title": "Redefine the tool node to use the interrupt version",
+      "url": "llms-txt#redefine-the-tool-node-to-use-the-interrupt-version"
+    },
+    {
+      "title": "Streaming",
+      "url": "llms-txt#streaming"
+    },
+    {
+      "title": "The \"messages\" stream mode returns an iterator of tuples (message_chunk, metadata)",
+      "url": "llms-txt#the-\"messages\"-stream-mode-returns-an-iterator-of-tuples-(message_chunk,-metadata)"
+    },
+    {
+      "title": "where message_chunk is the token streamed by the LLM and metadata is a dictionary",
+      "url": "llms-txt#where-message_chunk-is-the-token-streamed-by-the-llm-and-metadata-is-a-dictionary"
+    },
+    {
+      "title": "with information about the graph node where the LLM was called and other information",
+      "url": "llms-txt#with-information-about-the-graph-node-where-the-llm-was-called-and-other-information"
+    },
+    {
+      "title": "model_1 is tagged with \"joke\"",
+      "url": "llms-txt#model_1-is-tagged-with-\"joke\""
+    },
+    {
+      "title": "model_2 is tagged with \"poem\"",
+      "url": "llms-txt#model_2-is-tagged-with-\"poem\""
+    },
+    {
+      "title": "The stream_mode is set to \"messages\" to stream LLM tokens",
+      "url": "llms-txt#the-stream_mode-is-set-to-\"messages\"-to-stream-llm-tokens"
+    },
+    {
+      "title": "The metadata contains information about the LLM invocation, including the tags",
+      "url": "llms-txt#the-metadata-contains-information-about-the-llm-invocation,-including-the-tags"
+    },
+    {
+      "title": "The \"messages\" stream mode returns a tuple of (message_chunk, metadata)",
+      "url": "llms-txt#the-\"messages\"-stream-mode-returns-a-tuple-of-(message_chunk,-metadata)"
+    },
+    {
+      "title": "where message_chunk is the token streamed by the LLM and metadata is a dictionary",
+      "url": "llms-txt#where-message_chunk-is-the-token-streamed-by-the-llm-and-metadata-is-a-dictionary"
+    },
+    {
+      "title": "with information about the graph node where the LLM was called and other information",
+      "url": "llms-txt#with-information-about-the-graph-node-where-the-llm-was-called-and-other-information"
+    },
+    {
+      "title": "Set stream_mode=\"custom\" to receive the custom data in the stream",
+      "url": "llms-txt#set-stream_mode=\"custom\"-to-receive-the-custom-data-in-the-stream"
+    },
+    {
+      "title": "LangSmith Studio",
+      "url": "llms-txt#langsmith-studio"
+    },
+    {
+      "title": "Python >= 3.11 is required.",
+      "url": "llms-txt#python->=-3.11-is-required."
+    },
+    {
+      "title": "Test",
+      "url": "llms-txt#test"
+    },
+    {
+      "title": "Thinking in LangGraph",
+      "url": "llms-txt#thinking-in-langgraph"
+    },
+    {
+      "title": "Define the structure for email classification",
+      "url": "llms-txt#define-the-structure-for-email-classification"
+    },
+    {
+      "title": "Agent Chat UI",
+      "url": "llms-txt#agent-chat-ui"
+    },
+    {
+      "title": "Use the functional API",
+      "url": "llms-txt#use-the-functional-api"
+    },
+    {
+      "title": "This variable is just used for demonstration purposes to simulate a network failure.",
+      "url": "llms-txt#this-variable-is-just-used-for-demonstration-purposes-to-simulate-a-network-failure."
+    },
+    {
+      "title": "It's not something you will have in your actual code.",
+      "url": "llms-txt#it's-not-something-you-will-have-in-your-actual-code."
+    },
+    {
+      "title": "Let's configure the RetryPolicy to retry on ValueError.",
+      "url": "llms-txt#let's-configure-the-retrypolicy-to-retry-on-valueerror."
+    },
+    {
+      "title": "The default RetryPolicy is optimized for retrying specific network errors.",
+      "url": "llms-txt#the-default-retrypolicy-is-optimized-for-retrying-specific-network-errors."
+    },
+    {
+      "title": "This variable is just used for demonstration purposes to simulate a network failure.",
+      "url": "llms-txt#this-variable-is-just-used-for-demonstration-purposes-to-simulate-a-network-failure."
+    },
+    {
+      "title": "It's not something you will have in your actual code.",
+      "url": "llms-txt#it's-not-something-you-will-have-in-your-actual-code."
+    },
+    {
+      "title": "Initialize an in-memory checkpointer for persistence",
+      "url": "llms-txt#initialize-an-in-memory-checkpointer-for-persistence"
+    },
+    {
+      "title": "Workflow execution configuration with a unique thread identifier",
+      "url": "llms-txt#workflow-execution-configuration-with-a-unique-thread-identifier"
+    },
+    {
+      "title": "This invocation will take ~1 second due to the slow_task execution",
+      "url": "llms-txt#this-invocation-will-take-~1-second-due-to-the-slow_task-execution"
+    },
+    {
+      "title": "Continue execution",
+      "url": "llms-txt#continue-execution"
+    },
+    {
+      "title": "Use the graph API",
+      "url": "llms-txt#use-the-graph-api"
+    },
+    {
+      "title": "Define the schema for the input",
+      "url": "llms-txt#define-the-schema-for-the-input"
+    },
+    {
+      "title": "Define the schema for the output",
+      "url": "llms-txt#define-the-schema-for-the-output"
+    },
+    {
+      "title": "Define the overall schema, combining both input and output",
+      "url": "llms-txt#define-the-overall-schema,-combining-both-input-and-output"
+    },
+    {
+      "title": "Define the node that processes the input and generates an answer",
+      "url": "llms-txt#define-the-node-that-processes-the-input-and-generates-an-answer"
+    },
+    {
+      "title": "Build the graph with input and output schemas specified",
+      "url": "llms-txt#build-the-graph-with-input-and-output-schemas-specified"
+    },
+    {
+      "title": "Invoke the graph with an input and print the result",
+      "url": "llms-txt#invoke-the-graph-with-an-input-and-print-the-result"
+    },
+    {
+      "title": "The overall state of the graph (this is the public state shared across nodes)",
+      "url": "llms-txt#the-overall-state-of-the-graph-(this-is-the-public-state-shared-across-nodes)"
+    },
+    {
+      "title": "Output from node_1 contains private data that is not part of the overall state",
+      "url": "llms-txt#output-from-node_1-contains-private-data-that-is-not-part-of-the-overall-state"
+    },
+    {
+      "title": "The private data is only shared between node_1 and node_2",
+      "url": "llms-txt#the-private-data-is-only-shared-between-node_1-and-node_2"
+    },
+    {
+      "title": "Node 2 input only requests the private data available after node_1",
+      "url": "llms-txt#node-2-input-only-requests-the-private-data-available-after-node_1"
+    },
+    {
+      "title": "Node 3 only has access to the overall state (no access to private data from node_1)",
+      "url": "llms-txt#node-3-only-has-access-to-the-overall-state-(no-access-to-private-data-from-node_1)"
+    },
+    {
+      "title": "Connect nodes in a sequence",
+      "url": "llms-txt#connect-nodes-in-a-sequence"
+    },
+    {
+      "title": "node_2 accepts private data from node_1, whereas",
+      "url": "llms-txt#node_2-accepts-private-data-from-node_1,-whereas"
+    },
+    {
+      "title": "node_3 does not see the private data.",
+      "url": "llms-txt#node_3-does-not-see-the-private-data."
+    },
+    {
+      "title": "Invoke the graph with the initial state",
+      "url": "llms-txt#invoke-the-graph-with-the-initial-state"
+    },
+    {
+      "title": "The overall state of the graph (this is the public state shared across nodes)",
+      "url": "llms-txt#the-overall-state-of-the-graph-(this-is-the-public-state-shared-across-nodes)"
+    },
+    {
+      "title": "Build the state graph",
+      "url": "llms-txt#build-the-state-graph"
+    },
+    {
+      "title": "Test the graph with a valid input",
+      "url": "llms-txt#test-the-graph-with-a-valid-input"
+    },
+    {
+      "title": "1. Specify config schema",
+      "url": "llms-txt#1.-specify-config-schema"
+    },
+    {
+      "title": "2. Define a graph that accesses the config in a node",
+      "url": "llms-txt#2.-define-a-graph-that-accesses-the-config-in-a-node"
+    },
+    {
+      "title": "3. Pass in configuration at runtime:",
+      "url": "llms-txt#3.-pass-in-configuration-at-runtime:"
+    },
+    {
+      "title": "Add nodes",
+      "url": "llms-txt#add-nodes"
+    },
+    {
+      "title": "Add edges",
+      "url": "llms-txt#add-edges"
+    },
+    {
+      "title": "Call the graph: here we call it to generate a list of jokes",
+      "url": "llms-txt#call-the-graph:-here-we-call-it-to-generate-a-list-of-jokes"
+    },
+    {
+      "title": "Define nodes",
+      "url": "llms-txt#define-nodes"
+    },
+    {
+      "title": "Define edges",
+      "url": "llms-txt#define-edges"
+    },
+    {
+      "title": "Define graph state",
+      "url": "llms-txt#define-graph-state"
+    },
+    {
+      "title": "Define the nodes",
+      "url": "llms-txt#define-the-nodes"
+    },
+    {
+      "title": "NOTE: there are no edges between nodes A, B and C!",
+      "url": "llms-txt#note:-there-are-no-edges-between-nodes-a,-b-and-c!"
+    },
+    {
+      "title": "Subgraphs",
+      "url": "llms-txt#subgraphs"
+    },
+    {
+      "title": "Subgraph",
+      "url": "llms-txt#subgraph"
+    },
+    {
+      "title": "Parent graph",
+      "url": "llms-txt#parent-graph"
+    },
+    {
+      "title": "Subgraph",
+      "url": "llms-txt#subgraph"
+    },
+    {
+      "title": "Parent graph",
+      "url": "llms-txt#parent-graph"
+    },
+    {
+      "title": "Subgraph",
+      "url": "llms-txt#subgraph"
+    },
+    {
+      "title": "Parent graph",
+      "url": "llms-txt#parent-graph"
+    },
+    {
+      "title": "Use time-travel",
+      "url": "llms-txt#use-time-travel"
+    },
+    {
+      "title": "Build workflow",
+      "url": "llms-txt#build-workflow"
+    },
+    {
+      "title": "Add nodes",
+      "url": "llms-txt#add-nodes"
+    },
+    {
+      "title": "Add edges to connect nodes",
+      "url": "llms-txt#add-edges-to-connect-nodes"
+    },
+    {
+      "title": "Compile",
+      "url": "llms-txt#compile"
+    },
+    {
+      "title": "The Secret Life of Socks in the Dryer",
+      "url": "llms-txt#the-secret-life-of-socks-in-the-dryer"
+    },
+    {
+      "title": "The states are returned in reverse chronological order.",
+      "url": "llms-txt#the-states-are-returned-in-reverse-chronological-order."
+    },
+    {
+      "title": "This is the state before last (states are listed in chronological order)",
+      "url": "llms-txt#this-is-the-state-before-last-(states-are-listed-in-chronological-order)"
+    },
+    {
+      "title": "Workflows and agents",
+      "url": "llms-txt#workflows-and-agents"
+    },
+    {
+      "title": "Schema for structured output",
+      "url": "llms-txt#schema-for-structured-output"
+    },
+    {
+      "title": "Augment the LLM with schema for structured output",
+      "url": "llms-txt#augment-the-llm-with-schema-for-structured-output"
+    },
+    {
+      "title": "Invoke the augmented LLM",
+      "url": "llms-txt#invoke-the-augmented-llm"
+    },
+    {
+      "title": "Define a tool",
+      "url": "llms-txt#define-a-tool"
+    },
+    {
+      "title": "Augment the LLM with tools",
+      "url": "llms-txt#augment-the-llm-with-tools"
+    },
+    {
+      "title": "Invoke the LLM with input that triggers the tool call",
+      "url": "llms-txt#invoke-the-llm-with-input-that-triggers-the-tool-call"
+    },
+    {
+      "title": "Get the tool call",
+      "url": "llms-txt#get-the-tool-call"
+    },
+    {
+      "title": "Graph state",
+      "url": "llms-txt#graph-state"
+    },
+    {
+      "title": "Worker state",
+      "url": "llms-txt#worker-state"
+    },
+    {
+      "title": "Nodes",
+      "url": "llms-txt#nodes"
+    },
+    {
+      "title": "Conditional edge function to create llm_call workers that each write a section of the report",
+      "url": "llms-txt#conditional-edge-function-to-create-llm_call-workers-that-each-write-a-section-of-the-report"
+    },
+    {
+      "title": "Build workflow",
+      "url": "llms-txt#build-workflow"
+    },
+    {
+      "title": "Add the nodes",
+      "url": "llms-txt#add-the-nodes"
+    },
+    {
+      "title": "Add edges to connect nodes",
+      "url": "llms-txt#add-edges-to-connect-nodes"
+    },
+    {
+      "title": "Compile the workflow",
+      "url": "llms-txt#compile-the-workflow"
+    },
+    {
+      "title": "Show the workflow",
+      "url": "llms-txt#show-the-workflow"
+    },
+    {
+      "title": "Invoke",
+      "url": "llms-txt#invoke"
+    },
+    {
+      "title": "Define tools",
+      "url": "llms-txt#define-tools"
+    },
+    {
+      "title": "Augment the LLM with tools",
+      "url": "llms-txt#augment-the-llm-with-tools"
+    },
+    {
+      "title": "Learn",
+      "url": "llms-txt#learn"
+    },
+    {
+      "title": "LangChain v1 migration guide",
+      "url": "llms-txt#langchain-v1-migration-guide"
+    },
+    {
+      "title": "No longer supported",
+      "url": "llms-txt#no-longer-supported"
+    },
+    {
+      "title": "Use instead",
+      "url": "llms-txt#use-instead"
+    },
+    {
+      "title": "Text block",
+      "url": "llms-txt#text-block"
+    },
+    {
+      "title": "Image block",
+      "url": "llms-txt#image-block"
+    },
+    {
+      "title": "Enforce previous behavior with output_version flag",
+      "url": "llms-txt#enforce-previous-behavior-with-output_version-flag"
+    },
+    {
+      "title": "Property access",
+      "url": "llms-txt#property-access"
+    },
+    {
+      "title": "Deprecated method call",
+      "url": "llms-txt#deprecated-method-call"
+    },
+    {
+      "title": "LangGraph v1 migration guide",
+      "url": "llms-txt#langgraph-v1-migration-guide"
+    },
+    {
+      "title": "Deep Agents",
+      "url": "llms-txt#deep-agents"
+    },
+    {
+      "title": "Integrations",
+      "url": "llms-txt#integrations"
+    },
+    {
+      "title": "LangChain SDK",
+      "url": "llms-txt#langchain-sdk"
+    },
+    {
+      "title": "LangGraph SDK",
+      "url": "llms-txt#langgraph-sdk"
+    },
+    {
+      "title": "Reference",
+      "url": "llms-txt#reference"
+    },
+    {
+      "title": "Release policy",
+      "url": "llms-txt#release-policy"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "What's new in LangChain v1",
+      "url": "llms-txt#what's-new-in-langchain-v1"
+    },
+    {
+      "title": "results in `Weather(temperature=70.0, condition='sunny')`",
+      "url": "llms-txt#results-in-`weather(temperature=70.0,-condition='sunny')`"
+    },
+    {
+      "title": "Unified access to content blocks",
+      "url": "llms-txt#unified-access-to-content-blocks"
+    },
+    {
+      "title": "Agent building",
+      "url": "llms-txt#agent-building"
+    },
+    {
+      "title": "Messages and content",
+      "url": "llms-txt#messages-and-content"
+    },
+    {
+      "title": "Tools",
+      "url": "llms-txt#tools"
+    },
+    {
+      "title": "Model initialization",
+      "url": "llms-txt#model-initialization"
+    },
+    {
+      "title": "What's new in LangGraph v1",
+      "url": "llms-txt#what's-new-in-langgraph-v1"
+    },
+    {
+      "title": "Security policy",
+      "url": "llms-txt#security-policy"
+    },
+    {
+      "title": "Versioning",
+      "url": "llms-txt#versioning"
+    }
+  ]
+}

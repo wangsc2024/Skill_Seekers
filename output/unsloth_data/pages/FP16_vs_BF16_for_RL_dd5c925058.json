@@ -1,0 +1,29 @@
+{
+  "title": "FP16 vs BF16 for RL",
+  "content": "Defeating the Training-Inference Mismatch via FP16 https\\://arxiv.org/pdf/2510.26788 shows how using float16 is better than bfloat16\n\n### Float16 vs Bfloat16\n\nThere was a paper titled \"**Defeating the Training-Inference Mismatch via FP16**\" <https://arxiv.org/pdf/2510.26788> showing how using float16 precision can dramatically be better than using bfloat16 when doing reinforcement learning.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Frec4qe1aQS0xyMzGvS9c%2Fimage.png?alt=media&#x26;token=2137e766-0f1f-48ec-b25f-2292d6f149f4\" alt=\"\"><figcaption></figcaption></figure>\n\nIn fact the longer the generation, the worse it gets when using bfloat16:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FWs7ioB2lraTbDbUCOAnn%2Fimage.png?alt=media&#x26;token=ac2b4f8e-210f-4bcc-bcbb-6e68f80781a6\" alt=\"\"><figcaption></figcaption></figure>\n\nWe did an investigation, and **DO find float16 to be more stable** than bfloat16 with much smaller gradient norms see <https://x.com/danielhanchen/status/1985557028295827482> and <https://x.com/danielhanchen/status/1985562902531850472>\n\n{% columns %}\n{% column width=\"50%\" %}\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FhvQ1W5wtV6TTfsetp7y2%2FG44d7ZFbIAANBBd.jpg?alt=media&#x26;token=35181a07-de3e-4321-b54e-4436b4a201ff\" alt=\"\"><figcaption></figcaption></figure>\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2F62HkxnGcaKvxnSxbZMZu%2FG44c20SbwAAGo8j.jpg?alt=media&#x26;token=e0c7ecb8-6f0c-4ecf-b1a0-50f1b2a9a807\" alt=\"\"><figcaption></figcaption></figure>\n{% endcolumn %}\n\n{% column width=\"50%\" %}\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fsi18IkGqE4IuUvzroyHh%2FG44ix5FbQAM0L5l.jpg?alt=media&#x26;token=bc3b97ce-5df4-4b69-aa50-a8e339f21601\" alt=\"\"><figcaption></figcaption></figure>\n{% endcolumn %}\n{% endcolumns %}\n\n### :exploding\\_head:A100 Cascade Attention Bug\n\nAs per <https://x.com/RichardYRLi/status/1984858850143715759> and <https://yingru.notion.site/When-Speed-Kills-Stability-Demystifying-RL-Collapse-from-the-Training-Inference-Mismatch-271211a558b7808d8b12d403fd15edda>, older vLLM versions (before 0.11.0) had broken attention mechanisms for A100 and similar GPUs. Please update vLLM! We also by default disable cascade attention in vLLM during Unsloth reinforcement learning if we detect an older vLLM version.\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FnkCLRVIIGLADXBSCe58e%2Fimage.png?alt=media&#x26;token=6669642f-8690-44bf-b2de-6aa89acf2332\" alt=\"\"><figcaption></figcaption></figure>\n\nDifferent hardware also changes results, where newer and more expensive GPUs have less KL difference between the inference and training sides:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2FaroTTz68zzyofy6nagtH%2Fimage.webp?alt=media&#x26;token=3be09506-b8a0-42eb-8d17-af72496a9cd1\" alt=\"\"><figcaption></figcaption></figure>\n\n### :fire:Using float16 in Unsloth RL\n\nTo use float16 precision in Unsloth GRPO and RL, you just need to set `dtype = torch.float16` and we'll take care of the rest!\n\n{% code overflow=\"wrap\" %}",
+  "code_samples": [
+    {
+      "code": "from unsloth import FastLanguageModel\nimport torch\nmax_seq_length = 2048 # Can increase for longer reasoning traces\nlora_rank = 32 # Larger rank = smarter, but slower\n\nmodel, tokenizer = FastLanguageModel.from_pretrained(\n    model_name = \"unsloth/Qwen3-4B-Base\",\n    max_seq_length = max_seq_length,\n    load_in_4bit = False, # False for LoRA 16bit\n    fast_inference = True, # Enable vLLM fast inference\n    max_lora_rank = lora_rank,\n    gpu_memory_utilization = 0.9, # Reduce if out of memory\n    \n    dtype = torch.float16, # Use torch.float16, torch.bfloat16\n)",
+      "language": "python"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Float16 vs Bfloat16",
+      "id": "float16-vs-bfloat16"
+    },
+    {
+      "level": "h3",
+      "text": ":exploding\\_head:A100 Cascade Attention Bug",
+      "id": ":exploding\\_head:a100-cascade-attention-bug"
+    },
+    {
+      "level": "h3",
+      "text": ":fire:Using float16 in Unsloth RL",
+      "id": ":fire:using-float16-in-unsloth-rl"
+    }
+  ],
+  "url": "llms-txt#fp16-vs-bf16-for-rl",
+  "links": []
+}

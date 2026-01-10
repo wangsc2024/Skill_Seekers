@@ -1,0 +1,36 @@
+{
+  "title": "FunctionGemma: How to Run & Fine-tune",
+  "content": "Learn how to run and fine-tune FunctionGemma locally on your device and phone.\n\nFunctionGemma is a new 270M parameter model by Google designed for function-calling and fine-tuning. Based on [Gemma 3](https://docs.unsloth.ai/models/gemma-3-how-to-run-and-fine-tune) 270M and trained specifically for text-only tool-calling, its small size makes it great to deploy on your own phone.\n\nYou can run the full precision model on **550MB RAM** (CPU) and you can now **fine-tune** it locally with Unsloth. Thank you to Google DeepMind for partnering with Unsloth for day-zero support!\n\n<a href=\"#run-functiongemma\" class=\"button secondary\">Running Tutorial</a><a href=\"#fine-tuning-functiongemma\" class=\"button primary\">Fine-tuning FunctionGemma</a>\n\n* FunctionGemma GGUF to run: [unsloth/functiongemma-270m-it-GGUF](https://huggingface.co/unsloth/functiongemma-270m-it-GGUF)\n\n* Fine-tune to **reason/think before tool calls** using our [FunctionGemma notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/FunctionGemma_\\(270M\\).ipynb)\n* Do **multi-turn tool calling** in a free [Multi Turn tool calling notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/FunctionGemma_\\(270M\\)-Multi-Turn-Tool-Calling.ipynb)\n* Fine-tune to **enable mobile actions** (calendar, set timer) in our [Mobile Actions notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/FunctionGemma_\\(270M\\)-Mobile-Actions.ipynb)\n\nGoogle recommends these settings for inference:\n\n* `top_k = 64`\n* `top_p = 0.95`\n* `temperature = 1.0`\n* maximum context length = `32,768`&#x20;\n\nThe chat template format is found when we use the below:\n\n{% code overflow=\"wrap\" %}\n\n#### FunctionGemma chat template format:\n\n{% hint style=\"info\" %}\nFunctionGemma requires the system or **developer message** as `You are a model that can do function calling with the following functions` Unsloth versions have this pre-built in if you forget to pass one, so please use [unsloth/functiongemma-270m-it](https://huggingface.co/unsloth/functiongemma-270m-it)\n{% endhint %}\n\n{% code overflow=\"wrap\" lineNumbers=\"true\" %}\n\n## 🖥️ Run FunctionGemma\n\nSee below for a local desktop guide or you can view our Phone Deployment Guide.\n\n#### Llama.cpp Tutorial (GGUF):\n\nInstructions to run in llama.cpp (note we will be using 4-bit to fit most devices):\n\n{% stepper %}\n{% step %}\nObtain the latest `llama.cpp` on [GitHub here](https://github.com/ggml-org/llama.cpp). You can follow the build instructions below as well. Change `-DGGML_CUDA=ON` to `-DGGML_CUDA=OFF` if you don't have a GPU or just want CPU inference.\n\n{% code overflow=\"wrap\" %}\n\n{% endcode %}\n{% endstep %}\n\n{% step %}\nYou can directly pull from Hugging Face. Because the model is so small, we'll be using the unquantized full-precision BF16 variant.\n\n{% step %}\nDownload the model via (after installing `pip install huggingface_hub hf_transfer` ). You can choose `BF16` or other quantized versions (though it's not recommended to go lower than 4-bit) due to the small model size.",
+  "code_samples": [
+    {
+      "code": "def get_today_date():\n    \"\"\" Gets today's date \"\"\"\n    return {\"today_date\": \"18 December 2025\"}\n    \ntokenizer.apply_chat_template(\n    [\n        {\"role\" : \"user\", \"content\" : \"what is today's date?\"},\n    ],\n    tools = [get_today_date], add_generation_prompt = True, tokenize = False,\n)",
+      "language": "python"
+    },
+    {
+      "code": "<bos><start_of_turn>developer\\nYou are a model that can do function calling with the following functions<start_function_declaration>declaration:get_today_date{description:<escape>Gets today's date<escape>,parameters:{type:<escape>OBJECT<escape>}}<end_function_declaration><end_of_turn>\\n<start_of_turn>user\\nwhat is today's date?<end_of_turn>\\n<start_of_turn>model\\n",
+      "language": "unknown"
+    },
+    {
+      "code": "apt-get update\napt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y\ngit clone https://github.com/ggml-org/llama.cpp\ncmake llama.cpp -B llama.cpp/build \\\n    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON\ncmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-mtmd-cli llama-server llama-gguf-split\ncp llama.cpp/build/bin/llama-* llama.cpp",
+      "language": "bash"
+    },
+    {
+      "code": "./llama.cpp/llama-cli \\\n    -hf unsloth/functiongemma-270m-it-GGUF:BF16 \\\n    --jinja -ngl 99 --threads -1 --ctx-size 32768 \\\n    --top-k 64 --top-p 0.95 --temp 1.0",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "⚙️ Usage Guide",
+      "id": "⚙️-usage-guide"
+    },
+    {
+      "level": "h2",
+      "text": "🖥️ Run FunctionGemma",
+      "id": "🖥️-run-functiongemma"
+    }
+  ],
+  "url": "llms-txt#functiongemma:-how-to-run-&-fine-tune",
+  "links": []
+}

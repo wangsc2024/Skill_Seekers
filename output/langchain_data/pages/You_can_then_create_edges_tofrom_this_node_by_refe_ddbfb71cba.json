@@ -1,0 +1,37 @@
+{
+  "title": "You can then create edges to/from this node by referencing it as `\"my_node\"`",
+  "content": "python  theme={null}\nfrom langgraph.graph import START\n\ngraph.add_edge(START, \"node_a\")\npython  theme={null}\nfrom langgraph.graph import END\n\ngraph.add_edge(\"node_a\", END)\npython  theme={null}\nimport time\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph\nfrom langgraph.cache.memory import InMemoryCache\nfrom langgraph.types import CachePolicy\n\nclass State(TypedDict):\n    x: int\n    result: int\n\nbuilder = StateGraph(State)\n\ndef expensive_node(state: State) -> dict[str, int]:\n    # expensive computation\n    time.sleep(2)\n    return {\"result\": state[\"x\"] * 2}\n\nbuilder.add_node(\"expensive_node\", expensive_node, cache_policy=CachePolicy(ttl=3))\nbuilder.set_entry_point(\"expensive_node\")\nbuilder.set_finish_point(\"expensive_node\")\n\ngraph = builder.compile(cache=InMemoryCache())\n\nprint(graph.invoke({\"x\": 5}, stream_mode='updates'))    # [!code highlight]",
+  "code_samples": [
+    {
+      "code": "### `START` Node\n\nThe [`START`](https://reference.langchain.com/python/langgraph/constants/#langgraph.constants.START) Node is a special node that represents the node that sends user input to the graph. The main purpose for referencing this node is to determine which nodes should be called first.",
+      "language": "unknown"
+    },
+    {
+      "code": "### `END` Node\n\nThe `END` Node is a special node that represents a terminal node. This node is referenced when you want to denote which edges have no actions after they are done.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Node Caching\n\nLangGraph supports caching of tasks/nodes based on the input to the node. To use caching:\n\n* Specify a cache when compiling a graph (or specifying an entrypoint)\n* Specify a cache policy for nodes. Each cache policy supports:\n  * `key_func` used to generate a cache key based on the input to a node, which defaults to a `hash` of the input with pickle.\n  * `ttl`, the time to live for the cache in seconds. If not specified, the cache will never expire.\n\nFor example:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "`START` Node",
+      "id": "`start`-node"
+    },
+    {
+      "level": "h3",
+      "text": "`END` Node",
+      "id": "`end`-node"
+    },
+    {
+      "level": "h3",
+      "text": "Node Caching",
+      "id": "node-caching"
+    }
+  ],
+  "url": "llms-txt#you-can-then-create-edges-to/from-this-node-by-referencing-it-as-`\"my_node\"`",
+  "links": []
+}

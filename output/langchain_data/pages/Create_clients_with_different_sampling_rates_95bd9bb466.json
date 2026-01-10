@@ -1,0 +1,8 @@
+{
+  "title": "Create clients with different sampling rates",
+  "content": "client_1 = Client(tracing_sampling_rate=0.5)  # 50% sampling\nclient_2 = Client(tracing_sampling_rate=0.25)  # 25% sampling\nclient_no_trace = Client(tracing_sampling_rate=0.0)  # No tracing",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-clients-with-different-sampling-rates",
+  "links": []
+}

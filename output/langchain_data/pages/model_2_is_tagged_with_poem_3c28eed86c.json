@@ -1,0 +1,8 @@
+{
+  "title": "model_2 is tagged with \"poem\"",
+  "content": "model_2 = init_chat_model(model=\"gpt-4o-mini\", tags=['poem'])\n\ngraph = ... # define a graph that uses these LLMs",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#model_2-is-tagged-with-\"poem\"",
+  "links": []
+}

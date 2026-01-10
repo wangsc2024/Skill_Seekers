@@ -1,0 +1,77 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+  "title": "Quickstart — AutoGen",
+  "content": "Via AgentChat, you can build applications quickly using preset agents. To illustrate this, we will begin with creating a single agent that can use tools.\n\nFirst, we need to install the AgentChat and Extension packages.\n\nThis example uses an OpenAI model, however, you can use other models as well. Simply update the model_client with the desired model or model client class.\n\nTo use Azure OpenAI models and AAD authentication, you can follow the instructions here. To use other models, see Models.\n\nNow that you have a basic understanding of how to use a single agent, consider following the tutorial for a walkthrough on other features of AgentChat.\n\nMigration Guide for v0.2 to v0.4",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Quickstart#",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "What’s Next?#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "pip install -U \"autogen-agentchat\" \"autogen-ext[openai,azure]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "pip install -U \"autogen-agentchat\" \"autogen-ext[openai,azure]\"",
+      "language": "unknown"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Define a model client. You can use other model client that implements\n# the `ChatCompletionClient` interface.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    # api_key=\"YOUR_API_KEY\",\n)\n\n\n# Define a simple function tool that the agent can use.\n# For this example, we use a fake weather tool for demonstration purposes.\nasync def get_weather(city: str) -> str:\n    \"\"\"Get the weather for a given city.\"\"\"\n    return f\"The weather in {city} is 73 degrees and Sunny.\"\n\n\n# Define an AssistantAgent with the model, tool, system message, and reflection enabled.\n# The system message instructs the agent via natural language.\nagent = AssistantAgent(\n    name=\"weather_agent\",\n    model_client=model_client,\n    tools=[get_weather],\n    system_message=\"You are a helpful assistant.\",\n    reflect_on_tool_use=True,\n    model_client_stream=True,  # Enable streaming tokens from the model client.\n)\n\n\n# Run the agent and stream the messages to the console.\nasync def main() -> None:\n    await Console(agent.run_stream(task=\"What is the weather in New York?\"))\n    # Close the connection to the model client.\n    await model_client.close()\n\n\n# NOTE: if running this inside a Python script you'll need to use asyncio.run(main()).\nawait main()",
+      "language": "python"
+    },
+    {
+      "code": "from autogen_agentchat.agents import AssistantAgent\nfrom autogen_agentchat.ui import Console\nfrom autogen_ext.models.openai import OpenAIChatCompletionClient\n\n# Define a model client. You can use other model client that implements\n# the `ChatCompletionClient` interface.\nmodel_client = OpenAIChatCompletionClient(\n    model=\"gpt-4o\",\n    # api_key=\"YOUR_API_KEY\",\n)\n\n\n# Define a simple function tool that the agent can use.\n# For this example, we use a fake weather tool for demonstration purposes.\nasync def get_weather(city: str) -> str:\n    \"\"\"Get the weather for a given city.\"\"\"\n    return f\"The weather in {city} is 73 degrees and Sunny.\"\n\n\n# Define an AssistantAgent with the model, tool, system message, and reflection enabled.\n# The system message instructs the agent via natural language.\nagent = AssistantAgent(\n    name=\"weather_agent\",\n    model_client=model_client,\n    tools=[get_weather],\n    system_message=\"You are a helpful assistant.\",\n    reflect_on_tool_use=True,\n    model_client_stream=True,  # Enable streaming tokens from the model client.\n)\n\n\n# Run the agent and stream the messages to the console.\nasync def main() -> None:\n    await Console(agent.run_stream(task=\"What is the weather in New York?\"))\n    # Close the connection to the model client.\n    await model_client.close()\n\n\n# NOTE: if running this inside a Python script you'll need to use asyncio.run(main()).\nawait main()",
+      "language": "python"
+    },
+    {
+      "code": "---------- user ----------\nWhat is the weather in New York?\n---------- weather_agent ----------\n[FunctionCall(id='call_bE5CYAwB7OlOdNAyPjwOkej1', arguments='{\"city\":\"New York\"}', name='get_weather')]\n---------- weather_agent ----------\n[FunctionExecutionResult(content='The weather in New York is 73 degrees and Sunny.', call_id='call_bE5CYAwB7OlOdNAyPjwOkej1', is_error=False)]\n---------- weather_agent ----------\nThe current weather in New York is 73 degrees and sunny.",
+      "language": "json"
+    },
+    {
+      "code": "---------- user ----------\nWhat is the weather in New York?\n---------- weather_agent ----------\n[FunctionCall(id='call_bE5CYAwB7OlOdNAyPjwOkej1', arguments='{\"city\":\"New York\"}', name='get_weather')]\n---------- weather_agent ----------\n[FunctionExecutionResult(content='The weather in New York is 73 degrees and Sunny.', call_id='call_bE5CYAwB7OlOdNAyPjwOkej1', is_error=False)]\n---------- weather_agent ----------\nThe current weather in New York is 73 degrees and sunny.",
+      "language": "json"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/quickstart.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/installation.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/messages.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/graph-flow.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/memory.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/logging.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/serialize-components.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tracing.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/travel-planning.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/company-research.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/examples/literature-review.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Create a thread as user 1",
+  "content": "thread = await user1_client.threads.create()\nprint(f\"✅ User 1 created thread: {thread['thread_id']}\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-thread-as-user-1",
+  "links": []
+}

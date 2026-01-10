@@ -1,0 +1,8 @@
+{
+  "title": "Collect all tools from all step configurations",
+  "content": "all_tools = [\n    record_warranty_status,\n    record_issue_type,\n    provide_solution,\n    escalate_to_human,\n]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#collect-all-tools-from-all-step-configurations",
+  "links": []
+}

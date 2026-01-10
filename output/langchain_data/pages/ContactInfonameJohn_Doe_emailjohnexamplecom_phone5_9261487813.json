@@ -1,0 +1,23 @@
+{
+  "title": "ContactInfo(name='John Doe', email='john@example.com', phone='(555) 123-4567')",
+  "content": "python wrap theme={null}\nfrom langchain.agents.structured_output import ProviderStrategy\n\nagent = create_agent(\n    model=\"gpt-4o\",\n    response_format=ProviderStrategy(ContactInfo)\n)\npython  theme={null}\nfrom langchain.agents import AgentState\nfrom langchain.agents.middleware import AgentMiddleware\nfrom typing import Any\n\nclass CustomState(AgentState):\n    user_preferences: dict\n\nclass CustomMiddleware(AgentMiddleware):\n    state_schema = CustomState\n    tools = [tool1, tool2]\n\ndef before_model(self, state: CustomState, runtime) -> dict[str, Any] | None:\n        ...\n\nagent = create_agent(\n    model,\n    tools=tools,\n    middleware=[CustomMiddleware()]\n)",
+  "code_samples": [
+    {
+      "code": "#### ProviderStrategy\n\n`ProviderStrategy` uses the model provider's native structured output generation. This is more reliable but only works with providers that support native structured output (e.g., OpenAI):",
+      "language": "unknown"
+    },
+    {
+      "code": "<Note>\n  As of `langchain 1.0`, simply passing a schema (e.g., `response_format=ContactInfo`) is no longer supported. You must explicitly use `ToolStrategy` or `ProviderStrategy`.\n</Note>\n\n<Tip>\n  To learn about structured output, see [Structured output](/oss/python/langchain/structured-output).\n</Tip>\n\n### Memory\n\nAgents maintain conversation history automatically through the message state. You can also configure the agent to use a custom state schema to remember additional information during the conversation.\n\nInformation stored in the state can be thought of as the [short-term memory](/oss/python/langchain/short-term-memory) of the agent:\n\nCustom state schemas must extend [`AgentState`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.AgentState) as a `TypedDict`.\n\nThere are two ways to define custom state:\n\n1. Via [middleware](/oss/python/langchain/middleware) (preferred)\n2. Via [`state_schema`](https://reference.langchain.com/python/langchain/middleware/#langchain.agents.middleware.AgentMiddleware.state_schema) on [`create_agent`](https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent)\n\n#### Defining state via middleware\n\nUse middleware to define custom state when your custom state needs to be accessed by specific middleware hooks and tools attached to said middleware.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Memory",
+      "id": "memory"
+    }
+  ],
+  "url": "llms-txt#contactinfo(name='john-doe',-email='john@example.com',-phone='(555)-123-4567')",
+  "links": []
+}

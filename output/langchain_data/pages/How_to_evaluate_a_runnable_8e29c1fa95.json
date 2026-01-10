@@ -1,0 +1,45 @@
+{
+  "title": "How to evaluate a runnable",
+  "content": "Source: https://docs.langchain.com/langsmith/langchain-runnable\n\n<Info>\n  * `langchain`: [Python](https://python.langchain.com) and [JS/TS](https://js.langchain.com)\n  * Runnable: [Python](https://python.langchain.com/docs/concepts/runnables/) and [JS/TS](https://js.langchain.com/docs/concepts/runnables/)\n</Info>\n\n`langchain` [Runnable](https://python.langchain.com/docs/concepts/runnables/) objects (such as chat models, retrievers, chains, etc.) can be passed directly into `evaluate()` / `aevaluate()`.\n\nLet's define a simple chain to evaluate. First, install all the required packages:\n\nTo evaluate our chain we can pass it directly to the `evaluate()` / `aevaluate()` method. Note that the input variables of the chain must match the keys of the example inputs. In this case, the example inputs should have the form `{\"text\": \"...\"}`.\n\nThe runnable is traced appropriately for each output.\n\n<img src=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/runnable-eval.png?fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=b9dac41dafb9a1cbb3b90fc508f212f7\" alt=\"Runnable Evaluation\" data-og-width=\"2288\" width=\"2288\" data-og-height=\"1052\" height=\"1052\" data-path=\"langsmith/images/runnable-eval.png\" data-optimize=\"true\" data-opv=\"3\" srcset=\"https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/runnable-eval.png?w=280&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=39f7bda57df5d29c72729390065342c2 280w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/runnable-eval.png?w=560&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=2bbfa58f877541adff85056d2d4910c7 560w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/runnable-eval.png?w=840&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=198967ebb494d0577fac294f879f348c 840w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/runnable-eval.png?w=1100&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=dd0758a55517d6899d445bd203bc7d03 1100w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/runnable-eval.png?w=1650&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=6fa8f6a044a0b978ef727390f18f5ce3 1650w, https://mintcdn.com/langchain-5e9cc07a/Fr2lazPB4XVeEA7l/langsmith/images/runnable-eval.png?w=2500&fit=max&auto=format&n=Fr2lazPB4XVeEA7l&q=85&s=40dad8febfdaf0756c90b6326e2c4415 2500w\" />\n\n* [How to evaluate a `langgraph` graph](/langsmith/evaluate-on-intermediate-steps)\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/langchain-runnable.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\nNow define a chain:\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Evaluate\n\nTo evaluate our chain we can pass it directly to the `evaluate()` / `aevaluate()` method. Note that the input variables of the chain must match the keys of the example inputs. In this case, the example inputs should have the form `{\"text\": \"...\"}`.\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "Evaluate",
+      "id": "evaluate"
+    },
+    {
+      "level": "h2",
+      "text": "Related",
+      "id": "related"
+    }
+  ],
+  "url": "llms-txt#how-to-evaluate-a-runnable",
+  "links": []
+}

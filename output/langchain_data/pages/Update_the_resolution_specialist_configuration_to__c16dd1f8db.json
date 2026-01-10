@@ -1,0 +1,17 @@
+{
+  "title": "Update the resolution_specialist configuration to include these tools",
+  "content": "STEP_CONFIG[\"resolution_specialist\"][\"tools\"].extend([\n    go_back_to_warranty,\n    go_back_to_classification\n])\npython  theme={null}\nRESOLUTION_SPECIALIST_PROMPT = \"\"\"You are a customer support agent helping with device issues.\n\nCURRENT STAGE: Resolution\nCUSTOMER INFO: Warranty status is {warranty_status}, issue type is {issue_type}\n\nAt this step, you need to:\n1. For SOFTWARE issues: provide troubleshooting steps using provide_solution\n2. For HARDWARE issues:\n   - If IN WARRANTY: explain warranty repair process using provide_solution\n   - If OUT OF WARRANTY: escalate_to_human for paid repair options\n\nIf the customer indicates any information was wrong, use:\n- go_back_to_warranty to correct warranty status\n- go_back_to_classification to correct issue type\n\nBe specific and helpful in your solutions.\"\"\"\npython  theme={null}\nresult = agent.invoke(\n    {\"messages\": [HumanMessage(\"Actually, I made a mistake - my device is out of warranty\")]},\n    config\n)",
+  "code_samples": [
+    {
+      "code": "Update the resolution specialist's prompt to mention these tools:",
+      "language": "unknown"
+    },
+    {
+      "code": "Now the agent can handle corrections:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#update-the-resolution_specialist-configuration-to-include-these-tools",
+  "links": []
+}

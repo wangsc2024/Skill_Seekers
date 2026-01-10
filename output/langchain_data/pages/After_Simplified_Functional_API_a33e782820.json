@@ -1,0 +1,14 @@
+{
+  "title": "After: Simplified Functional API",
+  "content": "@entrypoint(checkpointer=checkpointer)\ndef simple_workflow(input_data: str) -> str:\n    step1 = process_step1(input_data).result()\n    step2 = process_step2(step1).result()\n    return finalize_result(step2).result()\n```\n\nChoose the **Graph API** when you need explicit control over workflow structure, complex branching, parallel processing, or team collaboration benefits.\n\nChoose the **Functional API** when you want to add LangGraph features to existing code with minimal changes, have simple linear workflows, or need rapid prototyping capabilities.\n\nBoth APIs provide the same core LangGraph features (persistence, streaming, human-in-the-loop, memory) but package them in different paradigms to suit different development styles and use cases.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/choosing-apis.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    }
+  ],
+  "url": "llms-txt#after:-simplified-functional-api",
+  "links": []
+}

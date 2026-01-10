@@ -1,0 +1,19 @@
+{
+  "title": "How to add custom routes",
+  "content": "Source: https://docs.langchain.com/langsmith/custom-routes\n\nWhen deploying agents to LangSmith Deployment, your server automatically exposes routes for creating runs and threads, interacting with the long-term memory store, managing configurable assistants, and other core functionality ([see all default API endpoints](/langsmith/server-api-ref)).\n\nYou can add custom routes by providing your own [`Starlette`](https://www.starlette.io/applications/) app (including [`FastAPI`](https://fastapi.tiangolo.com/), [`FastHTML`](https://fastht.ml/) and other compatible apps). You make LangSmith aware of this by providing a path to the app in your `langgraph.json` configuration file.\n\nDefining a custom app object lets you add any routes you'd like, so you can do anything from adding a `/login` endpoint to writing an entire full-stack web-app, all deployed in a single Agent Server.\n\nBelow is an example using FastAPI.\n\nStarting from an **existing** LangSmith application, add the following custom route code to your `webapp.py` file. If you are starting from scratch, you can create a new app from a template using the CLI.\n\nOnce you have a LangGraph project, add the following app code:\n\n```python {highlight={4}} theme={null}",
+  "code_samples": [
+    {
+      "code": "Once you have a LangGraph project, add the following app code:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create app",
+      "id": "create-app"
+    }
+  ],
+  "url": "llms-txt#how-to-add-custom-routes",
+  "links": []
+}

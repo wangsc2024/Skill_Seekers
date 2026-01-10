@@ -1,0 +1,8 @@
+{
+  "title": "Model for performing extraction.",
+  "content": "info_llm = init_chat_model(\"gpt-4o-mini\").with_structured_output(\n    PurchaseInformation, method=\"json_schema\", include_raw=True\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#model-for-performing-extraction.",
+  "links": []
+}

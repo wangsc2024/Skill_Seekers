@@ -1,0 +1,8 @@
+{
+  "title": "Load files and create attachments",
+  "content": "image_data = load_file(\"my_image.png\")\naudio_data = load_file(\"my_mp3.mp3\")\nvideo_data = load_file(\"my_video.mp4\")\npdf_data = load_file(\"my_document.pdf\")\n\nimage_attachment = Attachment(mime_type=\"image/png\", data=image_data)\naudio_attachment = Attachment(mime_type=\"audio/mpeg\", data=audio_data)\nvideo_attachment = Attachment(mime_type=\"video/mp4\", data=video_data)\npdf_attachment = (\"application/pdf\", pdf_data) # Can just define as tuple of (mime_type, data)\ncsv_attachment = Attachment(mime_type=\"text/csv\", data=Path(os.getcwd()) / \"my_csv.csv\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#load-files-and-create-attachments",
+  "links": []
+}

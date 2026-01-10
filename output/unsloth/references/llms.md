@@ -1,0 +1,98 @@
+# Unsloth Documentation
+
+## Unsloth Documentation
+
+- [Unsloth Docs](/get-started/readme.md): Train your own model with Unsloth, an open-source framework for LLM fine-tuning and reinforcement learning.
+- [Fine-tuning for Beginners](/get-started/fine-tuning-for-beginners.md)
+- [Unsloth Requirements](/get-started/fine-tuning-for-beginners/unsloth-requirements.md): Here are Unsloth's requirements including system and GPU VRAM requirements.
+- [FAQ + Is Fine-tuning Right For Me?](/get-started/fine-tuning-for-beginners/faq-+-is-fine-tuning-right-for-me.md): If you're stuck on if fine-tuning is right for you, see here! Learn about fine-tuning misconceptions, how it compared to RAG and more:
+- [Unsloth Notebooks](/get-started/unsloth-notebooks.md): Explore our catalog of Unsloth notebooks:
+- [Unsloth Model Catalog](/get-started/unsloth-model-catalog.md)
+- [Unsloth Installation](/get-started/install-and-update.md): Learn to install Unsloth locally or online.
+- [Docker](/get-started/install-and-update/docker.md): Install Unsloth using our official Docker container
+- [Updating](/get-started/install-and-update/updating.md): To update or use an old version of Unsloth, follow the steps below:
+- [Instal Unsloth via pip and uv](/get-started/install-and-update/pip-install.md): To install Unsloth locally via Pip, follow the steps below:
+- [Windows Installation](/get-started/install-and-update/windows-installation.md): See how to install Unsloth on Windows with or without WSL.
+- [AMD](/get-started/install-and-update/amd.md): Guide for Fine-tuning LLMs with Unsloth on AMD GPUs.
+- [Conda Install](/get-started/install-and-update/conda-install.md): To install Unsloth locally on Conda, follow the steps below:
+- [Google Colab](/get-started/install-and-update/google-colab.md): To install and run Unsloth on Google Colab, follow the steps below:
+- [Fine-tuning LLMs Guide](/get-started/fine-tuning-llms-guide.md): Learn all the basics and best practices of fine-tuning. Beginner-friendly.
+- [Datasets Guide](/get-started/fine-tuning-llms-guide/datasets-guide.md): Learn how to create & prepare a dataset for fine-tuning.
+- [LoRA fine-tuning Hyperparameters Guide](/get-started/fine-tuning-llms-guide/lora-hyperparameters-guide.md): Optimal lora rank. alpha, number of epochs, batch size & gradient accumulation, QLoRA vs LoRA, target modules and more!
+- [What Model Should I Use for Fine-tuning?](/get-started/fine-tuning-llms-guide/what-model-should-i-use.md)
+- [Tutorial: How to Finetune Llama-3 and Use In Ollama](/get-started/fine-tuning-llms-guide/tutorial-how-to-finetune-llama-3-and-use-in-ollama.md): Beginner's Guide for creating a customized personal assistant (like ChatGPT) to run locally on Ollama
+- [Reinforcement Learning (RL) Guide](/get-started/reinforcement-learning-rl-guide.md): Learn all about Reinforcement Learning (RL) and how to train your own DeepSeek-R1 reasoning model with Unsloth using GRPO. A complete guide from beginner to advanced.
+- [Vision Reinforcement Learning (VLM RL)](/get-started/reinforcement-learning-rl-guide/vision-reinforcement-learning-vlm-rl.md): Train Vision/multimodal models via GRPO and RL with Unsloth!
+- [Tutorial: Train your own Reasoning model with GRPO](/get-started/reinforcement-learning-rl-guide/tutorial-train-your-own-reasoning-model-with-grpo.md): Beginner's Guide to transforming a model like Llama 3.1 (8B) into a reasoning model by using Unsloth and GRPO.
+- [Advanced RL Documentation](/get-started/reinforcement-learning-rl-guide/advanced-rl-documentation.md): Advanced documentation settings when using Unsloth with GRPO.
+- [FP16 vs BF16 for RL](/get-started/reinforcement-learning-rl-guide/fp16-vs-bf16-for-rl.md): Defeating the Training-Inference Mismatch via FP16 https://arxiv.org/pdf/2510.26788 shows how using float16 is better than bfloat16
+- [Memory Efficient RL](/get-started/reinforcement-learning-rl-guide/memory-efficient-rl.md)
+- [RL Reward Hacking](/get-started/reinforcement-learning-rl-guide/rl-reward-hacking.md): Learn what is Reward Hacking in Reinforcement Learning and how to counter it.
+- [GSPO Reinforcement Learning](/get-started/reinforcement-learning-rl-guide/gspo-reinforcement-learning.md): Train with GSPO (Group Sequence Policy Optimization) RL in Unsloth.
+- [Reinforcement Learning - DPO, ORPO & KTO](/get-started/reinforcement-learning-rl-guide/reinforcement-learning-dpo-orpo-and-kto.md): To use the reward modelling functions for DPO, GRPO, ORPO or KTO with Unsloth, follow the steps below:
+- [How to Run and Deploy LLMs on your iOS or Android Phone](/new/deploy-llms-phone.md): Tutorial for fine-tuning your own LLM and deploying it on your Android or iPhone with ExecuTorch.
+- [3x Faster LLM Training with Unsloth Kernels + Packing](/new/3x-faster-training-packing.md): Learn how Unsloth increases training throughput and eliminates padding waste for fine-tuning.
+- [500K Context Length Fine-tuning](/new/500k-context-length-fine-tuning.md): Learn how to enable >500K token context window fine-tuning with Unsloth.
+- [FP8 Reinforcement Learning](/new/fp8-reinforcement-learning.md): Train reinforcement learning (RL) and GRPO in FP8 precision with Unsloth.
+- [How to Fine-tune LLMs with Unsloth & Docker](/new/how-to-fine-tune-llms-with-unsloth-and-docker.md): Learn how to fine-tune LLMs or do Reinforcement Learning (RL) with Unsloth's Docker image.
+- [FunctionGemma: How to Run & Fine-tune](/models/functiongemma.md): Learn how to run and fine-tune FunctionGemma locally on your device and phone.
+- [NVIDIA Nemotron 3 Nano - How To Run Guide](/models/nemotron-3.md): Run & fine-tune NVIDIA Nemotron 3 Nano locally on your device!
+- [GLM-4.7: How to Run Locally Guide](/models/glm-4.7.md): A guide on how to run Z.ai GLM-4.7 model on your own local device!
+- [Devstral 2 - How to Run Guide](/models/devstral-2.md): Guide for local running Mistral Devstral 2 models: 123B-Instruct-2512 and Small-2-24B-Instruct-2512.
+- [Qwen3-VL: How to Run Guide](/models/qwen3-vl-how-to-run-and-fine-tune.md): Learn to fine-tune and run Qwen3-VL locally with Unsloth.
+- [Ministral 3 - How to Run Guide](/models/ministral-3.md): Guide for Mistral Ministral 3 models, to run or fine-tune locally on your device
+- [GLM-4.6: Run Locally Guide](/models/glm-4.6-how-to-run-locally.md): A guide on how to run Z.ai GLM-4.6 and GLM-4.6V-Flash model on your own local device!
+- [Qwen3-Next: Run Locally Guide](/models/qwen3-next.md): Run Qwen3-Next-80B-A3B-Instruct and Thinking versions locally on your device!
+- [DeepSeek-OCR: How to Run & Fine-tune](/models/deepseek-ocr-how-to-run-and-fine-tune.md): Guide on how to run and fine-tune DeepSeek-OCR locally.
+- [gpt-oss: How to Run Guide](/models/gpt-oss-how-to-run-and-fine-tune.md): Run & fine-tune OpenAI's new open-source models!
+- [gpt-oss Reinforcement Learning](/models/gpt-oss-how-to-run-and-fine-tune/gpt-oss-reinforcement-learning.md)
+- [Tutorial: How to Train gpt-oss with RL](/models/gpt-oss-how-to-run-and-fine-tune/gpt-oss-reinforcement-learning/tutorial-how-to-train-gpt-oss-with-rl.md): Learn to train OpenAI gpt-oss with GRPO to autonomously beat 2048 locally or on Colab.
+- [Tutorial: How to Fine-tune gpt-oss](/models/gpt-oss-how-to-run-and-fine-tune/tutorial-how-to-fine-tune-gpt-oss.md): Learn step-by-step how to train OpenAI gpt-oss locally with Unsloth.
+- [Long Context gpt-oss Training](/models/gpt-oss-how-to-run-and-fine-tune/long-context-gpt-oss-training.md)
+- [DeepSeek-V3.1: How to Run Locally](/models/deepseek-v3.1-how-to-run-locally.md): A guide on how to run DeepSeek-V3.1 and Terminus on your own local device!
+- [Kimi K2 Thinking: Run Locally Guide](/models/kimi-k2-thinking-how-to-run-locally.md): Guide on running Kimi-K2-Thinking and Kimi-K2 on your own local device!
+- [Qwen3-Coder: How to Run Locally](/models/qwen3-coder-how-to-run-locally.md): Run Qwen3-Coder-30B-A3B-Instruct and 480B-A35B locally with Unsloth Dynamic quants.
+- [Gemma 3 - How to Run Guide](/models/gemma-3-how-to-run-and-fine-tune.md): How to run Gemma 3 effectively with our GGUFs on llama.cpp, Ollama, Open WebUI and how to fine-tune with Unsloth!
+- [Gemma 3n: How to Run & Fine-tune](/models/gemma-3-how-to-run-and-fine-tune/gemma-3n-how-to-run-and-fine-tune.md): Run Google's new Gemma 3n locally with Dynamic GGUFs on llama.cpp, Ollama, Open WebUI and fine-tune with Unsloth!
+- [Qwen3 - How to Run & Fine-tune](/models/qwen3-how-to-run-and-fine-tune.md): Learn to run & fine-tune Qwen3 locally with Unsloth + our Dynamic 2.0 quants
+- [Qwen3-2507: Run Locally Guide](/models/qwen3-how-to-run-and-fine-tune/qwen3-2507.md): Run Qwen3-30B-A3B-2507 and 235B-A22B Thinking and Instruct versions locally on your device!
+- [How to Run Local LLMs with Docker: Step-by-Step Guide](/models/how-to-run-llms-with-docker.md): Learn how to run Large Language Models (LLMs) with Docker & Unsloth on your local device.
+- [Tutorials: How To Fine-tune & Run LLMs](/models/tutorials-how-to-fine-tune-and-run-llms.md): Learn how to run and/or fine-tune models for optimal performance 100% locally with Unsloth.
+- [DeepSeek-R1-0528: How to Run Locally](/models/tutorials-how-to-fine-tune-and-run-llms/deepseek-r1-0528-how-to-run-locally.md): A guide on how to run DeepSeek-R1-0528 including Qwen3 on your own local device!
+- [Magistral: How to Run & Fine-tune](/models/tutorials-how-to-fine-tune-and-run-llms/magistral-how-to-run-and-fine-tune.md): Meet Magistral - Mistral's new reasoning models.
+- [IBM Granite 4.0](/models/tutorials-how-to-fine-tune-and-run-llms/ibm-granite-4.0.md): How to run IBM Granite-4.0 with Unsloth GGUFs on llama.cpp, Ollama and how to fine-tune!
+- [Llama 4: How to Run & Fine-tune](/models/tutorials-how-to-fine-tune-and-run-llms/llama-4-how-to-run-and-fine-tune.md): How to run Llama 4 locally using our dynamic GGUFs which recovers accuracy compared to standard quantization.
+- [Grok 2](/models/tutorials-how-to-fine-tune-and-run-llms/grok-2.md): Run xAI's Grok 2 model locally!
+- [Devstral: How to Run & Fine-tune](/models/tutorials-how-to-fine-tune-and-run-llms/devstral-how-to-run-and-fine-tune.md): Run and fine-tune Mistral Devstral 1.1, including Small-2507 and 2505.
+- [DeepSeek-V3-0324: How to Run Locally](/models/tutorials-how-to-fine-tune-and-run-llms/deepseek-v3-0324-how-to-run-locally.md): How to run DeepSeek-V3-0324 locally using our dynamic quants which recovers accuracy
+- [DeepSeek-R1: How to Run Locally](/models/tutorials-how-to-fine-tune-and-run-llms/deepseek-r1-how-to-run-locally.md): A guide on how you can run our 1.58-bit Dynamic Quants for DeepSeek-R1 using llama.cpp.
+- [DeepSeek-R1 Dynamic 1.58-bit](/models/tutorials-how-to-fine-tune-and-run-llms/deepseek-r1-how-to-run-locally/deepseek-r1-dynamic-1.58-bit.md): See performance comparison tables for Unsloth's Dynamic GGUF Quants vs Standard IMatrix Quants.
+- [Phi-4 Reasoning: How to Run & Fine-tune](/models/tutorials-how-to-fine-tune-and-run-llms/phi-4-reasoning-how-to-run-and-fine-tune.md): Learn to run & fine-tune Phi-4 reasoning models locally with Unsloth + our Dynamic 2.0 quants
+- [QwQ-32B: How to Run effectively](/models/tutorials-how-to-fine-tune-and-run-llms/qwq-32b-how-to-run-effectively.md): How to run QwQ-32B effectively with our bug fixes and without endless generations + GGUFs.
+- [Cogito v2.1: How to Run Locally](/models/tutorials-how-to-fine-tune-and-run-llms/cogito-v2-how-to-run-locally.md): Cogito v2.1 LLMs are one of the strongest open models in the world trained with IDA. Also v1 comes in 4 sizes: 70B, 109B, 405B and 671B, allowing you to select which size best matches your hardware.
+- [Inference & Deployment](/basics/inference-and-deployment.md): Learn how to save your finetuned model so you can run it in your favorite inference engine.
+- [Saving to GGUF](/basics/inference-and-deployment/saving-to-gguf.md): Saving models to 16bit for GGUF so you can use it for Ollama, Jan AI, Open WebUI and more!
+- [vLLM Deployment & Inference Guide](/basics/inference-and-deployment/vllm-guide.md): Guide on saving and deploying LLMs to vLLM for serving LLMs in production
+- [vLLM Engine Arguments](/basics/inference-and-deployment/vllm-guide/vllm-engine-arguments.md)
+- [LoRA Hot Swapping Guide](/basics/inference-and-deployment/vllm-guide/lora-hot-swapping-guide.md)
+- [Saving to Ollama](/basics/inference-and-deployment/saving-to-ollama.md)
+- [Deploying models to LM Studio](/basics/inference-and-deployment/lm-studio.md): Saving models to GGUF so you can run and deploy them to LM Studio
+- [SGLang Deployment & Inference Guide](/basics/inference-and-deployment/sglang-guide.md): Guide on saving and deploying LLMs to SGLang for serving LLMs in production
+- [Unsloth Inference](/basics/inference-and-deployment/unsloth-inference.md): Learn how to run your finetuned model with Unsloth's faster inference.
+- [Troubleshooting Inference](/basics/inference-and-deployment/troubleshooting-inference.md): If you're experiencing issues when running or saving your model.
+- [llama-server & OpenAI endpoint Deployment Guide](/basics/inference-and-deployment/llama-server-and-openai-endpoint.md): Deploying via llama-server with an OpenAI compatible endpoint
+- [Text-to-Speech (TTS) Fine-tuning](/basics/text-to-speech-tts-fine-tuning.md): Learn how to to fine-tune TTS & STT voice models with Unsloth.
+- [Multi-GPU Fine-tuning with Unsloth](/basics/multi-gpu-training-with-unsloth.md): Learn how to fine-tune LLMs on multiple GPUs and parallelism with Unsloth.
+- [Multi-GPU Fine-tuning with Distributed Data Parallel (DDP)](/basics/multi-gpu-training-with-unsloth/ddp.md): Learn how to use the Unsloth CLI to train on multiple GPUs with Distributed Data Parallel (DDP)!
+- [Unsloth Dynamic 2.0 GGUFs](/basics/unsloth-dynamic-2.0-ggufs.md): A big new upgrade to our Dynamic Quants!
+- [Unsloth Dynamic GGUFs on Aider Polyglot](/basics/unsloth-dynamic-2.0-ggufs/unsloth-dynamic-ggufs-on-aider-polyglot.md): Performance of Unsloth Dynamic GGUFs on Aider Polyglot Benchmarks
+- [Vision Fine-tuning](/basics/vision-fine-tuning.md): Learn how to fine-tune vision/multimodal LLMs with Unsloth
+- [Fine-tuning LLMs with NVIDIA DGX Spark and Unsloth](/basics/fine-tuning-llms-with-nvidia-dgx-spark-and-unsloth.md): Tutorial on how to fine-tune and do reinforcement learning (RL) with OpenAI gpt-oss on NVIDIA DGX Spark.
+- [Fine-tuning LLMs with Blackwell, RTX 50 series & Unsloth](/basics/fine-tuning-llms-with-blackwell-rtx-50-series-and-unsloth.md): Learn how to fine-tune LLMs on NVIDIA's Blackwell RTX 50 series and B200 GPUs with our step-by-step guide.
+- [Troubleshooting & FAQs](/basics/troubleshooting-and-faqs.md): Tips to solve issues, and frequently asked questions.
+- [Chat Templates](/basics/chat-templates.md): Learn the fundamentals and customization options of chat templates, including Conversational, ChatML, ShareGPT, Alpaca formats, and more!
+- [Quantization-Aware Training (QAT)](/basics/quantization-aware-training-qat.md): Quantize models to 4-bit with Unsloth and PyTorch to recover accuracy.
+- [Unsloth Environment Flags](/basics/unsloth-environment-flags.md): Advanced flags which might be useful if you see breaking finetunes, or you want to turn stuff off.
+- [Continued Pretraining](/basics/continued-pretraining.md): AKA as Continued Finetuning. Unsloth allows you to continually pretrain so a model can learn a new language.
+- [Finetuning from Last Checkpoint](/basics/finetuning-from-last-checkpoint.md): Checkpointing allows you to save your finetuning progress so you can pause it and then continue.
+- [Unsloth Benchmarks](/basics/unsloth-benchmarks.md): Unsloth recorded benchmarks on NVIDIA GPUs.

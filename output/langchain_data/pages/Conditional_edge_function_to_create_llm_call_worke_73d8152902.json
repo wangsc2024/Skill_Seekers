@@ -1,0 +1,8 @@
+{
+  "title": "Conditional edge function to create llm_call workers that each write a section of the report",
+  "content": "def assign_workers(state: State):\n    \"\"\"Assign a worker to each section in the plan\"\"\"\n\n# Kick off section writing in parallel via Send() API\n    return [Send(\"llm_call\", {\"section\": s}) for s in state[\"sections\"]]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#conditional-edge-function-to-create-llm_call-workers-that-each-write-a-section-of-the-report",
+  "links": []
+}

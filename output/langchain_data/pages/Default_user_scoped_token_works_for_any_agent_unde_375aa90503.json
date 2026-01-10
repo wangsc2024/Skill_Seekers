@@ -1,0 +1,8 @@
+{
+  "title": "Default: user-scoped token (works for any agent under this user)",
+  "content": "auth_result = await client.authenticate(\n    provider=\"{provider_id}\",\n    scopes=[\"scopeA\"],\n    user_id=\"your_user_id\"\n)\n\nif auth_result.needs_auth:\n    print(f\"Complete OAuth at: {auth_result.auth_url}\")\n    # Wait for completion\n    completed_auth = await client.wait_for_completion(auth_result.auth_id)\n    token = completed_auth.token\nelse:\n    token = auth_result.token\n```\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/agent-auth.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#default:-user-scoped-token-(works-for-any-agent-under-this-user)",
+  "links": []
+}

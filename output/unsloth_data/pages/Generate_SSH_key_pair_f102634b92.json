@@ -1,0 +1,8 @@
+{
+  "title": "Generate SSH key pair",
+  "content": "ssh-keygen -t rsa -b 4096 -f ~/.ssh/container_key",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#generate-ssh-key-pair",
+  "links": []
+}

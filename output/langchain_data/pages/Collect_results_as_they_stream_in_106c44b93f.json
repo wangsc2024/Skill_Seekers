@@ -1,0 +1,8 @@
+{
+  "title": "Collect results as they stream in",
+  "content": "aggregated_results = []\nfor result in streamed_results:\n    aggregated_results.append(result)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#collect-results-as-they-stream-in",
+  "links": []
+}

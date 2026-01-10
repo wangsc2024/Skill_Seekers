@@ -1,0 +1,365 @@
+{
+  "url": "https://react.dev/reference/react/useReducer",
+  "title": "useReducer",
+  "content": "useReducer is a React Hook that lets you add a reducer to your component.\n\nCall useReducer at the top level of your component to manage its state with a reducer.\n\nSee more examples below.\n\nuseReducer returns an array with exactly two values:\n\nThe dispatch function returned by useReducer lets you update the state to a different value and trigger a re-render. You need to pass the action as the only argument to the dispatch function:\n\nReact will set the next state to the result of calling the reducer function you’ve provided with the current state and the action you’ve passed to dispatch.\n\ndispatch functions do not have a return value.\n\nThe dispatch function only updates the state variable for the next render. If you read the state variable after calling the dispatch function, you will still get the old value that was on the screen before your call.\n\nIf the new value you provide is identical to the current state, as determined by an Object.is comparison, React will skip re-rendering the component and its children. This is an optimization. React may still need to call your component before ignoring the result, but it shouldn’t affect your code.\n\nReact batches state updates. It updates the screen after all the event handlers have run and have called their set functions. This prevents multiple re-renders during a single event. In the rare case that you need to force React to update the screen earlier, for example to access the DOM, you can use flushSync.\n\nCall useReducer at the top level of your component to manage state with a reducer.\n\nuseReducer returns an array with exactly two items:\n\nTo update what’s on the screen, call dispatch with an object representing what the user did, called an action:\n\nReact will pass the current state and the action to your reducer function. Your reducer will calculate and return the next state. React will store that next state, render your component with it, and update the UI.\n\nuseReducer is very similar to useState, but it lets you move the state update logic from event handlers into a single function outside of your component. Read more about choosing between useState and useReducer.\n\nA reducer function is declared like this:\n\nThen you need to fill in the code that will calculate and return the next state. By convention, it is common to write it as a switch statement. For each case in the switch, calculate and return some next state.\n\nActions can have any shape. By convention, it’s common to pass objects with a type property identifying the action. It should include the minimal necessary information that the reducer needs to compute the next state.\n\nThe action type names are local to your component. Each action describes a single interaction, even if that leads to multiple changes in data. The shape of the state is arbitrary, but usually it’ll be an object or an array.\n\nRead extracting state logic into a reducer to learn more.\n\nState is read-only. Don’t modify any objects or arrays in state:\n\nInstead, always return new objects from your reducer:\n\nRead updating objects in state and updating arrays in state to learn more.\n\nIn this example, the reducer manages a state object with two fields: name and age.\n\nReact saves the initial state once and ignores it on the next renders.\n\nAlthough the result of createInitialState(username) is only used for the initial render, you’re still calling this function on every render. This can be wasteful if it’s creating large arrays or performing expensive calculations.\n\nTo solve this, you may pass it as an initializer function to useReducer as the third argument instead:\n\nNotice that you’re passing createInitialState, which is the function itself, and not createInitialState(), which is the result of calling it. This way, the initial state does not get re-created after initialization.\n\nIn the above example, createInitialState takes a username argument. If your initializer doesn’t need any information to compute the initial state, you may pass null as the second argument to useReducer.\n\nThis example passes the initializer function, so the createInitialState function only runs during initialization. It does not run when component re-renders, such as when you type into the input.\n\nCalling the dispatch function does not change state in the running code:\n\nThis is because states behaves like a snapshot. Updating state requests another render with the new state value, but does not affect the state JavaScript variable in your already-running event handler.\n\nIf you need to guess the next state value, you can calculate it manually by calling the reducer yourself:\n\nReact will ignore your update if the next state is equal to the previous state, as determined by an Object.is comparison. This usually happens when you change an object or an array in state directly:\n\nYou mutated an existing state object and returned it, so React ignored the update. To fix this, you need to ensure that you’re always updating objects in state and updating arrays in state instead of mutating them:\n\nMake sure that every case branch copies all of the existing fields when returning the new state:\n\nWithout ...state above, the returned next state would only contain the age field and nothing else.\n\nIf your state unexpectedly becomes undefined, you’re likely forgetting to return state in one of the cases, or your action type doesn’t match any of the case statements. To find why, throw an error outside the switch:\n\nYou can also use a static type checker like TypeScript to catch such mistakes.\n\nYou might get an error that says: Too many re-renders. React limits the number of renders to prevent an infinite loop. Typically, this means that you’re unconditionally dispatching an action during render, so your component enters a loop: render, dispatch (which causes a render), render, dispatch (which causes a render), and so on. Very often, this is caused by a mistake in specifying an event handler:\n\nIf you can’t find the cause of this error, click on the arrow next to the error in the console and look through the JavaScript stack to find the specific dispatch function call responsible for the error.\n\nIn Strict Mode, React will call your reducer and initializer functions twice. This shouldn’t break your code.\n\nThis development-only behavior helps you keep components pure. React uses the result of one of the calls, and ignores the result of the other call. As long as your component, initializer, and reducer functions are pure, this shouldn’t affect your logic. However, if they are accidentally impure, this helps you notice the mistakes.\n\nFor example, this impure reducer function mutates an array in state:\n\nBecause React calls your reducer function twice, you’ll see the todo was added twice, so you’ll know that there is a mistake. In this example, you can fix the mistake by replacing the array instead of mutating it:\n\nNow that this reducer function is pure, calling it an extra time doesn’t make a difference in behavior. This is why React calling it twice helps you find mistakes. Only component, initializer, and reducer functions need to be pure. Event handlers don’t need to be pure, so React will never call your event handlers twice.\n\nRead keeping components pure to learn more.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "useReducer",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h3",
+      "text": "useReducer(reducer, initialArg, init?)",
+      "id": "usereducer"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "caveats"
+    },
+    {
+      "level": "h3",
+      "text": "dispatch function",
+      "id": "dispatch"
+    },
+    {
+      "level": "h4",
+      "text": "Parameters",
+      "id": "dispatch-parameters"
+    },
+    {
+      "level": "h4",
+      "text": "Returns",
+      "id": "dispatch-returns"
+    },
+    {
+      "level": "h4",
+      "text": "Caveats",
+      "id": "setstate-caveats"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Adding a reducer to a component",
+      "id": "adding-a-reducer-to-a-component"
+    },
+    {
+      "level": "h3",
+      "text": "Writing the reducer function",
+      "id": "writing-the-reducer-function"
+    },
+    {
+      "level": "h3",
+      "text": "Pitfall",
+      "id": ""
+    },
+    {
+      "level": "h4",
+      "text": "Basic useReducer examples",
+      "id": "examples-basic"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 3: Form (object)",
+      "id": "form-object"
+    },
+    {
+      "level": "h3",
+      "text": "Avoiding recreating the initial state",
+      "id": "avoiding-recreating-the-initial-state"
+    },
+    {
+      "level": "h4",
+      "text": "The difference between passing an initializer and passing the initial state directly",
+      "id": "examples-initializer"
+    },
+    {
+      "level": "h4",
+      "text": "Example 1 of 2: Passing the initializer function",
+      "id": "passing-the-initializer-function"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "I’ve dispatched an action, but logging gives me the old state value",
+      "id": "ive-dispatched-an-action-but-logging-gives-me-the-old-state-value"
+    },
+    {
+      "level": "h3",
+      "text": "I’ve dispatched an action, but the screen doesn’t update",
+      "id": "ive-dispatched-an-action-but-the-screen-doesnt-update"
+    },
+    {
+      "level": "h3",
+      "text": "A part of my reducer state becomes undefined after dispatching",
+      "id": "a-part-of-my-reducer-state-becomes-undefined-after-dispatching"
+    },
+    {
+      "level": "h3",
+      "text": "My entire reducer state becomes undefined after dispatching",
+      "id": "my-entire-reducer-state-becomes-undefined-after-dispatching"
+    },
+    {
+      "level": "h3",
+      "text": "I’m getting an error: “Too many re-renders”",
+      "id": "im-getting-an-error-too-many-re-renders"
+    },
+    {
+      "level": "h3",
+      "text": "My reducer or initializer function runs twice",
+      "id": "my-reducer-or-initializer-function-runs-twice"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "const [state, dispatch] = useReducer(reducer, initialArg, init?)",
+      "language": "unknown"
+    },
+    {
+      "code": "import { useReducer } from 'react';function reducer(state, action) {  // ...}function MyComponent() {  const [state, dispatch] = useReducer(reducer, { age: 42 });  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "const [state, dispatch] = useReducer(reducer, { age: 42 });function handleClick() {  dispatch({ type: 'incremented_age' });  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "import { useReducer } from 'react';function reducer(state, action) {  // ...}function MyComponent() {  const [state, dispatch] = useReducer(reducer, { age: 42 });  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function handleClick() {  dispatch({ type: 'incremented_age' });}",
+      "language": "javascript"
+    },
+    {
+      "code": "function reducer(state, action) {  // ...}",
+      "language": "javascript"
+    },
+    {
+      "code": "function reducer(state, action) {  switch (action.type) {    case 'incremented_age': {      return {        name: state.name,        age: state.age + 1      };    }    case 'changed_name': {      return {        name: action.nextName,        age: state.age      };    }  }  throw Error('Unknown action: ' + action.type);}",
+      "language": "javascript"
+    },
+    {
+      "code": "function Form() {  const [state, dispatch] = useReducer(reducer, { name: 'Taylor', age: 42 });    function handleButtonClick() {    dispatch({ type: 'incremented_age' });  }  function handleInputChange(e) {    dispatch({      type: 'changed_name',      nextName: e.target.value    });  }  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function reducer(state, action) {  switch (action.type) {    case 'incremented_age': {      // 🚩 Don't mutate an object in state like this:      state.age = state.age + 1;      return state;    }",
+      "language": "javascript"
+    },
+    {
+      "code": "function reducer(state, action) {  switch (action.type) {    case 'incremented_age': {      // ✅ Instead, return a new object      return {        ...state,        age: state.age + 1      };    }",
+      "language": "javascript"
+    },
+    {
+      "code": "function createInitialState(username) {  // ...}function TodoList({ username }) {  const [state, dispatch] = useReducer(reducer, createInitialState(username));  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function createInitialState(username) {  // ...}function TodoList({ username }) {  const [state, dispatch] = useReducer(reducer, username, createInitialState);  // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function handleClick() {  console.log(state.age);  // 42  dispatch({ type: 'incremented_age' }); // Request a re-render with 43  console.log(state.age);  // Still 42!  setTimeout(() => {    console.log(state.age); // Also 42!  }, 5000);}",
+      "language": "javascript"
+    },
+    {
+      "code": "const action = { type: 'incremented_age' };dispatch(action);const nextState = reducer(state, action);console.log(state);     // { age: 42 }console.log(nextState); // { age: 43 }",
+      "language": "javascript"
+    },
+    {
+      "code": "function reducer(state, action) {  switch (action.type) {    case 'incremented_age': {      // 🚩 Wrong: mutating existing object      state.age++;      return state;    }    case 'changed_name': {      // 🚩 Wrong: mutating existing object      state.name = action.nextName;      return state;    }    // ...  }}",
+      "language": "javascript"
+    },
+    {
+      "code": "function reducer(state, action) {  switch (action.type) {    case 'incremented_age': {      // ✅ Correct: creating a new object      return {        ...state,        age: state.age + 1      };    }    case 'changed_name': {      // ✅ Correct: creating a new object      return {        ...state,        name: action.nextName      };    }    // ...  }}",
+      "language": "javascript"
+    },
+    {
+      "code": "function reducer(state, action) {  switch (action.type) {    case 'incremented_age': {      return {        ...state, // Don't forget this!        age: state.age + 1      };    }    // ...",
+      "language": "javascript"
+    },
+    {
+      "code": "function reducer(state, action) {  switch (action.type) {    case 'incremented_age': {      // ...    }    case 'edited_name': {      // ...    }  }  throw Error('Unknown action: ' + action.type);}",
+      "language": "javascript"
+    },
+    {
+      "code": "// 🚩 Wrong: calls the handler during renderreturn <button onClick={handleClick()}>Click me</button>// ✅ Correct: passes down the event handlerreturn <button onClick={handleClick}>Click me</button>// ✅ Correct: passes down an inline functionreturn <button onClick={(e) => handleClick(e)}>Click me</button>",
+      "language": "jsx"
+    },
+    {
+      "code": "function reducer(state, action) {  switch (action.type) {    case 'added_todo': {      // 🚩 Mistake: mutating state      state.todos.push({ id: nextId++, text: action.text });      return state;    }    // ...  }}",
+      "language": "javascript"
+    },
+    {
+      "code": "function reducer(state, action) {  switch (action.type) {    case 'added_todo': {      // ✅ Correct: replacing with new state      return {        ...state,        todos: [          ...state.todos,          { id: nextId++, text: action.text }        ]      };    }    // ...  }}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://react.dev/learn",
+    "https://react.dev/reference/react",
+    "https://react.dev/reference/react/hooks",
+    "https://react.dev/reference/react/useActionState",
+    "https://react.dev/reference/react/useCallback",
+    "https://react.dev/reference/react/useContext",
+    "https://react.dev/reference/react/useDebugValue",
+    "https://react.dev/reference/react/useDeferredValue",
+    "https://react.dev/reference/react/useEffect",
+    "https://react.dev/reference/react/useEffectEvent",
+    "https://react.dev/reference/react/useId",
+    "https://react.dev/reference/react/useImperativeHandle",
+    "https://react.dev/reference/react/useInsertionEffect",
+    "https://react.dev/reference/react/useLayoutEffect",
+    "https://react.dev/reference/react/useMemo",
+    "https://react.dev/reference/react/useOptimistic",
+    "https://react.dev/reference/react/useReducer",
+    "https://react.dev/reference/react/useRef",
+    "https://react.dev/reference/react/useState",
+    "https://react.dev/reference/react/useSyncExternalStore",
+    "https://react.dev/reference/react/useTransition",
+    "https://react.dev/reference/react/components",
+    "https://react.dev/reference/react/Fragment",
+    "https://react.dev/reference/react/Profiler",
+    "https://react.dev/reference/react/StrictMode",
+    "https://react.dev/reference/react/Suspense",
+    "https://react.dev/reference/react/Activity",
+    "https://react.dev/reference/react/ViewTransition",
+    "https://react.dev/reference/react/apis",
+    "https://react.dev/reference/react/act",
+    "https://react.dev/reference/react/addTransitionType",
+    "https://react.dev/reference/react/cache",
+    "https://react.dev/reference/react/cacheSignal",
+    "https://react.dev/reference/react/captureOwnerStack",
+    "https://react.dev/reference/react/createContext",
+    "https://react.dev/reference/react/lazy",
+    "https://react.dev/reference/react/memo",
+    "https://react.dev/reference/react/startTransition",
+    "https://react.dev/reference/react/use",
+    "https://react.dev/reference/react/experimental_taintObjectReference",
+    "https://react.dev/reference/react/experimental_taintUniqueValue",
+    "https://react.dev/reference/react-dom/hooks",
+    "https://react.dev/reference/react-dom/hooks/useFormStatus",
+    "https://react.dev/reference/react-dom/components",
+    "https://react.dev/reference/react-dom/components/common",
+    "https://react.dev/reference/react-dom/components/form",
+    "https://react.dev/reference/react-dom/components/input",
+    "https://react.dev/reference/react-dom/components/option",
+    "https://react.dev/reference/react-dom/components/progress",
+    "https://react.dev/reference/react-dom/components/select",
+    "https://react.dev/reference/react-dom/components/textarea",
+    "https://react.dev/reference/react-dom/components/link",
+    "https://react.dev/reference/react-dom/components/meta",
+    "https://react.dev/reference/react-dom/components/script",
+    "https://react.dev/reference/react-dom/components/style",
+    "https://react.dev/reference/react-dom/components/title",
+    "https://react.dev/reference/react-dom",
+    "https://react.dev/reference/react-dom/createPortal",
+    "https://react.dev/reference/react-dom/flushSync",
+    "https://react.dev/reference/react-dom/preconnect",
+    "https://react.dev/reference/react-dom/prefetchDNS",
+    "https://react.dev/reference/react-dom/preinit",
+    "https://react.dev/reference/react-dom/preinitModule",
+    "https://react.dev/reference/react-dom/preload",
+    "https://react.dev/reference/react-dom/preloadModule",
+    "https://react.dev/reference/react-dom/client",
+    "https://react.dev/reference/react-dom/client/createRoot",
+    "https://react.dev/reference/react-dom/client/hydrateRoot",
+    "https://react.dev/reference/react-dom/server",
+    "https://react.dev/reference/react-dom/server/renderToPipeableStream",
+    "https://react.dev/reference/react-dom/server/renderToReadableStream",
+    "https://react.dev/reference/react-dom/server/renderToStaticMarkup",
+    "https://react.dev/reference/react-dom/server/renderToString",
+    "https://react.dev/reference/react-dom/server/resume",
+    "https://react.dev/reference/react-dom/server/resumeToPipeableStream",
+    "https://react.dev/reference/react-dom/static",
+    "https://react.dev/reference/react-dom/static/prerender",
+    "https://react.dev/reference/react-dom/static/prerenderToNodeStream",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerender",
+    "https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStream",
+    "https://react.dev/reference/react-compiler/configuration",
+    "https://react.dev/reference/react-compiler/compilationMode",
+    "https://react.dev/reference/react-compiler/gating",
+    "https://react.dev/reference/react-compiler/logger",
+    "https://react.dev/reference/react-compiler/panicThreshold",
+    "https://react.dev/reference/react-compiler/target",
+    "https://react.dev/reference/react-compiler/directives",
+    "https://react.dev/reference/react-compiler/directives/use-memo",
+    "https://react.dev/reference/react-compiler/directives/use-no-memo",
+    "https://react.dev/reference/react-compiler/compiling-libraries",
+    "https://react.dev/reference/dev-tools/react-performance-tracks",
+    "https://react.dev/reference/eslint-plugin-react-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/component-hook-factories",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/config",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/error-boundaries",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/gating",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/globals",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/incompatible-library",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/preserve-manual-memoization",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/purity",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/refs",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-render",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/static-components",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/unsupported-syntax",
+    "https://react.dev/reference/eslint-plugin-react-hooks/lints/use-memo",
+    "https://react.dev/reference/rules",
+    "https://react.dev/reference/rules/components-and-hooks-must-be-pure",
+    "https://react.dev/reference/rules/react-calls-components-and-hooks",
+    "https://react.dev/reference/rules/rules-of-hooks",
+    "https://react.dev/reference/rsc/server-components",
+    "https://react.dev/reference/rsc/server-functions",
+    "https://react.dev/reference/rsc/directives",
+    "https://react.dev/reference/rsc/use-client",
+    "https://react.dev/reference/rsc/use-server",
+    "https://react.dev/reference/react/legacy",
+    "https://react.dev/reference/react/Children",
+    "https://react.dev/reference/react/cloneElement",
+    "https://react.dev/reference/react/Component",
+    "https://react.dev/reference/react/createElement",
+    "https://react.dev/reference/react/createRef",
+    "https://react.dev/reference/react/forwardRef",
+    "https://react.dev/reference/react/isValidElement",
+    "https://react.dev/reference/react/PureComponent",
+    "https://react.dev/learn/extracting-state-logic-into-a-reducer",
+    "https://react.dev/learn/removing-effect-dependencies",
+    "https://react.dev/learn/queueing-a-series-of-state-updates",
+    "https://react.dev/learn/updating-objects-in-state",
+    "https://react.dev/learn/updating-arrays-in-state",
+    "https://react.dev/learn/state-as-a-snapshot",
+    "https://react.dev/learn/keeping-components-pure",
+    "https://react.dev/learn/installation",
+    "https://react.dev/learn/describing-the-ui",
+    "https://react.dev/learn/adding-interactivity",
+    "https://react.dev/learn/managing-state",
+    "https://react.dev/learn/escape-hatches"
+  ]
+}

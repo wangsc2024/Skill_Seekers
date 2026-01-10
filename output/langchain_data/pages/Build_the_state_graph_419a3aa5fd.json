@@ -1,0 +1,8 @@
+{
+  "title": "Build the state graph",
+  "content": "builder = StateGraph(OverallState)\nbuilder.add_node(node)  # node_1 is the first node\nbuilder.add_edge(START, \"node\")  # Start the graph with node_1\nbuilder.add_edge(\"node\", END)  # End the graph after node_1\ngraph = builder.compile()",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#build-the-state-graph",
+  "links": []
+}

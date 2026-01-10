@@ -1,0 +1,93 @@
+{
+  "title": "Trace with the Vercel AI SDK (JS/TS only)",
+  "content": "Source: https://docs.langchain.com/langsmith/trace-with-vercel-ai-sdk\n\nYou can use LangSmith to trace runs from the Vercel AI SDK. This guide will walk through an example.\n\n<Note>\n  This wrapper requires AI SDK v5 and `langsmith>=0.3.63`. If you are using an older version of the AI SDK or `langsmith`, see the OpenTelemetry (OTEL)\n  based approach [on this page](/langsmith/legacy-trace-with-vercel-ai-sdk).\n</Note>\n\nInstall the Vercel AI SDK. This guide uses Vercel's OpenAI integration for the code snippets below, but you can use any of their other options as well.\n\n## Environment configuration\n\n<CodeGroup>\n  \n</CodeGroup>\n\nImport and wrap AI SDK methods, then use them as you normally would:\n\nYou should see a trace in your LangSmith dashboard [like this one](https://smith.langchain.com/public/4f0e689e-c801-44d3-8857-93b47ab100cc/r).\n\nYou can also trace runs with tool calls:\n\nWhich results in a trace like [this one](https://smith.langchain.com/public/6075fa2c-d255-4885-a66a-4fc798afaa9f/r).\n\nYou can use other AI SDK methods exactly as you usually would.\n\nYou can wrap `traceable` calls around AI SDK calls or within AI SDK tool calls. This is useful if you\nwant to group runs together in LangSmith:\n\nThe resulting trace will look [like this](https://smith.langchain.com/public/ff25bc26-9389-4798-8b91-2bdcc95d4a8e/r).\n\n## Tracing in serverless environments\n\nWhen tracing in serverless environments, you must wait for all runs to flush before your environment\nshuts down. To do this, you can pass a LangSmith [`Client`](https://docs.smith.langchain.com/reference/js/classes/client.Client) instance when wrapping the AI SDK method,\nthen call `await client.awaitPendingTraceBatches()`.\nMake sure to also pass it into any `traceable` wrappers you create as well:\n\nIf you are using `Next.js`, there is a convenient [`after`](https://nextjs.org/docs/app/api-reference/functions/after) hook\nwhere you can put this logic:\n\nSee [this page](/langsmith/serverless-environments) for more detail, including information\naround managing rate limits in serverless environments.\n\n## Passing LangSmith config\n\nYou can pass LangSmith-specific config to your wrapper both when initially wrapping your\nAI SDK methods and while running them via `providerOptions.langsmith`.\nThis includes metadata (which you can later use to filter runs in LangSmith), top-level run name,\ntags, custom client instances, and more.\n\nConfig passed while wrapping will apply to all future calls you make with the wrapped method:\n\nWhile passing config at runtime via `providerOptions.langsmith` will apply only to that run.\nWe suggest importing and wrapping your config in `createLangSmithProviderOptions` to ensure\nproper typing:\n\nYou can customize what inputs and outputs the AI SDK sends to LangSmith by specifying custom input/output\nprocessing functions. This is useful if you are dealing with sensitive data that you would like to\navoid sending to LangSmith.\n\nBecause output formats vary depending on which AI SDK method you are using, we suggest defining and passing config\nindividually into wrapped methods. You will also need to provide separate functions for child LLM runs within\nAI SDK calls, since calling `generateText` at top level calls the LLM internally and can do so multiple times.\n\nWe also suggest passing a generic parameter into `createLangSmithProviderOptions` to get proper types for inputs and outputs.\nHere's an example for `generateText`:\n\nThe actual return value will contain the original, non-redacted result but the trace in LangSmith\nwill be redacted. [Here's an example](https://smith.langchain.com/public/b4c69c8e-285b-4c0c-8492-e571e2cf562f/r).\n\nFor redacting tool input/output, wrap your `execute` method in a `traceable` like this:\n\nThe `traceable` return type is complex, which makes the cast necessary. You may also omit the AI SDK `tool` wrapper function\nif you wish to avoid the cast.\n\n<Callout icon=\"pen-to-square\" iconType=\"regular\">\n  [Edit this page on GitHub](https://github.com/langchain-ai/docs/edit/main/src/langsmith/trace-with-vercel-ai-sdk.mdx) or [file an issue](https://github.com/langchain-ai/docs/issues/new/choose).\n</Callout>\n\n<Tip icon=\"terminal\" iconType=\"regular\">\n  [Connect these docs](/use-these-docs) to Claude, VSCode, and more via MCP for real-time answers.\n</Tip>",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Environment configuration\n\n<CodeGroup>",
+      "language": "unknown"
+    },
+    {
+      "code": "</CodeGroup>\n\n## Basic setup\n\nImport and wrap AI SDK methods, then use them as you normally would:",
+      "language": "unknown"
+    },
+    {
+      "code": "You should see a trace in your LangSmith dashboard [like this one](https://smith.langchain.com/public/4f0e689e-c801-44d3-8857-93b47ab100cc/r).\n\nYou can also trace runs with tool calls:",
+      "language": "unknown"
+    },
+    {
+      "code": "Which results in a trace like [this one](https://smith.langchain.com/public/6075fa2c-d255-4885-a66a-4fc798afaa9f/r).\n\nYou can use other AI SDK methods exactly as you usually would.\n\n### With `traceable`\n\nYou can wrap `traceable` calls around AI SDK calls or within AI SDK tool calls. This is useful if you\nwant to group runs together in LangSmith:",
+      "language": "unknown"
+    },
+    {
+      "code": "The resulting trace will look [like this](https://smith.langchain.com/public/ff25bc26-9389-4798-8b91-2bdcc95d4a8e/r).\n\n## Tracing in serverless environments\n\nWhen tracing in serverless environments, you must wait for all runs to flush before your environment\nshuts down. To do this, you can pass a LangSmith [`Client`](https://docs.smith.langchain.com/reference/js/classes/client.Client) instance when wrapping the AI SDK method,\nthen call `await client.awaitPendingTraceBatches()`.\nMake sure to also pass it into any `traceable` wrappers you create as well:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you are using `Next.js`, there is a convenient [`after`](https://nextjs.org/docs/app/api-reference/functions/after) hook\nwhere you can put this logic:",
+      "language": "unknown"
+    },
+    {
+      "code": "See [this page](/langsmith/serverless-environments) for more detail, including information\naround managing rate limits in serverless environments.\n\n## Passing LangSmith config\n\nYou can pass LangSmith-specific config to your wrapper both when initially wrapping your\nAI SDK methods and while running them via `providerOptions.langsmith`.\nThis includes metadata (which you can later use to filter runs in LangSmith), top-level run name,\ntags, custom client instances, and more.\n\nConfig passed while wrapping will apply to all future calls you make with the wrapped method:",
+      "language": "unknown"
+    },
+    {
+      "code": "While passing config at runtime via `providerOptions.langsmith` will apply only to that run.\nWe suggest importing and wrapping your config in `createLangSmithProviderOptions` to ensure\nproper typing:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Redacting data\n\nYou can customize what inputs and outputs the AI SDK sends to LangSmith by specifying custom input/output\nprocessing functions. This is useful if you are dealing with sensitive data that you would like to\navoid sending to LangSmith.\n\nBecause output formats vary depending on which AI SDK method you are using, we suggest defining and passing config\nindividually into wrapped methods. You will also need to provide separate functions for child LLM runs within\nAI SDK calls, since calling `generateText` at top level calls the LLM internally and can do so multiple times.\n\nWe also suggest passing a generic parameter into `createLangSmithProviderOptions` to get proper types for inputs and outputs.\nHere's an example for `generateText`:",
+      "language": "unknown"
+    },
+    {
+      "code": "The actual return value will contain the original, non-redacted result but the trace in LangSmith\nwill be redacted. [Here's an example](https://smith.langchain.com/public/b4c69c8e-285b-4c0c-8492-e571e2cf562f/r).\n\nFor redacting tool input/output, wrap your `execute` method in a `traceable` like this:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Environment configuration",
+      "id": "environment-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Basic setup",
+      "id": "basic-setup"
+    },
+    {
+      "level": "h3",
+      "text": "With `traceable`",
+      "id": "with-`traceable`"
+    },
+    {
+      "level": "h2",
+      "text": "Tracing in serverless environments",
+      "id": "tracing-in-serverless-environments"
+    },
+    {
+      "level": "h2",
+      "text": "Passing LangSmith config",
+      "id": "passing-langsmith-config"
+    },
+    {
+      "level": "h2",
+      "text": "Redacting data",
+      "id": "redacting-data"
+    }
+  ],
+  "url": "llms-txt#trace-with-the-vercel-ai-sdk-(js/ts-only)",
+  "links": []
+}

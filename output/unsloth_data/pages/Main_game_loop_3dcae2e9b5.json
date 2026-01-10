@@ -1,0 +1,67 @@
+{
+  "title": "Main game loop:",
+  "content": "while running :\n     for event in pygame.event.get() : \n        if quit ... etc\n\npygame.quit()\nprint(\"Code is simplified. Due time constraints, full working version requires further implementation.\")\nbash\n./llama.cpp/llama-cli --model unsloth-QwQ-32B-GGUF/QwQ-32B-Q4_K_M.gguf \\\n    --threads 32 --n-gpu-layers 99 \\\n    --ctx-size 16384 \\\n    --temp 1.5 \\\n    --min-p 0.1 \\\n    --top-k 0 \\\n    --top-p 1.0 \\\n    -no-cnv \\\n    --prompt \"<|im_start|>user\\nCreate a Flappy Bird game in Python. You must include these things:\\n1. You must use pygame.\\n2. The background color should be randomly chosen and is a light shade. Start with a light blue color.\\n3. Pressing SPACE multiple times will accelerate the bird.\\n4. The bird's shape should be randomly chosen as a square, circle or triangle. The color should be randomly chosen as a dark color.\\n5. Place on the bottom some land colored as dark brown or yellow chosen randomly.\\n6. Make a score shown on the top right side. Increment if you pass pipes and don't hit them.\\n7. Make randomly spaced pipes with enough space. Color them randomly as dark green or light brown or a dark gray shade.\\n8. When you lose, show the best score. Make the text inside the screen. Pressing q or Esc will quit the game. Restarting is pressing SPACE again.\\nThe final game should be inside a markdown section in Python. Check your code for errors and fix them before the final markdown section.<|im_end|>\\n<|im_start|>assistant\\n<think>\\n\"\nbash\n./llama.cpp/llama-cli --model unsloth-QwQ-32B-GGUF/QwQ-32B-Q4_K_M.gguf \\\n    --threads 32 --n-gpu-layers 99 \\\n    --ctx-size 16384 \\\n    --temp 0.6 \\\n    --min-p 0.0 \\\n    --top-k 40 \\\n    --top-p 0.95 \\\n    -no-cnv \\\n    --prompt \"<|im_start|>user\\nCreate a Flappy Bird game in Python. You must include these things:\\n1. You must use pygame.\\n2. The background color should be randomly chosen and is a light shade. Start with a light blue color.\\n3. Pressing SPACE multiple times will accelerate the bird.\\n4. The bird's shape should be randomly chosen as a square, circle or triangle. The color should be randomly chosen as a dark color.\\n5. Place on the bottom some land colored as dark brown or yellow chosen randomly.\\n6. Make a score shown on the top right side. Increment if you pass pipes and don't hit them.\\n7. Make randomly spaced pipes with enough space. Color them randomly as dark green or light brown or a dark gray shade.\\n8. When you lose, show the best score. Make the text inside the screen. Pressing q or Esc will quit the game. Restarting is pressing SPACE again.\\nThe final game should be inside a markdown section in Python. Check your code for errors and fix them before the final markdown section.<|im_end|>\\n<|im_start|>assistant\\n<think>\\n\"\n\njson\n{\n  ...,\n  \"rope_scaling\": {\n    \"factor\": 4.0,\n    \"original_max_position_embeddings\": 32768,\n    \"type\": \"yarn\"\n  }\n}\nbash\n--override-kv qwen2.context_length=int:131072 \\\n--override-kv qwen2.rope.scaling.type=str:yarn \\\n--override-kv qwen2.rope.scaling.factor=float:4 \\\n--override-kv qwen2.rope.scaling.original_context_length=int:32768 \\\n--override-kv qwen2.rope.scaling.attn_factor=float:1.13862943649292 \\\nbash\n--override-kv qwen2.attention.layer_norm_rms_epsilon=float:0.000001 \\\n\n\"eos_token\": \"<|im_end|>\",\n\"pad_token\": \"<|endoftext|>\",\n```\n\n## :tools: Dynamic 4-bit Quants\n\nWe also uploaded dynamic 4bit quants which increase accuracy vs naive 4bit quantizations! We attach the QwQ quantization error plot analysis for both activation and weight quantization errors:\n\n<figure><img src=\"https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-16157f53eff143c179be571a43f8b55000d94290%2FQwQ%20quantization%20errors.png?alt=media\" alt=\"\"><figcaption></figcaption></figure>\n\nWe uploaded dynamic 4-bit quants to: <https://huggingface.co/unsloth/QwQ-32B-unsloth-bnb-4bit>\n\nSince vLLM 0.7.3 (2025 February 20th) <https://github.com/vllm-project/vllm/releases/tag/v0.7.3>, vLLM now supports loading Unsloth dynamic 4bit quants!\n\nAll our GGUFs are at <https://huggingface.co/unsloth/QwQ-32B-GGUF>!",
+  "code_samples": [
+    {
+      "code": "9. You might be wondering maybe it's Q4\\_K\\_M? B16 ie full precision should work fine right? Incorrect - the outputs again fail if we do not use our fix of -`-samplers \"top_k;top_p;min_p;temperature;dry;typ_p;xtc\"` when using a Repetition Penalty.\n\n## :sunrise\\_over\\_mountains: Still doesn't work? Try Min\\_p = 0.1, Temperature = 1.5\n\nAccording to the Min\\_p paper <https://arxiv.org/pdf/2407.01082>, for more creative and diverse outputs, and if you still see repetitions, try disabling top\\_p and top\\_k!",
+      "language": "unknown"
+    },
+    {
+      "code": "Another approach is to disable `min_p` directly, since llama.cpp by default uses `min_p = 0.1`!",
+      "language": "unknown"
+    },
+    {
+      "code": "## :thinking: \\<think> token not shown?\n\nSome people are reporting that because \\<think> is default added in the chat template, some systems are not outputting the thinking traces correctly. You will have to manually edit the Jinja template from:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\nto another by removing the `<think>\\n` at the end. The model will now have to manually add `<think>\\n` during inference, which might not always succeed. DeepSeek also edited all models to default add a `<think>` token to force the model to go into reasoning model.\n\nSo change `{%- if add_generation_prompt %} {{- '<|im_start|>assistant\\n<think>\\n' }} {%- endif %}` to `{%- if add_generation_prompt %} {{- '<|im_start|>assistant\\n' }} {%- endif %}`\n\nie remove `<think>\\n`\n\n<details>\n\n<summary>Full jinja template with removed &#x3C;think>\\n part</summary>\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\n</details>\n\n## Extra Notes\n\nWe first thought maybe:\n\n1. QwQ's context length was not natively 128K, but rather 32K with YaRN extension. For example in the readme file for <https://huggingface.co/Qwen/QwQ-32B>, we see:",
+      "language": "unknown"
+    },
+    {
+      "code": "We tried overriding llama.cpp's YaRN handling, but nothing changed.\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\n2. We also thought maybe the RMS Layernorm epsilon was wrong - not 1e-5 but maybe 1e-6. For example [this](https://huggingface.co/Qwen/Qwen2.5-32B-Instruct/blob/main/config.json) has `rms_norm_eps=1e-06`, whilst [this](https://huggingface.co/Qwen/Qwen2.5-32B/blob/main/config.json) has `rms_norm_eps=1e-05` . We also overrided it, but it did not work:\n\n{% code overflow=\"wrap\" %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% endcode %}\n\n3. We also tested if tokenizer IDs matched between llama.cpp and normal Transformers courtesy of [@kalomaze](https://x.com/kalomaze/status/1897875332230779138). They matched, so this was not the culprit.\n\nWe provide our experimental results below:\n\n{% file src=\"<https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-daa99953e0628c36fd53745a4b786206907e7d9a%2Ffile_BF16_no_samplers.txt?alt=media>\" %}\nBF16 full precision with no sampling fix\n{% endfile %}\n\n{% file src=\"<https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-52f35bdaa5b1d7c9c19e943f224f049de2f0555f%2Ffile_BF16_yes_samplers.txt?alt=media>\" %}\nBF16 full precision with sampling fix\n{% endfile %}\n\n{% file src=\"<https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-276ff61d8749856abacdd33f38e73f9782a516fd%2Ffinal_Q4_K_M_no_samplers.txt?alt=media>\" %}\nQ4\\_K\\_M precision with no sampling fix\n{% endfile %}\n\n{% file src=\"<https://3215535692-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FxhOjnexMCB3dmuQFQ2Zq%2Fuploads%2Fgit-blob-ea3905fe9ce08d0fdf291ee2a32eaa6958759547%2Ffinal_Q4_K_M_yes_samplers.txt?alt=media>\" %}\nQ4\\_K\\_M precision with sampling fix\n{% endfile %}\n\n## :pencil2: Tokenizer Bug Fixes\n\n* We found a few issues as well specifically impacting finetuning! The EOS token is correct, but the PAD token should probably rather be `\"<|vision_pad|>`\" We updated it in: <https://huggingface.co/unsloth/QwQ-32B/blob/main/tokenizer_config.json>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": ":sunrise\\_over\\_mountains: Still doesn't work? Try Min\\_p = 0.1, Temperature = 1.5",
+      "id": ":sunrise\\_over\\_mountains:-still-doesn't-work?-try-min\\_p-=-0.1,-temperature-=-1.5"
+    },
+    {
+      "level": "h2",
+      "text": ":thinking: \\<think> token not shown?",
+      "id": ":thinking:-\\<think>-token-not-shown?"
+    },
+    {
+      "level": "h2",
+      "text": "Extra Notes",
+      "id": "extra-notes"
+    },
+    {
+      "level": "h2",
+      "text": ":pencil2: Tokenizer Bug Fixes",
+      "id": ":pencil2:-tokenizer-bug-fixes"
+    },
+    {
+      "level": "h2",
+      "text": ":tools: Dynamic 4-bit Quants",
+      "id": ":tools:-dynamic-4-bit-quants"
+    }
+  ],
+  "url": "llms-txt#main-game-loop:",
+  "links": []
+}

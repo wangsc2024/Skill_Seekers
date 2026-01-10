@@ -1,0 +1,180 @@
+{
+  "url": "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.state.html",
+  "title": "autogen_agentchat.state — AutoGen",
+  "content": "State management for agents, teams and termination conditions.\n\nBase class for all saveable state\n\nShow JSON schema{ \"title\": \"BaseState\", \"description\": \"Base class for all saveable state\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"BaseState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" } } }\n\nState for an assistant agent.\n\nShow JSON schema{ \"title\": \"AssistantAgentState\", \"description\": \"State for an assistant agent.\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"AssistantAgentState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" }, \"llm_context\": { \"title\": \"Llm Context\", \"type\": \"object\" } } }\n\nllm_context (Mapping[str, Any])\n\nBase state for all group chat managers.\n\nShow JSON schema{ \"title\": \"BaseGroupChatManagerState\", \"description\": \"Base state for all group chat managers.\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"BaseGroupChatManagerState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" }, \"message_thread\": { \"items\": { \"type\": \"object\" }, \"title\": \"Message Thread\", \"type\": \"array\" }, \"current_turn\": { \"default\": 0, \"title\": \"Current Turn\", \"type\": \"integer\" } } }\n\nmessage_thread (List[Mapping[str, Any]])\n\nState for a container of chat agents.\n\nShow JSON schema{ \"title\": \"ChatAgentContainerState\", \"description\": \"State for a container of chat agents.\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"ChatAgentContainerState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" }, \"agent_state\": { \"title\": \"Agent State\", \"type\": \"object\" }, \"message_buffer\": { \"items\": { \"type\": \"object\" }, \"title\": \"Message Buffer\", \"type\": \"array\" } } }\n\nagent_state (Mapping[str, Any])\n\nmessage_buffer (List[Mapping[str, Any]])\n\nBases: BaseGroupChatManagerState\n\nState for RoundRobinGroupChat manager.\n\nShow JSON schema{ \"title\": \"RoundRobinManagerState\", \"description\": \"State for :class:`~autogen_agentchat.teams.RoundRobinGroupChat` manager.\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"RoundRobinManagerState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" }, \"message_thread\": { \"items\": { \"type\": \"object\" }, \"title\": \"Message Thread\", \"type\": \"array\" }, \"current_turn\": { \"default\": 0, \"title\": \"Current Turn\", \"type\": \"integer\" }, \"next_speaker_index\": { \"default\": 0, \"title\": \"Next Speaker Index\", \"type\": \"integer\" } } }\n\nnext_speaker_index (int)\n\nBases: BaseGroupChatManagerState\n\nState for SelectorGroupChat manager.\n\nShow JSON schema{ \"title\": \"SelectorManagerState\", \"description\": \"State for :class:`~autogen_agentchat.teams.SelectorGroupChat` manager.\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"SelectorManagerState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" }, \"message_thread\": { \"items\": { \"type\": \"object\" }, \"title\": \"Message Thread\", \"type\": \"array\" }, \"current_turn\": { \"default\": 0, \"title\": \"Current Turn\", \"type\": \"integer\" }, \"previous_speaker\": { \"anyOf\": [ { \"type\": \"string\" }, { \"type\": \"null\" } ], \"default\": null, \"title\": \"Previous Speaker\" } } }\n\nprevious_speaker (str | None)\n\nBases: BaseGroupChatManagerState\n\nState for Swarm manager.\n\nShow JSON schema{ \"title\": \"SwarmManagerState\", \"description\": \"State for :class:`~autogen_agentchat.teams.Swarm` manager.\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"SwarmManagerState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" }, \"message_thread\": { \"items\": { \"type\": \"object\" }, \"title\": \"Message Thread\", \"type\": \"array\" }, \"current_turn\": { \"default\": 0, \"title\": \"Current Turn\", \"type\": \"integer\" }, \"current_speaker\": { \"default\": \"\", \"title\": \"Current Speaker\", \"type\": \"string\" } } }\n\ncurrent_speaker (str)\n\nBases: BaseGroupChatManagerState\n\nState for MagneticOneGroupChat orchestrator.\n\nShow JSON schema{ \"title\": \"MagenticOneOrchestratorState\", \"description\": \"State for :class:`~autogen_agentchat.teams.MagneticOneGroupChat` orchestrator.\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"MagenticOneOrchestratorState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" }, \"message_thread\": { \"items\": { \"type\": \"object\" }, \"title\": \"Message Thread\", \"type\": \"array\" }, \"current_turn\": { \"default\": 0, \"title\": \"Current Turn\", \"type\": \"integer\" }, \"task\": { \"default\": \"\", \"title\": \"Task\", \"type\": \"string\" }, \"facts\": { \"default\": \"\", \"title\": \"Facts\", \"type\": \"string\" }, \"plan\": { \"default\": \"\", \"title\": \"Plan\", \"type\": \"string\" }, \"n_rounds\": { \"default\": 0, \"title\": \"N Rounds\", \"type\": \"integer\" }, \"n_stalls\": { \"default\": 0, \"title\": \"N Stalls\", \"type\": \"integer\" } } }\n\nState for a team of agents.\n\nShow JSON schema{ \"title\": \"TeamState\", \"description\": \"State for a team of agents.\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"TeamState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" }, \"agent_states\": { \"title\": \"Agent States\", \"type\": \"object\" } } }\n\nagent_states (Mapping[str, Any])\n\nState for a Society of Mind agent.\n\nShow JSON schema{ \"title\": \"SocietyOfMindAgentState\", \"description\": \"State for a Society of Mind agent.\", \"type\": \"object\", \"properties\": { \"type\": { \"default\": \"SocietyOfMindAgentState\", \"title\": \"Type\", \"type\": \"string\" }, \"version\": { \"default\": \"1.0.0\", \"title\": \"Version\", \"type\": \"string\" }, \"inner_team_state\": { \"title\": \"Inner Team State\", \"type\": \"object\" } } }\n\ninner_team_state (Mapping[str, Any])\n\nautogen_agentchat.messages\n\nautogen_agentchat.teams",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "autogen_agentchat.state#",
+      "id": ""
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "{\n   \"title\": \"BaseState\",\n   \"description\": \"Base class for all saveable state\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"BaseState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"BaseState\",\n   \"description\": \"Base class for all saveable state\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"BaseState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"AssistantAgentState\",\n   \"description\": \"State for an assistant agent.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"AssistantAgentState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"llm_context\": {\n         \"title\": \"Llm Context\",\n         \"type\": \"object\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"AssistantAgentState\",\n   \"description\": \"State for an assistant agent.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"AssistantAgentState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"llm_context\": {\n         \"title\": \"Llm Context\",\n         \"type\": \"object\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"BaseGroupChatManagerState\",\n   \"description\": \"Base state for all group chat managers.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"BaseGroupChatManagerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"BaseGroupChatManagerState\",\n   \"description\": \"Base state for all group chat managers.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"BaseGroupChatManagerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"ChatAgentContainerState\",\n   \"description\": \"State for a container of chat agents.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"ChatAgentContainerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"agent_state\": {\n         \"title\": \"Agent State\",\n         \"type\": \"object\"\n      },\n      \"message_buffer\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Buffer\",\n         \"type\": \"array\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"ChatAgentContainerState\",\n   \"description\": \"State for a container of chat agents.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"ChatAgentContainerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"agent_state\": {\n         \"title\": \"Agent State\",\n         \"type\": \"object\"\n      },\n      \"message_buffer\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Buffer\",\n         \"type\": \"array\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"RoundRobinManagerState\",\n   \"description\": \"State for :class:`~autogen_agentchat.teams.RoundRobinGroupChat` manager.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"RoundRobinManagerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      },\n      \"next_speaker_index\": {\n         \"default\": 0,\n         \"title\": \"Next Speaker Index\",\n         \"type\": \"integer\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"RoundRobinManagerState\",\n   \"description\": \"State for :class:`~autogen_agentchat.teams.RoundRobinGroupChat` manager.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"RoundRobinManagerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      },\n      \"next_speaker_index\": {\n         \"default\": 0,\n         \"title\": \"Next Speaker Index\",\n         \"type\": \"integer\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"SelectorManagerState\",\n   \"description\": \"State for :class:`~autogen_agentchat.teams.SelectorGroupChat` manager.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"SelectorManagerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      },\n      \"previous_speaker\": {\n         \"anyOf\": [\n            {\n               \"type\": \"string\"\n            },\n            {\n               \"type\": \"null\"\n            }\n         ],\n         \"default\": null,\n         \"title\": \"Previous Speaker\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"SelectorManagerState\",\n   \"description\": \"State for :class:`~autogen_agentchat.teams.SelectorGroupChat` manager.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"SelectorManagerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      },\n      \"previous_speaker\": {\n         \"anyOf\": [\n            {\n               \"type\": \"string\"\n            },\n            {\n               \"type\": \"null\"\n            }\n         ],\n         \"default\": null,\n         \"title\": \"Previous Speaker\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"SwarmManagerState\",\n   \"description\": \"State for :class:`~autogen_agentchat.teams.Swarm` manager.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"SwarmManagerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      },\n      \"current_speaker\": {\n         \"default\": \"\",\n         \"title\": \"Current Speaker\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"SwarmManagerState\",\n   \"description\": \"State for :class:`~autogen_agentchat.teams.Swarm` manager.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"SwarmManagerState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      },\n      \"current_speaker\": {\n         \"default\": \"\",\n         \"title\": \"Current Speaker\",\n         \"type\": \"string\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"MagenticOneOrchestratorState\",\n   \"description\": \"State for :class:`~autogen_agentchat.teams.MagneticOneGroupChat` orchestrator.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"MagenticOneOrchestratorState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      },\n      \"task\": {\n         \"default\": \"\",\n         \"title\": \"Task\",\n         \"type\": \"string\"\n      },\n      \"facts\": {\n         \"default\": \"\",\n         \"title\": \"Facts\",\n         \"type\": \"string\"\n      },\n      \"plan\": {\n         \"default\": \"\",\n         \"title\": \"Plan\",\n         \"type\": \"string\"\n      },\n      \"n_rounds\": {\n         \"default\": 0,\n         \"title\": \"N Rounds\",\n         \"type\": \"integer\"\n      },\n      \"n_stalls\": {\n         \"default\": 0,\n         \"title\": \"N Stalls\",\n         \"type\": \"integer\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"MagenticOneOrchestratorState\",\n   \"description\": \"State for :class:`~autogen_agentchat.teams.MagneticOneGroupChat` orchestrator.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"MagenticOneOrchestratorState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"message_thread\": {\n         \"items\": {\n            \"type\": \"object\"\n         },\n         \"title\": \"Message Thread\",\n         \"type\": \"array\"\n      },\n      \"current_turn\": {\n         \"default\": 0,\n         \"title\": \"Current Turn\",\n         \"type\": \"integer\"\n      },\n      \"task\": {\n         \"default\": \"\",\n         \"title\": \"Task\",\n         \"type\": \"string\"\n      },\n      \"facts\": {\n         \"default\": \"\",\n         \"title\": \"Facts\",\n         \"type\": \"string\"\n      },\n      \"plan\": {\n         \"default\": \"\",\n         \"title\": \"Plan\",\n         \"type\": \"string\"\n      },\n      \"n_rounds\": {\n         \"default\": 0,\n         \"title\": \"N Rounds\",\n         \"type\": \"integer\"\n      },\n      \"n_stalls\": {\n         \"default\": 0,\n         \"title\": \"N Stalls\",\n         \"type\": \"integer\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"TeamState\",\n   \"description\": \"State for a team of agents.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"TeamState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"agent_states\": {\n         \"title\": \"Agent States\",\n         \"type\": \"object\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"TeamState\",\n   \"description\": \"State for a team of agents.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"TeamState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"agent_states\": {\n         \"title\": \"Agent States\",\n         \"type\": \"object\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"SocietyOfMindAgentState\",\n   \"description\": \"State for a Society of Mind agent.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"SocietyOfMindAgentState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"inner_team_state\": {\n         \"title\": \"Inner Team State\",\n         \"type\": \"object\"\n      }\n   }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n   \"title\": \"SocietyOfMindAgentState\",\n   \"description\": \"State for a Society of Mind agent.\",\n   \"type\": \"object\",\n   \"properties\": {\n      \"type\": {\n         \"default\": \"SocietyOfMindAgentState\",\n         \"title\": \"Type\",\n         \"type\": \"string\"\n      },\n      \"version\": {\n         \"default\": \"1.0.0\",\n         \"title\": \"Version\",\n         \"type\": \"string\"\n      },\n      \"inner_team_state\": {\n         \"title\": \"Inner Team State\",\n         \"type\": \"object\"\n      }\n   }\n}",
+      "language": "json"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.state.html",
+    "https://microsoft.github.io/autogen/stable/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/extensions-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/index.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.code_executor.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.exceptions.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.logging.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tool_agent.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_core.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.ui.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.file_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.auth.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.diskcache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.cache_store.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.docker_jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.jupyter.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.code_executors.local.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.canvas.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.chromadb.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.mem0.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.memory.redis.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.cache.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.llama_cpp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.replay.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.teams.magentic_one.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.azure.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.code_execution.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.http.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.semantic_kernel.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.tools.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.playwright_controller.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.experimental.task_centric_memory.utils.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.config.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.agent_worker_pb2_grpc.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2.html",
+    "https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.runtimes.grpc.protos.cloudevent_pb2_grpc.html"
+  ]
+}

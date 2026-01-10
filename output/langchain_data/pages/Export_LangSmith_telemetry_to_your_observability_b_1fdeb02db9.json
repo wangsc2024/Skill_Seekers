@@ -1,0 +1,8 @@
+{
+  "title": "Export LangSmith telemetry to your observability backend",
+  "content": "Source: https://docs.langchain.com/langsmith/export-backend\n\n<Warning>\n  **This section is only applicable for Kubernetes deployments.**\n</Warning>\n\nSelf-Hosted LangSmith instances produce telemetry data in the form of logs, metrics and traces. This section will show you how to access and export that data to an observability collector or backend.\n\nThis section assumes that you have monitoring infrastructure set up already, or you will set up this infrastructure and want to know how to configure LangSmith to collect data from it.\n\nInfrastructure refers to:\n\n* Collectors, such as [OpenTelemetry](https://opentelemetry.io/docs/collector/), [FluentBit](https://docs.fluentbit.io/manual) or [Prometheus](https://prometheus.io/).\n* Observability backends, such as [Datadog](https://www.datadoghq.com/) or the [Grafana](https://grafana.com/) ecosystem.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#export-langsmith-telemetry-to-your-observability-backend",
+  "links": []
+}

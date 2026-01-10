@@ -1,0 +1,28 @@
+{
+  "title": "Checkpointer is REQUIRED for human-in-the-loop",
+  "content": "checkpointer = MemorySaver()\n\nagent = create_deep_agent(\n    model=\"claude-sonnet-4-5-20250929\",\n    tools=[delete_file, read_file, send_email],\n    interrupt_on={\n        \"delete_file\": True,  # Default: approve, edit, reject\n        \"read_file\": False,   # No interrupts needed\n        \"send_email\": {\"allowed_decisions\": [\"approve\", \"reject\"]},  # No editing\n    },\n    checkpointer=checkpointer  # Required!\n)\npython  theme={null}\ninterrupt_on = {\n    # Sensitive operations: allow all options\n    \"delete_file\": {\"allowed_decisions\": [\"approve\", \"edit\", \"reject\"]},\n\n# Moderate risk: approval or rejection only\n    \"write_file\": {\"allowed_decisions\": [\"approve\", \"reject\"]},\n\n# Must approve (no rejection allowed)\n    \"critical_operation\": {\"allowed_decisions\": [\"approve\"]},\n}\npython  theme={null}\nimport uuid\nfrom langgraph.types import Command",
+  "code_samples": [
+    {
+      "code": "## Decision types\n\nThe `allowed_decisions` list controls what actions a human can take when reviewing a tool call:\n\n* **`\"approve\"`**: Execute the tool with the original arguments as proposed by the agent\n* **`\"edit\"`**: Modify the tool arguments before execution\n* **`\"reject\"`**: Skip executing this tool call entirely\n\nYou can customize which decisions are available for each tool:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Handle interrupts\n\nWhen an interrupt is triggered, the agent pauses execution and returns control. Check for interrupts in the result and handle them accordingly.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Decision types",
+      "id": "decision-types"
+    },
+    {
+      "level": "h2",
+      "text": "Handle interrupts",
+      "id": "handle-interrupts"
+    }
+  ],
+  "url": "llms-txt#checkpointer-is-required-for-human-in-the-loop",
+  "links": []
+}

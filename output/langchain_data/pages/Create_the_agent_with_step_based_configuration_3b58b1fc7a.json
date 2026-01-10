@@ -1,0 +1,19 @@
+{
+  "title": "Create the agent with step-based configuration",
+  "content": "agent = create_agent(\n    model,\n    tools=all_tools,\n    state_schema=SupportState,  # [!code highlight]\n    middleware=[apply_step_config],  # [!code highlight]\n    checkpointer=InMemorySaver(),  # [!code highlight]\n)\npython  theme={null}\nfrom langchain.messages import HumanMessage\nimport uuid",
+  "code_samples": [
+    {
+      "code": "<Note>\n  **Why a checkpointer?** The checkpointer maintains state across conversation turns. Without it, the `current_step` state would be lost between user messages, breaking the workflow.\n</Note>\n\n## 6. Test the workflow\n\nTest the complete workflow:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "6. Test the workflow",
+      "id": "6.-test-the-workflow"
+    }
+  ],
+  "url": "llms-txt#create-the-agent-with-step-based-configuration",
+  "links": []
+}

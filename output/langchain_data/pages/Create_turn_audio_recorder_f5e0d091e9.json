@@ -1,0 +1,8 @@
+{
+  "title": "Create turn audio recorder",
+  "content": "turn_audio_recorder = TurnAudioRecorder(\n    span_processor=span_processor,\n    conversation_id=conversation_id,\n    recordings_dir=recordings_dir,\n    turn_tracker=None,  # Will be set after task creation\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-turn-audio-recorder",
+  "links": []
+}

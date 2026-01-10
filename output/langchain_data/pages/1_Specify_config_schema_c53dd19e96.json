@@ -1,0 +1,8 @@
+{
+  "title": "1. Specify config schema",
+  "content": "class ContextSchema(TypedDict):\n    my_runtime_value: str",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#1.-specify-config-schema",
+  "links": []
+}

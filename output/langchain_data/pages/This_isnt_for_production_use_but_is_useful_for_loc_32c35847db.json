@@ -1,0 +1,8 @@
+{
+  "title": "This isn't for production use, but is useful for local",
+  "content": "store = LocalFileStore(\"./cache/\") # [!code highlight]\n\ncached_embedder = CacheBackedEmbeddings.from_bytes_store(\n    underlying_embeddings,\n    store,\n    namespace=underlying_embeddings.model\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#this-isn't-for-production-use,-but-is-useful-for-local",
+  "links": []
+}

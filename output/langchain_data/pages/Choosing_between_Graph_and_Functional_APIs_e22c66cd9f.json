@@ -1,0 +1,24 @@
+{
+  "title": "Choosing between Graph and Functional APIs",
+  "content": "Source: https://docs.langchain.com/oss/python/langgraph/choosing-apis\n\nLangGraph provides two different APIs to build agent workflows: the **Graph API** and the **Functional API**. Both APIs share the same underlying runtime and can be used together in the same application, but they are designed for different use cases and development preferences.\n\nThis guide will help you understand when to use each API based on your specific requirements.\n\n## Quick decision guide\n\nUse the **Graph API** when you need:\n\n* **Complex workflow visualization** for debugging and documentation\n* **Explicit state management** with shared data across multiple nodes\n* **Conditional branching** with multiple decision points\n* **Parallel execution paths** that need to merge later\n* **Team collaboration** where visual representation aids understanding\n\nUse the **Functional API** when you want:\n\n* **Minimal code changes** to existing procedural code\n* **Standard control flow** (if/else, loops, function calls)\n* **Function-scoped state** without explicit state management\n* **Rapid prototyping** with less boilerplate\n* **Linear workflows** with simple branching logic\n\n## Detailed comparison\n\n### When to use the Graph API\n\nThe [Graph API](/oss/python/langgraph/graph-api) uses a declarative approach where you define nodes, edges, and shared state to create a visual graph structure.\n\n**1. Complex decision trees and branching logic**\n\nWhen your workflow has multiple decision points that depend on various conditions, the Graph API makes these branches explicit and easy to visualize.\n\n```python  theme={null}",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Quick decision guide",
+      "id": "quick-decision-guide"
+    },
+    {
+      "level": "h2",
+      "text": "Detailed comparison",
+      "id": "detailed-comparison"
+    },
+    {
+      "level": "h3",
+      "text": "When to use the Graph API",
+      "id": "when-to-use-the-graph-api"
+    }
+  ],
+  "url": "llms-txt#choosing-between-graph-and-functional-apis",
+  "links": []
+}
