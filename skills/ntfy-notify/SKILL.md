@@ -58,19 +58,19 @@ echo -n "中文訊息" | curl -H "Content-Type: text/plain; charset=utf-8" --dat
 ### 成功通知
 
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" -d "Task summary here" ntfy.sh/TOPIC
+echo -n "Task summary here" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" --data-binary @- ntfy.sh/TOPIC
 ```
 
 ### 失敗通知
 
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Failed" -H "Priority: high" -H "Tags: x" -d "Error description" ntfy.sh/TOPIC
+echo -n "Error description" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Failed" -H "Priority: high" -H "Tags: x" --data-binary @- ntfy.sh/TOPIC
 ```
 
 ### 進度通知
 
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: In Progress" -H "Tags: hourglass_flowing_sand" -d "Progress: 50%" ntfy.sh/TOPIC
+echo -n "Progress: 50%" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: In Progress" -H "Tags: hourglass_flowing_sand" --data-binary @- ntfy.sh/TOPIC
 ```
 
 ## 完整範例
@@ -81,25 +81,25 @@ curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: In Progress" -H "Ta
 
 **完成後執行：**
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" -d "React project created at ./my-react-app" ntfy.sh/wangsc2025
+echo -n "React project created at ./my-react-app" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" --data-binary @- ntfy.sh/wangsc2025
 ```
 
 ### 範例 2: 跑測試
 
 **成功：**
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Tests Passed" -H "Tags: white_check_mark,test_tube" -d "46 tests passed, 85% coverage" ntfy.sh/ci-alerts
+echo -n "46 tests passed, 85% coverage" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Tests Passed" -H "Tags: white_check_mark,test_tube" --data-binary @- ntfy.sh/ci-alerts
 ```
 
 **失敗：**
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Tests Failed" -H "Priority: high" -H "Tags: x,test_tube" -d "3 tests failed" ntfy.sh/ci-alerts
+echo -n "3 tests failed" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Tests Failed" -H "Priority: high" -H "Tags: x,test_tube" --data-binary @- ntfy.sh/ci-alerts
 ```
 
 ### 範例 3: 部署
 
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Deploy Success" -H "Tags: rocket,white_check_mark" -d "v2.1.0 deployed to production" ntfy.sh/ops-team
+echo -n "v2.1.0 deployed to production" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Deploy Success" -H "Tags: rocket,white_check_mark" --data-binary @- ntfy.sh/ops-team
 ```
 
 ## 進階用法
@@ -107,13 +107,13 @@ curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Deploy Success" -H 
 ### 帶連結
 
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: PR Merged" -H "Tags: white_check_mark" -H "Click: https://github.com/user/repo/pull/123" -d "PR #123 merged" ntfy.sh/TOPIC
+echo -n "PR #123 merged" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: PR Merged" -H "Tags: white_check_mark" -H "Click: https://github.com/user/repo/pull/123" --data-binary @- ntfy.sh/TOPIC
 ```
 
 ### 延遲通知
 
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Reminder" -H "Delay: 30m" -d "30 min reminder" ntfy.sh/TOPIC
+echo -n "30 min reminder" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Reminder" -H "Delay: 30m" --data-binary @- ntfy.sh/TOPIC
 ```
 
 ## 重要規則
@@ -155,12 +155,12 @@ Tags 會自動轉換為 emoji：
 
 **成功：**
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" -d "DESCRIPTION" ntfy.sh/TOPIC
+echo -n "DESCRIPTION" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" --data-binary @- ntfy.sh/TOPIC
 ```
 
 **失敗：**
 ```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Failed" -H "Priority: high" -H "Tags: x" -d "DESCRIPTION" ntfy.sh/TOPIC
+echo -n "DESCRIPTION" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Failed" -H "Priority: high" -H "Tags: x" --data-binary @- ntfy.sh/TOPIC
 ```
 
 ## 注意事項
