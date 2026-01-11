@@ -47,6 +47,14 @@ triggers:
 
 **重要：必須加上 Content-Type header 確保編碼正確**
 
+### Windows/跨平台安全做法
+
+避免終端編碼問題，使用 stdin 傳遞訊息內容：
+
+```bash
+echo -n "中文訊息" | curl -H "Content-Type: text/plain; charset=utf-8" --data-binary @- ntfy.sh/TOPIC
+```
+
 ### 成功通知
 
 ```bash
@@ -102,17 +110,15 @@ curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Deploy Success" -H 
 curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: PR Merged" -H "Tags: white_check_mark" -H "Click: https://github.com/user/repo/pull/123" -d "PR #123 merged" ntfy.sh/TOPIC
 ```
 
-### 帶附件
-
-```bash
-curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Report Ready" -H "Tags: chart" -H "Attach: https://example.com/report.pdf" -d "Report generated" ntfy.sh/TOPIC
-```
-
 ### 延遲通知
 
 ```bash
 curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Reminder" -H "Delay: 30m" -d "30 min reminder" ntfy.sh/TOPIC
 ```
+
+## 重要規則
+
+**禁止使用附件功能**：發送通知時不要使用 `Attach:` header，只發送純文字訊息。
 
 ## 如何接收通知
 
