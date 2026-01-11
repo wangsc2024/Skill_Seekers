@@ -68,7 +68,7 @@ These skills are pre-built and ready for immediate use. They can be installed to
 
 | Skill | Description | Triggers |
 |-------|-------------|----------|
-| **[ntfy-notify](skills/ntfy-notify/)** | Send task completion notifications via ntfy.sh push service | `通知`, `提醒`, `notify`, `完成後通知`, `做完通知` |
+| **[ntfy-notify](skills/ntfy-notify/)** | Send task completion notifications via ntfy.sh with JSON format (perfect Chinese support, cross-platform) | `通知`, `提醒`, `notify`, `完成後通知`, `做完通知`, `處理完提醒` |
 | **[rloop](skills/rloop/rloop/)** | Ralph autonomous development loop for Claude Code with intelligent exit detection | `rloop`, `ralph`, `autonomous`, `development loop` |
 | **[Skill Seekers](skills/skill-seekers/)** | Create skills from documentation websites, GitHub repos, and PDFs | `skill seekers`, `create skill`, `documentation scraper` |
 
@@ -246,7 +246,7 @@ skill-seekers unified --config configs/django_unified.json --merge-mode claude-e
 - **Storytelling Masters** - Presentation and narrative skills
 
 ### Task Automation
-- **ntfy-notify** - Push notifications on task completion
+- **ntfy-notify** - Push notifications via ntfy.sh (JSON format, Chinese support)
 - **rloop** - Autonomous development loops
 
 ---

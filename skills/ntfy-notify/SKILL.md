@@ -45,33 +45,43 @@ triggers:
 
 ## 通知發送格式
 
-**重要：必須加上 Content-Type header 確保編碼正確**
+**使用 JSON 格式發送，完美支援中文標題與訊息，跨平台無亂碼問題。**
 
-### Windows/跨平台安全做法
-
-避免終端編碼問題，使用 stdin 傳遞訊息內容：
+### 基本格式
 
 ```bash
-echo -n "中文訊息" | curl -H "Content-Type: text/plain; charset=utf-8" --data-binary @- ntfy.sh/TOPIC
+curl -H "Content-Type: application/json" -d '{"topic":"TOPIC","message":"訊息內容"}' ntfy.sh
 ```
 
 ### 成功通知
 
 ```bash
-echo -n "Task summary here" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" --data-binary @- ntfy.sh/TOPIC
+curl -H "Content-Type: application/json" -d '{"topic":"TOPIC","title":"任務完成","message":"Task summary here","tags":["white_check_mark"]}' ntfy.sh
 ```
 
 ### 失敗通知
 
 ```bash
-echo -n "Error description" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Failed" -H "Priority: high" -H "Tags: x" --data-binary @- ntfy.sh/TOPIC
+curl -H "Content-Type: application/json" -d '{"topic":"TOPIC","title":"任務失敗","message":"Error description","priority":4,"tags":["x"]}' ntfy.sh
 ```
 
 ### 進度通知
 
 ```bash
-echo -n "Progress: 50%" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: In Progress" -H "Tags: hourglass_flowing_sand" --data-binary @- ntfy.sh/TOPIC
+curl -H "Content-Type: application/json" -d '{"topic":"TOPIC","title":"進行中","message":"Progress: 50%","tags":["hourglass_flowing_sand"]}' ntfy.sh
 ```
+
+## JSON 欄位說明
+
+| 欄位 | 必填 | 說明 |
+|------|------|------|
+| `topic` | 是 | 通知頻道名稱 |
+| `message` | 是 | 通知內容 |
+| `title` | 否 | 通知標題（支援中文） |
+| `tags` | 否 | 標籤陣列，自動轉為 emoji |
+| `priority` | 否 | 優先級 1-5（5 最高） |
+| `click` | 否 | 點擊通知開啟的 URL |
+| `delay` | 否 | 延遲發送（如 "30m", "1h"） |
 
 ## 完整範例
 
@@ -81,25 +91,25 @@ echo -n "Progress: 50%" | curl -H "Content-Type: text/plain; charset=utf-8" -H "
 
 **完成後執行：**
 ```bash
-echo -n "React project created at ./my-react-app" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" --data-binary @- ntfy.sh/wangsc2025
+curl -H "Content-Type: application/json" -d '{"topic":"wangsc2025","title":"任務完成","message":"React project created at ./my-react-app","tags":["white_check_mark"]}' ntfy.sh
 ```
 
 ### 範例 2: 跑測試
 
 **成功：**
 ```bash
-echo -n "46 tests passed, 85% coverage" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Tests Passed" -H "Tags: white_check_mark,test_tube" --data-binary @- ntfy.sh/ci-alerts
+curl -H "Content-Type: application/json" -d '{"topic":"ci-alerts","title":"測試通過","message":"46 tests passed, 85% coverage","tags":["white_check_mark","test_tube"]}' ntfy.sh
 ```
 
 **失敗：**
 ```bash
-echo -n "3 tests failed" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Tests Failed" -H "Priority: high" -H "Tags: x,test_tube" --data-binary @- ntfy.sh/ci-alerts
+curl -H "Content-Type: application/json" -d '{"topic":"ci-alerts","title":"測試失敗","message":"3 tests failed","priority":4,"tags":["x","test_tube"]}' ntfy.sh
 ```
 
 ### 範例 3: 部署
 
 ```bash
-echo -n "v2.1.0 deployed to production" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Deploy Success" -H "Tags: rocket,white_check_mark" --data-binary @- ntfy.sh/ops-team
+curl -H "Content-Type: application/json" -d '{"topic":"ops-team","title":"部署成功","message":"v2.1.0 deployed to production","tags":["rocket","white_check_mark"]}' ntfy.sh
 ```
 
 ## 進階用法
@@ -107,18 +117,24 @@ echo -n "v2.1.0 deployed to production" | curl -H "Content-Type: text/plain; cha
 ### 帶連結
 
 ```bash
-echo -n "PR #123 merged" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: PR Merged" -H "Tags: white_check_mark" -H "Click: https://github.com/user/repo/pull/123" --data-binary @- ntfy.sh/TOPIC
+curl -H "Content-Type: application/json" -d '{"topic":"TOPIC","title":"PR 已合併","message":"PR #123 merged","tags":["white_check_mark"],"click":"https://github.com/user/repo/pull/123"}' ntfy.sh
 ```
 
 ### 延遲通知
 
 ```bash
-echo -n "30 min reminder" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Reminder" -H "Delay: 30m" --data-binary @- ntfy.sh/TOPIC
+curl -H "Content-Type: application/json" -d '{"topic":"TOPIC","title":"提醒","message":"30 分鐘提醒","delay":"30m"}' ntfy.sh
+```
+
+### 高優先級（緊急）
+
+```bash
+curl -H "Content-Type: application/json" -d '{"topic":"TOPIC","title":"緊急","message":"Server down!","priority":5,"tags":["fire","warning"]}' ntfy.sh
 ```
 
 ## 重要規則
 
-**禁止使用附件功能**：發送通知時不要使用 `Attach:` header，只發送純文字訊息。
+**禁止使用附件功能**：發送通知時不要使用 `attach` 欄位，只發送純文字訊息。
 
 ## 如何接收通知
 
@@ -155,12 +171,12 @@ Tags 會自動轉換為 emoji：
 
 **成功：**
 ```bash
-echo -n "DESCRIPTION" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" --data-binary @- ntfy.sh/TOPIC
+curl -H "Content-Type: application/json" -d '{"topic":"TOPIC","title":"任務完成","message":"DESCRIPTION","tags":["white_check_mark"]}' ntfy.sh
 ```
 
 **失敗：**
 ```bash
-echo -n "DESCRIPTION" | curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Failed" -H "Priority: high" -H "Tags: x" --data-binary @- ntfy.sh/TOPIC
+curl -H "Content-Type: application/json" -d '{"topic":"TOPIC","title":"任務失敗","message":"DESCRIPTION","priority":4,"tags":["x"]}' ntfy.sh
 ```
 
 ## 注意事項

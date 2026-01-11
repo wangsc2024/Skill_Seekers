@@ -583,7 +583,7 @@ When working with this codebase or helping users, these keywords should trigger 
 
 | Trigger Keywords | Skill | Description |
 |------------------|-------|-------------|
-| `通知`, `提醒`, `notify`, `完成後通知`, `做完通知` | ntfy-notify | Send task completion notifications via ntfy.sh |
+| `通知`, `提醒`, `notify`, `完成後通知`, `做完通知`, `處理完提醒` | ntfy-notify | Push notifications via ntfy.sh (JSON format, perfect Chinese support) |
 | `rloop`, `ralph`, `autonomous`, `development loop` | rloop | Autonomous development loop for Claude Code |
 | `skill seekers`, `create skill`, `documentation scraper` | Skill Seekers | Create skills from documentation |
 
