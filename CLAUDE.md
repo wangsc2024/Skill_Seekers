@@ -523,3 +523,184 @@ User experience benefits:
 - Conflict detection between docs and code
 - 5 unified configs (React, Django, FastAPI, Godot)
 - 22 unified tests passing
+
+---
+
+## 🧠 Available Skills Reference
+
+This project contains pre-built skills that can be used to enhance Claude's capabilities. Skills are organized in two directories:
+
+- `output/` - Skills generated from documentation scraping
+- `skills/` - Manually created custom skills
+
+### Skill Trigger Keywords
+
+When working with this codebase or helping users, these keywords should trigger loading the corresponding skill:
+
+#### AI/ML Development
+
+| Trigger Keywords | Skill | Description |
+|------------------|-------|-------------|
+| `langchain`, `LCEL`, `LangGraph`, `RAG pipeline` | LangChain | Build AI agents with LCEL pipelines, RAG, memory systems |
+| `dspy`, `prompt optimization`, `teleprompter`, `MIPRO` | DSPy | Stanford's declarative prompt optimization framework |
+| `autogen`, `multi-agent`, `AgentChat`, `Swarm` | AutoGen | Microsoft's multi-agent framework |
+| `unsloth`, `fine-tuning`, `LoRA`, `QLoRA`, `GRPO` | Unsloth | 2-5x faster LLM fine-tuning |
+| `vllm`, `inference`, `serving`, `PagedAttention` | vLLM | Fast LLM inference and serving |
+| `RAG`, `vector database`, `embeddings`, `chunking`, `RAGAS` | RAG | Retrieval-augmented generation guide |
+| `deep learning`, `CNN`, `RNN`, `LSTM`, `Transformer` | Deep Learning | Core DL architectures and techniques |
+| `groq`, `Whisper`, `fast inference` | Groq | Ultra-fast LLM inference API |
+| `mistral`, `mistral-large`, `mistral-small` | Mistral | Mistral AI API and models |
+
+#### Frontend Development
+
+| Trigger Keywords | Skill | Description |
+|------------------|-------|-------------|
+| `react`, `hooks`, `useState`, `useEffect`, `JSX` | React | React framework for building UIs |
+| `tiptap`, `ProseMirror`, `rich text`, `WYSIWYG`, `editor` | Tiptap | Headless rich text editor |
+
+#### Testing & DevTools
+
+| Trigger Keywords | Skill | Description |
+|------------------|-------|-------------|
+| `playwright`, `E2E`, `browser automation`, `testing` | Playwright | Browser automation and E2E testing |
+| `devtools`, `chrome`, `debugging`, `profiling` | Chrome DevTools | Browser developer tools |
+
+#### Personal Growth & Learning
+
+| Trigger Keywords | Skill | Description |
+|------------------|-------|-------------|
+| `atomic habits`, `habit`, `behavior change`, `James Clear` | Atomic Habits | Build good habits, break bad ones |
+| `learning`, `study`, `memory`, `Feynman technique` | Learning Mastery | Five-layer learning framework |
+
+#### Creative Writing
+
+| Trigger Keywords | Skill | Description |
+|------------------|-------|-------------|
+| `writing`, `Hemingway`, `iceberg theory`, `creative writing` | Writing Masters | Literary writing techniques |
+| `storytelling`, `hero's journey`, `presentation`, `narrative` | Storytelling Masters | Presentation and narrative skills |
+
+#### Automation & Tools
+
+| Trigger Keywords | Skill | Description |
+|------------------|-------|-------------|
+| `通知`, `提醒`, `notify`, `完成後通知`, `做完通知` | ntfy-notify | Send task completion notifications via ntfy.sh |
+| `rloop`, `ralph`, `autonomous`, `development loop` | rloop | Autonomous development loop for Claude Code |
+| `skill seekers`, `create skill`, `documentation scraper` | Skill Seekers | Create skills from documentation |
+
+#### Travel
+
+| Trigger Keywords | Skill | Description |
+|------------------|-------|-------------|
+| `大阪`, `osaka`, `日本旅遊`, `關西` | 大阪旅遊 | Complete Osaka travel guide |
+
+### Skill File Structure
+
+Each skill follows this structure:
+
+```
+<skill-name>/
+├── SKILL.md           # Main skill file with frontmatter
+└── references/        # Optional additional reference files
+    ├── api.md
+    ├── patterns.md
+    └── ...
+```
+
+### SKILL.md Frontmatter Format
+
+```yaml
+---
+name: skill-name
+description: |
+  Short description of when to use this skill.
+  This is shown to Claude when deciding which skill to load.
+triggers:
+  - "keyword1"
+  - "keyword2"
+  - "phrase to match"
+---
+
+# Skill Title
+
+Main skill content goes here...
+```
+
+### Using Skills in Development
+
+When developing new features or fixing bugs in Skill Seekers:
+
+1. **Check existing skills** - Before implementing new functionality, check if a relevant skill exists in `output/` or `skills/`
+
+2. **Update skill index** - After adding new skills, update `SKILLS_INDEX.md`
+
+3. **Test skill loading** - Ensure the skill's triggers work correctly:
+   ```bash
+   # Test that skill content is accessible
+   cat output/<skill-name>/SKILL.md | head -20
+   ```
+
+4. **Validate skill format** - Ensure frontmatter is valid YAML:
+   ```bash
+   # Check skill structure
+   python -c "import yaml; yaml.safe_load(open('skills/<name>/SKILL.md').read().split('---')[1])"
+   ```
+
+### Creating New Skills
+
+Two methods for creating skills:
+
+#### Method 1: Scraping (Automated)
+
+```bash
+# Create config file
+cat > configs/new-skill.json << 'EOF'
+{
+  "name": "new-skill",
+  "description": "Description of when to use this skill",
+  "base_url": "https://docs.example.com/",
+  "selectors": {
+    "main_content": "article",
+    "title": "h1"
+  }
+}
+EOF
+
+# Scrape and generate skill
+skill-seekers scrape --config configs/new-skill.json --enhance-local
+```
+
+#### Method 2: Manual Creation
+
+```bash
+# Create skill directory
+mkdir -p skills/new-skill
+
+# Create SKILL.md with proper frontmatter
+cat > skills/new-skill/SKILL.md << 'EOF'
+---
+name: new-skill
+description: Description of when to use this skill
+triggers:
+  - "trigger1"
+  - "trigger2"
+---
+
+# New Skill
+
+Content goes here...
+EOF
+```
+
+### Skill Categories Quick Reference
+
+| Category | Skills | Primary Use Case |
+|----------|--------|------------------|
+| AI/ML | LangChain, AutoGen, DSPy, RAG, Unsloth, vLLM, Groq, Mistral, Deep Learning | Building AI applications |
+| Frontend | React, Tiptap | Web UI development |
+| Testing | Playwright, Chrome DevTools | Testing and debugging |
+| Personal | Atomic Habits, Learning Mastery | Personal development |
+| Creative | Writing Masters, Storytelling Masters | Content creation |
+| Automation | ntfy-notify, rloop, Skill Seekers | Task automation |
+| Travel | 大阪旅遊 | Travel planning |
+
+For the complete skill index with descriptions and commands, see [SKILLS_INDEX.md](SKILLS_INDEX.md).

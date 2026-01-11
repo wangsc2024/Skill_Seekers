@@ -1,0 +1,255 @@
+# Repository File Structure
+
+Total items: 249
+
+```
+📁 .claude
+📁 .github
+📄 .gitignore
+📁 .vscode
+📄 ASYNC_SUPPORT.md
+📄 BULLETPROOF_QUICKSTART.md
+📄 CHANGELOG.md
+📄 CLAUDE.md
+📄 CONTRIBUTING.md
+📄 EVOLUTION_ANALYSIS.md
+📄 FLEXIBLE_ROADMAP.md
+📄 FUTURE_RELEASES.md
+📄 LICENSE
+📄 QUICKSTART.md
+📄 README.md
+📄 REDDIT_POST_v2.2.0.md
+📄 ROADMAP.md
+📄 STRUCTURE.md
+📄 SUMMARY_HTTP_TRANSPORT.md
+📄 SUMMARY_MULTI_AGENT_SETUP.md
+📄 TROUBLESHOOTING.md
+📁 api
+📁 configs
+📄 demo_conflicts.py
+📁 docs
+📄 example-mcp-config.json
+📁 examples
+📄 mypy.ini
+📄 pyproject.toml
+📄 render.yaml
+📄 requirements.txt
+📄 setup_mcp.sh
+📁 src
+📄 test_api.py
+📁 tests
+  📄 mcp_config.example.json
+  📄 FUNDING.yml
+  📄 ISSUES_TO_CREATE.md
+  📁 ISSUE_TEMPLATE
+  📄 PROJECT_BOARD_SETUP.md
+  📄 PULL_REQUEST_TEMPLATE.md
+  📄 SETUP_GUIDE.md
+  📄 SETUP_INSTRUCTIONS.md
+  📄 create_issues.sh
+  📁 workflows
+  📄 settings.json
+  📄 .gitignore
+  📄 README.md
+  📄 __init__.py
+  📄 config_analyzer.py
+  📄 main.py
+  📄 requirements.txt
+  📄 ansible-core.json
+  📄 astro.json
+  📄 claude-code.json
+  📄 deck_deck_go_local.json
+  📄 django.json
+  📄 django_unified.json
+  📁 example-team
+  📄 example_pdf.json
+  📄 fastapi.json
+  📄 fastapi_unified.json
+  📄 fastapi_unified_test.json
+  📄 godot-large-example.json
+  📄 godot.json
+  📄 godot_github.json
+  📄 godot_unified.json
+  📄 hono.json
+  📄 kubernetes.json
+  📄 laravel.json
+  📄 python-tutorial-test.json
+  📄 react.json
+  📄 react_github.json
+  📄 react_unified.json
+  📄 steam-economy-complete.json
+  📄 svelte_cli_unified.json
+  📄 tailwind.json
+  📄 test-manual.json
+  📄 vue.json
+  📄 CLAUDE.md
+  📄 ENHANCEMENT.md
+  📄 FEATURE_MATRIX.md
+  📄 GEMINI_INTEGRATION.md
+  📄 GIT_CONFIG_SOURCES.md
+  📄 HTTP_TRANSPORT.md
+  📄 LARGE_DOCUMENTATION.md
+  📄 LLMS_TXT_SUPPORT.md
+  📄 LOCAL_REPO_TEST_RESULTS.md
+  📄 MCP_SETUP.md
+  📄 MULTI_AGENT_SETUP.md
+  📄 MULTI_LLM_SUPPORT.md
+  📄 OPENAI_INTEGRATION.md
+  📄 PATTERN_DETECTION.md
+  📄 PDF_ADVANCED_FEATURES.md
+  📄 PDF_CHUNKING.md
+  📄 PDF_EXTRACTOR_POC.md
+  📄 PDF_IMAGE_EXTRACTION.md
+  📄 PDF_MCP_TOOL.md
+  📄 PDF_PARSING_RESEARCH.md
+  📄 PDF_SCRAPER.md
+  📄 PDF_SYNTAX_DETECTION.md
+  📄 SETUP_QUICK_REFERENCE.md
+  📄 SKILL_ARCHITECTURE.md
+  📄 TERMINAL_SELECTION.md
+  📄 TESTING.md
+  📄 TEST_MCP_IN_CLAUDE_CODE.md
+  📄 UNIFIED_SCRAPING.md
+  📄 UPLOAD_GUIDE.md
+  📄 USAGE.md
+  📁 plans
+  📄 http_transport_examples.sh
+  📄 test_http_server.py
+  📁 skill_seekers
+  📄 __init__.py
+  📄 conftest.py
+  📁 fixtures
+  📄 mcp_integration_test.md
+  📁 test_adaptors
+  📄 test_api_reference_builder.py
+  📄 test_async_scraping.py
+  📄 test_cli_paths.py
+  📄 test_code_analyzer.py
+  📄 test_codebase_scraper.py
+  📄 test_config_validation.py
+  📄 test_constants.py
+  📄 test_dependency_analyzer.py
+  📄 test_estimate_pages.py
+  📄 test_excluded_dirs_config.py
+  📄 test_git_repo.py
+  📄 test_git_sources_e2e.py
+  📄 test_github_scraper.py
+  📄 test_install_agent.py
+  📄 test_install_multiplatform.py
+  📄 test_install_skill.py
+  📄 test_install_skill_e2e.py
+  📄 test_integration.py
+  📄 test_issue_219_e2e.py
+  📄 test_language_detector.py
+  📄 test_llms_txt_detector.py
+  📄 test_llms_txt_downloader.py
+  📄 test_llms_txt_parser.py
+  📄 test_mcp_fastmcp.py
+  📄 test_mcp_git_sources.py
+  📄 test_mcp_server.py
+  📄 test_package_skill.py
+  📄 test_package_structure.py
+  📄 test_parallel_scraping.py
+  📄 test_pattern_recognizer.py
+  📄 test_pdf_advanced_features.py
+  📄 test_pdf_extractor.py
+  📄 test_pdf_scraper.py
+  📄 test_pr144_concerns.py
+  📄 test_quality_checker.py
+  📄 test_scraper_features.py
+  📄 test_server_fastmcp_http.py
+  📄 test_setup_scripts.py
+  📄 test_skip_llms_txt.py
+  📄 test_smart_summarization.py
+  📄 test_source_manager.py
+  📄 test_swift_detection.py
+  📄 test_terminal_detection.py
+  📄 test_unified.py
+  📄 test_unified_mcp_integration.py
+  📄 test_upload_skill.py
+  📄 test_utilities.py
+    📄 bug_report.md
+    📄 documentation.md
+    📄 feature_request.md
+    📄 mcp_tool.md
+    📄 release.yml
+    📄 tests.yml
+    📄 README.md
+    📄 company-api.json
+    📄 react-custom.json
+    📄 test_e2e.py
+    📄 vue-internal.json
+    📄 2025-10-24-active-skills-design.md
+    📄 2025-10-24-active-skills-phase1.md
+    📄 __init__.py
+    📁 cli
+    📁 mcp
+    📄 py.typed
+    📄 example_conflicts.json
+    📄 __init__.py
+    📄 test_adaptors_e2e.py
+    📄 test_base.py
+    📄 test_claude_adaptor.py
+    📄 test_gemini_adaptor.py
+    📄 test_markdown_adaptor.py
+    📄 test_openai_adaptor.py
+      📄 __init__.py
+      📁 adaptors
+      📄 api_reference_builder.py
+      📄 code_analyzer.py
+      📄 codebase_scraper.py
+      📄 config_validator.py
+      📄 conflict_detector.py
+      📄 constants.py
+      📄 dependency_analyzer.py
+      📄 doc_scraper.py
+      📄 enhance_skill.py
+      📄 enhance_skill_local.py
+      📄 estimate_pages.py
+      📄 generate_router.py
+      📄 github_scraper.py
+      📄 install_agent.py
+      📄 install_skill.py
+      📄 language_detector.py
+      📄 llms_txt_detector.py
+      📄 llms_txt_downloader.py
+      📄 llms_txt_parser.py
+      📄 main.py
+      📄 merge_sources.py
+      📄 package_multi.py
+      📄 package_skill.py
+      📄 pattern_recognizer.py
+      📄 pdf_extractor_poc.py
+      📄 pdf_scraper.py
+      📄 quality_checker.py
+      📄 run_tests.py
+      📄 split_config.py
+      📄 swift_patterns.py
+      📄 test_unified_simple.py
+      📄 unified_scraper.py
+      📄 unified_skill_builder.py
+      📄 upload_skill.py
+      📄 utils.py
+      📄 README.md
+      📄 __init__.py
+      📄 agent_detector.py
+      📄 git_repo.py
+      📄 requirements.txt
+      📄 server.py
+      📄 server_fastmcp.py
+      📄 server_legacy.py
+      📄 source_manager.py
+      📁 tools
+        📄 __init__.py
+        📄 base.py
+        📄 claude.py
+        📄 gemini.py
+        📄 markdown.py
+        📄 openai.py
+        📄 __init__.py
+        📄 config_tools.py
+        📄 packaging_tools.py
+        📄 scraping_tools.py
+        📄 source_tools.py
+        📄 splitting_tools.py
+```

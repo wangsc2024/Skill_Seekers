@@ -35,8 +35,6 @@ triggers:
 | 「做完這個功能後通知 wangsc2025」 | `wangsc2025` |
 | 「完成後通知 my-alerts」 | `my-alerts` |
 | 「處理完提醒 test123」 | `test123` |
-| 「修好 bug 後通知 dev-team」 | `dev-team` |
-| 「跑完測試通知 ci-notify」 | `ci-notify` |
 
 ### 觸發關鍵字
 
@@ -44,164 +42,94 @@ triggers:
 - `提醒 + topic名稱`
 - `完成後通知 + topic名稱`
 - `做完通知 + topic名稱`
-- `做完後通知 + topic名稱`
-- `完成後提醒 + topic名稱`
-- `處理完提醒 + topic名稱`
 
-## 通知發送
+## 通知發送格式
+
+**重要：必須加上 Content-Type header 確保編碼正確**
 
 ### 成功通知
 
-當任務成功完成時，發送：
-
 ```bash
-curl -H "Title: ✅ 任務完成" \
-     -H "Tags: white_check_mark" \
-     -d "任務摘要說明" \
-     ntfy.sh/TOPIC
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" -d "Task summary here" ntfy.sh/TOPIC
 ```
-
-**參數說明：**
-- `Title`: 通知標題（帶成功圖示）
-- `Tags`: ntfy 內建 emoji 標籤
-- `-d`: 通知內容（任務執行結果摘要）
-- `TOPIC`: 用戶指定的 topic 名稱
 
 ### 失敗通知
 
-當任務執行失敗時，發送：
-
 ```bash
-curl -H "Title: ❌ 任務失敗" \
-     -H "Priority: high" \
-     -H "Tags: x" \
-     -d "錯誤說明" \
-     ntfy.sh/TOPIC
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Failed" -H "Priority: high" -H "Tags: x" -d "Error description" ntfy.sh/TOPIC
 ```
 
-**參數說明：**
-- `Priority: high`: 高優先級，手機會發出警示音
-- `Tags: x`: 失敗 emoji 標籤
-
-### 進度通知（可選）
-
-對於長時間任務，可發送進度更新：
+### 進度通知
 
 ```bash
-curl -H "Title: ⏳ 任務進行中" \
-     -H "Tags: hourglass_flowing_sand" \
-     -d "目前進度: 50%" \
-     ntfy.sh/TOPIC
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: In Progress" -H "Tags: hourglass_flowing_sand" -d "Progress: 50%" ntfy.sh/TOPIC
 ```
 
 ## 完整範例
 
-### 範例 1: 建立 React 專案
+### 範例 1: 建立專案
 
-**用戶指令：**
-> 幫我建立 React 專案，做完通知 wangsc2025
+**用戶指令：** 幫我建立 React 專案，做完通知 wangsc2025
 
-**執行流程：**
-1. 解析 topic: `wangsc2025`
-2. 執行任務：建立 React 專案
-3. 任務完成後發送通知：
-
+**完成後執行：**
 ```bash
-curl -H "Title: ✅ 任務完成" \
-     -H "Tags: white_check_mark" \
-     -d "React 專案已成功建立於 ./my-react-app" \
-     ntfy.sh/wangsc2025
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" -d "React project created at ./my-react-app" ntfy.sh/wangsc2025
 ```
 
 ### 範例 2: 跑測試
 
-**用戶指令：**
-> 跑完所有測試後通知 ci-alerts
-
-**成功時：**
+**成功：**
 ```bash
-curl -H "Title: ✅ 測試通過" \
-     -H "Tags: white_check_mark,test_tube" \
-     -d "46 個測試全部通過，覆蓋率 85%" \
-     ntfy.sh/ci-alerts
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Tests Passed" -H "Tags: white_check_mark,test_tube" -d "46 tests passed, 85% coverage" ntfy.sh/ci-alerts
 ```
 
-**失敗時：**
+**失敗：**
 ```bash
-curl -H "Title: ❌ 測試失敗" \
-     -H "Priority: high" \
-     -H "Tags: x,test_tube" \
-     -d "3 個測試失敗: test_auth.py, test_api.py" \
-     ntfy.sh/ci-alerts
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Tests Failed" -H "Priority: high" -H "Tags: x,test_tube" -d "3 tests failed" ntfy.sh/ci-alerts
 ```
 
-### 範例 3: 部署應用
+### 範例 3: 部署
 
-**用戶指令：**
-> 部署到 production，完成後提醒 ops-team
-
-**成功時：**
 ```bash
-curl -H "Title: ✅ 部署成功" \
-     -H "Tags: rocket,white_check_mark" \
-     -d "v2.1.0 已成功部署到 production 環境" \
-     ntfy.sh/ops-team
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Deploy Success" -H "Tags: rocket,white_check_mark" -d "v2.1.0 deployed to production" ntfy.sh/ops-team
 ```
 
 ## 進階用法
 
-### 帶連結的通知
+### 帶連結
 
 ```bash
-curl -H "Title: ✅ PR 已合併" \
-     -H "Tags: white_check_mark" \
-     -H "Click: https://github.com/user/repo/pull/123" \
-     -d "PR #123 已成功合併到 main 分支" \
-     ntfy.sh/TOPIC
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: PR Merged" -H "Tags: white_check_mark" -H "Click: https://github.com/user/repo/pull/123" -d "PR #123 merged" ntfy.sh/TOPIC
 ```
 
-### 帶附件的通知
+### 帶附件
 
 ```bash
-curl -H "Title: ✅ 報告生成完成" \
-     -H "Tags: white_check_mark,chart" \
-     -H "Attach: https://example.com/report.pdf" \
-     -d "月度報告已生成" \
-     ntfy.sh/TOPIC
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Report Ready" -H "Tags: chart" -H "Attach: https://example.com/report.pdf" -d "Report generated" ntfy.sh/TOPIC
 ```
 
 ### 延遲通知
 
 ```bash
-curl -H "Title: ⏰ 定時提醒" \
-     -H "Delay: 30m" \
-     -d "30 分鐘後的提醒" \
-     ntfy.sh/TOPIC
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Reminder" -H "Delay: 30m" -d "30 min reminder" ntfy.sh/TOPIC
 ```
 
 ## 如何接收通知
 
 1. **手機 App**
-   - iOS: [App Store 下載](https://apps.apple.com/app/ntfy/id1625396347)
-   - Android: [Google Play 下載](https://play.google.com/store/apps/details?id=io.heckel.ntfy)
+   - iOS: [App Store](https://apps.apple.com/app/ntfy/id1625396347)
+   - Android: [Google Play](https://play.google.com/store/apps/details?id=io.heckel.ntfy)
 
 2. **訂閱 Topic**
-   - 開啟 App
-   - 點擊 「+」 新增訂閱
-   - 輸入你的 topic 名稱（例如 `wangsc2025`）
+   - 開啟 App → 點擊 + → 輸入 topic 名稱
 
 3. **桌面通知**
    - 訪問 https://ntfy.sh/YOUR_TOPIC
    - 允許瀏覽器通知
 
-## 注意事項
+## 常用 Tags
 
-- Topic 名稱是公開的，任何人知道 topic 都可以發送/接收通知
-- 建議使用不易猜測的 topic 名稱
-- 敏感資訊不要放在通知內容中
-- ntfy.sh 免費版有速率限制（每天約 250 條）
-
-## 常用 Tags 參考
+Tags 會自動轉換為 emoji：
 
 | Tag | Emoji | 用途 |
 |-----|-------|------|
@@ -211,10 +139,29 @@ curl -H "Title: ⏰ 定時提醒" \
 | `hourglass_flowing_sand` | ⏳ | 進行中 |
 | `rocket` | 🚀 | 部署 |
 | `test_tube` | 🧪 | 測試 |
-| `hammer_and_wrench` | 🛠️ | 建構 |
 | `package` | 📦 | 打包 |
 | `bug` | 🐛 | Bug |
 | `chart` | 📊 | 報告 |
+| `tada` | 🎉 | 慶祝 |
+| `fire` | 🔥 | 緊急 |
+
+## 快速範本
+
+**成功：**
+```bash
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Completed" -H "Tags: white_check_mark" -d "DESCRIPTION" ntfy.sh/TOPIC
+```
+
+**失敗：**
+```bash
+curl -H "Content-Type: text/plain; charset=utf-8" -H "Title: Task Failed" -H "Priority: high" -H "Tags: x" -d "DESCRIPTION" ntfy.sh/TOPIC
+```
+
+## 注意事項
+
+- Topic 是公開的，使用不易猜測的名稱
+- 避免放敏感資訊
+- 免費版每天約 250 條限制
 
 ---
 
